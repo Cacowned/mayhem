@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 namespace MayhemApp.Business_Logic.Triggers
 {
     [Serializable]
-    public class MayhemTimerTrigger: MayhemTrigger,
+    public class MayhemTimerTrigger: MayhemTriggerBase,
         ISerializable, IMayhemTriggerCommon, IMayhemConnectionItemCommon
         
     {

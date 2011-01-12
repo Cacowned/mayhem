@@ -95,20 +95,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Business Logic\Actions\MayhemDebugAction.cs" />
-    <Compile Include="Business Logic\Actions\MayhemPlaySoundAction.cs" />
-    <Compile Include="Business Logic\Actions\MayhemTweetAction.cs" />
+    <Compile Include="Business Logic\Actions\Debugging\DebugAction.cs" />
+    <Compile Include="Business Logic\Actions\Debugging\PopupAction.cs" />
+    <Compile Include="Business Logic\Actions\PlaySoundAction.cs" />
+    <Compile Include="Business Logic\Actions\TweetAction.cs" />
+    <Compile Include="Business Logic\Actions\Zune\LastSongAction.cs" />
+    <Compile Include="Business Logic\Actions\Zune\NextSongAction.cs" />
+    <Compile Include="Business Logic\Actions\Zune\PlayPauseAction.cs" />
+    <Compile Include="Business Logic\IMayhemConnectionItemCommon.cs" />
+    <Compile Include="Business Logic\IMayhemTriggerCommon.cs" />
     <Compile Include="Business Logic\LibraryListItem.cs" />
+    <Compile Include="Business Logic\MayhemActionBase.cs" />
     <Compile Include="Business Logic\MayhemConnection.cs" />
+    <Compile Include="Business Logic\MayhemConnectionItem.cs" />
     <Compile Include="Business Logic\MayhemInterfaceCategoryListController.cs" />
+    <Compile Include="Business Logic\MayhemInterfaceItemListPage.cs" />
     <Compile Include="Business Logic\MayhemInterfacePaginationController.cs" />
     <Compile Include="Business Logic\MayhemSerialization.cs" />
+    <Compile Include="Business Logic\MayhemSettingsDictionaryLoader.cs" />
+    <Compile Include="Business Logic\MayhemTriggerBase.cs" />
+    <Compile Include="Business Logic\RunListController.cs" />
     <Compile Include="Business Logic\Triggers\MayhemKeyboardEventTrigger.cs" />
-    <Compile Include="Business Logic\Triggers\MayhemMotionDetectionTrigger.cs" />
-    <Compile Include="Business Logic\Actions\MayhemSnapshotAction.cs" />
     <Compile Include="Business Logic\Triggers\MayhemTimerTrigger.cs" />
     <Compile Include="Business Logic\Triggers\MayhemUDPTrigger.cs" />
     <Compile Include="Business Logic\Twitter\MayhemTwitter.cs" />
+    <Compile Include="Business Logic\Zune\MayhemZune.cs" />
     <Compile Include="Dialogs\BrowserWindow.xaml.cs">
       <DependentUpon>BrowserWindow.xaml</DependentUpon>
     </Compile>
@@ -117,9 +128,6 @@
     </Compile>
     <Compile Include="Dialogs\MainConfigDialog.xaml.cs">
       <DependentUpon>MainConfigDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\MotionDetectionSetupWindow.xaml.cs">
-      <DependentUpon>MotionDetectionSetupWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\TwitterActionSetupWindow.xaml.cs">
       <DependentUpon>TwitterActionSetupWindow.xaml</DependentUpon>
@@ -130,9 +138,6 @@
     <Compile Include="Low-Level\MPlayer.cs" />
     <Compile Include="Low-Level\UdpState.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Widgets\CameraConfigItem.xaml.cs">
-      <DependentUpon>CameraConfigItem.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Widgets\ConfigButton.xaml.cs">
       <DependentUpon>ConfigButton.xaml</DependentUpon>
     </Compile>
@@ -173,10 +178,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Widgets\CameraConfigItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Widgets\ConfigButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -214,10 +215,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widgets\MayhemButtonDesign.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\MotionDetectionSetupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -327,12 +324,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\trash.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MayhemOpenCVWrapper\MayhemOpenCVWrapper.csproj">
-      <Project>{B04222E3-9FC3-4827-A40F-8AE68CABB834}</Project>
-      <Name>MayhemOpenCVWrapper</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\closeWindowPaneButton.png" />

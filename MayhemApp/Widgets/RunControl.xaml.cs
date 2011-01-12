@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using MayhemApp.Business_Logic;
 
 namespace MayhemApp
 {
@@ -32,7 +33,7 @@ namespace MayhemApp
 
         public RunControl() { }
         
-        public RunControl(MayhemConnection c, MayhemTrigger t, MayhemAction a)  
+        public RunControl(MayhemConnection c, MayhemTriggerBase t, MayhemActionBase a)  
             : this (c, t.template_data, a.template_data) {}
         
         public RunControl(MayhemConnection c, MayhemButton t,  MayhemButton a)

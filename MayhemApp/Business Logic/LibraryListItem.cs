@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 
 namespace MayhemApp
 {
-    public  class LibraryListItem
+    public class LibraryListItem
     {
         public BitmapImage CategoryImage { get; set; }
         public BitmapImage NavImage { get; set; }

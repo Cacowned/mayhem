@@ -80,6 +80,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -111,7 +112,6 @@
     <Library Include="..\..\..\..\..\..\..\OpenCV2.1\lib\ml210d.lib" />
     <Library Include="..\..\..\..\..\..\..\OpenCV2.1\lib\opencv_ffmpeg210.lib" />
     <Library Include="..\..\..\..\..\..\..\OpenCV2.1\lib\opencv_ffmpeg210d.lib" />
-    <Library Include="..\..\..\..\..\Downloads\videoInput0.1995\videoInput0.1995\compiledLib\compiledByVS2008\videoInput.lib" />
     <Library Include="..\atlthunk.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

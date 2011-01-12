@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Diagnostics;
+using MayhemApp.Business_Logic;
 
 namespace MayhemApp
 {
@@ -27,10 +18,6 @@ namespace MayhemApp
             InitializeComponent();
 
             MayhemButton b = this.DataContext as MayhemButton;
-
-            //b.control = this;
-
-
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -45,14 +32,14 @@ namespace MayhemApp
             {
                 Trace.WriteLine("BlueButton has MouseUP Event");
                 MayhemButton b = this.DataContext as MayhemButton;
-               // Debug.WriteLine("Assigned MayhemButton Text : " + b.Text);
                 if (b != null)
+                {
                     b.GotDoubleClicked(this, e);
+                }
                 else if (connectionItem != null)
                 {
                     connectionItem.OnDoubleClick(this, e);
                 }
-
             }
          }
 
@@ -60,7 +47,5 @@ namespace MayhemApp
         {
 
         }
-
-       
     }
 }

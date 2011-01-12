@@ -16,11 +16,11 @@ namespace MayhemApp.Business_Logic.Actions
      * </summary>
      * */
     [Serializable]
-    class MayhemPlaySoundAction : MayhemAction, ISerializable, IMayhemConnectionItemCommon
+    class PlaySoundAction : MayhemActionBase, ISerializable, IMayhemConnectionItemCommon
     {
 
 
-        public const string TAG = "[MayhemPlaySoundAction] : ";
+        public const string TAG = "[PlaySoundAction] : ";
 
         private string path_to_sound = null;
 
@@ -63,9 +63,9 @@ namespace MayhemApp.Business_Logic.Actions
          * Ignores the input string!
          * </summary>
          **/
-        public MayhemPlaySoundAction(string s) : this() { }
+        public PlaySoundAction(string s) : this() { }
 
-        public MayhemPlaySoundAction()
+        public PlaySoundAction()
             : base("Play Sound",
                    "Plays a sound when triggered",
                    "This Action plays a sound when it is triggered. Double click to select the sound file to play.")
@@ -114,8 +114,6 @@ namespace MayhemApp.Business_Logic.Actions
          * */
         public override void OnDoubleClick(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            //throw new NotImplementedException();
-
             System.Windows.Forms.OpenFileDialog fDialog = new System.Windows.Forms.OpenFileDialog();
             fDialog.Title = "Please choose the sound file you want the action to play";
             fDialog.Filter = "Sound Files|*.mp3|*.wav|*.wma"; // TODO really add all that the framework can play back
@@ -156,14 +154,14 @@ namespace MayhemApp.Business_Logic.Actions
        * </summary>
        * 
        */
-        public override void PerformAction(MayhemTrigger sender)
+        public override void PerformAction(MayhemTriggerBase sender)
         {
             if (path_to_sound != null)
             {
                // media_playing++;
                 MPlayer m = new MPlayer();
                 m.PlayFile(path_to_sound);
-                Debug.WriteLine(TAG + "media playback started ");// + media_playing + " " + mediaPlayer.Position);
+                Debug.WriteLine(TAG + "media playback started ");
             }
         }
         #endregion
@@ -172,7 +170,7 @@ namespace MayhemApp.Business_Logic.Actions
 
         #region Serialization
 
-        public MayhemPlaySoundAction(SerializationInfo info, StreamingContext context)
+        public PlaySoundAction(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             string path = info.GetString("soundFile");

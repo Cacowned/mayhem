@@ -189,14 +189,14 @@ void OpenCVImageProvider::StopCam(int device)
 		cvErode(diffGray, diffGray, 0, 10);
 
 		////////////////////////////////
-		IplImage * grayCtr = cvCloneImage(diffGray);
+		IplImage* grayCtr = cvCloneImage(diffGray);
 		////////////////////////////////
 
 		// contours
 		////////////////////////////////
-		CvMemStorage * storage = cvCreateMemStorage(0);
+		CvMemStorage* storage = cvCreateMemStorage(0);
 		///////////////////////////////
-		CvSeq * contour = 0;
+		CvSeq* contour = 0;
 
 		cvFindContours( grayCtr, storage, &contour, sizeof(CvContour), CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
 	

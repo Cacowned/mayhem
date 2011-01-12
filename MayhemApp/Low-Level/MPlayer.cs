@@ -45,13 +45,7 @@ namespace MayhemApp.Low_Level
         }
 
         // declare the delegate
-        public delegate bool AudioCallbackDelegate(IntPtr hwnd,
-                                                 int lParam);
-
-        /*
-        [DllImport("winmm.dll")]
-        private static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, AudioCallbackDelegate cb );//IntPtr hwndCallback);
-        */
+        public delegate bool AudioCallbackDelegate(IntPtr hwnd, int lParam);
 
         public MPlayer()
         {

@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using MayhemApp.Business_Logic;
 
 namespace MayhemApp
 {
@@ -74,13 +75,7 @@ namespace MayhemApp
         }
 
         #endregion
-
-
-
-
-
     }
-
 
     public class MayhemButtonPlaceHolder : MayhemButton {
 
@@ -89,8 +84,5 @@ namespace MayhemApp
             Text = text;
             Img = image;
         }
-
-       
-
     }
 }

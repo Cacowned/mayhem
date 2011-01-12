@@ -17,6 +17,7 @@
   <ItemGroup>
     <None Include="ReadMe.txt" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -43,7 +44,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\..\..\Downloads\videoInput0.1995\videoInput0.1995\compiledLib\compiledByVS2008\videoInput.lib" />
     <Library Include="..\atlthunk.lib" />
     <Library Include="..\..\..\..\..\..\..\OpenCV2.1\lib\cv210.lib" />
     <Library Include="..\..\..\..\..\..\..\OpenCV2.1\lib\cv210d.lib" />

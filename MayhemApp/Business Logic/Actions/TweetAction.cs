@@ -16,7 +16,7 @@ namespace MayhemApp.Business_Logic.Actions
      * </summary>
      * */
     [Serializable]
-    public class MayhemTweetAction : MayhemAction, ISerializable, IMayhemConnectionItemCommon
+    public class TweetAction : MayhemActionBase, ISerializable, IMayhemConnectionItemCommon
     {
 
         public string tweet_text = "#Mayhem just got triggered";
@@ -35,9 +35,9 @@ namespace MayhemApp.Business_Logic.Actions
          * Ignores the input string!
          * </summary>
          **/
-        public MayhemTweetAction(string s) : this() { }
+        public TweetAction(string s) : this() { }
 
-        public MayhemTweetAction()
+        public TweetAction()
             : base(     "Twitter Update",
                         "Updates Twitter status with a text",
                         "This action updates the Twitter status of the Twitter account associated with Mayhem. Double click to configure the Twitter update message")
@@ -61,16 +61,9 @@ namespace MayhemApp.Business_Logic.Actions
             // TODO -- this could be implemented in the base class
            // setup_window.Show();
            
-
-    
-          // mainWindow.MainRectangle.Visibility = Visibility.Visible;
            DimMainWindow(true);
            setup_window.ShowDialog();
-          // mainWindow.MainRectangle.Visibility = Visibility.Collapsed;
            DimMainWindow(false);
-           
-
-            
         }
       
         /** <summary>
@@ -78,7 +71,7 @@ namespace MayhemApp.Business_Logic.Actions
          * </summary>
          * 
          */ 
-        public override void PerformAction(MayhemTrigger sender)
+        public override void PerformAction(MayhemTriggerBase sender)
         {
             MayhemTwitter t = MayhemTwitter.Instance;
             t.SendTweet("#Mayhem [" + DateTime.Now.Millisecond.ToString().Substring(0,3)+"] " + tweet_text);
@@ -91,16 +84,11 @@ namespace MayhemApp.Business_Logic.Actions
 
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            //throw new NotImplementedException();
-
             base.GetObjectData(info, context);
             info.AddValue("Tweet_Text", this.tweet_text);
-
-            
-
         }
 
-         public MayhemTweetAction(SerializationInfo info, StreamingContext context)
+         public TweetAction(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             this.tweet_text = info.GetString("Tweet_Text");
@@ -110,9 +98,6 @@ namespace MayhemApp.Business_Logic.Actions
             this.setup_window.tweet_text = tweet_text;
             this.setup_window.EntryBox.Text = tweet_text;
             this.setup_window.OnTextEntered();
-
-            //this.userControl.connectionItem = this;
-
         }
 
         #endregion

@@ -12,7 +12,7 @@ using System.Diagnostics;
 namespace MayhemApp.Business_Logic.Triggers
 {
     [Serializable]
-    class MayhemUDPTrigger : MayhemTrigger, ISerializable, IMayhemTriggerCommon, IMayhemConnectionItemCommon
+    class MayhemUDPTrigger : MayhemTriggerBase, ISerializable, IMayhemTriggerCommon, IMayhemConnectionItemCommon
     {
 
         public static HashSet<int> used_ports = new HashSet<int>();

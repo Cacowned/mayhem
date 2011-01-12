@@ -74,13 +74,6 @@
       <FileName>Business Logic\MayhemInterfacePaginationController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="MayhemApp.MotionDetectionSetupWindow" Collapsed="true">
-    <Position X="17" Y="8" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AQBAAAIAAQAAAASAAAEAAAkJAQgABACEIAAAJCAAAAg=</HashCode>
-      <FileName>Dialogs\MotionDetectionSetupWindow.xaml.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="MayhemApp.TimerSetupWindow" Collapsed="true">
     <Position X="18.75" Y="9" Width="1.5" />
     <TypeIdentifier>
@@ -202,13 +195,6 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="MayhemApp.Business_Logic.MayhemSnapshotAction" Collapsed="true">
-    <Position X="19.25" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAACAAEAAIAAAAAAAAABAgAAAAAAAABIAAAQAAAAAA=</HashCode>
-      <FileName>Business Logic\Actions\MayhemSnapshotAction.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="MayhemApp.Business_Logic.MayhemInterfaceItemListPage" Collapsed="true">
     <Position X="11.75" Y="8" Width="1.5" />
     <TypeIdentifier>
@@ -235,13 +221,6 @@
     <TypeIdentifier>
       <HashCode>AAAACAAAACAAAAAAAAIAAAAAACBAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Business Logic\MayhemSerialization.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="MayhemApp.Business_Logic.MayhemMotionDetectionTrigger" Collapsed="true">
-    <Position X="5.75" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>IEQACAAIAAAAAAAAAAAAAACAEAAAEAAhAgAAAAAAAAI=</HashCode>
-      <FileName>Business Logic\Triggers\MayhemMotionDetectionTrigger.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MayhemApp.Business_Logic.Actions.MayhemPlaySoundAction" Collapsed="true">
@@ -372,13 +351,6 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAACAEAAAAIAAAAAABAAAAAAAEAAAECAA=</HashCode>
       <FileName>Settings.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="MayhemApp.Widgets.CameraConfigItem" Collapsed="true">
-    <Position X="17" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AACACAAAAAAAAAAAAAEAAAAAABAAgAAAAAAAAAAAAJA=</HashCode>
-      <FileName>Widgets\CameraConfigItem.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="MayhemApp.IMayhemConnectionItemCommon" Collapsed="true">
