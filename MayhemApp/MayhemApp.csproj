@@ -1,0 +1,487 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7C446222-6335-4BAD-878A-F2C1434C20C6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MayhemApp</RootNamespace>
+    <AssemblyName>MayhemApp</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\t-svenk\Documents\Visual Studio 2010\Projects\mayhem-dev\Mayhem-Publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>E609F486FC0F29D9E4FD487E54FF42691CF3B608</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>MayhemApp_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Twitterizer2, Version=2.3.0.39334, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\Twitterizer\Twitterizer2.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Business Logic\Actions\MayhemDebugAction.cs" />
+    <Compile Include="Business Logic\Actions\MayhemPlaySoundAction.cs" />
+    <Compile Include="Business Logic\Actions\MayhemTweetAction.cs" />
+    <Compile Include="Business Logic\LibraryListItem.cs" />
+    <Compile Include="Business Logic\MayhemConnection.cs" />
+    <Compile Include="Business Logic\MayhemInterfaceCategoryListController.cs" />
+    <Compile Include="Business Logic\MayhemInterfacePaginationController.cs" />
+    <Compile Include="Business Logic\MayhemSerialization.cs" />
+    <Compile Include="Business Logic\Triggers\MayhemKeyboardEventTrigger.cs" />
+    <Compile Include="Business Logic\Triggers\MayhemMotionDetectionTrigger.cs" />
+    <Compile Include="Business Logic\Actions\MayhemSnapshotAction.cs" />
+    <Compile Include="Business Logic\Triggers\MayhemTimerTrigger.cs" />
+    <Compile Include="Business Logic\Triggers\MayhemUDPTrigger.cs" />
+    <Compile Include="Business Logic\Twitter\MayhemTwitter.cs" />
+    <Compile Include="Dialogs\BrowserWindow.xaml.cs">
+      <DependentUpon>BrowserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\KeyboardEventTriggerSetupWindow.xaml.cs">
+      <DependentUpon>KeyboardEventTriggerSetupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\MainConfigDialog.xaml.cs">
+      <DependentUpon>MainConfigDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\MotionDetectionSetupWindow.xaml.cs">
+      <DependentUpon>MotionDetectionSetupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\TwitterActionSetupWindow.xaml.cs">
+      <DependentUpon>TwitterActionSetupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\UDPTriggerSetupWindow.cs" />
+    <Compile Include="Low-Level\AsyncUDPSocket.cs" />
+    <Compile Include="Low-Level\InterceptKeys.cs" />
+    <Compile Include="Low-Level\MPlayer.cs" />
+    <Compile Include="Low-Level\UdpState.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Widgets\CameraConfigItem.xaml.cs">
+      <DependentUpon>CameraConfigItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widgets\ConfigButton.xaml.cs">
+      <DependentUpon>ConfigButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widgets\ListNavigationControl.xaml.cs">
+      <DependentUpon>ListNavigationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widgets\OnOffControl.xaml.cs">
+      <DependentUpon>OnOffControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widgets\RunControl.xaml.cs">
+      <DependentUpon>RunControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widgets\SetupWindowCloseButton.xaml.cs">
+      <DependentUpon>SetupWindowCloseButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\TimerSetupWindow.xaml.cs">
+      <DependentUpon>TimerSetupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widgets\TrashButton.xaml.cs">
+      <DependentUpon>TrashButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widgets\TwitterConfigItem.xaml.cs">
+      <DependentUpon>TwitterConfigItem.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Dialogs\BrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\KeyboardEventTriggerSetupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\MainConfigDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\TwitterActionSetupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widgets\CameraConfigItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widgets\ConfigButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widgets\CreateButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widgets\DragDropAdorner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Widgets\CreateButton.xaml.cs">
+      <DependentUpon>CreateButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widgets\DragDropAdorner.xaml.cs">
+      <DependentUpon>DragDropAdorner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WidgetHelpers\DragDropAdornerBase.cs" />
+    <Compile Include="WidgetHelpers\DragDropHelper.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Widgets\ListNavigationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widgets\MayhemButtonDesign.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\MotionDetectionSetupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widgets\OnOffControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widgets\RunControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widgets\SetupWindowCloseButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\TimerSetupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widgets\TrashButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widgets\TwitterConfigItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Widgets\MayhemButtonDesign.xaml.cs">
+      <DependentUpon>MayhemButtonDesign.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Business Logic\MayhemButton.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="Images\Keyboard\Thumbs.db" />
+    <None Include="MayhemApp_TemporaryKey.pfx" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bluebutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\redbutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\action-empty.png" />
+    <Resource Include="Images\masthead.png" />
+    <Resource Include="Images\trigger-empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\subtitlebar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\createbutton.png" />
+    <Resource Include="Images\previous&amp;next_buttons.png" />
+    <Resource Include="Images\switch_bg.png" />
+    <Resource Include="Images\switch_toggle.png" />
+    <Resource Include="Images\Top-shadow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\nextButton.png" />
+    <Resource Include="Images\prevButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\trash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MayhemOpenCVWrapper\MayhemOpenCVWrapper.csproj">
+      <Project>{B04222E3-9FC3-4827-A40F-8AE68CABB834}</Project>
+      <Name>MayhemOpenCVWrapper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\closeWindowPaneButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\config.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\twitter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\twitter-official.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\twitter-b.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Keyboard\0-2.png" />
+    <Resource Include="Images\Keyboard\0.png" />
+    <Resource Include="Images\Keyboard\1-2.png" />
+    <Resource Include="Images\Keyboard\1.png" />
+    <Resource Include="Images\Keyboard\10.png" />
+    <Resource Include="Images\Keyboard\2-2.png" />
+    <Resource Include="Images\Keyboard\2.png" />
+    <Resource Include="Images\Keyboard\3-2.png" />
+    <Resource Include="Images\Keyboard\3-euro.png" />
+    <Resource Include="Images\Keyboard\3.png" />
+    <Resource Include="Images\Keyboard\4-2.png" />
+    <Resource Include="Images\Keyboard\4.png" />
+    <Resource Include="Images\Keyboard\5-2.png" />
+    <Resource Include="Images\Keyboard\5.png" />
+    <Resource Include="Images\Keyboard\6.png" />
+    <Resource Include="Images\Keyboard\7-2.png" />
+    <Resource Include="Images\Keyboard\7.png" />
+    <Resource Include="Images\Keyboard\8-2.png" />
+    <Resource Include="Images\Keyboard\8.png" />
+    <Resource Include="Images\Keyboard\9-2.png" />
+    <Resource Include="Images\Keyboard\9.png" />
+    <Resource Include="Images\Keyboard\=.png" />
+    <Resource Include="Images\Keyboard\a.png" />
+    <Resource Include="Images\Keyboard\alt-2.png" />
+    <Resource Include="Images\Keyboard\alt.png" />
+    <Resource Include="Images\Keyboard\arrow-1.png" />
+    <Resource Include="Images\Keyboard\arrow-2.png" />
+    <Resource Include="Images\Keyboard\arrow-3.png" />
+    <Resource Include="Images\Keyboard\arrow-4.png" />
+    <Resource Include="Images\Keyboard\b.png" />
+    <Resource Include="Images\Keyboard\backspace.png" />
+    <Resource Include="Images\Keyboard\blank.png" />
+    <Resource Include="Images\Keyboard\c.png" />
+    <Resource Include="Images\Keyboard\caps-lock.png" />
+    <Resource Include="Images\Keyboard\ctrl-2.png" />
+    <Resource Include="Images\Keyboard\ctrl.png" />
+    <Resource Include="Images\Keyboard\d.png" />
+    <Resource Include="Images\Keyboard\del.png" />
+    <Resource Include="Images\Keyboard\delete.png" />
+    <Resource Include="Images\Keyboard\e.png" />
+    <Resource Include="Images\Keyboard\end.png" />
+    <Resource Include="Images\Keyboard\enter.png" />
+    <Resource Include="Images\Keyboard\esc.png" />
+    <Resource Include="Images\Keyboard\f.png" />
+    <Resource Include="Images\Keyboard\f1.png" />
+    <Resource Include="Images\Keyboard\f10.png" />
+    <Resource Include="Images\Keyboard\f11.png" />
+    <Resource Include="Images\Keyboard\f12.png" />
+    <Resource Include="Images\Keyboard\f2.png" />
+    <Resource Include="Images\Keyboard\f3.png" />
+    <Resource Include="Images\Keyboard\f4.png" />
+    <Resource Include="Images\Keyboard\f5.png" />
+    <Resource Include="Images\Keyboard\f6.png" />
+    <Resource Include="Images\Keyboard\f7.png" />
+    <Resource Include="Images\Keyboard\f8.png" />
+    <Resource Include="Images\Keyboard\f9.png" />
+    <Resource Include="Images\Keyboard\g.png" />
+    <Resource Include="Images\Keyboard\h.png" />
+    <Resource Include="Images\Keyboard\home.png" />
+    <Resource Include="Images\Keyboard\i.png" />
+    <Resource Include="Images\Keyboard\insert.png" />
+    <Resource Include="Images\Keyboard\j.png" />
+    <Resource Include="Images\Keyboard\k.png" />
+    <Resource Include="Images\Keyboard\l.png" />
+    <Resource Include="Images\Keyboard\m.png" />
+    <Resource Include="Images\Keyboard\n.png" />
+    <Resource Include="Images\Keyboard\num-lock.png" />
+    <Resource Include="Images\Keyboard\o.png" />
+    <Resource Include="Images\Keyboard\p.png" />
+    <Resource Include="Images\Keyboard\page-down.png" />
+    <Resource Include="Images\Keyboard\page-up.png" />
+    <Resource Include="Images\Keyboard\pause-break.png" />
+    <Resource Include="Images\Keyboard\plus.png" />
+    <Resource Include="Images\Keyboard\print-screen.png" />
+    <Resource Include="Images\Keyboard\q.png" />
+    <Resource Include="Images\Keyboard\r.png" />
+    <Resource Include="Images\Keyboard\s.png" />
+    <Resource Include="Images\Keyboard\scroll-lock.png" />
+    <Resource Include="Images\Keyboard\shift-2.png" />
+    <Resource Include="Images\Keyboard\shift.png" />
+    <Resource Include="Images\Keyboard\space.png" />
+    <Resource Include="Images\Keyboard\symbol-1.png" />
+    <Resource Include="Images\Keyboard\symbol-10.png" />
+    <Resource Include="Images\Keyboard\symbol-11.png" />
+    <Resource Include="Images\Keyboard\symbol-2.png" />
+    <Resource Include="Images\Keyboard\symbol-3.png" />
+    <Resource Include="Images\Keyboard\symbol-4.png" />
+    <Resource Include="Images\Keyboard\symbol-5.png" />
+    <Resource Include="Images\Keyboard\symbol-6.png" />
+    <Resource Include="Images\Keyboard\symbol-7.png" />
+    <Resource Include="Images\Keyboard\symbol-8.png" />
+    <Resource Include="Images\Keyboard\symbol-9.png" />
+    <Resource Include="Images\Keyboard\t.png" />
+    <Resource Include="Images\Keyboard\tab.png" />
+    <Resource Include="Images\Keyboard\u.png" />
+    <Resource Include="Images\Keyboard\v.png" />
+    <Resource Include="Images\Keyboard\w.png" />
+    <Resource Include="Images\Keyboard\x.png" />
+    <Resource Include="Images\Keyboard\y.png" />
+    <Resource Include="Images\Keyboard\z.png" />
+    <Resource Include="Images\Keyboard\_.png" />
+    <Resource Include="Images\Keyboard\{.png" />
+    <Resource Include="Images\Keyboard\}.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\cameraIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\networkIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\button-glow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\action-glow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bluebutton_10.png" />
+    <Resource Include="Images\redbutton_10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\arrow.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

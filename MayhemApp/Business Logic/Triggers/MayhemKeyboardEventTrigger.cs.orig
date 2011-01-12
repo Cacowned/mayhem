@@ -1,0 +1,143 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Runtime.Serialization;
+using System.Windows.Input;
+using MayhemApp.Dialogs;
+using MayhemApp.Low_Level;
+using System.Diagnostics;
+
+namespace MayhemApp.Business_Logic.Triggers
+{
+    class MayhemKeyboardEventTrigger : MayhemTrigger, IMayhemTriggerCommon, IMayhemConnectionItemCommon, ISerializable
+    {
+
+         public const string TAG = "[MayhemKeyboardEventTrigger]";
+
+         private HashSet<System.Windows.Forms.Keys> monitor_keys_down = null;
+
+         private HashSet<System.Windows.Forms.Keys> keys_down = new HashSet<System.Windows.Forms.Keys>();
+         private InterceptKeys.KeyDownHandler keyDownHandler = null;
+         private InterceptKeys.KeyUpHandler keyUpHandler = null;
+
+
+         public override event triggerActivateHandler onTriggerActivated;
+
+         public MayhemKeyboardEventTrigger(string s)
+            : this() { }
+
+         public MayhemKeyboardEventTrigger()
+             : base("Keyboard Event")
+         {
+             setup_window = new KeyboardEventTriggerSetupWindow();
+
+             ((KeyboardEventTriggerSetupWindow)setup_window).OnKeyCombinationUpdated += new KeyboardEventTriggerSetupWindow.KeyCombinationUpdatedHandler(MayhemKeyboardEventTrigger_OnKeyCombinationUpdated);
+
+
+             keyDownHandler = new InterceptKeys.KeyDownHandler(Intercept_key_down);
+             keyUpHandler = new InterceptKeys.KeyUpHandler(Intercept_key_up);
+
+         
+         }
+
+
+         private void Intercept_key_down(object sender, System.Windows.Forms.KeyEventArgs e)
+         {
+             Debug.WriteLine(TAG + " dn " + e.KeyCode);
+
+             keys_down.Add(e.KeyCode);
+
+             if (Keysets_Equal())
+             {
+                 Debug.WriteLine(TAG + "key sets match, will fire the trigger if activated");
+                 if (this.triggerEnabled)
+                 {
+                     Debug.WriteLine(TAG + "trigger enabled, testing fire condition");
+                     if (onTriggerActivated != null)
+                     {
+                         onTriggerActivated(this, new EventArgs());
+                     }
+                 }
+
+             }
+
+         }
+
+         private bool Keysets_Equal()
+         {
+             Debug.WriteLine(TAG + "Keyset Lengths " + monitor_keys_down.Count + " " + keys_down.Count);
+
+             if (keys_down.Count == monitor_keys_down.Count)
+             {
+                 foreach (System.Windows.Forms.Keys k in monitor_keys_down)
+                 {
+                     bool foundEqiv = false;
+                     foreach (System.Windows.Forms.Keys l in keys_down)
+                     {
+                         if (l == k)
+                         { foundEqiv = true; break; }
+                     }
+
+                     if (foundEqiv == false)
+                         return false;
+                 }
+                 return true;
+             }
+             else
+             {
+                 return false;
+             }
+         }
+
+         private void Intercept_key_up(object sender, System.Windows.Forms.KeyEventArgs e)
+         {
+             Debug.WriteLine(TAG + " up " + e.KeyCode);
+
+             keys_down.Remove(e.KeyCode);
+
+         }
+
+
+
+         void MayhemKeyboardEventTrigger_OnKeyCombinationUpdated(object sender, KeyboardEventTriggerSetupWindow.KeyCombinationUpdatedArgs e)
+         {
+            // throw new NotImplementedException();
+
+             monitor_keys_down = e.key_combination;
+
+         }
+
+
+
+         public override void EnableTrigger()
+         {
+             Debug.WriteLine(TAG + "EnableTrigger()");
+             base.EnableTrigger();
+
+             this.triggerEnabled = true;
+             InterceptKeys.OnInterceptKeyDown += keyDownHandler;
+             InterceptKeys.OnInterceptKeyUp += keyUpHandler;
+         }
+
+         public override void DisableTrigger()
+         {
+             Debug.WriteLine(TAG + "DisableTrigger()");
+             base.DisableTrigger();
+
+             this.triggerEnabled = false;
+             InterceptKeys.OnInterceptKeyDown -= keyDownHandler;
+             InterceptKeys.OnInterceptKeyUp -= keyUpHandler;
+         }
+
+         public override void OnDoubleClick(object sender, MouseEventArgs e)
+         {
+             DimMainWindow(true);
+             setup_window.ShowDialog();
+             DimMainWindow(false);
+         }
+
+
+         
+    }
+}

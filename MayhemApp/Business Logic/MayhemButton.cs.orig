@@ -1,0 +1,72 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows.Media.Imaging;
+using System.Windows.Input;
+using System.Diagnostics;
+using System.Windows;
+
+namespace MayhemApp
+{
+    public class MayhemButton
+    {
+       public string Text { get; set; }
+       // public Position Position { get; set; }
+       public BitmapImage Img { get; set; }
+       public BitmapImage glowImg { get; set; }
+       // public MayhemTrigger triggerItem = null;
+       public delegate void DoubleClickHandler(object sender, MouseEventArgs e);
+       public event DoubleClickHandler OnDoubleClick;
+       public readonly  RoutedUICommand ClickCommand;
+
+           //  this.CommandBindings.Add(cb);
+            //MyCommandButton.Command = MyCommand;
+            //KeyGesture kg = new KeyGesture(Key.M, ModifierKeys.Control);
+           //  InputBinding ib = new InputBinding(MyCommand, kg);
+         //    this.InputBindings.Add(ib);
+ 
+        public MayhemConnectionItem connectionItem = null;
+
+        public MayhemButton() {
+
+         //   CommandBinding cb = new CommandBinding(MyCommand, MyCommandExecute, MyCommandCanExecute);
+
+          //  ClickCommand = new RoutedUICommand("BondDoubleClickedCommand", "BondDoubleClickedCommand", typeof(MayhemBlueButton));
+        }
+
+        public void GotDoubleClicked(object sender, MouseEventArgs e)
+        {
+            Debug.Write("Just Got DoubleClicked");
+
+            if (this.OnDoubleClick != null)
+                OnDoubleClick(this, e);
+
+        }
+
+        public  MayhemButton(string text, BitmapImage image, BitmapImage glowImage)
+        {
+            Text = text;
+            Img = image;
+            glowImg = glowImage;
+        }
+
+
+        
+       
+
+    }
+
+
+    public class MayhemButtonPlaceHolder : MayhemButton {
+
+        public MayhemButtonPlaceHolder(string text, BitmapImage image)
+        {
+            Text = text;
+            Img = image;
+        }
+
+       
+
+    }
+}

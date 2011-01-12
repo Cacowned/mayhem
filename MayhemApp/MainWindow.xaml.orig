@@ -1,0 +1,476 @@
+﻿<Window x:Class="MayhemApp.MainWindow" 
+        x:Name="TheMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MayhemApp"
+        Title="MainWindow" Height="793" Width="1024" ResizeMode="NoResize" Loaded="Window_Loaded" DataContext="{Binding}" Background="{x:Null}" Closing="Window_Closing" Closed="Window_Closed">
+    <Window.Resources>
+        <local:DragDropAdorner x:Key="adorner"/>
+        <Style TargetType="Button" x:Key="TransparentButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="Transparent">
+                            <ContentPresenter/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style for the Tabs on the "Triggers and Actions" side-->
+        <!-- Style for Tab Headers -->
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid>
+                            <Border 
+             Name="Border"
+             Background="LightGray"
+             BorderBrush="Ivory" 
+             BorderThickness="0,0,0,0" 
+             Panel.ZIndex="30"                  
+             CornerRadius="6,6,0,0" >
+                                <ContentPresenter x:Name="ContentSite"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               ContentSource="Header"
+               Margin="12,5,12,2"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="0,1,1,0"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="Gray" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="1,0,0,1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Style for Tab Control  -->
+        <Style  TargetType="{x:Type TabControl}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TabPanel 
+             Grid.Row="0"
+             Panel.ZIndex="1" 
+             Margin="0,0,0,0" 
+             IsItemsHost="True"
+             Background="Transparent" />
+                            <Border Grid.Row="0"
+                    BorderBrush="Ivory"
+                    BorderThickness="0,0,0,1"
+                    CornerRadius="0,0,0,0"
+                    />
+
+                            <Border 
+             Grid.Row="1"
+             BorderBrush="Ivory" 
+             BorderThickness="0,0,0,0" 
+             CornerRadius="0, 0, 5, 5" >
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                        <GradientStop Color="LightGray" Offset="0" />
+                                        <GradientStop Color="DarkGray" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <ContentPresenter ContentSource="SelectedContent" />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- End Tab Styles -->
+
+        <!--Can be used to gray out the app background -->
+
+        <Style x:Key="UserControlOverlayRectangleStyle" TargetType="{x:Type Rectangle}">
+            <Setter Property="Fill" Value="#FF151515"/>
+            <Setter Property="Opacity" Value="0.61"/>
+        </Style>
+
+        <!-- Category List Style -->
+
+        <DataTemplate x:Key="libraryListBaseTemplate">
+            <Grid Background="Transparent">
+            </Grid>
+        </DataTemplate>
+
+        <Style TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+
+        <!-- Data Template for the List Navigation -->
+
+        <DataTemplate DataType="{x:Type local:LibraryListItem}">
+            <Border
+                BorderThickness="0,0,0,0"
+                BorderBrush="DarkGray">
+                <Border.Background>
+                    <LinearGradientBrush x:Name="bbrush" StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="LightGray" Offset="0" />
+                        <GradientStop Color="DarkGray" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <!-- list item animation-->
+                <Border.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetName="bbrush"
+                                            Storyboard.TargetProperty="(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"        
+                                            To="LightBlue" Duration="0:0:0.1"        
+                                                    />
+                                    <ColorAnimation Storyboard.TargetName="bbrush"
+                                            Storyboard.TargetProperty="(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)"        
+                                            To="SkyBlue" Duration="0:0:0.1"        
+                                                    />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetName="bbrush"
+                                            Storyboard.TargetProperty="(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"        
+                                            To="LightGray" Duration="0:0:0.1"        
+                                                    />
+                                    <ColorAnimation Storyboard.TargetName="bbrush"
+                                            Storyboard.TargetProperty="(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)"        
+                                            To="DarkGray" Duration="0:0:0.1"        
+                                                    />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Border.Triggers>
+                <Grid Width="437" Height="50" Background="#30101010"  >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Image Grid.Row="0" Grid.Column="0" Source="{Binding CategoryImage}" Width="75" Height="45" HorizontalAlignment="Center" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Label}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0" />
+                    <!--<Rectangle  Width="75" Height="45" Stroke="Orange"/>  -->
+                    <Image Grid.Row="0" Grid.Column="2" Height="30"  Margin="0,0,10,0" Source="/MayhemApp;component/Images/arrow.png" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:MayhemButton}">
+            <Border
+                BorderThickness="0,0,0,0"
+                BorderBrush="DarkGray">
+                <Border.Background>
+                    <LinearGradientBrush x:Name="bbrush" StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="LightGray" Offset="0" />
+                        <GradientStop Color="DarkGray" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <!-- list item animation-->
+                <Border.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetName="bbrush"
+                                            Storyboard.TargetProperty="(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"        
+                                            To="LightBlue" Duration="0:0:0.1"        
+                                                    />
+                                    <ColorAnimation Storyboard.TargetName="bbrush"
+                                            Storyboard.TargetProperty="(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)"        
+                                            To="SkyBlue" Duration="0:0:0.1"        
+                                                    />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetName="bbrush"
+                                            Storyboard.TargetProperty="(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"        
+                                            To="LightGray" Duration="0:0:0.1"        
+                                                    />
+                                    <ColorAnimation Storyboard.TargetName="bbrush"
+                                            Storyboard.TargetProperty="(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)"        
+                                            To="DarkGray" Duration="0:0:0.1"        
+                                                    />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Border.Triggers>
+                <UniformGrid Height="60" Margin="4" Background="Transparent" VerticalAlignment="Center" >
+                    <local:MayhemButtonControl Margin="0"
+                                             local:DragDropHelper.AdornerLayer="adornLayer"
+                                             local:DragDropHelper.DragDropControl="{StaticResource adorner}"
+                                             local:DragDropHelper.DropTarget="connectionBuilder"
+                                             local:DragDropHelper.IsDragSource="true"
+                                                />
+                    <TextBlock VerticalAlignment="Center" x:Name="help_text" Text="{Binding HelpText}" Width="200" TextWrapping="Wrap"  />
+                </UniformGrid>
+            </Border>
+        </DataTemplate>
+        
+
+
+
+        <!-- /////////////////// List Navigagion -->
+
+    </Window.Resources>
+    <Grid>
+        <!-- The rectangle below is used to gray out the screen when a modal dialog is shown -->
+        <Rectangle Visibility="Hidden"  x:Name="DimRectangle" Margin="2,0,-2,0" Style="{DynamicResource UserControlOverlayRectangleStyle}" Panel.ZIndex="0" />
+        
+        <Rectangle HorizontalAlignment="Left" Margin="512,98,0,-1" Name="right_bg" Stroke="{x:Null}" Width="512">
+            <Rectangle.Fill>
+                <RadialGradientBrush>
+                    <GradientStop Color="#FFD8D8D8" Offset="0" />
+                    <GradientStop Color="#FFC1C1C1" Offset="1" />
+                </RadialGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Left" Margin="0,98,0,-1" Name="left_bg" Stroke="{x:Null}" Width="512">
+            <Rectangle.Fill>
+                <RadialGradientBrush>
+                    <GradientStop Color="#FFB1B1B1" Offset="0" />
+                    <GradientStop Color="#FF8D8D8D" Offset="1" />
+                </RadialGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        
+        <Rectangle Height="100" HorizontalAlignment="Left" Name="mastHead" Stroke="{x:Null}" VerticalAlignment="Top" Width="1024">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="/MayhemApp;component/Images/masthead.png" Stretch="UniformToFill" TileMode="None" />
+            </Rectangle.Fill>
+        </Rectangle>
+        <!--
+        <Rectangle Height="35" HorizontalAlignment="Left" Margin="0,94,0,0" Name="subTitleBar" Stroke="{x:Null}" VerticalAlignment="Top" Width="1024">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="/MayhemApp;component/Images/subtitlebar.png" Stretch="UniformToFill" TileMode="None" />
+            </Rectangle.Fill>
+        </Rectangle>--> <!-- #ffb1b1-->
+        <Border Background="DarkGray" BorderBrush="#FFF2F2F2" BorderThickness="2" Name="border_leftside"  HorizontalAlignment="Left" Margin="35,128,0,45"  Width="445"  CornerRadius="6"></Border>
+      
+        <Border  Background="Gray" BorderBrush="#FFF2F2F2" BorderThickness="2" CornerRadius="6" Name="border_rightside" Margin="522,128,12,45"></Border>
+        <!-- <UniformGrid x:Name="CreateButtonGrid" Rows="1" Columns="1" Canvas.Left="0" Canvas.Top="0">
+           
+        </UniformGrid> -->
+        <!--<Button Canvas.Left="457" Canvas.Top="248" Content="Button" Height="52" Name="CreateButton" Width="93" BorderBrush="{x:Null}" Click="CreateButton_Click">
+            <Button.Background>
+                <ImageBrush ImageSource="/MayhemApp;component/Images/createbutton.png" Stretch="UniformToFill" TileMode="None" />
+            </Button.Background> 
+        </Button>-->
+        
+        <!-- The Adorner Layer for Drag & Drop Buttons 
+             Keep this at a high Zindex at all times! -->
+        <Canvas  x:Name="adornLayer" Visibility="Collapsed" Panel.ZIndex="99"/>
+
+
+        <Canvas x:Name="createBtn" Visibility="Visible" Cursor="Hand" MouseLeftButtonUp="createBtnClick">
+            <local:CreateButton Canvas.Left="468" Canvas.Top="164"  />
+        </Canvas>
+        
+        <Canvas>
+            <local:ConfigButton x:Name="configButton" Cursor="Hand" Canvas.Top="725" Canvas.Right="5" >
+            </local:ConfigButton>
+        </Canvas>
+
+        <Canvas Margin="0,2,0,-2">
+            <StackPanel Orientation="Horizontal" Canvas.Left="694" Canvas.Top="734">
+                <Button Style="{StaticResource prevButtonStyle}" Cursor="Hand" Height="23" x:Name="btn_runlist_prev" Width="75" BorderBrush="{x:Null}" Content="Prev" Click="btn_runlist_prev_Click">
+                </Button>
+                <Button Style="{StaticResource nextButtonStyle}" Margin="5 0 0 0" Cursor="Hand"  Height="23" x:Name="btn_runlist_next" Width="75" BorderBrush="{x:Null}"  Content="Next" Click="btn_runlist_next_Click">
+                </Button>
+            </StackPanel>
+
+            <!--   next/prev button, not needed anymore
+        <StackPanel Orientation="Horizontal" Canvas.Left="300" Canvas.Top="734">
+                <Button Style="{StaticResource prevButtonStyle}" Cursor="Hand" Height="23" x:Name="btn_actionList_prev" Width="75" BorderBrush="{x:Null}" Content="Prev" Click="btn_actionList_prev_Click">
+                </Button>
+                <Button Style="{StaticResource nextButtonStyle}" Margin="5 0 0 0" Cursor="Hand"  Height="23" x:Name="btn_actionList_next" Width="75" BorderBrush="{x:Null}"  Content="Next" Click="btn_actionList_next_Click">
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Canvas.Left="50" Canvas.Top="734">
+                <Button Style="{StaticResource prevButtonStyle}" Cursor="Hand" Height="23" x:Name="btn_triggerList_prev" Width="75" BorderBrush="{x:Null}" Content="Prev" Click="btn_triggerList_prev_Click">
+                </Button>
+                <Button Style="{StaticResource nextButtonStyle}" Margin="5 0 0 0" Cursor="Hand"  Height="23" x:Name="btn_triggerList_next" Width="75" BorderBrush="{x:Null}"  Content="Next" Click="btn_triggerList_next_Click">
+                </Button>
+            </StackPanel> -->
+            <Label Canvas.Left="934" Canvas.Top="712" FontSize="10" Height="28" Name="runListLabel" />
+        </Canvas>
+        
+        <!--- ///////// Library ////////////// -->
+        <Canvas>
+            <Grid Background="Transparent" Width="441" Height="563" Canvas.Left="36" Canvas.Top="138" Margin="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="124*" />
+                    <RowDefinition Height="442*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="444*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Name="library_header" Grid.Column="0" Grid.Row="0" FontSize="24" FontFamily="Segoe UI" Margin="5,0,0,0">
+                    <!-- TODO Extract the settings of this text as a style-->
+                    <TextBlock.Foreground>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="WhiteSmoke" Offset="0" />
+                            <GradientStop Color="#FFD8D8D8" Offset="1" />
+                        </LinearGradientBrush>
+                    </TextBlock.Foreground> 
+                    <TextBlock.Effect>
+                        <DropShadowEffect
+                          ShadowDepth="4"
+                          Direction="330"
+                          Color="Black"
+                          Opacity="0.5"
+                         BlurRadius="4"/>
+                    </TextBlock.Effect>
+                    Triggers and Actions
+                </TextBlock>
+                <TabControl Name="labrary_tabs" Margin="0,39,0,0"  Grid.RowSpan="2">
+                    <TabItem>
+
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/MayhemApp;component/Images/redbutton_10.png"/>
+                                <TextBlock Text="Triggers" Margin="5,0,0,0" />
+                            </StackPanel>
+                        </TabItem.Header>
+
+                        <StackPanel Orientation="Vertical">
+                            <local:ListNavigationControl x:Name="t_listNavigationControl" Margin="5"/>
+                            <!-- a listbox displays the tab's items-->
+                            <ListBox Name="triggerList" Height="469" Margin="0" BorderBrush="Transparent" BorderThickness="0"></ListBox>
+                        </StackPanel>
+
+                    </TabItem>
+
+                    <TabItem >
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/MayhemApp;component/Images/bluebutton_10.png"/>
+                                <TextBlock Text="Actions" Margin="5,0,0,0" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <StackPanel Orientation="Vertical">
+                            <local:ListNavigationControl x:Name="a_listNavigationControl" Margin="5"/>
+                            <!-- a listbox displays the tab's items-->
+                            <ListBox Name="actionList" Height="469" BorderBrush="Transparent" Margin="0" BorderThickness="0"></ListBox>
+                        </StackPanel>
+
+                    </TabItem>
+                </TabControl>
+
+            </Grid>
+
+
+            <!---//////////////////////////////// RIGHT SIDE GRID /////////////////////// -->
+                <Grid x:Name="rightSideGrid" Margin="2" Canvas.Left="522" Canvas.Top="139" Height="570" Width="480" Panel.ZIndex="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="700" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="39" />
+                        <RowDefinition Height="54*" />
+                        <RowDefinition Height="447*" />
+                    </Grid.RowDefinitions>
+               
+                    <TextBlock Name="Runlist_Header"  FontSize="24" FontFamily="Segoe UI" Margin="5,0,0,0">
+                    <!-- TODO Extract the settings fo this text as a style-->
+                    <TextBlock.Foreground>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0" />
+                            <GradientStop Color="#FFD8D8D8" Offset="1" />
+                        </LinearGradientBrush>
+                    </TextBlock.Foreground> 
+                    <TextBlock.Effect>
+                        <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity="0.5" BlurRadius="4" />
+                    </TextBlock.Effect>
+                    Build &amp; Run Mayhem
+                    </TextBlock>
+                
+                    <!-- ////////////////////// Connection-Builder Control ///////////////////// -->
+                <Border Background="LightGray" 
+                        Grid.Column="0" 
+                        Grid.Row="1" 
+                        MinWidth="468" 
+                        BorderBrush="WhiteSmoke"
+                        BorderThickness="0,0,0,1">
+                    <StackPanel  x:Name="connectionBuilder" 
+                                 Orientation="Horizontal" 
+                                 Background="Transparent" 
+                                 AllowDrop="True" 
+                                 MinWidth="468">
+                    <TextBlock Text="Drag items here to build connection:" TextWrapping="Wrap" Width="120" VerticalAlignment="Center" Margin="3,0,0,0" />
+                        <StackPanel Orientation="Horizontal" AllowDrop="True" Width="468">
+                        <ItemsControl x:Name="triggerBuilder" Width="175">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:MayhemButtonControl local:DragDropHelper.AdornerLayer="adornLayer" local:DragDropHelper.DragDropControl="{StaticResource adorner}" local:DragDropHelper.DropTarget="triggerList" local:DragDropHelper.IsDragSource="true" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                        <ItemsControl x:Name="actionBuilder" Width="200">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:MayhemButtonControl local:DragDropHelper.AdornerLayer="adornLayer" local:DragDropHelper.DragDropControl="{StaticResource adorner}" local:DragDropHelper.DropTarget="actionList" local:DragDropHelper.IsDragSource="true" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+                </Border>
+                <!-- ///////////////////// End Connection Builder ////////////////////// -->
+                    <ItemsControl Grid.Column="0" Grid.Row="2" x:Name="runList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:RunControl></local:RunControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+
+            
+        </Canvas>
+        <!-- <Canvas>
+            <local:OnOffControl Canvas.Left="370" Canvas.Top="200" x:Name="ooControl1"/>
+        </Canvas>-->
+    </Grid>
+</Window>

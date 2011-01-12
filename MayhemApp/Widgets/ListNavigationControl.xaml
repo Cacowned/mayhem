@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="MayhemApp.ListNavigationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="35" d:DesignWidth="450">
+    <UniformGrid Rows="1" Columns="3">
+        <Button Style="{StaticResource prevButtonStyle}" Visibility="Hidden" Width="100" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" x:Name="back_button" Cursor="Hand" VerticalContentAlignment="Stretch">Back
+            
+        </Button>
+        <TextBlock VerticalAlignment="Center" FontSize="16" Text="{Binding list_title}"></TextBlock>
+        <TextBox Background="AntiqueWhite" Width="130"></TextBox>
+    </UniformGrid>
+</UserControl>

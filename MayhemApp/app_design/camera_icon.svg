@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="camera_icon.svg">
+  <defs
+     id="defs4">
+    <filter
+       inkscape:collect="always"
+       id="filter3805"
+       inkscape:label="Drop shadow"
+       inkscape:menu="Shadows and Glows"
+       inkscape:menu-tooltip="Overlays a semi-transparent shifted copy to a blurred one"
+       color-interpolation-filters="sRGB"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.628434"
+         id="feGaussianBlur3807"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix3823" />
+      <feOffset
+         id="feOffset3825"
+         dx="4"
+         dy="4"
+         result="result11"
+         in="fbSourceGraphic" />
+      <feGaussianBlur
+         id="feGaussianBlur3827"
+         stdDeviation="4"
+         result="result8" />
+      <feComposite
+         id="feComposite3829"
+         in2="result8"
+         result="result9"
+         in="fbSourceGraphic"
+         operator="in" />
+      <feBlend
+         id="feBlend3831"
+         in2="result8"
+         in="result9"
+         mode="darken"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix3875" />
+      <feGaussianBlur
+         id="feGaussianBlur3877"
+         in="fbSourceGraphicAlpha"
+         stdDeviation="1.6"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix3879"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.5 0 " />
+      <feOffset
+         id="feOffset3881"
+         in="bluralpha"
+         dx="4"
+         dy="4"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge3883">
+        <feMergeNode
+           id="feMergeNode3885"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode3887"
+           in="fbSourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#000000"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="292.16098"
+     inkscape:cy="912.47759"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     objecttolerance="10000"
+     guidetolerance="10000"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1195"
+     inkscape:window-height="822"
+     inkscape:window-x="405"
+     inkscape:window-y="106"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       dotted="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;stroke:#e7e7e7;stroke-width:25;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3805)"
+       d="M 360.62446,172.62595 300,202.36219 c 0,-9.95417 0,-19.90834 0,-29.86251 0,-3.37916 0,-6.75833 0,-10.13749 0,0 -3.6476,0 -9.95995,0 -38.64223,0 -177.14629,-1e-5 -190.04005,0 -5,0 -5,139.99999 0,139.99999 10,-1e-5 200,0 200,0 l 0,-10.03316 0,-29.96684 60,30 z"
+       id="path2991"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccscsssccccc"
+       inkscape:export-filename="C:\Users\t-svenk\Documents\Visual Studio 2010\Projects\test-opencv\MayhemApp\Images\cameraIcon.png"
+       inkscape:export-xdpi="22"
+       inkscape:export-ydpi="22" />
+  </g>
+</svg>

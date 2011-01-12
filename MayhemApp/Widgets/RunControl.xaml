@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="MayhemApp.RunControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:local="clr-namespace:MayhemApp"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="450"
+             Background="{x:Null}" IsVisibleChanged="UserControl_IsVisibleChanged">
+    <Canvas Background="{x:Null}" Margin="10,20,0,50">
+
+        <local:TrashButton x:Name="myTrashButton" Canvas.Left="0" Canvas.Top="7" Panel.ZIndex="10"/>
+        <local:MayhemButtonControl x:Name="triggerItem" Canvas.Left="47" />
+        <local:MayhemButtonControl x:Name="actionItem"  Canvas.Left="205" />
+        <local:OnOffControl x:Name="onOffCtrl" Canvas.Left="386" Canvas.Top="7" />
+
+        </Canvas>
+</UserControl>

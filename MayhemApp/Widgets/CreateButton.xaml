@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="MayhemApp.CreateButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="42" d:DesignWidth="83" Background="Transparent" Foreground="Black">
+
+    <UserControl.Resources>
+      
+    </UserControl.Resources>
+        <Canvas >
+        <!--<Button Style="{DynamicResource CreateButton}" Click="Button_Click" Cursor="Hand" Background="{x:Null}" BorderBrush="{x:Null}">
+            
+        </Button>-->
+        <Image x:Name="Img" Source="../Images/createButton.png" MaxHeight="42" MaxWidth="83" Height="42" Width="83" Canvas.Top="0" />
+        <TextBlock x:Name="buttonName" Text="Create" Background ="{x:Null}" Margin="12,7,15,7" Foreground="DarkGray" Canvas.Top="0" />
+       
+    </Canvas>
+</UserControl>
