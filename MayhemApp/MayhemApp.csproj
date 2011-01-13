@@ -102,6 +102,7 @@
     <Compile Include="Business Logic\Actions\Zune\LastSongAction.cs" />
     <Compile Include="Business Logic\Actions\Zune\NextSongAction.cs" />
     <Compile Include="Business Logic\Actions\Zune\PlayPauseAction.cs" />
+    <Compile Include="Business Logic\Facebook\MayhemFacebook.cs" />
     <Compile Include="Business Logic\IMayhemConnectionItemCommon.cs" />
     <Compile Include="Business Logic\IMayhemTriggerCommon.cs" />
     <Compile Include="Business Logic\LibraryListItem.cs" />
@@ -129,8 +130,8 @@
     <Compile Include="Dialogs\MainConfigDialog.xaml.cs">
       <DependentUpon>MainConfigDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\TwitterActionSetupWindow.xaml.cs">
-      <DependentUpon>TwitterActionSetupWindow.xaml</DependentUpon>
+    <Compile Include="Dialogs\TwitterActionConfiguration.xaml.cs">
+      <DependentUpon>TwitterActionConfiguration.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\UDPTriggerSetupWindow.cs" />
     <Compile Include="Low-Level\AsyncUDPSocket.cs" />
@@ -174,7 +175,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialogs\TwitterActionSetupWindow.xaml">
+    <Page Include="Dialogs\TwitterActionConfiguration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -466,6 +467,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Facebook\FacebookAPI.csproj">
+      <Project>{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}</Project>
+      <Name>FacebookAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

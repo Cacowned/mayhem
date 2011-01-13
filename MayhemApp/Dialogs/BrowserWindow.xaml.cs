@@ -1,20 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Diagnostics;
-using MayhemApp.Business_Logic.Twitter;
 using System.Text.RegularExpressions;
-
-
+using System.Windows;
+using MayhemApp.Business_Logic.Twitter;
 
 namespace MayhemApp.Dialogs
 {
@@ -37,8 +25,6 @@ namespace MayhemApp.Dialogs
 
         public delegate void SaveButtonClickHandler(object sender, SaveButtonClickEventArgs e);
       
-
-
         public BrowserWindow()
         {
             InitializeComponent();
@@ -48,7 +34,6 @@ namespace MayhemApp.Dialogs
 
         void browser_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            //throw new NotImplementedException();
             Debug.WriteLine(TAG + "browser_Navigated");
             browser.BringIntoView();
         }
@@ -71,7 +56,7 @@ namespace MayhemApp.Dialogs
         {
             Match m = _isNumber.Match(theValue);
             return m.Success;
-        } //IsInteger
+        }
 
        
 
@@ -102,15 +87,11 @@ namespace MayhemApp.Dialogs
                 {
                     MessageBox.Show("Twitter could not authorize Mayhem's access. Did you enter the code correctly?");
                 }
-                
-
             }
             else
             {
                 MessageBox.Show("The code shown by Twitter needs to be entered or pasted into the field exactly as shown.");
             }
-
         }
-
     }
 }

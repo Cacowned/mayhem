@@ -37,7 +37,7 @@
             </Button>
 
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical" Margin="0,0,0,10">
-                <Label Foreground="WhiteSmoke" FontStyle="Normal" FontWeight="SemiBold" FontSize="18">Configure: Twitter Update</Label>
+                <Label Foreground="WhiteSmoke" FontStyle="Normal" FontWeight="SemiBold" FontSize="18">Configure: Keyboard trigger</Label>
                 <TextBlock Foreground="WhiteSmoke">This actions posts a twitter update when the associated trigger fires.</TextBlock>
                 <TextBlock  Foreground="WhiteSmoke" Margin="10 25 10 0" TextWrapping="WrapWithOverflow">Please enter any combination of 2 to 4 keys which will activate this trigger.</TextBlock>        
                 <ItemsControl x:Name="keyItems" Margin="0 50 0 20" MinHeight="50">

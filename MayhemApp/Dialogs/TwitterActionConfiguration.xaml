@@ -1,5 +1,6 @@
 ﻿<Window x:Class="MayhemApp.Dialogs.TwitterActionSetupWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        x:Name="TwitterActionConfiguration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:MayhemApp"
         Title="Configure: Twitter Update" 

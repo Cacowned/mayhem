@@ -228,22 +228,18 @@ namespace MayhemApp
             /////////////////////////
 
             LoadButtons();
-
-
-
         }
 
         private void LoadButtons()
         {
 
-            BitmapImage actionImg = new BitmapImage(new Uri("Images/bluebutton.png", UriKind.Relative)); //(BitmapImage) App.Current.TryFindResource("bluebutton");
+            BitmapImage actionImg = new BitmapImage(new Uri("Images/bluebutton.png", UriKind.Relative));
             BitmapImage triggerImg = new BitmapImage(new Uri("Images/redbutton.png", UriKind.Relative));
 
-            BitmapImage dragTriggerImg = new BitmapImage(new Uri("../Images/trigger-empty.png", UriKind.Relative));
-            BitmapImage dragActionImg = new BitmapImage(new Uri("../Images/action-empty.png", UriKind.Relative));
+            BitmapImage dragTriggerImg = new BitmapImage(new Uri("Images/trigger-empty.png", UriKind.Relative));
+            BitmapImage dragActionImg = new BitmapImage(new Uri("Images/action-empty.png", UriKind.Relative));
 
-
-            /// Create top level Categories ////////////////////
+            // Create top level Categories ////////////////////
 
             LibraryListItem time_category = new LibraryListItem("Time Triggers", triggerImg, null);
             LibraryListItem input_events_category = new LibraryListItem("Input Triggers", triggerImg, null);

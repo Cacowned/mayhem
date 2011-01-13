@@ -13,7 +13,7 @@ namespace MayhemApp.Business_Logic
      * </summary>
      * */
     [Serializable]
-    public class MayhemConnectionItem : ISerializable, IMayhemConnectionItemCommon
+    public abstract class MayhemConnectionItem : ISerializable, IMayhemConnectionItemCommon
     {
 
 
@@ -38,7 +38,7 @@ namespace MayhemApp.Business_Logic
 
         public virtual void OnDoubleClick(object sender, MouseEventArgs e)
         {
-            Debug.WriteLine("[MayhemConnectionItem] OnDoubleClick");
+            Debug.WriteLine("["+System.Reflection.MethodBase.GetCurrentMethod().DeclaringType+"] OnDoubleClick");
         }
 
 
@@ -57,12 +57,11 @@ namespace MayhemApp.Business_Logic
             WindowCollection wc = Application.Current.Windows;
             Debug.WriteLine("Number of current Windows: " + wc.Count);
 
+            // We need to get the main window, go through every window checking names
             MainWindow mainW = null;
-
             foreach (Window w in wc)
             {
-                Debug.WriteLine("Name? " + w.Name);
-
+                Debug.WriteLine("Name: " + w.Name);
                 if (w.Name == "TheMainWindow")
                 {
                     mainW = w as MainWindow;

@@ -21,21 +21,21 @@ namespace MayhemApp.Business_Logic.Twitter
             ON
         }
 
-        private static MayhemTwitter Instance_ = null;
+        private static MayhemTwitter _instance = null;
 
         public static MayhemTwitter Instance
         {
             get
             {
-                if (Instance_ == null)
+                if (_instance == null)
                 {
-                    Instance_ = new MayhemTwitter();
+                    _instance = new MayhemTwitter();
                 }
-                return Instance_;
+                return _instance;
             }
 
         }
-       
+
         public static string TAG = "[MayhemTwitter] :";
 
         private string TWITTER_CONSUMER_KEY = "iw29isfyKmNca4sVfVGTLA";
@@ -44,27 +44,23 @@ namespace MayhemApp.Business_Logic.Twitter
 
 
         private string TWITTER_REQUEST_TOKEN = null;
-
         private string TWITTER_ACCESS_TOKEN = null;
         private string TWITTER_ACCESS_TOKEN_SECRET = null;
 
-        public  TWITTER_STATE twitterState = TWITTER_STATE.OFF_NOTOKEN;
+        public TWITTER_STATE twitterState = TWITTER_STATE.OFF_NOTOKEN;
 
         private Dictionary<string, string> myTwitterSettings = null;
 
-
         private OAuthTokens TOKENS = null;
 
-
-
-        private static  string TWITTER_SETTINGS_KEY="TwitterSettings"; 
+        private static string TWITTER_SETTINGS_KEY = "TwitterSettings";
 
         // references to the getter/setter functions of the properties list
         // this allows me to keep the dictionary loader unspecific to the property in question
-        private Action<String> TWITTER_PROPERTY_SET =  (value => Properties.Settings.Default.TwitterSettings = value);
-        private Func<String>   TWITTER_PROPERTY_GET = (() => Properties.Settings.Default.TwitterSettings);
+        private Action<String> TWITTER_PROPERTY_SET = (value => Properties.Settings.Default.TwitterSettings = value);
+        private Func<String> TWITTER_PROPERTY_GET = (() => Properties.Settings.Default.TwitterSettings);
 
-       
+
 
 
         public MayhemTwitter()
@@ -85,7 +81,7 @@ namespace MayhemApp.Business_Logic.Twitter
                     TWITTER_REQUEST_TOKEN = stored_twitter_settings["TWITTER_REQUEST_TOKEN"];
                     TWITTER_ACCESS_TOKEN = stored_twitter_settings["TWITTER_ACCESS_TOKEN"];
                     TWITTER_ACCESS_TOKEN_SECRET = stored_twitter_settings["TWITTER_ACCESS_TOKEN_SECRET"];
-                    twitterState = (TWITTER_STATE) Enum.Parse(typeof(TWITTER_STATE),  stored_twitter_settings["TWITTER_STATE"]);
+                    twitterState = (TWITTER_STATE)Enum.Parse(typeof(TWITTER_STATE), stored_twitter_settings["TWITTER_STATE"]);
 
                     this.TOKENS = GenerateTokens();
 
@@ -94,8 +90,8 @@ namespace MayhemApp.Business_Logic.Twitter
                 {
                     Debug.WriteLine(TAG + "Exception parsing config dictionary -- KeyNotFoundException");
                 }
-                
-                
+
+
                 myTwitterSettings = stored_twitter_settings;
             }
 
@@ -111,7 +107,7 @@ namespace MayhemApp.Business_Logic.Twitter
                 myTwitterSettings["TWITTER_ACCESS_TOKEN_SECRET"] = TWITTER_ACCESS_TOKEN_SECRET;
 
                 // Evil Kludge 
-                if (MayhemSettingsDictionaryLoader.SaveDictionaryWithKey(myTwitterSettings, TWITTER_PROPERTY_SET ))
+                if (MayhemSettingsDictionaryLoader.SaveDictionaryWithKey(myTwitterSettings, TWITTER_PROPERTY_SET))
                 {
                     Debug.WriteLine(TAG + "Settings Saved Successfully");
                 }
@@ -209,11 +205,7 @@ namespace MayhemApp.Business_Logic.Twitter
             tokens.ConsumerKey = this.TWITTER_CONSUMER_KEY;
             tokens.ConsumerSecret = this.TWITTER_CONSUMER_SECRET;
 
-            
-
-            
             return tokens;
-
         }
 
         public bool SendTweet(string tweet)
@@ -236,7 +228,7 @@ namespace MayhemApp.Business_Logic.Twitter
                     }
                     else
                     {
-                        Debug.WriteLine(TAG + "Error sending the tweet: " +  resp.Result.ToString());
+                        Debug.WriteLine(TAG + "Error sending the tweet: " + resp.Result.ToString());
                         Debug.WriteLine(resp.ErrorMessage + "\n" + resp.Content);
                         return false;
                     }
@@ -245,7 +237,6 @@ namespace MayhemApp.Business_Logic.Twitter
                 {
                     return false;
                 }
-               
             }
         }
     }

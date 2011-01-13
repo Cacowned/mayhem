@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{13B4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyIntercept", "KeyIntercept\KeyIntercept.csproj", "{C93A92DA-14B3-4BB3-8BFF-55ABF6701B64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacebookAPI", "Facebook\FacebookAPI.csproj", "{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,18 @@ Global
 		{C93A92DA-14B3-4BB3-8BFF-55ABF6701B64}.Release|Win32.ActiveCfg = Release|x86
 		{C93A92DA-14B3-4BB3-8BFF-55ABF6701B64}.Release|x86.ActiveCfg = Release|x86
 		{C93A92DA-14B3-4BB3-8BFF-55ABF6701B64}.Release|x86.Build.0 = Release|x86
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Release|Win32.ActiveCfg = Release|Any CPU
+		{1F538275-4C0C-4983-8D92-BFF2AA0E5FC1}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
