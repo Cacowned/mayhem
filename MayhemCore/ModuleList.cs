@@ -21,12 +21,12 @@ namespace MayhemCore
         /// <returns></returns>
         protected List<T> FindTypes<T>(string path)
         {
-            var typeList = new List<T>();
-
             if (String.IsNullOrEmpty(path))
             {
                 throw new ArgumentNullException("The given path is null or empty");
             }
+
+            var typeList = new List<T>();
 
             string[] pluginFiles = Directory.GetFiles(path, "*.DLL");
 
