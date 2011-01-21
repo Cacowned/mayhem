@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace MayhemCore
 {
     /// <summary>
@@ -39,6 +35,10 @@ namespace MayhemCore
         {
             this.Name = name;
             this.Description = description;
+        }
+
+        public override string ToString() {
+            return Name;
         }
     }
 }

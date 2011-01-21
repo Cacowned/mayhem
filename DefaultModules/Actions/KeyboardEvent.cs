@@ -11,7 +11,7 @@ namespace DefaultModules.Actions
         public KeyboardEvent()
             : base("Keyboard Event", "This trigger fires with a predefined keyboard event")
         {
-
+            hasConfig = true;
         }
     }
 }

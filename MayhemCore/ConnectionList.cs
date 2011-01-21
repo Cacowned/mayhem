@@ -1,8 +1,5 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
 
 namespace MayhemCore
 {
@@ -10,23 +7,34 @@ namespace MayhemCore
     /// Maintains a set of all the current
     /// connections
     /// </summary>
-    public class ConnectionList: IEnumerable<Connection>
+    public class ConnectionList : List<Connection>
     {
-        List<Connection> connectionList;
-
-        public ConnectionList()
-        {
+        //protected List<Connection> connectionList;
+        /*
+        public ConnectionList() {
             connectionList = new List<Connection>();
         }
 
-        public IEnumerator GetEnumerator()
-        {
+        public Connection this[int index] {
+            get {
+                return connectionList[index];
+            }
+            set {
+                connectionList[index] = value;
+            }
+        }
+
+        public IEnumerator GetEnumerator() {
             return connectionList.GetEnumerator();
         }
 
-        IEnumerator<Connection> IEnumerable<Connection>.GetEnumerator()
-        {
+        IEnumerator<Connection> IEnumerable<Connection>.GetEnumerator() {
             return connectionList.GetEnumerator();
         }
+
+        public void Add(Connection connection) {
+            connectionList.Add(connection);
+        }
+         */
     }
 }

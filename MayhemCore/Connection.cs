@@ -12,13 +12,12 @@ namespace MayhemCore
                 return enabled;
             }
             set {
-                // TODO: What if they are already enabled? We need to check that.
-                if (value == true)
+                if (value == true && enabled == false)
                 {
                     Action.Enable();
                     Reaction.Enable();
                 }
-                else
+                else if (value == false && enabled == true)
                 {
                     Action.Disable();
                     Reaction.Disable();

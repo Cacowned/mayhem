@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace MayhemCore
 {
     /// <summary>
@@ -10,17 +6,17 @@ namespace MayhemCore
     /// </summary>
     public class Mayhem
     {
-        public static ConnectionList ConnectionList
+        public ConnectionList ConnectionList
         {
             get;
             private set;
         }
-        public static ActionList ActionList
+        public ActionList ActionList
         { 
             get;
             private set;
         }
-        public static ReactionList ReactionList
+        public ReactionList ReactionList
         {
             get;
             private set;
@@ -28,6 +24,7 @@ namespace MayhemCore
 
         public Mayhem()
         {
+            // Set up our three lists
             ConnectionList = new ConnectionList();
             ActionList = new ActionList();
             ReactionList = new ReactionList();

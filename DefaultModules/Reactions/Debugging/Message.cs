@@ -12,11 +12,11 @@ namespace DefaultModules.Reactions.Debugging
         public Message()
             :base("Debug Message", "Generates debug output when triggered")
         {
-
         }
         public override void Perform()
         {
             Debug.WriteLine("Debug Reaction got triggered");
         }
+
     }
 }
