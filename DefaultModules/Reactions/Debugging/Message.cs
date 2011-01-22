@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MayhemCore;
 using System.Diagnostics;
+using MayhemCore.ModuleTypes;
 
 namespace DefaultModules.Reactions.Debugging
 {

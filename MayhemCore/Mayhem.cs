@@ -4,19 +4,20 @@ namespace MayhemCore
     /// <summary>
     /// Main Mayhem class, contains lists of actions, reactions, and runlist
     /// </summary>
-    public class Mayhem
+    /// <typeparam name="T">The interface that modules must implement</typeparam>
+    public class Mayhem<T>
     {
         public ConnectionList ConnectionList
         {
             get;
             private set;
         }
-        public ActionList ActionList
+        public ActionList<T> ActionList
         { 
             get;
             private set;
         }
-        public ReactionList ReactionList
+        public ReactionList<T> ReactionList
         {
             get;
             private set;
@@ -26,8 +27,8 @@ namespace MayhemCore
         {
             // Set up our three lists
             ConnectionList = new ConnectionList();
-            ActionList = new ActionList();
-            ReactionList = new ReactionList();
+            ActionList = new ActionList<T>();
+            ReactionList = new ReactionList<T>();
         }
     }
 }

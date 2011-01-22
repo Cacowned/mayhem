@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemCore;
+using MayhemCore.ModuleTypes;
+
 using System.Reflection;
 
 namespace MayhemApp
 {
     class Program
     {
-        static Mayhem mayhem;
+        static Mayhem<ICli> mayhem;
         static void Main(string[] args)
         {
-            mayhem = new Mayhem();
+            mayhem = new Mayhem<ICli>();
             while (true) {
                 Console.WriteLine();
                 Console.WriteLine("0)\tView the run list");
@@ -76,9 +78,7 @@ namespace MayhemApp
             Console.WriteLine();
             ReactionBase reaction = chooseReaction();
            
-            Connection conn = new Connection();
-            conn.Action = action;
-            conn.Reaction = reaction;
+            Connection conn = new Connection(action, reaction);
 
             mayhem.ConnectionList.Add(conn);
 

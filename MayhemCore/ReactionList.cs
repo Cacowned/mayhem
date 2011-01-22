@@ -8,7 +8,7 @@ namespace MayhemCore
     /// <summary>
     /// A list of all the avaliable reactions
     /// </summary>
-    public class ReactionList : ModuleList<ReactionBase>, IEnumerable<ReactionBase>
+    public class ReactionList<T> : ModuleList<ReactionBase, T>, IEnumerable<ReactionBase>
     {
     }
 }
