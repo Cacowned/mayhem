@@ -11,7 +11,7 @@ namespace MayhemCore
     /// Helper methods for Action and Reaction lists
     /// </summary>
     /// <typeparam name="V">The interface type that modules must implement</typeparam>
-    public abstract class ModuleList<T, V> : List<T>
+    public abstract class ModuleList<T, V> : List<T> where T : ModuleBase
     {
         public ModuleList() {
             FindTypes(Application.StartupPath);
@@ -43,18 +43,18 @@ namespace MayhemCore
                     // Go through all the public classes in the assembly
                     foreach (var type in ass.GetExportedTypes())
                     {
-                        //bool hasConfig = (bool)type.GetProperty("HasConfig");
                         // If it's parent class is the type we want
                         // and it implements the correct moduleType
-                        if (type.BaseType == typeof(T) && 
-                            type.GetProperty("HasConfig").Equals(true) &&
-                            type.GetInterfaces().Contains(typeof(V)))
+                        if (type.BaseType == typeof(T))
                         {
                             
                             // Create an instance
                             T reaction = (T)Activator.CreateInstance(type);
-                            // Add it to our final list
-                            this.Add(reaction);
+                            bool hasConfig = reaction.HasConfig;
+                            if (!hasConfig || (hasConfig && type.GetInterfaces().Contains(typeof(V)))) {
+                                // Add it to our final list
+                                this.Add(reaction);
+                            }
                         }
                     }
                 }

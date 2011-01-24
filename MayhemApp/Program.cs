@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 
-using System.Reflection;
 
 namespace MayhemApp
 {
@@ -27,7 +25,6 @@ namespace MayhemApp
                     case 1: addConnection();
                         break;
                 }
-               
             }
         }
 
@@ -39,34 +36,54 @@ namespace MayhemApp
                 return;
             }
 
-
             for (int i = 0; i < mayhem.ConnectionList.Count; i++) {
                 var connection = mayhem.ConnectionList[i];
                 Console.Write(i+")\t");
-                Console.WriteLine(printConnection(connection));
+                Console.Write(printConnection(connection));
+                if (connection.Enabled) {
+                    Console.WriteLine(" - Running");
+                } else {
+                    Console.WriteLine(" - Stopped");
+                }
             }
-            Console.WriteLine("Configure? Y/N");
+
+            Console.Write("Configure? Y/N: ");
             if (isYes()) {
                 Console.WriteLine("Configure connection number: ");
                 int num = validateNumber(mayhem.ConnectionList.Count - 1);
                 var connection = mayhem.ConnectionList[num];
-                
+
                 Console.WriteLine("Configuring {0}", printConnection(connection));
 
-                Console.WriteLine("Configure Action or Reaction? A/R");
+                Console.WriteLine("Configure Action or Reaction? A/R: ");
                 string input = Console.ReadLine();
                 if (input.ToLower().Equals("a")) {
-                    if(!connection.Action.HasConfig) {
+                    if (!connection.Action.HasConfig) {
                         Console.WriteLine("Action {0} can't be configured", connection.Action);
-                    }
-                    else {
+                    } else {
                         Console.WriteLine("Configuring {0}", connection.Action);
+                        ((ICli)connection.Action).CliConfig();
                     }
                 } else if (input.ToLower().Equals("r")) {
                     if (!connection.Reaction.HasConfig) {
                         Console.WriteLine("Reaction {0} can't be configured", connection.Reaction);
                     } else {
                         Console.WriteLine("Configuring {0}", connection.Reaction);
+                        ((ICli)connection.Reaction).CliConfig();
+                    }
+                }
+            } else {
+                Console.Write("Start / Stop a connection? Y/N: ");
+                if (isYes()) {
+                    Console.Write("Which connection? ");
+                    int num = validateNumber(numConnections - 1);
+                    Connection connection = mayhem.ConnectionList[num];
+
+                    // Flip whether it is enabled or not
+                    if (connection.Enabled) {
+                        connection.Disable();
+                    } else {
+                        connection.Enable();
                     }
                 }
             }

@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Threading;
 namespace MayhemCore
 {
     /// <summary>
@@ -7,23 +8,13 @@ namespace MayhemCore
     /// </summary>
     public class Connection
     {
+        protected Thread actionThread;
+        protected Thread reactionThread;
+
         protected bool enabled;
         public bool Enabled {
-            get {
-                return enabled;
-            }
-            set {
-                if (value == true && enabled == false)
-                {
-                    Action.Enable();
-                    Reaction.Enable();
-                }
-                else if (value == false && enabled == true)
-                {
-                    Action.Disable();
-                    Reaction.Disable();
-                }
-            }
+            get;
+            private set;
         }
         public ActionBase Action { get; private set; }
         public ReactionBase Reaction { get; private set; }
@@ -32,7 +23,7 @@ namespace MayhemCore
             this.Action = action;
             this.Reaction = reaction;
 
-            this.Action.OnActionActivated += this.action_activated;
+            this.Action.ActionActivated += this.action_activated;
         }
 
         public void action_activated(object sender, EventArgs e) {
@@ -40,6 +31,29 @@ namespace MayhemCore
             // to check if we are enabled.
             if (Enabled)
                 Reaction.Perform();
+        }
+
+
+        public void Enable() {
+            if (this.Enabled) {
+                return;
+            }
+
+            Action.Enable();
+            Reaction.Enable();
+
+            this.Enabled = true;
+        }
+
+        public void Disable() {
+            if (!this.Enabled) { 
+                return;
+            }
+
+            Action.Disable();
+            Reaction.Disable();
+
+            this.Enabled = false;
         }
     }
 }

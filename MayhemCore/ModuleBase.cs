@@ -28,8 +28,8 @@ namespace MayhemCore
 
         public void ShowConfig() { }
 
-        public void Enable() { }
-        public void Disable() { }
+        public virtual void Enable() { }
+        public virtual void Disable() { }
 
         public ModuleBase(string name, string description)
         {

@@ -15,7 +15,7 @@ namespace DefaultModules.Actions
         protected int hours, minutes, seconds = 0;
 
         private System.Timers.Timer myTimer;
-        public override event ActionActivateHandler OnActionActivated;
+        //public override event ActionActivateHandler OnActionActivated;
 
         public Timer()
             : base("Timer", "Triggers after a certain amount of time")
@@ -34,33 +34,43 @@ namespace DefaultModules.Actions
 
         public void CliConfig() {
             
-            
             string input = "";
             
             do{
-                Console.WriteLine("{0} Please enter the number of hours to wait: ");
+                Console.Write("{0} Please enter the number of hours to wait: ", TAG);
                 input =  Console.ReadLine();
             }
-            while(Int32.TryParse(input, out hours) && hours >= 0);
+            while(Int32.TryParse(input, out hours) && !(hours >= 0));
 
             do {
-                Console.WriteLine("{0} Please enter the number of minutes to wait: ");
+                Console.Write("{0} Please enter the number of minutes to wait: ", TAG);
                 input = Console.ReadLine();
             }
-            while (Int32.TryParse(input, out minutes) && minutes >= 0 && minutes < 60);
+            while (Int32.TryParse(input, out minutes) && !(minutes >= 0 && minutes < 60));
 
             do {
-                Console.WriteLine("{0} Please enter the number of seconds to wait: ");
+                Console.Write("{0} Please enter the number of seconds to wait: ", TAG);
                 input = Console.ReadLine();
             }
-            while (Int32.TryParse(input, out seconds) && seconds >= 0 && seconds < 60);
+            while (Int32.TryParse(input, out seconds) && !(seconds >= 0 && seconds < 60));
+
+            double interval = (hours * 3600 + minutes * 60 + seconds) * 1000;
+            myTimer.Interval = interval;
 
         }
 
         private void myTimer_Elapsed(object sender, ElapsedEventArgs e) {
-            if (OnActionActivated != null) {
-                OnActionActivated(this, new EventArgs());
-            }
+            base.OnActionActivated();
+        }
+
+        public override void Enable() {
+            myTimer.Enabled = true;
+            myTimer.Start();
+        }
+
+        public override void Disable() {
+            myTimer.Stop();
+            myTimer.Enabled = false;
         }
     }
 }
