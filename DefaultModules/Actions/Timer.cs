@@ -40,19 +40,19 @@ namespace DefaultModules.Actions
                 Console.Write("{0} Please enter the number of hours to wait: ", TAG);
                 input =  Console.ReadLine();
             }
-            while(Int32.TryParse(input, out hours) && !(hours >= 0));
+            while(!Int32.TryParse(input, out hours) || !(hours >= 0));
 
             do {
                 Console.Write("{0} Please enter the number of minutes to wait: ", TAG);
                 input = Console.ReadLine();
             }
-            while (Int32.TryParse(input, out minutes) && !(minutes >= 0 && minutes < 60));
+            while (!Int32.TryParse(input, out minutes) || !(minutes >= 0 && minutes < 60));
 
             do {
                 Console.Write("{0} Please enter the number of seconds to wait: ", TAG);
                 input = Console.ReadLine();
             }
-            while (Int32.TryParse(input, out seconds) && !(seconds >= 0 && seconds < 60));
+            while (!Int32.TryParse(input, out seconds) || !(seconds >= 0 && seconds < 60));
 
             double interval = (hours * 3600 + minutes * 60 + seconds) * 1000;
             myTimer.Interval = interval;

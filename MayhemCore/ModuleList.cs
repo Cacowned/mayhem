@@ -30,15 +30,15 @@ namespace MayhemCore
                 throw new ArgumentNullException("The given path is null or empty");
             }
 
-            string[] pluginFiles = Directory.GetFiles(path, "*.DLL");
+            string[] pluginFiles = Directory.GetFiles(path, "*.dll");
 
             // Go through each dll file
             for (int i = 0; i < pluginFiles.Length; i++)
             {
-
-                string fileName = Path.GetFileNameWithoutExtension(pluginFiles[i]);
                 // load it
-                Assembly ass = Assembly.Load(fileName);
+                string path2 = Path.Combine(path, pluginFiles[i]);
+                Assembly ass = Assembly.LoadFrom(path2);
+
                 if (ass != null)
                 {
                     // Go through all the public classes in the assembly

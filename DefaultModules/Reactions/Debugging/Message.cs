@@ -16,8 +16,7 @@ namespace DefaultModules.Reactions.Debugging
         }
         public override void Perform()
         {
-            Debug.WriteLine("Debug Reaction got triggered");
+            Debug.WriteLine("{0}: Debug Reaction got triggered", DateTime.Now.ToLongTimeString());
         }
-
     }
 }

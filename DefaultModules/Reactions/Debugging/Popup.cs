@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MayhemCore;
 using System.Diagnostics;
+using System.Windows;
 
 namespace DefaultModules.Reactions.Debugging
 {
@@ -16,7 +17,7 @@ namespace DefaultModules.Reactions.Debugging
         }
         public override void Perform()
         {
-            Debug.WriteLine("Debug Reaction got triggered");
+            MessageBox.Show("Triggered!");
         }
     }
 }

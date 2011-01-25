@@ -92,6 +92,7 @@ namespace MayhemApp
         public static void addConnection() {
             Console.WriteLine("Create a Connection:");
             ActionBase action = chooseAction();
+
             Console.WriteLine();
             ReactionBase reaction = chooseReaction();
            
@@ -112,8 +113,10 @@ namespace MayhemApp
 
             int num = validateNumber(numActions-1);
 
-            return mayhem.ActionList[num];
-
+            Type actionType = mayhem.ActionList[num].GetType();
+            var action = Activator.CreateInstance(actionType);
+            
+            return (ActionBase)action;
         }
 
         public static ReactionBase chooseReaction() {
@@ -126,7 +129,10 @@ namespace MayhemApp
 
             int num = validateNumber(numReactions-1);
 
-            return mayhem.ReactionList[num];
+            Type reactionType = mayhem.ReactionList[num].GetType();
+            var reaction = Activator.CreateInstance(reactionType);
+
+            return (ReactionBase)reaction;
 
         }
 
