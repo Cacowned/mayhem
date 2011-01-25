@@ -10,7 +10,7 @@ namespace DefaultModules.Actions
     public class Keypress : ActionBase
     {
         public Keypress()
-            : base("Keypress", "This trigger fires on a predefined keypress")
+            : base("Keypress", "This trigger fires on a predefined key press")
         {
             hasConfig = true;
         }

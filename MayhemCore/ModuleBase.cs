@@ -7,26 +7,30 @@ namespace MayhemCore
     public abstract class ModuleBase
     {
         protected bool hasConfig = false;
-
+        /// <summary>
+        /// Whether this module has configuration settings
+        /// </summary>
         public bool HasConfig {
             get {
                 return hasConfig;
             }
         }
 
+
         public string Name
         {
             get;
             protected set;
         }
+        
         public string Description
         {
             get;
             protected set;
         }
-        // category
+        
+        // TODO: category?
 
-        public void ShowConfig() { }
 
         public virtual void Enable() { }
         public virtual void Disable() { }

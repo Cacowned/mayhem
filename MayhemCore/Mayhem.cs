@@ -2,7 +2,7 @@
 namespace MayhemCore
 {
     /// <summary>
-    /// Main Mayhem class, contains lists of actions, reactions, and runlist
+    /// Main Mayhem class, contains lists of actions, reactions, and run list
     /// </summary>
     /// <typeparam name="T">The interface that modules must implement</typeparam>
     public class Mayhem<T>

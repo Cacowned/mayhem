@@ -10,16 +10,17 @@ namespace MayhemCore
     /// <summary>
     /// Helper methods for Action and Reaction lists
     /// </summary>
+    /// <typeparam name="T">ActionBase or ReactionBase</typeparam>
     /// <typeparam name="V">The interface type that modules must implement</typeparam>
     public abstract class ModuleList<T, V> : List<T> where T : ModuleBase
     {
         public ModuleList() {
-            FindTypes(Application.StartupPath);
+            // Load up all the types of things that we want in the application root
+            FindTypes(Path.Combine(Application.StartupPath, "modules"));
         }
         /// <summary>
-        /// Find all the types that exist in dlls specified by path
+        /// Find all the types that exist in DLLs specified by path
         /// </summary>
-        /// <typeparam name="P">The interface type that the class must implement</typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
         protected void FindTypes(string path)

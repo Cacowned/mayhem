@@ -8,10 +8,6 @@ namespace MayhemCore
     /// </summary>
     public class Connection
     {
-        protected Thread actionThread;
-        protected Thread reactionThread;
-
-        protected bool enabled;
         public bool Enabled {
             get;
             private set;
@@ -23,9 +19,13 @@ namespace MayhemCore
             this.Action = action;
             this.Reaction = reaction;
 
+            // Set up the event handler for when the action triggers
             this.Action.ActionActivated += this.action_activated;
         }
 
+        /// <summary>
+        /// Calls the Reaction when the action gets triggered.
+        /// </summary>
         public void action_activated(object sender, EventArgs e) {
             // If we got into this method call, we probably don't need
             // to check if we are enabled.
@@ -33,8 +33,12 @@ namespace MayhemCore
                 Reaction.Perform();
         }
 
-
+        /// <summary>
+        /// Enable this connection's
+        /// action and reaction
+        /// </summary>
         public void Enable() {
+            // if we are already enabled, just stop
             if (this.Enabled) {
                 return;
             }
@@ -46,6 +50,7 @@ namespace MayhemCore
         }
 
         public void Disable() {
+            // if we aren't already enabled, just stop
             if (!this.Enabled) { 
                 return;
             }
