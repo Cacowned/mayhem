@@ -43,9 +43,12 @@
   <ItemGroup>
     <Compile Include="Actions\Keypress.cs" />
     <Compile Include="Actions\Timer.cs" />
+    <Compile Include="Actions\UdpReceive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reactions\Debugging\Message.cs" />
     <Compile Include="Reactions\Debugging\Popup.cs" />
+    <Compile Include="UdpHelpers\AsyncUdpServerSocket.cs" />
+    <Compile Include="UdpHelpers\UdpState.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MayhemCore\MayhemCore.csproj">
