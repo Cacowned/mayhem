@@ -8,12 +8,9 @@ using System.Diagnostics;
 
 namespace DefaultModules.UdpHelpers
 {
-    public class DataReceivedEventArgs : EventArgs
-    {
-        public string data = null;
-    }
+    
 
-    class AsyncUdpServerSocket
+    public class AsyncUdpServerSocket
     {
         // port nr -- socket
         private static Dictionary<int, AsyncUdpServerSocket> sockets_ = new Dictionary<int, AsyncUdpServerSocket>();

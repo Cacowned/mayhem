@@ -11,7 +11,7 @@ namespace DefaultModules.Reactions.Debugging
     public class Popup : ReactionBase
     {
         public Popup()
-            : base("Popup Window", "Generates a small popup window when triggered")
+            : base("Debug: Popup", "Generates a small popup window when triggered")
         {
 
         }

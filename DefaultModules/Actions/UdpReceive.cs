@@ -48,8 +48,35 @@ namespace DefaultModules.Actions
                 text = Console.ReadLine();
             } while (text.Trim().Length == 0);
 
-            this.port = portNum;
-            this.listen_message = text;
+            SetListenOnPort(port, text);
+        }
+
+        public void SetListenOnPort(int port, string message) {
+            this.port = port;
+            this.listen_message = message;
+
+            socket = AsyncUdpServerSocket.GetSocketForPort(port);
+            received_handler = new AsyncUdpServerSocket.DataReceivedHandler(socket_OnDataReceived);
+        }
+
+
+        public override void Enable() {
+            base.Enable();
+            if (socket != null)
+                socket.OnDataReceived += received_handler;
+        }
+
+        void socket_OnDataReceived(object sender, DataReceivedEventArgs e) {
+
+            if (e.data == listen_message) {
+                base.OnActionActivated();
+            }
+        }
+
+        public override void Disable() {
+            base.Disable();
+            if (socket != null)
+                socket.OnDataReceived -= received_handler;
         }
     }
 }

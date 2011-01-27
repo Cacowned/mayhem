@@ -64,11 +64,13 @@ namespace DefaultModules.Actions
         }
 
         public override void Enable() {
+            base.Enable();
             myTimer.Enabled = true;
             myTimer.Start();
         }
 
         public override void Disable() {
+            base.Disable();
             myTimer.Stop();
             myTimer.Enabled = false;
         }

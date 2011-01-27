@@ -1,10 +1,11 @@
 ﻿
+using System;
 namespace MayhemCore
 {
     /// <summary>
     /// This class is extended by ActionBase and ReactionBase
     /// </summary>
-    public abstract class ModuleBase
+    public abstract class ModuleBase: IComparable<ModuleBase>
     {
         protected bool hasConfig = false;
         /// <summary>
@@ -16,6 +17,7 @@ namespace MayhemCore
             }
         }
 
+        protected bool Enabled { get; set; }
 
         public string Name
         {
@@ -32,8 +34,12 @@ namespace MayhemCore
         // TODO: category?
 
 
-        public virtual void Enable() { }
-        public virtual void Disable() { }
+        public virtual void Enable() {
+            this.Enabled = true;
+        }
+        public virtual void Disable() {
+            this.Enabled = false;
+        }
 
         public ModuleBase(string name, string description)
         {
@@ -43,6 +49,10 @@ namespace MayhemCore
 
         public override string ToString() {
             return Name;
+        }
+
+        public int CompareTo(ModuleBase obj) {
+            return String.Compare(this.Name, obj.Name);
         }
     }
 }

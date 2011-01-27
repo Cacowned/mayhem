@@ -60,6 +60,7 @@ namespace MayhemCore
                     }
                 }
             }
+            this.Sort();
         }
     }
 }

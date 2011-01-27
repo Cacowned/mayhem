@@ -11,7 +11,7 @@ namespace DefaultModules.Reactions.Debugging
     public class Message: ReactionBase
     {
         public Message()
-            :base("Debug Message", "Generates debug output when triggered")
+            :base("Debug: Message", "Generates debug output when triggered")
         {
         }
         public override void Perform()
