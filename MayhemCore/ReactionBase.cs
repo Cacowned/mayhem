@@ -1,7 +1,10 @@
-﻿
+﻿using System;
+using System.Runtime.Serialization;
+
 namespace MayhemCore
 {
-    public abstract class ReactionBase: ModuleBase
+    [Serializable]
+    public abstract class ReactionBase: ModuleBase, ISerializable
     {
         public ReactionBase(string name, string description)
             :base(name, description)
@@ -9,5 +12,14 @@ namespace MayhemCore
         }
 
         public abstract void Perform();
+
+        #region Serializable
+        public ReactionBase(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context) {
+            base.GetObjectData(info, context);
+        }
+        #endregion
+        
     }
 }

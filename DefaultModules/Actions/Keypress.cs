@@ -10,7 +10,7 @@ using System.Diagnostics;
 namespace DefaultModules.Actions
 {
     // Because of it's support for shifts and stuff, it won't work in CLI mode.
-
+    [Serializable]
     public class Keypress : ActionBase
     {
         public const string TAG = "[Key Press]";

@@ -8,6 +8,7 @@ using System.Windows;
 
 namespace DefaultModules.Reactions.Debugging
 {
+    [Serializable]
     public class Popup : ReactionBase
     {
         public Popup()

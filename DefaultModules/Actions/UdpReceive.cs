@@ -5,23 +5,24 @@ using System.Text;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using DefaultModules.UdpHelpers;
+using System.Runtime.Serialization;
 
 namespace DefaultModules.Actions
 {
-    
-    public class UdpReceive : ActionBase, ICli
+    [Serializable]
+    public class UdpReceive : ActionBase, ICli, ISerializable
     {
         public const string TAG = "[UdpReceive]";
 
-        public static HashSet<int> used_ports = new HashSet<int>();
+        public static HashSet<int> usedPorts = new HashSet<int>();
 
         protected int port = 1111;
 
         protected AsyncUdpServerSocket socket = null;
 
-        protected string listen_message = null;
+        protected string listenMessage = null;
 
-        protected AsyncUdpServerSocket.DataReceivedHandler received_handler = null;
+        protected AsyncUdpServerSocket.DataReceivedHandler receivedHandler = null;
 
         public UdpReceive()
             : base("UDP Receive", "Fires when predefined UDP message is received")
@@ -53,22 +54,22 @@ namespace DefaultModules.Actions
 
         public void SetListenOnPort(int port, string message) {
             this.port = port;
-            this.listen_message = message;
+            this.listenMessage = message;
 
             socket = AsyncUdpServerSocket.GetSocketForPort(port);
-            received_handler = new AsyncUdpServerSocket.DataReceivedHandler(socket_OnDataReceived);
+            receivedHandler = new AsyncUdpServerSocket.DataReceivedHandler(socket_OnDataReceived);
         }
 
 
         public override void Enable() {
             base.Enable();
             if (socket != null)
-                socket.OnDataReceived += received_handler;
+                socket.OnDataReceived += receivedHandler;
         }
 
         void socket_OnDataReceived(object sender, DataReceivedEventArgs e) {
 
-            if (e.data == listen_message) {
+            if (e.data == listenMessage) {
                 base.OnActionActivated();
             }
         }
@@ -76,7 +77,35 @@ namespace DefaultModules.Actions
         public override void Disable() {
             base.Disable();
             if (socket != null)
-                socket.OnDataReceived -= received_handler;
+                socket.OnDataReceived -= receivedHandler;
+        }
+
+        #region Serialization
+
+        public UdpReceive(SerializationInfo info, StreamingContext context) : base (info, context)
+        {
+            //throw new NotImplementedException();
+
+            this.port = info.GetInt32("Port");
+            this.listenMessage = info.GetString("ListenMessage");
+
+            SetListenOnPort(port, listenMessage);
+
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            //throw new NotImplementedException();
+
+            info.AddValue("Port", port);
+            info.AddValue("ListenMessage", listenMessage);
+
+        }
+        #endregion
+
+        ~UdpReceive()
+        {
+            socket = null;
         }
     }
 }

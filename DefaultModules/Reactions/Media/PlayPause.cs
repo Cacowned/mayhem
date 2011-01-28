@@ -1,8 +1,10 @@
 ﻿using DefaultModules.LowLevel;
 using MayhemCore;
+using System;
 
 namespace DefaultModules.Reactions.Media
 {
+    [Serializable]
     public class PlayPause : ReactionBase
     {
         public PlayPause()

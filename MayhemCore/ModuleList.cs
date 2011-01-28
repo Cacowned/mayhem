@@ -12,6 +12,7 @@ namespace MayhemCore
     /// </summary>
     /// <typeparam name="T">ActionBase or ReactionBase</typeparam>
     /// <typeparam name="V">The interface type that modules must implement</typeparam>
+    [Serializable]
     public abstract class ModuleList<T, V> : List<T> where T : ModuleBase
     {
         public ModuleList() {

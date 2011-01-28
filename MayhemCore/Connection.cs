@@ -1,19 +1,23 @@
 ﻿
 using System;
 using System.Threading;
+using System.Runtime.Serialization;
 namespace MayhemCore
 {
     /// <summary>
     /// This class will be a pairing of an action and reaction
     /// </summary>
-    public class Connection
+    [Serializable]
+    public class Connection : ISerializable
     {
         public bool Enabled {
             get;
-            private set;
+            set;
         }
-        public ActionBase Action { get; private set; }
-        public ReactionBase Reaction { get; private set; }
+        public ActionBase Action { get; set; }
+        public ReactionBase Reaction { get; set; }
+
+        public Connection() { }
 
         public Connection(ActionBase action, ReactionBase reaction) {
             this.Action = action;
@@ -60,5 +64,24 @@ namespace MayhemCore
 
             this.Enabled = false;
         }
+
+        #region Serialization
+        public Connection(SerializationInfo info, StreamingContext context)
+        {
+            Action = info.GetValue("Action", typeof(object)) as ActionBase;
+            Reaction = info.GetValue("Reaction", typeof(object)) as ReactionBase;
+
+            bool enabled = info.GetBoolean("Enabled");
+            if (enabled)
+                this.Enable();
+        }
+
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context) {
+            info.AddValue("Action", Action);
+            info.AddValue("Reaction", Reaction);
+            info.AddValue("Enabled", Enabled);
+        }
+
+        #endregion
     }
 }

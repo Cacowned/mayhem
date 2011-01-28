@@ -3,6 +3,9 @@ using System.Linq;
 using System.Text;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using System.Diagnostics;
+using System.Runtime.Serialization;
+using System.IO;
 
 
 namespace MayhemApp
@@ -12,20 +15,47 @@ namespace MayhemApp
         static Mayhem<ICli> mayhem;
         static void Main(string[] args)
         {
-            mayhem = new Mayhem<ICli>();
+            //Properties.Settings.Default.RunListSettings = "";
+            //Properties.Settings.Default.Save();
+
+            /// TODO: Figure out how to load up the correct assemblies
+            /// 
+
+            if (File.Exists(Base64Serialize<Mayhem<ICli>>.filename)) {
+               // Debug.WriteLine(Properties.Settings.Default.RunListSettings);
+                
+                try {
+                    mayhem = Base64Serialize<Mayhem<ICli>>.Deserialize();
+
+                    Console.WriteLine("Starting up with "+mayhem.ConnectionList.Count+" connections");
+                
+                } catch (SerializationException e) {
+                    Debug.WriteLine("(De-)SerializationException " + e);
+                }
+            } else { 
+                mayhem = new Mayhem<ICli>();
+            }
+
             while (true) {
                 Console.WriteLine();
                 Console.WriteLine("0)\tView the run list");
                 Console.WriteLine("1)\tCreate a connection");
-                int number = validateNumber(1);
+                Console.WriteLine("2)\tExit");
+
+                int number = validateNumber(2);
                 Console.WriteLine();
                 switch (number) {
                     case 0: runList();
                         break;
                     case 1: addConnection();
                         break;
+                    case 2: 
+                        Base64Serialize<Mayhem<ICli>>.SerializeObject(mayhem);
+                        return;
                 }
             }
+
+
         }
 
         public static void runList() {

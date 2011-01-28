@@ -5,9 +5,11 @@ using System.Text;
 using MayhemCore;
 using System.Diagnostics;
 using MayhemCore.ModuleTypes;
+using System.Runtime.Serialization;
 
 namespace DefaultModules.Reactions.Debugging
 {
+    [Serializable]
     public class Message: ReactionBase
     {
         public Message()

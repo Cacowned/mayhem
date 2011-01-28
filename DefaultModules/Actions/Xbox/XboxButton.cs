@@ -9,16 +9,20 @@ using Microsoft.Xna.Framework;
 using System.Threading;
 using System.Diagnostics;
 using MayhemCore.ModuleTypes;
+using System.Runtime.Serialization;
 
 namespace DefaultModules.Actions.Xbox
 {
-    public class XboxButton : ActionBase, ICli
+    [Serializable]
+    public class XboxButton : ActionBase, ICli, ISerializable
     {
         protected BackgroundWorker bw = new BackgroundWorker();
 
         protected const string TAG = "[Xbox]";
 
-        protected GamePadState configState;
+        protected GamePadButtons buttons;
+        //protected GamePadState configState;
+        protected PlayerIndex player = PlayerIndex.One;
 
         public XboxButton()
             : base("Xbox Controller: Button", "Triggers when buttons on an Xbox 360 controller are pushed")
@@ -53,7 +57,7 @@ namespace DefaultModules.Actions.Xbox
                 if (worker.CancellationPending == true)
                     return;
 
-                var state2 = GamePad.GetState(PlayerIndex.One);
+                var state2 = GamePad.GetState(player).Buttons;
 
                 bool isEquals = StateEquals(state2);
                 if (wasEquals == false && isEquals == true) {
@@ -68,13 +72,12 @@ namespace DefaultModules.Actions.Xbox
         }
 
         protected void ProgressChanged(object sender, ProgressChangedEventArgs e) {
+            Debug.WriteLine(String.Format("{0} Button Pressed", TAG));
             base.OnActionActivated();
         }
 
 
         public void CliConfig() {
-            PlayerIndex player;
-
             int playerNum;
 
             string input = "";
@@ -99,15 +102,38 @@ namespace DefaultModules.Actions.Xbox
 
             Console.WriteLine("{0} Push buttons on the controller and press enter to set.", TAG);
             Console.ReadLine();
-            configState = GamePad.GetState(player);
+            //configState = GamePad.GetState(player);
+            buttons = GamePad.GetState(player).Buttons;
         }
 
         /// <summary>
         /// Checks the gamepad state against the one saved from configuration
         /// </summary>
         /// <param name="checkState"></param>
-        public bool StateEquals(GamePadState checkState) {
-            return configState.Buttons.Equals(checkState.Buttons) && configState.DPad.Equals(checkState.DPad);
+        public bool StateEquals(GamePadButtons checkState) {
+            return buttons.Equals(checkState);
+            //return configState.Buttons.Equals(checkState.Buttons) && configState.DPad.Equals(checkState.DPad);
         }
+
+        #region Serialization
+        // The xna stuff isn't serializable. Find a fix?
+        public XboxButton(SerializationInfo info, StreamingContext context) 
+            : base (info, context)
+        {
+
+            //configState = (GamePadState)info.GetValue("GamePadState", typeof(GamePadState));
+            //buttons = (GamePadButtons)info.GetValue("GamePadButtons", typeof(GamePadButtons));
+            //player = (PlayerIndex)info.GetValue("Player", typeof(PlayerIndex));
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+
+            //info.AddValue("GamePadState", configState);
+            //info.AddValue("GamePadButtons", buttons);
+            //info.AddValue("Player", player);
+        }
+        #endregion
+
     }
 }

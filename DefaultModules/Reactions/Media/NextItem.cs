@@ -1,8 +1,10 @@
 ﻿using DefaultModules.LowLevel;
 using MayhemCore;
+using System;
 
-namespace DefaultModules.Reactions.Zune
+namespace DefaultModules.Reactions.Media
 {
+    [Serializable]
     public class NextItem: ReactionBase
     {
         public NextItem()

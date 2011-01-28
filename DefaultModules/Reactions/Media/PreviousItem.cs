@@ -7,6 +7,7 @@ using DefaultModules.LowLevel;
 
 namespace DefaultModules.Reactions.Media
 {
+    [Serializable]
     public class PreviousItem : ReactionBase
     {
         public PreviousItem()

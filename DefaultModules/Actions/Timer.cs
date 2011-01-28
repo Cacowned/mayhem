@@ -5,10 +5,12 @@ using System.Text;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using System.Timers;
+using System.Runtime.Serialization;
 
 namespace DefaultModules.Actions
 {
-    public class Timer : ActionBase, ICli
+    [Serializable]
+    public class Timer : ActionBase, ICli, ISerializable
     {
         protected const string TAG = "[Timer]";
 
@@ -29,6 +31,8 @@ namespace DefaultModules.Actions
             myTimer = new System.Timers.Timer();
             myTimer.Elapsed += new ElapsedEventHandler(myTimer_Elapsed);
             myTimer.Enabled = false;
+
+            SetInterval();
             
         }
 
@@ -54,9 +58,13 @@ namespace DefaultModules.Actions
             }
             while (!Int32.TryParse(input, out seconds) || !(seconds >= 0 && seconds < 60));
 
+            SetInterval();
+
+        }
+
+        protected void SetInterval() {
             double interval = (hours * 3600 + minutes * 60 + seconds) * 1000;
             myTimer.Interval = interval;
-
         }
 
         private void myTimer_Elapsed(object sender, ElapsedEventArgs e) {
@@ -74,5 +82,26 @@ namespace DefaultModules.Actions
             myTimer.Stop();
             myTimer.Enabled = false;
         }
+
+        #region Serialization
+
+        public Timer(SerializationInfo info, StreamingContext context) 
+            : base (info, context)
+        {
+
+            hours = info.GetInt32("Hours");
+            minutes = info.GetInt32("Minutes");
+            seconds = info.GetInt32("Seconds");
+
+            SetInterval();
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Hours", hours);
+            info.AddValue("Minutes", minutes);
+            info.AddValue("Seconds", seconds);
+        }
+        #endregion
     }
 }
