@@ -48,7 +48,7 @@
     <Compile Include="Actions\Keypress.cs" />
     <Compile Include="Actions\Timer.cs" />
     <Compile Include="Actions\UdpReceive.cs" />
-    <Compile Include="Actions\Xbox\AButton.cs" />
+    <Compile Include="Actions\Xbox\XboxButton.cs" />
     <Compile Include="KeypressHelpers\InterceptKeys.cs" />
     <Compile Include="LowLevel\Native.cs" />
     <Compile Include="LowLevel\Utils.cs" />
