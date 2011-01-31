@@ -20,5 +20,17 @@ namespace DefaultModules.Reactions.Debugging
         {
             Debug.WriteLine("{0}: Debug Reaction got triggered", DateTime.Now.ToLongTimeString());
         }
+
+        #region Serialization
+        public Message(SerializationInfo info, StreamingContext context) 
+            : base (info, context)
+        {
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+        }
+        #endregion
     }
 }

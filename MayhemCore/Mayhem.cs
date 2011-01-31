@@ -6,8 +6,8 @@ namespace MayhemCore
     /// Main Mayhem class, contains lists of actions, reactions, and run list
     /// </summary>
     /// <typeparam name="T">The interface that modules must implement</typeparam>
-    [Serializable]
-    public class Mayhem<T>: ISerializable
+    //[Serializable]
+    public class Mayhem<T>//: ISerializable
     {
         public ConnectionList ConnectionList
         {
@@ -32,7 +32,7 @@ namespace MayhemCore
             ReactionList = new ReactionList<T>();
             ConnectionList = new ConnectionList();
         }
-
+        /*
         #region Serialization
         public Mayhem(SerializationInfo info, StreamingContext context)
         {
@@ -45,5 +45,6 @@ namespace MayhemCore
             info.AddValue("ConnectionList", ConnectionList);
         }
         #endregion
+         */
     }
 }

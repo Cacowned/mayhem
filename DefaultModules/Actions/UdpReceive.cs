@@ -96,7 +96,7 @@ namespace DefaultModules.Actions
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             //throw new NotImplementedException();
-
+            base.GetObjectData(info, context);
             info.AddValue("Port", port);
             info.AddValue("ListenMessage", listenMessage);
 

@@ -28,12 +28,15 @@ namespace DefaultModules.Actions
             minutes = 0;
             seconds = 3;
 
+            SetUpTimer();
+        }
+
+        protected void SetUpTimer() {
             myTimer = new System.Timers.Timer();
             myTimer.Elapsed += new ElapsedEventHandler(myTimer_Elapsed);
             myTimer.Enabled = false;
 
             SetInterval();
-            
         }
 
         public void CliConfig() {
@@ -93,11 +96,12 @@ namespace DefaultModules.Actions
             minutes = info.GetInt32("Minutes");
             seconds = info.GetInt32("Seconds");
 
-            SetInterval();
+            SetUpTimer();
         }
 
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            base.GetObjectData(info, context);
             info.AddValue("Hours", hours);
             info.AddValue("Minutes", minutes);
             info.AddValue("Seconds", seconds);

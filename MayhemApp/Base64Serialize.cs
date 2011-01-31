@@ -6,6 +6,9 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters;
 
 namespace MayhemApp
 {
@@ -14,39 +17,63 @@ namespace MayhemApp
         public static string filename = "serial.settings";
 
         public static T Deserialize() {
-            /*
-            Stream stream = File.Open(filename, FileMode.Open);
-            BinaryFormatter bFormatter = new BinaryFormatter();
 
-            T obj = (T)bFormatter.Deserialize(stream);
-            stream.Close();
+            byte[] file = File.ReadAllBytes(filename);
+            MemoryStream stream = new MemoryStream(file);
+            BinaryFormatter formatter = new BinaryFormatter();
 
+
+            formatter.AssemblyFormat
+                = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple;
+            formatter.Binder
+                = new VersionConfigToNamespaceAssemblyObjectBinder();
+            T obj = (T)formatter.Deserialize(stream);
             return obj;
-             */
-
             
-            Stream stream = File.Open(filename, FileMode.Open);
-            BinaryFormatter bFormatter = new BinaryFormatter();
-            T objectToSerialize = (T)bFormatter.Deserialize(stream);
-            stream.Close();
-            return objectToSerialize;
- 
         }
 
         public static void SerializeObject(T objectToSerialize) {
-            /*
-            XmlSerializer x = new XmlSerializer(objectToSerialize.GetType());
-
-            Stream stream = File.Open("serial.settings", FileMode.Create);
-
-            x.Serialize(stream, objectToSerialize);
-             */
 
             Stream stream = File.Open(filename, FileMode.Create);
-            BinaryFormatter bFormatter = new BinaryFormatter();
-            bFormatter.Serialize(stream, objectToSerialize);
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.AssemblyFormat = FormatterAssemblyStyle.Simple;
+            formatter.Serialize(stream, objectToSerialize);
             stream.Close();
  
         }
     }
+    internal sealed class VersionConfigToNamespaceAssemblyObjectBinder : SerializationBinder
+    {
+        public override Type BindToType(string assemblyName, string typeName)
+            {
+                Type typeToDeserialize = null;
+                try
+                {
+
+                    string ToAssemblyName = assemblyName.Split(',')[0];
+                    Assembly[] Assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                    foreach (Assembly ass in Assemblies)
+                    {
+                        if (ass.FullName.Split(',')[0] == ToAssemblyName)
+                        {
+                            typeToDeserialize = ass.GetType(typeName);
+                            break;
+                        }
+                    }
+
+                }
+                catch (System.Exception exception)
+                {
+                    throw exception;
+                }
+                finally
+                {
+                }
+                return typeToDeserialize;
+            }
+    }
+
+
+
+
 }

@@ -29,6 +29,12 @@ namespace DefaultModules.Actions.Xbox
         {
             hasConfig = true;
 
+            Setup();
+        }
+
+        protected void Setup() {
+           
+
             bw.WorkerReportsProgress = true;
             bw.WorkerSupportsCancellation = true;
             bw.DoWork += new DoWorkEventHandler(WatchButtons);
@@ -48,7 +54,7 @@ namespace DefaultModules.Actions.Xbox
         protected void WatchButtons(object sender, DoWorkEventArgs e) {
             //var state = GamePad.GetState(PlayerIndex.One);
             
-            bool wasEquals = false;
+            bool wasEqual = false;
 
             BackgroundWorker worker = sender as BackgroundWorker;
 
@@ -58,14 +64,13 @@ namespace DefaultModules.Actions.Xbox
                     return;
 
                 var state2 = GamePad.GetState(player).Buttons;
-
-                bool isEquals = StateEquals(state2);
-                if (wasEquals == false && isEquals == true) {
+                bool isEqual = StateEquals(state2);
+                if (wasEqual == false && isEqual == true) {
                     // It doesn't matter what we return
                     worker.ReportProgress(0);
                 }
 
-                wasEquals = isEquals;
+                wasEqual = isEqual;
 
                 Thread.Sleep(50);
             }
@@ -82,7 +87,7 @@ namespace DefaultModules.Actions.Xbox
 
             string input = "";
             do {
-                Console.WriteLine("{0} What player's controller? 1-4.");
+                Console.WriteLine(String.Format("{0} What player's controller? 1-4.", TAG));
                 input = Console.ReadLine();
             }
             while (!Int32.TryParse(input, out playerNum) || !(playerNum >= 1 && playerNum <= 4));
@@ -100,10 +105,10 @@ namespace DefaultModules.Actions.Xbox
             }
            
 
-            Console.WriteLine("{0} Push buttons on the controller and press enter to set.", TAG);
+            Console.WriteLine(String.Format("{0} Push buttons on the controller and press enter to set.", TAG));
             Console.ReadLine();
-            //configState = GamePad.GetState(player);
             buttons = GamePad.GetState(player).Buttons;
+            Console.WriteLine(String.Format("{0} Saved state {1}", TAG, buttons.ToString()));
         }
 
         /// <summary>
@@ -122,16 +127,45 @@ namespace DefaultModules.Actions.Xbox
         {
 
             //configState = (GamePadState)info.GetValue("GamePadState", typeof(GamePadState));
-            //buttons = (GamePadButtons)info.GetValue("GamePadButtons", typeof(GamePadButtons));
-            //player = (PlayerIndex)info.GetValue("Player", typeof(PlayerIndex));
+            buttons = new GamePadButtons((Buttons)info.GetValue("Buttons", typeof(Buttons)));
+            player = (PlayerIndex)info.GetInt32("Player");
+
+            Setup();
         }
 
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-
+            base.GetObjectData(info, context);
             //info.AddValue("GamePadState", configState);
             //info.AddValue("GamePadButtons", buttons);
-            //info.AddValue("Player", player);
+            info.AddValue("Player", (int)player);
+
+            // We need to create a buttons struct from all the buttons that are pressed
+            Buttons keys = new Buttons();
+            if ((int)this.buttons.A == 1)
+                keys = keys | Buttons.A;
+            if ((int)this.buttons.B == 1)
+                keys = keys | Buttons.B;
+            if ((int)this.buttons.Back == 1)
+                keys = keys | Buttons.Back;
+            if ((int)this.buttons.BigButton == 1)
+                keys = keys | Buttons.BigButton;
+            if ((int)this.buttons.LeftShoulder == 1)
+                keys = keys | Buttons.LeftShoulder;
+            if ((int)this.buttons.LeftStick == 1)
+                keys = keys | Buttons.LeftStick;
+            if ((int)this.buttons.RightShoulder == 1)
+                keys = keys | Buttons.RightShoulder;
+            if ((int)this.buttons.RightStick == 1)
+                keys = keys | Buttons.RightStick;
+            if ((int)this.buttons.Start == 1)
+                keys = keys | Buttons.Start;
+            if ((int)this.buttons.X == 1)
+                keys = keys | Buttons.X;
+            if ((int)this.buttons.Y == 1)
+                keys = keys | Buttons.Y;
+
+            info.AddValue("Buttons", keys);
         }
         #endregion
 

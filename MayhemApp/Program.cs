@@ -20,27 +20,26 @@ namespace MayhemApp
 
             /// TODO: Figure out how to load up the correct assemblies
             /// 
+            mayhem = new Mayhem<ICli>();
 
-            if (File.Exists(Base64Serialize<Mayhem<ICli>>.filename)) {
-               // Debug.WriteLine(Properties.Settings.Default.RunListSettings);
-                
+            if (File.Exists(Base64Serialize<ConnectionList>.filename)) {
+                // Debug.WriteLine(Properties.Settings.Default.RunListSettings);
+
                 try {
-                    mayhem = Base64Serialize<Mayhem<ICli>>.Deserialize();
+                    mayhem.ConnectionList = Base64Serialize<ConnectionList>.Deserialize();
 
-                    Console.WriteLine("Starting up with "+mayhem.ConnectionList.Count+" connections");
-                
+                    Console.WriteLine("Starting up with " + mayhem.ConnectionList.Count + " connections");
+
                 } catch (SerializationException e) {
                     Debug.WriteLine("(De-)SerializationException " + e);
                 }
-            } else { 
-                mayhem = new Mayhem<ICli>();
             }
 
             while (true) {
                 Console.WriteLine();
                 Console.WriteLine("0)\tView the run list");
                 Console.WriteLine("1)\tCreate a connection");
-                Console.WriteLine("2)\tExit");
+                Console.WriteLine("2)\tSave and Exit");
 
                 int number = validateNumber(2);
                 Console.WriteLine();
@@ -50,7 +49,7 @@ namespace MayhemApp
                     case 1: addConnection();
                         break;
                     case 2: 
-                        Base64Serialize<Mayhem<ICli>>.SerializeObject(mayhem);
+                        Base64Serialize<ConnectionList>.SerializeObject(mayhem.ConnectionList);
                         return;
                 }
             }
@@ -114,6 +113,15 @@ namespace MayhemApp
                         connection.Disable();
                     } else {
                         connection.Enable();
+                    }
+                } else {
+                    Console.Write("Remove a connection? Y/N: ");
+                    if (isYes()) {
+                        Console.Write("Which connection? ");
+                        int num = validateNumber(numConnections - 1);
+                        mayhem.ConnectionList[num].Disable();
+                        mayhem.ConnectionList.RemoveAt(num);
+                        Console.WriteLine("Connection " + num + " removed");
                     }
                 }
             }

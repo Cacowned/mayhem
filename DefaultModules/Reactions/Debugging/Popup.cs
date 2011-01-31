@@ -5,6 +5,7 @@ using System.Text;
 using MayhemCore;
 using System.Diagnostics;
 using System.Windows;
+using System.Runtime.Serialization;
 
 namespace DefaultModules.Reactions.Debugging
 {
@@ -20,5 +21,17 @@ namespace DefaultModules.Reactions.Debugging
         {
             MessageBox.Show("Triggered!");
         }
+
+        #region Serialization
+        public Popup(SerializationInfo info, StreamingContext context) 
+            : base (info, context)
+        {
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+        }
+        #endregion
     }
 }
