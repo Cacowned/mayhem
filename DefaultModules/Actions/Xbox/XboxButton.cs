@@ -51,9 +51,8 @@ namespace DefaultModules.Actions.Xbox
             bw.CancelAsync();
         }
 
-        protected void WatchButtons(object sender, DoWorkEventArgs e) {
-            //var state = GamePad.GetState(PlayerIndex.One);
-            
+        int counter = 0;
+        protected void WatchButtons(object sender, DoWorkEventArgs e) {            
             bool wasEqual = false;
 
             BackgroundWorker worker = sender as BackgroundWorker;
@@ -65,6 +64,7 @@ namespace DefaultModules.Actions.Xbox
 
                 var state2 = GamePad.GetState(player).Buttons;
                 bool isEqual = StateEquals(state2);
+                counter++;
                 if (wasEqual == false && isEqual == true) {
                     // It doesn't matter what we return
                     worker.ReportProgress(0);
@@ -104,10 +104,13 @@ namespace DefaultModules.Actions.Xbox
                     break;
             }
            
+            do {
+                Console.WriteLine(String.Format("{0} Push buttons on the controller and press enter to set.", TAG));
+                Console.ReadLine();
+                buttons = GamePad.GetState(player).Buttons;
+            }
+            while (buttons.ToString() == "{Buttons:None}");
 
-            Console.WriteLine(String.Format("{0} Push buttons on the controller and press enter to set.", TAG));
-            Console.ReadLine();
-            buttons = GamePad.GetState(player).Buttons;
             Console.WriteLine(String.Format("{0} Saved state {1}", TAG, buttons.ToString()));
         }
 
@@ -121,12 +124,9 @@ namespace DefaultModules.Actions.Xbox
         }
 
         #region Serialization
-        // The xna stuff isn't serializable. Find a fix?
         public XboxButton(SerializationInfo info, StreamingContext context) 
             : base (info, context)
         {
-
-            //configState = (GamePadState)info.GetValue("GamePadState", typeof(GamePadState));
             buttons = new GamePadButtons((Buttons)info.GetValue("Buttons", typeof(Buttons)));
             player = (PlayerIndex)info.GetInt32("Player");
 
@@ -136,8 +136,6 @@ namespace DefaultModules.Actions.Xbox
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            //info.AddValue("GamePadState", configState);
-            //info.AddValue("GamePadButtons", buttons);
             info.AddValue("Player", (int)player);
 
             // We need to create a buttons struct from all the buttons that are pressed

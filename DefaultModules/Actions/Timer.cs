@@ -17,7 +17,6 @@ namespace DefaultModules.Actions
         protected int hours, minutes, seconds = 0;
 
         private System.Timers.Timer myTimer;
-        //public override event ActionActivateHandler OnActionActivated;
 
         public Timer()
             : base("Timer", "Triggers after a certain amount of time")

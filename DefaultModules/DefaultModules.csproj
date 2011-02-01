@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,6 +44,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\Keypress.cs" />
@@ -50,6 +52,7 @@
     <Compile Include="Actions\UdpReceive.cs" />
     <Compile Include="Actions\Xbox\XboxButton.cs" />
     <Compile Include="KeypressHelpers\InterceptKeys.cs" />
+    <Compile Include="LowLevel\MPlayer.cs" />
     <Compile Include="LowLevel\Native.cs" />
     <Compile Include="LowLevel\Utils.cs" />
     <Compile Include="LowLevel\VK.cs" />
@@ -59,6 +62,7 @@
     <Compile Include="Reactions\Media\NextItem.cs" />
     <Compile Include="Reactions\Media\PlayPause.cs" />
     <Compile Include="Reactions\Media\PreviousItem.cs" />
+    <Compile Include="Reactions\PlaySound.cs" />
     <Compile Include="UdpHelpers\AsyncUdpServerSocket.cs" />
     <Compile Include="UdpHelpers\DataReceivedEventArgs.cs" />
     <Compile Include="UdpHelpers\UdpState.cs" />
