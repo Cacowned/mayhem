@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 
-namespace MayhemApp
+namespace MayhemCli
 {
     public class Base64Serialize<T>
     {

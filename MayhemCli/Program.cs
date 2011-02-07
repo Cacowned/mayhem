@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 using System.IO;
 
 
-namespace MayhemApp
+namespace MayhemCli
 {
     class Program
     {

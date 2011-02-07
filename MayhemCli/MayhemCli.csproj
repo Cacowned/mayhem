@@ -8,8 +8,8 @@
     <ProjectGuid>{DE686AF4-17B8-4E8B-BC15-ACE681877C06}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MayhemApp</RootNamespace>
-    <AssemblyName>MayhemApp</AssemblyName>
+    <RootNamespace>MayhemCli</RootNamespace>
+    <AssemblyName>MayhemCli</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

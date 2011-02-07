@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemApp", "MayhemApp\MayhemApp.csproj", "{DE686AF4-17B8-4E8B-BC15-ACE681877C06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemCli", "MayhemCli\MayhemCli.csproj", "{DE686AF4-17B8-4E8B-BC15-ACE681877C06}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemCore", "MayhemCore\MayhemCore.csproj", "{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultModules", "DefaultModules\DefaultModules.csproj", "{21F131F9-56F2-4339-A625-EDB4A3F086D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemWpf", "MayhemWpf\MayhemWpf.csproj", "{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,16 @@ Global
 		{21F131F9-56F2-4339-A625-EDB4A3F086D1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{21F131F9-56F2-4339-A625-EDB4A3F086D1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{21F131F9-56F2-4339-A625-EDB4A3F086D1}.Release|x86.ActiveCfg = Release|Any CPU
+		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Debug|x86.ActiveCfg = Debug|x86
+		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Debug|x86.Build.0 = Debug|x86
+		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Release|Any CPU.ActiveCfg = Release|x86
+		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Release|Mixed Platforms.Build.0 = Release|x86
+		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Release|x86.ActiveCfg = Release|x86
+		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

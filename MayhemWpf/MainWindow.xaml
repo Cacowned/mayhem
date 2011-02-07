@@ -1,0 +1,54 @@
+﻿<Window x:Class="MayhemWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="600">
+    <StackPanel>
+    	<Grid Margin="0,0,0,20">
+    		<Grid.ColumnDefinitions>
+    			<ColumnDefinition /> 		
+				<ColumnDefinition MaxWidth="80" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Button Grid.Column="0">Choose an Action</Button>
+			<Button Grid.Column="1">Build</Button>
+			<Button Grid.Column="2">Choose a Reaction</Button>
+		</Grid>
+		   <ItemsControl>
+		   		<ItemsControl.ItemTemplate>
+		   			<DataTemplate>
+		   				<StackPanel Width="450" Height="100" Orientation="Vertical">
+		   					<TextBlock>Xbox Button</TextBlock>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock>Configure</TextBlock>
+								<TextBlock>Buttons X, A, B</TextBlock>
+							</StackPanel>			
+						</StackPanel>
+					</DataTemplate>	 
+				</ItemsControl.ItemTemplate>
+				<StackPanel Orientation="Horizontal">
+					
+					
+						<StackPanel Width="250" Orientation="Vertical" >
+		   					<TextBlock>Xbox Button</TextBlock>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock>Configure</TextBlock>
+								<TextBlock>Buttons X, A, B</TextBlock>
+							</StackPanel>			
+						</StackPanel>
+					
+					
+					
+					<StackPanel Width="250" Orientation="Vertical">
+	   					<TextBlock>Media: Next Item</TextBlock>
+							
+					</StackPanel>
+					
+					<StackPanel Orientation="Horizontal">
+						<Button>Delete</Button>
+						<Button>On/Off</Button>
+					</StackPanel>
+					
+				</StackPanel>
+		   </ItemsControl>
+	</StackPanel>
+</Window>
