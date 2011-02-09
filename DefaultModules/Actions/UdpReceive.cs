@@ -30,6 +30,14 @@ namespace DefaultModules.Actions
             hasConfig = true;
         }
 
+        public override string ConfigString
+        {
+            get
+            {
+                return String.Format("Port: {0}, Message: \"{1}\"", port, listenMessage);
+            }
+        }
+
         public void CliConfig()
         {
             int portNum = 0;

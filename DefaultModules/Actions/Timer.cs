@@ -30,6 +30,14 @@ namespace DefaultModules.Actions
             SetUpTimer();
         }
 
+        public override string ConfigString
+        {
+            get
+            {
+                return String.Format("{0} hours, {1} minutes, {2} seconds", hours, minutes, seconds);
+            }
+        }
+
         protected void SetUpTimer() {
             myTimer = new System.Timers.Timer();
             myTimer.Elapsed += new ElapsedEventHandler(myTimer_Elapsed);

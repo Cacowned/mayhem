@@ -32,6 +32,14 @@ namespace DefaultModules.Actions.Xbox
             Setup();
         }
 
+        public override string ConfigString
+        {
+            get
+            {
+                return buttons.ToString();
+            }
+        }
+
         protected void Setup() {
            
 
@@ -51,7 +59,6 @@ namespace DefaultModules.Actions.Xbox
             bw.CancelAsync();
         }
 
-        int counter = 0;
         protected void WatchButtons(object sender, DoWorkEventArgs e) {            
             bool wasEqual = false;
 
@@ -64,7 +71,6 @@ namespace DefaultModules.Actions.Xbox
 
                 var state2 = GamePad.GetState(player).Buttons;
                 bool isEqual = StateEquals(state2);
-                counter++;
                 if (wasEqual == false && isEqual == true) {
                     // It doesn't matter what we return
                     worker.ReportProgress(0);

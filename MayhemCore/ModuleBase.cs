@@ -31,7 +31,12 @@ namespace MayhemCore
             get;
             protected set;
         }
-        
+
+        public virtual string ConfigString
+        {
+            get { return String.Empty; }
+        }
+
         // TODO: category?
 
 
