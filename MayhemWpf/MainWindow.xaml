@@ -2,12 +2,8 @@
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:src="clr-namespace:MayhemWpf"
-		Title="MainWindow" Height="350" Width="600" ResizeMode="CanMinimize">
+		Title="MainWindow" Height="600" Width="600" ResizeMode="CanMinimize" Background="White">
 	<Window.Resources>
-		<Style x:Key="ModuleNameStyle">
-			<Setter Property="Control.FontSize" Value="14.667" />
-			<Setter Property="Control.FontWeight" Value="Bold" />
-		</Style>
 		<Style x:Key="ActionConfigureButtonStyle">
 			<Setter Property="Control.Margin" Value="0,0,10,0" />
 			<Style.Triggers>
@@ -34,9 +30,13 @@
 			<Setter Property="Control.FontStyle" Value="Italic" />
 		</Style>
 		<Style TargetType="{x:Type Button}" x:Key="ActionButton">
+			<Setter Property="HorizontalAlignment" Value="Center" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontWeight" Value="Bold" />
+			<Setter Property="FontSize" Value="13.333" />
 			<Setter Property="Background">
 				<Setter.Value>
-					<ImageBrush ImageSource="redbutton.png"/>
+					<ImageBrush ImageSource="Images\redbutton.png"/>
 				</Setter.Value>
 			</Setter>
 			<Setter Property="Template">
@@ -44,13 +44,51 @@
 					<ControlTemplate>
 						<Grid>
 							<Rectangle Fill="{TemplateBinding Property=Background}" />
-							<ContentPresenter />
+							<TextBlock HorizontalAlignment="Center" Margin="0,0,10,2" VerticalAlignment="Center" Text="Choose an Action" />
 						</Grid>
 					</ControlTemplate>
 				</Setter.Value>
 			</Setter>
 		</Style>
-	</Window.Resources>
+		
+		<Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="ReactionButton">
+			<Setter Property="Background">
+				<Setter.Value>
+					<ImageBrush ImageSource="Images\bluebutton.png"/>
+				</Setter.Value>
+			</Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <Rectangle Fill="{TemplateBinding Property=Background}" />
+                            <TextBlock HorizontalAlignment="Center" Margin="20,0,0,2" VerticalAlignment="Center" Text="Choose a Reaction" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="CreateButton">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+			<Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="Images\createbutton.png"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <Rectangle Fill="{TemplateBinding Property=Background}" />
+                            <TextBlock HorizontalAlignment="Center" Margin="0,0,15,6" VerticalAlignment="Center" Text="Create" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
 	<StackPanel>
 		<Grid>
 			<Grid.Background>
@@ -60,23 +98,21 @@
 				</LinearGradientBrush>
 			</Grid.Background>
 			<Grid.RowDefinitions>
-				<RowDefinition MinHeight="50" />
-				<RowDefinition MinHeight="30" />
+				<RowDefinition MinHeight="60" />
+				<RowDefinition MinHeight="40" />
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
 				<ColumnDefinition />
 				<ColumnDefinition MaxWidth="80" />
 			</Grid.ColumnDefinitions>
-			<TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="21.333" FontWeight="Bold">
+			<TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28.333" FontWeight="Bold">
 				<TextBlock.Effect>
 					<DropShadowEffect Color="White" BlurRadius="15" ShadowDepth="0"/>
 				</TextBlock.Effect>Mayhem</TextBlock>
-			<Button Grid.Column="0" Grid.Row="1" Style="{StaticResource ActionButton}" Width="176" HorizontalAlignment="Center" BorderThickness="0">
-				<TextBlock>Choose an Action</TextBlock>
-			</Button>
-			<Button Grid.Column="1" Grid.Row="1">Choose a Reaction</Button>
-			<Button Grid.Column="2" Grid.Row="1">Build</Button>
+			<Button Grid.Column="0" Grid.Row="1" Style="{StaticResource ActionButton}" Width="176" Click="ActionListClick" />
+            <Button Grid.Column="1" Grid.Row="1" Style="{StaticResource ReactionButton}" Width="176" Click="ReactionListClick" />
+            <Button Grid.Column="2" Grid.Row="1" Style="{StaticResource CreateButton}" />
 		</Grid>
 		<Border Margin="10" BorderThickness="3" CornerRadius="10" BorderBrush="#FF266368" Padding="5" Background="White">
 			<ItemsControl x:Name="RunList">

@@ -57,14 +57,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Images.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Compile Include="ReactionList.xaml.cs">
+      <DependentUpon>ReactionList.xaml</DependentUpon>
+    </Compile>
+    <Page Include="ActionList.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="ActionList.xaml.cs">
+      <DependentUpon>ActionList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -73,6 +79,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ReactionList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -105,8 +119,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="bodybg.gif" />
-    <Resource Include="redbutton.png" />
+    <Resource Include="Images\bodybg.gif" />
+    <Resource Include="Images\redbutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bluebutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\createbutton.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
