@@ -2,6 +2,11 @@
 using System.Windows;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Windows.Data;
 
 namespace MayhemWpf
 {
@@ -12,53 +17,103 @@ namespace MayhemWpf
     {
         Mayhem<ICli> mayhem;
 
+        ActionBase action;
+        ReactionBase reaction;
+
         public MainWindow() {
             InitializeComponent();
 
             mayhem = new Mayhem<ICli>();
 
-            Connection c = new Connection(mayhem.ActionList[0], mayhem.ReactionList[0]);
-            mayhem.ConnectionList.Add(c);
+            if (File.Exists(Base64Serialize<ConnectionList>.filename)) {
 
-            c = new Connection(mayhem.ActionList[1], mayhem.ReactionList[1]);
-            mayhem.ConnectionList.Add(c);
+                try {
+                    mayhem.ConnectionList = Base64Serialize<ConnectionList>.Deserialize();
+
+                    Debug.WriteLine("Starting up with " + mayhem.ConnectionList.Count + " connections");
+
+                } catch (SerializationException e) {
+                    Debug.WriteLine("(De-)SerializationException " + e);
+                }
+            } else {
+                Connection c = new Connection(mayhem.ActionList[0], mayhem.ReactionList[0]);
+                mayhem.ConnectionList.Add(c);
+
+                c = new Connection(mayhem.ActionList[1], mayhem.ReactionList[1]);
+                mayhem.ConnectionList.Add(c);
+
+            }
 
             RunList.ItemsSource = mayhem.ConnectionList;
         }
 
         private void ActionListClick(object sender, RoutedEventArgs e)
         {
-            ActionList dlg = new ActionList(mayhem);
+            ModuleList dlg = new ModuleList(mayhem.ActionList, "Action List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            dlg.ActionsList.SelectedIndex = 0;
+            dlg.ModulesList.SelectedIndex = 0;
 
             dlg.ShowDialog();
 
             if (dlg.DialogResult == true)
             {
-                if (dlg.ActionsList.SelectedItem != null)
-                    MessageBox.Show(dlg.ActionsList.SelectedItem.GetType().ToString());
-                else
-                    MessageBox.Show("Nothing Selected");
+                if (dlg.ModulesList.SelectedItem != null) {
+                    action = (ActionBase)dlg.ModulesList.SelectedItem;
+                    CheckEnableBuild();
+                }
             }
-            else
-                MessageBox.Show("Nay!");
         }
 
         private void ReactionListClick(object sender, RoutedEventArgs e)
         {
-            ReactionList dlg = new ReactionList(mayhem);
+            ModuleList dlg = new ModuleList(mayhem.ReactionList, "Reaction List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            dlg.ModulesList.SelectedIndex = 0;
 
             dlg.ShowDialog();
 
             if (dlg.DialogResult == true)
             {
-                MessageBox.Show("Yay!");
+                if (dlg.ModulesList.SelectedItem != null) {
+                    reaction = (ReactionBase)dlg.ModulesList.SelectedItem;
+                    CheckEnableBuild();
+                }
             }
-            MessageBox.Show("Nay!");
+        }
+
+        private void CheckEnableBuild() {
+            if (action != null && reaction != null) {
+                mayhem.ConnectionList.Add(new Connection(action, reaction));
+
+                action = null;
+                reaction = null;
+            }
+        }
+
+        private void DeleteConnectionClick(object sender, RoutedEventArgs e) {
+            Connection c = ((Button)sender).Tag as Connection;
+            mayhem.ConnectionList.Remove(c);
+        }
+
+        private void OnOffClick(object sender, RoutedEventArgs e) {
+            ToggleButton button = (ToggleButton)sender;
+            Connection c = button.Tag as Connection;
+
+            Debug.WriteLine("On/Off clicked on " + c.Action.Name);
+            
+            if (!c.Enabled) {
+                c.Enable();
+            } else {
+                c.Disable();
+            }
+            
+            Debug.WriteLine("Connection is enabled: " + c.Enabled);
+        }
+
+        private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e) {
+            Base64Serialize<ConnectionList>.SerializeObject(mayhem.ConnectionList);
         }
     }
 }

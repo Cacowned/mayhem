@@ -57,10 +57,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Base64Serialize.cs" />
     <Compile Include="ReactionList.xaml.cs">
       <DependentUpon>ReactionList.xaml</DependentUpon>
     </Compile>
-    <Page Include="ActionList.xaml">
+    <Page Include="ModuleList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -68,8 +69,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="ActionList.xaml.cs">
-      <DependentUpon>ActionList.xaml</DependentUpon>
+    <Compile Include="ModuleList.xaml.cs">
+      <DependentUpon>ModuleList.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -127,6 +128,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\createbutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Settings16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="WPFIssues.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

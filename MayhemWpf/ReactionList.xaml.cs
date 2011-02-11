@@ -30,14 +30,12 @@ namespace MayhemWpf
             ReactionsList.ItemsSource = mayhem.ReactionList;
         }
 
-        private void CancelButtonClick(object sender, RoutedEventArgs e)
-        {
-
+        private void ChooseButtonClick(object sender, RoutedEventArgs e) {
+            DialogResult = true;
         }
 
-        private void ChooseButtonClick(object sender, RoutedEventArgs e)
-        {
-
+        private void CancelButtonClick(object sender, RoutedEventArgs e) {
+            DialogResult = false;
         }
     }
 }

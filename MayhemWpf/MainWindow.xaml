@@ -2,33 +2,23 @@
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:src="clr-namespace:MayhemWpf"
-		Title="MainWindow" Height="600" Width="600" ResizeMode="CanMinimize" Background="White">
-	<Window.Resources>
-		<Style x:Key="ActionConfigureButtonStyle">
-			<Setter Property="Control.Margin" Value="0,0,10,0" />
-			<Style.Triggers>
-				<DataTrigger Binding="{Binding Path=Action.HasConfig}" Value="true">
-					<Setter Property="Control.Foreground" Value="Black" />
-				</DataTrigger>
-				<DataTrigger Binding="{Binding Path=Action.HasConfig}" Value="false">
-					<Setter Property="Control.Foreground" Value="Gray" />
-				</DataTrigger>
-			</Style.Triggers>
-		</Style>
-		<Style x:Key="ReactionConfigureButtonStyle">
-			<Setter Property="Control.Margin" Value="0,0,10,0" />
-			<Style.Triggers>
-				<DataTrigger Binding="{Binding Path=Reaction.HasConfig}" Value="true">
-					<Setter Property="Control.Foreground" Value="Black" />
-				</DataTrigger>
-				<DataTrigger Binding="{Binding Path=Reaction.HasConfig}" Value="false">
-					<Setter Property="Control.Foreground" Value="Gray" />
-				</DataTrigger>
-			</Style.Triggers>
-		</Style>
+		Title="MainWindow" Height="600" Width="600" ResizeMode="CanMinimize" Background="White"
+		Closing="AppClosing">
+	<Window.Resources>     
 		<Style x:Key="ConfigurationStringStyle">
 			<Setter Property="Control.FontStyle" Value="Italic" />
 		</Style>
+		
+		<Style TargetType="{x:Type ToggleButton}">
+			<Setter Property="Width" Value="35" />
+			<Setter Property="Content" Value="On"/>
+			<Style.Triggers>
+				<Trigger Property="IsChecked" Value="True">
+					<Setter Property="Content" Value="Off"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		
 		<Style TargetType="{x:Type Button}" x:Key="ActionButton">
 			<Setter Property="HorizontalAlignment" Value="Center" />
 			<Setter Property="Foreground" Value="White" />
@@ -57,38 +47,75 @@
 					<ImageBrush ImageSource="Images\bluebutton.png"/>
 				</Setter.Value>
 			</Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Grid>
-                            <Rectangle Fill="{TemplateBinding Property=Background}" />
-                            <TextBlock HorizontalAlignment="Center" Margin="20,0,0,2" VerticalAlignment="Center" Text="Choose a Reaction" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Grid>
+							<Rectangle Fill="{TemplateBinding Property=Background}" />
+							<TextBlock HorizontalAlignment="Center" Margin="20,0,0,2" VerticalAlignment="Center" Text="Choose a Reaction" />
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="CreateButton">
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
+		<Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="CreateButton">
+			<Setter Property="HorizontalAlignment" Value="Stretch" />
 			<Setter Property="Background">
-                <Setter.Value>
-                    <ImageBrush ImageSource="Images\createbutton.png"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Grid>
-                            <Rectangle Fill="{TemplateBinding Property=Background}" />
-                            <TextBlock HorizontalAlignment="Center" Margin="0,0,15,6" VerticalAlignment="Center" Text="Create" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+				<Setter.Value>
+					<ImageBrush ImageSource="Images\createbutton.png"/>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Grid>
+							<Rectangle Fill="{TemplateBinding Property=Background}" />
+							<TextBlock HorizontalAlignment="Center" Margin="0,0,15,6" VerticalAlignment="Center" Text="Create" />
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		
+		<Style TargetType="{x:Type Button}" x:Key="ConfigureActionButton">
+			<Setter Property="HorizontalAlignment" Value="Stretch" />
+			<Setter Property="Background">
+				<Setter.Value>
+					<ImageBrush ImageSource="Images\Settings16.png"/>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Grid>
+							<Rectangle Width="16" Height="16" Fill="{TemplateBinding Property=Background}" />
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Path=Action.HasConfig}" Value="true">
+					<Setter Property="IsEnabled" Value="True" />
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=Action.HasConfig}" Value="false">
+					<Setter Property="IsEnabled" Value="False" />
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
 
-    </Window.Resources>
+		<Style TargetType="{x:Type Button}" BasedOn="{StaticResource ConfigureActionButton}" x:Key="ConfigureReactionButton">
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Path=Reaction.HasConfig}" Value="true">
+					<Setter Property="IsEnabled" Value="True" />
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=Reaction.HasConfig}" Value="false">
+					<Setter Property="IsEnabled" Value="false" />
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+		
+	</Window.Resources>
 	<StackPanel>
 		<Grid>
 			<Grid.Background>
@@ -99,53 +126,57 @@
 			</Grid.Background>
 			<Grid.RowDefinitions>
 				<RowDefinition MinHeight="60" />
-				<RowDefinition MinHeight="40" />
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
-				<ColumnDefinition />
-				<ColumnDefinition MaxWidth="80" />
 			</Grid.ColumnDefinitions>
 			<TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28.333" FontWeight="Bold">
 				<TextBlock.Effect>
 					<DropShadowEffect Color="White" BlurRadius="15" ShadowDepth="0"/>
-				</TextBlock.Effect>Mayhem</TextBlock>
-			<Button Grid.Column="0" Grid.Row="1" Style="{StaticResource ActionButton}" Width="176" Click="ActionListClick" />
-            <Button Grid.Column="1" Grid.Row="1" Style="{StaticResource ReactionButton}" Width="176" Click="ReactionListClick" />
-            <Button Grid.Column="2" Grid.Row="1" Style="{StaticResource CreateButton}" />
+				</TextBlock.Effect>
+                Mayhem
+            </TextBlock>
 		</Grid>
 		<Border Margin="10" BorderThickness="3" CornerRadius="10" BorderBrush="#FF266368" Padding="5" Background="White">
-			<ItemsControl x:Name="RunList">
+            <StackPanel Orientation="Vertical">
+                <UniformGrid Rows="1" Columns="2" Height="40" Margin="0,0,0,10">
+                    <Button x:Name="ActionListButton" Style="{StaticResource ActionButton}" Width="176" Click="ActionListClick" />
+                    <Button x:Name="ReactionListButton" Style="{StaticResource ReactionButton}" Width="176" Click="ReactionListClick" />
+                </UniformGrid>
+                <ItemsControl x:Name="RunList">
 				
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Border BorderThickness="0,0,0,1" BorderBrush="#FFD4D4D4">
-							<StackPanel Orientation="Horizontal">
-								<StackPanel Width="237" Orientation="Vertical">
-									<TextBlock Style="{StaticResource ModuleNameStyle}" Text="{Binding Action.Name}" />
-									<StackPanel Orientation="Horizontal">
-										<TextBlock Style="{StaticResource ActionConfigureButtonStyle}">Configure</TextBlock>
-										<TextBlock Style="{StaticResource ConfigurationStringStyle}" Text="{Binding Action.ConfigString}" />
-									</StackPanel>
-								</StackPanel>
-								<StackPanel Width="238" Orientation="Vertical">
-									<TextBlock Style="{StaticResource ModuleNameStyle}" Text="{Binding Reaction.Name}" />
-									<StackPanel Orientation="Horizontal">
-										<TextBlock Style="{StaticResource ReactionConfigureButtonStyle}">Configure</TextBlock>
-                                        <TextBlock Style="{StaticResource ConfigurationStringStyle}" Text="{Binding Reaction.ConfigString}" />
-                                    </StackPanel>
-								</StackPanel>
+				    <ItemsControl.ItemTemplate>
+					    <DataTemplate>
+						    <Border BorderThickness="0,0,0,1" BorderBrush="#FFD4D4D4">
+							    <StackPanel Orientation="Horizontal">
+								
+								    <StackPanel Width="237" Orientation="Vertical">
+									    <TextBlock Style="{StaticResource ModuleNameStyle}" Text="{Binding Action.Name}" />
+									    <StackPanel Orientation="Horizontal">
+										    <Button x:Name="ConfigureActionButton" Style="{StaticResource ConfigureActionButton}" />
+										    <TextBlock Margin="10,0,0,0" Style="{StaticResource ConfigurationStringStyle}" Text="{Binding Action.ConfigString}" />
+									    </StackPanel>
+								    </StackPanel>
+								
+								    <StackPanel Width="238" Orientation="Vertical">
+									    <TextBlock Style="{StaticResource ModuleNameStyle}" Text="{Binding Reaction.Name}" />
+									    <StackPanel Orientation="Horizontal">
+										    <Button x:Name="ConfigureReactionButton" Style="{StaticResource ConfigureReactionButton}" />
+										    <TextBlock Style="{StaticResource ConfigurationStringStyle}" Text="{Binding Reaction.ConfigString}" />
+									    </StackPanel>
+								    </StackPanel>
 
-								<StackPanel Orientation="Horizontal">
-									<Button>Delete</Button>
-									<Button>On/Off</Button>
-								</StackPanel>
-							</StackPanel>
-						</Border>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
+								    <StackPanel Orientation="Horizontal">
+									    <Button Tag="{Binding}" Click="DeleteConnectionClick">Delete</Button>
+									    <ToggleButton Tag="{Binding}" IsChecked="{Binding Path=Enabled, Mode=OneWay}" Click="OnOffClick" />
+								    </StackPanel>
+							    </StackPanel>
+						    </Border>
+					    </DataTemplate>
+				    </ItemsControl.ItemTemplate>
 				
-			</ItemsControl>
-		</Border>
+			    </ItemsControl>
+            </StackPanel>
+        </Border>
 	</StackPanel>
 </Window>

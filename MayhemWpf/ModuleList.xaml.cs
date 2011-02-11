@@ -12,22 +12,29 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using System.Collections;
 
 namespace MayhemWpf
 {
     /// <summary>
     /// Interaction logic for ActionList.xaml
     /// </summary>
-    public partial class ActionList : Window
+    public partial class ModuleList : Window
     {
-        Mayhem<ICli> mayhem;
+        private string text;
 
-        public ActionList(Mayhem<ICli> mayhem)
+        public ModuleList(IEnumerable list, string headerText)
         {
+            text = headerText;
             InitializeComponent();
-            this.mayhem = mayhem;
+            
+            ModulesList.ItemsSource = list;
+        }
 
-            ActionsList.ItemsSource = mayhem.ActionList;
+        protected override void OnInitialized(EventArgs e) {
+            base.OnInitialized(e);
+
+            HeaderText.Text = this.text;
         }
 
         private void ChooseButtonClick(object sender, RoutedEventArgs e)

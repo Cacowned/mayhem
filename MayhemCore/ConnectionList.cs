@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MayhemCore
 {
@@ -7,7 +8,7 @@ namespace MayhemCore
     /// Maintains a set of all the current connections
     /// </summary>
     [Serializable]
-    public class ConnectionList : List<Connection>
+    public class ConnectionList : ObservableCollection<Connection> // List<Connection>, ObservableCollection
     {
     }
 }

@@ -1,0 +1,4 @@
+﻿ActionList and ReactionList windows are almost identical, consolidation?
+Style Duplication based on binding
+
+Displaying Action and Reaction inside of ItemTemplate the same way

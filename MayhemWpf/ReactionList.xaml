@@ -20,8 +20,8 @@
 				Reaction List
             </TextBlock>
         </Grid>
-        <Border Margin="10" BorderThickness="3" CornerRadius="10" BorderBrush="#FF266368" Padding="5" Background="White">
-            <ListBox MaxHeight="230" x:Name="ReactionsList" BorderThickness="0">
+        <Border Margin="10" Height="385" BorderThickness="3" CornerRadius="10" BorderBrush="#FF266368" Padding="5" Background="White">
+            <ListBox MaxHeight="385" x:Name="ReactionsList" BorderThickness="0">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border BorderThickness="0,0,0,1" BorderBrush="#FFD4D4D4">
