@@ -4,21 +4,11 @@
 		Height="500" Width="300" WindowStyle="None" ResizeMode="NoResize" BorderThickness="2">
 
 	<StackPanel>
-		<Grid>
-			<Grid.Background>
-				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-					<GradientStop Color="Black" Offset="0"/>
-					<GradientStop Color="#FF38FFFC" Offset="1"/>
-				</LinearGradientBrush>
-			</Grid.Background>
+        <Grid Style="{StaticResource HeaderBackground}">
 			<Grid.RowDefinitions>
 				<RowDefinition MinHeight="60" />
 			</Grid.RowDefinitions>
-			<TextBlock x:Name="HeaderText" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28.333" FontWeight="Bold">
-				<TextBlock.Effect>
-					<DropShadowEffect Color="White" BlurRadius="15" ShadowDepth="0"/>
-				</TextBlock.Effect>
-			</TextBlock>
+            <TextBlock Style="{DynamicResource HeaderText}" x:Name="HeaderText" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" />
 		</Grid>
 		<Border Margin="10" Height="385" BorderThickness="3" CornerRadius="10" BorderBrush="#FF266368" Padding="5" Background="White">
 			<ListBox MaxHeight="385" x:Name="ModulesList" BorderThickness="0">

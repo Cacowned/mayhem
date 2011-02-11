@@ -20,6 +20,7 @@ namespace MayhemWpf
         ActionBase action;
         ReactionBase reaction;
 
+
         public MainWindow() {
             InitializeComponent();
 
@@ -44,17 +45,21 @@ namespace MayhemWpf
 
             }
 
+
             RunList.ItemsSource = mayhem.ConnectionList;
         }
 
         private void ActionListClick(object sender, RoutedEventArgs e)
         {
+            DimMainWindow(true);
+
             ModuleList dlg = new ModuleList(mayhem.ActionList, "Action List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
 
             dlg.ShowDialog();
+            DimMainWindow(false);
 
             if (dlg.DialogResult == true)
             {
@@ -67,12 +72,15 @@ namespace MayhemWpf
 
         private void ReactionListClick(object sender, RoutedEventArgs e)
         {
+            DimMainWindow(true);
+
             ModuleList dlg = new ModuleList(mayhem.ReactionList, "Reaction List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
 
             dlg.ShowDialog();
+            DimMainWindow(false);
 
             if (dlg.DialogResult == true)
             {
@@ -114,6 +122,32 @@ namespace MayhemWpf
 
         private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e) {
             Base64Serialize<ConnectionList>.SerializeObject(mayhem.ConnectionList);
+        }
+
+        protected void DimMainWindow(bool dim) {
+            WindowCollection wc = Application.Current.Windows;
+            Debug.WriteLine("Number of current Windows: " + wc.Count);
+
+            MainWindow mainW = null;
+
+            foreach (Window w in wc) {
+                Debug.WriteLine("Name? " + w.Name);
+
+                if (w.Name == "MayhemMainWindow") {
+                    mainW = w as MainWindow;
+                }
+            }
+
+            if (mainW != null) {
+                if (dim) {
+                    Panel.SetZIndex(mainW.DimRectangle, 99);
+                    mainW.DimRectangle.Visibility = Visibility.Visible;
+                } else {
+                    Panel.SetZIndex(mainW.DimRectangle, 0);
+                    mainW.DimRectangle.Visibility = Visibility.Collapsed;
+                }
+            }
+
         }
     }
 }

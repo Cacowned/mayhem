@@ -2,3 +2,5 @@ glob:bin/
 glob:obj/
 glob:*.suo
 glob:*.suo.orig
+glob:*.vs10x
+glob:*.user

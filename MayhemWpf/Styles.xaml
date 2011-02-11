@@ -4,4 +4,36 @@
         <Setter Property="Control.FontSize" Value="14.667" />
         <Setter Property="Control.FontWeight" Value="Bold" />
     </Style>
+
+    <Style TargetType="{x:Type Panel}" x:Key="HeaderBackground">
+        <Setter Property="Background">
+            <Setter.Value>
+                <RadialGradientBrush>
+                    <GradientStop Color="#FF82B0BC"/>
+                    <GradientStop Color="#FF458697" Offset="1"/>
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}" x:Key="HeaderText">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+
+        <Setter Property="FontSize" Value="28.333" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="White" />
+
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="13"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Used to grey out a Window -->
+    <Style x:Key="UserControlOverlayRectangleStyle" TargetType="{x:Type Rectangle}">
+        <Setter Property="Fill" Value="#FF151515"/>
+        <Setter Property="Opacity" Value="0.95"/>
+    </Style>
 </ResourceDictionary>
