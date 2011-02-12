@@ -21,20 +21,25 @@ namespace MayhemWpf
     /// </summary>
     public partial class ModuleList : Window
     {
-        private string text;
+
+
+
+        public string Text {
+            get { return (string)GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.Register("Text", typeof(string), typeof(ModuleList), new UIPropertyMetadata(string.Empty));
+
 
         public ModuleList(IEnumerable list, string headerText)
         {
-            text = headerText;
+            Text = headerText;
             InitializeComponent();
             
             ModulesList.ItemsSource = list;
-        }
-
-        protected override void OnInitialized(EventArgs e) {
-            base.OnInitialized(e);
-
-            HeaderText.Text = this.text;
         }
 
         private void ChooseButtonClick(object sender, RoutedEventArgs e)

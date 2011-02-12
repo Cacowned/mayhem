@@ -7,6 +7,8 @@ using System.Windows.Controls.Primitives;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Data;
+using System.Windows.Media.Animation;
+using System;
 
 namespace MayhemWpf
 {
@@ -15,45 +17,68 @@ namespace MayhemWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        Mayhem<ICli> mayhem;
 
-        ActionBase action;
-        ReactionBase reaction;
+        public Mayhem<ICli> Mayhem {
+            get { return (Mayhem<ICli>)GetValue(MayhemProperty); }
+            set { SetValue(MayhemProperty, value); }
+        }
 
+        // Using a DependencyProperty as the backing store for Mayhem.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MayhemProperty =
+            DependencyProperty.Register("Mayhem", typeof(Mayhem<ICli>), typeof(MainWindow), new UIPropertyMetadata(null));
+
+
+
+        public ActionBase Action {
+            get { return (ActionBase)GetValue(ActionProperty); }
+            set { SetValue(ActionProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Action.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ActionProperty =
+            DependencyProperty.Register("Action", typeof(ActionBase), typeof(MainWindow), new UIPropertyMetadata(null));
+
+
+
+        public ReactionBase Reaction {
+            get { return (ReactionBase)GetValue(ReactionProperty); }
+            set { SetValue(ReactionProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Reaction.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ReactionProperty =
+            DependencyProperty.Register("Reaction", typeof(ReactionBase), typeof(MainWindow), new UIPropertyMetadata(null));
+
+        
 
         public MainWindow() {
-            InitializeComponent();
+            
 
-            mayhem = new Mayhem<ICli>();
+            Mayhem = new Mayhem<ICli>();
 
             if (File.Exists(Base64Serialize<ConnectionList>.filename)) {
 
                 try {
-                    mayhem.ConnectionList = Base64Serialize<ConnectionList>.Deserialize();
+                    Mayhem.ConnectionList = Base64Serialize<ConnectionList>.Deserialize();
 
-                    Debug.WriteLine("Starting up with " + mayhem.ConnectionList.Count + " connections");
+                    Debug.WriteLine("Starting up with " + Mayhem.ConnectionList.Count + " connections");
 
                 } catch (SerializationException e) {
                     Debug.WriteLine("(De-)SerializationException " + e);
                 }
-            } else {
-                Connection c = new Connection(mayhem.ActionList[0], mayhem.ReactionList[0]);
-                mayhem.ConnectionList.Add(c);
-
-                c = new Connection(mayhem.ActionList[1], mayhem.ReactionList[1]);
-                mayhem.ConnectionList.Add(c);
-
             }
 
 
-            RunList.ItemsSource = mayhem.ConnectionList;
+            InitializeComponent();
+
+            RunList.ItemsSource = Mayhem.ConnectionList;
         }
 
         private void ActionListClick(object sender, RoutedEventArgs e)
         {
             DimMainWindow(true);
 
-            ModuleList dlg = new ModuleList(mayhem.ActionList, "Action List");
+            ModuleList dlg = new ModuleList(Mayhem.ActionList, "Action List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
@@ -64,7 +89,7 @@ namespace MayhemWpf
             if (dlg.DialogResult == true)
             {
                 if (dlg.ModulesList.SelectedItem != null) {
-                    action = (ActionBase)dlg.ModulesList.SelectedItem;
+                    Action = (ActionBase)dlg.ModulesList.SelectedItem;
                     CheckEnableBuild();
                 }
             }
@@ -74,7 +99,7 @@ namespace MayhemWpf
         {
             DimMainWindow(true);
 
-            ModuleList dlg = new ModuleList(mayhem.ReactionList, "Reaction List");
+            ModuleList dlg = new ModuleList(Mayhem.ReactionList, "Reaction List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
@@ -85,24 +110,24 @@ namespace MayhemWpf
             if (dlg.DialogResult == true)
             {
                 if (dlg.ModulesList.SelectedItem != null) {
-                    reaction = (ReactionBase)dlg.ModulesList.SelectedItem;
+                    Reaction = (ReactionBase)dlg.ModulesList.SelectedItem;
                     CheckEnableBuild();
                 }
             }
         }
 
         private void CheckEnableBuild() {
-            if (action != null && reaction != null) {
-                mayhem.ConnectionList.Add(new Connection(action, reaction));
+            if (Action != null && Reaction != null) {
+                Mayhem.ConnectionList.Add(new Connection(Action, Reaction));
 
-                action = null;
-                reaction = null;
+                Action = null;
+                Reaction = null;
             }
         }
 
         private void DeleteConnectionClick(object sender, RoutedEventArgs e) {
             Connection c = ((Button)sender).Tag as Connection;
-            mayhem.ConnectionList.Remove(c);
+            Mayhem.ConnectionList.Remove(c);
         }
 
         private void OnOffClick(object sender, RoutedEventArgs e) {
@@ -121,17 +146,15 @@ namespace MayhemWpf
         }
 
         private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e) {
-            Base64Serialize<ConnectionList>.SerializeObject(mayhem.ConnectionList);
+            Base64Serialize<ConnectionList>.SerializeObject(Mayhem.ConnectionList);
         }
 
-        protected void DimMainWindow(bool dim) {
+        public static void DimMainWindow(bool dim) {
             WindowCollection wc = Application.Current.Windows;
-            Debug.WriteLine("Number of current Windows: " + wc.Count);
 
             MainWindow mainW = null;
 
             foreach (Window w in wc) {
-                Debug.WriteLine("Name? " + w.Name);
 
                 if (w.Name == "MayhemMainWindow") {
                     mainW = w as MainWindow;
@@ -141,10 +164,19 @@ namespace MayhemWpf
             if (mainW != null) {
                 if (dim) {
                     Panel.SetZIndex(mainW.DimRectangle, 99);
-                    mainW.DimRectangle.Visibility = Visibility.Visible;
+                    var storyB = (Storyboard)mainW.DimRectangle.FindResource("FadeIn");
+                    storyB.Begin();
                 } else {
-                    Panel.SetZIndex(mainW.DimRectangle, 0);
-                    mainW.DimRectangle.Visibility = Visibility.Collapsed;
+                    
+
+                    var storyB = (Storyboard)mainW.DimRectangle.FindResource("FadeOut");
+
+                    storyB.Completed += delegate(object sender, EventArgs e) {
+                        Panel.SetZIndex(mainW.DimRectangle, 0);
+                    };
+
+                    storyB.Begin();
+
                 }
             }
 

@@ -6,11 +6,13 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using System.Timers;
 using System.Runtime.Serialization;
+using DefaultModules.Wpf;
+using System.Windows;
 
 namespace DefaultModules.Actions
 {
     [Serializable]
-    public class Timer : ActionBase, ICli, ISerializable
+    public class Timer : ActionBase, ICli, IWpf, ISerializable
     {
         protected const string TAG = "[Timer]";
 
@@ -25,7 +27,7 @@ namespace DefaultModules.Actions
 
             hours = 0;
             minutes = 0;
-            seconds = 3;
+            seconds = 2;
 
             SetUpTimer();
         }
@@ -69,6 +71,14 @@ namespace DefaultModules.Actions
             while (!Int32.TryParse(input, out seconds) || !(seconds >= 0 && seconds < 60));
 
             SetInterval();
+
+        }
+
+        public void WpfConfig() {
+            var window = new TimerConfig();
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            window.ShowDialog();
+
 
         }
 

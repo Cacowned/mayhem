@@ -1,28 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MayhemCore;
+using MayhemCore.ModuleTypes;
 
-namespace MayhemWpf
+namespace MayhemWpf.UserControls
 {
     /// <summary>
     /// Interaction logic for ModuleView.xaml
     /// </summary>
     public partial class ModuleView : UserControl
     {
-
-
-
 
         public ModuleBase Module {
             get { return (ModuleBase)GetValue(ModuleProperty); }
@@ -33,10 +20,19 @@ namespace MayhemWpf
         public static readonly DependencyProperty ModuleProperty =
             DependencyProperty.Register("Module", typeof(ModuleBase), typeof(ModuleView), new UIPropertyMetadata(null));
 
-
-
         public ModuleView() {
             InitializeComponent();
+        }
+
+        private void ConfigureButton_Click(object sender, RoutedEventArgs e) {
+            MainWindow.DimMainWindow(true);
+            ((IWpf)Module).WpfConfig();
+            /*
+            var config = new TimerConfig();
+            config.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            config.ShowDialog();
+            */
+            MainWindow.DimMainWindow(false);
         }
     }
 }

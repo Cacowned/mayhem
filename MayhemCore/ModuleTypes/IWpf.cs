@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.Windows;
 
 namespace MayhemCore.ModuleTypes
 {
@@ -14,5 +15,7 @@ namespace MayhemCore.ModuleTypes
     public interface IWpf : ISerializable
     {
         void WpfConfig();
+
+        //void WpfConfig(Window window);
     }
 }

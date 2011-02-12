@@ -1,9 +1,7 @@
-﻿<UserControl x:Class="MayhemWpf.ModuleView"
+﻿<UserControl x:Class="MayhemWpf.UserControls.ModuleView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
              >
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="vizConverter"/>
@@ -11,7 +9,7 @@
     <StackPanel Width="237" Orientation="Vertical">
         <TextBlock Style="{DynamicResource ModuleNameStyle}" Text="{Binding Module.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
         <StackPanel Orientation="Horizontal" Visibility="{Binding Module.HasConfig, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Converter={StaticResource vizConverter}}" >
-            <Button x:Name="ConfigureButton" Style="{DynamicResource ConfigureButton}" />
+            <Button x:Name="ConfigureButton" Style="{DynamicResource ConfigureButton}" Click="ConfigureButton_Click" />
             <TextBlock Margin="10,0,0,0" Style="{DynamicResource ConfigurationStringStyle}" Text="{Binding Module.ConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
         </StackPanel>
     </StackPanel>
