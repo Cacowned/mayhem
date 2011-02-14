@@ -32,14 +32,6 @@ namespace DefaultModules.Actions.Xbox
             Setup();
         }
 
-        public override string ConfigString
-        {
-            get
-            {
-                return buttons.ToString();
-            }
-        }
-
         protected void Setup() {
            
 
@@ -47,6 +39,13 @@ namespace DefaultModules.Actions.Xbox
             bw.WorkerSupportsCancellation = true;
             bw.DoWork += new DoWorkEventHandler(WatchButtons);
             bw.ProgressChanged += new ProgressChangedEventHandler(ProgressChanged);
+            
+            SetConfigString();
+        }
+
+        public void SetConfigString()
+        {
+            ConfigString = buttons.ToString();
         }
 
         public override void Enable() {
@@ -118,6 +117,8 @@ namespace DefaultModules.Actions.Xbox
             while (buttons.ToString() == "{Buttons:None}");
 
             Console.WriteLine(String.Format("{0} Saved state {1}", TAG, buttons.ToString()));
+
+            SetConfigString();
         }
 
         /// <summary>

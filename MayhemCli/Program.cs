@@ -91,14 +91,36 @@ namespace MayhemCli
                         Console.WriteLine("Action {0} can't be configured", connection.Action);
                     } else {
                         Console.WriteLine("Configuring {0}", connection.Action);
+                        
+                        // We want to disable the action, and re-enable it if it was enabled
+                        // to begin with
+                        bool wasEnabled = connection.Enabled;
+
+                        connection.Disable();
                         ((ICli)connection.Action).CliConfig();
+
+                        if (wasEnabled)
+                        {
+                            connection.Enable();
+                        }
+
                     }
                 } else if (input.ToLower().Equals("r")) {
                     if (!connection.Reaction.HasConfig) {
                         Console.WriteLine("Reaction {0} can't be configured", connection.Reaction);
                     } else {
                         Console.WriteLine("Configuring {0}", connection.Reaction);
+
+                        // We want to disable the reaction, and re-enable it if it was enabled
+                        // to begin with
+                        bool wasEnabled = connection.Enabled;
+                        connection.Disable();
+
                         ((ICli)connection.Reaction).CliConfig();
+                        if (wasEnabled)
+                        {
+                            connection.Enable();
+                        }
                     }
                 }
             } else {

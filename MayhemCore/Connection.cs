@@ -23,6 +23,9 @@ namespace MayhemCore
             this.Action = action;
             this.Reaction = reaction;
 
+            this.Action.connection = this;
+            this.Reaction.connection = this;
+
             // Set up the event handler for when the action triggers
             this.Action.ActionActivated += this.action_activated;
         }
@@ -70,6 +73,9 @@ namespace MayhemCore
         {
             Action = info.GetValue("Action", typeof(object)) as ActionBase;
             Reaction = info.GetValue("Reaction", typeof(object)) as ReactionBase;
+
+            Action.connection = this;
+            Reaction.connection = this;
 
             bool enabled = info.GetBoolean("Enabled");
             if (enabled)

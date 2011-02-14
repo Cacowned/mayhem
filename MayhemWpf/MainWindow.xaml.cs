@@ -18,14 +18,14 @@ namespace MayhemWpf
     public partial class MainWindow : Window
     {
 
-        public Mayhem<ICli> Mayhem {
-            get { return (Mayhem<ICli>)GetValue(MayhemProperty); }
+        public Mayhem<IWpf> Mayhem {
+            get { return (Mayhem<IWpf>)GetValue(MayhemProperty); }
             set { SetValue(MayhemProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Mayhem.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MayhemProperty =
-            DependencyProperty.Register("Mayhem", typeof(Mayhem<ICli>), typeof(MainWindow), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Mayhem", typeof(Mayhem<IWpf>), typeof(MainWindow), new UIPropertyMetadata(null));
 
 
 
@@ -54,7 +54,7 @@ namespace MayhemWpf
         public MainWindow() {
             
 
-            Mayhem = new Mayhem<ICli>();
+            Mayhem = new Mayhem<IWpf>();
 
             if (File.Exists(Base64Serialize<ConnectionList>.filename)) {
 

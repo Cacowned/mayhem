@@ -32,12 +32,9 @@ namespace DefaultModules.Actions
             SetUpTimer();
         }
 
-        public override string ConfigString
+        protected void SetConfigString()
         {
-            get
-            {
-                return String.Format("{0} hours, {1} minutes, {2} seconds", hours, minutes, seconds);
-            }
+            ConfigString = String.Format("{0} hours, {1} minutes, {2} seconds", hours, minutes, seconds);
         }
 
         protected void SetUpTimer() {
@@ -75,16 +72,22 @@ namespace DefaultModules.Actions
         }
 
         public void WpfConfig() {
-            var window = new TimerConfig();
+            var window = new TimerConfig(hours, minutes, seconds);
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             window.ShowDialog();
 
+            this.hours = window.hours;
+            this.minutes = window.minutes;
+            this.seconds = window.seconds;
 
+            SetInterval();
         }
 
         protected void SetInterval() {
             double interval = (hours * 3600 + minutes * 60 + seconds) * 1000;
             myTimer.Interval = interval;
+
+            SetConfigString();
         }
 
         private void myTimer_Elapsed(object sender, ElapsedEventArgs e) {

@@ -76,6 +76,9 @@
     <Compile Include="UdpHelpers\AsyncUdpServerSocket.cs" />
     <Compile Include="UdpHelpers\DataReceivedEventArgs.cs" />
     <Compile Include="UdpHelpers\UdpState.cs" />
+    <Compile Include="Wpf\KeypressConfig.xaml.cs">
+      <DependentUpon>KeypressConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\TimerConfig.xaml.cs">
       <DependentUpon>TimerConfig.xaml</DependentUpon>
     </Compile>
@@ -120,6 +123,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Wpf\KeypressConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wpf\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

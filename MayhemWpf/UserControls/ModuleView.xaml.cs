@@ -26,7 +26,16 @@ namespace MayhemWpf.UserControls
 
         private void ConfigureButton_Click(object sender, RoutedEventArgs e) {
             MainWindow.DimMainWindow(true);
+
+            bool wasEnabled = Module.connection.Enabled;
+
+            Module.connection.Disable();
             ((IWpf)Module).WpfConfig();
+
+            if (wasEnabled)
+            {
+                Module.connection.Enable();
+            }
             /*
             var config = new TimerConfig();
             config.WindowStartupLocation = WindowStartupLocation.CenterOwner;

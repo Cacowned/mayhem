@@ -1,13 +1,18 @@
 ﻿
 using System;
 using System.Runtime.Serialization;
+using System.Windows;
+
 namespace MayhemCore
 {
     /// <summary>
     /// This class is extended by ActionBase and ReactionBase
     /// </summary>
-    public abstract class ModuleBase: IComparable<ModuleBase>, ISerializable
+    public abstract class ModuleBase : DependencyObject, IComparable<ModuleBase>, ISerializable
     {
+        // A reference to the connection that holds this module.
+        public Connection connection;
+
         protected bool hasConfig = false;
         /// <summary>
         /// Whether this module has configuration settings
@@ -32,10 +37,16 @@ namespace MayhemCore
             protected set;
         }
 
-        public virtual string ConfigString
+        public string ConfigString
         {
-            get { return String.Empty; }
+            get { return (string)GetValue(ConfigStringProperty); }
+            set { SetValue(ConfigStringProperty, value); }
         }
+
+        // Using a DependencyProperty as the backing store for ConfigString.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ConfigStringProperty =
+            DependencyProperty.Register("ConfigString", typeof(string), typeof(ModuleBase), new UIPropertyMetadata(string.Empty));
+
 
         // TODO: category?
 

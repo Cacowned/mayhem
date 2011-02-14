@@ -28,14 +28,7 @@ namespace DefaultModules.Actions
             : base("UDP Receive", "Fires when predefined UDP message is received")
         {
             hasConfig = true;
-        }
-
-        public override string ConfigString
-        {
-            get
-            {
-                return String.Format("Port: {0}, Message: \"{1}\"", port, listenMessage);
-            }
+            SetListenOnPort(port, listenMessage);
         }
 
         public void CliConfig()
@@ -66,6 +59,8 @@ namespace DefaultModules.Actions
 
             socket = AsyncUdpServerSocket.GetSocketForPort(port);
             receivedHandler = new AsyncUdpServerSocket.DataReceivedHandler(socket_OnDataReceived);
+
+            ConfigString = String.Format("Port: {0}, Message: \"{1}\"", port, listenMessage);
         }
 
 

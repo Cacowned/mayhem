@@ -29,10 +29,14 @@ namespace DefaultModules.KeypressHelpers
         public delegate void KeyUpHandler(object sender, KeyEventArgs e);
         public static event KeyUpHandler OnInterceptKeyUp;
 
-        public static void Instantiate() {
+        public static InterceptKeys GetInstance()
+        {
             if (instance == null)
                 instance = new InterceptKeys();
+
+            return instance;
         }
+
 
         public InterceptKeys() {
             _hookID = SetHook(_proc);
