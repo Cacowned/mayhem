@@ -26,33 +26,6 @@ namespace DefaultModules.Wpf
 
         private InterceptKeys.KeyDownHandler keyDownHandler = null;
 
-        #region Key Combination updated (Save Button Clicked)
-
-        /**<summary>
-         * Holds the key combination in order to inform the trigger.
-         * Gets sent when the "Save" button is clicked. 
-         * </summary>
-         * */
-        public class KeyCombinationUpdatedArgs : EventArgs
-        {
-
-            public HashSet<System.Windows.Forms.Keys> key_combination = new HashSet<System.Windows.Forms.Keys>();
-            public KeyCombinationUpdatedArgs(HashSet<System.Windows.Forms.Keys> q)
-                : base()
-            {
-                foreach (System.Windows.Forms.Keys k in q)
-                {
-                    key_combination.Add(k);
-                }
-            }
-        }
-
-        public delegate void KeyCombinationUpdatedHandler(object sender, KeyCombinationUpdatedArgs e);
-        public event KeyCombinationUpdatedHandler OnKeyCombinationUpdated;
-
-        #endregion
-
-
         public KeypressConfig()
         {
 
@@ -80,8 +53,6 @@ namespace DefaultModules.Wpf
                     KeysDown += " + "+e.KeyCode.ToString();
                 }
             }
-
-
         }
 
         /**<summary>
@@ -114,11 +85,6 @@ namespace DefaultModules.Wpf
 
             keyDownHandler = null;
             
-            if (OnKeyCombinationUpdated != null)
-            {
-                OnKeyCombinationUpdated(this, new KeyCombinationUpdatedArgs(keys_down));
-            }
-
             DialogResult = true;
         }
 

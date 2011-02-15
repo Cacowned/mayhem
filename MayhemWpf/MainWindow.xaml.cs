@@ -118,7 +118,15 @@ namespace MayhemWpf
 
         private void CheckEnableBuild() {
             if (Action != null && Reaction != null) {
-                Mayhem.ConnectionList.Add(new Connection(Action, Reaction));
+
+                // We have to clone the action and reaction
+                Type t = Action.GetType();
+                ActionBase action = (ActionBase)Activator.CreateInstance(t);
+
+                t = Reaction.GetType();
+                ReactionBase reaction = (ReactionBase)Activator.CreateInstance(t);
+
+                Mayhem.ConnectionList.Add(new Connection(action, reaction));
 
                 Action = null;
                 Reaction = null;

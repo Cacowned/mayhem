@@ -73,11 +73,15 @@
     <Compile Include="Reactions\Office\PowerPoint\PptPrevSlide.cs" />
     <Compile Include="Reactions\Office\PowerPoint\PptNextSlide.cs" />
     <Compile Include="Reactions\PlaySound.cs" />
+    <Compile Include="Reactions\TextToSpeech.cs" />
     <Compile Include="UdpHelpers\AsyncUdpServerSocket.cs" />
     <Compile Include="UdpHelpers\DataReceivedEventArgs.cs" />
     <Compile Include="UdpHelpers\UdpState.cs" />
     <Compile Include="Wpf\KeypressConfig.xaml.cs">
       <DependentUpon>KeypressConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\TextToSpeechConfig.xaml.cs">
+      <DependentUpon>TextToSpeechConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\TimerConfig.xaml.cs">
       <DependentUpon>TimerConfig.xaml</DependentUpon>
@@ -85,6 +89,9 @@
     <Compile Include="Wpf\UserControls\Borders.cs" />
     <Compile Include="Wpf\UserControls\WindowHeader.xaml.cs">
       <DependentUpon>WindowHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\XboxButtonConfig.xaml.cs">
+      <DependentUpon>XboxButtonConfig.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +119,15 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+    <COMReference Include="SpeechLib">
+      <Guid>{C866CA3A-32F7-11D2-9602-00C04F8EE628}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
     <COMReference Include="VBIDE">
       <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>5</VersionMajor>
@@ -131,6 +147,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Wpf\TextToSpeechConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wpf\Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -142,6 +162,10 @@
     <Page Include="Wpf\UserControls\WindowHeader.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\XboxButtonConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

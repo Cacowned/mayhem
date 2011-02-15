@@ -28,7 +28,7 @@ namespace DefaultModules.Actions
         private InterceptKeys interceptKeys;
 
         public Keypress()
-            : base("Key press", "This trigger fires on a predefined key press") {
+            : base("Key Press", "This trigger fires on a predefined key press") {
                 
             Setup();
             // Default key to add
@@ -66,8 +66,6 @@ namespace DefaultModules.Actions
 
                 SetConfigString();
             }
-
-            
             
         }
 

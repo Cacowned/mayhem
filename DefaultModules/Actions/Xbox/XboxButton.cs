@@ -10,11 +10,13 @@ using System.Threading;
 using System.Diagnostics;
 using MayhemCore.ModuleTypes;
 using System.Runtime.Serialization;
+using DefaultModules.Wpf;
+using System.Windows;
 
 namespace DefaultModules.Actions.Xbox
 {
     [Serializable]
-    public class XboxButton : ActionBase, ICli, ISerializable
+    public class XboxButton : ActionBase, ICli, IWpf, ISerializable
     {
         protected BackgroundWorker bw = new BackgroundWorker();
 
@@ -28,6 +30,11 @@ namespace DefaultModules.Actions.Xbox
             : base("Xbox Controller: Button", "Triggers when buttons on an Xbox 360 controller are pushed")
         {
             hasConfig = true;
+
+            var defaultButtons = new Buttons();
+            defaultButtons = defaultButtons | Buttons.A;
+
+            buttons = new GamePadButtons(defaultButtons);
 
             Setup();
         }
@@ -121,6 +128,22 @@ namespace DefaultModules.Actions.Xbox
             SetConfigString();
         }
 
+        public void WpfConfig() {
+            var window = new XboxButtonConfig(buttons);
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+           
+
+            window.ShowDialog();
+
+            if (window.DialogResult == true) {
+                buttons = new GamePadButtons(window.down_buttons);
+
+                SetConfigString();
+            }
+        }
+
+
         /// <summary>
         /// Checks the gamepad state against the one saved from configuration
         /// </summary>
@@ -147,7 +170,9 @@ namespace DefaultModules.Actions.Xbox
 
             // We need to create a buttons struct from all the buttons that are pressed
             Buttons keys = new Buttons();
-            if ((int)this.buttons.A == 1)
+            MergeButtons(ref keys, this.buttons);
+
+            /*if ((int)this.buttons.A == 1)
                 keys = keys | Buttons.A;
             if ((int)this.buttons.B == 1)
                 keys = keys | Buttons.B;
@@ -169,10 +194,35 @@ namespace DefaultModules.Actions.Xbox
                 keys = keys | Buttons.X;
             if ((int)this.buttons.Y == 1)
                 keys = keys | Buttons.Y;
-
+            */
             info.AddValue("Buttons", keys);
         }
         #endregion
 
+        // Merges the states of buttons into the original struct
+        public static void MergeButtons(ref Buttons original, GamePadButtons buttons) {
+            if ((int)buttons.A == 1)
+                original = original | Buttons.A;
+            if ((int)buttons.B == 1)
+                original = original | Buttons.B;
+            if ((int)buttons.Back == 1)
+                original = original | Buttons.Back;
+            if ((int)buttons.BigButton == 1)
+                original = original | Buttons.BigButton;
+            if ((int)buttons.LeftShoulder == 1)
+                original = original | Buttons.LeftShoulder;
+            if ((int)buttons.LeftStick == 1)
+                original = original | Buttons.LeftStick;
+            if ((int)buttons.RightShoulder == 1)
+                original = original | Buttons.RightShoulder;
+            if ((int)buttons.RightStick == 1)
+                original = original | Buttons.RightStick;
+            if ((int)buttons.Start == 1)
+                original = original | Buttons.Start;
+            if ((int)buttons.X == 1)
+                original = original | Buttons.X;
+            if ((int)buttons.Y == 1)
+                original = original | Buttons.Y;
+        }
     }
 }
