@@ -3,6 +3,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	x:Class="MayhemWpf.TimerConfig"
 	xmlns:src="clr-namespace:MayhemWpf.UserControls"
+    xmlns:common="clr-namespace:MayhemDefaultStyles.UserControls;assembly=MayhemDefaultStyles"
 	x:Name="Window"
 	Title="TimerConfig"
 	Width="400" Height="400">
@@ -32,8 +33,8 @@
 </Window.Resources>
 	<Grid>
 		<StackPanel Style="{StaticResource BackgroundGradient}">   
-            <src:WindowHeader Text="Config: Timer" />
-			<src:Borders>
+            <common:WindowHeader Text="Config: Timer" />
+			<common:Borders>
 				<StackPanel>
 					<Grid>
 						<Grid.ColumnDefinitions>
@@ -61,7 +62,7 @@
 						<Button>Cancel</Button>
 					</StackPanel>
 				</StackPanel>
-			</src:Borders>
+			</common:Borders>
 			
 		</StackPanel>
 	</Grid>

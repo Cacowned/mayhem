@@ -47,4 +47,21 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="Grid">
+        <Style.Resources>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="0,5,0,0" />
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0,20" MappingMode="Absolute" StartPoint="0,0">
+                            <GradientStop Color="#FFABADB3" Offset="0.05"/>
+                            <GradientStop Color="#FFE2E3EA" Offset="0.07"/>
+                            <GradientStop Color="#FF33373B" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Style.Resources>
+    </Style>
 </ResourceDictionary>

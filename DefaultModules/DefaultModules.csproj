@@ -73,12 +73,22 @@
     <Compile Include="Reactions\Office\PowerPoint\PptPrevSlide.cs" />
     <Compile Include="Reactions\Office\PowerPoint\PptNextSlide.cs" />
     <Compile Include="Reactions\PlaySound.cs" />
+    <Compile Include="Reactions\RunProgram.cs" />
+    <Compile Include="Reactions\SmsMessage.cs" />
     <Compile Include="Reactions\TextToSpeech.cs" />
+    <Compile Include="Reactions\WebcamSnapshot.cs" />
     <Compile Include="UdpHelpers\AsyncUdpServerSocket.cs" />
     <Compile Include="UdpHelpers\DataReceivedEventArgs.cs" />
     <Compile Include="UdpHelpers\UdpState.cs" />
+    <Compile Include="WebcamHelpers\Webcam.cs" />
     <Compile Include="Wpf\KeypressConfig.xaml.cs">
       <DependentUpon>KeypressConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\RunProgramConfig.xaml.cs">
+      <DependentUpon>RunProgramConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\SmsMessageConfig.xaml.cs">
+      <DependentUpon>SmsMessageConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\TextToSpeechConfig.xaml.cs">
       <DependentUpon>TextToSpeechConfig.xaml</DependentUpon>
@@ -143,6 +153,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Wpf\RunProgramConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\SmsMessageConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wpf\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -168,6 +186,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

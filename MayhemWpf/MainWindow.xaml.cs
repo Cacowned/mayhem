@@ -90,6 +90,11 @@ namespace MayhemWpf
             {
                 if (dlg.ModulesList.SelectedItem != null) {
                     Action = (ActionBase)dlg.ModulesList.SelectedItem;
+
+                    // Take this item, remove it and add it to the front (MoveToFrontList)
+                    Mayhem.ActionList.Remove(Action);
+                    Mayhem.ActionList.Insert(0, Action);
+
                     CheckEnableBuild();
                 }
             }
@@ -111,6 +116,11 @@ namespace MayhemWpf
             {
                 if (dlg.ModulesList.SelectedItem != null) {
                     Reaction = (ReactionBase)dlg.ModulesList.SelectedItem;
+
+                    // Take this item, remove it and add it to the front (MoveToFrontList)
+                    Mayhem.ReactionList.Remove(Reaction);
+                    Mayhem.ReactionList.Insert(0, Reaction);
+
                     CheckEnableBuild();
                 }
             }

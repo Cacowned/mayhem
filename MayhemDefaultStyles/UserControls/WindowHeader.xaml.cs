@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace MayhemWpf.UserControls
+namespace MayhemDefaultStyles.UserControls
 {
     /// <summary>
     /// Interaction logic for WindowHeader.xaml
