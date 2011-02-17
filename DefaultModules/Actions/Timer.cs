@@ -74,13 +74,15 @@ namespace DefaultModules.Actions
         public void WpfConfig() {
             var window = new TimerConfig(hours, minutes, seconds);
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            window.ShowDialog();
+            
+            if (window.ShowDialog() == true) {
 
-            this.hours = window.hours;
-            this.minutes = window.minutes;
-            this.seconds = window.seconds;
+                this.hours = window.hours;
+                this.minutes = window.minutes;
+                this.seconds = window.seconds;
 
-            SetInterval();
+                SetInterval();
+            }
         }
 
         protected void SetInterval() {
