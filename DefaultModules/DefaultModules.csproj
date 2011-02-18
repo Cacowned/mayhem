@@ -40,6 +40,7 @@
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="Phidget21.NET, Version=2.1.7.48, Culture=neutral, PublicKeyToken=c2b1f2a3594bce52, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -58,6 +59,7 @@
     <Compile Include="Actions\Keypress.cs" />
     <Compile Include="Actions\Office\Outlook\OutlookMail.cs" />
     <Compile Include="Actions\Office\Outlook\OutlookReminder.cs" />
+    <Compile Include="Actions\Phidget\Phidget1133Sound.cs" />
     <Compile Include="Actions\Timer.cs" />
     <Compile Include="Actions\UdpReceive.cs" />
     <Compile Include="Actions\Xbox\XboxButton.cs" />
@@ -212,9 +214,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Actions\Phidgets\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
