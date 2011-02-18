@@ -99,10 +99,6 @@
     <Compile Include="Wpf\TimerConfig.xaml.cs">
       <DependentUpon>TimerConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\UserControls\Borders.cs" />
-    <Compile Include="Wpf\UserControls\WindowHeader.xaml.cs">
-      <DependentUpon>WindowHeader.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Wpf\WebcamSnapshotConfig.xaml.cs">
       <DependentUpon>WebcamSnapshotConfig.xaml</DependentUpon>
     </Compile>
@@ -118,6 +114,10 @@
     <ProjectReference Include="..\MayhemCore\MayhemCore.csproj">
       <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
       <Name>MayhemCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MayhemDefaultStyles\MayhemDefaultStyles.csproj">
+      <Project>{D4441581-1768-4A2A-9A2B-B6A700B96FAD}</Project>
+      <Name>MayhemDefaultStyles</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -179,17 +179,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Wpf\TimerConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wpf\UserControls\WindowHeader.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Wpf\WebcamSnapshotConfig.xaml">
       <SubType>Designer</SubType>
