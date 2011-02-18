@@ -85,7 +85,7 @@
             <StackPanel Style="{StaticResource BackgroundGradient}">   
             <common:WindowHeader Text="Mayhem" />
 
-            <!--<common:Borders>-->
+            <common:Borders>
                 <StackPanel Orientation="Vertical">
 						<UniformGrid Rows="1" Columns="2" Height="40" Margin="0,0,0,10">
 							<Button Style="{StaticResource ActionButton}" Width="176" Click="ActionListClick">
@@ -120,7 +120,7 @@
 				
 					</ItemsControl>
 				</StackPanel>
-            <!--</common:Borders>-->
+            </common:Borders>
 		</StackPanel>
 	</Grid>
 </Window>

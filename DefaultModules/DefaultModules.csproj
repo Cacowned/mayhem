@@ -80,6 +80,9 @@
     <Compile Include="UdpHelpers\AsyncUdpServerSocket.cs" />
     <Compile Include="UdpHelpers\DataReceivedEventArgs.cs" />
     <Compile Include="UdpHelpers\UdpState.cs" />
+    <Compile Include="WebcamHelpers\ComBitmap.cs" />
+    <Compile Include="WebcamHelpers\Device.cs" />
+    <Compile Include="WebcamHelpers\ImageCapture.cs" />
     <Compile Include="WebcamHelpers\Webcam.cs" />
     <Compile Include="Wpf\KeypressConfig.xaml.cs">
       <DependentUpon>KeypressConfig.xaml</DependentUpon>
@@ -108,6 +111,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DirectShowDotNet\DirectShowLib-2008.csproj">
+      <Project>{CE009BFA-5EF6-4153-B2A1-2FA79698A9AE}</Project>
+      <Name>DirectShowLib-2008</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MayhemCore\MayhemCore.csproj">
       <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
       <Name>MayhemCore</Name>

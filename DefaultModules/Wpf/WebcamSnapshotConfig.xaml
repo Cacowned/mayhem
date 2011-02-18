@@ -34,7 +34,7 @@
             <!--<src:Borders>-->
             <StackPanel>
                 
-                <Button Click="Button_Click">Choose Camera</Button>
+                <ComboBox Name="DeviceList" />
                 <Button Click="Button_Click_1">Save Images Location</Button>
                 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">

@@ -23,30 +23,24 @@ namespace DefaultModules.Wpf
     public partial class WebcamSnapshotConfig : Window
     {
         public string location;
-        public int captureDevice;
+        public Device captureDevice;
 
+        
 
-        public WebcamSnapshotConfig(string location, int captureDevice) {
+        public WebcamSnapshotConfig(string location, Device captureDevice) {
             this.location = location;
             this.captureDevice = captureDevice;
 
             InitializeComponent();
+
+            // Fill the device box
+            foreach (Device device in Device.FindDevices())
+                DeviceList.Items.Add(device);
+
+            DeviceList.SelectedIndex = 0;
+            
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) {
-
-            WindowInteropHelper helper = new WindowInteropHelper(this);
-            // setup a capture window
-            captureDevice = Webcam.capCreateCaptureWindowA(lpszWindowName: "WebCap",
-                                                dwStyle: 0,
-                                                X: 0,
-                                                Y: 0,
-                                                nWidth: Webcam.Width,
-                                                nHeight: Webcam.Height,
-                                                hwndParent: helper.Handle.ToInt32(),
-                                                nID: 0);
-
-        }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
@@ -58,6 +52,7 @@ namespace DefaultModules.Wpf
         }
 
         private void Button_Save_Click(object sender, RoutedEventArgs e) {
+            captureDevice = DeviceList.SelectedItem as Device;
             DialogResult = true;
         }
 

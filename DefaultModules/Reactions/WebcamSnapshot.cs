@@ -11,6 +11,7 @@ using DefaultModules.Wpf;
 using System.Windows;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Diagnostics;
 
 namespace DefaultModules.Reactions
 {
@@ -18,6 +19,9 @@ namespace DefaultModules.Reactions
     public class WebcamSnapshot : ReactionBase, IWpf, ISerializable
     {
         protected string folderLocation = "";
+
+        // The device we are recording from
+        protected Device cameraDevice;
 
         protected Webcam webcam;
 
@@ -29,16 +33,20 @@ namespace DefaultModules.Reactions
         }
 
         public void Setup() {
-            webcam = Webcam.GetInstance();
 
             hasConfig = true;
-
-
+            // TODO: What if we have multiple of these?
+            webcam = new Webcam();
             SetConfigString();
         }
 
         public override void Enable() {
             base.Enable();
+
+            if (webcam.Device == null) {
+                WpfConfig();
+            }
+
             webcam.Start();
         }
 
@@ -48,27 +56,16 @@ namespace DefaultModules.Reactions
         }
 
         public override void Perform() {
-            
-            
+            Bitmap captureImage = webcam.Capture();
 
-            Bitmap picture = webcam.GetFrame();
-            
-            string location = Path.Combine(folderLocation, DateTimeToTimeStamp(DateTime.Now))+".bmp";
+            if (captureImage == null) {
+                Debug.WriteLine("[Webcam] No Images yet.");
+                return;
+            }
 
-            picture.Save(location, ImageFormat.Bmp);
-
-//            imagefile = picture.Save()
-            /*
-            FileStream stream = File.OpenWrite(location);
+            string location = Path.Combine(folderLocation, DateTimeToTimeStamp(DateTime.Now)) + ".jpg";
             
-            MessageBox.Show("Text","foo", MessageBoxButton.OK, )
-            picture.Save(stream, ImageFormat.Bmp);
-  //         stream.Write()
-
-            //picture.Save(location, ImageFormat.Jpeg );
-            
-            // take snapshot
-             */
+            captureImage.Save(location, ImageFormat.Jpeg);
         }
 
         protected string DateTimeToTimeStamp(DateTime time) {
@@ -79,14 +76,15 @@ namespace DefaultModules.Reactions
             /*
              * Choose a webcam and save folder
              */
-            var window = new WebcamSnapshotConfig(folderLocation, webcam.CaptureDevice);
+            var window = new WebcamSnapshotConfig(folderLocation, cameraDevice);
             
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             if (window.ShowDialog() == true) {
 
                 folderLocation = window.location;
-                webcam.CaptureDevice = window.captureDevice;
+
+                webcam.Device = window.captureDevice;
 
                 SetConfigString();
             }
