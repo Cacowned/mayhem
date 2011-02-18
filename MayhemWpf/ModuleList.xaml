@@ -9,8 +9,8 @@
     <StackPanel Style="{StaticResource BackgroundGradient}">
         <common:WindowHeader Text="{Binding Text, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
         
-        <!--<common:Borders>-->
-			<ListBox MaxHeight="385" x:Name="ModulesList" BorderThickness="0">
+        <common:Borders>
+			<ListBox MaxHeight="365" x:Name="ModulesList" BorderThickness="0">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<Border BorderThickness="0,0,0,1" BorderBrush="#FFD4D4D4">
@@ -24,7 +24,7 @@
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 			</ListBox>
-        <!--</common:Borders>-->
+        </common:Borders>
 
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >

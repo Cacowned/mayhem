@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using MayhemCore;
 using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
+using System.Runtime.InteropServices;
 
 namespace DefaultModules.Reactions.Office.PowerPoint
 {
@@ -14,7 +15,7 @@ namespace DefaultModules.Reactions.Office.PowerPoint
         public override void Perform() {
             OPowerPoint.Application oApp;
 
-            oApp = (OPowerPoint.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("PowerPoint.Application");
+            oApp = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");
 
             // If we have a presentation window, go to the next slide
             if (oApp.SlideShowWindows.Count >= 1) {
