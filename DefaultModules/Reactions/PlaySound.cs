@@ -12,7 +12,7 @@ using MayhemCore.ModuleTypes;
 namespace DefaultModules.Reactions
 {
     [Serializable]
-    public class PlaySound : ReactionBase, ICli
+    public class PlaySound : ReactionBase, ICli // TODO: Make WPF Compatible
     {
 
         protected const string TAG = "[PlaySound]";

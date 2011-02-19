@@ -48,13 +48,13 @@ namespace MayhemCore
                     {
                         // If it's parent class is the type we want
                         // and it implements the correct moduleType
-                        if (type.BaseType == typeof(T))
+                        if(type.IsSubclassOf(typeof(T)) && !type.IsAbstract)
                         {
-                            
                             // Create an instance
                             T reaction = (T)Activator.CreateInstance(type);
                             bool hasConfig = reaction.HasConfig;
-                            if (!hasConfig || (hasConfig && type.GetInterfaces().Contains(typeof(V)))) {
+                            if (!hasConfig || (hasConfig && type.GetInterfaces().Contains(typeof(V))))
+                            {
                                 // Add it to our final list
                                 this.Add(reaction);
                             }
