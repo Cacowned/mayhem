@@ -14,31 +14,28 @@ using System.Windows.Shapes;
 using Phidgets;
 using Phidgets.Events;
 using System.Windows.Threading;
-using PhidgetModules.Action;
 
-namespace PhidgetModules
+namespace PhidgetModules.Wpf
 {
     /// <summary>
-    /// Interaction logic for _1133SoundConfig.xaml
+    /// Interaction logic for Phidget1129TouchConfig.xaml
     /// </summary>
-    public partial class Phidget1133SoundConfig : Window
+    public partial class Phidget1129TouchConfig : Window
     {
         public int index;
-        public double topValue;
 
-        public bool increasing;
+        public bool onTurnOn;
 
         public InterfaceKit ifKit;
 
         protected SensorChangeEventHandler handler;
 
-        
 
-        public Phidget1133SoundConfig(InterfaceKit ifKit, int index, double topValue, bool increasing)
+        public Phidget1129TouchConfig(InterfaceKit ifKit, int index, bool onTurnOn)
         {
             this.index = index;
             this.ifKit = ifKit;
-            this.topValue = topValue;
+            this.onTurnOn = onTurnOn;
 
             InitializeComponent();
 
@@ -50,10 +47,9 @@ namespace PhidgetModules
             }
 
             this.SensorBox.SelectedIndex = index;
-            TopValue.Text = topValue.ToString();
 
-            IncreasingRadio.IsChecked = increasing;
-            DecreasingRadio.IsChecked = !increasing;
+            OnWhenOn.IsChecked = onTurnOn;
+            OnWhenOff.IsChecked = !onTurnOn;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -69,24 +65,24 @@ namespace PhidgetModules
                 if (e.Index == index)
                 {
 
-                    this.ValueBox.Text = Phidget1133Sound.Convert(e.Value).ToString("0.###") +" dB";
+
+                    this.ValueBox.Text = IsOn(e.Value) ? "On":"Off" ;
                 }
             }));
 
             
         }
 
+        public bool IsOn(int value) {
+            if (value > 500)
+                return true;
+            return false;
+        }
+
         private void Button_Save_Click(object sender, RoutedEventArgs e)
         {
-            if (!double.TryParse(TopValue.Text, out topValue) && topValue >= 0)
-            {
-                MessageBox.Show("You must enter a valid number");
-            }
-            else
-            {
-                increasing = (bool)IncreasingRadio.IsChecked;
-                DialogResult = true;
-            }
+            onTurnOn = (bool)OnWhenOn.IsChecked;
+            DialogResult = true;
         }
 
         private void Button_Cancel_Click(object sender, RoutedEventArgs e)
