@@ -10,7 +10,7 @@ using System.Windows;
 namespace PhidgetModules.Action
 {
 	[Serializable]
-	public class Phidget1101IRDistance : ValueSensorActionBase, IWpf, ISerializable
+	public class Phidget1101IRDistance : RangeSensorActionBase, IWpf, ISerializable
 	{
 
 		public Phidget1101IRDistance()
@@ -20,19 +20,19 @@ namespace PhidgetModules.Action
 		}
 
 		public void WpfConfig() {
-			var window = new Phidget1101IRDistanceConfig(ifKit, index, topValue, increasing, Convert);
+			var window = new Phidget1101IRDistanceConfig(ifKit, index, topValue, bottomValue, Convert);
 			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
 			if (window.ShowDialog() == true) {
 				index = window.index;
 				topValue = window.topValue;
-				increasing = window.increasing;
+				bottomValue = window.bottomValue;
 
 				SetConfigString();
 			}
 		}
 
-		protected override bool IsValidRange(int value) {
+		protected override bool IsValidInput(int value) {
 			return (value < 490 && value > 80);
 		}
 
@@ -41,12 +41,7 @@ namespace PhidgetModules.Action
 		}
 
 		protected override void SetConfigString() {
-			string overUnder = "further";
-			if (!increasing) {
-				overUnder = "closer";
-			}
-
-			ConfigString = String.Format("Index {0}, item {1} than {2} cm", index, overUnder, topValue.ToString("0.##"));
+			ConfigString = String.Format("Index {0}, between {1} and {2} cm", index, topValue.ToString("0.##"), bottomValue.ToString("0.##"));
 		}
 
 

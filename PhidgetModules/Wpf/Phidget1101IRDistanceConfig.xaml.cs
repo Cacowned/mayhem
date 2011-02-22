@@ -23,7 +23,7 @@ namespace PhidgetModules.Wpf
 		public int index;
 		public double topValue;
 
-		public bool increasing;
+        public double bottomValue;
 
 		public InterfaceKit ifKit;
 
@@ -31,11 +31,12 @@ namespace PhidgetModules.Wpf
 
 		protected Func<int, double> convertor;
 
-		public Phidget1101IRDistanceConfig(InterfaceKit ifKit, int index, double topValue, bool increasing, Func<int, double> conversion) {
+		public Phidget1101IRDistanceConfig(InterfaceKit ifKit, int index, double topValue, double bottomValue, Func<int, double> conversion) {
 			this.index = index;
 			this.ifKit = ifKit;
 			this.topValue = topValue;
 			this.convertor = conversion;
+            this.bottomValue = bottomValue;
 
 			InitializeComponent();
 
@@ -47,9 +48,8 @@ namespace PhidgetModules.Wpf
 
 			this.SensorBox.SelectedIndex = index;
 			TopValue.Text = topValue.ToString();
+            BottomValue.Text = bottomValue.ToString();
 
-			IncreasingRadio.IsChecked = increasing;
-			DecreasingRadio.IsChecked = !increasing;
 		}
 
 		private void Window_Loaded(object sender, RoutedEventArgs e) {
@@ -76,11 +76,18 @@ namespace PhidgetModules.Wpf
 
 		private void Button_Save_Click(object sender, RoutedEventArgs e) {
 			if (!double.TryParse(TopValue.Text, out topValue) && topValue >= 0) {
-				MessageBox.Show("You must enter a valid number");
-			} else {
-				increasing = (bool)IncreasingRadio.IsChecked;
-				DialogResult = true;
+				MessageBox.Show("You must enter a valid number for the top of the range");
+			} else if(!double.TryParse(BottomValue.Text, out bottomValue) && topValue >= 0) {
+                MessageBox.Show("You must enter a valid number for the bottom of the range");
 			}
+            else if (bottomValue > topValue)
+            {
+                MessageBox.Show("The bottom of the range must be lower than the top of the range");
+            }
+            else
+            {
+                DialogResult = true;
+            }
 		}
 
 		private void Button_Cancel_Click(object sender, RoutedEventArgs e) {

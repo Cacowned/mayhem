@@ -16,9 +16,9 @@ namespace DefaultModules.Reactions.Office.PowerPoint
 
             oApp = (OPowerPoint.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("PowerPoint.Application");
 
-            // If we have a presentation window, go to the next slide
+            // If we have a presentation window, go to the prev slide
             if (oApp.SlideShowWindows.Count >= 1) {
-                oApp.SlideShowWindows[1].View.Next();
+                oApp.SlideShowWindows[1].View.Last();
             }
 
             oApp = null;

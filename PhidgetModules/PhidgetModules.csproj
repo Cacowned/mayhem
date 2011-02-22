@@ -48,6 +48,7 @@
     <Compile Include="Action\Phidget1101IRDistance.cs" />
     <Compile Include="Action\Phidget1129Touch.cs" />
     <Compile Include="OnOffSensorActionBase.cs" />
+    <Compile Include="RangeSensorActionBase.cs" />
     <Compile Include="Wpf\Phidget1101IRDistanceConfig.xaml.cs">
       <DependentUpon>Phidget1101IRDistanceConfig.xaml</DependentUpon>
     </Compile>
