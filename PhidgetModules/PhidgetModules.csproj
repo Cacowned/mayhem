@@ -46,11 +46,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action\Phidget1101IRDistance.cs" />
+    <Compile Include="Action\Phidget1103IRReflective.cs" />
+    <Compile Include="Action\Phidget1106Force.cs" />
+    <Compile Include="Action\Phidget1127Light.cs" />
     <Compile Include="Action\Phidget1129Touch.cs" />
     <Compile Include="OnOffSensorActionBase.cs" />
     <Compile Include="RangeSensorActionBase.cs" />
+    <Compile Include="Wpf\Phidget1103IRReflectiveConfig.xaml.cs">
+      <DependentUpon>Phidget1103IRReflectiveConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\Phidget1101IRDistanceConfig.xaml.cs">
       <DependentUpon>Phidget1101IRDistanceConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Phidget1106ForceConfig.xaml.cs">
+      <DependentUpon>Phidget1106ForceConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Phidget1127LightConfig.xaml.cs">
+      <DependentUpon>Phidget1127LightConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\Phidget1129TouchConfig.xaml.cs">
       <DependentUpon>Phidget1129TouchConfig.xaml</DependentUpon>
@@ -74,7 +86,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Wpf\Phidget1103IRReflectiveConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wpf\Phidget1101IRDistanceConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Phidget1106ForceConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Phidget1127LightConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

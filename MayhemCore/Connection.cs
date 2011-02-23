@@ -30,6 +30,13 @@ namespace MayhemCore
             this.Action.ActionActivated += this.action_activated;
         }
 
+		~Connection() {
+			Action.Disable();
+			Reaction.Disable();
+			Action = null;
+			Reaction = null;
+		}
+
         /// <summary>
         /// Calls the Reaction when the action gets triggered.
         /// </summary>

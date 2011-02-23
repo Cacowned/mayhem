@@ -56,7 +56,13 @@ namespace DefaultModules.Reactions
         }
 
         public override void Perform() {
-            Bitmap captureImage = webcam.Capture();
+			Bitmap captureImage = null;
+
+			try {
+				captureImage = webcam.Capture();
+			} catch (Exception e) {
+				Debug.WriteLine("[Webcam] Error capturing image.");
+			}
 
             if (captureImage == null) {
                 Debug.WriteLine("[Webcam] No Images yet.");

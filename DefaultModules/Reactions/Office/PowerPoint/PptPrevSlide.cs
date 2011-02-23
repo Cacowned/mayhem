@@ -18,7 +18,7 @@ namespace DefaultModules.Reactions.Office.PowerPoint
 
             // If we have a presentation window, go to the prev slide
             if (oApp.SlideShowWindows.Count >= 1) {
-                oApp.SlideShowWindows[1].View.Last();
+				oApp.SlideShowWindows[1].View.Previous();
             }
 
             oApp = null;
