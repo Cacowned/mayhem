@@ -105,5 +105,10 @@ namespace DefaultModules.Wpf
         {
             DialogResult = false;
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            InterceptKeys.OnInterceptKeyDown -= keyDownHandler;
+        }
     }
 }

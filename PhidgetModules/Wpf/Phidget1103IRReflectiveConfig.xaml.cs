@@ -25,47 +25,29 @@ namespace PhidgetModules.Wpf
 
 		public bool onTurnOn;
 
-		public InterfaceKit ifKit;
-
-		protected SensorChangeEventHandler handler;
-
 
 		public Phidget1103IRReflectiveConfig(InterfaceKit ifKit, int index, bool onTurnOn) {
 			this.index = index;
-			this.ifKit = ifKit;
 			this.onTurnOn = onTurnOn;
 
 			InitializeComponent();
 
-			handler = new SensorChangeEventHandler(SensorChange);
-
-			for (int i = 0; i < ifKit.sensors.Count; i++) {
-				SensorBox.Items.Add(i);
-			}
-
-			this.SensorBox.SelectedIndex = index;
 
 			OnWhenOn.IsChecked = onTurnOn;
 			OnWhenOff.IsChecked = !onTurnOn;
 		}
 
-		private void Window_Loaded(object sender, RoutedEventArgs e) {
-			this.ifKit.SensorChange += handler;
-		}
-
+        /*
 		protected void SensorChange(object sender, SensorChangeEventArgs e) {
 			this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
 			{
 				// We only care about the index we are looking at.
 				if (e.Index == index) {
-
-
 					this.ValueBox.Text = IsDetected(e.Value) ? "Detected" : "Not Detected";
 				}
 			}));
-
-
 		}
+         * */
 
 		public bool IsDetected(int value) {
 			if (value < 100)
@@ -80,16 +62,6 @@ namespace PhidgetModules.Wpf
 
 		private void Button_Cancel_Click(object sender, RoutedEventArgs e) {
 			DialogResult = false;
-		}
-
-		private void SensorBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			ComboBox box = sender as ComboBox;
-
-			index = box.SelectedIndex;
-		}
-
-		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			this.ifKit.SensorChange -= handler;
 		}
 	}
 }

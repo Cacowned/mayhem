@@ -114,8 +114,11 @@ namespace DefaultModules.WebcamHelpers
                             new Rectangle(0, 0, currentImage.Bitmap.Width, currentImage.Bitmap.Height), GraphicsUnit.Pixel);
 
                         Bitmap captureImage = _captureImage;
+
                         _captureImage = null;
                         bitmaps.Add(captureImage);
+                        
+                        captureG.Dispose();
                     }
                     
                     Thread.Sleep(1000);
