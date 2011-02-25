@@ -6,6 +6,7 @@ using MayhemCore;
 using System.Runtime.Serialization;
 using OOutlook = Microsoft.Office.Interop.Outlook;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace DefaultModules.Actions.Office.Outlook
 {
@@ -23,9 +24,15 @@ namespace DefaultModules.Actions.Office.Outlook
         }
 
         protected void SetUp() {
-            
-            outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
-            reminderEvent = new OOutlook.ApplicationEvents_11_ReminderEventHandler(GotReminder);
+            try
+            {
+                outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
+                reminderEvent = new OOutlook.ApplicationEvents_11_ReminderEventHandler(GotReminder);
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e);
+            }
         }
 
         private void GotReminder(object sender) {

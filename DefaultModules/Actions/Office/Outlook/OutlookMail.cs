@@ -6,6 +6,7 @@ using MayhemCore;
 using System.Runtime.Serialization;
 using OOutlook = Microsoft.Office.Interop.Outlook;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace DefaultModules.Actions.Office.Outlook
 {
@@ -24,8 +25,17 @@ namespace DefaultModules.Actions.Office.Outlook
 
         protected void SetUp() {
 
-            outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
-            mailEvent = new OOutlook.ApplicationEvents_11_NewMailEventHandler(GotMail); 
+            try
+            {
+                outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
+                mailEvent = new OOutlook.ApplicationEvents_11_NewMailEventHandler(GotMail);
+
+            }
+            catch (Exception e)
+                {
+                    Debug.Write(e);
+                }
+            
         }
 
         private void GotMail() {
