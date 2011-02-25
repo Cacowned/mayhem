@@ -20,7 +20,7 @@ namespace PhidgetModules.Action
 		}
 
 		public void WpfConfig() {
-			var window = new Phidget1101IRDistanceConfig(ifKit, index, topValue, bottomValue, Convert);
+			var window = new Phidget1101IRDistanceConfig(ifKit, index, topValue, bottomValue, ConvertToString);
 			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
 			if (window.ShowDialog() == true) {
@@ -38,6 +38,18 @@ namespace PhidgetModules.Action
 
 		public override double Convert(int value) {
 			return 9462 / (value - 16.92);
+		}
+
+		public string ConvertToString(int value) {
+
+            if ((value < 490) && (value > 80))
+            {
+                return Convert(value).ToString("0.##") + " cm";
+            }
+            else
+            {
+                return "Object Not Detected";
+            }
 		}
 
 		protected override void SetConfigString() {

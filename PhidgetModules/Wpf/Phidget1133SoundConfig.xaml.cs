@@ -32,9 +32,9 @@ namespace PhidgetModules.Wpf
 
         protected SensorChangeEventHandler handler;
 
-        protected Func<int, double> convertor;
+        protected Func<int, string> convertor;
 
-        public Phidget1133SoundConfig(InterfaceKit ifKit, int index, double topValue, bool increasing, Func<int, double> conversion)
+        public Phidget1133SoundConfig(InterfaceKit ifKit, int index, double topValue, bool increasing, Func<int, string> conversion)
         {
             this.index = index;
             this.ifKit = ifKit;
@@ -43,39 +43,21 @@ namespace PhidgetModules.Wpf
 
             InitializeComponent();
 
-            handler = new SensorChangeEventHandler(SensorChange);
-
-            for (int i = 0; i < ifKit.sensors.Count; i++)
-            {
-                SensorBox.Items.Add(i);
-            }
-
-            this.SensorBox.SelectedIndex = index;
-            TopValue.Text = topValue.ToString();
-
             IncreasingRadio.IsChecked = increasing;
             DecreasingRadio.IsChecked = !increasing;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.ifKit.SensorChange += handler;
-        }
 
-        protected void SensorChange(object sender, SensorChangeEventArgs e)
-        {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-            {
-                // We only care about the index we are looking at.
-                if (e.Index == index)
-                {
+		protected override void OnInitialized(EventArgs e) {
+			base.OnInitialized(e);
 
-                    this.ValueBox.Text = convertor(e.Value).ToString("0.###") +" dB";
-                }
-            }));
+			SensorDataBox.Index = index;
+			SensorDataBox.IfKit = ifKit;
+			SensorDataBox.convertor = convertor;
 
-            
-        }
+			TopValue.Text = topValue.ToString();
+
+		}
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
         {
@@ -93,18 +75,6 @@ namespace PhidgetModules.Wpf
         private void Button_Cancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
-        }
-
-        private void SensorBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox box = sender as ComboBox;
-
-            index = box.SelectedIndex;
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            this.ifKit.SensorChange -= handler;
         }
     }
 }

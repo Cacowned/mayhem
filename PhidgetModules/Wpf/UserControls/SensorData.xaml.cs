@@ -22,7 +22,7 @@ namespace PhidgetModules.Wpf.UserControls
     /// </summary>
     public partial class SensorData : UserControl
     {
-        public Func<int, double> convertor;
+        public Func<int, string> convertor;
 
         public int Index
         {
@@ -52,19 +52,17 @@ namespace PhidgetModules.Wpf.UserControls
             InitializeComponent();
 
             handler = new SensorChangeEventHandler(SensorChange);
-
-            /*
-            for (int i = 0; i < IfKit.sensors.Count; i++)
-            {
-                SensorBox.Items.Add(i);
-            }
-            */
-            //this.SensorBox.SelectedIndex = Index;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             this.IfKit.SensorChange += handler;
+
+			for (int i = 0; i < IfKit.sensors.Count; i++) {
+				SensorBox.Items.Add(i);
+			}
+
+			this.SensorBox.SelectedIndex = Index;
         }
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -78,7 +76,8 @@ namespace PhidgetModules.Wpf.UserControls
                 // We only care about the index we are looking at.
                 if (e.Index == Index)
                 {
-
+					this.ValueBox.Text = convertor(e.Value);
+					/*
                     if ((e.Value < 490) && (e.Value > 80))
                     {
                         this.ValueBox.Text = convertor(e.Value).ToString("0.##") + " cm";
@@ -87,7 +86,7 @@ namespace PhidgetModules.Wpf.UserControls
                     {
                         this.ValueBox.Text = "Object Not Detected";
                     }
-
+					*/
                 }
             }));
 

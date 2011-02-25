@@ -25,7 +25,7 @@ namespace PhidgetModules.Action
         }
 
         public void WpfConfig() {
-            var window = new Phidget1129TouchConfig(ifKit, index, onTurnOn);
+            var window = new Phidget1129TouchConfig(ifKit, index, onTurnOn, ConvertToString);
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             if (window.ShowDialog() == true) {
@@ -35,6 +35,13 @@ namespace PhidgetModules.Action
                 SetConfigString();
             }
         }
+		
+		public string ConvertToString(int value) {
+			if (value > 500)
+				return "Touch Detected";
+
+			return "No Touch Detected";
+		}
 
         protected override void SetConfigString() {
             string message = "turns on";

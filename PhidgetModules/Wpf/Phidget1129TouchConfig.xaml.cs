@@ -30,54 +30,28 @@ namespace PhidgetModules.Wpf
 
         protected SensorChangeEventHandler handler;
 
+		protected Func<int, string> convertor;
 
-        public Phidget1129TouchConfig(InterfaceKit ifKit, int index, bool onTurnOn)
+		public Phidget1129TouchConfig(InterfaceKit ifKit, int index, bool onTurnOn, Func<int, string> conversion)
         {
             this.index = index;
             this.ifKit = ifKit;
             this.onTurnOn = onTurnOn;
+			this.convertor = conversion;
 
             InitializeComponent();
-
-            handler = new SensorChangeEventHandler(SensorChange);
-
-            for (int i = 0; i < ifKit.sensors.Count; i++)
-            {
-                SensorBox.Items.Add(i);
-            }
-
-            this.SensorBox.SelectedIndex = index;
 
             OnWhenOn.IsChecked = onTurnOn;
             OnWhenOff.IsChecked = !onTurnOn;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.ifKit.SensorChange += handler;
-        }
+		protected override void OnInitialized(EventArgs e) {
+			base.OnInitialized(e);
 
-        protected void SensorChange(object sender, SensorChangeEventArgs e)
-        {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-            {
-                // We only care about the index we are looking at.
-                if (e.Index == index)
-                {
-
-
-                    this.ValueBox.Text = IsOn(e.Value) ? "On":"Off" ;
-                }
-            }));
-
-            
-        }
-
-        public bool IsOn(int value) {
-            if (value > 500)
-                return true;
-            return false;
-        }
+			SensorDataBox.Index = index;
+			SensorDataBox.IfKit = ifKit;
+			SensorDataBox.convertor = convertor;
+		}
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
         {
@@ -95,11 +69,6 @@ namespace PhidgetModules.Wpf
             ComboBox box = sender as ComboBox;
 
             index = box.SelectedIndex;
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            this.ifKit.SensorChange -= handler;
         }
     }
 }

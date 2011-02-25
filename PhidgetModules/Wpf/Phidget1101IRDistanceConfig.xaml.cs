@@ -26,35 +26,32 @@ namespace PhidgetModules.Wpf
 
         public double bottomValue;
 
-		protected Func<int, double> convertor;
+		protected Func<int, string> convertor;
+
+		public InterfaceKit IfKit;
 
 
-
-        public InterfaceKit IfKit
-        {
-            get { return (InterfaceKit)GetValue(IfKitProperty); }
-            set { SetValue(IfKitProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for IfKit.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IfKitProperty =
-            DependencyProperty.Register("IfKit", typeof(InterfaceKit), typeof(Phidget1101IRDistanceConfig), new UIPropertyMetadata(null));
-
-        
-
-		public Phidget1101IRDistanceConfig(InterfaceKit ifKit, int index, double topValue, double bottomValue, Func<int, double> conversion) {
+		public Phidget1101IRDistanceConfig(InterfaceKit ifKit, int index, double topValue, double bottomValue, Func<int, string> conversion) {
 			this.topValue = topValue;
             this.bottomValue = bottomValue;
+			this.IfKit = ifKit;
+			this.convertor = conversion;
 
 			InitializeComponent();
 
-			TopValue.Text = topValue.ToString();
-            BottomValue.Text = bottomValue.ToString();
+			
 
-            this.IfKit = ifKit;
-            SensorDataBox.Index = index;
-            
-            SensorDataBox.convertor = conversion;
+		}
+
+		protected override void OnInitialized(EventArgs e) {
+			base.OnInitialized(e);
+
+			SensorDataBox.Index = index;
+			SensorDataBox.IfKit = IfKit;
+			SensorDataBox.convertor = convertor;
+
+			TopValue.Text = topValue.ToString();
+			BottomValue.Text = bottomValue.ToString();
 
 		}
 
@@ -63,14 +60,11 @@ namespace PhidgetModules.Wpf
 				MessageBox.Show("You must enter a valid number for the top of the range");
 			} else if(!double.TryParse(BottomValue.Text, out bottomValue) && topValue >= 0) {
                 MessageBox.Show("You must enter a valid number for the bottom of the range");
-			}
-            else if (bottomValue > topValue)
-            {
+			} else if (bottomValue > topValue) {
                 MessageBox.Show("The bottom of the range must be lower than the top of the range");
             }
             else
             {
-
                 DialogResult = true;
             }
 		}

@@ -22,7 +22,7 @@ namespace PhidgetModules.Action
 
         public void WpfConfig()
         {
-            var window = new Phidget1133SoundConfig(ifKit, index, topValue, increasing, Convert);
+            var window = new Phidget1133SoundConfig(ifKit, index, topValue, increasing, ConvertToString);
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             if (window.ShowDialog() == true)
@@ -38,6 +38,10 @@ namespace PhidgetModules.Action
         public override double Convert(int value) {
             return 16.801 * Math.Log(value) + 9.872;
         }
+
+		public string ConvertToString(int value) {
+			return Convert(value).ToString("0.###") + " db";
+		}
 
         protected override void SetConfigString()
         {

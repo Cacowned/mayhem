@@ -7,7 +7,7 @@
 	<Grid>
 		<StackPanel Style="{StaticResource BackgroundGradient}">
 			<src:WindowHeader Text="Phidget 1101 - IR Distance" />
-            <common:SensorData x:Name="SensorDataBox" IfKit="{Binding IfKit, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+            <common:SensorData x:Name="SensorDataBox" />
 			<src:Borders>
 				<StackPanel>
 					<Grid>

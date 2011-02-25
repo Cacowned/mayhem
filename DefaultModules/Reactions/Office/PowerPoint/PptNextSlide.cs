@@ -13,16 +13,21 @@ namespace DefaultModules.Reactions.Office.PowerPoint
             : base("PowerPoint: Next Slide", "Navigates to the next slide.") {
         }
         public override void Perform() {
-            OPowerPoint.Application oApp;
+           
 
-            oApp = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");
+			try {
+				OPowerPoint.Application oApp;
+				oApp = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");
 
-            // If we have a presentation window, go to the next slide
-            if (oApp.SlideShowWindows.Count >= 1) {
-                oApp.SlideShowWindows[1].View.Next();
-            }
+				// If we have a presentation window, go to the next slide
+				if (oApp.SlideShowWindows.Count >= 1) {
+					oApp.SlideShowWindows[1].View.Next();
+				}
 
-            oApp = null;
+				oApp = null;
+			} finally {
+
+			}
         }
 
         #region Serialization
