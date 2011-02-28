@@ -18,35 +18,27 @@ using PhidgetModules.Action;
 
 namespace PhidgetModules.Wpf
 {
-    /// <summary>
-    /// Interaction logic for _1133SoundConfig.xaml
-    /// </summary>
-    public partial class Phidget1133SoundConfig : Window
-    {
-        public int index;
-        public double topValue;
+	/// <summary>
+	/// Interaction logic for _1133SoundConfig.xaml
+	/// </summary>
+	public partial class Phidget1133SoundConfig : Window
+	{
+		public int index;
+		public double topValue;
+		public bool increasing;
 
-        public bool increasing;
+		public InterfaceKit ifKit;
+		protected Func<int, string> convertor;
 
-        public InterfaceKit ifKit;
+		public Phidget1133SoundConfig(InterfaceKit ifKit, int index, double topValue, bool increasing, Func<int, string> conversion) {
+			this.index = index;
+			this.topValue = topValue;
 
-        protected SensorChangeEventHandler handler;
+			this.ifKit = ifKit;
+			this.convertor = conversion;
 
-        protected Func<int, string> convertor;
-
-        public Phidget1133SoundConfig(InterfaceKit ifKit, int index, double topValue, bool increasing, Func<int, string> conversion)
-        {
-            this.index = index;
-            this.ifKit = ifKit;
-            this.topValue = topValue;
-            this.convertor = conversion;
-
-            InitializeComponent();
-
-            IncreasingRadio.IsChecked = increasing;
-            DecreasingRadio.IsChecked = !increasing;
-        }
-
+			InitializeComponent();
+		}
 
 		protected override void OnInitialized(EventArgs e) {
 			base.OnInitialized(e);
@@ -57,24 +49,23 @@ namespace PhidgetModules.Wpf
 
 			TopValue.Text = topValue.ToString();
 
+			IncreasingRadio.IsChecked = increasing;
+			DecreasingRadio.IsChecked = !increasing;
 		}
 
-        private void Button_Save_Click(object sender, RoutedEventArgs e)
-        {
-            if (!double.TryParse(TopValue.Text, out topValue) && topValue >= 0)
-            {
-                MessageBox.Show("You must enter a valid number");
-            }
-            else
-            {
-                increasing = (bool)IncreasingRadio.IsChecked;
-                DialogResult = true;
-            }
-        }
+		private void Button_Save_Click(object sender, RoutedEventArgs e) {
+			if (!double.TryParse(TopValue.Text, out topValue) && topValue >= 0) {
+				MessageBox.Show("You must enter a valid number");
+			} else {
+				increasing = (bool)IncreasingRadio.IsChecked;
+				index = SensorDataBox.Index;
 
-        private void Button_Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-        }
-    }
+				DialogResult = true;
+			}
+		}
+
+		private void Button_Cancel_Click(object sender, RoutedEventArgs e) {
+			DialogResult = false;
+		}
+	}
 }

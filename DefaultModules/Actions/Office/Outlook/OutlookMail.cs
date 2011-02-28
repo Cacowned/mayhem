@@ -1,67 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using System.Runtime.Serialization;
-using OOutlook = Microsoft.Office.Interop.Outlook;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using MayhemCore;
+using OOutlook = Microsoft.Office.Interop.Outlook;
 
 namespace DefaultModules.Actions.Office.Outlook
 {
-    [Serializable]
-    public class OutlookMail : ActionBase, ISerializable
-    {
-        protected OOutlook.Application outlook;
-        protected OOutlook.ApplicationEvents_11_NewMailEventHandler mailEvent;
+	[Serializable]
+	public class OutlookMail : ActionBase, ISerializable
+	{
+		protected OOutlook.Application outlook;
+		protected OOutlook.ApplicationEvents_11_NewMailEventHandler mailEvent;
 
-        public OutlookMail()
-            : base("Outlook New Mail", "Triggers when a new email is received") {
+		public OutlookMail()
+			: base("Outlook New Mail", "Triggers when a new email is received") {
 
-            SetUp();
+			SetUp();
+		}
 
-        }
+		protected void SetUp() {
 
-        protected void SetUp() {
+			try {
+				outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
+				mailEvent = new OOutlook.ApplicationEvents_11_NewMailEventHandler(GotMail);
+			} catch (Exception e) {
+				Debug.Write(e);
+			}
+		}
 
-            try
-            {
-                outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
-                mailEvent = new OOutlook.ApplicationEvents_11_NewMailEventHandler(GotMail);
+		private void GotMail() {
+			base.OnActionActivated();
+		}
 
-            }
-            catch (Exception e)
-                {
-                    Debug.Write(e);
-                }
-            
-        }
+		public override void Enable() {
+			base.Enable();
 
-        private void GotMail() {
-            base.OnActionActivated();
-        }
+			outlook.NewMail += mailEvent;
+		}
 
+		public override void Disable() {
+			base.Disable();
 
-        public override void Enable() {
-            base.Enable();
+			outlook.NewMail -= mailEvent;
+		}
 
-            outlook.NewMail  += mailEvent;
+		#region Serialization
+		public OutlookMail(SerializationInfo info, StreamingContext context)
+			: base(info, context) {
 
-        }
-
-        public override void Disable() {
-            base.Disable();
-
-            outlook.NewMail -= mailEvent;
-        }
-
-        #region Serialization
-        public OutlookMail(SerializationInfo info, StreamingContext context)
-            : base(info, context) {
-
-            SetUp();
-        }
-        #endregion
-    }
+			SetUp();
+		}
+		#endregion
+	}
 }

@@ -19,7 +19,7 @@
             <TextBox Name="ValueBox" IsEnabled="False" Grid.Column="1" Grid.Row="0" />
 
             <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="1">Sensor:</TextBlock>
-            <ComboBox Name="SensorBox" Grid.Column="1" Grid.Row="1" SelectedIndex="0" SelectionChanged="SensorBox_SelectionChanged" ItemsSource="{Binding IfKit.sensors}" />
+			<ComboBox Name="SensorBox" Grid.Column="1" Grid.Row="1" SelectionChanged="SensorBox_SelectionChanged" ItemsSource="{Binding IfKit.sensors}" />
 
         </Grid>
     </src:Borders>

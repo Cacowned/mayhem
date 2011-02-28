@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
+using System.Timers;
+using System.Windows;
+using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using System.Timers;
-using System.Runtime.Serialization;
-using DefaultModules.Wpf;
-using System.Windows;
 
 namespace DefaultModules.Actions
 {

@@ -26,7 +26,7 @@
                         </StackPanel>
                         
                         <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="1">Trigger Value:</TextBlock>
-                        <TextBox Name="TopValue" Grid.Column="1" Grid.Row="3" />
+                        <TextBox Name="TopValue" Grid.Column="1" Grid.Row="1" />
 
                     </Grid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">

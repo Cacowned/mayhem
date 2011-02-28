@@ -15,47 +15,49 @@ using System.Diagnostics;
 
 namespace DefaultModules.Reactions
 {
-    [Serializable]
-    public class WebcamSnapshot : ReactionBase, IWpf, ISerializable
-    {
-        protected string folderLocation = "";
+	[Serializable]
+	public class WebcamSnapshot : ReactionBase, IWpf, ISerializable
+	{
+		protected string folderLocation = "";
 
-        // The device we are recording from
-        protected Device cameraDevice;
+		// The device we are recording from
+		protected Device cameraDevice;
 
-        protected Webcam webcam;
+		protected Webcam webcam;
 
-        public WebcamSnapshot()
-            : base("Webcam Snapshot", "Takes a photo with your webcam and saves it to the hard drive.") {
+		public WebcamSnapshot()
+			: base("Webcam Snapshot", "Takes a photo with your webcam and saves it to the hard drive.") {
 
-            
-            Setup();
-        }
 
-        public void Setup() {
+			Setup();
+		}
 
-            hasConfig = true;
-            // TODO: What if we have multiple of these?
-            webcam = new Webcam();
-            SetConfigString();
-        }
+		public void Setup() {
 
-        public override void Enable() {
-            base.Enable();
+			hasConfig = true;
+			// TODO: What if we have multiple of these?
+			webcam = new Webcam();
+			SetConfigString();
+		}
 
-            if (webcam.Device == null) {
-                WpfConfig();
-            }
+		public override void Enable() {
+			base.Enable();
 
-            webcam.Start();
-        }
+			if (webcam.Device == null) {
+				WpfConfig();
+			}
 
-        public override void Disable() {
-            base.Disable();
-            webcam.Stop();
-        }
+			webcam.Start();
+		}
 
-        public override void Perform() {
+		public override void Disable() {
+			base.Disable();
+			if (Enabled) {
+				webcam.Stop();
+			}
+		}
+
+		public override void Perform() {
 			Bitmap captureImage = null;
 
 			try {
@@ -64,57 +66,56 @@ namespace DefaultModules.Reactions
 				Debug.WriteLine("[Webcam] Error capturing image.");
 			}
 
-            if (captureImage == null) {
-                Debug.WriteLine("[Webcam] No Images yet.");
-                return;
-            }
+			if (captureImage == null) {
+				Debug.WriteLine("[Webcam] No Images yet.");
+				return;
+			}
 
-            string location = Path.Combine(folderLocation, DateTimeToTimeStamp(DateTime.Now)) + ".jpg";
-            
-            captureImage.Save(location, ImageFormat.Jpeg);
-        }
+			string location = Path.Combine(folderLocation, DateTimeToTimeStamp(DateTime.Now)) + ".jpg";
 
-        protected string DateTimeToTimeStamp(DateTime time) {
-            return time.ToString("yyyyMMddHHmmssffff");
-        }
+			captureImage.Save(location, ImageFormat.Jpeg);
+		}
 
-        public void WpfConfig() {
-            /*
-             * Choose a webcam and save folder
-             */
-            var window = new WebcamSnapshotConfig(folderLocation, cameraDevice);
-            
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+		protected string DateTimeToTimeStamp(DateTime time) {
+			return time.ToString("yyyyMMddHHmmssffff");
+		}
 
-            if (window.ShowDialog() == true) {
+		public void WpfConfig() {
+			/*
+			 * Choose a webcam and save folder
+			 */
+			var window = new WebcamSnapshotConfig(folderLocation, cameraDevice);
 
-                folderLocation = window.location;
+			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-                webcam.Device = window.captureDevice;
+			if (window.ShowDialog() == true) {
 
-                SetConfigString();
-            }
-            // Choose camera
-            
-        }
+				folderLocation = window.location;
 
-        private void SetConfigString() {
-            ConfigString = String.Format("Save Location: \"{0}\"", folderLocation);
-        }
+				webcam.Device = window.captureDevice;
 
-        #region Serialization
-        public WebcamSnapshot(SerializationInfo info, StreamingContext context)
-            : base(info, context) {
+				SetConfigString();
+			}
 
-            folderLocation = info.GetString("FolderLocation");
+		}
 
-            Setup();
-        }
+		private void SetConfigString() {
+			ConfigString = String.Format("Save Location: \"{0}\"", folderLocation);
+		}
 
-        public new void GetObjectData(SerializationInfo info, StreamingContext context) {
-            base.GetObjectData(info, context);
-            info.AddValue("FolderLocation", folderLocation);
-        }
-        #endregion
-    }
+		#region Serialization
+		public WebcamSnapshot(SerializationInfo info, StreamingContext context)
+			: base(info, context) {
+
+			folderLocation = info.GetString("FolderLocation");
+
+			Setup();
+		}
+
+		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
+			base.GetObjectData(info, context);
+			info.AddValue("FolderLocation", folderLocation);
+		}
+		#endregion
+	}
 }

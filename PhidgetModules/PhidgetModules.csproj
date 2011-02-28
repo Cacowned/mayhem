@@ -51,8 +51,10 @@
     <Compile Include="Action\Phidget1106Force.cs" />
     <Compile Include="Action\Phidget1127Light.cs" />
     <Compile Include="Action\Phidget1129Touch.cs" />
+    <Compile Include="InterfaceFactory.cs" />
     <Compile Include="OnOffSensorActionBase.cs" />
     <Compile Include="RangeSensorActionBase.cs" />
+    <Compile Include="Reaction\DigitalOutput.cs" />
     <Compile Include="Wpf\Phidget1023RFIDConfig.xaml.cs">
       <DependentUpon>Phidget1023RFIDConfig.xaml</DependentUpon>
     </Compile>

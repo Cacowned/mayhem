@@ -19,7 +19,7 @@ namespace PhidgetModules.Action
 		}
 
 		public void WpfConfig() {
-			var window = new Phidget1127LightConfig(ifKit, index, topValue, increasing);
+			var window = new Phidget1127LightConfig(ifKit, index, topValue, increasing, ConvertToString);
 			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
 			if (window.ShowDialog() == true) {
@@ -33,6 +33,10 @@ namespace PhidgetModules.Action
 
 		public override double Convert(int value) {
 			return (double) value;
+		}
+
+		protected string ConvertToString(int value) {
+			return value.ToString("0.###") + " lx";
 		}
 
 		protected override void SetConfigString() {

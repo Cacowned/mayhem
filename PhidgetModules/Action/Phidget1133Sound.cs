@@ -10,64 +10,57 @@ using PhidgetModules.Wpf;
 
 namespace PhidgetModules.Action
 {
-    [Serializable]
-    public class Phidget1133Sound: ValueSensorActionBase, IWpf, ISerializable
-    {
-        
-        public Phidget1133Sound()
-            : base("Phidget-1133: Sound Sensor", "Triggers at a certain decibel level")
-        {
-            Setup();
-        }
+	[Serializable]
+	public class Phidget1133Sound : ValueSensorActionBase, IWpf, ISerializable
+	{
 
-        public void WpfConfig()
-        {
-            var window = new Phidget1133SoundConfig(ifKit, index, topValue, increasing, ConvertToString);
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+		public Phidget1133Sound()
+			: base("Phidget-1133: Sound Sensor", "Triggers at a certain decibel level") {
+			Setup();
+		}
 
-            if (window.ShowDialog() == true)
-            {
-                index = window.index;
-                topValue = window.topValue;
-                increasing = window.increasing;
+		public void WpfConfig() {
+			var window = new Phidget1133SoundConfig(ifKit, index, topValue, increasing, ConvertToString);
+			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-                SetConfigString();
-            }
-        }
+			if (window.ShowDialog() == true) {
+				index = window.index;
+				topValue = window.topValue;
+				increasing = window.increasing;
 
-        public override double Convert(int value) {
-            return 16.801 * Math.Log(value) + 9.872;
-        }
+				SetConfigString();
+			}
+		}
+
+		public override double Convert(int value) {
+			return 16.801 * Math.Log(value) + 9.872;
+		}
 
 		public string ConvertToString(int value) {
 			return Convert(value).ToString("0.###") + " db";
 		}
 
-        protected override void SetConfigString()
-        {
-            string overUnder = "above";
-            if (!increasing)
-            {
-                overUnder = "below";
-            }
+		protected override void SetConfigString() {
+			string overUnder = "above";
+			if (!increasing) {
+				overUnder = "below";
+			}
 
-            ConfigString = String.Format("Index {0} goes {1} {2} dB", index, overUnder, topValue.ToString("0.###"));
-        }
+			ConfigString = String.Format("Index {0} goes {1} {2} dB", index, overUnder, topValue.ToString("0.###"));
+		}
 
 
-        #region Serialization
+		#region Serialization
 
-        public Phidget1133Sound(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            
-        }
+		public Phidget1133Sound(SerializationInfo info, StreamingContext context)
+			: base(info, context) {
 
-        public new void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
+		}
 
-        }
-        #endregion
-    }
+		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
+			base.GetObjectData(info, context);
+
+		}
+		#endregion
+	}
 }

@@ -30,7 +30,7 @@ namespace PhidgetModules.Action
 		}
 
 		public void WpfConfig() {
-			var window = new Phidget1103IRReflectiveConfig(ifKit, index, onTurnOn);
+			var window = new Phidget1103IRReflectiveConfig(ifKit, index, onTurnOn, ConvertToString);
 			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
 			if (window.ShowDialog() == true) {
@@ -50,6 +50,12 @@ namespace PhidgetModules.Action
 			ConfigString = String.Format("Index {0} {1}", index, message);
 		}
 
+		protected string ConvertToString(int value) {
+			if(value < 100)
+				return "Detected";
+			else
+				return "Not Detected";
+		} 
 
 		#region Serialization
 

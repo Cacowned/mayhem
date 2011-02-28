@@ -1,19 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Phidgets;
-using Phidgets.Events;
-using System.Windows.Threading;
 
 namespace PhidgetModules.Wpf
 {
@@ -21,51 +8,32 @@ namespace PhidgetModules.Wpf
 	{
 		public int index;
 		public double topValue;
-
 		public bool increasing;
 
-		public InterfaceKit ifKit;
+		public InterfaceKit IfKit;
+		protected Func<int, string> convertor;
 
-		protected SensorChangeEventHandler handler;
-
-		protected Func<int, double> convertor;
-
-		public Phidget1106ForceConfig(InterfaceKit ifKit, int index, double topValue, bool increasing, Func<int, double> conversion) {
+		public Phidget1106ForceConfig(InterfaceKit ifKit, int index, double topValue, bool increasing, Func<int, string> conversion) {
 			this.index = index;
-			this.ifKit = ifKit;
 			this.topValue = topValue;
+			
+			this.IfKit = ifKit;
 			this.convertor = conversion;
 
 			InitializeComponent();
+		}
 
-			handler = new SensorChangeEventHandler(SensorChange);
+		protected override void OnInitialized(EventArgs e) {
+			base.OnInitialized(e);
 
-			for (int i = 0; i < ifKit.sensors.Count; i++) {
-				SensorBox.Items.Add(i);
-			}
+			SensorDataBox.Index = index;
+			SensorDataBox.IfKit = IfKit;
+			SensorDataBox.convertor = convertor;
 
-			this.SensorBox.SelectedIndex = index;
 			TopValue.Text = topValue.ToString();
 
 			IncreasingRadio.IsChecked = increasing;
 			DecreasingRadio.IsChecked = !increasing;
-		}
-
-		private void Window_Loaded(object sender, RoutedEventArgs e) {
-			this.ifKit.SensorChange += handler;
-		}
-
-		protected void SensorChange(object sender, SensorChangeEventArgs e) {
-			this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-			{
-				// We only care about the index we are looking at.
-				if (e.Index == index) {
-
-					this.ValueBox.Text = convertor(e.Value).ToString("0.###");
-				}
-			}));
-
-
 		}
 
 		private void Button_Save_Click(object sender, RoutedEventArgs e) {
@@ -73,22 +41,14 @@ namespace PhidgetModules.Wpf
 				MessageBox.Show("You must enter a valid number");
 			} else {
 				increasing = (bool)IncreasingRadio.IsChecked;
+				index = SensorDataBox.Index;
+
 				DialogResult = true;
 			}
 		}
 
 		private void Button_Cancel_Click(object sender, RoutedEventArgs e) {
 			DialogResult = false;
-		}
-
-		private void SensorBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			ComboBox box = sender as ComboBox;
-
-			index = box.SelectedIndex;
-		}
-
-		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			this.ifKit.SensorChange -= handler;
 		}
 	}
 }

@@ -42,14 +42,11 @@ namespace PhidgetModules.Action
 
 		public string ConvertToString(int value) {
 
-            if ((value < 490) && (value > 80))
-            {
-                return Convert(value).ToString("0.##") + " cm";
-            }
-            else
-            {
-                return "Object Not Detected";
-            }
+			if ((value < 490) && (value > 80)) {
+				return Convert(value).ToString("0.##") + " cm";
+			} else {
+				return "Object Not Detected";
+			}
 		}
 
 		protected override void SetConfigString() {

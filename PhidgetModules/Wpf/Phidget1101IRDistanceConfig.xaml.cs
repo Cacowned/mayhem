@@ -23,24 +23,20 @@ namespace PhidgetModules.Wpf
 	{
 		public int index;
 		public double topValue;
-
         public double bottomValue;
 
 		protected Func<int, string> convertor;
-
 		public InterfaceKit IfKit;
 
 
 		public Phidget1101IRDistanceConfig(InterfaceKit ifKit, int index, double topValue, double bottomValue, Func<int, string> conversion) {
+			this.index = index;
 			this.topValue = topValue;
             this.bottomValue = bottomValue;
 			this.IfKit = ifKit;
 			this.convertor = conversion;
 
 			InitializeComponent();
-
-			
-
 		}
 
 		protected override void OnInitialized(EventArgs e) {
@@ -52,7 +48,6 @@ namespace PhidgetModules.Wpf
 
 			TopValue.Text = topValue.ToString();
 			BottomValue.Text = bottomValue.ToString();
-
 		}
 
 		private void Button_Save_Click(object sender, RoutedEventArgs e) {
@@ -65,6 +60,7 @@ namespace PhidgetModules.Wpf
             }
             else
             {
+				index = SensorDataBox.Index;
                 DialogResult = true;
             }
 		}

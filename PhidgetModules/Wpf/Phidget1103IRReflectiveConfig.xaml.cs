@@ -22,41 +22,37 @@ namespace PhidgetModules.Wpf
 	{
 		
 		public int index;
-
 		public bool onTurnOn;
 
+		protected Func<int, string> convertor;
+		public InterfaceKit IfKit;
 
-		public Phidget1103IRReflectiveConfig(InterfaceKit ifKit, int index, bool onTurnOn) {
+
+		public Phidget1103IRReflectiveConfig(InterfaceKit ifKit, int index, bool onTurnOn, Func<int, string> conversion) {
 			this.index = index;
 			this.onTurnOn = onTurnOn;
 
-			InitializeComponent();
+			this.convertor = conversion;
+			this.IfKit = ifKit;
 
+			InitializeComponent();
+		}
+
+		protected override void OnInitialized(EventArgs e) {
+			base.OnInitialized(e);
+
+			SensorDataBox.Index = index;
+			SensorDataBox.IfKit = IfKit;
+			SensorDataBox.convertor = convertor;
 
 			OnWhenOn.IsChecked = onTurnOn;
 			OnWhenOff.IsChecked = !onTurnOn;
 		}
 
-        /*
-		protected void SensorChange(object sender, SensorChangeEventArgs e) {
-			this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-			{
-				// We only care about the index we are looking at.
-				if (e.Index == index) {
-					this.ValueBox.Text = IsDetected(e.Value) ? "Detected" : "Not Detected";
-				}
-			}));
-		}
-         * */
-
-		public bool IsDetected(int value) {
-			if (value < 100)
-				return true;
-			return false;
-		}
-
 		private void Button_Save_Click(object sender, RoutedEventArgs e) {
 			onTurnOn = (bool)OnWhenOn.IsChecked;
+			index = SensorDataBox.Index;
+
 			DialogResult = true;
 		}
 

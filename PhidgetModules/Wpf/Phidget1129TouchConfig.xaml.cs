@@ -17,33 +17,25 @@ using System.Windows.Threading;
 
 namespace PhidgetModules.Wpf
 {
-    /// <summary>
-    /// Interaction logic for Phidget1129TouchConfig.xaml
-    /// </summary>
-    public partial class Phidget1129TouchConfig : Window
-    {
-        public int index;
+	/// <summary>
+	/// Interaction logic for Phidget1129TouchConfig.xaml
+	/// </summary>
+	public partial class Phidget1129TouchConfig : Window
+	{
+		public int index;
+		public bool onTurnOn;
 
-        public bool onTurnOn;
-
-        public InterfaceKit ifKit;
-
-        protected SensorChangeEventHandler handler;
-
+		public InterfaceKit ifKit;
 		protected Func<int, string> convertor;
 
-		public Phidget1129TouchConfig(InterfaceKit ifKit, int index, bool onTurnOn, Func<int, string> conversion)
-        {
-            this.index = index;
-            this.ifKit = ifKit;
-            this.onTurnOn = onTurnOn;
+		public Phidget1129TouchConfig(InterfaceKit ifKit, int index, bool onTurnOn, Func<int, string> conversion) {
+			this.index = index;
+			this.ifKit = ifKit;
+			this.onTurnOn = onTurnOn;
 			this.convertor = conversion;
 
-            InitializeComponent();
-
-            OnWhenOn.IsChecked = onTurnOn;
-            OnWhenOff.IsChecked = !onTurnOn;
-        }
+			InitializeComponent();
+		}
 
 		protected override void OnInitialized(EventArgs e) {
 			base.OnInitialized(e);
@@ -51,24 +43,20 @@ namespace PhidgetModules.Wpf
 			SensorDataBox.Index = index;
 			SensorDataBox.IfKit = ifKit;
 			SensorDataBox.convertor = convertor;
+
+			OnWhenOn.IsChecked = onTurnOn;
+			OnWhenOff.IsChecked = !onTurnOn;
 		}
 
-        private void Button_Save_Click(object sender, RoutedEventArgs e)
-        {
-            onTurnOn = (bool)OnWhenOn.IsChecked;
-            DialogResult = true;
-        }
+		private void Button_Save_Click(object sender, RoutedEventArgs e) {
+			onTurnOn = (bool)OnWhenOn.IsChecked;
+			index = SensorDataBox.Index;
 
-        private void Button_Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-        }
+			DialogResult = true;
+		}
 
-        private void SensorBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox box = sender as ComboBox;
-
-            index = box.SelectedIndex;
-        }
-    }
+		private void Button_Cancel_Click(object sender, RoutedEventArgs e) {
+			DialogResult = false;
+		}
+	}
 }
