@@ -55,8 +55,12 @@
     <Compile Include="OnOffSensorActionBase.cs" />
     <Compile Include="RangeSensorActionBase.cs" />
     <Compile Include="Reaction\DigitalOutput.cs" />
+    <Compile Include="Reaction\Phidget1066AdvServo.cs" />
     <Compile Include="Wpf\Phidget1023RFIDConfig.xaml.cs">
       <DependentUpon>Phidget1023RFIDConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Phidget1066AdvServoConfig.xaml.cs">
+      <DependentUpon>Phidget1066AdvServoConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\Phidget1103IRReflectiveConfig.xaml.cs">
       <DependentUpon>Phidget1103IRReflectiveConfig.xaml</DependentUpon>
@@ -101,6 +105,10 @@
     <Page Include="Wpf\Phidget1023RFIDConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\Phidget1066AdvServoConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\Phidget1103IRReflectiveConfig.xaml">
       <SubType>Designer</SubType>

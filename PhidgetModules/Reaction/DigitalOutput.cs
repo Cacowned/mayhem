@@ -17,15 +17,12 @@ namespace PhidgetModules.Reaction
 		// The interface kit we are using for the sensors
 		protected InterfaceKit ifKit;
 
-		protected bool defaultValue;
-
 		protected DigitalOutputType outputType;
 
 		public DigitalOutput()
 			: base("Phidget: Digital Output", "Triggers a digital output") {
 
 			index = 0;
-			defaultValue = false;
 			Setup();
 		}
 
@@ -37,7 +34,7 @@ namespace PhidgetModules.Reaction
 		}
 
 		public void WpfConfig() {
-			var window = new PhidgetDigitalOutputConfig(ifKit, index, defaultValue, outputType: outputType);
+			var window = new PhidgetDigitalOutputConfig(ifKit, index, outputType: outputType);
 			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
 			window.ShowDialog();
@@ -45,8 +42,7 @@ namespace PhidgetModules.Reaction
 			if (window.DialogResult == true) {
 				this.index = window.Index;
 
-				this.outputType = window.outputType;
-				this.defaultValue = window.defaultValue;
+				this.outputType = window.OutputType;
 
 				SetConfigString();
 			}
@@ -90,11 +86,16 @@ namespace PhidgetModules.Reaction
 		#region Serialization
 		public DigitalOutput(SerializationInfo info, StreamingContext context)
 			: base(info, context) {
+
+				outputType = (DigitalOutputType)info.GetValue("OutputType", typeof(DigitalOutputType));
+
 			Setup();
 		}
 
 		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
 			base.GetObjectData(info, context);
+
+			info.AddValue("OutputType", outputType);
 		}
 		#endregion
 	}

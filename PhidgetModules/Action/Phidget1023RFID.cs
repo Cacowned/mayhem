@@ -39,7 +39,6 @@ namespace PhidgetModules.Action
 			SetConfigString();
 		}
 
-
 		public void WpfConfig() {
 
 			var window = new Phidget1023RFIDConfig(rfid, ourTag);

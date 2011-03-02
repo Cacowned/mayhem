@@ -10,27 +10,17 @@ namespace PhidgetModules.Wpf
 	/// </summary>
 	public partial class PhidgetDigitalOutputConfig : Window
 	{
-		public int Index {
-			get { return (int)GetValue(IndexProperty); }
-			set { SetValue(IndexProperty, value); }
-		}
+		public int Index { get; set; }
 
-		// Using a DependencyProperty as the backing store for Index.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty IndexProperty =
-			DependencyProperty.Register("Index", typeof(int), typeof(PhidgetDigitalOutputConfig), new UIPropertyMetadata(0));
+		public InterfaceKit IfKit { get; set; }
 
-		public InterfaceKit IfKit;
-
-		public DigitalOutputType outputType;
-
-		public bool defaultValue;
-
-		public PhidgetDigitalOutputConfig(InterfaceKit ifKit, int index, bool startValue, DigitalOutputType outputType) {
+		public DigitalOutputType OutputType { get; set; }
+		
+		public PhidgetDigitalOutputConfig(InterfaceKit ifKit, int index, DigitalOutputType outputType) {
 			this.Index = index;
 			this.IfKit = ifKit;
 
-			this.defaultValue = startValue;
-			this.outputType = outputType;
+			this.OutputType = outputType;
 
 			InitializeComponent();
 		}
@@ -45,7 +35,7 @@ namespace PhidgetModules.Wpf
 
 			this.ControlBox.SelectedIndex = 0;
 
-			switch (outputType) {
+			switch (OutputType) {
 				case DigitalOutputType.Toggle: this.ControlBox.SelectedIndex = 0;
 					break;
 				case DigitalOutputType.On: this.ControlBox.SelectedIndex = 1;
@@ -53,11 +43,6 @@ namespace PhidgetModules.Wpf
 				case DigitalOutputType.Off: this.ControlBox.SelectedIndex = 2;
 					break;
 			}
-
-			StartOn.IsChecked = defaultValue;
-			StartOff.IsChecked = !defaultValue;
-
-
 		}
 
 		private void OutputBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -70,24 +55,19 @@ namespace PhidgetModules.Wpf
 
 			ComboBoxItem item = ControlBox.SelectedItem as ComboBoxItem;
 			switch (item.Content.ToString()) {
-				case "Toggle": outputType = DigitalOutputType.Toggle;
+				case "Toggle": OutputType = DigitalOutputType.Toggle;
 					break;
-				case "Turn On": outputType = DigitalOutputType.On;
+				case "Turn On": OutputType = DigitalOutputType.On;
 					break;
-				case "Turn Off": outputType = DigitalOutputType.Off;
+				case "Turn Off": OutputType = DigitalOutputType.Off;
 					break;
 			}
 
-			defaultValue = (bool)StartOn.IsChecked;
-
 			DialogResult = true;
-
 		}
 
 		private void Button_Cancel_Click(object sender, RoutedEventArgs e) {
 			DialogResult = false;
 		}
-
-
 	}
 }
