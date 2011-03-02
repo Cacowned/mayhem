@@ -6,56 +6,53 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
 namespace DefaultModules.WebcamHelpers
 {
-    /// <summary>
-    /// Creates a managed Bitmap from pointer to bitmap data
-    /// </summary>
-    public class ComBitmap : IDisposable
-    {
-        /// <summary>
-        /// Pointer to the bitmap data
-        /// Needs to be freed
-        /// </summary>
-        private IntPtr _bitmapData;
+	/// <summary>
+	/// Creates a managed Bitmap from pointer to bitmap data
+	/// </summary>
+	public class ComBitmap : IDisposable
+	{
+		/// <summary>
+		/// Pointer to the bitmap data
+		/// Needs to be freed
+		/// </summary>
+		private IntPtr _bitmapData;
 
-        /// <summary>
-        /// Managed Bitmap
-        /// </summary>
-        private Bitmap _myBitmap;
+		/// <summary>
+		/// Managed Bitmap
+		/// </summary>
+		private Bitmap _myBitmap;
 
-        /// <summary>
-        /// Returns the managed Bitmap object
-        /// </summary>
-        public Bitmap Bitmap {
-            get { return _myBitmap; }
-        }
+		/// <summary>
+		/// Returns the managed Bitmap object
+		/// </summary>
+		public Bitmap Bitmap {
+			get { return _myBitmap; }
+		}
 
-        internal ComBitmap(IntPtr bitmapData, int width, int height, int stride, PixelFormat format) {
-            _bitmapData = bitmapData;
+		internal ComBitmap(IntPtr bitmapData, int width, int height, int stride, PixelFormat format) {
+			_bitmapData = bitmapData;
 
-            _myBitmap = new Bitmap(width, height, stride, format, bitmapData);
-            _myBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
-        }
+			_myBitmap = new Bitmap(width, height, stride, format, bitmapData);
+			_myBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+		}
 
 
-        #region IDisposable Members
+		#region IDisposable Members
 
-        public void Dispose() {
-            if (_bitmapData != IntPtr.Zero) {
-                _myBitmap.Dispose();
-                Marshal.FreeCoTaskMem(_bitmapData);
-                _bitmapData = IntPtr.Zero;
-            }
-        }
+		public void Dispose() {
+			if (_bitmapData != IntPtr.Zero) {
+				_myBitmap.Dispose();
+				Marshal.FreeCoTaskMem(_bitmapData);
+				_bitmapData = IntPtr.Zero;
+			}
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

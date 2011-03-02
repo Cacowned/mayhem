@@ -58,9 +58,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Base64Serialize.cs" />
-    <Compile Include="TimerConfig.xaml.cs">
-      <DependentUpon>TimerConfig.xaml</DependentUpon>
-    </Compile>
     <Page Include="ModuleList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -84,10 +81,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
-    </Page>
-    <Page Include="TimerConfig.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\ModuleView.xaml">
       <SubType>Designer</SubType>
@@ -143,9 +136,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Settings16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="WPFIssues.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

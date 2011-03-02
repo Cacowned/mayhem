@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore.ModuleTypes;
-using Phidgets.Events;
 using System.Runtime.Serialization;
 using System.Windows;
+using MayhemCore.ModuleTypes;
 using PhidgetModules.Wpf;
 
 namespace PhidgetModules.Action

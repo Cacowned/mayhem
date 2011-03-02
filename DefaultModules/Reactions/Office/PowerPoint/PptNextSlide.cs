@@ -1,19 +1,19 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using MayhemCore;
 using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
-using System.Runtime.InteropServices;
 
 namespace DefaultModules.Reactions.Office.PowerPoint
 {
-    [Serializable]
-    public class PptNextSlide : ReactionBase
-    {
-        public PptNextSlide ()
-            : base("PowerPoint: Next Slide", "Navigates to the next slide.") {
-        }
-        public override void Perform() {
-           
+	[Serializable]
+	public class PptNextSlide : ReactionBase
+	{
+		public PptNextSlide()
+			: base("PowerPoint: Next Slide", "Navigates to the next slide.") {
+		}
+		public override void Perform() {
+
 
 			try {
 				OPowerPoint.Application oApp;
@@ -28,16 +28,16 @@ namespace DefaultModules.Reactions.Office.PowerPoint
 			} finally {
 
 			}
-        }
+		}
 
-        #region Serialization
-        public PptNextSlide(SerializationInfo info, StreamingContext context)
-            : base(info, context) {
-        }
+		#region Serialization
+		public PptNextSlide(SerializationInfo info, StreamingContext context)
+			: base(info, context) {
+		}
 
-        public new void GetObjectData(SerializationInfo info, StreamingContext context) {
-            base.GetObjectData(info, context);
-        }
-        #endregion
-    }
+		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
+			base.GetObjectData(info, context);
+		}
+		#endregion
+	}
 }

@@ -1,37 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using System.Diagnostics;
-using System.Windows;
 using System.Runtime.Serialization;
+using System.Windows;
+using MayhemCore;
 
 namespace DefaultModules.Reactions.Debugging
 {
-    [Serializable]
-    public class Popup : ReactionBase
-    {
-        public Popup()
-            : base("Debug: Popup", "Generates a small popup window when triggered")
-        {
+	[Serializable]
+	public class Popup : ReactionBase
+	{
+		public Popup()
+			: base("Debug: Popup", "Generates a small popup window when triggered") {
 
-        }
-        public override void Perform()
-        {
-            MessageBox.Show("Triggered!");
-        }
+		}
+		public override void Perform() {
+			MessageBox.Show("Triggered!");
+		}
 
-        #region Serialization
-        public Popup(SerializationInfo info, StreamingContext context) 
-            : base (info, context)
-        {
-        }
+		#region Serialization
+		public Popup(SerializationInfo info, StreamingContext context)
+			: base(info, context) {
+		}
 
-        public new void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-        }
-        #endregion
-    }
+		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
+			base.GetObjectData(info, context);
+		}
+		#endregion
+	}
 }

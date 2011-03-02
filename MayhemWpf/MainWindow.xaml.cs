@@ -1,203 +1,198 @@
-﻿using System.Diagnostics;
-using System.Windows;
-using MayhemCore;
-using MayhemCore.ModuleTypes;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Data;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
-using System;
+using MayhemCore;
+using MayhemCore.ModuleTypes;
 
 namespace MayhemWpf
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
+	/// <summary>
+	/// Interaction logic for MainWindow.xaml
+	/// </summary>
+	public partial class MainWindow : Window
+	{
 
-        public Mayhem<IWpf> Mayhem {
-            get { return (Mayhem<IWpf>)GetValue(MayhemProperty); }
-            set { SetValue(MayhemProperty, value); }
-        }
+		public Mayhem<IWpf> Mayhem {
+			get { return (Mayhem<IWpf>)GetValue(MayhemProperty); }
+			set { SetValue(MayhemProperty, value); }
+		}
 
-        // Using a DependencyProperty as the backing store for Mayhem.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MayhemProperty =
-            DependencyProperty.Register("Mayhem", typeof(Mayhem<IWpf>), typeof(MainWindow), new UIPropertyMetadata(null));
-
-
-
-        public ActionBase Action {
-            get { return (ActionBase)GetValue(ActionProperty); }
-            set { SetValue(ActionProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Action.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ActionProperty =
-            DependencyProperty.Register("Action", typeof(ActionBase), typeof(MainWindow), new UIPropertyMetadata(null));
+		// Using a DependencyProperty as the backing store for Mayhem.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty MayhemProperty =
+			DependencyProperty.Register("Mayhem", typeof(Mayhem<IWpf>), typeof(MainWindow), new UIPropertyMetadata(null));
 
 
 
-        public ReactionBase Reaction {
-            get { return (ReactionBase)GetValue(ReactionProperty); }
-            set { SetValue(ReactionProperty, value); }
-        }
+		public ActionBase Action {
+			get { return (ActionBase)GetValue(ActionProperty); }
+			set { SetValue(ActionProperty, value); }
+		}
 
-        // Using a DependencyProperty as the backing store for Reaction.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ReactionProperty =
-            DependencyProperty.Register("Reaction", typeof(ReactionBase), typeof(MainWindow), new UIPropertyMetadata(null));
-
-        
-
-        public MainWindow() {
-            
-
-            Mayhem = new Mayhem<IWpf>();
-
-            if (File.Exists(Base64Serialize<ConnectionList>.filename)) {
-
-                try {
-                    Mayhem.ConnectionList = Base64Serialize<ConnectionList>.Deserialize();
-
-                    Debug.WriteLine("Starting up with " + Mayhem.ConnectionList.Count + " connections");
-
-                } catch (SerializationException e) {
-                    Debug.WriteLine("(De-)SerializationException " + e);
-                }
-            }
+		// Using a DependencyProperty as the backing store for Action.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty ActionProperty =
+			DependencyProperty.Register("Action", typeof(ActionBase), typeof(MainWindow), new UIPropertyMetadata(null));
 
 
-            InitializeComponent();
 
-            RunList.ItemsSource = Mayhem.ConnectionList;
-        }
+		public ReactionBase Reaction {
+			get { return (ReactionBase)GetValue(ReactionProperty); }
+			set { SetValue(ReactionProperty, value); }
+		}
 
-        private void ActionListClick(object sender, RoutedEventArgs e)
-        {
-            DimMainWindow(true);
+		// Using a DependencyProperty as the backing store for Reaction.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty ReactionProperty =
+			DependencyProperty.Register("Reaction", typeof(ReactionBase), typeof(MainWindow), new UIPropertyMetadata(null));
 
-            ModuleList dlg = new ModuleList(Mayhem.ActionList, "Action List");
-            dlg.Owner = this;
-            dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            dlg.ModulesList.SelectedIndex = 0;
 
-            dlg.ShowDialog();
-            DimMainWindow(false);
 
-            if (dlg.DialogResult == true)
-            {
-                if (dlg.ModulesList.SelectedItem != null) {
-                    Action = (ActionBase)dlg.ModulesList.SelectedItem;
+		public MainWindow() {
 
-                    // Take this item, remove it and add it to the front (MoveToFrontList)
-                    Mayhem.ActionList.Remove(Action);
-                    Mayhem.ActionList.Insert(0, Action);
 
-                    CheckEnableBuild();
-                }
-            }
-        }
+			Mayhem = new Mayhem<IWpf>();
 
-        private void ReactionListClick(object sender, RoutedEventArgs e)
-        {
-            DimMainWindow(true);
+			if (File.Exists(Base64Serialize<ConnectionList>.filename)) {
 
-            ModuleList dlg = new ModuleList(Mayhem.ReactionList, "Reaction List");
-            dlg.Owner = this;
-            dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            dlg.ModulesList.SelectedIndex = 0;
+				try {
+					Mayhem.ConnectionList = Base64Serialize<ConnectionList>.Deserialize();
 
-            dlg.ShowDialog();
-            DimMainWindow(false);
+					Debug.WriteLine("Starting up with " + Mayhem.ConnectionList.Count + " connections");
 
-            if (dlg.DialogResult == true)
-            {
-                if (dlg.ModulesList.SelectedItem != null) {
-                    Reaction = (ReactionBase)dlg.ModulesList.SelectedItem;
+				} catch (SerializationException e) {
+					Debug.WriteLine("(De-)SerializationException " + e);
+				}
+			}
 
-                    // Take this item, remove it and add it to the front (MoveToFrontList)
-                    Mayhem.ReactionList.Remove(Reaction);
-                    Mayhem.ReactionList.Insert(0, Reaction);
 
-                    CheckEnableBuild();
-                }
-            }
-        }
+			InitializeComponent();
 
-        private void CheckEnableBuild() {
-            if (Action != null && Reaction != null) {
+			RunList.ItemsSource = Mayhem.ConnectionList;
+		}
 
-                // We have to clone the action and reaction
-                Type t = Action.GetType();
-                ActionBase action = (ActionBase)Activator.CreateInstance(t);
+		private void ActionListClick(object sender, RoutedEventArgs e) {
+			DimMainWindow(true);
 
-                t = Reaction.GetType();
-                ReactionBase reaction = (ReactionBase)Activator.CreateInstance(t);
+			ModuleList dlg = new ModuleList(Mayhem.ActionList, "Action List");
+			dlg.Owner = this;
+			dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+			dlg.ModulesList.SelectedIndex = 0;
 
-                Mayhem.ConnectionList.Add(new Connection(action, reaction));
+			dlg.ShowDialog();
+			DimMainWindow(false);
 
-                Action = null;
-                Reaction = null;
-            }
-        }
+			if (dlg.DialogResult == true) {
+				if (dlg.ModulesList.SelectedItem != null) {
+					Action = (ActionBase)dlg.ModulesList.SelectedItem;
 
-        private void DeleteConnectionClick(object sender, RoutedEventArgs e) {
-            Connection c = ((Button)sender).Tag as Connection;
-            Mayhem.ConnectionList.Remove(c);
-        }
+					// Take this item, remove it and add it to the front (MoveToFrontList)
+					Mayhem.ActionList.Remove(Action);
+					Mayhem.ActionList.Insert(0, Action);
 
-        private void OnOffClick(object sender, RoutedEventArgs e) {
-            ToggleButton button = (ToggleButton)sender;
-            Connection c = button.Tag as Connection;
+					CheckEnableBuild();
+				}
+			}
+		}
 
-            Debug.WriteLine("On/Off clicked on " + c.Action.Name);
-            
-            if (!c.Enabled) {
-                c.Enable();
-            } else {
-                c.Disable();
-            }
-            
-            Debug.WriteLine("Connection is enabled: " + c.Enabled);
-        }
+		private void ReactionListClick(object sender, RoutedEventArgs e) {
+			DimMainWindow(true);
 
-        private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e) {
-            Base64Serialize<ConnectionList>.SerializeObject(Mayhem.ConnectionList);
-        }
+			ModuleList dlg = new ModuleList(Mayhem.ReactionList, "Reaction List");
+			dlg.Owner = this;
+			dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+			dlg.ModulesList.SelectedIndex = 0;
 
-        public static void DimMainWindow(bool dim) {
-            WindowCollection wc = Application.Current.Windows;
+			dlg.ShowDialog();
+			DimMainWindow(false);
 
-            MainWindow mainW = null;
+			if (dlg.DialogResult == true) {
+				if (dlg.ModulesList.SelectedItem != null) {
+					Reaction = (ReactionBase)dlg.ModulesList.SelectedItem;
 
-            foreach (Window w in wc) {
+					// Take this item, remove it and add it to the front (MoveToFrontList)
+					Mayhem.ReactionList.Remove(Reaction);
+					Mayhem.ReactionList.Insert(0, Reaction);
 
-                if (w.Name == "MayhemMainWindow") {
-                    mainW = w as MainWindow;
-                }
-            }
+					CheckEnableBuild();
+				}
+			}
+		}
 
-            if (mainW != null) {
-                if (dim) {
-                    Panel.SetZIndex(mainW.DimRectangle, 99);
-                    var storyB = (Storyboard)mainW.DimRectangle.FindResource("FadeIn");
-                    storyB.Begin();
-                } else {
-                    
+		private void CheckEnableBuild() {
+			if (Action != null && Reaction != null) {
 
-                    var storyB = (Storyboard)mainW.DimRectangle.FindResource("FadeOut");
+				// We have to clone the action and reaction
+				Type t = Action.GetType();
+				ActionBase action = (ActionBase)Activator.CreateInstance(t);
 
-                    storyB.Completed += delegate(object sender, EventArgs e) {
-                        Panel.SetZIndex(mainW.DimRectangle, 0);
-                    };
+				t = Reaction.GetType();
+				ReactionBase reaction = (ReactionBase)Activator.CreateInstance(t);
 
-                    storyB.Begin();
+				Mayhem.ConnectionList.Add(new Connection(action, reaction));
 
-                }
-            }
+				Action = null;
+				Reaction = null;
+			}
+		}
 
-        }
-    }
+		private void DeleteConnectionClick(object sender, RoutedEventArgs e) {
+			Connection c = ((Button)sender).Tag as Connection;
+			Mayhem.ConnectionList.Remove(c);
+		}
+
+		private void OnOffClick(object sender, RoutedEventArgs e) {
+			ToggleButton button = (ToggleButton)sender;
+			Connection c = button.Tag as Connection;
+
+			Debug.WriteLine("On/Off clicked on " + c.Action.Name);
+
+			if (!c.Enabled) {
+				c.Enable();
+			} else {
+				c.Disable();
+			}
+
+			Debug.WriteLine("Connection is enabled: " + c.Enabled);
+		}
+
+		private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e) {
+			Base64Serialize<ConnectionList>.SerializeObject(Mayhem.ConnectionList);
+		}
+
+		public static void DimMainWindow(bool dim) {
+			WindowCollection wc = Application.Current.Windows;
+
+			MainWindow mainW = null;
+
+			foreach (Window w in wc) {
+
+				if (w.Name == "MayhemMainWindow") {
+					mainW = w as MainWindow;
+				}
+			}
+
+			if (mainW != null) {
+				if (dim) {
+					Panel.SetZIndex(mainW.DimRectangle, 99);
+					var storyB = (Storyboard)mainW.DimRectangle.FindResource("FadeIn");
+					storyB.Begin();
+				} else {
+
+
+					var storyB = (Storyboard)mainW.DimRectangle.FindResource("FadeOut");
+
+					storyB.Completed += delegate(object sender, EventArgs e) {
+						Panel.SetZIndex(mainW.DimRectangle, 0);
+					};
+
+					storyB.Begin();
+
+				}
+			}
+
+		}
+	}
 }

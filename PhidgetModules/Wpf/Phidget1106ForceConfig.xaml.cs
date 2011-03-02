@@ -16,7 +16,7 @@ namespace PhidgetModules.Wpf
 		public Phidget1106ForceConfig(InterfaceKit ifKit, int index, double topValue, bool increasing, Func<int, string> conversion) {
 			this.index = index;
 			this.topValue = topValue;
-			
+
 			this.IfKit = ifKit;
 			this.convertor = conversion;
 

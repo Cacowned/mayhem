@@ -1,100 +1,96 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net;
+using System.Net.Mail;
+using System.Runtime.Serialization;
+using System.Windows;
+using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using System.Runtime.Serialization;
-using System.Net.Mail;
-using System.Net;
-using System.Windows.Forms;
-using DefaultModules.Wpf;
-using System.Windows;
 
 namespace DefaultModules.Reactions
 {
-    [Serializable]
-    public class SmsMessage : ReactionBase, IWpf
-    {
-        //list of US provider gateways: http://hacknmod.com/hack/email-to-text-messages-for-att-verizon-t-mobile-sprint-virgin-more/
+	[Serializable]
+	public class SmsMessage : ReactionBase, IWpf
+	{
+		//list of US provider gateways: http://hacknmod.com/hack/email-to-text-messages-for-att-verizon-t-mobile-sprint-virgin-more/
 
-        protected string to;
-        protected string from;
-        protected string password; // ick.
-        protected string subject;
-        protected string mailServer;
-        protected string msg;
+		protected string to;
+		protected string from;
+		protected string password; // ick.
+		protected string subject;
+		protected string mailServer;
+		protected string msg;
 
-        public SmsMessage()
-            : base("SMS Message", "Sends a text message when triggered.") {
+		public SmsMessage()
+			: base("SMS Message", "Sends a text message when triggered.") {
 
-            to = "";
-            subject = "Mayhem";
-            msg = "Mayhem just triggered!";
+			to = "";
+			subject = "Mayhem";
+			msg = "Mayhem just triggered!";
 
-            Setup();
-        }
+			Setup();
+		}
 
-        public void Setup() {
-            hasConfig = true;
-            SetConfigString();
-        }
+		public void Setup() {
+			hasConfig = true;
+			SetConfigString();
+		}
 
-        public void SetConfigString() {
-            ConfigString = String.Format("To: {0}\nSubject: {1}\nMessage: {2}", to, subject, msg);
-        }
+		public void SetConfigString() {
+			ConfigString = String.Format("To: {0}\nSubject: {1}\nMessage: {2}", to, subject, msg);
+		}
 
-        public override void Perform() {
-            MailMessage message = new MailMessage(from, to, subject, msg);
-            SmtpClient mySmtpClient = new SmtpClient(mailServer);
-            mySmtpClient.Credentials = new NetworkCredential(from, password);
-            
-            mySmtpClient.Send(message);
-        }
+		public override void Perform() {
+			MailMessage message = new MailMessage(from, to, subject, msg);
+			SmtpClient mySmtpClient = new SmtpClient(mailServer);
+			mySmtpClient.Credentials = new NetworkCredential(from, password);
 
-        public void WpfConfig() {
-            var window = new SmsMessageConfig(to, subject, msg, mailServer, from, password);
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+			mySmtpClient.Send(message);
+		}
 
-            window.ShowDialog();
+		public void WpfConfig() {
+			var window = new SmsMessageConfig(to, subject, msg, mailServer, from, password);
+			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            if (window.DialogResult == true) {
+			window.ShowDialog();
 
-                to = window.to;
-                subject = window.subject;
-                msg = window.msg;
-                mailServer = window.mailServer;
-                from = window.from;
-                password = window.password;
+			if (window.DialogResult == true) {
 
-                SetConfigString();
-            }
-        }
+				to = window.to;
+				subject = window.subject;
+				msg = window.msg;
+				mailServer = window.mailServer;
+				from = window.from;
+				password = window.password;
 
-        #region Serialization
-        public SmsMessage(SerializationInfo info, StreamingContext context)
-            : base(info, context) {
-            
-            to = info.GetString("To");
-            from = info.GetString("From");
-            password = info.GetString("Password");
-            subject = info.GetString("Subject");
-            mailServer = info.GetString("MailServer");
-            msg = info.GetString("Message");
+				SetConfigString();
+			}
+		}
 
-            Setup();
-        }
+		#region Serialization
+		public SmsMessage(SerializationInfo info, StreamingContext context)
+			: base(info, context) {
 
-        public new void GetObjectData(SerializationInfo info, StreamingContext context) {
-            base.GetObjectData(info, context);
-            
-            info.AddValue("To", to);
-            info.AddValue("From", from);
-            info.AddValue("Password", password);
-            info.AddValue("Subject", subject);
-            info.AddValue("MailServer", mailServer);
-            info.AddValue("Message", msg);
-        }
-        #endregion
-    }
+			to = info.GetString("To");
+			from = info.GetString("From");
+			password = info.GetString("Password");
+			subject = info.GetString("Subject");
+			mailServer = info.GetString("MailServer");
+			msg = info.GetString("Message");
+
+			Setup();
+		}
+
+		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
+			base.GetObjectData(info, context);
+
+			info.AddValue("To", to);
+			info.AddValue("From", from);
+			info.AddValue("Password", password);
+			info.AddValue("Subject", subject);
+			info.AddValue("MailServer", mailServer);
+			info.AddValue("Message", msg);
+		}
+		#endregion
+	}
 }

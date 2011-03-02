@@ -80,6 +80,9 @@
     <Compile Include="SensorActionBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueSensorActionBase.cs" />
+    <Compile Include="Wpf\PhidgetDigitalOutputConfig.xaml.cs">
+      <DependentUpon>PhidgetDigitalOutputConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\UserControls\SensorData.xaml.cs">
       <DependentUpon>SensorData.xaml</DependentUpon>
     </Compile>
@@ -120,6 +123,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\Phidget1133SoundConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\PhidgetDigitalOutputConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

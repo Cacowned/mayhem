@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Windows;
+using DefaultModules.WebcamHelpers;
+using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using System.Runtime.Serialization;
-using DefaultModules.WebcamHelpers;
-using System.Drawing;
-using DefaultModules.Wpf;
-using System.Windows;
-using System.IO;
-using System.Drawing.Imaging;
-using System.Diagnostics;
 
 namespace DefaultModules.Reactions
 {

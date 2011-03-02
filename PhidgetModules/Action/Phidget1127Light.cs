@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
-using MayhemCore.ModuleTypes;
 using System.Windows;
+using MayhemCore.ModuleTypes;
 using PhidgetModules.Wpf;
 
 namespace PhidgetModules.Action
@@ -32,7 +29,7 @@ namespace PhidgetModules.Action
 		}
 
 		public override double Convert(int value) {
-			return (double) value;
+			return (double)value;
 		}
 
 		protected string ConvertToString(int value) {

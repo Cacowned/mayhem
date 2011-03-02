@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore.ModuleTypes;
-using Phidgets.Events;
 using System.Runtime.Serialization;
-using System.Windows;
+using Phidgets.Events;
 
 namespace PhidgetModules
 {
@@ -27,8 +22,7 @@ namespace PhidgetModules
 		protected double lastValue;
 
 		public ValueSensorActionBase(string name, string description)
-			: base(name, description)
-		{
+			: base(name, description) {
 
 			increasing = true;
 			topValue = 85;
@@ -38,7 +32,7 @@ namespace PhidgetModules
 
 		protected override void Setup() {
 			base.Setup();
-			
+
 			hasConfig = true;
 			value = lastValue = topValue;
 
@@ -74,16 +68,14 @@ namespace PhidgetModules
 		#region Serialization
 
 		public ValueSensorActionBase(SerializationInfo info, StreamingContext context)
-			: base(info, context)
-		{
+			: base(info, context) {
 			increasing = info.GetBoolean("Increasing");
 			topValue = info.GetDouble("TopValue");
 
 			Setup();
 		}
 
-		public new void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
+		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
 			base.GetObjectData(info, context);
 
 			info.AddValue("Increasing", increasing);

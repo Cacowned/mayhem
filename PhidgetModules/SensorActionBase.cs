@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using MayhemCore.ModuleTypes;
 using System.Runtime.Serialization;
+using MayhemCore;
 using Phidgets;
 using Phidgets.Events;
 
@@ -31,7 +27,7 @@ namespace PhidgetModules
 		protected virtual void Setup() {
 			// If we don't have an ifKit yet, create one
 			if (ifKit == null) {
-				InterfaceFactory.GetInterface();
+				ifKit = InterfaceFactory.GetInterface();
 			}
 
 			handler = new SensorChangeEventHandler(SensorChange);
@@ -42,12 +38,15 @@ namespace PhidgetModules
 
 		public override void Enable() {
 			base.Enable();
-			ifKit.SensorChange += handler;
+			if (ifKit != null)
+				ifKit.SensorChange += handler;
 		}
 
 		public override void Disable() {
 			base.Disable();
-			ifKit.SensorChange -= handler;
+
+			if (ifKit != null)
+				ifKit.SensorChange -= handler;
 		}
 
 		#region Serialization

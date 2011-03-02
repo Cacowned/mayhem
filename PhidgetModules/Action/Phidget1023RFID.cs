@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Windows;
 using MayhemCore;
-using Phidgets;
-using Phidgets.Events;
 using MayhemCore.ModuleTypes;
 using PhidgetModules.Wpf;
-using System.Windows;
+using Phidgets;
+using Phidgets.Events;
 
 namespace PhidgetModules.Action
 {
@@ -35,12 +32,6 @@ namespace PhidgetModules.Action
 			if (rfid == null) {
 				rfid = new RFID();
 				rfid.open();
-				//rfid.Attach += new AttachEventHandler(rfid_Attach);
-				//rfid.Detach += new DetachEventHandler(rfid_Detach);
-				//rfid.Error += new ErrorEventHandler(rfid_Error);
-
-				//rfid.Tag += new TagEventHandler(rfid_Tag);
-				//rfid.TagLost += new TagEventHandler(rfid_TagLost);
 			}
 
 			gotTag = new TagEventHandler(rfidTag);
