@@ -24,7 +24,7 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Desktop\mayhem-dev-old\Projects\mayhem-dev\include\videoInput.h">
+    <ClInclude Include="videoInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
