@@ -140,13 +140,15 @@ namespace VisionModules.Wpf
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            DialogResult = true;
         }
 
         private void Button_Cancel_Click(object sender, RoutedEventArgs e)
         {
-
+            DialogResult = false;
         }
+
+       
 
 
     }

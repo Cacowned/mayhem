@@ -140,6 +140,9 @@
     <Compile Include="Reactions\RunProgram.cs" />
     <Compile Include="Reactions\SmsMessage.cs" />
     <Compile Include="Reactions\TextToSpeech.cs" />
+    <Compile Include="Reactions\WebcamSnapshot.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="UdpHelpers\AsyncUdpServerSocket.cs" />
     <Compile Include="UdpHelpers\DataReceivedEventArgs.cs" />
     <Compile Include="UdpHelpers\UdpState.cs" />
@@ -164,6 +167,10 @@
     </Compile>
     <Compile Include="Wpf\TimerConfig.xaml.cs">
       <DependentUpon>TimerConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WebcamSnapshotConfig.xaml.cs">
+      <DependentUpon>WebcamSnapshotConfig.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Wpf\XboxButtonConfig.xaml.cs">
       <DependentUpon>XboxButtonConfig.xaml</DependentUpon>
@@ -234,6 +241,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\TimerConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\WebcamSnapshotConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

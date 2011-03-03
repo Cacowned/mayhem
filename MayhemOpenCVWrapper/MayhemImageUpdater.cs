@@ -175,6 +175,7 @@ namespace MayhemOpenCVWrapper
 
                 if (OnImageUpdated != null)
                 {
+                    Debug.Write("Camera: new Frame!");
                     OnImageUpdated(this, new EventArgs());
                 }
 
