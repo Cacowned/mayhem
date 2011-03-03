@@ -1,0 +1,180 @@
+﻿Build started 03.03.2011 11:17:43.
+     1>Project "C:\Users\sven\mayhem-dev\repo\OpenCVDLL\OpenCVDLL.vcxproj" on node 2 (build target(s)).
+     1>ResolveAssemblyReferences:
+         Primary reference "MayhemOpenCVWrapper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null".
+     1>c:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.Targets(1360,9): warning MSB3245: Could not resolve this reference. Could not locate the assembly "MayhemOpenCVWrapper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null". Check to make sure the assembly exists on disk. If this reference is required by your code, you may get compilation errors.
+                 For SearchPath "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\atlmfc\lib".
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\atlmfc\lib\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\atlmfc\lib\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 For SearchPath "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\lib".
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\lib\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\lib\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 For SearchPath "{HintPathFromItem}".
+                 Considered "..\MayhemOpenCVWrapper\bin\Debug\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 For SearchPath "{TargetFrameworkDirectory}".
+                 Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 For SearchPath "{Registry:Software\Microsoft\.NETFramework,v4.0,AssemblyFoldersEx}".
+                 Considered "C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v4.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v4.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTO40\v4.0.Framework\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTO40\v4.0.Framework\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTA30\v9.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTA30\v9.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTA30\v8.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTA30\v8.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTA30\v10.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTA30\v10.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office14\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office14\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office12\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office12\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Common\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Common\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\Microsoft\SharePoint\PublicAssemblies\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\Microsoft\SharePoint\PublicAssemblies\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Platforms\x64\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Platforms\x64\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Platforms\Win32\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Platforms\Win32\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Platforms\Itanium\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Platforms\Itanium\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Reference Assemblies\Microsoft\VBPowerPacks\v10.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Reference Assemblies\Microsoft\VBPowerPacks\v10.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Synchronization Services\ADO.NET\v1.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Synchronization Services\ADO.NET\v1.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SQL Server Compact Edition\v3.5\Desktop\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SQL Server Compact Edition\v3.5\Desktop\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\ReportViewer\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\ReportViewer\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\PublicAssemblies\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\PublicAssemblies\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft.NET\Primary Interop Assemblies\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft.NET\Primary Interop Assemblies\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Reference Assemblies\Microsoft\FSharp\2.0\Runtime\v4.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Reference Assemblies\Microsoft\FSharp\2.0\Runtime\v4.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VSTSDB\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VSTSDB\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTO40\v9.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTO40\v9.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTO40\v10.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTO40\v10.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTA30\v9.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTA30\v9.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTA30\v10.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files\Reference Assemblies\Microsoft\VSTA30\v10.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office14\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office14\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office12\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office12\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Common\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Common\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\Microsoft\SharePoint\PublicAssemblies\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\Microsoft\SharePoint\PublicAssemblies\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Reference Assemblies\Microsoft\VBPowerPacks\v10.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Reference Assemblies\Microsoft\VBPowerPacks\v10.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Synchronization Services\ADO.NET\v1.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Synchronization Services\ADO.NET\v1.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SDKs\Microsoft Sync Framework\v1.0\Runtime\ADO.NET\V2.0\x64\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SDKs\Microsoft Sync Framework\v1.0\Runtime\ADO.NET\V2.0\x64\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SQL Server Compact Edition\v3.5\Desktop\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SQL Server Compact Edition\v3.5\Desktop\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\ReportViewer\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft Visual Studio 10.0\ReportViewer\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "C:\Program Files (x86)\Common Files\Microsoft Shared\MSEnv\PublicAssemblies\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "C:\Program Files (x86)\Common Files\Microsoft Shared\MSEnv\PublicAssemblies\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "C:\Program Files (x86)\Microsoft Visual Studio 8\Common7\IDE\PublicAssemblies\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "C:\Program Files (x86)\Microsoft Visual Studio 8\Common7\IDE\PublicAssemblies\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Reference Assemblies\Microsoft\FSharp\2.0\Runtime\v2.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Reference Assemblies\Microsoft\FSharp\2.0\Runtime\v2.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SDKs\Microsoft Sync Framework\v1.0\Runtime\x86\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SDKs\Microsoft Sync Framework\v1.0\Runtime\x86\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "C:\Program Files (x86)\Microsoft Chart Controls\Assemblies\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "C:\Program Files (x86)\Microsoft Chart Controls\Assemblies\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 2\Assemblies\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 2\Assemblies\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 For SearchPath "{AssemblyFolders}".
+                 Considered "c:\Program Files (x86)\Microsoft SQL Server\100\SDK\Assemblies\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SQL Server\100\SDK\Assemblies\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft.NET\ADOMD.NET\100\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft.NET\ADOMD.NET\100\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SQL Server\100\SDK\Assemblies\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Microsoft SQL Server\100\SDK\Assemblies\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files\IIS\Microsoft Web Deploy\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files\IIS\Microsoft Web Deploy\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.0\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "c:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.0\MayhemOpenCVWrapper.exe", but it didn't exist.
+                 For SearchPath "{GAC}".
+                 Considered "MayhemOpenCVWrapper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", which was not found in the GAC.
+                 For SearchPath "{RawFileName}".
+                 Considered treating "MayhemOpenCVWrapper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" as a file name, but it didn't exist.
+                 For SearchPath "C:\Users\sven\mayhem-dev\repo\Debug\".
+                 Considered "C:\Users\sven\mayhem-dev\repo\Debug\MayhemOpenCVWrapper.dll", but it didn't exist.
+                 Considered "C:\Users\sven\mayhem-dev\repo\Debug\MayhemOpenCVWrapper.exe", but it didn't exist.
+       InitializeBuildStatus:
+         Touching "Debug\OpenCVDLL.unsuccessfulbuild".
+       GenerateTargetFrameworkMonikerAttribute:
+       Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+       ClCompile:
+         All outputs are up-to-date.
+         All outputs are up-to-date.
+         All outputs are up-to-date.
+       ResourceCompile:
+         All outputs are up-to-date.
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\sven\mayhem-dev\repo\Debug\OpenCVDLL.dll" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\sven\mayhem-dev\repo\\Debug" /LIBPATH:C:\OpenCV2.2\bin /LIBPATH:C:\OpenCV2.2\lib /MANIFEST /ManifestFile:"Debug\OpenCVDLL.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\sven\mayhem-dev\repo\Debug\OpenCVDLL.pdb" /ASSEMBLYDEBUG /TLBID:1 /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 /DLL Debug\app.res
+         Debug\AssemblyInfo.obj
+         Debug\OpenCVDLL.obj
+         Debug\Stdafx.obj
+         "Debug\.NETFramework,Version=v4.0.AssemblyAttributes.obj"
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_calib3d220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_calib3d220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_contrib220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_contrib220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_core220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_core220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_features2d220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_features2d220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_ffmpeg220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_ffmpeg220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_flann220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_flann220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_gpu220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_gpu220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_highgui220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_highgui220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_imgproc220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_imgproc220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_legacy220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_legacy220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_ml220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_ml220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_objdetect220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_objdetect220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_ts220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_video220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_video220d.lib
+         libs\atlthunk.lib
+         libs\videoInput.lib
+     1>atlthunk.lib(videoInput.obj) : warning LNK4099: PDB 'vc90.pdb' was not found with 'atlthunk.lib(videoInput.obj)' or at 'C:\Users\sven\mayhem-dev\repo\Debug\vc90.pdb'; linking object as if no debug info
+         OpenCVDLL.vcxproj -> C:\Users\sven\mayhem-dev\repo\Debug\OpenCVDLL.dll
+       Manifest:
+         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\sven\mayhem-dev\repo\Debug\OpenCVDLL.dll;#2" /manifest Debug\OpenCVDLL.dll.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Debug\OpenCVDLL.unsuccessfulbuild".
+         Touching "Debug\OpenCVDLL.lastbuildstate".
+     1>Done Building Project "C:\Users\sven\mayhem-dev\repo\OpenCVDLL\OpenCVDLL.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.12
