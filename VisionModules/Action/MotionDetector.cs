@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Windows;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using VisionModules.Wpf;
 
 namespace VisionModules
 {
@@ -16,7 +17,7 @@ namespace VisionModules
             Setup();
         }
         
-        public Setup() {
+        public void Setup() {
           hasConfig = true;
           
           SetConfigString();
@@ -28,7 +29,7 @@ namespace VisionModules
         }
 
         public void WpfConfig() {
-            var window = new VisionConfig(); // pass the parameters to initially populate the window in the constructor
+            var window = new MotionDetectorConfig(); // pass the parameters to initially populate the window in the constructor
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             
             if (window.ShowDialog() == true) {
