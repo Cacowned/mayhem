@@ -4,24 +4,69 @@ using System.Windows;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using VisionModules.Wpf;
+using MayhemOpenCVWrapper;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace VisionModules
 {
     [Serializable]
     public class MotionDetector : ActionBase, IWpf, ISerializable
     {
+
+        private const string TAG = "[MotionDetector (Action)] : ";
+        private DateTime lastMotionDetected = DateTime.Now;
+        private const int detectionInterval = 5000; //ms
+
+        private MayhemOpenCVWrapper.MotionDetector m;
+        Rect boundingRect = new Rect();
+
+        private MayhemOpenCVWrapper.MotionDetector.MotionUpdateHandler motionUpdateHandler;
+
         
         public MotionDetector()
             : base("Motion Detector", "Detects when there is motion in the frame")
         {
+
             Setup();
         }
         
         public void Setup() {
+            m = new MayhemOpenCVWrapper.MotionDetector(320, 240);
+            motionUpdateHandler = new MayhemOpenCVWrapper.MotionDetector.MotionUpdateHandler(m_OnMotionUpdate);
+
           hasConfig = true;
           
           SetConfigString();
         }
+
+
+        /**<summary>
+         * Activates "Action" action when motion is detected. 
+         * </summary>
+         * 
+         */ 
+        void m_OnMotionUpdate(object sender, List<System.Drawing.Point> points)
+        {
+
+            TimeSpan ts = DateTime.Now - lastMotionDetected;
+
+            if (ts.TotalMilliseconds > detectionInterval)
+            {
+
+                Debug.WriteLine(TAG + "m_OnMotionUpdate");
+
+                /* TODO:  make compatible to Eli's framework 
+                if (onTriggerActivated != null)
+                {
+                    onTriggerActivated(this, new EventArgs());
+                }
+                 */
+
+                lastMotionDetected = DateTime.Now;
+            }
+        }
+
 
         protected void SetConfigString()
         {
