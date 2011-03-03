@@ -23,6 +23,8 @@ namespace VisionModules
 
         private MayhemOpenCVWrapper.MotionDetector.MotionUpdateHandler motionUpdateHandler;
 
+        private MayhemImageUpdater i = MayhemImageUpdater.Instance;
+
         
         public MotionDetector()
             : base("Motion Detector", "Detects when there is motion in the frame")
@@ -32,6 +34,14 @@ namespace VisionModules
         }
         
         public void Setup() {
+
+            if (i.selected_device == null && i.devices_available.Length > 0)
+            {
+                // use the first device for now
+                // TODO: Camera framework needs to be initialized globally 
+                i.InitCaptureDevice(0, 320, 240);
+            }
+
             m = new MayhemOpenCVWrapper.MotionDetector(320, 240);
             motionUpdateHandler = new MayhemOpenCVWrapper.MotionDetector.MotionUpdateHandler(m_OnMotionUpdate);
 
