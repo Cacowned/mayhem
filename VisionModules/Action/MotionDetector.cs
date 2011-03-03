@@ -56,12 +56,8 @@ namespace VisionModules
 
                 Debug.WriteLine(TAG + "m_OnMotionUpdate");
 
-                /* TODO:  make compatible to Eli's framework 
-                if (onTriggerActivated != null)
-                {
-                    onTriggerActivated(this, new EventArgs());
-                }
-                 */
+               // trigger the readction
+                OnActionActivated();
 
                 lastMotionDetected = DateTime.Now;
             }
