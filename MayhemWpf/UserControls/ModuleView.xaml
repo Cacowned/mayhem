@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="MayhemWpf.UserControls.ModuleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             >
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="vizConverter"/>
+    </UserControl.Resources>
+    <StackPanel Width="237" Orientation="Vertical">
+        <TextBlock Style="{DynamicResource ModuleNameStyle}" Text="{Binding Module.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+        <StackPanel Orientation="Horizontal" Visibility="{Binding Module.HasConfig, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Converter={StaticResource vizConverter}}" >
+            <Button Width="15" x:Name="ConfigureButton" Style="{DynamicResource ConfigureButton}" Click="ConfigureButton_Click" />
+            <TextBlock Width="210" TextWrapping="WrapWithOverflow" Margin="10,0,0,0" Style="{DynamicResource ConfigurationStringStyle}" Text="{Binding Module.ConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

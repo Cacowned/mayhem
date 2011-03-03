@@ -1,0 +1,25 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:MayhemDefaultStyles.UserControls">
+
+
+    <Style TargetType="{x:Type local:Borders}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:Borders}">
+                    <Border Margin="10" BorderThickness="1,0,1,1" CornerRadius="20,0,10,0" BorderBrush="Gray">
+                        <Border.Effect>
+                            <DropShadowEffect Opacity="0.9" Direction="270" BlurRadius="16"/>
+                        </Border.Effect>
+                        <Border BorderThickness="1" CornerRadius="20,0,10,0" BorderBrush="Black" Padding="7" Background="White">
+
+                            <ContentPresenter Content="{TemplateBinding Content}" />
+
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
