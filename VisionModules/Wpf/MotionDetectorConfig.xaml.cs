@@ -118,6 +118,36 @@ namespace VisionModules.Wpf
             this.camera_image.Source.Freeze();
         }
 
+        private void overlay_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void overlay_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void overlay_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void overlay_MouseLeave(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Cancel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
 
     }
 }
