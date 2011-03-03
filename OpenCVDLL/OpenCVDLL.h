@@ -16,9 +16,9 @@
 #include <limits>
 
 #include "videoInput.h"
-#include "cv.h"
-#include "cvaux.h"
-#include "highgui.h"
+#include <opencv/cv.h>
+#include <opencv/cvaux.h>
+#include <opencv/highgui.h>
 
 using namespace std;
 using namespace cv;
