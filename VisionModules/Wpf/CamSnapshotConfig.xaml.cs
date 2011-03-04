@@ -24,11 +24,18 @@ namespace VisionModules.Wpf
 	/// </summary>
 	public partial class CamSnapshotConfig : Window
 	{
+        public const string TAG = "[MotionDetectorConfig] :";
 		public string location;
 		// public Device captureDevice;
 
-        private MayhemImageUpdater i = MayhemImageUpdater.Instance;
-        private MayhemImageUpdater.ImageUpdateHandler imageUpdateHandler;
+
+        public Camera selected_camera = null; 
+
+        private MayhemCameraDriver i = MayhemCameraDriver.Instance;
+        private Camera.ImageUpdateHandler imageUpdateHandler;
+        private Camera cam = null; 
+
+        
 
 
         private delegate void SetCameraImageSource();
@@ -40,22 +47,31 @@ namespace VisionModules.Wpf
 			InitializeComponent();
 
             // TODO: Enumerate devices
-            imageUpdateHandler = new MayhemImageUpdater.ImageUpdateHandler(i_OnImageUpdated);
+            imageUpdateHandler = new Camera.ImageUpdateHandler(i_OnImageUpdated);
 
-            // if the image update isn't running yet, start it (could be dangerous) 
-            if (i.running == false)
-            {
-                i.StartFrameGrabbing();
-            }
 
             // populate device list
 
-            foreach(CameraInfo c in i.devices_available)
+            foreach(Camera c in i.cameras_available)
             {
                 DeviceList.Items.Add(c);
             }
 
-            DeviceList.SelectedIndex = 0; 
+            DeviceList.SelectedIndex = 0;
+
+            if (i.devices_available.Length > 0)
+            {
+
+                // start the camera 0 if it isn't already running
+                cam = i.cameras_available[0];
+                if (!cam.running) cam.StartFrameGrabbing();
+                Debug.WriteLine(TAG + "using " + cam.info.ToString());
+            }
+            else
+            {
+                Debug.WriteLine(TAG+"No camera available");
+
+            }
 	
 
 		}
@@ -68,11 +84,11 @@ namespace VisionModules.Wpf
         {
             if (this.IsVisible)
             {
-                i.OnImageUpdated += imageUpdateHandler;
+                cam.OnImageUpdated += imageUpdateHandler;
             }
             else
             {
-                i.OnImageUpdated -= imageUpdateHandler;
+                cam.OnImageUpdated -= imageUpdateHandler;
             }
         }
 
@@ -104,17 +120,17 @@ namespace VisionModules.Wpf
                 BackBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 BackBuffer.PixelFormat);
 
-            int bufSize = i.bufSize;
+            int bufSize = cam.bufSize;
 
             IntPtr ImgPtr = bmpData.Scan0;
 
             // grab the image
 
 
-            lock (i.thread_locker)
+            lock (cam.thread_locker)
             {
                 // Copy the RGB values back to the bitmap
-                System.Runtime.InteropServices.Marshal.Copy(i.imageBuffer, 0, ImgPtr, bufSize);
+                System.Runtime.InteropServices.Marshal.Copy(cam.imageBuffer, 0, ImgPtr, bufSize);
             }
             // Unlock the bits.
             BackBuffer.UnlockBits(bmpData);
@@ -139,7 +155,10 @@ namespace VisionModules.Wpf
 		}
 
 		private void Button_Save_Click(object sender, RoutedEventArgs e) {
-			// captureDevice = DeviceList.SelectedItem as Device;
+	
+
+            selected_camera = DeviceList.SelectedItem as Camera;
+
 			DialogResult = true;
 		}
 

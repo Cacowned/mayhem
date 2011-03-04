@@ -15,7 +15,10 @@
                             <Canvas Canvas.Left="0" Canvas.Top="0" Height="240" Width="320" Name="overlay" Background= "Transparent" MouseLeftButtonUp="overlay_MouseLeftButtonUp" MouseLeftButtonDown="overlay_MouseLeftButtonDown" MouseMove="overlay_MouseMove" MouseLeave="overlay_MouseLeave" />
                         </Canvas>
                     </StackPanel>
+                    <Label>Click drop down list below to select a camera:</Label>
+                    <ComboBox Name="DeviceList" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                      
                         <Button Click="Button_Click">Save</Button>
                         <Button Click="Button_Cancel_Click">Cancel</Button>
                     </StackPanel>
