@@ -24,7 +24,8 @@ namespace VisionModules.Wpf
     {
 
         private MayhemCameraDriver i = MayhemCameraDriver.Instance;
-        private MayhemCameraDriver.ImageUpdateHandler imageUpdateHandler;
+        private Camera.ImageUpdateHandler imageUpdateHandler;
+        private Camera cam; 
 
         private delegate void SetCameraImageSource();
 
@@ -34,13 +35,18 @@ namespace VisionModules.Wpf
 
             // image1 = new System.Windows.Controls.Image();
 
-            imageUpdateHandler = new MayhemCameraDriver.ImageUpdateHandler(i_OnImageUpdated);
+            imageUpdateHandler = new Camera.ImageUpdateHandler(i_OnImageUpdated);
 
             // if the image update isn't running yet, start it (could be dangerous) 
+            /*
             if (i.running == false)
             {
                 i.StartFrameGrabbing();
-            }
+            }*/
+
+            // start the camera 0 if it isn't already running
+            Camera cam = i.cameras_available[0];
+            if (!cam.running) cam.StartFrameGrabbing();
 
         }
 
