@@ -120,22 +120,22 @@ namespace VisionModules.Wpf
 
         private void overlay_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
+            // TODO
         }
 
         private void overlay_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            // TODO
         }
 
         private void overlay_MouseMove(object sender, MouseEventArgs e)
         {
-
+            // TODO
         }
 
         private void overlay_MouseLeave(object sender, MouseEventArgs e)
         {
-
+            // TODO
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
