@@ -97,15 +97,14 @@ namespace VisionModules.Action
         {
             base.Enable();
 
-           // TODO: Start Cam
-           // first check if that cam is still attached
+           // TODO: Improve this code
             if (selected_device_idx < i.devices_available.Length)
             {
                 cam = i.cameras_available[selected_device_idx];
                 if (cam.running == false)
                     cam.StartFrameGrabbing();
-            }
 
+            }
            
            
         }
@@ -150,8 +149,14 @@ namespace VisionModules.Action
 
                 folderLocation = window.location;
 
-                // TODO
-                // webcam.Device = window.captureDevice;
+                bool wasEnabled = this.Enabled;
+
+                if (this.Enabled) this.Disable();
+                // assign selected cam
+                cam = window.DeviceList.SelectedItem as Camera;
+
+                if (wasEnabled) this.Enable();
+                
 
                 SetConfigString();
             }
