@@ -22,6 +22,8 @@ namespace MayhemOpenCVWrapper
         public delegate void MotionUpdateHandler(object sender, List<Point> points);
         public event MotionUpdateHandler OnMotionUpdate;
 
+        private Camera.ImageUpdateHandler imageUpdateHandler; 
+
         public Rect motionBoundaryRect = new Rect();
 
 
@@ -33,27 +35,33 @@ namespace MayhemOpenCVWrapper
            m = new OpenCVDLL.MotionDetector(width, height);
         }
 
-        public void RegisterForImages(MayhemImageUpdater u)
+        public void RegisterForImages(Camera c)
         {
-            u.OnImageUpdated += new MayhemImageUpdater.ImageUpdateHandler(update_frame);
+            imageUpdateHandler = new Camera.ImageUpdateHandler(update_frame);
+            c.OnImageUpdated += imageUpdateHandler;
+        }
+
+        public void UnregisterForImages(Camera c)
+        {
+            c.OnImageUpdated -= imageUpdateHandler;
         }
 
         public void update_frame(object sender, EventArgs e)
         {
            // throw new NotImplementedException();
 
-            MayhemImageUpdater s = sender as MayhemImageUpdater;
+            Camera camera = sender as Camera;
             
             int numPoints = 0;
 
             int[] contourPoints = new int[1200];
 
-            lock (s.thread_locker)
+            lock (camera.thread_locker)
             {
 
                 unsafe
                 {
-                    fixed (byte* ptr = s.imageBuffer)
+                    fixed (byte* ptr = camera.imageBuffer)
                     {
                         fixed (int* buf = contourPoints)
                         {

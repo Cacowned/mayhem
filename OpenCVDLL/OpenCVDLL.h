@@ -62,7 +62,6 @@ namespace OpenCVDLL {
 
 		public:
 			 IplImage * global_image;
-			 int deviceID;
 			 unsigned char * imageDataBuffer;
 			 static OpenCVImageProvider instance;
 			 bool initialized;
@@ -82,7 +81,9 @@ namespace OpenCVDLL {
 
 			 void StopCam(int device);
 
-			 void GetNextFrame(unsigned char * buffer);
+			 void GetNextFrame(int deviceID, unsigned char * buffer); 
+
+			
 			 int GetImageSize();			
 	};
 
@@ -155,11 +156,29 @@ namespace OpenCVDLL {
 			
 			}
 
+			/*
+			*  Request next frame from imaging device with deviceID
+			*/
+			static void GetNextFrame(int deviceID, unsigned char * imageDataBuffer)
+			{
+				try
+				{
+					i->GetNextFrame(deviceID,imageDataBuffer);
+				}
+				catch (void * e)
+				{
+
+				}
+			}
+
+			/*
+			* Requests next frame from default device (deviceID 0) 
+			*/
 			static void GetNextFrame(unsigned char * imageDataBuffer)
 			{
 				try
 				{
-					i->GetNextFrame(imageDataBuffer);
+					i->GetNextFrame(0,imageDataBuffer);
 				}
 				catch (void * e)
 				{

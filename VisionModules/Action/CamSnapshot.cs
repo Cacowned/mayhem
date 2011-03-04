@@ -22,10 +22,11 @@ namespace VisionModules.Action
 
         // The device we are recording from
 
-        private MayhemImageUpdater i = MayhemImageUpdater.Instance;
-        private MayhemImageUpdater.ImageUpdateHandler imageUpdateHandler;
+        private MayhemCameraDriver i = MayhemCameraDriver.Instance;
+        private Camera.ImageUpdateHandler imageUpdateHandler;
+        private Camera cam; 
 
-        private int selected_device = 0; 
+        private int selected_device_idx = 0; 
 
         public CamSnapshot()
             : base("Webcam Snapshot (OpenCV)", "Takes a photo with your webcam and saves it to the hard drive.")
@@ -40,7 +41,15 @@ namespace VisionModules.Action
             // TODO: What if we have multiple of these?
            
             SetConfigString();
-            imageUpdateHandler = new MayhemImageUpdater.ImageUpdateHandler(i_OnImageUpdated);
+            imageUpdateHandler = new Camera.ImageUpdateHandler(i_OnImageUpdated);
+
+            /*
+            if (selected_device < i.devices_available.Length)
+            {
+                cam = i.cameras_available[selected_device];
+                if (cam.running == false)
+                    cam.StartFrameGrabbing();
+            }*/ 
 
 
         }
@@ -52,7 +61,7 @@ namespace VisionModules.Action
         {
             // Executes Action
             // avoid capturing any more images
-            i.OnImageUpdated -= imageUpdateHandler;
+            cam.OnImageUpdated -= imageUpdateHandler;
             // access image buffer
 
             Bitmap BackBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -63,15 +72,15 @@ namespace VisionModules.Action
                 BackBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 BackBuffer.PixelFormat);
 
-            int bufSize = i.bufSize;
+            int bufSize = cam.bufSize;
             IntPtr ImgPtr = bmpData.Scan0;
 
             // grab the image
 
-            lock (i.thread_locker)
+            lock (cam.thread_locker)
             {
                 // Copy the RGB values back to the bitmap
-                System.Runtime.InteropServices.Marshal.Copy(i.imageBuffer, 0, ImgPtr, bufSize);
+                System.Runtime.InteropServices.Marshal.Copy(cam.imageBuffer, 0, ImgPtr, bufSize);
             }
             // Unlock the bits.
             BackBuffer.UnlockBits(bmpData);
@@ -88,14 +97,14 @@ namespace VisionModules.Action
         {
             base.Enable();
 
-           // TODO: Start Cam
-           // first check if that cam is still attached
-            if (selected_device < i.devices_available.Length)
+           // TODO: Improve this code
+            if (selected_device_idx < i.devices_available.Length)
             {
-                if (i.running == false)
-                    i.StartFrameGrabbing();
-            }
+                cam = i.cameras_available[selected_device_idx];
+                if (cam.running == false)
+                    cam.StartFrameGrabbing();
 
+            }
            
            
         }
@@ -105,7 +114,7 @@ namespace VisionModules.Action
             base.Disable();
            
             // unhook image callback
-            i.OnImageUpdated -= this.imageUpdateHandler;
+            cam.OnImageUpdated -= this.imageUpdateHandler;
         }
 
         public override void Perform()
@@ -113,7 +122,7 @@ namespace VisionModules.Action
 
             // hook up image callback 
 
-            i.OnImageUpdated += this.imageUpdateHandler;
+            cam.OnImageUpdated += this.imageUpdateHandler;
 
             // image gets saved when image provider calls back
 
@@ -131,6 +140,8 @@ namespace VisionModules.Action
              */
             var window = new CamSnapshotConfig(folderLocation, null /* cameraDevice */);
 
+            window.DeviceList.SelectedIndex = selected_device_idx;
+
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             if (window.ShowDialog() == true)
@@ -138,8 +149,14 @@ namespace VisionModules.Action
 
                 folderLocation = window.location;
 
-                // TODO
-                // webcam.Device = window.captureDevice;
+                bool wasEnabled = this.Enabled;
+
+                if (this.Enabled) this.Disable();
+                // assign selected cam
+                cam = window.DeviceList.SelectedItem as Camera;
+
+                if (wasEnabled) this.Enable();
+                
 
                 SetConfigString();
             }
@@ -156,7 +173,41 @@ namespace VisionModules.Action
             : base(info, context)
         {
 
+            
+
             folderLocation = info.GetString("FolderLocation");
+
+
+            string camera_description = "";
+
+            // try to initialize the camera from the camera ID
+            try
+            {
+                selected_device_idx = info.GetInt32("CameraID");
+                camera_description = info.GetString("CameraName");
+            }
+            catch (Exception ex)
+            {
+                selected_device_idx = 0; 
+
+            }
+
+            // see if the particular cam is still present
+
+            if (selected_device_idx < i.cameras_available.Length)
+            {
+                if (camera_description.Equals(i.cameras_available[selected_device_idx].info.description))
+                {
+                    // great!, do nothing
+                }
+                else
+                {
+                    // default cam
+                    selected_device_idx = 0;
+                }
+            }
+
+            
 
             Setup();
         }
@@ -164,7 +215,14 @@ namespace VisionModules.Action
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue("FolderLocation", folderLocation);
+            try
+            {
+                info.AddValue("FolderLocation", folderLocation);
+                // may be problematic if user's setup changes between startups of mayhem
+                info.AddValue("CameraID", (Int32)cam.info.deviceId);
+                info.AddValue("CameraName", cam.info.description);
+            }
+            catch (Exception ex) { }
         }
         #endregion
     }
