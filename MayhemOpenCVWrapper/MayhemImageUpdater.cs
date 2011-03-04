@@ -22,6 +22,17 @@ namespace MayhemOpenCVWrapper
             deviceId = id;
             description = descr;
         }
+
+        public string FriendlyName()
+        {
+            return this.ToString();
+        }
+
+        public override string ToString()
+        {
+            return "" + deviceId + " " + description;
+        }
+
     }
 
     public class MayhemImageUpdater

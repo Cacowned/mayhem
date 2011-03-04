@@ -90,9 +90,9 @@
     <Compile Include="Reactions\RunProgram.cs" />
     <Compile Include="Reactions\SmsMessage.cs" />
     <Compile Include="Reactions\TextToSpeech.cs" />
-    <Compile Include="Reactions\WebcamSnapshot.cs">
+    <None Include="Reactions\Disabled\WebcamSnapshot.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </None>
     <Compile Include="WebcamHelpers\ComBitmap.cs" />
     <Compile Include="WebcamHelpers\Device.cs" />
     <Compile Include="WebcamHelpers\ImageCapture.cs" />
