@@ -72,7 +72,6 @@
     <Compile Include="Actions\Office\Outlook\OutlookMail.cs" />
     <Compile Include="Actions\Office\Outlook\OutlookReminder.cs" />
     <Compile Include="Actions\Timer.cs" />
-    <Compile Include="Actions\UdpReceive.cs" />
     <Compile Include="Actions\Xbox\XboxButton.cs" />
     <Compile Include="KeypressHelpers\InterceptKeys.cs" />
     <Compile Include="LowLevel\MPlayer.cs" />
@@ -92,9 +91,6 @@
     <Compile Include="Reactions\SmsMessage.cs" />
     <Compile Include="Reactions\TextToSpeech.cs" />
     <Compile Include="Reactions\WebcamSnapshot.cs" />
-    <Compile Include="UdpHelpers\AsyncUdpServerSocket.cs" />
-    <Compile Include="UdpHelpers\DataReceivedEventArgs.cs" />
-    <Compile Include="UdpHelpers\UdpState.cs" />
     <Compile Include="WebcamHelpers\ComBitmap.cs" />
     <Compile Include="WebcamHelpers\Device.cs" />
     <Compile Include="WebcamHelpers\ImageCapture.cs" />

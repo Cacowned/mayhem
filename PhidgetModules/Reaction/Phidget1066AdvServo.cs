@@ -56,13 +56,22 @@ namespace PhidgetModules.Reaction
 			if (advServo == null) {
 				advServo = new AdvancedServo();
 				advServo.open();
+
+                foreach (AdvancedServoServo servo in advServo.servos)
+                {
+                    servo.Engaged = true;
+                    servo.SpeedRamping = false;
+                }
+
 			}
 
 			SetConfigString();
 		}
 
 		public override void Perform() {
+            //advServo.servos[0].Engaged = true;
 			advServo.servos[0].Position = position;
+            
 		}
 
 		public void WpfConfig() {
