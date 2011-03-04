@@ -8,14 +8,15 @@ using Phidgets;
 
 namespace PhidgetModules.Reaction
 {
-	public class Phidget1066AdvServo : ReactionBase, IWpf, ISerializable
+	[Serializable]
+	public class Phidget1066AdvServo : ReactionBase, IWpf, ISerializable//, IDisposable
 	{
 		// Instance of the servo class
 		protected static AdvancedServo advServo;
 		
 		// count how many instances of this class we have
 		// so we know when to close our connection to the Servo
-		protected static int instances = 0;
+		//protected static int instances = 0;
 
 		// This is the position that this reaction instance wants to 
 		// move the servo to
@@ -26,6 +27,8 @@ namespace PhidgetModules.Reaction
 
 		// The servo index we are talking to
 		protected int index;
+
+		//private bool disposed = false; // to detect redundant calls
 
 		public Phidget1066AdvServo()
 			: base("Phidget-1066: Adv. Servo", "Controls a servo") {
@@ -38,19 +41,11 @@ namespace PhidgetModules.Reaction
 			Setup();
 		}
 
-		~Phidget1066AdvServo() {
-			instances--;
-
-			if (instances == 0 && advServo != null) {
-				advServo.close();
-			}
-		}
-
 		protected void Setup() {
 			hasConfig = true;
 
 			// Increment the number of instances we have of this class
-			instances++;
+			//instances++;
 
 			// We are currently only using a single servo. In the future,
 			// this should be changed
@@ -80,6 +75,7 @@ namespace PhidgetModules.Reaction
 
 				SetConfigString();
 			}
+			
 		}
 
 
@@ -89,7 +85,7 @@ namespace PhidgetModules.Reaction
 
 
 		#region Serialization
-
+		
 		public Phidget1066AdvServo(SerializationInfo info, StreamingContext context)
 			: base(info, context) {
 
@@ -108,6 +104,9 @@ namespace PhidgetModules.Reaction
 			info.AddValue("ServoType", servoType);
 
 		}
+		
 		#endregion
+
+		
 	}
 }

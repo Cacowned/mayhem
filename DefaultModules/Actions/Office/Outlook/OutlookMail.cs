@@ -20,13 +20,8 @@ namespace DefaultModules.Actions.Office.Outlook
 		}
 
 		protected void SetUp() {
-
-			try {
-				outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
-				mailEvent = new OOutlook.ApplicationEvents_11_NewMailEventHandler(GotMail);
-			} catch (Exception e) {
-				Debug.Write(e);
-			}
+			// Create the event handler delegate to attach
+			mailEvent = new OOutlook.ApplicationEvents_11_NewMailEventHandler(GotMail);
 		}
 
 		private void GotMail() {
@@ -35,6 +30,13 @@ namespace DefaultModules.Actions.Office.Outlook
 
 		public override void Enable() {
 			base.Enable();
+			
+			// When enabled, try and get the outlook instance
+			try {
+				outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
+			} catch (Exception e) {
+				Debug.Write(e);
+			}
 
 			outlook.NewMail += mailEvent;
 		}
@@ -43,6 +45,8 @@ namespace DefaultModules.Actions.Office.Outlook
 			base.Disable();
 
 			outlook.NewMail -= mailEvent;
+
+			outlook = null;
 		}
 
 		#region Serialization

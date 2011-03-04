@@ -17,16 +17,11 @@ namespace DefaultModules.Actions.Office.Outlook
 			: base("Outlook Reminder", "Triggers when a reminder goes off for an outlook event") {
 
 			SetUp();
-
 		}
 
 		protected void SetUp() {
-			try {
-				outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
-				reminderEvent = new OOutlook.ApplicationEvents_11_ReminderEventHandler(GotReminder);
-			} catch (Exception e) {
-				Debug.Write(e);
-			}
+			// Create the event handler delegate to attach
+			reminderEvent = new OOutlook.ApplicationEvents_11_ReminderEventHandler(GotReminder);
 		}
 
 		private void GotReminder(object sender) {
@@ -37,6 +32,13 @@ namespace DefaultModules.Actions.Office.Outlook
 		public override void Enable() {
 			base.Enable();
 
+			// When enabled, try and get the outlook instance
+			try {
+				outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
+			} catch (Exception e) {
+				Debug.Write(e);
+			}
+
 			outlook.Reminder += reminderEvent;
 
 		}
@@ -45,6 +47,8 @@ namespace DefaultModules.Actions.Office.Outlook
 			base.Disable();
 
 			outlook.Reminder -= reminderEvent;
+
+			outlook = null;
 		}
 
 		#region Serialization
