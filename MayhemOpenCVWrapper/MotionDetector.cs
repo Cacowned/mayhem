@@ -22,6 +22,8 @@ namespace MayhemOpenCVWrapper
         public delegate void MotionUpdateHandler(object sender, List<Point> points);
         public event MotionUpdateHandler OnMotionUpdate;
 
+        private Camera.ImageUpdateHandler imageUpdateHandler; 
+
         public Rect motionBoundaryRect = new Rect();
 
 
@@ -35,7 +37,13 @@ namespace MayhemOpenCVWrapper
 
         public void RegisterForImages(Camera c)
         {
-            c.OnImageUpdated += new Camera.ImageUpdateHandler(update_frame);
+            imageUpdateHandler = new Camera.ImageUpdateHandler(update_frame);
+            c.OnImageUpdated += imageUpdateHandler;
+        }
+
+        public void UnregisterForImages(Camera c)
+        {
+            c.OnImageUpdated -= imageUpdateHandler;
         }
 
         public void update_frame(object sender, EventArgs e)
