@@ -1,4 +1,15 @@
-﻿using System.Windows;
+﻿/* CamSnapshotConfig.xaml.cs
+ * 
+ * Snapshot configuration window using OpenCV Camera Library
+ * 
+ * Authors: Sven Kratz, Eli White
+ * (c) 2011 Mayhem Open Source Project by Microsoft inc. 
+ * 
+ * 
+ */
+
+
+using System.Windows;
 using System.Windows.Forms;
 using MayhemOpenCVWrapper;
 using System.Diagnostics;
