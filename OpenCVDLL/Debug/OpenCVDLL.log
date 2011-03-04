@@ -1,0 +1,83 @@
+﻿Build started 03.03.2011 15:27:10.
+     1>Project "C:\Users\sven\mayhem-dev\repo\OpenCVDLL\OpenCVDLL.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\OpenCVDLL.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       GenerateTargetFrameworkMonikerAttribute:
+       Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\OpenCV2.2\include /I"C:\Users\sven\mayhem-dev\repo\\include" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\OpenCVDLL.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /TP /FU"C:\Users\sven\mayhem-dev\repo\MayhemOpenCVWrapper\bin\Debug\MayhemOpenCVWrapper.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Core.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Xml.dll" /analyze- /errorReport:prompt Stdafx.cpp /clr:nostdlib 
+         Stdafx.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\OpenCV2.2\include /I"C:\Users\sven\mayhem-dev\repo\\include" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /TP /FU"C:\Users\sven\mayhem-dev\repo\MayhemOpenCVWrapper\bin\Debug\MayhemOpenCVWrapper.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Core.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Xml.dll" /analyze- /errorReport:prompt AssemblyInfo.cpp OpenCVDLL.cpp /clr:nostdlib 
+         AssemblyInfo.cpp
+         OpenCVDLL.cpp
+     1>C:\OpenCV2.2\include\opencv2/flann/logger.h(66): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(234) : see declaration of 'fopen'
+     1>C:\OpenCV2.2\include\opencv2/legacy/blobtrack.hpp(187): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string.h(105) : see declaration of 'strcpy'
+     1>C:\OpenCV2.2\include\opencv2/legacy/blobtrack.hpp(256): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string.h(110) : see declaration of 'strcat'
+     1>c:\users\sven\mayhem-dev\repo\opencvdll\OpenCVDLL.h(164): warning C4101: 'e' : unreferenced local variable
+     1>OpenCVDLL.cpp(53): warning C4996: 'strncat': This function or variable may be unsafe. Consider using strncat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string.h(175) : see declaration of 'strncat'
+     1>OpenCVDLL.cpp(56): warning C4996: 'strncat': This function or variable may be unsafe. Consider using strncat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string.h(175) : see declaration of 'strncat'
+     1>OpenCVDLL.cpp(129): warning C4101: 'e' : unreferenced local variable
+     1>OpenCVDLL.cpp(216): warning C4101: 'prevX' : unreferenced local variable
+         Generating Code...
+     1>c:\opencv2.2\include\opencv2\core\operations.hpp(81): warning C4793: '`anonymous namespace'::CV_XADD' : function compiled as native :
+         	Inline native assembly not supported in managed code
+         All outputs are up-to-date.
+       ResourceCompile:
+         All outputs are up-to-date.
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\sven\mayhem-dev\repo\Debug\OpenCVDLL.dll" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\sven\mayhem-dev\repo\\Debug" /LIBPATH:C:\OpenCV2.2\bin /LIBPATH:C:\OpenCV2.2\lib /MANIFEST /ManifestFile:"Debug\OpenCVDLL.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\sven\mayhem-dev\repo\Debug\OpenCVDLL.pdb" /ASSEMBLYDEBUG /TLBID:1 /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 /DLL Debug\app.res
+         Debug\AssemblyInfo.obj
+         Debug\OpenCVDLL.obj
+         Debug\Stdafx.obj
+         "Debug\.NETFramework,Version=v4.0.AssemblyAttributes.obj"
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_calib3d220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_calib3d220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_contrib220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_contrib220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_core220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_core220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_features2d220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_features2d220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_ffmpeg220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_ffmpeg220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_flann220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_flann220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_gpu220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_gpu220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_highgui220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_highgui220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_imgproc220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_imgproc220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_legacy220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_legacy220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_ml220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_ml220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_objdetect220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_objdetect220d.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_ts220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_video220.lib
+         ..\..\..\..\..\OpenCV2.2\lib\opencv_video220d.lib
+         libs\atlthunk.lib
+         libs\videoInput.lib
+     1>atlthunk.lib(videoInput.obj) : warning LNK4099: PDB 'vc90.pdb' was not found with 'atlthunk.lib(videoInput.obj)' or at 'C:\Users\sven\mayhem-dev\repo\Debug\vc90.pdb'; linking object as if no debug info
+         OpenCVDLL.vcxproj -> C:\Users\sven\mayhem-dev\repo\Debug\OpenCVDLL.dll
+       Manifest:
+         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\sven\mayhem-dev\repo\Debug\OpenCVDLL.dll;#2" /manifest Debug\OpenCVDLL.dll.intermediate.manifest
+       _CopyFilesMarkedCopyLocal:
+         Copying file from "C:\Users\sven\mayhem-dev\repo\MayhemOpenCVWrapper\bin\Debug\MayhemOpenCVWrapper.dll" to "C:\Users\sven\mayhem-dev\repo\Debug\MayhemOpenCVWrapper.dll".
+         Copying file from "C:\Users\sven\mayhem-dev\repo\MayhemOpenCVWrapper\bin\Debug\OpenCVDLL.dll" to "C:\Users\sven\mayhem-dev\repo\Debug\OpenCVDLL.dll".
+         Copying file from "C:\Users\sven\mayhem-dev\repo\MayhemOpenCVWrapper\bin\Debug\MayhemOpenCVWrapper.pdb" to "C:\Users\sven\mayhem-dev\repo\Debug\MayhemOpenCVWrapper.pdb".
+         Copying file from "C:\Users\sven\mayhem-dev\repo\MayhemOpenCVWrapper\bin\Debug\OpenCVDLL.pdb" to "C:\Users\sven\mayhem-dev\repo\Debug\OpenCVDLL.pdb".
+       FinalizeBuildStatus:
+         Deleting file "Debug\OpenCVDLL.unsuccessfulbuild".
+         Touching "Debug\OpenCVDLL.lastbuildstate".
+     1>Done Building Project "C:\Users\sven\mayhem-dev\repo\OpenCVDLL\OpenCVDLL.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:21.55

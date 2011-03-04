@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E78D02AA-FB6F-42DC-9752-67F8186AC6FF}</ProjectGuid>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <Keyword>ManagedCProj</Keyword>
+    <RootNamespace>OpenCVDLL</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>C:\OpenCV2.2\include;$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Debug;C:\OpenCV2.2\bin;C:\OpenCV2.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>C:\OpenCV2.1\include\opencv;$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Debug;C:\OpenCV2.1\bin;C:\OpenCV2.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Reference Include="MayhemOpenCVWrapper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\MayhemOpenCVWrapper\bin\Debug\MayhemOpenCVWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OpenCVDLL.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Stdafx.h" />
+    <ClInclude Include="videoInput.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="OpenCVDLL.cpp" />
+    <ClCompile Include="Stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.ico" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_calib3d220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_calib3d220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_contrib220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_contrib220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_core220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_core220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_features2d220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_features2d220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_ffmpeg220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_ffmpeg220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_flann220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_flann220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_gpu220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_gpu220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_highgui220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_highgui220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_imgproc220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_imgproc220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_legacy220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_legacy220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_ml220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_ml220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_objdetect220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_objdetect220d.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_ts220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_video220.lib" />
+    <Library Include="..\..\..\..\..\OpenCV2.2\lib\opencv_video220d.lib" />
+    <Library Include="libs\atlthunk.lib" />
+    <Library Include="libs\videoInput.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

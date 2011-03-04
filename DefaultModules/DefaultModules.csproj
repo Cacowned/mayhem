@@ -90,7 +90,9 @@
     <Compile Include="Reactions\RunProgram.cs" />
     <Compile Include="Reactions\SmsMessage.cs" />
     <Compile Include="Reactions\TextToSpeech.cs" />
-    <Compile Include="Reactions\WebcamSnapshot.cs" />
+    <Compile Include="Reactions\WebcamSnapshot.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="WebcamHelpers\ComBitmap.cs" />
     <Compile Include="WebcamHelpers\Device.cs" />
     <Compile Include="WebcamHelpers\ImageCapture.cs" />
@@ -115,6 +117,7 @@
     </Compile>
     <Compile Include="Wpf\WebcamSnapshotConfig.xaml.cs">
       <DependentUpon>WebcamSnapshotConfig.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Wpf\XboxButtonConfig.xaml.cs">
       <DependentUpon>XboxButtonConfig.xaml</DependentUpon>
