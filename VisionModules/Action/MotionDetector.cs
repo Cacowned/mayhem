@@ -67,7 +67,7 @@ namespace VisionModules
                 Debug.WriteLine(TAG + "m_OnMotionUpdate");
 
                // trigger the readction
-                OnActionActivated();
+                base.OnActionActivated();
 
                 lastMotionDetected = DateTime.Now;
             }
@@ -94,10 +94,23 @@ namespace VisionModules
 
         public override void Enable() {
             base.Enable();
+            Debug.WriteLine(TAG + "EnableTrigger");
+
+            MayhemImageUpdater i = MayhemImageUpdater.Instance;
+            if (!i.running)
+                i.StartFrameGrabbing();
+
+            // register the trigger's motion update handler
+            m.RegisterForImages(MayhemImageUpdater.Instance);
+            m.OnMotionUpdate += motionUpdateHandler;
+
         }
 
         public override void Disable() {
             base.Disable();
+            Debug.WriteLine(TAG + "DisableTrigger");
+            // de-register the trigger's motion update handler
+            m.OnMotionUpdate -= motionUpdateHandler;
         }
 
         #region Serialization
