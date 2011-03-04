@@ -33,16 +33,16 @@ namespace MayhemOpenCVWrapper
            m = new OpenCVDLL.MotionDetector(width, height);
         }
 
-        public void RegisterForImages(MayhemImageUpdater u)
+        public void RegisterForImages(MayhemCameraDriver u)
         {
-            u.OnImageUpdated += new MayhemImageUpdater.ImageUpdateHandler(update_frame);
+            u.OnImageUpdated += new MayhemCameraDriver.ImageUpdateHandler(update_frame);
         }
 
         public void update_frame(object sender, EventArgs e)
         {
            // throw new NotImplementedException();
 
-            MayhemImageUpdater s = sender as MayhemImageUpdater;
+            MayhemCameraDriver s = sender as MayhemCameraDriver;
             
             int numPoints = 0;
 

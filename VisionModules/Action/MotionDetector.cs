@@ -23,7 +23,7 @@ namespace VisionModules
 
         private MayhemOpenCVWrapper.MotionDetector.MotionUpdateHandler motionUpdateHandler;
 
-        private MayhemImageUpdater i = MayhemImageUpdater.Instance;
+        private MayhemCameraDriver i = MayhemCameraDriver.Instance;
 
         
         public MotionDetector()
@@ -96,12 +96,12 @@ namespace VisionModules
             base.Enable();
             Debug.WriteLine(TAG + "EnableTrigger");
 
-            MayhemImageUpdater i = MayhemImageUpdater.Instance;
+            MayhemCameraDriver i = MayhemCameraDriver.Instance;
             if (!i.running)
                 i.StartFrameGrabbing();
 
             // register the trigger's motion update handler
-            m.RegisterForImages(MayhemImageUpdater.Instance);
+            m.RegisterForImages(MayhemCameraDriver.Instance);
             m.OnMotionUpdate += motionUpdateHandler;
 
         }

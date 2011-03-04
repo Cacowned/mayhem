@@ -22,8 +22,8 @@ namespace VisionModules.Action
 
         // The device we are recording from
 
-        private MayhemImageUpdater i = MayhemImageUpdater.Instance;
-        private MayhemImageUpdater.ImageUpdateHandler imageUpdateHandler;
+        private MayhemCameraDriver i = MayhemCameraDriver.Instance;
+        private MayhemCameraDriver.ImageUpdateHandler imageUpdateHandler;
 
         private int selected_device = 0; 
 
@@ -40,7 +40,7 @@ namespace VisionModules.Action
             // TODO: What if we have multiple of these?
            
             SetConfigString();
-            imageUpdateHandler = new MayhemImageUpdater.ImageUpdateHandler(i_OnImageUpdated);
+            imageUpdateHandler = new MayhemCameraDriver.ImageUpdateHandler(i_OnImageUpdated);
 
 
         }
