@@ -22,10 +22,10 @@ namespace VisionModules.Wpf
     /// </summary>
     public partial class MotionDetectorConfig : Window
     {
-
+        public const string TAG = "[MotionDetectorConfig] :";
         private MayhemCameraDriver i = MayhemCameraDriver.Instance;
         private Camera.ImageUpdateHandler imageUpdateHandler;
-        private Camera cam; 
+        private Camera cam = null; 
 
         private delegate void SetCameraImageSource();
 
@@ -37,16 +37,16 @@ namespace VisionModules.Wpf
 
             imageUpdateHandler = new Camera.ImageUpdateHandler(i_OnImageUpdated);
 
-            // if the image update isn't running yet, start it (could be dangerous) 
-            /*
-            if (i.running == false)
-            {
-                i.StartFrameGrabbing();
-            }*/
 
-            // start the camera 0 if it isn't already running
-            Camera cam = i.cameras_available[0];
-            if (!cam.running) cam.StartFrameGrabbing();
+            if (i.cameras_available.Length > 0)
+            {
+                cam = i.cameras_available[0];
+                if (!cam.running) cam.StartFrameGrabbing();
+            }
+            else
+            {
+                Debug.WriteLine(TAG+"No camera available");
+            }
 
         }
 
@@ -59,11 +59,11 @@ namespace VisionModules.Wpf
         {
             if (this.IsVisible)
             {
-                i.OnImageUpdated += imageUpdateHandler;
+                cam.OnImageUpdated += imageUpdateHandler;
             }
             else
             {
-                i.OnImageUpdated -= imageUpdateHandler;
+                cam.OnImageUpdated -= imageUpdateHandler;
             }
         }
 
@@ -100,17 +100,17 @@ namespace VisionModules.Wpf
                 BackBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 BackBuffer.PixelFormat);
 
-            int bufSize = i.bufSize;
+            int bufSize = cam.bufSize;
 
             IntPtr ImgPtr = bmpData.Scan0;
 
             // grab the image
 
 
-            lock (i.thread_locker)
+            lock (cam.thread_locker)
             {
                 // Copy the RGB values back to the bitmap
-                System.Runtime.InteropServices.Marshal.Copy(i.imageBuffer, 0, ImgPtr, bufSize);
+                System.Runtime.InteropServices.Marshal.Copy(cam.imageBuffer, 0, ImgPtr, bufSize);
             }
             // Unlock the bits.
             BackBuffer.UnlockBits(bmpData);

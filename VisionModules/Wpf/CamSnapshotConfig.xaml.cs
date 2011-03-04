@@ -24,7 +24,7 @@ namespace VisionModules.Wpf
 	/// </summary>
 	public partial class CamSnapshotConfig : Window
 	{
-        public static const string TAG = "[MotionDetectorConfig] :";
+        public const string TAG = "[MotionDetectorConfig] :";
 		public string location;
 		// public Device captureDevice;
 
@@ -58,8 +58,9 @@ namespace VisionModules.Wpf
             {
 
                 // start the camera 0 if it isn't already running
-                Camera cam = i.cameras_available[0];
+                cam = i.cameras_available[0];
                 if (!cam.running) cam.StartFrameGrabbing();
+                Debug.WriteLine(TAG + "using " + cam.info.ToString());
             }
             else
             {
@@ -78,11 +79,11 @@ namespace VisionModules.Wpf
         {
             if (this.IsVisible)
             {
-                i.OnImageUpdated += imageUpdateHandler;
+                cam.OnImageUpdated += imageUpdateHandler;
             }
             else
             {
-                i.OnImageUpdated -= imageUpdateHandler;
+                cam.OnImageUpdated -= imageUpdateHandler;
             }
         }
 
@@ -114,17 +115,17 @@ namespace VisionModules.Wpf
                 BackBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 BackBuffer.PixelFormat);
 
-            int bufSize = i.bufSize;
+            int bufSize = cam.bufSize;
 
             IntPtr ImgPtr = bmpData.Scan0;
 
             // grab the image
 
 
-            lock (i.thread_locker)
+            lock (cam.thread_locker)
             {
                 // Copy the RGB values back to the bitmap
-                System.Runtime.InteropServices.Marshal.Copy(i.imageBuffer, 0, ImgPtr, bufSize);
+                System.Runtime.InteropServices.Marshal.Copy(cam.imageBuffer, 0, ImgPtr, bufSize);
             }
             // Unlock the bits.
             BackBuffer.UnlockBits(bmpData);

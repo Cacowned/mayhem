@@ -80,7 +80,7 @@ void OpenCVImageProvider::StopCam(int device)
  */
  void OpenCVImageProvider::InitCam(int device, int width, int height)
 			{
-				deviceID = device;
+				int deviceID = device;
 				printf("\tOpenCVImageProvider::InitCam -- starting \n");
 				if (true)
 				{
@@ -115,7 +115,7 @@ void OpenCVImageProvider::StopCam(int device)
 
 			}
 
-	  void OpenCVImageProvider::GetNextFrame(unsigned char * buffer)
+	  void OpenCVImageProvider::GetNextFrame(int deviceID, unsigned char * buffer)
 	  {
 		  // this should be called to prevent the cam from freezing
 		  if(VI.isFrameNew(deviceID)){}
@@ -167,6 +167,9 @@ void OpenCVImageProvider::StopCam(int device)
 
 	void MotionDetector::ProcessFrame(unsigned char * imageData, int * contourBoundPoints, int & numContours)
 	{
+
+		//// TODO: find memory leaks!
+
 		currentImage->imageData = (char*) imageData;
 
 		if (first)
@@ -248,6 +251,7 @@ void OpenCVImageProvider::StopCam(int device)
 		// release memory
 
 		cvReleaseImage(&grayCtr);
+		
 		cvFree(&storage);
 		
 
