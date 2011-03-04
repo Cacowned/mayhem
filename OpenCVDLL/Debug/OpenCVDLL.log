@@ -1,8 +1,6 @@
-﻿Build started 04.03.2011 16:22:08.
-     1>Project "C:\Users\sven\mayhem-dev\repo\OpenCVDLL\OpenCVDLL.vcxproj" on node 2 (rebuild target(s)).
-     1>_PrepareForClean:
-         Deleting file "Debug\OpenCVDLL.lastbuildstate".
-       ResolveAssemblyReferences:
+﻿Build started 04.03.2011 18:29:26.
+     1>Project "C:\Users\sven\mayhem-dev\repo\OpenCVDLL\OpenCVDLL.vcxproj" on node 2 (build target(s)).
+     1>ResolveAssemblyReferences:
          Primary reference "MayhemOpenCVWrapper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null".
      1>c:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.Targets(1360,9): warning MSB3245: Could not resolve this reference. Could not locate the assembly "MayhemOpenCVWrapper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null". Check to make sure the assembly exists on disk. If this reference is required by your code, you may get compilation errors.
                  For SearchPath "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\atlmfc\lib".
@@ -196,8 +194,8 @@
        FinalizeBuildStatus:
          Deleting file "Debug\OpenCVDLL.unsuccessfulbuild".
          Touching "Debug\OpenCVDLL.lastbuildstate".
-     1>Done Building Project "C:\Users\sven\mayhem-dev\repo\OpenCVDLL\OpenCVDLL.vcxproj" (rebuild target(s)).
+     1>Done Building Project "C:\Users\sven\mayhem-dev\repo\OpenCVDLL\OpenCVDLL.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.62
+Time Elapsed 00:00:16.03

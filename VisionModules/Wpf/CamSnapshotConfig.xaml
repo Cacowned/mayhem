@@ -12,7 +12,7 @@
             <StackPanel>
                     <Image Width="320" Height="240" Name="camera_preview" />
                     <Label>Click drop down list below to select a camera:</Label>
-                        <ComboBox Name="DeviceList" />
+                    <ComboBox Name="DeviceList" />
                     <Label>Click button below to choose location of saved images:</Label>
                         <Button Click="Button_Click_1">Save Images Location</Button>
                 

@@ -26,7 +26,7 @@ namespace VisionModules.Action
         private Camera.ImageUpdateHandler imageUpdateHandler;
         private Camera cam; 
 
-        private int selected_device = 0; 
+        private int selected_device_idx = 0; 
 
         public CamSnapshot()
             : base("Webcam Snapshot (OpenCV)", "Takes a photo with your webcam and saves it to the hard drive.")
@@ -99,9 +99,9 @@ namespace VisionModules.Action
 
            // TODO: Start Cam
            // first check if that cam is still attached
-            if (selected_device < i.devices_available.Length)
+            if (selected_device_idx < i.devices_available.Length)
             {
-                cam = i.cameras_available[selected_device];
+                cam = i.cameras_available[selected_device_idx];
                 if (cam.running == false)
                     cam.StartFrameGrabbing();
             }
@@ -141,6 +141,8 @@ namespace VisionModules.Action
              */
             var window = new CamSnapshotConfig(folderLocation, null /* cameraDevice */);
 
+            window.DeviceList.SelectedIndex = selected_device_idx;
+
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             if (window.ShowDialog() == true)
@@ -166,7 +168,41 @@ namespace VisionModules.Action
             : base(info, context)
         {
 
+            
+
             folderLocation = info.GetString("FolderLocation");
+
+
+            string camera_description = "";
+
+            // try to initialize the camera from the camera ID
+            try
+            {
+                selected_device_idx = info.GetInt32("CameraID");
+                camera_description = info.GetString("CameraName");
+            }
+            catch (Exception ex)
+            {
+                selected_device_idx = 0; 
+
+            }
+
+            // see if the particular cam is still present
+
+            if (selected_device_idx < i.cameras_available.Length)
+            {
+                if (camera_description.Equals(i.cameras_available[selected_device_idx].info.description))
+                {
+                    // great!, do nothing
+                }
+                else
+                {
+                    // default cam
+                    selected_device_idx = 0;
+                }
+            }
+
+            
 
             Setup();
         }
@@ -174,7 +210,14 @@ namespace VisionModules.Action
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue("FolderLocation", folderLocation);
+            try
+            {
+                info.AddValue("FolderLocation", folderLocation);
+                // may be problematic if user's setup changes between startups of mayhem
+                info.AddValue("CameraID", (Int32)cam.info.deviceId);
+                info.AddValue("CameraName", cam.info.description);
+            }
+            catch (Exception ex) { }
         }
         #endregion
     }
