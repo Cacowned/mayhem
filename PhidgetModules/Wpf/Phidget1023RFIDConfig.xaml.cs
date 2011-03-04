@@ -25,8 +25,8 @@ namespace PhidgetModules.Wpf
 			DependencyProperty.Register("TagID", typeof(string), typeof(Phidget1023RFIDConfig), new UIPropertyMetadata(string.Empty));
 
 
-		public Phidget1023RFIDConfig(RFID phidget, string tagId) {
-			this.rfid = phidget;
+		public Phidget1023RFIDConfig(string tagId) {
+			this.rfid = InterfaceFactory.GetRFID();
 			TagID = tagId;
 
 			gotTag = new TagEventHandler(rfidTag);
