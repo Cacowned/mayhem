@@ -4,3 +4,6 @@ glob:*.suo
 glob:*.suo.orig
 glob:*.vs10x
 glob:*.user
+glob:*.tlog
+glob:*.cache
+glob:*.opensdf
