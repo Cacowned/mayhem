@@ -23,8 +23,8 @@ namespace VisionModules.Wpf
     public partial class MotionDetectorConfig : Window
     {
 
-        private MayhemImageUpdater i = MayhemImageUpdater.Instance;
-        private MayhemImageUpdater.ImageUpdateHandler imageUpdateHandler;
+        private MayhemCameraDriver i = MayhemCameraDriver.Instance;
+        private MayhemCameraDriver.ImageUpdateHandler imageUpdateHandler;
 
         private delegate void SetCameraImageSource();
 
@@ -34,7 +34,7 @@ namespace VisionModules.Wpf
 
             // image1 = new System.Windows.Controls.Image();
 
-            imageUpdateHandler = new MayhemImageUpdater.ImageUpdateHandler(i_OnImageUpdated);
+            imageUpdateHandler = new MayhemCameraDriver.ImageUpdateHandler(i_OnImageUpdated);
 
             // if the image update isn't running yet, start it (could be dangerous) 
             if (i.running == false)
