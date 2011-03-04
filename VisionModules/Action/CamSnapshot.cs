@@ -40,7 +40,6 @@ namespace VisionModules.Action
             // TODO: What if we have multiple of these?
            
             SetConfigString();
-
             imageUpdateHandler = new MayhemImageUpdater.ImageUpdateHandler(i_OnImageUpdated);
 
 
