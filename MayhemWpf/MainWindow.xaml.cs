@@ -194,5 +194,9 @@ namespace MayhemWpf
 			}
 
 		}
+
+		private void MayhemMainWindow_Closed(object sender, EventArgs e) {
+			Debug.WriteLine("Done");
+		}
 	}
 }

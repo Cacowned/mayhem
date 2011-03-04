@@ -5,7 +5,8 @@
         xmlns:common="clr-namespace:MayhemDefaultStyles.UserControls;assembly=MayhemDefaultStyles"
 		Title="Mayhem" Height="600" Width="600" ResizeMode="CanMinimize"
 		x:Name="MayhemMainWindow"
-		Closing="AppClosing">
+		Closing="AppClosing"
+		Closed="MayhemMainWindow_Closed">
 	<Window.Resources>     
 		<Style x:Key="ConfigurationStringStyle">
 			<Setter Property="Control.FontStyle" Value="Italic" />

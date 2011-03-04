@@ -19,7 +19,7 @@ namespace PhidgetModules.Action
 		protected TagEventHandler lostTag;
 
 		// This is the tag we are watching for
-		protected string ourTag;
+		protected string ourTag = String.Empty;
 
 		public Phidget1023RFID()
 			: base("Phidget-1023: RFID", "Triggers with a certain RFID Tag") {
@@ -79,8 +79,12 @@ namespace PhidgetModules.Action
 
 		public override void Disable() {
 			base.Disable();
-			rfid.Tag -= gotTag;
-			rfid.TagLost -= lostTag;
+			
+			if (rfid != null) {
+				rfid.Tag -= gotTag;
+				rfid.TagLost -= lostTag;
+			}
+			
 		}
 
 		#region Serialization
