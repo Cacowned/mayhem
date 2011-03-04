@@ -23,7 +23,8 @@ namespace VisionModules.Action
         // The device we are recording from
 
         private MayhemCameraDriver i = MayhemCameraDriver.Instance;
-        private MayhemCameraDriver.ImageUpdateHandler imageUpdateHandler;
+        private Camera.ImageUpdateHandler imageUpdateHandler;
+        private Camera cam; 
 
         private int selected_device = 0; 
 
@@ -40,7 +41,15 @@ namespace VisionModules.Action
             // TODO: What if we have multiple of these?
            
             SetConfigString();
-            imageUpdateHandler = new MayhemCameraDriver.ImageUpdateHandler(i_OnImageUpdated);
+            imageUpdateHandler = new Camera.ImageUpdateHandler(i_OnImageUpdated);
+
+            /*
+            if (selected_device < i.devices_available.Length)
+            {
+                cam = i.cameras_available[selected_device];
+                if (cam.running == false)
+                    cam.StartFrameGrabbing();
+            }*/ 
 
 
         }
@@ -52,7 +61,7 @@ namespace VisionModules.Action
         {
             // Executes Action
             // avoid capturing any more images
-            i.OnImageUpdated -= imageUpdateHandler;
+            cam.OnImageUpdated -= imageUpdateHandler;
             // access image buffer
 
             Bitmap BackBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -92,8 +101,9 @@ namespace VisionModules.Action
            // first check if that cam is still attached
             if (selected_device < i.devices_available.Length)
             {
-                if (i.running == false)
-                    i.StartFrameGrabbing();
+                cam = i.cameras_available[selected_device];
+                if (cam.running == false)
+                    cam.StartFrameGrabbing();
             }
 
            
@@ -105,7 +115,7 @@ namespace VisionModules.Action
             base.Disable();
            
             // unhook image callback
-            i.OnImageUpdated -= this.imageUpdateHandler;
+            cam.OnImageUpdated -= this.imageUpdateHandler;
         }
 
         public override void Perform()
@@ -113,7 +123,7 @@ namespace VisionModules.Action
 
             // hook up image callback 
 
-            i.OnImageUpdated += this.imageUpdateHandler;
+            cam.OnImageUpdated += this.imageUpdateHandler;
 
             // image gets saved when image provider calls back
 
