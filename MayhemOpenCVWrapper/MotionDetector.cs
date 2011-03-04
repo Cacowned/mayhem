@@ -33,27 +33,27 @@ namespace MayhemOpenCVWrapper
            m = new OpenCVDLL.MotionDetector(width, height);
         }
 
-        public void RegisterForImages(MayhemCameraDriver u)
+        public void RegisterForImages(Camera c)
         {
-            u.OnImageUpdated += new MayhemCameraDriver.ImageUpdateHandler(update_frame);
+            c.OnImageUpdated += new Camera.ImageUpdateHandler(update_frame);
         }
 
         public void update_frame(object sender, EventArgs e)
         {
            // throw new NotImplementedException();
 
-            MayhemCameraDriver s = sender as MayhemCameraDriver;
+            Camera camera = sender as Camera;
             
             int numPoints = 0;
 
             int[] contourPoints = new int[1200];
 
-            lock (s.thread_locker)
+            lock (camera.thread_locker)
             {
 
                 unsafe
                 {
-                    fixed (byte* ptr = s.imageBuffer)
+                    fixed (byte* ptr = camera.imageBuffer)
                     {
                         fixed (int* buf = contourPoints)
                         {

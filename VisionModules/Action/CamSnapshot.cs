@@ -72,15 +72,15 @@ namespace VisionModules.Action
                 BackBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 BackBuffer.PixelFormat);
 
-            int bufSize = i.bufSize;
+            int bufSize = cam.bufSize;
             IntPtr ImgPtr = bmpData.Scan0;
 
             // grab the image
 
-            lock (i.thread_locker)
+            lock (cam.thread_locker)
             {
                 // Copy the RGB values back to the bitmap
-                System.Runtime.InteropServices.Marshal.Copy(i.imageBuffer, 0, ImgPtr, bufSize);
+                System.Runtime.InteropServices.Marshal.Copy(cam.imageBuffer, 0, ImgPtr, bufSize);
             }
             // Unlock the bits.
             BackBuffer.UnlockBits(bmpData);

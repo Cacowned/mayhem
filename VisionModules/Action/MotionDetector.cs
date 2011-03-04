@@ -24,7 +24,7 @@ namespace VisionModules
         private MayhemOpenCVWrapper.MotionDetector.MotionUpdateHandler motionUpdateHandler;
 
         private MayhemCameraDriver i = MayhemCameraDriver.Instance;
-
+        private Camera cam = null;
         
         public MotionDetector()
             : base("Motion Detector", "Detects when there is motion in the frame")
@@ -35,11 +35,16 @@ namespace VisionModules
         
         public void Setup() {
 
-            if (i.selected_device == null && i.devices_available.Length > 0)
+          
+
+            if (i.cameras_available.Length > 0)
             {
-                // use the first device for now
-                // TODO: Camera framework needs to be initialized globally 
-                i.InitCaptureDevice(0, 320, 240);
+                cam = i.cameras_available[0];
+                if (!cam.running) cam.StartFrameGrabbing();
+            }
+            else
+            {
+                Debug.WriteLine(TAG + "No camera available");
             }
 
             m = new MayhemOpenCVWrapper.MotionDetector(320, 240);
@@ -97,11 +102,11 @@ namespace VisionModules
             Debug.WriteLine(TAG + "EnableTrigger");
 
             MayhemCameraDriver i = MayhemCameraDriver.Instance;
-            if (!i.running)
-                i.StartFrameGrabbing();
+            if (!cam.running)
+                cam.StartFrameGrabbing();
 
             // register the trigger's motion update handler
-            m.RegisterForImages(MayhemCameraDriver.Instance);
+            m.RegisterForImages(cam);
             m.OnMotionUpdate += motionUpdateHandler;
 
         }

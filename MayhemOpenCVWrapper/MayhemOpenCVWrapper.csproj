@@ -44,7 +44,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MayhemImageUpdater.cs" />
+    <Compile Include="MayhemCameraDriver.cs" />
     <Compile Include="MotionDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
