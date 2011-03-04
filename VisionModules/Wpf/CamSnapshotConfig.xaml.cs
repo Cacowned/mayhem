@@ -28,9 +28,14 @@ namespace VisionModules.Wpf
 		public string location;
 		// public Device captureDevice;
 
+
+        public Camera selected_camera = null; 
+
         private MayhemCameraDriver i = MayhemCameraDriver.Instance;
         private Camera.ImageUpdateHandler imageUpdateHandler;
         private Camera cam = null; 
+
+        
 
 
         private delegate void SetCameraImageSource();
@@ -47,7 +52,7 @@ namespace VisionModules.Wpf
 
             // populate device list
 
-            foreach(CameraInfo c in i.devices_available)
+            foreach(Camera c in i.cameras_available)
             {
                 DeviceList.Items.Add(c);
             }
@@ -150,7 +155,10 @@ namespace VisionModules.Wpf
 		}
 
 		private void Button_Save_Click(object sender, RoutedEventArgs e) {
-			// captureDevice = DeviceList.SelectedItem as Device;
+	
+
+            selected_camera = DeviceList.SelectedItem as Camera;
+
 			DialogResult = true;
 		}
 
