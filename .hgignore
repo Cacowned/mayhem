@@ -8,3 +8,5 @@ glob:*.user
 glob:*.tlog
 glob:*.cache
 glob:*.opensdf
+glob:Release/
+glob:Debug/
