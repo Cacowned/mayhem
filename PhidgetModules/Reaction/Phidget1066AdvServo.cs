@@ -36,7 +36,7 @@ namespace PhidgetModules.Reaction
 			position = 50;
 
 			// This is the one we have, so we are just defaulting to it
-			servoType = ServoServo.ServoType.FIRGELLI_L12_100_100_06_R;
+			servoType = ServoServo.ServoType.HITEC_HS322HD;
 				
 			Setup();
 		}
