@@ -79,8 +79,12 @@ namespace PhidgetModules.Action
 
 		public override void Disable() {
 			base.Disable();
-			rfid.Tag -= gotTag;
-			rfid.TagLost -= lostTag;
+			
+			if (rfid != null) {
+				rfid.Tag -= gotTag;
+				rfid.TagLost -= lostTag;
+			}
+			
 		}
 
 		#region Serialization

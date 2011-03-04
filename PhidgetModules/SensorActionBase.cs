@@ -38,15 +38,16 @@ namespace PhidgetModules
 
 		public override void Enable() {
 			base.Enable();
-			if (ifKit != null)
-				ifKit.SensorChange += handler;
+			ifKit.SensorChange += handler;
 		}
 
 		public override void Disable() {
 			base.Disable();
-
-			if (ifKit != null)
+			
+			if (ifKit != null) {
 				ifKit.SensorChange -= handler;
+			}
+
 		}
 
 		#region Serialization

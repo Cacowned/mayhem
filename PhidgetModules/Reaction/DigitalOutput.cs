@@ -88,6 +88,7 @@ namespace PhidgetModules.Reaction
 			: base(info, context) {
 
 				outputType = (DigitalOutputType)info.GetValue("OutputType", typeof(DigitalOutputType));
+				index = info.GetInt32("Index");
 
 			Setup();
 		}
@@ -96,6 +97,7 @@ namespace PhidgetModules.Reaction
 			base.GetObjectData(info, context);
 
 			info.AddValue("OutputType", outputType);
+			info.AddValue("Index", index);
 		}
 		#endregion
 	}
