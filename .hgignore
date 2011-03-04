@@ -1,5 +1,6 @@
 glob:bin/
 glob:obj/
+glob:*.cs.orig
 glob:*.suo
 glob:*.suo.orig
 glob:*.vs10x
