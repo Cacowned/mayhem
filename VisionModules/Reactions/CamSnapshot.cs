@@ -11,12 +11,12 @@ using MayhemOpenCVWrapper;
 using System.Drawing;
 using System.Diagnostics;
 
-namespace VisionModules.Action
+namespace VisionModules.Reactions
 {
     [Serializable]
     public class CamSnapshot : ReactionBase, IWpf, ISerializable
     {
-        public static string TAG = "[VisionModules.Action.CamSnapshot] : ";
+        public static string TAG = "[VisionModules.Reaction.CamSnapshot] : ";
 
         protected string folderLocation = "";
 

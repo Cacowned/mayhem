@@ -8,7 +8,7 @@ using MayhemOpenCVWrapper;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace VisionModules
+namespace VisionModules.Actions
 {
     [Serializable]
     public class MotionDetectorAction : ActionBase, IWpf, ISerializable
@@ -74,7 +74,7 @@ namespace VisionModules
 
                 Debug.WriteLine(TAG + "m_OnMotionUpdate");
 
-               // trigger the readction
+               // trigger the reaction
                 base.OnActionActivated();
 
                 lastMotionDetected = DateTime.Now;
