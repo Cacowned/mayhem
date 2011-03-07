@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace DefaultModules.Wpf
 {
@@ -9,33 +10,38 @@ namespace DefaultModules.Wpf
 	public partial class SmsMessageConfig : Window
 	{
 		public string to;
-		public string subject;
 		public string msg;
-		public string mailServer;
-		public string from;
+
+		public string carrierString;
+
+		protected Dictionary<string, string> carriers;
 
 		// TODO: This is probably a security hole
 		public string password;
 
-		public SmsMessageConfig(string to, string subject, string message, string mailserver, string from, string password) {
-			InitializeComponent();
+		public SmsMessageConfig(string to, string message, Dictionary<string, string> carriers) {
+			this.to = to;
+			this.msg = message;
+			this.carriers = carriers;
 
-			this.to = ToBox.Text = to;
-			this.subject = SubjectBox.Text = subject;
-			this.msg = MsgBox.Text = message;
-			this.mailServer = ServerBox.Text = mailserver;
-			this.from = FromBox.Text = from;
-			this.password = PasswordBox.Password = password;
+			InitializeComponent();			
+		}
+
+		protected override void OnInitialized(System.EventArgs e) {
+			base.OnInitialized(e);
+
+			ToBox.Text = to;
+			MsgBox.Text = msg;
+			Carrier.ItemsSource = this.carriers.Keys;
+
+			Carrier.SelectedIndex = 0;
 		}
 
 		private void Button_Save_Click(object sender, RoutedEventArgs e) {
 
 			to = ToBox.Text;
-			subject = SubjectBox.Text;
 			msg = MsgBox.Text;
-			mailServer = ServerBox.Text;
-			from = FromBox.Text;
-			password = PasswordBox.Password;
+			carrierString = carriers[Carrier.SelectedValue.ToString()];
 
 			DialogResult = true;
 		}
