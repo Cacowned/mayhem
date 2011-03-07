@@ -4,3 +4,5 @@ glob:*.suo
 glob:*.suo.orig
 glob:*.vs10x
 glob:*.user
+syntax: glob
+Debug
