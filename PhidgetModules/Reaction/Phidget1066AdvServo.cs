@@ -70,7 +70,12 @@ namespace PhidgetModules.Reaction
 
 		public override void Perform() {
             //advServo.servos[0].Engaged = true;
-			advServo.servos[0].Position = position;
+			
+			// If we have a servo, use the first one. 
+			// TODO: This should be configurable
+			if (advServo.servos.Count >= 1) {
+				advServo.servos[0].Position = position;
+			}
             
 		}
 

@@ -12,7 +12,7 @@ namespace PhidgetModules.Action
 	[Serializable]
 	public class Phidget1023RFID : ActionBase, IWpf, ISerializable
 	{
-		protected static RFID rfid;
+		protected RFID rfid;
 
 		protected TagEventHandler gotTag;
 
@@ -29,10 +29,7 @@ namespace PhidgetModules.Action
 		protected virtual void Setup() {
 			hasConfig = true;
 
-			if (rfid == null) {
-				rfid = new RFID();
-				rfid.open();
-			}
+			rfid = InterfaceFactory.GetRFID();
 
 			gotTag = new TagEventHandler(rfidTag);
 			lostTag = new TagEventHandler(lostRfidTag);
@@ -41,7 +38,7 @@ namespace PhidgetModules.Action
 
 		public void WpfConfig() {
 
-			var window = new Phidget1023RFIDConfig(rfid, ourTag);
+			var window = new Phidget1023RFIDConfig(ourTag);
 			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
 			window.ShowDialog();
