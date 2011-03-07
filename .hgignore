@@ -10,3 +10,5 @@ glob:*.cache
 glob:*.opensdf
 glob:Release/
 glob:Debug/
+syntax: glob
+Mayhem-Dev.sdf
