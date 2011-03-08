@@ -84,11 +84,13 @@ namespace VisionModules.Wpf
         {
             if (this.IsVisible)
             {
+                if (!cam.running) cam.StartFrameGrabbing();
                 cam.OnImageUpdated += imageUpdateHandler;
             }
             else
             {
                 cam.OnImageUpdated -= imageUpdateHandler;
+                cam.TryStopFrameGrabbing();
             }
         }
 

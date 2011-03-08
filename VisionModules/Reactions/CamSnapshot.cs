@@ -102,8 +102,7 @@ namespace VisionModules.Reactions
             {
                 cam = i.cameras_available[selected_device_idx];
                 if (cam.running == false)
-                    cam.StartFrameGrabbing();
-
+                   cam.StartFrameGrabbing();
             }
            
            
@@ -115,12 +114,15 @@ namespace VisionModules.Reactions
            
             // unhook image callback
             cam.OnImageUpdated -= this.imageUpdateHandler;
+
+            cam.TryStopFrameGrabbing();
         }
 
         public override void Perform()
         {
 
             // hook up image callback 
+
 
             cam.OnImageUpdated += this.imageUpdateHandler;
 

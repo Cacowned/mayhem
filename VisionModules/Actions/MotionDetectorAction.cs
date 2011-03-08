@@ -131,8 +131,10 @@ namespace VisionModules.Actions
             base.Disable();
             Debug.WriteLine(TAG + "DisableTrigger");
             // de-register the trigger's motion update handler
-        
+            m.UnregisterForImages(cam);
             m.OnMotionUpdate -= motionUpdateHandler;
+            // try to shut down the camera
+            cam.TryStopFrameGrabbing();
         }
 
         #region Serialization
