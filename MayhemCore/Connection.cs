@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Runtime.Serialization;
+using System.Diagnostics;
 namespace MayhemCore
 {
 	/// <summary>
@@ -30,10 +31,17 @@ namespace MayhemCore
 		}
 
 		~Connection() {
-			Action.Disable();
-			Reaction.Disable();
-			Action = null;
-			Reaction = null;
+            try
+            {
+                Action.Disable();
+                Reaction.Disable();
+                Action = null;
+                Reaction = null;
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine("Null Reference Exception " + e);
+            }
 		}
 
 		/// <summary>

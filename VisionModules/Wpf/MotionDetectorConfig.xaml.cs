@@ -25,7 +25,8 @@ namespace VisionModules.Wpf
         public const string TAG = "[MotionDetectorConfig] :";
         private MayhemCameraDriver i = MayhemCameraDriver.Instance;
         private Camera.ImageUpdateHandler imageUpdateHandler;
-        private Camera cam = null; 
+        private Camera cam = null;
+        public Camera selected_camera = null; 
 
         private delegate void SetCameraImageSource();
 
@@ -38,6 +39,7 @@ namespace VisionModules.Wpf
             imageUpdateHandler = new Camera.ImageUpdateHandler(i_OnImageUpdated);
 
 
+            /*
             if (i.cameras_available.Length > 0)
             {
                 cam = i.cameras_available[0];
@@ -46,7 +48,31 @@ namespace VisionModules.Wpf
             else
             {
                 Debug.WriteLine(TAG+"No camera available");
+            }*/
+
+            // populate device list
+
+            foreach (Camera c in i.cameras_available)
+            {
+                DeviceList.Items.Add(c);
             }
+
+            DeviceList.SelectedIndex = 0;
+
+            if (i.devices_available.Length > 0)
+            {
+
+                // start the camera 0 if it isn't already running
+                cam = i.cameras_available[0];
+                if (!cam.running) cam.StartFrameGrabbing();
+                Debug.WriteLine(TAG + "using " + cam.info.ToString());
+            }
+            else
+            {
+                Debug.WriteLine(TAG + "No camera available");
+            }
+
+
 
         }
 
@@ -146,7 +172,12 @@ namespace VisionModules.Wpf
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            selected_camera = DeviceList.SelectedItem as Camera;
+            // cam.OnImageUpdated -= imageUpdateHandler;
+
+            cam = selected_camera;
+            DialogResult = true;        
+            
         }
 
         private void Button_Cancel_Click(object sender, RoutedEventArgs e)
