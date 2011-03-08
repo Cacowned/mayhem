@@ -156,9 +156,10 @@ namespace VisionModules.Wpf
 
 		private void Button_Save_Click(object sender, RoutedEventArgs e) {
 	
-
             selected_camera = DeviceList.SelectedItem as Camera;
+            // cam.OnImageUpdated -= imageUpdateHandler;
 
+            cam = selected_camera; 
 			DialogResult = true;
 		}
 
