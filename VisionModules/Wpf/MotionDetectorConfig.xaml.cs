@@ -64,7 +64,7 @@ namespace VisionModules.Wpf
 
                 // start the camera 0 if it isn't already running
                 cam = i.cameras_available[0];
-                if (!cam.running) cam.StartFrameGrabbing();
+                // if (!cam.running) cam.StartFrameGrabbing();
                 Debug.WriteLine(TAG + "using " + cam.info.ToString());
             }
             else
@@ -85,10 +85,12 @@ namespace VisionModules.Wpf
         {
             if (this.IsVisible)
             {
+                if (!cam.running) cam.StartFrameGrabbing();
                 cam.OnImageUpdated += imageUpdateHandler;
             }
             else
             {
+
                 cam.OnImageUpdated -= imageUpdateHandler;
             }
         }
