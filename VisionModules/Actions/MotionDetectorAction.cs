@@ -38,24 +38,23 @@ namespace VisionModules.Actions
         
         public void Setup() {
 
-          
-            /*
-            if (i.cameras_available.Length > 0)
+
+
+            if (selected_device_idx < i.devices_available.Length)
             {
-                cam = i.cameras_available[0];
-                if (!cam.running) cam.StartFrameGrabbing();
+                cam = i.cameras_available[selected_device_idx];
             }
             else
             {
                 Debug.WriteLine(TAG + "No camera available");
-            } */
+            } 
 
             m = new MayhemOpenCVWrapper.MotionDetector(320, 240);
             motionUpdateHandler = new MayhemOpenCVWrapper.MotionDetector.MotionUpdateHandler(m_OnMotionUpdate);
 
-          hasConfig = true;
+              hasConfig = true;
           
-          SetConfigString();
+              SetConfigString();
         }
 
 
@@ -101,7 +100,7 @@ namespace VisionModules.Actions
                
                 if (this.Enabled) this.Disable();
                 // assign selected cam
-                cam = window.DeviceList.SelectedItem as Camera;
+                cam = window.selected_camera;
 
                 if (wasEnabled) this.Enable();
                
@@ -181,8 +180,17 @@ namespace VisionModules.Actions
         {
             base.GetObjectData(info, context);
             // code goes here
-            info.AddValue("CameraID", (Int32)cam.info.deviceId);
-            info.AddValue("CameraName", cam.info.description);
+            if (cam != null)
+            {
+                info.AddValue("CameraID", (Int32)cam.info.deviceId);
+                info.AddValue("CameraName",  cam.info.description);
+            }
+            else
+            {
+                info.AddValue("CameraID", (Int32) 0);
+                info.AddValue("CameraName", "Unknown");
+            }
+           
 
 
         }

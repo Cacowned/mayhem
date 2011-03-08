@@ -212,12 +212,7 @@ namespace MayhemOpenCVWrapper
                     }
                 }
 
-                if (OnImageUpdated != null)
-                {
-                    Debug.Write("Camera: new Frame!");
-                    OnImageUpdated(this, new EventArgs());
-                }
-
+               
                 if (running)
                 {
                     Thread.Sleep(frameInterval);
@@ -226,6 +221,13 @@ namespace MayhemOpenCVWrapper
                 {
                     break;
                 }
+
+                if (OnImageUpdated != null)
+                {
+                    Debug.Write("Camera: new Frame!");
+                    OnImageUpdated(this, new EventArgs());
+                }
+
 
             }
             Debug.WriteLine(TAG + "GrabFrame Thread terminated");
