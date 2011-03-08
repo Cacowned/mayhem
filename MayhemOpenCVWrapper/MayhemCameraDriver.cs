@@ -150,6 +150,13 @@ namespace MayhemOpenCVWrapper
         // removing handlers
         // i.e. if this.OnImageUpdates == null after
         // OnImageUpdate-= blah, execute StopGrabbing()
+
+        /// <summary>
+        /// This method will try to deactivate the camera.
+        /// The camera will be deactivated if there are no handlers left
+        /// attached to OnImageUpdated
+        /// </summary>
+        /// <returns>Success of the deactivation procedure.</returns>
         public bool TryStopFrameGrabbing()
         {
             if (this.OnImageUpdated == null)

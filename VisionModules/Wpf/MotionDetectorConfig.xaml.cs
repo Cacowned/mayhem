@@ -92,7 +92,6 @@ namespace VisionModules.Wpf
             {
 
                 cam.OnImageUpdated -= imageUpdateHandler;
-
                 cam.TryStopFrameGrabbing();
             }
         }
