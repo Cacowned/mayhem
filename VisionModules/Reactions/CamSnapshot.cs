@@ -43,13 +43,11 @@ namespace VisionModules.Reactions
             SetConfigString();
             imageUpdateHandler = new Camera.ImageUpdateHandler(i_OnImageUpdated);
 
-            /*
-            if (selected_device < i.devices_available.Length)
+            
+            if (selected_device_idx < i.devices_available.Length)
             {
-                cam = i.cameras_available[selected_device];
-                if (cam.running == false)
-                    cam.StartFrameGrabbing();
-            }*/ 
+                cam = i.cameras_available[selected_device_idx];
+            } 
 
 
         }
