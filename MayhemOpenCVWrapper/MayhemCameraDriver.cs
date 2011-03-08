@@ -94,7 +94,7 @@ namespace MayhemOpenCVWrapper
         {
             this.info = info;
             this.settings = settings;
-            InitializeCaptureDevice(info, settings);
+            // InitializeCaptureDevice(info, settings);
         }
 
         /// <summary>
@@ -125,6 +125,11 @@ namespace MayhemOpenCVWrapper
 
         public void StartFrameGrabbing()
         {
+            if (!is_initialized)
+            {
+                InitializeCaptureDevice(info, settings);
+            }
+
             Thread grabFrm = new Thread(GrabFrames);
             try
             {
@@ -299,98 +304,7 @@ namespace MayhemOpenCVWrapper
             return c;
         }
 
-        // old crufty code from this module (is now implemented by each camera) 
-        ///**<summary>
-        // * Initialiazes the capture device with the correct resolution
-        // * Starts grabbing frames through the device
-        // * Checks if there are devices available and that a device hasn't been selected yet.
-        // * </summary>
-        // */ 
-        //public void InitCaptureDevice(int device, int width, int height)
-        //{
-
-        //    this.running = false;
-        //    if (devices_available != null && this.selected_device == null)
-        //    {
-        //        cWidth = width;
-        //        cHeight = height;
-        //        OpenCVDLL.OpenCVBindings.InitCapture(device, width, height);
-        //        bufSize = OpenCVDLL.OpenCVBindings.GetImageSize();
-        //        imageBuffer = new byte[bufSize];
-        //        selected_device = devices_available[device];
-        //        StartFrameGrabbing();
-        //    }
-        //    else
-        //    {
-        //        Debug.WriteLine("No Cameras Available");
-        //    }
-        //}
-
-        //public void StartFrameGrabbing()
-        //{
-        //    Thread grabFrm = new Thread(GrabFrames);
-        //    try
-        //    {
-        //        grabFrm.Start();
-        //        this.running = true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine("Exception while trying to start Framegrab");
-        //        Debug.WriteLine(e.ToString());
-        //    }
-        //}
-
-        //public void GrabFrames()
-        //{
-        //    running = true;
-
-        //    while (running)
-        //    {
-        //        lock (thread_locker)
-        //        {
-        //            unsafe
-        //            {
-
-        //                fixed (byte* ptr = imageBuffer)
-        //                {
-        //                    try
-        //                    {
-        //                        OpenCVDLL.OpenCVBindings.GetNextFrame(ptr);
-        //                    }
-        //                    catch (Exception e)
-        //                    {
-        //                        Debug.WriteLine("Cam Exception " + e);
-        //                        // shutdown cam
-        //                        running = false;
-        //                    }
-        //                }
-        //            }
-        //        }
-
-        //        if (OnImageUpdated != null)
-        //        {
-        //            Debug.Write("Camera: new Frame!");
-        //            OnImageUpdated(this, new EventArgs());
-        //        }
-
-        //        Thread.Sleep(frameInterval);
-
-        //    }
-        //}
-
-        //public void Stop()
-        //{
-        //    running = false;
-
-        //}
-
-        //public void ReleaseDevice()
-        //{
-        //    running = false;
-        //    OpenCVDLL.OpenCVBindings.StopCamera(this.selected_device.deviceId);
-        //    this.selected_device = null;
-        //}
+       
     
 
     }
