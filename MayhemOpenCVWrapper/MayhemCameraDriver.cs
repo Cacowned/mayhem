@@ -69,7 +69,7 @@ namespace MayhemOpenCVWrapper
     /// </summary>
     public class Camera
     {
-        public const string TAG = "[Camera] :";
+        public const string TAG = "[Camera] : ";
 
 
         public CameraInfo info;
@@ -88,6 +88,8 @@ namespace MayhemOpenCVWrapper
 
         // (ms) : update rate with which the camera thread requests new images
         private int frameInterval;
+
+        private Thread grabFrm = null;
 
 
         public Camera(CameraInfo info, CameraSettings settings)
@@ -130,7 +132,7 @@ namespace MayhemOpenCVWrapper
                 InitializeCaptureDevice(info, settings);
             }
 
-            Thread grabFrm = new Thread(GrabFrames);
+            grabFrm = new Thread(GrabFrames);
             try
             {
                 grabFrm.Start();
@@ -143,7 +145,39 @@ namespace MayhemOpenCVWrapper
             }
         }
 
-        public void GrabFrames()
+
+        // TODO: override the event handler and just add this to the process of 
+        // removing handlers
+        // i.e. if this.OnImageUpdates == null after
+        // OnImageUpdate-= blah, execute StopGrabbing()
+        public bool TryStopFrameGrabbing()
+        {
+            if (this.OnImageUpdated == null)
+            {
+                Debug.WriteLine(TAG + " shutting down camera");
+                //  Stop device
+                StopGrabbing();
+                return true;
+            }
+            else
+            {
+                Debug.WriteLine(TAG + " handlers still attached, not shutting down camera");
+                return false;
+            }
+        }
+
+        private void StopGrabbing()
+        {
+            is_initialized = false;
+            running = false;
+            // Wait for frame grab thread to end or 500ms timeout to elapse
+            if (grabFrm.IsAlive)
+             grabFrm.Join(500);
+            OpenCVDLL.OpenCVBindings.StopCamera(this.info.deviceId);
+
+        }
+
+        private void GrabFrames()
         {
             running = true;
 
@@ -177,9 +211,17 @@ namespace MayhemOpenCVWrapper
                     OnImageUpdated(this, new EventArgs());
                 }
 
-                Thread.Sleep(frameInterval);
+                if (running)
+                {
+                    Thread.Sleep(frameInterval);
+                }
+                else
+                {
+                    break;
+                }
 
             }
+            Debug.WriteLine(TAG + "GrabFrame Thread terminated");
         }
 
         public void Release()
