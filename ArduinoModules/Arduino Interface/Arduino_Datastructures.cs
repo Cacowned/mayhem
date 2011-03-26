@@ -7,23 +7,22 @@ namespace ArduinoModules.Arduino_Interface
 {
     public enum PinMode { INPUT, OUTPUT };
 
-    public struct DigitalPin
+    public struct DigitalIO
     {
-        public PinMode pin_mode;
-        public bool pin_state;
-
-        public DigitalPin()
-        {
-            pin_mode = PinMode.INPUT;
-            pin_state = false;
-        }
+        public PinMode pin_mode = PinMode.INPUT;
+        public bool pin_state = false;
     }
 
-    public struct AnalogIn
+    public struct AnalogInput
     {
         public PinMode pin_mode = PinMode.INPUT;
         // 16 bit sampling
         public UInt16 value = 0; 
- 
+    }
+
+    public struct AnalogOutput
+    {
+        public PinMode pin_mode = PinMode.OUTPUT;
+        public UInt16 value = 0; 
     }
 }
