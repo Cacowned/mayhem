@@ -6,6 +6,8 @@ namespace PhidgetModules
 	{
 		private static InterfaceKit ifKit;
 		private static RFID rfid;
+        private static IR ir;
+
 
 		public static InterfaceKit GetInterface() {
 			if (ifKit == null) {
@@ -24,5 +26,16 @@ namespace PhidgetModules
 
 			return rfid;
 		}
+
+        public static IR GetIR()
+        {
+            if (ir == null)
+            {
+                ir = new IR();
+                ir.open();
+            }
+
+            return ir;
+        }
 	}
 }
