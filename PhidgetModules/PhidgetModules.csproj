@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Action\DigitalInput.cs" />
     <Compile Include="Action\Phidget1023RFID.cs" />
+    <Compile Include="Action\Phidget1055IRReceive.cs" />
     <Compile Include="Action\Phidget1101IRDistance.cs" />
     <Compile Include="Action\Phidget1103IRReflective.cs" />
     <Compile Include="Action\Phidget1106Force.cs" />
@@ -62,6 +63,9 @@
     <Compile Include="Reaction\Phidget1066AdvServo.cs" />
     <Compile Include="Wpf\Phidget1023RFIDConfig.xaml.cs">
       <DependentUpon>Phidget1023RFIDConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Phidget1055IRReceiveConfig.xaml.cs">
+      <DependentUpon>Phidget1055IRReceiveConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\Phidget1066AdvServoConfig.xaml.cs">
       <DependentUpon>Phidget1066AdvServoConfig.xaml</DependentUpon>
@@ -112,6 +116,10 @@
     <Page Include="Wpf\Phidget1023RFIDConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\Phidget1055IRReceiveConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\Phidget1066AdvServoConfig.xaml">
       <SubType>Designer</SubType>

@@ -90,13 +90,6 @@
     <Compile Include="Reactions\RunProgram.cs" />
     <Compile Include="Reactions\SmsMessage.cs" />
     <Compile Include="Reactions\TextToSpeech.cs" />
-    <None Include="Reactions\Disabled\WebcamSnapshot.cs">
-      <SubType>Code</SubType>
-    </None>
-    <Compile Include="WebcamHelpers\ComBitmap.cs" />
-    <Compile Include="WebcamHelpers\Device.cs" />
-    <Compile Include="WebcamHelpers\ImageCapture.cs" />
-    <Compile Include="WebcamHelpers\Webcam.cs" />
     <Compile Include="Wpf\DebugMessageConfig.xaml.cs">
       <DependentUpon>DebugMessageConfig.xaml</DependentUpon>
     </Compile>
@@ -115,19 +108,11 @@
     <Compile Include="Wpf\TimerConfig.xaml.cs">
       <DependentUpon>TimerConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\WebcamSnapshotConfig.xaml.cs">
-      <DependentUpon>WebcamSnapshotConfig.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Wpf\XboxButtonConfig.xaml.cs">
       <DependentUpon>XboxButtonConfig.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DirectShowDotNet\DirectShowLib-2008.csproj">
-      <Project>{CE009BFA-5EF6-4153-B2A1-2FA79698A9AE}</Project>
-      <Name>DirectShowLib-2008</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MayhemCore\MayhemCore.csproj">
       <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
       <Name>MayhemCore</Name>
@@ -188,10 +173,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\TimerConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wpf\WebcamSnapshotConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
