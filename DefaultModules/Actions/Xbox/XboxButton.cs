@@ -49,8 +49,18 @@ namespace DefaultModules.Actions.Xbox
 		}
 
 		public override void Enable() {
-			base.Enable();
-			bw.RunWorkerAsync();
+            // Lets check if a controller is plugged in before enabling
+            var state = GamePad.GetState(player);
+            if (!state.IsConnected)
+            {
+                ErrorLog.AddError(ErrorType.Warning, "Xbox Controller is not plugged in. Not Enabling.");
+            }
+            else
+            {
+                // If it is connected, lets enable
+                base.Enable();
+                bw.RunWorkerAsync();
+            }
 		}
 
 		public override void Disable() {
@@ -58,6 +68,11 @@ namespace DefaultModules.Actions.Xbox
 			bw.CancelAsync();
 		}
 
+        /// <summary>
+        /// This method checks for input on a gamepad
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 		protected void WatchButtons(object sender, DoWorkEventArgs e) {
 			bool wasEqual = false;
 
@@ -68,16 +83,30 @@ namespace DefaultModules.Actions.Xbox
 				if (worker.CancellationPending == true)
 					return;
 
-				var state2 = GamePad.GetState(player).Buttons;
-				bool isEqual = StateEquals(state2);
-				if (wasEqual == false && isEqual == true) {
-					// It doesn't matter what we return
-					worker.ReportProgress(0);
-				}
+				var state2 = GamePad.GetState(player);
+                if (!state2.IsConnected)
+                {
+                    ErrorLog.AddError(ErrorType.Warning, "Xbox Controller is not plugged in. Waiting longer before next check.");
+                    // It's not plugged in, we might as well wait a full second
+                    // before checking again
+                    Thread.Sleep(1000);
+                }
+                else
+                {
+                    var buttons = state2.Buttons;
 
-				wasEqual = isEqual;
+                    bool isEqual = StateEquals(buttons);
+                    if (wasEqual == false && isEqual == true)
+                    {
+                        // It doesn't matter what we return
+                        // We call this when they are equal to trigger the action
+                        worker.ReportProgress(0);
+                    }
 
-				Thread.Sleep(50);
+                    wasEqual = isEqual;
+
+                    Thread.Sleep(50);
+                }
 			}
 		}
 
@@ -122,10 +151,18 @@ namespace DefaultModules.Actions.Xbox
 		}
 
 		public void WpfConfig() {
+            // TODO: This only works here because we've hard coded the first controller
+            // We need to make which controller configurable, then this 
+            // will need to go into the config window.
+            var state2 = GamePad.GetState(player);
+            if (!state2.IsConnected)
+            {
+                ErrorLog.AddError(ErrorType.Warning, "You must plug an Xbox Controller in to configure the buttons.");
+                return;
+            }
+
 			var window = new XboxButtonConfig(buttons);
 			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-
 
 			window.ShowDialog();
 

@@ -23,7 +23,7 @@ namespace MayhemCore
 			}
 		}
 
-		protected bool Enabled { get; set; }
+		public bool Enabled { get; private set; }
 
 		public string Name {
 			get;

@@ -30,14 +30,17 @@ namespace DefaultModules.Actions.Office.Outlook
 
 
 		public override void Enable() {
-			base.Enable();
+			
 
 			// When enabled, try and get the outlook instance
 			try {
 				outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
 			} catch (Exception e) {
-				Debug.Write(e);
+                ErrorLog.AddError(ErrorType.Warning, "Unable to find the open Outlook application");
+                return;
 			}
+
+            base.Enable();
 
 			outlook.Reminder += reminderEvent;
 

@@ -143,19 +143,48 @@ namespace MayhemWpf
 			Mayhem.ConnectionList.Remove(c);
 		}
 
+
 		private void OnOffClick(object sender, RoutedEventArgs e) {
 			ToggleButton button = (ToggleButton)sender;
 			Connection c = button.Tag as Connection;
 
-			Debug.WriteLine("On/Off clicked on " + c.Action.Name);
+			//Debug.WriteLine("On/Off clicked on " + c.Action.Name);
 
 			if (!c.Enabled) {
 				c.Enable();
+
+                if (c.Enabled)
+                {
+                    //Debug.WriteLine("Connection is enabled");
+                }
+                else
+                {
+                    //Debug.WriteLine("Connection didn't enable.");
+
+                    // We wanted to enable it, and it didn't enable
+                    // mark the event as handled so it doesn't
+                    // flip the button
+                    button.IsChecked = false;
+                    e.Handled = true;
+                }
+
 			} else {
 				c.Disable();
-			}
 
-			Debug.WriteLine("Connection is enabled: " + c.Enabled);
+                if (c.Enabled)
+                {
+                    //Debug.WriteLine("Connection didn't disable.");
+                    // We wanted to disable it, and it didn't disable
+                    // mark the event as handled so it doesn't
+                    // flip the button
+                    button.IsChecked = true;
+                    e.Handled = true;
+                }
+                else
+                {
+                    //Debug.WriteLine("Connection disabled");
+                }
+			}
 		}
 
 		private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e) {
@@ -198,5 +227,7 @@ namespace MayhemWpf
 		private void MayhemMainWindow_Closed(object sender, EventArgs e) {
 			Debug.WriteLine("Done");
 		}
+
+        
 	}
 }
