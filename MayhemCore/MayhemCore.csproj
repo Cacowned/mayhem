@@ -49,6 +49,7 @@
     <Compile Include="ActionList.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionList.cs" />
+    <Compile Include="ErrorLog.cs" />
     <Compile Include="Mayhem.cs" />
     <Compile Include="ModuleBase.cs" />
     <Compile Include="ModuleList.cs" />
