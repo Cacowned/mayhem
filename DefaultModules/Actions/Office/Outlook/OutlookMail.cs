@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using MayhemCore;
@@ -46,11 +45,14 @@ namespace DefaultModules.Actions.Office.Outlook
 
 		public override void Disable() {
 			
-            // Sometimes outlook is null here
+            // TODO: Sometimes outlook is null here
             // how is that possible?
-			outlook.NewMail -= mailEvent;
+            if (outlook != null)
+            {
+                outlook.NewMail -= mailEvent;
 
-			outlook = null;
+                outlook = null;
+            }
 
             base.Disable();
 		}

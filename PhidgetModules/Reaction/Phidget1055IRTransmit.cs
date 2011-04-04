@@ -1,30 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
+using System.Windows;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using System.Runtime.Serialization;
 using Phidgets;
-using Phidgets.Events;
-using PhidgetModules.Wpf;
-using System.Windows;
 
-namespace PhidgetModules.Action
+namespace PhidgetModules.Reaction
 {
     [Serializable]
-    public class Phidget1055IRReceive : ActionBase, IWpf, ISerializable
+    public class Phidget1055IRTransmit : ReactionBase, IWpf, ISerializable
     {
         protected IR ir;
 
-        protected IRCodeEventHandler gotCode;
-
+        // This is the code and code information that we will
+        // transmit
         protected IRCode code;
-
-        protected DateTime lastSignal;
+        protected IRCodeInfo codeInfo;
         
-        public Phidget1055IRReceive()
-            : base("Phidget-1055: IR Receive", "Triggers when it sees a certain IR code")
+        public Phidget1055IRTransmit()
+            : base("Phidget-1055: IR Transmit", "Sends an IR code")
         {
             Setup();
         }
@@ -35,14 +29,13 @@ namespace PhidgetModules.Action
 
             ir = InterfaceFactory.GetIR();
 
-            gotCode = new IRCodeEventHandler(ir_Code);
             SetConfigString();
         }
 
         public void WpfConfig()
         {
 
-            var window = new Phidget1055IRReceiveConfig(code);
+            var window = new Phidget1055IRTransmitConfig(code, codeInfo);
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             window.ShowDialog();
@@ -50,6 +43,7 @@ namespace PhidgetModules.Action
             if (window.DialogResult == true)
             {
                 code = window.Code;
+                codeInfo = window.CodeInfo;
 
                 SetConfigString();
             }
@@ -60,48 +54,32 @@ namespace PhidgetModules.Action
             ConfigString = String.Format("IR Code 0x{0}", code);
         }
 
-        // When we receive a code
-        void ir_Code(object sender, IRCodeEventArgs e)
+        public override void Perform()
         {
-            // If the data matches,
-            // Do we care about the number of times it was repeated?
-            if (code.Data.SequenceEqual(e.Code.Data))
+            if (code != null && codeInfo != null)
             {
-                // We need to make a timeout for the IR
-                TimeSpan diff = DateTime.Now - lastSignal;
-                if (diff.TotalMilliseconds >= 750)
-                {
-
-                    // then trigger
-                    OnActionActivated();
-                }
-
-                lastSignal = DateTime.Now;
+                ir.transmit(code, codeInfo);
+                ir.transmitRepeat();
             }
         }
 
         public override void Enable()
         {
             base.Enable();
-            ir.Code += gotCode;
         }
 
         public override void Disable()
         {
             base.Disable();
-
-            if (ir != null)
-            {
-                ir.Code -= gotCode;
-            }
         }
 
         #region Serialization
 
-        public Phidget1055IRReceive(SerializationInfo info, StreamingContext context)
+        public Phidget1055IRTransmit(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             code = (IRCode)info.GetValue("Code", typeof(IRCode));
+            codeInfo = (IRCodeInfo)info.GetValue("CodeInfo", typeof(IRCodeInfo));
             Setup();
 
         }
@@ -111,6 +89,7 @@ namespace PhidgetModules.Action
             base.GetObjectData(info, context);
 
             info.AddValue("Code", code);
+            info.AddValue("CodeInfo", codeInfo);
         }
         #endregion
     }
