@@ -4,15 +4,16 @@
         xmlns:mayhem="clr-namespace:MayhemCore;assembly=MayhemCore"
 		xmlns:src="clr-namespace:MayhemWpf.UserControls"
         xmlns:common="clr-namespace:MayhemDefaultStyles.UserControls;assembly=MayhemDefaultStyles"
+		xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
 		Title="Mayhem" Height="600" Width="600" ResizeMode="CanMinimize"
 		x:Name="MayhemMainWindow"
 		Closing="AppClosing"
 		Closed="MayhemMainWindow_Closed">
-	<Window.Resources>     
+	<Window.Resources>
 		<Style x:Key="ConfigurationStringStyle">
 			<Setter Property="Control.FontStyle" Value="Italic" />
 		</Style>
-		
+
 		<Style TargetType="{x:Type ToggleButton}">
 			<Setter Property="Width" Value="35" />
 			<Setter Property="Content" Value="On"/>
@@ -22,7 +23,7 @@
 				</Trigger>
 			</Style.Triggers>
 		</Style>
-		
+
 		<Style TargetType="{x:Type Button}" x:Key="ActionButton">
 			<Setter Property="HorizontalAlignment" Value="Center" />
 			<Setter Property="Foreground" Value="White" />
@@ -44,7 +45,7 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		
+
 		<Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="ReactionButton">
 			<Setter Property="Background">
 				<Setter.Value>
@@ -70,66 +71,74 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		
-		
+
+
 	</Window.Resources>
 	<Grid>
-        <Rectangle  x:Name="DimRectangle" Margin="2,0,-2,0" Style="{StaticResource UserControlOverlayRectangleStyle}">
-            <Rectangle.Resources>
-                <Storyboard x:Key="FadeIn">
-                    <DoubleAnimation To="0.8" Duration="00:00:00.5" Storyboard.TargetName="DimRectangle" Storyboard.TargetProperty="(Rectangle.Opacity)" />
-                </Storyboard>
-                <Storyboard x:Key="FadeOut">
-                    <DoubleAnimation To="0" Duration="00:00:00.20" Storyboard.TargetName="DimRectangle" Storyboard.TargetProperty="(Rectangle.Opacity)" />
-                </Storyboard>
-            </Rectangle.Resources>
-        </Rectangle>
+		<Rectangle  x:Name="DimRectangle" Margin="2,0,-2,0" Style="{StaticResource UserControlOverlayRectangleStyle}">
+			<Rectangle.Resources>
+				<Storyboard x:Key="FadeIn">
+					<DoubleAnimation To="0.8" Duration="00:00:00.5" Storyboard.TargetName="DimRectangle" Storyboard.TargetProperty="(Rectangle.Opacity)" />
+				</Storyboard>
+				<Storyboard x:Key="FadeOut">
+					<DoubleAnimation To="0" Duration="00:00:00.20" Storyboard.TargetName="DimRectangle" Storyboard.TargetProperty="(Rectangle.Opacity)" />
+				</Storyboard>
+			</Rectangle.Resources>
+		</Rectangle>
 
-        <DockPanel>
-            <RichTextBox DockPanel.Dock="Bottom" MaxHeight="150" MinHeight="0">
-                
-            </RichTextBox>
-            
-            <StackPanel Style="{StaticResource BackgroundGradient}">   
-                <common:WindowHeader Text="Mayhem" />
+		<DockPanel>
+			<DockPanel.Resources>
+				<DataTemplate x:Key="myStyle" >
+					<TextBlock>Foo</TextBlock>
+				</DataTemplate>
+			</DockPanel.Resources>
+			<ListBox Background="Red" 
+					 ItemTemplate="{StaticResource myStyle}"  
+					 DockPanel.Dock="Bottom" MaxHeight="150" MinHeight="150" 
+					 ItemsSource="{Binding Mode=OneWay, Source={x:Static mayhem:ErrorLog.Errors}}" >
+					 
 
-                <common:Borders>
-                    <StackPanel Orientation="Vertical">
-						    <UniformGrid Rows="1" Columns="2" Height="40" Margin="0,0,0,10">
-							    <Button Style="{StaticResource ActionButton}" Width="176" Click="ActionListClick">
-                                    <TextBlock Margin="0,0,15,0" Text="{Binding Action.Name, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+			</ListBox>
 
+			<StackPanel Style="{StaticResource BackgroundGradient}">
+				<common:WindowHeader Text="Mayhem" />
+
+				<common:Borders>
+					<StackPanel Orientation="Vertical">
+						<UniformGrid Rows="1" Columns="2" Height="40" Margin="0,0,0,10">
+							<Button Style="{StaticResource ActionButton}" Width="176" Click="ActionListClick">
+								<TextBlock Margin="0,0,15,0" Text="{Binding Action.Name, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                                         Choose an Action
-                                    </TextBlock>
-							    </Button>
-							    <Button Style="{StaticResource ReactionButton}" Width="176" Click="ReactionListClick">
-								    <TextBlock Margin="15,0,0,0">
+								</TextBlock>
+							</Button>
+							<Button Style="{StaticResource ReactionButton}" Width="176" Click="ReactionListClick">
+								<TextBlock Margin="15,0,0,0">
                                         Choose a Reaction
-                                    </TextBlock>
-							    </Button>
-						    </UniformGrid>
-                        <ItemsControl x:Name="RunList">
-				
-						    <ItemsControl.ItemTemplate>
-							    <DataTemplate>
-								    <Border BorderThickness="0,0,0,1" BorderBrush="#FFD4D4D4">
-									    <StackPanel Orientation="Horizontal">
-								
-										    <src:ModuleView Module="{Binding Action}" />
-										    <src:ModuleView Module="{Binding Reaction}" />
-										    <StackPanel Orientation="Horizontal">
-											    <Button Canvas.Right="40" Tag="{Binding}" Click="DeleteConnectionClick">Delete</Button>
-											    <ToggleButton x:Name="OnOffButton" Canvas.Right="0" Tag="{Binding}" IsChecked="{Binding Path=Enabled, Mode=OneWay}" Click="OnOffClick" />
-										    </StackPanel>
-									    </StackPanel>
-								    </Border>
-							    </DataTemplate>
-						    </ItemsControl.ItemTemplate>
-				
-					    </ItemsControl>
-				    </StackPanel>
-                </common:Borders>
-		    </StackPanel>
-        </DockPanel>
-    </Grid>
+								</TextBlock>
+							</Button>
+						</UniformGrid>
+						<ItemsControl x:Name="RunList">
+
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border BorderThickness="0,0,0,1" BorderBrush="#FFD4D4D4">
+										<StackPanel Orientation="Horizontal">
+
+											<src:ModuleView Module="{Binding Action}" />
+											<src:ModuleView Module="{Binding Reaction}" />
+											<StackPanel Orientation="Horizontal">
+												<Button Canvas.Right="40" Tag="{Binding}" Click="DeleteConnectionClick">Delete</Button>
+												<ToggleButton x:Name="OnOffButton" Canvas.Right="0" Tag="{Binding}" IsChecked="{Binding Path=Enabled, Mode=OneWay}" Click="OnOffClick" />
+											</StackPanel>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+
+						</ItemsControl>
+					</StackPanel>
+				</common:Borders>
+			</StackPanel>
+		</DockPanel>
+	</Grid>
 </Window>

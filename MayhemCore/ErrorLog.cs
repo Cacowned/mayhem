@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows.Controls;
 
 namespace MayhemCore
 {
@@ -16,7 +17,9 @@ namespace MayhemCore
         // Do we want to remove things from the beginning?
 
         // Collection that stores all of the errors
-        private static ObservableCollection<Error> errors = new ObservableCollection<Error>(); 
+        private static ObservableCollection<Error> errors = new ObservableCollection<Error>();
+
+		private static ObservableCollection<Error> minimumError = new ObservableCollection<Error>();
 
         public static void AddError(ErrorType error, string message) {
             Error err = new Error(error, message);
@@ -25,6 +28,13 @@ namespace MayhemCore
             // For the time being, write the error to Debug as well
             Debug.WriteLine(message);
         }
+
+
+		public static ObservableCollection<Error> Errors {
+			get {
+				return errors;
+			}
+		}
 
         // Get all of the errors in the collection
         // with an error type of at least
