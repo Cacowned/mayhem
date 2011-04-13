@@ -58,8 +58,11 @@ namespace MayhemWpf
 			if (File.Exists(Base64Serialize<ConnectionList>.filename)) {
 
 				try {
-					Mayhem.ConnectionList = Base64Serialize<ConnectionList>.Deserialize();
-
+					// Empty the connection list (should be empty already)
+					Mayhem.ConnectionList.Clear();
+					// Load all the serialized connections
+					Mayhem.LoadConnections(Base64Serialize<ConnectionList>.Deserialize());
+						
 					Debug.WriteLine("Starting up with " + Mayhem.ConnectionList.Count + " connections");
 
 				} catch (SerializationException e) {

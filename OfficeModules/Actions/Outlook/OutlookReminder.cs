@@ -1,36 +1,38 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using MayhemCore;
 using OOutlook = Microsoft.Office.Interop.Outlook;
 
-namespace DefaultModules.Actions.Office.Outlook
+namespace OfficeModules.Actions.Outlook
 {
 	[Serializable]
-	public class OutlookMail : ActionBase, ISerializable
+	public class OutlookReminder : ActionBase, ISerializable
 	{
 		protected OOutlook.Application outlook;
-		protected OOutlook.ApplicationEvents_11_NewMailEventHandler mailEvent;
+		protected OOutlook.ApplicationEvents_11_ReminderEventHandler reminderEvent;
 
-		public OutlookMail()
-			: base("Outlook New Mail", "Triggers when a new email is received") {
+		public OutlookReminder()
+			: base("Outlook Reminder", "Triggers when a reminder goes off for an outlook event") {
 
 			SetUp();
 		}
 
 		protected void SetUp() {
 			// Create the event handler delegate to attach
-			mailEvent = new OOutlook.ApplicationEvents_11_NewMailEventHandler(GotMail);
+			reminderEvent = new OOutlook.ApplicationEvents_11_ReminderEventHandler(GotReminder);
 		}
 
-		private void GotMail() {
+		private void GotReminder(object sender) {
 			base.OnActionActivated();
 		}
 
+
 		public override void Enable() {
 			
-			
-			// When enabled, try and get the outlook instance            
+
+			// When enabled, try and get the outlook instance
 			try {
 				outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
 			} catch (Exception e) {
@@ -40,25 +42,20 @@ namespace DefaultModules.Actions.Office.Outlook
 
             base.Enable();
 
-			outlook.NewMail += mailEvent;
+			outlook.Reminder += reminderEvent;
+
 		}
 
 		public override void Disable() {
-			
-            // TODO: Sometimes outlook is null here
-            // how is that possible?
-            if (outlook != null)
-            {
-                outlook.NewMail -= mailEvent;
+			base.Disable();
 
-                outlook = null;
-            }
+			outlook.Reminder -= reminderEvent;
 
-            base.Disable();
+			outlook = null;
 		}
 
 		#region Serialization
-		public OutlookMail(SerializationInfo info, StreamingContext context)
+		public OutlookReminder(SerializationInfo info, StreamingContext context)
 			: base(info, context) {
 
 			SetUp();

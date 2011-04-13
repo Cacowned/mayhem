@@ -10,19 +10,35 @@ namespace MayhemCore
 	[Serializable]
 	public class Connection : ISerializable
 	{
-		public bool Enabled {
-			get;
-			private set;
-		}
-		public ActionBase Action { get; set; }
-		public ReactionBase Reaction { get; set; }
+		/// <summary>
+		/// True if this connection is enabled
+		/// false if disabled.
+		/// </summary>
+		public bool Enabled { get;	private set; }
+
+		/// <summary>
+		/// The action that this connection is using
+		/// </summary>
+		public ActionBase Action { get;  private set; }
+
+		/// <summary>
+		/// The reaction that this connection is using
+		/// </summary>
+		public ReactionBase Reaction { get; private set; }
 
 		public Connection() { }
 
+		/// <summary>
+		/// Create a new connection
+		/// </summary>
+		/// <param name="action">The action to trigger on</param>
+		/// <param name="reaction">The reaction to perform</param>
 		public Connection(ActionBase action, ReactionBase reaction) {
+			// Set our action and reactions 
 			this.Action = action;
 			this.Reaction = reaction;
 
+			// Set them to have a reference to this connection
 			this.Action.connection = this;
 			this.Reaction.connection = this;
 
