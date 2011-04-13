@@ -25,7 +25,10 @@ namespace MayhemCli
 				// Debug.WriteLine(Properties.Settings.Default.RunListSettings);
 
 				try {
-					mayhem.ConnectionList = Base64Serialize<ConnectionList>.Deserialize();
+					// Empty the connection list (should be empty already)
+					mayhem.ConnectionList.Clear();
+					// Load all the serialized connections
+					mayhem.LoadConnections(Base64Serialize<ConnectionList>.Deserialize());
 
 					Console.WriteLine("Starting up with " + mayhem.ConnectionList.Count + " connections");
 

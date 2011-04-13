@@ -24,10 +24,8 @@ namespace MayhemWpf
             BinaryFormatter formatter = new BinaryFormatter();
 
 
-            formatter.AssemblyFormat
-                = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple;
-            formatter.Binder
-                = new VersionConfigToNamespaceAssemblyObjectBinder();
+            formatter.AssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple;
+            formatter.Binder = new VersionConfigToNamespaceAssemblyObjectBinder();
             T obj = (T)formatter.Deserialize(stream);
             return obj;
             

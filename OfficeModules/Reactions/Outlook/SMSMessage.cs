@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Windows;
-using DefaultModules.Wpf;
+using OfficeModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using Outlook = Microsoft.Office.Interop.Outlook;
+using OOutlook = Microsoft.Office.Interop.Outlook;
 
-namespace DefaultModules.Reactions
+namespace OutlookModules.Reactions.Outlook
 {
     [Serializable]
     public class SmsMessage : ReactionBase, IWpf
@@ -55,10 +55,10 @@ namespace DefaultModules.Reactions
             try
             {
                 // Create the Outlook application.
-                Outlook.Application oApp = new Outlook.Application();
+				OOutlook.Application oApp = new OOutlook.Application();
 
                 // Get the NameSpace and Logon information.
-                Outlook.NameSpace oNS = oApp.GetNamespace("mapi");
+				OOutlook.NameSpace oNS = oApp.GetNamespace("mapi");
 
                 // Log on by using a dialog box to choose the profile.
                 oNS.Logon(Missing.Value, Missing.Value, true, true);
@@ -69,15 +69,15 @@ namespace DefaultModules.Reactions
                 //oNS.Logon("YourValidProfile", Missing.Value, false, true); 
 
                 // Create a new mail item.
-                Outlook.MailItem oMsg = (Outlook.MailItem)oApp.CreateItem(Outlook.OlItemType.olMailItem);
+				OOutlook.MailItem oMsg = (OOutlook.MailItem)oApp.CreateItem(OOutlook.OlItemType.olMailItem);
 
 
                 oMsg.Body = msg;
 
                 // Add a recipient.
-                Outlook.Recipients oRecips = (Outlook.Recipients)oMsg.Recipients;
+				OOutlook.Recipients oRecips = (OOutlook.Recipients)oMsg.Recipients;
                 // TODO: Change the recipient in the next line if necessary.
-                Outlook.Recipient oRecip = (Outlook.Recipient)oRecips.Add(to + carrierString);
+				OOutlook.Recipient oRecip = (OOutlook.Recipient)oRecips.Add(to + carrierString);
                 oRecip.Resolve();
 
                 // Send.

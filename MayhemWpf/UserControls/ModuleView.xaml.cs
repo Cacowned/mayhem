@@ -35,11 +35,7 @@ namespace MayhemWpf.UserControls
 			if (wasEnabled) {
 				Module.connection.Enable();
 			}
-			/*
-			var config = new TimerConfig();
-			config.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-			config.ShowDialog();
-			*/
+
 			MainWindow.DimMainWindow(false);
 		}
 	}

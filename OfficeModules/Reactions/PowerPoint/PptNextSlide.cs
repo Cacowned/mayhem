@@ -1,19 +1,19 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using MayhemCore;
 using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
 
-namespace DefaultModules.Reactions.Office.PowerPoint
+namespace OfficeModules.Reactions.PowerPoint
 {
 	[Serializable]
-	public class PptPrevSlide : ReactionBase
+	public class PptNextSlide : ReactionBase
 	{
 		protected OPowerPoint.Application oApp;
 
-		public PptPrevSlide()
-			: base("PowerPoint: Last Slide", "Navigates to the previous slide.") {
+		public PptNextSlide()
+			: base("PowerPoint: Next Slide", "Navigates to the next slide.") {
 		}
 
 		public override void Enable() {
@@ -36,15 +36,15 @@ namespace DefaultModules.Reactions.Office.PowerPoint
 			try {
 				// If we have a presentation window, go to the next slide
 				if (oApp.SlideShowWindows.Count >= 1) {
-					oApp.SlideShowWindows[1].View.Previous();
+					oApp.SlideShowWindows[1].View.Next();
 				}
 			} catch (Exception e) {
 				Debug.Write(e);
-			}
+			}			
 		}
 
 		#region Serialization
-		public PptPrevSlide(SerializationInfo info, StreamingContext context)
+		public PptNextSlide(SerializationInfo info, StreamingContext context)
 			: base(info, context) {
 		}
 
