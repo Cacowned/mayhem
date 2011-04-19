@@ -2,11 +2,11 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
-using DefaultModules.Actions.Xbox;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using XboxModules.Actions;
 
-namespace DefaultModules.Wpf
+namespace XboxModules.Wpf
 {
 	/// <summary>
 	/// Interaction logic for XboxButtonConfig.xaml
