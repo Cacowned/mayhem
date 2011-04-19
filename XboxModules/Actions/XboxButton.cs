@@ -4,13 +4,13 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Windows;
-using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using XboxModules.Wpf;
 
-namespace DefaultModules.Actions.Xbox
+namespace XboxModules.Actions
 {
 	[Serializable]
 	public class XboxButton : ActionBase, ICli, IWpf, ISerializable

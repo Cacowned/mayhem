@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisionModules", "VisionModu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeModules", "OfficeModules\OfficeModules.csproj", "{760C6B5A-5259-453B-BFF4-1AC6F8C8193C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XboxModules", "XboxModules\XboxModules.csproj", "{40F3228B-D4A1-42D0-AABF-E48451D31806}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,18 @@ Global
 		{760C6B5A-5259-453B-BFF4-1AC6F8C8193C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{760C6B5A-5259-453B-BFF4-1AC6F8C8193C}.Release|Win32.ActiveCfg = Release|Any CPU
 		{760C6B5A-5259-453B-BFF4-1AC6F8C8193C}.Release|x86.ActiveCfg = Release|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Release|Win32.ActiveCfg = Release|Any CPU
+		{40F3228B-D4A1-42D0-AABF-E48451D31806}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
