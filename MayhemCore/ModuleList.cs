@@ -18,7 +18,7 @@ namespace MayhemCore
 		public ModuleList() {
 			// Load up all the types of things that we want in the application root
 			FindTypes(Path.Combine(Application.StartupPath, "modules"));
-			//FindTypes(Application.StartupPath);
+
 		}
 		/// <summary>
 		/// Find all the types that exist in DLLs specified by path
@@ -30,32 +30,47 @@ namespace MayhemCore
 				throw new ArgumentNullException("The given path is null or empty");
 			}
 
-			string[] pluginFiles = Directory.GetFiles(path, "*.dll");
+			string[] pluginFiles = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
 
+			var assemblies = new List<Assembly>();
 			// Go through each dll file
 			for (int i = 0; i < pluginFiles.Length; i++) {
 				// load it
 				string path2 = Path.Combine(path, pluginFiles[i]);
-				Assembly ass = Assembly.LoadFrom(path2);
+				try {
+					Assembly ass = Assembly.LoadFrom(path2);
+					if (ass != null) {
+						assemblies.Add(ass);
+					}
+				} catch (BadImageFormatException) {
 
-				if (ass != null) {
-					// Go through all the public classes in the assembly
-					foreach (var type in ass.GetExportedTypes()) {
-						// If it's parent class is the type we want
-						// and it implements the correct moduleType
-						if (type.IsSubclassOf(typeof(T)) && !type.IsAbstract) {
-							// Create an instance
-							T reaction = (T)Activator.CreateInstance(type);
-							bool hasConfig = reaction.HasConfig;
-							if (!hasConfig || (hasConfig && type.GetInterfaces().Contains(typeof(V)))) {
-								// Add it to our final list
-								this.Add(reaction);
-							}
+				}
+			}
+			assemblies.ForEach(ProcessAssembly);
+
+			this.Sort();
+		}
+
+		private void ProcessAssembly(Assembly ass) {
+			// Go through all the public classes in the assembly
+			foreach (var type in ass.GetExportedTypes()) {
+				// If it's parent class is the type we want
+				// and it implements the correct moduleType
+				if (type.IsSubclassOf(typeof(T)) && !type.IsAbstract) {
+					try {
+						// Create an instance
+						T reaction = (T)Activator.CreateInstance(type);
+						bool hasConfig = reaction.HasConfig;
+						if (!hasConfig || (hasConfig && type.GetInterfaces().Contains(typeof(V)))) {
+							// Add it to our final list
+							this.Add(reaction);
 						}
+					} 
+					catch {
+						// Swallow
 					}
 				}
 			}
-			this.Sort();
 		}
 	}
 }
