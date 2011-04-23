@@ -66,6 +66,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Base64Serialize.cs" />
+    <Page Include="InstallModule.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ModuleList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -74,6 +78,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="InstallModule.xaml.cs">
+      <DependentUpon>InstallModule.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ModuleList.xaml.cs">
       <DependentUpon>ModuleList.xaml</DependentUpon>
     </Compile>
