@@ -16,11 +16,16 @@ namespace MayhemCore
 	public abstract class ModuleList<T, V> : List<T> where T : ModuleBase
 	{
 		public ModuleList() {
-			// Load up all the types of things that we want in the application root
+            RescanModules();
+		}
+
+        public void RescanModules() {
+            // Load up all the types of things that we want in the application root
             FindTypes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules"));
             //FindTypes(Path.Combine(Application.StartupPath, "modules"));
-			//FindTypes(Application.StartupPath);
-		}
+            //FindTypes(Application.StartupPath);
+        }
+
 		/// <summary>
 		/// Find all the types that exist in DLLs specified by path
 		/// </summary>
@@ -30,6 +35,9 @@ namespace MayhemCore
 			if (String.IsNullOrEmpty(path)) {
 				throw new ArgumentNullException("The given path is null or empty");
 			}
+
+            // Clear this of all the modules
+            this.Clear();
 
 			string[] pluginFiles = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
 
