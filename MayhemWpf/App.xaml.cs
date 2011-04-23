@@ -27,6 +27,7 @@ namespace MayhemWpf
                 string installPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules");
 
                 var zipFile = new ZipPackage(packageFile);
+                
                 // Create a repository pointing to the local feed
                 var repository = new DataServicePackageRepository(new Uri("http://localhost:58108/nuget/"));
 
@@ -34,7 +35,8 @@ namespace MayhemWpf
 
                 // Create a package manager to install and resolve dependencies
                 var packageManager = new PackageManager(repository, installPath);
-                //packageManager.Logger = new Logger();
+
+                packageManager.Logger = new Logger();
 
                 // Install the package
                 packageManager.InstallPackage(zipFile, ignoreDependencies: false);

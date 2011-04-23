@@ -17,7 +17,8 @@ namespace MayhemCore
 	{
 		public ModuleList() {
 			// Load up all the types of things that we want in the application root
-			FindTypes(Path.Combine(Application.StartupPath, "modules"));
+            FindTypes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules"));
+            //FindTypes(Path.Combine(Application.StartupPath, "modules"));
 			//FindTypes(Application.StartupPath);
 		}
 		/// <summary>
