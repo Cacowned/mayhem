@@ -51,30 +51,32 @@ namespace MayhemWpf
 
 
 		public MainWindow() {
-
-
 			Mayhem = new Mayhem<IWpf>();
-
-			if (File.Exists(Base64Serialize<ConnectionList>.filename)) {
-
-				try {
-					// Empty the connection list (should be empty already)
-					Mayhem.ConnectionList.Clear();
-					// Load all the serialized connections
-					Mayhem.LoadConnections(Base64Serialize<ConnectionList>.Deserialize());
-						
-					Debug.WriteLine("Starting up with " + Mayhem.ConnectionList.Count + " connections");
-
-				} catch (SerializationException e) {
-					Debug.WriteLine("(De-)SerializationException " + e);
-				}
-			}
-
-
 			InitializeComponent();
-
-			RunList.ItemsSource = Mayhem.ConnectionList;
 		}
+
+        public void Load()
+        {
+            if (File.Exists(Base64Serialize<ConnectionList>.filename))
+            {
+                try
+                {
+                    // Empty the connection list (should be empty already)
+                    Mayhem.ConnectionList.Clear();
+                    // Load all the serialized connections
+                    Mayhem.LoadConnections(Base64Serialize<ConnectionList>.Deserialize());
+
+                    Debug.WriteLine("Starting up with " + Mayhem.ConnectionList.Count + " connections");
+
+                }
+                catch (SerializationException e)
+                {
+                    Debug.WriteLine("(De-)SerializationException " + e);
+                }
+            }
+
+            RunList.ItemsSource = Mayhem.ConnectionList;
+        }
 
 		private void ActionListClick(object sender, RoutedEventArgs e) {
 			DimMainWindow(true);

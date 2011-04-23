@@ -15,7 +15,7 @@ namespace MayhemWpf
 {
     public class Base64Serialize<T>
     {
-        public static string filename = "serial.settings";
+        public static string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "serial.settings");
 
         public static T Deserialize() {
 

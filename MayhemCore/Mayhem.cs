@@ -33,6 +33,12 @@ namespace MayhemCore
 			ConnectionList = new ConnectionList();
 		}
 
+        public void RescanModules()
+        {
+            ActionList.RescanModules();
+            ReactionList.RescanModules();
+        }
+
 		/// <summary>
 		/// Loads the passed ConnectionList by adding each element
 		/// into this instance's connectionList
