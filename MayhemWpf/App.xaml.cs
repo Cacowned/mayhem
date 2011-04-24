@@ -17,7 +17,6 @@ namespace MayhemWpf
             MainWindow main = new MainWindow();
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             Application.Current.MainWindow = main;
-
 			if (e.Args.Any())
 			{
 			    string packageFile = e.Args[0];

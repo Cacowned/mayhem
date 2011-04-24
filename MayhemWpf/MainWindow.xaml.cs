@@ -76,6 +76,8 @@ namespace MayhemWpf
             }
 
             RunList.ItemsSource = Mayhem.ConnectionList;
+
+            ErrorLog.AddError(ErrorType.Failure, "Error!");
         }
 
 		private void ActionListClick(object sender, RoutedEventArgs e) {
