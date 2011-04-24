@@ -97,12 +97,19 @@
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
     </Page>
+    <Page Include="UserControls\MayhemHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ModuleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserControls\MayhemHeader.xaml.cs">
+      <DependentUpon>MayhemHeader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ModuleView.xaml.cs">
       <DependentUpon>ModuleView.xaml</DependentUpon>
     </Compile>
@@ -153,6 +160,23 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Settings16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LogoApp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LogoAppWhiteGradientBorder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LogoAppWhiteDropShadow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LogoAppOrangeWhiteDropshadow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LogoAppWhiteDropShadowSmaller.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
