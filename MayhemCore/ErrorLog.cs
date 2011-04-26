@@ -11,7 +11,7 @@ namespace MayhemCore
     // There should be only one of these
     // We should be able to write to the error log from
     // any class, thus it is static
-    public static class ErrorLog
+    public class ErrorLog
     {
         // What do we do if this thing gets huge? It will keep using up memory. 
         // Do we want to remove things from the beginning?
@@ -20,6 +20,11 @@ namespace MayhemCore
         private static ObservableCollection<Error> errors = new ObservableCollection<Error>();
 
 		private static ObservableCollection<Error> minimumError = new ObservableCollection<Error>();
+
+        public ErrorLog()
+        {
+
+        }
 
         public static void AddError(ErrorType error, string message) {
             Error err = new Error(error, message);
