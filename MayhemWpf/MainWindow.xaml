@@ -71,7 +71,8 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-
+    
+        <mayhem:ErrorLog x:Key="errorLog"></mayhem:ErrorLog>
 
 	</Window.Resources>
 	<Grid>
@@ -87,18 +88,19 @@
 		</Rectangle>
 
 		<DockPanel>
-			<DockPanel.Resources>
+            
+            <DockPanel.Resources>
 				<DataTemplate x:Key="myStyle" >
-					<TextBlock>Foo</TextBlock>
+					<TextBlock Background="Green">Foo</TextBlock>
 				</DataTemplate>
 			</DockPanel.Resources>
-			<ListBox Background="Red" 
+			<ListBox
 					 ItemTemplate="{StaticResource myStyle}"  
 					 DockPanel.Dock="Bottom" MaxHeight="150" MinHeight="150" 
-					 ItemsSource="{Binding Mode=OneWay, Source={x:Static mayhem:ErrorLog.Errors}}" >
-					 
+					 ItemsSource="{Binding Source={x:Static mayhem:ErrorLog.Errors}}" >
 
-			</ListBox>
+                
+            </ListBox>
 
 			<StackPanel Style="{StaticResource BackgroundGradient}">
                 <src:MayhemHeader />
