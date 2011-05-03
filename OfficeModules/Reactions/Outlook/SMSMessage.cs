@@ -7,6 +7,7 @@ using OfficeModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using OOutlook = Microsoft.Office.Interop.Outlook;
+using OfficeModules;
 
 namespace OutlookModules.Reactions.Outlook
 {
@@ -55,10 +56,10 @@ namespace OutlookModules.Reactions.Outlook
             try
             {
                 // Create the Outlook application.
-				OOutlook.Application oApp = new OOutlook.Application();
+                OOutlook.Application outlook = OfficeFactory.GetOutlook();
 
                 // Get the NameSpace and Logon information.
-				OOutlook.NameSpace oNS = oApp.GetNamespace("mapi");
+				OOutlook.NameSpace oNS = outlook.GetNamespace("mapi");
 
                 // Log on by using a dialog box to choose the profile.
                 oNS.Logon(Missing.Value, Missing.Value, true, true);
@@ -69,7 +70,7 @@ namespace OutlookModules.Reactions.Outlook
                 //oNS.Logon("YourValidProfile", Missing.Value, false, true); 
 
                 // Create a new mail item.
-				OOutlook.MailItem oMsg = (OOutlook.MailItem)oApp.CreateItem(OOutlook.OlItemType.olMailItem);
+				OOutlook.MailItem oMsg = (OOutlook.MailItem)outlook.CreateItem(OOutlook.OlItemType.olMailItem);
 
 
                 oMsg.Body = msg;
@@ -91,7 +92,7 @@ namespace OutlookModules.Reactions.Outlook
                 oRecips = null;
                 oMsg = null;
                 oNS = null;
-                oApp = null;
+                outlook = null;
             }
 
              // Simple error handling.

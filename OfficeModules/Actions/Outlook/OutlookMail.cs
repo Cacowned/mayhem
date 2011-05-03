@@ -28,19 +28,15 @@ namespace OfficeModules.Actions.Outlook
 		}
 
 		public override void Enable() {
-			
-			
-			// When enabled, try and get the outlook instance            
-			try {
-				outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
-			} catch (Exception e) {
-                ErrorLog.AddError(ErrorType.Warning, "Unable to find the open Outlook application");
-                return;
-			}
 
-            base.Enable();
+            outlook = OfficeFactory.GetOutlook();
 
-			outlook.NewMail += mailEvent;
+            if (outlook != null)
+            {
+                base.Enable();
+
+                outlook.NewMail += mailEvent;
+            }
 		}
 
 		public override void Disable() {

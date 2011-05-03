@@ -52,6 +52,7 @@ namespace MayhemCore
 
     public class Error
     {
+        public DateTime Time { get; private set; }
         public ErrorType Type { get; private set; }
         public string Message { get; private set; }
 
@@ -59,6 +60,8 @@ namespace MayhemCore
         {
             this.Type = type;
             this.Message = message;
+
+            this.Time = DateTime.Now;
         }
     }
 
