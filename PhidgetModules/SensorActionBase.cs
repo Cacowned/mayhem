@@ -37,8 +37,15 @@ namespace PhidgetModules
 		protected abstract void SensorChange(object sender, SensorChangeEventArgs e);
 
 		public override void Enable() {
-			base.Enable();
-			ifKit.SensorChange += handler;
+            if (!ifKit.Attached)
+            {
+                ErrorLog.AddError(ErrorType.Warning, "No Phidget Interface Kit found. Not Enabling.");
+            }
+            else
+            {
+                base.Enable();
+                ifKit.SensorChange += handler;
+            }
 		}
 
 		public override void Disable() {

@@ -8,6 +8,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using System.Collections.ObjectModel;
 
 namespace MayhemWpf
 {
@@ -55,6 +56,20 @@ namespace MayhemWpf
 			InitializeComponent();
 		}
 
+
+
+        public ObservableCollection<Error> Errors
+        {
+            get { return (ObservableCollection<Error>)GetValue(ErrorsProperty); }
+            set { SetValue(ErrorsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Errors.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ErrorsProperty =
+            DependencyProperty.Register("Errors", typeof(ObservableCollection<Error>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<Error>()));
+
+
+
         public void Load()
         {
             if (File.Exists(Base64Serialize<ConnectionList>.filename))
@@ -77,7 +92,7 @@ namespace MayhemWpf
 
             RunList.ItemsSource = Mayhem.ConnectionList;
 
-            ErrorLog.AddError(ErrorType.Failure, "Error!");
+            Errors = ErrorLog.Errors;
         }
 
 		private void ActionListClick(object sender, RoutedEventArgs e) {
@@ -147,6 +162,7 @@ namespace MayhemWpf
 
 		private void DeleteConnectionClick(object sender, RoutedEventArgs e) {
 			Connection c = ((Button)sender).Tag as Connection;
+            c.Disable();
 			Mayhem.ConnectionList.Remove(c);
 		}
 
@@ -155,16 +171,10 @@ namespace MayhemWpf
 			ToggleButton button = (ToggleButton)sender;
 			Connection c = button.Tag as Connection;
 
-			//Debug.WriteLine("On/Off clicked on " + c.Action.Name);
-
 			if (!c.Enabled) {
 				c.Enable();
 
-                if (c.Enabled)
-                {
-                    //Debug.WriteLine("Connection is enabled");
-                }
-                else
+                if (!c.Enabled)
                 {
                     //Debug.WriteLine("Connection didn't enable.");
 

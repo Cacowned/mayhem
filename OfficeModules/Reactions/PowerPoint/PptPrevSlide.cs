@@ -33,6 +33,7 @@ namespace OfficeModules.Reactions.PowerPoint
 		}
 
 		public override void Perform() {
+            ErrorLog.AddError(ErrorType.Message, "Trying to go to last slide");
 			try {
 				// If we have a presentation window, go to the next slide
 				if (oApp.SlideShowWindows.Count >= 1) {
