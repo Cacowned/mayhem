@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
+using System.Xml;
 
 // Copied this class from MayhemCli
 namespace MayhemWpf
@@ -19,60 +20,27 @@ namespace MayhemWpf
 
         public static T Deserialize() {
 
-            byte[] file = File.ReadAllBytes(filename);
-            MemoryStream stream = new MemoryStream(file);
-            BinaryFormatter formatter = new BinaryFormatter();
+            DataContractSerializer dcs = new DataContractSerializer(typeof(T));
+            FileStream fs = new FileStream(filename, FileMode.Open);
+            XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
 
+            T obj = (T)dcs.ReadObject(reader);
 
-            formatter.AssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple;
-            formatter.Binder = new VersionConfigToNamespaceAssemblyObjectBinder();
-            T obj = (T)formatter.Deserialize(stream);
+            fs.Close();
             return obj;
             
         }
 
         public static void SerializeObject(T objectToSerialize) {
 
-            Stream stream = File.Open(filename, FileMode.Create);
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.AssemblyFormat = FormatterAssemblyStyle.Simple;
-            formatter.Serialize(stream, objectToSerialize);
+            FileStream stream = File.Open(filename, FileMode.Create);
+            DataContractSerializer dcs = new DataContractSerializer(typeof(T));
+
+            XmlDictionaryWriter xdw = XmlDictionaryWriter.CreateTextWriter(stream, Encoding.UTF8);
+            dcs.WriteObject(xdw, objectToSerialize);
+
             stream.Close();
  
         }
     }
-    internal sealed class VersionConfigToNamespaceAssemblyObjectBinder : SerializationBinder
-    {
-        public override Type BindToType(string assemblyName, string typeName)
-            {
-                Type typeToDeserialize = null;
-                try
-                {
-
-                    string ToAssemblyName = assemblyName.Split(',')[0];
-                    Assembly[] Assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                    foreach (Assembly ass in Assemblies)
-                    {
-                        if (ass.FullName.Split(',')[0] == ToAssemblyName)
-                        {
-                            typeToDeserialize = ass.GetType(typeName);
-                            break;
-                        }
-                    }
-
-                }
-                catch (System.Exception exception)
-                {
-                    throw exception;
-                }
-                finally
-                {
-                }
-                return typeToDeserialize;
-            }
-    }
-
-
-
-
 }

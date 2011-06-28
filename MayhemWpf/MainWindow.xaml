@@ -7,8 +7,7 @@
 		xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
 		Title="Mayhem" Height="600" Width="600" ResizeMode="CanMinimize"
 		x:Name="MayhemMainWindow"
-		Closing="AppClosing"
-		Closed="MayhemMainWindow_Closed">
+		Closing="AppClosing">
     <Window.Resources>
         <Style x:Key="ConfigurationStringStyle">
             <Setter Property="Control.FontStyle" Value="Italic" />
