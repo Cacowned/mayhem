@@ -8,119 +8,157 @@ using MayhemCore.ModuleTypes;
 
 namespace DefaultModules.Actions
 {
-	[Serializable]
-	public class Timer : ActionBase, ICli, IWpf, ISerializable
-	{
-		protected const string TAG = "[Timer]";
+    [DataContract]
+    public class Timer : ActionBase, ICli, IWpf
+    {
+        private System.Timers.Timer myTimer;
 
-		protected int hours, minutes, seconds = 0;
+        #region Configuration Properties
+        private int _hours;
+        //[DataMember]
+        private int Hours
+        {
+            get
+            {
+                return _hours;
+            }
+            set
+            {
+                _hours = value;
+                SetInterval();
+            }
+        }
 
-		private System.Timers.Timer myTimer;
+        private int _minutes;
+        //[DataMember]
+        private int Minutes
+        {
+            get
+            {
+                return _minutes;
+            }
+            set
+            {
+                _minutes = value;
+                SetInterval();
+            }
+        }
 
-		public Timer()
-			: base("Timer", "Triggers after a certain amount of time") {
-			hasConfig = true;
+        private int _seconds;
+        //[DataMember]
+        private int Seconds
+        {
+            get
+            {
+                return _seconds;
+            }
+            set
+            {
+                _seconds = value;
+                SetInterval();
+            }
+        }
+        #endregion
 
-			hours = 0;
-			minutes = 0;
-			seconds = 2;
+        
+        public Timer()
+            : base("Timer", "Triggers after a certain amount of time")
+        {
+            hasConfig = true;
 
-			SetUpTimer();
-		}
+            // Set our defaults
+            Seconds = 2;
 
-		protected void SetConfigString() {
-			ConfigString = String.Format("{0} hours, {1} minutes, {2} seconds", hours, minutes, seconds);
-		}
+            myTimer = new System.Timers.Timer();
+            myTimer.Elapsed += new ElapsedEventHandler(myTimer_Elapsed);
+            myTimer.Enabled = false;
+        }
 
-		protected void SetUpTimer() {
-			myTimer = new System.Timers.Timer();
-			myTimer.Elapsed += new ElapsedEventHandler(myTimer_Elapsed);
-			myTimer.Enabled = false;
+        protected void SetInterval()
+        {
+            double interval = (Hours * 3600 + Minutes * 60 + Seconds) * 1000;
 
-			SetInterval();
-		}
+            try {
+                myTimer.Interval = interval;
+            }
+            catch {
+                /* setting the interval throws if the 
+                 * given argument is less than or equal to 0
+                 */
+            }
 
-		public void CliConfig() {
+            SetConfigString();
+        }
 
-			string input = "";
+        protected void SetConfigString()
+        {
+            ConfigString = String.Format("{0} hours, {1} minutes, {2} seconds", Hours, Minutes, Seconds);
+        }
 
-			do {
-				Console.Write("{0} Please enter the number of hours to wait: ", TAG);
-				input = Console.ReadLine();
-			}
-			while (!Int32.TryParse(input, out hours) || !(hours >= 0));
+        #region Configuration Views
+        public void CliConfig()
+        {
+            string TAG = "[TIMER]";
 
-			do {
-				Console.Write("{0} Please enter the number of minutes to wait: ", TAG);
-				input = Console.ReadLine();
-			}
-			while (!Int32.TryParse(input, out minutes) || !(minutes >= 0 && minutes < 60));
+            string input = "";
+            int hours, minutes, seconds;
 
-			do {
-				Console.Write("{0} Please enter the number of seconds to wait: ", TAG);
-				input = Console.ReadLine();
-			}
-			while (!Int32.TryParse(input, out seconds) || !(seconds >= 0 && seconds < 60));
+            do {
+                Console.Write("{0} Please enter the number of hours to wait: ", TAG);
+                input = Console.ReadLine();
+            }
+            while (!Int32.TryParse(input, out hours) || !(hours >= 0));
 
-			SetInterval();
+            do {
+                Console.Write("{0} Please enter the number of minutes to wait: ", TAG);
+                input = Console.ReadLine();
+            }
+            while (!Int32.TryParse(input, out minutes) || !(minutes >= 0 && minutes < 60));
 
-		}
+            do {
+                Console.Write("{0} Please enter the number of seconds to wait: ", TAG);
+                input = Console.ReadLine();
+            }
+            while (!Int32.TryParse(input, out seconds) || !(seconds >= 0 && seconds < 60));
 
-		public void WpfConfig() {
-			var window = new TimerConfig(hours, minutes, seconds);
-			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            // everything checked out, set our variables
+            Hours = hours;
+            Minutes = minutes;
+            Seconds = seconds;
+        }
 
-			if (window.ShowDialog() == true) {
+        public void WpfConfig()
+        {
+            var window = new TimerConfig(Hours, Minutes, Seconds);
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-				this.hours = window.hours;
-				this.minutes = window.minutes;
-				this.seconds = window.seconds;
+            if (window.ShowDialog() == true) {
 
-				SetInterval();
-			}
-		}
+                Hours = window.hours;
+                Minutes = window.minutes;
+                Seconds = window.seconds;
+            }
+        }
+        #endregion
 
-		protected void SetInterval() {
-			double interval = (hours * 3600 + minutes * 60 + seconds) * 1000;
-			myTimer.Interval = interval;
 
-			SetConfigString();
-		}
+        private void myTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            base.OnActionActivated();
+        }
 
-		private void myTimer_Elapsed(object sender, ElapsedEventArgs e) {
-			base.OnActionActivated();
-		}
+        public override void Enable()
+        {
+            base.Enable();
+            myTimer.Enabled = true;
+            myTimer.Start();
+        }
 
-		public override void Enable() {
-			base.Enable();
-			myTimer.Enabled = true;
-			myTimer.Start();
-		}
-
-		public override void Disable() {
-			base.Disable();
-			myTimer.Stop();
-			myTimer.Enabled = false;
-		}
-
-		#region Serialization
-
-		public Timer(SerializationInfo info, StreamingContext context)
-			: base(info, context) {
-
-			hours = info.GetInt32("Hours");
-			minutes = info.GetInt32("Minutes");
-			seconds = info.GetInt32("Seconds");
-
-			SetUpTimer();
-		}
-
-		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
-			base.GetObjectData(info, context);
-			info.AddValue("Hours", hours);
-			info.AddValue("Minutes", minutes);
-			info.AddValue("Seconds", seconds);
-		}
-		#endregion
-	}
+        public override void Disable()
+        {
+            base.Disable();
+            myTimer.Stop();
+            myTimer.Enabled = false;
+        }
+    }
 }

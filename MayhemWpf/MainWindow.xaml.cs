@@ -95,6 +95,11 @@ namespace MayhemWpf
             Errors = ErrorLog.Errors;
         }
 
+        private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Base64Serialize<ConnectionList>.SerializeObject(Mayhem.ConnectionList);
+        }
+
 		private void ActionListClick(object sender, RoutedEventArgs e) {
 			DimMainWindow(true);
 
@@ -204,10 +209,6 @@ namespace MayhemWpf
 			}
 		}
 
-		private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e) {
-			Base64Serialize<ConnectionList>.SerializeObject(Mayhem.ConnectionList);
-		}
-
 		public static void DimMainWindow(bool dim) {
 			WindowCollection wc = Application.Current.Windows;
 
@@ -239,12 +240,6 @@ namespace MayhemWpf
 				}
 			}
 
-		}
-
-		private void MayhemMainWindow_Closed(object sender, EventArgs e) {
-			Debug.WriteLine("Done");
-		}
-
-        
+		}       
 	}
 }
