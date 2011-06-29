@@ -7,80 +7,87 @@ using MayhemCore.ModuleTypes;
 
 namespace DefaultModules.Reactions
 {
-	[Serializable]
-	public class PlaySound : ReactionBase, ICli // TODO: Make WPF Compatible
-	{
+    [DataContract]
+    public class PlaySound : ReactionBase, ICli // TODO: Make WPF Compatible
+    {
+        protected const string TAG = "[PlaySound]";
 
-		protected const string TAG = "[PlaySound]";
-		protected string path_to_sound = null;
+        private string _soundPath;
+        [DataMember]
+        private string SoundPath
+        {
+            get
+            {
+                return _soundPath;
+            }
+            set
+            {
+                if (File.Exists(value))
+                {
+                    SoundPath = value;
+                }
+                else
+                {
+                    SoundPath = null;
 
-		object locker = new object();
+                    // TODO: decide to display warning (or not) 
+                }
+            }
+        }
 
-		protected int _media_playing = 0;
-		private int MediaPlaying {
-			get {
-				lock (locker) {
-					return _media_playing;
-				}
+        object locker = new object();
 
-			}
+        protected int _media_playing = 0;
+        private int MediaPlaying
+        {
+            get
+            {
+                lock (locker)
+                {
+                    return _media_playing;
+                }
 
-			set {
-				lock (locker) {
-					_media_playing = value;
-				}
-			}
+            }
 
-		}
+            set
+            {
+                lock (locker)
+                {
+                    _media_playing = value;
+                }
+            }
 
-		public PlaySound()
-			: base("Play Sound", "Plays an audio file when triggered.") {
-			Setup();
-		}
+        }
 
-		public void Setup() {
-			hasConfig = true;
-		}
-		public override void Perform() {
-			if (path_to_sound != null) {
-				// media_playing++;
-				MPlayer m = new MPlayer();
-				m.PlayFile(path_to_sound);
-			}
-		}
+        public PlaySound()
+            : base("Play Sound", "Plays an audio file when triggered.")
+        {
+            hasConfig = true;
+        }
 
-		public void CliConfig() {
-			string path = "";
 
-			do {
-				Console.WriteLine(String.Format("{0} Enter the path for the audio file", TAG));
-				path = Console.ReadLine();
-			}
-			while (!File.Exists(path));
+        public override void Perform()
+        {
+            if (SoundPath != null)
+            {
+                // media_playing++;
+                MPlayer m = new MPlayer();
+                m.PlayFile(SoundPath);
+            }
+        }
 
-			path_to_sound = path;
-		}
+        public void CliConfig()
+        {
+            string path = "";
 
-		#region Serialization
-		public PlaySound(SerializationInfo info, StreamingContext context)
-			: base(info, context) {
-			Setup();
+            do
+            {
+                Console.WriteLine(String.Format("{0} Enter the path for the audio file", TAG));
+                path = Console.ReadLine();
+            }
+            while (!File.Exists(path));
 
-			string path = info.GetString("soundFile");
-			// test if this is a valid path, else set soundfile to null
-			if (File.Exists(path)) {
-				path_to_sound = path;
-			} else {
-				path_to_sound = null;
-
-				// TODO: decide to display warning (or not) 
-			}
-		}
-
-		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
-			base.GetObjectData(info, context);
-			info.AddValue("soundFile", path_to_sound);
-		}
-		#endregion
-	}
+            SoundPath = path;
+        }
+    }
 }

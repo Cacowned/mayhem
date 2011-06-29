@@ -8,11 +8,13 @@ namespace MayhemCore
 	/// <summary>
 	/// This class is extended by ActionBase and ReactionBase
 	/// </summary>
-	public abstract class ModuleBase : DependencyObject, IComparable<ModuleBase>, ISerializable
+    [DataContract]
+	public abstract class ModuleBase : DependencyObject, IComparable<ModuleBase>
 	{
 		// A reference to the connection that holds this module.
 		public Connection connection;
 
+        [DataMember]
 		protected bool hasConfig = false;
 		/// <summary>
 		/// Whether this module has configuration settings
@@ -25,11 +27,13 @@ namespace MayhemCore
 
 		public bool Enabled { get; private set; }
 
+        [DataMember]
 		public string Name {
 			get;
 			protected set;
 		}
 
+        [DataMember]
 		public string Description {
 			get;
 			protected set;
@@ -67,19 +71,5 @@ namespace MayhemCore
 		public int CompareTo(ModuleBase obj) {
 			return String.Compare(this.Name, obj.Name);
 		}
-
-		#region Serialization
-		public ModuleBase(SerializationInfo info, StreamingContext context) {
-			Name = info.GetString("Name");
-			Description = info.GetString("Description");
-			hasConfig = info.GetBoolean("HasConfig");
-		}
-
-		public void GetObjectData(SerializationInfo info, StreamingContext context) {
-			info.AddValue("Name", Name);
-			info.AddValue("Description", Description);
-			info.AddValue("HasConfig", HasConfig);
-		}
-		#endregion
 	}
 }
