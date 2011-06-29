@@ -19,25 +19,25 @@ namespace MayhemWpf
         public static string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "serial.settings");
 
         public static T Deserialize() {
-
             DataContractSerializer dcs = new DataContractSerializer(typeof(T));
-            FileStream fs = new FileStream(filename, FileMode.Open);
-            XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
 
-            T obj = (T)dcs.ReadObject(reader);
-
-            fs.Close();
-            return obj;
+            FileStream stream = new FileStream(filename, FileMode.Open);
+            XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(stream, new XmlDictionaryReaderQuotas());
             
+            T obj = (T)dcs.ReadObject(stream);
+
+            stream.Close();
+            
+            return obj;
         }
 
         public static void SerializeObject(T objectToSerialize) {
-
-            FileStream stream = File.Open(filename, FileMode.Create);
             DataContractSerializer dcs = new DataContractSerializer(typeof(T));
 
-            XmlDictionaryWriter xdw = XmlDictionaryWriter.CreateTextWriter(stream, Encoding.UTF8);
-            dcs.WriteObject(xdw, objectToSerialize);
+            FileStream stream = new FileStream(filename, FileMode.Create);
+            XmlDictionaryWriter writer = XmlDictionaryWriter.CreateTextWriter(stream);
+
+            dcs.WriteObject(writer, objectToSerialize);
 
             stream.Close();
  

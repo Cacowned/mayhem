@@ -15,7 +15,7 @@ namespace DefaultModules.Actions
 
         #region Configuration Properties
         private int _hours;
-        //[DataMember]
+        [DataMember]
         private int Hours
         {
             get
@@ -30,7 +30,7 @@ namespace DefaultModules.Actions
         }
 
         private int _minutes;
-        //[DataMember]
+        [DataMember]
         private int Minutes
         {
             get
@@ -45,7 +45,7 @@ namespace DefaultModules.Actions
         }
 
         private int _seconds;
-        //[DataMember]
+        [DataMember]
         private int Seconds
         {
             get

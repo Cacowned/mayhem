@@ -8,65 +8,71 @@ using MayhemCore.ModuleTypes;
 
 namespace DefaultModules.Reactions
 {
-	[Serializable]
-	public class RunProgram : ReactionBase, IWpf, ISerializable
-	{
-		protected string filename = "";
-		protected string arguments = "";
+    [DataContract]
+    public class RunProgram : ReactionBase, IWpf
+    {
+        private string _fileName;
+        private string _arguments;
+        [DataMember]
+        private string FileName
+        {
+            get
+            {
+                return _fileName;
+            }
+            set {
+                _fileName = value;
+                SetConfigString();
+            }
 
-		public RunProgram()
-			: base("Run Program", "Runs a given program.") {
+        }
+        [DataMember]
+        private string Arguments
+        {
+            get
+            {
+                return _arguments;
+            }
+            set
+            {
+                _arguments = value;
+                SetConfigString();
+            }
+        }
 
-			filename = Path.Combine(Environment.GetEnvironmentVariable("Windir"), "System32", "calc.exe");
 
-			Setup();
+        public RunProgram()
+            : base("Run Program", "Runs a given program.")
+        {
+            hasConfig = true;
+         
+            // Set the default
+            FileName = Path.Combine(Environment.GetEnvironmentVariable("Windir"), "System32", "calc.exe");
+        }
 
-		}
+        public override void Perform()
+        {
+            System.Diagnostics.Process.Start(FileName, Arguments);
+        }
 
-		public void Setup() {
-			hasConfig = true;
-			SetConfigString();
-		}
+        public void WpfConfig()
+        {
+            var window = new RunProgramConfig(FileName, Arguments);
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-		public override void Perform() {
+            window.ShowDialog();
 
-			System.Diagnostics.Process.Start(filename, arguments);
-		}
+            if (window.DialogResult == true)
+            {
 
-		public void WpfConfig() {
-			var window = new RunProgramConfig(filename, arguments);
-			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                FileName = window.filename;
+                Arguments = window.arguments;
+            }
+        }
 
-			window.ShowDialog();
-
-			if (window.DialogResult == true) {
-
-				filename = window.filename;
-				arguments = window.arguments;
-
-				SetConfigString();
-			}
-		}
-
-		private void SetConfigString() {
-			ConfigString = String.Format("Filename: \"{0}\"\nArguments: \"{1}\"", Path.GetFileName(filename), arguments);
-		}
-
-		#region Serialization
-		public RunProgram(SerializationInfo info, StreamingContext context)
-			: base(info, context) {
-
-			filename = info.GetString("FileName");
-			filename = info.GetString("Arguments");
-
-			Setup();
-		}
-
-		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
-			base.GetObjectData(info, context);
-			info.AddValue("FileName", filename);
-			info.AddValue("Arguments", arguments);
-		}
-		#endregion
-	}
+        private void SetConfigString()
+        {
+            ConfigString = String.Format("Filename: \"{0}\"\nArguments: \"{1}\"", Path.GetFileName(FileName), Arguments);
+        }
+    }
 }

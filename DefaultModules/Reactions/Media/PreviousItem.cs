@@ -5,7 +5,6 @@ using MayhemCore;
 
 namespace DefaultModules.Reactions.Media
 {
-	[Serializable]
 	public class PreviousItem : ReactionBase
 	{
 		public PreviousItem()
@@ -14,15 +13,5 @@ namespace DefaultModules.Reactions.Media
 		public override void Perform() {
 			Utils.SendKey((ushort)VK.MEDIA_PREV_TRACK);
 		}
-
-		#region Serialization
-		public PreviousItem(SerializationInfo info, StreamingContext context)
-			: base(info, context) {
-		}
-
-		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
-			base.GetObjectData(info, context);
-		}
-		#endregion
 	}
 }

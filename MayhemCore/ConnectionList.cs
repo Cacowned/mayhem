@@ -7,7 +7,7 @@ namespace MayhemCore
 	/// <summary>
 	/// Maintains a set of all the current connections
 	/// </summary>
-	[Serializable]
+	[DataContract]
 	public class ConnectionList : ObservableCollection<Connection>
 	{
 	}

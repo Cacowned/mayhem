@@ -8,7 +8,7 @@ namespace MayhemCore
 	/// <summary>
 	/// Base class for all action modules
 	/// </summary>
-	public abstract class ActionBase : ModuleBase, ISerializable
+	public abstract class ActionBase : ModuleBase
 	{
 		/// <summary>
 		/// Event that triggers when the action is activated
@@ -29,19 +29,5 @@ namespace MayhemCore
 				handler(this, null);
 			}
 		}
-
-
-		#region Serialization
-		public ActionBase(SerializationInfo info, StreamingContext context)
-			: base(info, context) {
-			ActionActivated = (ActionActivateHandler)info.GetValue("ActionActivated", typeof(ActionActivateHandler));
-		}
-
-		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
-			base.GetObjectData(info, context);
-			info.AddValue("ActionActivated", ActionActivated);
-		}
-
-		#endregion
 	}
 }

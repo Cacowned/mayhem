@@ -7,7 +7,7 @@ namespace MayhemCore.ModuleTypes
 	/// that wants to be accessible from a WPF
 	/// application needs to implement this interface
 	/// </summary>
-	public interface IWpf : ISerializable
+	public interface IWpf
 	{
 		void WpfConfig();
 	}

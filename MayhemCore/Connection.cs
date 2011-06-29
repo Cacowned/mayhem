@@ -1,29 +1,32 @@
 ﻿
 using System;
 using System.Runtime.Serialization;
-using System.Diagnostics;
 namespace MayhemCore
 {
 	/// <summary>
 	/// This class will be a pairing of an action and reaction
 	/// </summary>
-	[Serializable]
-	public class Connection : ISerializable
+	[DataContract]
+	public class Connection
 	{
+
 		/// <summary>
 		/// True if this connection is enabled
 		/// false if disabled.
 		/// </summary>
+        [DataMember]
 		public bool Enabled { get;	private set; }
 
 		/// <summary>
 		/// The action that this connection is using
 		/// </summary>
+        [DataMember]
 		public ActionBase Action { get;  private set; }
 
 		/// <summary>
 		/// The reaction that this connection is using
 		/// </summary>
+        [DataMember]
 		public ReactionBase Reaction { get; private set; }
 
 		public Connection() { }
@@ -44,23 +47,6 @@ namespace MayhemCore
 
 			// Set up the event handler for when the action triggers
 			this.Action.ActionActivated += this.action_activated;
-		}
-
-        // TODO: I haven't figured out if this 
-        // is actually working properly.
-        // Needs more testing
-		~Connection() {
-            try
-            {
-                Action.Disable();
-                Reaction.Disable();
-                Action = null;
-                Reaction = null;
-            }
-            catch (NullReferenceException e)
-            {
-                Debug.WriteLine("Null Reference Exception " + e);
-            }
 		}
 
 		/// <summary>
@@ -96,7 +82,7 @@ namespace MayhemCore
             if(!Reaction.Enabled) {
                 /* If we got here, then it means
                  * the action is enabled
-                 * and the reacion won't enable
+                 * and the reaction won't enable
                  * 
                  * we need to disable the action
                  * and then return out
@@ -134,25 +120,20 @@ namespace MayhemCore
 			this.Enabled = false;
 		}
 
-		#region Serialization
-		public Connection(SerializationInfo info, StreamingContext context) {
-			Action = info.GetValue("Action", typeof(object)) as ActionBase;
-			Reaction = info.GetValue("Reaction", typeof(object)) as ReactionBase;
+        [OnDeserialized]
+        public void OnDeserialized(StreamingContext context)
+        {
+            Action.connection = this;
+            Reaction.connection = this;
 
-			Action.connection = this;
-			Reaction.connection = this;
+            // Set up the event handler for when the action triggers
+            this.Action.ActionActivated += this.action_activated;
 
-			bool enabled = info.GetBoolean("Enabled");
-			if (enabled)
-				this.Enable();
-		}
+            // If we have started up and are enabled, then we need to
+            // actually enable our actions and reactions
+            if(Enabled)
+                this.Enable();
+        }
 
-		public virtual void GetObjectData(SerializationInfo info, StreamingContext context) {
-			info.AddValue("Action", Action);
-			info.AddValue("Reaction", Reaction);
-			info.AddValue("Enabled", Enabled);
-		}
-
-		#endregion
 	}
 }
