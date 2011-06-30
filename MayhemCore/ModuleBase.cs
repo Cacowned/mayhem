@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Runtime.Serialization;
-using System.Windows;
 
 namespace MayhemCore
 {
@@ -9,7 +8,7 @@ namespace MayhemCore
 	/// This class is extended by ActionBase and ReactionBase
 	/// </summary>
     [DataContract]
-	public abstract class ModuleBase : DependencyObject, IComparable<ModuleBase>
+	public abstract class ModuleBase : IComparable<ModuleBase>
 	{
 		// A reference to the connection that holds this module.
 		public Connection connection;
@@ -39,16 +38,8 @@ namespace MayhemCore
 			protected set;
 		}
 
-		public string ConfigString {
-			get { return (string)GetValue(ConfigStringProperty); }
-			set { SetValue(ConfigStringProperty, value); }
-		}
-
-		// Using a DependencyProperty as the backing store for ConfigString.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty ConfigStringProperty =
-			DependencyProperty.Register("ConfigString", typeof(string), typeof(ModuleBase), new UIPropertyMetadata(string.Empty));
-
-
+        public string ConfigString { get; set; }
+		
 		// TODO: category?
 
 

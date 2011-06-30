@@ -24,11 +24,11 @@ namespace DefaultModules.Reactions
             {
                 if (File.Exists(value))
                 {
-                    SoundPath = value;
+                    _soundPath = value;
                 }
                 else
                 {
-                    SoundPath = null;
+                    _soundPath = null;
 
                     // TODO: decide to display warning (or not) 
                 }

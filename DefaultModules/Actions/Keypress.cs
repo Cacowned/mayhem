@@ -23,7 +23,7 @@ namespace DefaultModules.Actions
         private InterceptKeys interceptKeys;
 
         [DataMember]
-        private HashSet<System.Windows.Forms.Keys> monitor_keys_down = null;
+        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown { get; set; }
 
         public Keypress()
             : base("Key Press", "This trigger fires on a predefined key press")
@@ -32,8 +32,8 @@ namespace DefaultModules.Actions
             hasConfig = true;
 
             // Set our defaults
-            monitor_keys_down = new HashSet<System.Windows.Forms.Keys>();
-            monitor_keys_down.Add(Keys.Enter);
+            MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
+            MonitorKeysDown.Add(Keys.Enter);
 
             interceptKeys = InterceptKeys.GetInstance();
 
@@ -55,7 +55,7 @@ namespace DefaultModules.Actions
             var window = new KeypressConfig();
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            foreach (System.Windows.Forms.Keys k in monitor_keys_down)
+            foreach (System.Windows.Forms.Keys k in MonitorKeysDown)
             {
                 window.Deserialize_AddKey(k);
             }
@@ -64,7 +64,7 @@ namespace DefaultModules.Actions
 
             if (window.DialogResult == true)
             {
-                monitor_keys_down = window.keys_down;
+                MonitorKeysDown = window.keys_down;
 
                 SetConfigString();
             }
@@ -75,7 +75,7 @@ namespace DefaultModules.Actions
         {
             StringBuilder b = new StringBuilder();
 
-            foreach (Keys k in monitor_keys_down)
+            foreach (Keys k in MonitorKeysDown)
             {
                 if (b.Length == 0)
                 {
@@ -119,9 +119,9 @@ namespace DefaultModules.Actions
 
         private bool Keysets_Equal()
         {
-            if (keys_down.Count == monitor_keys_down.Count)
+            if (keys_down.Count == MonitorKeysDown.Count)
             {
-                foreach (System.Windows.Forms.Keys k in monitor_keys_down)
+                foreach (System.Windows.Forms.Keys k in MonitorKeysDown)
                 {
                     bool foundEqiv = false;
                     foreach (System.Windows.Forms.Keys l in keys_down)

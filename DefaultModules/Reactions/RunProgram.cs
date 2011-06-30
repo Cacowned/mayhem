@@ -24,7 +24,6 @@ namespace DefaultModules.Reactions
                 _fileName = value;
                 SetConfigString();
             }
-
         }
         [DataMember]
         private string Arguments

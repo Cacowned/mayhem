@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Windows.Controls;
+using System.Linq;
 
 namespace MayhemCore
 {
@@ -22,9 +20,7 @@ namespace MayhemCore
 		private static ObservableCollection<Error> minimumError = new ObservableCollection<Error>();
 
         public ErrorLog()
-        {
-
-        }
+        { }
 
         public static void AddError(ErrorType error, string message) {
             Error err = new Error(error, message);
