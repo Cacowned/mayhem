@@ -23,10 +23,11 @@ namespace MayhemWpf
 
             FileStream stream = new FileStream(filename, FileMode.Open);
             XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(stream, new XmlDictionaryReaderQuotas());
-            
-            T obj = (T)dcs.ReadObject(stream);
+            stream.Position = 0;
 
-            stream.Close();
+            T obj = (T)dcs.ReadObject(reader, false, new ModuleTypeResolver());
+
+            reader.Close();
             
             return obj;
         }
@@ -37,9 +38,9 @@ namespace MayhemWpf
             FileStream stream = new FileStream(filename, FileMode.Create);
             XmlDictionaryWriter writer = XmlDictionaryWriter.CreateTextWriter(stream);
 
-            dcs.WriteObject(writer, objectToSerialize);
+            dcs.WriteObject(writer, objectToSerialize, new ModuleTypeResolver());
 
-            stream.Close();
+            writer.Close();
  
         }
     }
