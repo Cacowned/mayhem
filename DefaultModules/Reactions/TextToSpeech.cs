@@ -8,57 +8,57 @@ using SpeechLib;
 
 namespace DefaultModules.Reactions
 {
-	[Serializable]
-	public class TextToSpeech : ReactionBase, IWpf, ISerializable
-	{
-		protected string message = "Running Mayhem!";
-		SpVoice voice;
+    [DataContract]
+    public class TextToSpeech : ReactionBase, IWpf
+    {
+        private string _message;
+        [DataMember]
+        private string Message
+        {
+            get { return _message; }
+            set
+            {
+                _message = value;
+                SetConfigString();
+            }
+        }
 
-		public TextToSpeech()
-			: base("Text To Speech", "Speaks a given phrase.") {
-			Setup();
-		}
+        SpVoice voice;
 
-		public void Setup() {
-			hasConfig = true;
-			voice = new SpVoice();
-			SetConfigString();
-		}
+        public TextToSpeech()
+            : base("Text To Speech", "Speaks a given phrase.")
+        {
+            hasConfig = true;
 
-		public override void Perform() {
-			voice.Speak(message, SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
-		}
+            // Set the defaults
+            Message = "Running Mayhem!";
 
-		public void WpfConfig() {
-			var window = new TextToSpeechConfig(message);
-			window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            voice = new SpVoice();
 
-			window.ShowDialog();
+        }
 
-			if (window.DialogResult == true) {
-				message = window.message;
+        public override void Perform()
+        {
+            voice.Speak(Message, SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
+        }
 
-				SetConfigString();
-			}
-		}
+        public void WpfConfig()
+        {
+            var window = new TextToSpeechConfig(Message);
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-		private void SetConfigString() {
-			ConfigString = String.Format("Message: \"{0}\"", message);
-		}
+            window.ShowDialog();
 
-		#region Serialization
-		public TextToSpeech(SerializationInfo info, StreamingContext context)
-			: base(info, context) {
+            if (window.DialogResult == true) {
+                Message = window.message;
 
-			message = info.GetString("Message");
+                SetConfigString();
+            }
+        }
 
-			Setup();
-		}
-
-		public new void GetObjectData(SerializationInfo info, StreamingContext context) {
-			base.GetObjectData(info, context);
-			info.AddValue("Message", message);
-		}
-		#endregion
-	}
+        private void SetConfigString()
+        {
+            ConfigString = String.Format("Message: \"{0}\"", Message);
+        }
+    }
 }

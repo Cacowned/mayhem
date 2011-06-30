@@ -8,6 +8,7 @@ namespace MayhemCore
 	/// <summary>
 	/// Base class for all action modules
 	/// </summary>
+    [DataContract]
 	public abstract class ActionBase : ModuleBase
 	{
 		/// <summary>
