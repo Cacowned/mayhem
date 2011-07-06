@@ -73,8 +73,14 @@
     <Compile Include="..\MayhemCore\ModuleList.cs">
       <Link>ModuleList.cs</Link>
     </Compile>
+    <Compile Include="..\MayhemCore\ModuleTypeResolver.cs">
+      <Link>ModuleTypeResolver.cs</Link>
+    </Compile>
     <Compile Include="..\MayhemCore\ModuleTypes\ICli.cs">
       <Link>ModuleTypes\ICli.cs</Link>
+    </Compile>
+    <Compile Include="..\MayhemCore\ModuleTypes\IWp7.cs">
+      <Link>ModuleTypes\IWp7.cs</Link>
     </Compile>
     <Compile Include="..\MayhemCore\ModuleTypes\IWpf.cs">
       <Link>ModuleTypes\IWpf.cs</Link>
