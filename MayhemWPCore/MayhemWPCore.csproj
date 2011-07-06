@@ -41,6 +41,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -72,9 +73,6 @@
     </Compile>
     <Compile Include="..\MayhemCore\ModuleList.cs">
       <Link>ModuleList.cs</Link>
-    </Compile>
-    <Compile Include="..\MayhemCore\ModuleTypeResolver.cs">
-      <Link>ModuleTypeResolver.cs</Link>
     </Compile>
     <Compile Include="..\MayhemCore\ModuleTypes\ICli.cs">
       <Link>ModuleTypes\ICli.cs</Link>
