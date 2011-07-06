@@ -66,12 +66,12 @@ namespace DefaultModules.Actions
         {
             hasConfig = true;
 
-            // Set our defaults
-            Seconds = 2;
-
             myTimer = new System.Timers.Timer();
             myTimer.Elapsed += new ElapsedEventHandler(myTimer_Elapsed);
             myTimer.Enabled = false;
+
+            // Set our defaults
+            Seconds = 2;
         }
 
         protected void SetInterval()
