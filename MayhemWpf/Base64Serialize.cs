@@ -37,6 +37,7 @@ namespace MayhemWpf
 
             FileStream stream = new FileStream(filename, FileMode.Create);
             XmlDictionaryWriter writer = XmlDictionaryWriter.CreateTextWriter(stream);
+            stream.Position = 0;
 
             dcs.WriteObject(writer, objectToSerialize, new ModuleTypeResolver());
 
