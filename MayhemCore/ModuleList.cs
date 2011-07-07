@@ -14,12 +14,13 @@ namespace MayhemCore
 	public abstract class ModuleList<T, V> : List<T> where T : ModuleBase
 	{
 		public ModuleList() {
-            RescanModules();
+            //RescanModules();
 		}
 
-        public void RescanModules() {
+        public void ScanModules(string path) {
             // Load up all the types of things that we want in the application root
-            FindTypes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules"));
+            FindTypes(path);
+            //Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules"));
             //FindTypes(Path.Combine(Application.StartupPath, "modules"));
             //FindTypes(Application.StartupPath);
         }

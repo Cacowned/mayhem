@@ -49,15 +49,6 @@ namespace MayhemWpf
 		public static readonly DependencyProperty ReactionProperty =
 			DependencyProperty.Register("Reaction", typeof(ReactionBase), typeof(MainWindow), new UIPropertyMetadata(null));
 
-
-
-		public MainWindow() {
-			Mayhem = new Mayhem<IWpf>();
-			InitializeComponent();
-		}
-
-
-
         public ObservableCollection<Error> Errors
         {
             get { return (ObservableCollection<Error>)GetValue(ErrorsProperty); }
@@ -68,7 +59,17 @@ namespace MayhemWpf
         public static readonly DependencyProperty ErrorsProperty =
             DependencyProperty.Register("Errors", typeof(ObservableCollection<Error>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<Error>()));
 
+        public MainWindow() {
+			Mayhem = new Mayhem<IWpf>();
 
+            string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules");
+
+            // Scan for modules in the module directory
+            Mayhem.ActionList.ScanModules(directory);
+            Mayhem.ReactionList.ScanModules(directory);
+            
+			InitializeComponent();            
+		}
 
         public void Load()
         {
