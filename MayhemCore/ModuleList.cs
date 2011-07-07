@@ -14,7 +14,7 @@ namespace MayhemCore
 	public abstract class ModuleList<T, V> : List<T> where T : ModuleBase
 	{
 		public ModuleList() {
-            //RescanModules();
+            //ScanModules();
 		}
 
         public void ScanModules(string path) {
