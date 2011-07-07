@@ -26,9 +26,7 @@ namespace MayhemWpf
 			
 			    if (window.ShowDialog() == true)
 			    {
-				    // Installation was a success                
-                    // Rescan for new modules
-                    main.Mayhem.RescanModules();
+				    // Installation was a success
 			    }
             }
 
