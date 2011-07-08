@@ -16,33 +16,35 @@ namespace MayhemWpf
 {
     public class Base64Serialize<T>
     {
-        public static string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "serial.settings");
-
-        public static T Deserialize() {
+        public static string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
+        
+        public static T Deserialize(List<Type> types) 
+        {
+            T obj = default(T);
             DataContractSerializer dcs = new DataContractSerializer(typeof(T));
 
-            FileStream stream = new FileStream(filename, FileMode.Open);
-            XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(stream, new XmlDictionaryReaderQuotas());
-            stream.Position = 0;
-
-            T obj = (T)dcs.ReadObject(reader, false, new ModuleTypeResolver());
-
-            reader.Close();
+            using (FileStream stream = new FileStream(filename, FileMode.Open))
+            {
+                using (XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(stream,XmlDictionaryReaderQuotas.Max))
+                {
+                    obj = (T)dcs.ReadObject(reader, false, new ModuleTypeResolver(types));
+                }
+            }
             
             return obj;
         }
 
-        public static void SerializeObject(T objectToSerialize) {
+        public static void SerializeObject(T objectToSerialize) 
+        {
             DataContractSerializer dcs = new DataContractSerializer(typeof(T));
 
-            FileStream stream = new FileStream(filename, FileMode.Create);
-            XmlDictionaryWriter writer = XmlDictionaryWriter.CreateTextWriter(stream);
-            stream.Position = 0;
-
-            dcs.WriteObject(writer, objectToSerialize, new ModuleTypeResolver());
-
-            writer.Close();
- 
+            using (FileStream stream = new FileStream(filename, FileMode.Create))
+            {
+                using (XmlDictionaryWriter writer = XmlDictionaryWriter.CreateTextWriter(stream))
+                {
+                    dcs.WriteObject(writer, objectToSerialize, new ModuleTypeResolver());
+                }
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace MayhemWpf
 {
@@ -49,6 +50,7 @@ namespace MayhemWpf
 		public static readonly DependencyProperty ReactionProperty =
 			DependencyProperty.Register("Reaction", typeof(ReactionBase), typeof(MainWindow), new UIPropertyMetadata(null));
 
+
         public ObservableCollection<Error> Errors
         {
             get { return (ObservableCollection<Error>)GetValue(ErrorsProperty); }
@@ -59,17 +61,19 @@ namespace MayhemWpf
         public static readonly DependencyProperty ErrorsProperty =
             DependencyProperty.Register("Errors", typeof(ObservableCollection<Error>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<Error>()));
 
-        public MainWindow() {
-			Mayhem = new Mayhem<IWpf>();
+        public MainWindow()
+        {
+            Mayhem = new Mayhem<IWpf>();
 
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules");
 
             // Scan for modules in the module directory
             Mayhem.ActionList.ScanModules(directory);
             Mayhem.ReactionList.ScanModules(directory);
-            
-			InitializeComponent();            
-		}
+
+            InitializeComponent();
+        }
+
 
         public void Load()
         {
@@ -80,7 +84,10 @@ namespace MayhemWpf
                     // Empty the connection list (should be empty already)
                     Mayhem.ConnectionList.Clear();
                     // Load all the serialized connections
-                    Mayhem.LoadConnections(Base64Serialize<ConnectionList>.Deserialize());
+                    List<Type> allTypes = new List<Type>();
+                    allTypes.AddRange(Mayhem.ActionList.types);
+                    allTypes.AddRange(Mayhem.ReactionList.types);
+                    Mayhem.LoadConnections(Base64Serialize<ConnectionList>.Deserialize(allTypes));
 
                     Debug.WriteLine("Starting up with " + Mayhem.ConnectionList.Count + " connections");
 
