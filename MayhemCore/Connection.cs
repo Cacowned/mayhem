@@ -9,7 +9,6 @@ namespace MayhemCore
 	[DataContract]
 	public class Connection
 	{
-
 		/// <summary>
 		/// True if this connection is enabled
 		/// false if disabled.
@@ -36,7 +35,8 @@ namespace MayhemCore
 		/// </summary>
 		/// <param name="action">The action to trigger on</param>
 		/// <param name="reaction">The reaction to perform</param>
-		public Connection(ActionBase action, ReactionBase reaction) {
+		public Connection(ActionBase action, ReactionBase reaction) 
+        {
 			// Set our action and reactions 
 			this.Action = action;
 			this.Reaction = reaction;
@@ -46,13 +46,14 @@ namespace MayhemCore
 			this.Reaction.connection = this;
 
 			// Set up the event handler for when the action triggers
-			this.Action.ActionActivated += this.action_activated;
+			this.Action.ActionActivated += this.OnActionActivated;
 		}
 
 		/// <summary>
 		/// Calls the Reaction when the action gets triggered.
 		/// </summary>
-		public void action_activated(object sender, EventArgs e) {
+		private void OnActionActivated(object sender, EventArgs e)
+        {
 			// If we got into this method call, we probably don't need
 			// to check if we are enabled.
 			if (Enabled)
@@ -63,23 +64,32 @@ namespace MayhemCore
 		/// Enable this connection's
 		/// action and reaction
 		/// </summary>
-		public void Enable() {
+		public void Enable() 
+        {
 			// if we are already enabled, just stop
-			if (this.Enabled) {
+			if (Enabled) 
+            {
 				return;
 			}
+            _Enable();
+		}
 
+        private void _Enable()
+        {
             // Enable the action
-			Action.Enable();
+            Action.Enable();
             // If the action didn't enable
-            if(!Action.Enabled) {
+            if (!Action.Enabled)
+            {
+                Enabled = false;
                 // Return out and don't try to 
                 // enable the reaction
                 return;
             }
 
-			Reaction.Enable();
-            if(!Reaction.Enabled) {
+            Reaction.Enable();
+            if (!Reaction.Enabled)
+            {
                 /* If we got here, then it means
                  * the action is enabled
                  * and the reaction won't enable
@@ -89,6 +99,7 @@ namespace MayhemCore
                  */
                 Action.Disable();
 
+                Enabled = false;
                 // Now return out
                 return;
             }
@@ -98,13 +109,15 @@ namespace MayhemCore
              */
             if (Action.Enabled && Reaction.Enabled)
             {
-                this.Enabled = true;
+                Enabled = true;
             }
-		}
+        }
 
-		public void Disable() {
+		public void Disable() 
+        {
 			// if we aren't already enabled, just stop
-			if (!this.Enabled) {
+			if (!Enabled)
+            {
 				return;
 			}
 
@@ -117,7 +130,7 @@ namespace MayhemCore
              * seem like a reasonable option though, so for
              * now, this will stay as it is
              */
-			this.Enabled = false;
+			Enabled = false;
 		}
 
         [OnDeserialized]
@@ -127,12 +140,12 @@ namespace MayhemCore
             Reaction.connection = this;
 
             // Set up the event handler for when the action triggers
-            this.Action.ActionActivated += this.action_activated;
+            this.Action.ActionActivated += this.OnActionActivated;
 
             // If we have started up and are enabled, then we need to
             // actually enable our actions and reactions
             if(Enabled)
-                this.Enable();
+                _Enable();
         }
 
 	}

@@ -81,6 +81,9 @@ namespace ZuneTest
 		[DllImport("user32.dll", SetLastError = true)]
 		public static extern uint SendInput(uint nInputs, INPUT_86[] pInputs, int cbSize);
 
+        [DllImport("user32.dll")]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
 		[DllImport("user32.dll")]
 		public static extern void mouse_event(uint dwFlags, int dx, int dy, int dwData, IntPtr dwExtraInfo);
 
