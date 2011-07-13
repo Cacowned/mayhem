@@ -49,6 +49,7 @@
     <Compile Include="Mayhem.cs" />
     <Compile Include="ModuleBase.cs" />
     <Compile Include="ModuleList.cs" />
+    <Compile Include="ModuleTypeResolver.cs" />
     <Compile Include="ModuleTypes\ICli.cs" />
     <Compile Include="ModuleTypes\IWp7.cs" />
     <Compile Include="ModuleTypes\IWpf.cs" />
