@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Xml;
 
-namespace MayhemWpf
+namespace MayhemCore
 {
     public class ModuleTypeResolver : DataContractResolver
     {

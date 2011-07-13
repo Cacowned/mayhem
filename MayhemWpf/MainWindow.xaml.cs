@@ -61,6 +61,8 @@ namespace MayhemWpf
         public static readonly DependencyProperty ErrorsProperty =
             DependencyProperty.Register("Errors", typeof(ObservableCollection<Error>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<Error>()));
 
+        private string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
+
         public MainWindow()
         {
             Mayhem = new Mayhem<IWpf>();
@@ -77,24 +79,27 @@ namespace MayhemWpf
 
         public void Load()
         {
-            if (File.Exists(Base64Serialize<ConnectionList>.filename))
+            using (FileStream stream = new FileStream(filename, FileMode.Open))
             {
-                try
+                if (File.Exists(filename))
                 {
-                    // Empty the connection list (should be empty already)
-                    Mayhem.ConnectionList.Clear();
-                    // Load all the serialized connections
-                    List<Type> allTypes = new List<Type>();
-                    allTypes.AddRange(Mayhem.ActionList.types);
-                    allTypes.AddRange(Mayhem.ReactionList.types);
-                    Mayhem.LoadConnections(Base64Serialize<ConnectionList>.Deserialize(allTypes));
+                    try
+                    {
+                        // Empty the connection list (should be empty already)
+                        Mayhem.ConnectionList.Clear();
+                        // Load all the serialized connections
+                        List<Type> allTypes = new List<Type>();
+                        allTypes.AddRange(Mayhem.ActionList.types);
+                        allTypes.AddRange(Mayhem.ReactionList.types);
+                        Mayhem.LoadConnections(ConnectionList.Deserialize(stream, allTypes));
 
-                    Debug.WriteLine("Starting up with " + Mayhem.ConnectionList.Count + " connections");
+                        Debug.WriteLine("Starting up with " + Mayhem.ConnectionList.Count + " connections");
 
-                }
-                catch (SerializationException e)
-                {
-                    Debug.WriteLine("(De-)SerializationException " + e);
+                    }
+                    catch (SerializationException e)
+                    {
+                        Debug.WriteLine("(De-)SerializationException " + e);
+                    }
                 }
             }
 
@@ -105,7 +110,10 @@ namespace MayhemWpf
 
         private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Base64Serialize<ConnectionList>.SerializeObject(Mayhem.ConnectionList);
+            using (FileStream stream = new FileStream(filename, FileMode.Create))
+            {
+                Mayhem.ConnectionList.Serialize(stream);
+            }
         }
 
 		private void ActionListClick(object sender, RoutedEventArgs e) {
