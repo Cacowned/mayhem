@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Runtime.Serialization;
+using System.ComponentModel;
 
 namespace MayhemCore
 {
@@ -8,7 +9,7 @@ namespace MayhemCore
 	/// This class is extended by ActionBase and ReactionBase
 	/// </summary>
     [DataContract]
-	public abstract class ModuleBase : IComparable<ModuleBase>
+	public abstract class ModuleBase : IComparable<ModuleBase>, INotifyPropertyChanged
 	{
 		// A reference to the connection that holds this module.
 		public Connection connection;
@@ -38,11 +39,22 @@ namespace MayhemCore
 			protected set;
 		}
 
-        public string ConfigString { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private string _configString;
+        public string ConfigString
+        {
+            get
+            {
+                return _configString;
+            }
+            set
+            {
+                _configString = value;
+                OnPropertyChanged("ConfigString");
+            }
+        }
 		
-		// TODO: category?
-
-
 		public virtual void Enable() {
 			this.Enabled = true;
 		}
@@ -62,5 +74,14 @@ namespace MayhemCore
 		public int CompareTo(ModuleBase obj) {
 			return String.Compare(this.Name, obj.Name);
 		}
+
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
 	}
 }
