@@ -74,9 +74,6 @@
     <Compile Include="..\MayhemCore\ModuleTypes\ICli.cs">
       <Link>ModuleTypes\ICli.cs</Link>
     </Compile>
-    <Compile Include="..\MayhemCore\ModuleTypes\IWp7.cs">
-      <Link>ModuleTypes\IWp7.cs</Link>
-    </Compile>
     <Compile Include="..\MayhemCore\ModuleTypes\IWpf.cs">
       <Link>ModuleTypes\IWpf.cs</Link>
     </Compile>
@@ -87,6 +84,7 @@
       <Link>ReactionList.cs</Link>
     </Compile>
     <Compile Include="ModuleList.cs" />
+    <Compile Include="ModuleTypes\IWp7.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
