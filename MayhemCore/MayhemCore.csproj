@@ -51,7 +51,6 @@
     <Compile Include="ModuleList.cs" />
     <Compile Include="ModuleTypeResolver.cs" />
     <Compile Include="ModuleTypes\ICli.cs" />
-    <Compile Include="ModuleTypes\IWp7.cs" />
     <Compile Include="ModuleTypes\IWpf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactionBase.cs" />
