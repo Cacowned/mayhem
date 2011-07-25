@@ -38,6 +38,15 @@ namespace MayhemCore
 			protected set;
 		}
 
+        public string DisplayText
+        {
+            get
+            {
+                return Name + ": " + ConfigString;
+            }
+        }
+
+
         public string ConfigString { get; set; }
 		
 		// TODO: category?

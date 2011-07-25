@@ -28,7 +28,7 @@ namespace MayhemCore
         [DataMember]
 		public ReactionBase Reaction { get; private set; }
 
-		public Connection() { }
+        public Connection() { }
 
 		/// <summary>
 		/// Create a new connection
