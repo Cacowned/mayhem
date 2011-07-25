@@ -1,4 +1,5 @@
 ﻿
+using System;
 namespace MayhemCore.ModuleTypes
 {
     /// <summary>
@@ -8,6 +9,6 @@ namespace MayhemCore.ModuleTypes
     /// </summary>
     public interface IWp7
     {
-        void Wp7Config();
+        Uri Wp7Config();
     }
 }
