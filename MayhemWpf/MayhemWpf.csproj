@@ -178,6 +178,24 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\redbluebutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\switch_bg.png" />
+    <Resource Include="Images\switch_toggle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\emptyaction.png" />
+    <Resource Include="Images\emptytrigger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\blue.png" />
+    <Resource Include="Images\red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\divider.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

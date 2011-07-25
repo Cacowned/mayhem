@@ -5,14 +5,10 @@
 		xmlns:src="clr-namespace:MayhemWpf.UserControls"
 		xmlns:common="clr-namespace:MayhemDefaultStyles.UserControls;assembly=MayhemDefaultStyles"
 		xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
-		Title="Mayhem" Height="600" Width="600" ResizeMode="CanMinimize"
+		Title="Mayhem" Height="686" Width="580" ResizeMode="CanMinimize"
 		x:Name="MayhemMainWindow"
 		Closing="AppClosing">
     <Window.Resources>
-        <Style x:Key="ConfigurationStringStyle">
-            <Setter Property="Control.FontStyle" Value="Italic" />
-        </Style>
-
         <Style TargetType="{x:Type ToggleButton}">
             <Setter Property="Width" Value="35" />
             <Setter Property="Content" Value="On"/>
@@ -23,11 +19,42 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType="{x:Type Button}" x:Key="ActionButton">
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="13.333" />
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="ReactionButton">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="Images\bluebutton.png"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="EmptyTriggerButton">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="Images\red.png"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Rectangle Fill="{TemplateBinding Background}" />
+                            <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="25,0,0,3" >
+                                <ContentPresenter.Effect>
+                                    <DropShadowEffect
+                                      ShadowDepth="1"
+                                      Direction="295"
+                                      Color="Black"
+                                      Opacity="0.5"
+                                     BlurRadius="1"/>
+                                </ContentPresenter.Effect>
+                            </ContentPresenter>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="TriggerButton">
             <Setter Property="Background">
                 <Setter.Value>
                     <ImageBrush ImageSource="Images\redbutton.png"/>
@@ -38,33 +65,43 @@
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
                             <Rectangle Fill="{TemplateBinding Background}" />
-                            <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,5" >
+                                <ContentPresenter.Effect>
+                                    <DropShadowEffect
+                                      ShadowDepth="1"
+                                      Direction="295"
+                                      Color="Black"
+                                      Opacity="0.5"
+                                     BlurRadius="1"/>
+                                </ContentPresenter.Effect>
+                            </ContentPresenter>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="ReactionButton">
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="EmptyActionButton">
             <Setter Property="Background">
                 <Setter.Value>
-                    <ImageBrush ImageSource="Images\bluebutton.png"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="{x:Type Button}" x:Key="ConfigureButton">
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Background">
-                <Setter.Value>
-                    <ImageBrush ImageSource="Images\Settings16.png"/>
+                    <ImageBrush ImageSource="Images\blue.png"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate>
+                    <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
-                            <Rectangle Width="16" Height="16" Fill="{TemplateBinding Property=Background}" />
+                            <Rectangle Fill="{TemplateBinding Background}" />
+                            <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="40,0,0,3" >
+                                <ContentPresenter.Effect>
+                                    <DropShadowEffect
+                                      ShadowDepth="1"
+                                      Direction="295"
+                                      Color="Black"
+                                      Opacity="0.5"
+                                     BlurRadius="1"/>
+                                </ContentPresenter.Effect>
+                            </ContentPresenter>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -101,49 +138,71 @@
 				ItemsSource="{Binding Path=Errors, ElementName=MayhemMainWindow}" >
             </ListBox>
 
-
             <StackPanel Style="{StaticResource BackgroundGradient}">
                 <src:MayhemHeader />
+                <Border BorderThickness="2" CornerRadius="20,20,20,20" BorderBrush="#D7D9DE" Margin="85,4,85,0"  Background="#8890A1" Padding="0,2,0,4">
+                        <Border.Effect>
+                            <DropShadowEffect Opacity="0.9" Direction="270" BlurRadius="16"/>
+                        </Border.Effect>
+                    <!--<Border BorderThickness="1" CornerRadius="20,20,20,20" BorderBrush="#D7D9DE" Padding="0,0,0,2">-->
+                        <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Center">
+                            <TextBlock Text="TO CREATE MAYHEM, select a trigger and an action" FontFamily="Gotham" Margin="0,0,0,4" HorizontalAlignment="Center">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect
+                                      ShadowDepth="1"
+                                      Direction="295"
+                                      Color="White"
+                                      Opacity="0.75"
+                                     BlurRadius="4"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Name="buttonEmptyTrigger" Content="Create Trigger" Foreground="#DDDDDD" FontWeight="DemiBold" FontSize="18" Style="{StaticResource EmptyTriggerButton}" Width="178" Height="46" Click="ActionListClick" Margin="0,0,0,0" />
+                                <Button Name="buttonEmptyAction" Content="Create Action" FontFamily="Segoe UI" Foreground="#DDDDDD" FontWeight="DemiBold"  FontSize="18" Style="{StaticResource EmptyActionButton}" Width="178" Height="46" Click="ReactionListClick" Margin="10,0,0,0" />
+                            </StackPanel>
+                        </StackPanel>
 
-                <common:Borders>
+                    <!--</Border>-->
+                    
+                </Border>
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,2">
+                    <StackPanel.Effect>
+                        <DropShadowEffect Opacity="0.9" Direction="270" BlurRadius="16"/>
+                    </StackPanel.Effect>
+                    <Image Source="Images/divider.png" Margin="175,0,0,0" />
+                    <Image Source="Images/divider.png"  Margin="175,0,0,0" />
+                </StackPanel>
+                <Border BorderThickness="2" CornerRadius="20,20,20,20" BorderBrush="#D7D9DE" Background="#B4BAC4" Margin="10,0,10,0" Padding="7" >
+                    <Border.Effect>
+                        <DropShadowEffect Opacity="0.9" Direction="270" BlurRadius="16"/>
+                    </Border.Effect>
                     <StackPanel Orientation="Vertical">
-                        <UniformGrid Rows="1" Columns="2" Height="40" Margin="0,0,0,10">
-                            <Button Style="{StaticResource ActionButton}" Width="176" Click="ActionListClick">
-                                <TextBlock Margin="0,0,15,0">
-										Choose an Action
-                                </TextBlock>
-                            </Button>
-                            <Button Style="{StaticResource ReactionButton}" Width="176" Click="ReactionListClick">
-                                <TextBlock Margin="15,0,0,0">
-										Choose a Reaction
-                                </TextBlock>
-                            </Button>
-                        </UniformGrid>
                         
-                        <!--<ScrollViewer MaxHeight="250">-->
+                        
+                        <ScrollViewer MaxHeight="390" VerticalScrollBarVisibility="Auto">
                             <ItemsControl x:Name="RunList">
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border BorderThickness="0,0,0,1" BorderBrush="#FFD4D4D4">
+                                        <!--<Border BorderThickness="0,0,0,1" BorderBrush="#FFD4D4D4">-->
                                             <StackPanel Orientation="Horizontal">
+                                            <src:ModuleView Connection="{Binding}" Margin="0,0,0,15" >
+                                                <src:ModuleView.Effect>
+                                                    <DropShadowEffect Opacity="0.5" Direction="270" BlurRadius="16"/>
+                                                </src:ModuleView.Effect>
+                                            </src:ModuleView>
+                                            <!--<src:ModuleView Module="{Binding Reaction}" />-->
 
-                                                <src:ModuleView Module="{Binding Action}" />
-                                                <src:ModuleView Module="{Binding Reaction}" />
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button Canvas.Right="40" Tag="{Binding}" Click="DeleteConnectionClick">Delete</Button>
-                                                    <ToggleButton x:Name="OnOffButton" Canvas.Right="0" Tag="{Binding}" IsChecked="{Binding Path=Enabled, Mode=OneWay}" Click="OnOffClick" />
-                                                </StackPanel>
                                             </StackPanel>
-                                        </Border>
+                                        <!--</Border>-->
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
 
                             </ItemsControl>
 
-                        <!--</ScrollViewer>-->
+                        </ScrollViewer>
                     </StackPanel>
-                </common:Borders>
+                </Border>
             </StackPanel>
         </DockPanel>
     </Grid>
