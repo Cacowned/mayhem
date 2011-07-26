@@ -79,7 +79,6 @@ namespace MayhemWpf
             InitializeComponent();
         }
 
-
         public void Load()
         {
             if (File.Exists(filename))
@@ -138,9 +137,12 @@ namespace MayhemWpf
                 {
                     Action = (ActionBase)dlg.ModulesList.SelectedItem;
 
+                    buttonEmptyTrigger.Style = (Style)FindResource("TriggerButton");
+                    buttonEmptyTrigger.Content = Action.Name;
+
                     // Take this item, remove it and add it to the front (MoveToFrontList)
-                    Mayhem.ActionList.Remove(Action);
-                    Mayhem.ActionList.Insert(0, Action);
+//                    Mayhem.ActionList.Remove(Action);
+//                    Mayhem.ActionList.Insert(0, Action);
 
                     CheckEnableBuild();
                 }
@@ -165,9 +167,12 @@ namespace MayhemWpf
                 {
                     Reaction = (ReactionBase)dlg.ModulesList.SelectedItem;
 
+                    buttonEmptyAction.Style = (Style)FindResource("ReactionButton");
+                    buttonEmptyAction.Content = Reaction.Name;
+
                     // Take this item, remove it and add it to the front (MoveToFrontList)
-                    Mayhem.ReactionList.Remove(Reaction);
-                    Mayhem.ReactionList.Insert(0, Reaction);
+//                    Mayhem.ReactionList.Remove(Reaction);
+//                    Mayhem.ReactionList.Insert(0, Reaction);
 
                     CheckEnableBuild();
                 }
@@ -188,6 +193,12 @@ namespace MayhemWpf
 
                 Mayhem.ConnectionList.Add(new Connection(action, reaction));
 
+                buttonEmptyTrigger.Style = (Style)FindResource("EmptyTriggerButton");
+                buttonEmptyAction.Style = (Style)FindResource("EmptyActionButton");
+                buttonEmptyTrigger.Content = "Create Trigger";
+                buttonEmptyAction.Content = "Create Action";
+
+
                 Action = null;
                 Reaction = null;
             }
@@ -199,7 +210,6 @@ namespace MayhemWpf
             c.Disable();
             Mayhem.ConnectionList.Remove(c);
         }
-
 
         private void OnOffClick(object sender, RoutedEventArgs e)
         {
