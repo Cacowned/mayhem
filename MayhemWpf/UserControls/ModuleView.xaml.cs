@@ -14,7 +14,6 @@ namespace MayhemWpf.UserControls
     /// </summary>
     public partial class ModuleView : UserControl
     {
-
         public Connection Connection
         {
             get { return (Connection)GetValue(ConnectionProperty); }
@@ -89,6 +88,13 @@ namespace MayhemWpf.UserControls
             }
 
             MainWindow.DimMainWindow(false);
+        }
+
+        private void DeleteConnectionClick(object sender, RoutedEventArgs e)
+        {
+            Connection c = ((Button)sender).Tag as Connection;
+            c.Disable();
+            MainWindow.Mayhem.ConnectionList.Remove(c);
         }
 
         private void OnOffClick(object sender, RoutedEventArgs e)

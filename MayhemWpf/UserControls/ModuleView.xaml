@@ -118,6 +118,7 @@
                     </Style>
                 </ToggleButton.Style>
             </ToggleButton>
+            <Button Canvas.Right="40" Tag="{Binding}" Click="DeleteConnectionClick">Delete</Button>
         </StackPanel>
     </StackPanel>
 </UserControl>
