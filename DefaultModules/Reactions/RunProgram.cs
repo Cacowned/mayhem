@@ -51,7 +51,12 @@ namespace DefaultModules.Reactions
 
         public override void Perform()
         {
-            System.Diagnostics.Process.Start(FileName, Arguments);
+            try {
+                System.Diagnostics.Process.Start(FileName, Arguments);
+            }
+            catch {
+                ErrorLog.AddError(ErrorType.Failure, "Could not start the application");
+            }
         }
 
         public void WpfConfig()
