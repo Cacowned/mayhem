@@ -5,7 +5,7 @@
 		xmlns:src="clr-namespace:MayhemWpf.UserControls"
 		xmlns:common="clr-namespace:MayhemDefaultStyles.UserControls;assembly=MayhemDefaultStyles"
 		xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
-		Title="Mayhem" Height="686" Width="625" ResizeMode="CanMinimize"
+		Title="Mayhem" Height="686" Width="645" ResizeMode="CanMinimize"
 		x:Name="MayhemMainWindow"
 		Closing="AppClosing">
     <Window.Resources>
@@ -134,8 +134,8 @@
 
             <ListBox
 				ItemTemplate="{StaticResource errorStyle}"  
-				DockPanel.Dock="Bottom" MaxHeight="150" MinHeight="150" 
-				ItemsSource="{Binding Path=Errors, ElementName=MayhemMainWindow}" >
+				DockPanel.Dock="Bottom" MaxHeight="130" MinHeight="130" 
+				ItemsSource="{Binding Path=Errors, ElementName=MayhemMainWindow}" Height="130">
             </ListBox>
 
             <StackPanel Style="{StaticResource BackgroundGradient}">
@@ -177,8 +177,8 @@
                         <DropShadowEffect Opacity="0.9" Direction="270" BlurRadius="16"/>
                     </Border.Effect>
                     <StackPanel Orientation="Vertical">
-                        <ScrollViewer MaxHeight="390" VerticalScrollBarVisibility="Auto">
-                            <ItemsControl x:Name="RunList">
+                        <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl x:Name="RunList" HorizontalAlignment="Center">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <!--<Border BorderThickness="0,0,0,1" BorderBrush="#FFD4D4D4">-->
