@@ -18,18 +18,18 @@ namespace MayhemWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        public Mayhem<IWpf> Mayhem
+        private static Mayhem<IWpf> mayhem;
+        public static Mayhem<IWpf> Mayhem
         {
-            get { return (Mayhem<IWpf>)GetValue(MayhemProperty); }
-            set { SetValue(MayhemProperty, value); }
+            get 
+            {
+                return mayhem; 
+            }
+            set
+            {
+                mayhem = value; 
+            }
         }
-
-        // Using a DependencyProperty as the backing store for Mayhem.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MayhemProperty =
-            DependencyProperty.Register("Mayhem", typeof(Mayhem<IWpf>), typeof(MainWindow), new UIPropertyMetadata(null));
-
-
 
         public ActionBase Action
         {
@@ -40,8 +40,6 @@ namespace MayhemWpf
         // Using a DependencyProperty as the backing store for Action.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ActionProperty =
             DependencyProperty.Register("Action", typeof(ActionBase), typeof(MainWindow), new UIPropertyMetadata(null));
-
-
 
         public ReactionBase Reaction
         {
@@ -204,54 +202,6 @@ namespace MayhemWpf
             }
         }
 
-        private void DeleteConnectionClick(object sender, RoutedEventArgs e)
-        {
-            Connection c = ((Button)sender).Tag as Connection;
-            c.Disable();
-            Mayhem.ConnectionList.Remove(c);
-        }
-
-        private void OnOffClick(object sender, RoutedEventArgs e)
-        {
-            ToggleButton button = (ToggleButton)sender;
-            Connection c = button.Tag as Connection;
-
-            if (!c.Enabled)
-            {
-                c.Enable();
-
-                if (!c.Enabled)
-                {
-                    //Debug.WriteLine("Connection didn't enable.");
-
-                    // We wanted to enable it, and it didn't enable
-                    // mark the event as handled so it doesn't
-                    // flip the button
-                    button.IsChecked = false;
-                    e.Handled = true;
-                }
-
-            }
-            else
-            {
-                c.Disable();
-
-                if (c.Enabled)
-                {
-                    //Debug.WriteLine("Connection didn't disable.");
-                    // We wanted to disable it, and it didn't disable
-                    // mark the event as handled so it doesn't
-                    // flip the button
-                    button.IsChecked = true;
-                    e.Handled = true;
-                }
-                else
-                {
-                    //Debug.WriteLine("Connection disabled");
-                }
-            }
-        }
-
         public static void DimMainWindow(bool dim)
         {
             WindowCollection wc = Application.Current.Windows;
@@ -260,7 +210,6 @@ namespace MayhemWpf
 
             foreach (Window w in wc)
             {
-
                 if (w.Name == "MayhemMainWindow")
                 {
                     mainW = w as MainWindow;
@@ -277,8 +226,6 @@ namespace MayhemWpf
                 }
                 else
                 {
-
-
                     var storyB = (Storyboard)mainW.DimRectangle.FindResource("FadeOut");
 
                     storyB.Completed += delegate(object sender, EventArgs e)
