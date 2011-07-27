@@ -29,8 +29,7 @@ namespace DefaultModules.Reactions
                 else
                 {
                     _soundPath = null;
-
-                    // TODO: decide to display warning (or not) 
+                    ErrorLog.AddError(ErrorType.Warning, "The sound file does not exist");
                 }
             }
         }
