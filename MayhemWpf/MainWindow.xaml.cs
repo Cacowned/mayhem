@@ -18,19 +18,6 @@ namespace MayhemWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static Mayhem<IWpf> mayhem;
-        public static Mayhem<IWpf> Mayhem
-        {
-            get 
-            {
-                return mayhem; 
-            }
-            set
-            {
-                mayhem = value; 
-            }
-        }
-
         public ActionBase Action
         {
             get { return (ActionBase)GetValue(ActionProperty); }
@@ -66,19 +53,20 @@ namespace MayhemWpf
 
         public MainWindow()
         {
-            Mayhem = new Mayhem<IWpf>();
+            Mayhem<IWpf> mayhem = MayhemInstance.Instance;
 
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules");
 
             // Scan for modules in the module directory
-            Mayhem.ActionList.ScanModules(directory);
-            Mayhem.ReactionList.ScanModules(directory);
+            mayhem.ActionList.ScanModules(directory);
+            mayhem.ReactionList.ScanModules(directory);
 
             InitializeComponent();
         }
 
         public void Load()
         {
+            Mayhem<IWpf> mayhem = MayhemInstance.Instance;
             if (File.Exists(filename))
             {
                 using (FileStream stream = new FileStream(filename, FileMode.Open))
@@ -87,14 +75,14 @@ namespace MayhemWpf
                     try
                     {
                         // Empty the connection list (should be empty already)
-                        Mayhem.ConnectionList.Clear();
+                        mayhem.ConnectionList.Clear();
                         // Load all the serialized connections
                         List<Type> allTypes = new List<Type>();
-                        allTypes.AddRange(Mayhem.ActionList.types);
-                        allTypes.AddRange(Mayhem.ReactionList.types);
-                        Mayhem.LoadConnections(ConnectionList.Deserialize(stream, allTypes));
+                        allTypes.AddRange(mayhem.ActionList.types);
+                        allTypes.AddRange(mayhem.ReactionList.types);
+                        mayhem.LoadConnections(ConnectionList.Deserialize(stream, allTypes));
 
-                        Debug.WriteLine("Starting up with " + Mayhem.ConnectionList.Count + " connections");
+                        Debug.WriteLine("Starting up with " + mayhem.ConnectionList.Count + " connections");
 
                     }
                     catch (SerializationException e)
@@ -104,7 +92,7 @@ namespace MayhemWpf
                 }
             }
 
-            RunList.ItemsSource = Mayhem.ConnectionList;
+            RunList.ItemsSource = mayhem.ConnectionList;
 
             Errors = ErrorLog.Errors;
         }
@@ -113,7 +101,7 @@ namespace MayhemWpf
         {
             using (FileStream stream = new FileStream(filename, FileMode.Create))
             {
-                Mayhem.ConnectionList.Serialize(stream);
+                MayhemInstance.Instance.ConnectionList.Serialize(stream);
             }
         }
 
@@ -121,7 +109,7 @@ namespace MayhemWpf
         {
             DimMainWindow(true);
 
-            ModuleList dlg = new ModuleList(Mayhem.ActionList, "Action List");
+            ModuleList dlg = new ModuleList(MayhemInstance.Instance.ActionList, "Action List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
@@ -151,7 +139,7 @@ namespace MayhemWpf
         {
             DimMainWindow(true);
 
-            ModuleList dlg = new ModuleList(Mayhem.ReactionList, "Reaction List");
+            ModuleList dlg = new ModuleList(MayhemInstance.Instance.ReactionList, "Reaction List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
@@ -189,7 +177,7 @@ namespace MayhemWpf
                 t = Reaction.GetType();
                 ReactionBase reaction = (ReactionBase)Activator.CreateInstance(t);
 
-                Mayhem.ConnectionList.Add(new Connection(action, reaction));
+                MayhemInstance.Instance.ConnectionList.Add(new Connection(action, reaction));
 
                 buttonEmptyTrigger.Style = (Style)FindResource("EmptyTriggerButton");
                 buttonEmptyAction.Style = (Style)FindResource("EmptyActionButton");
