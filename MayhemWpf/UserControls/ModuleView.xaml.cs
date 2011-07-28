@@ -94,7 +94,8 @@ namespace MayhemWpf.UserControls
         {
             Connection c = ((Button)sender).Tag as Connection;
             c.Disable();
-            MainWindow.Mayhem.ConnectionList.Remove(c);
+
+            MayhemInstance.Instance.ConnectionList.Remove(c);
         }
 
         private void OnOffClick(object sender, RoutedEventArgs e)
