@@ -86,20 +86,20 @@ namespace MayhemCli
 
 				Console.WriteLine("Configuring {0}", printConnection(connection));
 
-				Console.WriteLine("Configure Action or Reaction? A/R: ");
+				Console.WriteLine("Configure Event or Reaction? A/R: ");
 				string input = Console.ReadLine();
 				if (input.ToLower().Equals("a")) {
-					if (!connection.Action.HasConfig) {
-						Console.WriteLine("Action {0} can't be configured", connection.Action);
+					if (!connection.Event.HasConfig) {
+						Console.WriteLine("Event {0} can't be configured", connection.Event);
 					} else {
-						Console.WriteLine("Configuring {0}", connection.Action);
+						Console.WriteLine("Configuring {0}", connection.Event);
 
-						// We want to disable the action, and re-enable it if it was enabled
+						// We want to disable the event, and re-enable it if it was enabled
 						// to begin with
 						bool wasEnabled = connection.Enabled;
 
 						connection.Disable();
-						((ICli)connection.Action).CliConfig();
+						((ICli)connection.Event).CliConfig();
 
 						if (wasEnabled) {
 							connection.Enable();
@@ -151,32 +151,32 @@ namespace MayhemCli
 
 		public static void addConnection() {
 			Console.WriteLine("Create a Connection:");
-			ActionBase action = chooseAction();
+			EventBase eventInstance = chooseEvent();
 
 			Console.WriteLine();
 			ReactionBase reaction = chooseReaction();
 
-			Connection conn = new Connection(action, reaction);
+			Connection conn = new Connection(eventInstance, reaction);
 
 			mayhem.ConnectionList.Add(conn);
 
 			Console.WriteLine("Created a new connection: {0}", printConnection(conn));
 		}
 
-		public static ActionBase chooseAction() {
-			int numActions = mayhem.ActionList.Count();
-			Console.WriteLine("Choose an Action:");
-			for (int i = 0; i < numActions; i++) {
+		public static EventBase chooseEvent() {
+			int numEvents = mayhem.EventList.Count();
+			Console.WriteLine("Choose an Event:");
+			for (int i = 0; i < numEvents; i++) {
 				Console.Write(i + ")\t");
-				Console.WriteLine(mayhem.ActionList[i].Name);
+				Console.WriteLine(mayhem.EventList[i].Name);
 			}
 
-			int num = validateNumber(numActions - 1);
+			int num = validateNumber(numEvents - 1);
 
-			Type actionType = mayhem.ActionList[num].GetType();
-			var action = Activator.CreateInstance(actionType);
+			Type eventType = mayhem.EventList[num].GetType();
+			var eventInstance = Activator.CreateInstance(eventType);
 
-			return (ActionBase)action;
+			return (EventBase)eventInstance;
 		}
 
 		public static ReactionBase chooseReaction() {
@@ -223,7 +223,7 @@ namespace MayhemCli
 		}
 
 		public static string printConnection(Connection connection) {
-			return String.Format("{0}{1} to {2}{3}", connection.Action.Name, printConfig(connection.Action),
+			return String.Format("{0}{1} to {2}{3}", connection.Event.Name, printConfig(connection.Event),
 														connection.Reaction.Name, printConfig(connection.Reaction));
 		}
 

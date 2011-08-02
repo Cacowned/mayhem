@@ -8,9 +8,9 @@ using System.Diagnostics;
 namespace MayhemCore
 {
 	/// <summary>
-	/// Helper methods for Action and Reaction lists
+	/// Helper methods for Event and Reaction lists
 	/// </summary>
-	/// <typeparam name="T">ActionBase or ReactionBase</typeparam>
+	/// <typeparam name="T">EventBase or ReactionBase</typeparam>
 	/// <typeparam name="V">The interface type that modules must implement</typeparam>
 	public abstract class ModuleList<T, V> : List<T> where T : ModuleBase
 	{

@@ -2,7 +2,7 @@
 namespace MayhemCore
 {
 	/// <summary>
-	/// Main Mayhem class, contains lists of actions, reactions, and list of connections
+	/// Main Mayhem class, contains lists of events, reactions, and list of connections
 	/// 
 	/// When making a new app that uses Mayhem, you should create an instance of this class
 	/// </summary>
@@ -17,7 +17,7 @@ namespace MayhemCore
 			get;
 			private set;
 		}
-		public ActionList<T> ActionList {
+		public EventList<T> EventList {
 			get;
 			private set;
 		}
@@ -28,7 +28,7 @@ namespace MayhemCore
 
 		public Mayhem() {
 			// Set up our three lists
-			ActionList = new ActionList<T>();
+			EventList = new EventList<T>();
 			ReactionList = new ReactionList<T>();
 			ConnectionList = new ConnectionList();
 		}
