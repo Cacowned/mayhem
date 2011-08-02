@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
 using System;
+using System.Windows.Media.Effects;
 
 namespace MayhemWpf.UserControls
 {
@@ -26,6 +27,12 @@ namespace MayhemWpf.UserControls
 
         DoubleAnimation animOut;
         DoubleAnimation animIn;
+        DoubleAnimation animBlurOut;
+        DoubleAnimation animBlurIn;
+        DoubleAnimation animBlurOpacityOut;
+        DoubleAnimation animBlurOpacityIn;
+        DoubleAnimation animBlurDistanceOut;
+        DoubleAnimation animBlurDistanceIn;
 
         public ModuleView()
         {
@@ -38,6 +45,30 @@ namespace MayhemWpf.UserControls
             animIn = new DoubleAnimation();
             animIn.To = 1.0;
             animIn.Duration = new Duration(TimeSpan.FromSeconds(0.25));
+
+            animBlurOut = new DoubleAnimation();
+            animBlurOut.To = 4;
+            animBlurOut.Duration = new Duration(TimeSpan.FromSeconds(0.25));
+
+            animBlurIn = new DoubleAnimation();
+            animBlurIn.To = 16;
+            animBlurIn.Duration = new Duration(TimeSpan.FromSeconds(0.25));
+
+            animBlurOpacityOut = new DoubleAnimation();
+            animBlurOpacityOut.To = 0.5;
+            animBlurOpacityOut.Duration = new Duration(TimeSpan.FromSeconds(0.25));
+
+            animBlurOpacityIn = new DoubleAnimation();
+            animBlurOpacityIn.To = 0.9;
+            animBlurOpacityIn.Duration = new Duration(TimeSpan.FromSeconds(0.25));
+
+            animBlurDistanceOut = new DoubleAnimation();
+            animBlurDistanceOut.To = 2;
+            animBlurDistanceOut.Duration = new Duration(TimeSpan.FromSeconds(0.25));
+
+            animBlurDistanceIn = new DoubleAnimation();
+            animBlurDistanceIn.To = 5;
+            animBlurDistanceIn.Duration = new Duration(TimeSpan.FromSeconds(0.25));
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -48,6 +79,9 @@ namespace MayhemWpf.UserControls
                 buttonReaction.Cursor = null;
 
             connectionButtons.Opacity = Connection.Enabled ? 1 : 0.5;
+            dropShadow.BlurRadius = Connection.Enabled ? 16 : 4;
+            dropShadow.Opacity = Connection.Enabled ? 0.9 : 0.5;
+            dropShadow.ShadowDepth = Connection.Enabled ? 5 : 2;
         }
 
         private void ConfigureTrigger_Click(object sender, RoutedEventArgs e)
@@ -137,9 +171,19 @@ namespace MayhemWpf.UserControls
                 }
             }
             if (Connection.Enabled)
+            {
                 connectionButtons.BeginAnimation(StackPanel.OpacityProperty, animIn);
+                dropShadow.BeginAnimation(DropShadowEffect.BlurRadiusProperty, animBlurIn);
+                dropShadow.BeginAnimation(DropShadowEffect.OpacityProperty, animBlurOpacityIn);
+                dropShadow.BeginAnimation(DropShadowEffect.ShadowDepthProperty, animBlurDistanceIn);
+            }
             else
+            {
                 connectionButtons.BeginAnimation(StackPanel.OpacityProperty, animOut);
+                dropShadow.BeginAnimation(DropShadowEffect.BlurRadiusProperty, animBlurOut);
+                dropShadow.BeginAnimation(DropShadowEffect.OpacityProperty, animBlurOpacityOut);
+                dropShadow.BeginAnimation(DropShadowEffect.ShadowDepthProperty, animBlurDistanceOut);
+            }
             //connectionButtons.Opacity = Connection.Enabled ? 1 : 0.5;
         }
     }
