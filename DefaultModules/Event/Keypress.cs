@@ -8,11 +8,11 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 
-namespace DefaultModules.Actions
+namespace DefaultModules.Events
 {
     // Because of it's support for shifts and stuff, it won't work in CLI mode.
     [DataContract]
-    public class Keypress : ActionBase, IWpf
+    public class Keypress : EventBase, IWpf
     {
         public const string TAG = "[Key Press]";
 
@@ -26,7 +26,7 @@ namespace DefaultModules.Actions
         private HashSet<System.Windows.Forms.Keys> MonitorKeysDown { get; set; }
 
         public Keypress()
-            : base("Key Press", "This trigger fires on a predefined key press")
+            : base("Key Press", "This event fires on a predefined key press")
         {
 
             hasConfig = true;
@@ -112,7 +112,7 @@ namespace DefaultModules.Actions
 
             if (Keysets_Equal() && Enabled)
             {
-                OnActionActivated();
+                OnEventActivated();
             }
 
         }

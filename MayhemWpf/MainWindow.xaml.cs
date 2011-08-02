@@ -18,15 +18,15 @@ namespace MayhemWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ActionBase Action
+        public EventBase Event
         {
-            get { return (ActionBase)GetValue(ActionProperty); }
-            set { SetValue(ActionProperty, value); }
+            get { return (EventBase)GetValue(EventProperty); }
+            set { SetValue(EventProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Action.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ActionProperty =
-            DependencyProperty.Register("Action", typeof(ActionBase), typeof(MainWindow), new UIPropertyMetadata(null));
+        // Using a DependencyProperty as the backing store for Event.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EventProperty =
+            DependencyProperty.Register("Event", typeof(EventBase), typeof(MainWindow), new UIPropertyMetadata(null));
 
         public ReactionBase Reaction
         {
@@ -58,7 +58,7 @@ namespace MayhemWpf
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules");
 
             // Scan for modules in the module directory
-            mayhem.ActionList.ScanModules(directory);
+            mayhem.EventList.ScanModules(directory);
             mayhem.ReactionList.ScanModules(directory);
 
             InitializeComponent();
@@ -78,7 +78,7 @@ namespace MayhemWpf
                         mayhem.ConnectionList.Clear();
                         // Load all the serialized connections
                         List<Type> allTypes = new List<Type>();
-                        allTypes.AddRange(mayhem.ActionList.types);
+                        allTypes.AddRange(mayhem.EventList.types);
                         allTypes.AddRange(mayhem.ReactionList.types);
                         mayhem.LoadConnections(ConnectionList.Deserialize(stream, allTypes));
 
@@ -105,11 +105,11 @@ namespace MayhemWpf
             }
         }
 
-        private void ActionListClick(object sender, RoutedEventArgs e)
+        private void EventListClick(object sender, RoutedEventArgs e)
         {
             DimMainWindow(true);
 
-            ModuleList dlg = new ModuleList(MayhemInstance.Instance.ActionList, "Action List");
+            ModuleList dlg = new ModuleList(MayhemInstance.Instance.EventList, "Event List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
@@ -121,14 +121,14 @@ namespace MayhemWpf
             {
                 if (dlg.ModulesList.SelectedItem != null)
                 {
-                    Action = (ActionBase)dlg.ModulesList.SelectedItem;
+                    Event = (EventBase)dlg.ModulesList.SelectedItem;
 
-                    buttonEmptyTrigger.Style = (Style)FindResource("TriggerButton");
-                    buttonEmptyTrigger.Content = Action.Name;
+                    buttonEmptyEvent.Style = (Style)FindResource("EventButton");
+                    buttonEmptyEvent.Content = Event.Name;
 
                     // Take this item, remove it and add it to the front (MoveToFrontList)
-//                    Mayhem.ActionList.Remove(Action);
-//                    Mayhem.ActionList.Insert(0, Action);
+//                    Mayhem.EventList.Remove(Event);
+//                    Mayhem.EventList.Insert(0, Event);
 
                     CheckEnableBuild();
                 }
@@ -153,8 +153,8 @@ namespace MayhemWpf
                 {
                     Reaction = (ReactionBase)dlg.ModulesList.SelectedItem;
 
-                    buttonEmptyAction.Style = (Style)FindResource("ReactionButton");
-                    buttonEmptyAction.Content = Reaction.Name;
+                    buttonEmptyReaction.Style = (Style)FindResource("ReactionButton");
+                    buttonEmptyReaction.Content = Reaction.Name;
 
                     // Take this item, remove it and add it to the front (MoveToFrontList)
 //                    Mayhem.ReactionList.Remove(Reaction);
@@ -167,25 +167,25 @@ namespace MayhemWpf
 
         private void CheckEnableBuild()
         {
-            if (Action != null && Reaction != null)
+            if (Event != null && Reaction != null)
             {
 
                 // We have to clone the action and reaction
-                Type t = Action.GetType();
-                ActionBase action = (ActionBase)Activator.CreateInstance(t);
+                Type t = Event.GetType();
+                EventBase action = (EventBase)Activator.CreateInstance(t);
 
                 t = Reaction.GetType();
                 ReactionBase reaction = (ReactionBase)Activator.CreateInstance(t);
 
                 MayhemInstance.Instance.ConnectionList.Add(new Connection(action, reaction));
 
-                buttonEmptyTrigger.Style = (Style)FindResource("EmptyTriggerButton");
-                buttonEmptyAction.Style = (Style)FindResource("EmptyActionButton");
-                buttonEmptyTrigger.Content = "Create Trigger";
-                buttonEmptyAction.Content = "Create Action";
+                buttonEmptyReaction.Style = (Style)FindResource("EmptyReactionButton");
+                buttonEmptyEvent.Style = (Style)FindResource("EmptyEventButton");
+                buttonEmptyReaction.Content = "Create Reaction";
+                buttonEmptyEvent.Content = "Create Event";
 
 
-                Action = null;
+                Event = null;
                 Reaction = null;
             }
         }

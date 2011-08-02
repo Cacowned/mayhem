@@ -50,8 +50,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\Keypress.cs" />
-    <Compile Include="Actions\Timer.cs" />
+    <Compile Include="Event\Keypress.cs" />
+    <Compile Include="Event\Timer.cs" />
     <Compile Include="KeypressHelpers\InterceptKeys.cs" />
     <Compile Include="LowLevel\MPlayer.cs" />
     <Compile Include="LowLevel\Native.cs" />

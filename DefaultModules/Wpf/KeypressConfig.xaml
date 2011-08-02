@@ -11,7 +11,7 @@
             <src:WindowHeader Text="Config: KeyPress" />
             <src:Borders>
             <StackPanel>
-                <TextBlock TextWrapping="WrapWithOverflow">Please enter a combination of keys which will activate this action.</TextBlock>
+                <TextBlock TextWrapping="WrapWithOverflow">Please enter a combination of keys which will activate this event.</TextBlock>
                 <TextBlock TextWrapping="WrapWithOverflow" Margin="0 50 0 20" MinHeight="50" Text="{Binding KeysDown, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" FontSize="14" TextAlignment="Center" FontWeight="Bold" />
                 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">

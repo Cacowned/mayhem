@@ -6,10 +6,10 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 
-namespace DefaultModules.Actions
+namespace DefaultModules.Events
 {
     [DataContract]
-    public class Timer : ActionBase, ICli, IWpf
+    public class Timer : EventBase, ICli, IWpf
     {
         private System.Timers.Timer myTimer;
 
@@ -144,7 +144,7 @@ namespace DefaultModules.Actions
 
         private void myTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            base.OnActionActivated();
+            base.OnEventActivated();
         }
 
         public override void Enable()

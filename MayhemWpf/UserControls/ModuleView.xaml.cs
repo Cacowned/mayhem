@@ -42,7 +42,7 @@ namespace MayhemWpf.UserControls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!Connection.Action.HasConfig)
+            if (!Connection.Event.HasConfig)
                 buttonTrigger.Cursor = null;
             if (!Connection.Reaction.HasConfig)
                 buttonReaction.Cursor = null;
@@ -52,7 +52,7 @@ namespace MayhemWpf.UserControls
 
         private void ConfigureTrigger_Click(object sender, RoutedEventArgs e)
         {
-            if (!Connection.Action.HasConfig)
+            if (!Connection.Event.HasConfig)
                 return;
 
             MainWindow.DimMainWindow(true);
@@ -60,7 +60,7 @@ namespace MayhemWpf.UserControls
             bool wasEnabled = Connection.Enabled;
 
             Connection.Disable();
-            ((IWpf)Connection.Action).WpfConfig();
+            ((IWpf)Connection.Event).WpfConfig();
 
             if (wasEnabled)
             {
