@@ -81,6 +81,7 @@
     <Compile Include="InstallModule.xaml.cs">
       <DependentUpon>InstallModule.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MayhemInstance.cs" />
     <Compile Include="ModuleList.xaml.cs">
       <DependentUpon>ModuleList.xaml</DependentUpon>
     </Compile>
