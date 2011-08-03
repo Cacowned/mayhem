@@ -6,6 +6,7 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using SpeechLib;
 using System.Windows.Controls;
+using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions
 {
@@ -59,7 +60,7 @@ namespace DefaultModules.Reactions
         }
          * */
 
-        public UserControl ConfigurationControl
+        public IWpfConfig ConfigurationControl
         {
             get { return new TextToSpeechConfig(Message); }
         }

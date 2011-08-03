@@ -50,8 +50,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Event\Keypress.cs" />
-    <Compile Include="Event\Timer.cs" />
+    <Compile Include="Events\Keypress.cs" />
+    <Compile Include="Events\Timer.cs" />
     <Compile Include="KeypressHelpers\InterceptKeys.cs" />
     <Compile Include="LowLevel\MPlayer.cs" />
     <Compile Include="LowLevel\Native.cs" />
@@ -74,9 +74,6 @@
     </Compile>
     <Compile Include="Wpf\RunProgramConfig.xaml.cs">
       <DependentUpon>RunProgramConfig.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wpf\SmsMessageConfig.xaml.cs">
-      <DependentUpon>SmsMessageConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\TextToSpeechConfig.xaml.cs">
       <DependentUpon>TextToSpeechConfig.xaml</DependentUpon>
@@ -135,10 +132,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\RunProgramConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wpf\SmsMessageConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -94,7 +94,7 @@ namespace MayhemWpf.UserControls
             bool wasEnabled = Connection.Enabled;
 
             Connection.Disable();
-            ConfigWindow config = new ConfigWindow((IWpf)Connection.Action);
+            ConfigWindow config = new ConfigWindow((IWpf)Connection.Event);
             config.ShowDialog();
 
 //            ((IWpf)Connection.Action).WpfConfig();

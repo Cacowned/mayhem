@@ -6,6 +6,7 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using System.Windows.Controls;
+using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions
 {
@@ -79,7 +80,7 @@ namespace DefaultModules.Reactions
         }
         */
 
-        public UserControl ConfigurationControl
+        public IWpfConfig ConfigurationControl
         {
             get { return new RunProgramConfig(FileName, Arguments); }
         }
@@ -89,7 +90,6 @@ namespace DefaultModules.Reactions
             RunProgramConfig rpc = configurationControl as RunProgramConfig;
             FileName = rpc.Filename;
             Arguments = rpc.Arguments;
-            SetConfigString();
         }
 
         private void SetConfigString()

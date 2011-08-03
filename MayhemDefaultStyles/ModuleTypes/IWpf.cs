@@ -1,5 +1,6 @@
-﻿
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using MayhemDefaultStyles.UserControls;
+
 namespace MayhemCore.ModuleTypes
 {
 	/// <summary>
@@ -10,7 +11,7 @@ namespace MayhemCore.ModuleTypes
 	public interface IWpf
 	{
 //		void WpfConfig();
-        UserControl ConfigurationControl { get; }
+        IWpfConfig ConfigurationControl { get; }
         void OnSaved(UserControl configurationControl);
 	}
 }

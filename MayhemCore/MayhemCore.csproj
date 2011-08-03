@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionBase.cs" />
-    <Compile Include="ActionList.cs" />
+    <Compile Include="EventBase.cs" />
+    <Compile Include="EventList.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionList.cs" />
     <Compile Include="ErrorLog.cs" />
