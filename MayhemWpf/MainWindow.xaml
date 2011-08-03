@@ -146,7 +146,7 @@
                         </Border.Effect>
                     <!--<Border BorderThickness="1" CornerRadius="20,20,20,20" BorderBrush="#D7D9DE" Padding="0,0,0,2">-->
                         <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Center">
-                            <TextBlock Text="TO CREATE MAYHEM, select a trigger and an action" FontFamily="Gotham" Margin="0,0,0,4" HorizontalAlignment="Center">
+                            <TextBlock Text="TO CREATE MAYHEM, select an event and a reaction" FontFamily="Gotham" Margin="0,0,0,4" HorizontalAlignment="Center">
                                 <TextBlock.Effect>
                                     <DropShadowEffect
                                       ShadowDepth="1"

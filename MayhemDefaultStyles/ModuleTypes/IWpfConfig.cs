@@ -11,6 +11,8 @@ namespace MayhemDefaultStyles.UserControls
         public virtual string Title { get { return "Title"; } }
         public virtual bool OnSave() { return true; }
         public virtual void OnCancel() { }
+        public virtual void OnLoad() { }
+        public virtual void OnClosing() { }
         public delegate void ConfigCanSaveHandler(bool canSave);
         public event ConfigCanSaveHandler CanSavedChanged;
         private bool canSave = true;

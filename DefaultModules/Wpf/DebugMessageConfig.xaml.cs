@@ -4,19 +4,20 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Wpf
 {
-	/// <summary>
-	/// Interaction logic for DebugMessageConfig.xaml
-	/// </summary>
-	public partial class DebugMessageConfig : IWpfConfig
-	{
-		public string message;
+    /// <summary>
+    /// Interaction logic for DebugMessageConfig.xaml
+    /// </summary>
+    public partial class DebugMessageConfig : IWpfConfig
+    {
+        public string Message;
 
-		public DebugMessageConfig(string message) {
-			this.message = message;
-			InitializeComponent();
+        public DebugMessageConfig(string message)
+        {
+            this.Message = message;
+            InitializeComponent();
 
-			MessageText.Text = this.message;
-		}
+            MessageText.Text = this.Message;
+        }
 
         public override bool OnSave()
         {
@@ -25,7 +26,7 @@ namespace DefaultModules.Wpf
                 MessageBox.Show("You must provide a message");
                 return false;
             }
-            message = MessageText.Text.Trim();
+            Message = MessageText.Text.Trim();
             return true;
         }
 

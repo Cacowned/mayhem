@@ -6,6 +6,7 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using System.Windows.Controls;
+using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions.Debugging
 {
@@ -20,8 +21,6 @@ namespace DefaultModules.Reactions.Debugging
             SetConfigString();
         }
 
-        
-        
         public override void Perform()
         {
             Debug.WriteLine(String.Format("{0}: {1}", DateTime.Now.ToLongTimeString(), message));
@@ -47,6 +46,8 @@ namespace DefaultModules.Reactions.Debugging
 
         public void OnSaved(UserControl configurationControl)
         {
+            message = ((DebugMessageConfig)configurationControl).Message;
+            SetConfigString();
         }
 
         private void SetConfigString()
@@ -54,7 +55,7 @@ namespace DefaultModules.Reactions.Debugging
             ConfigString = message;
         }
 
-        public UserControl ConfigurationControl
+        public IWpfConfig ConfigurationControl
         {
             get { return new DebugMessageConfig(message); }
         }

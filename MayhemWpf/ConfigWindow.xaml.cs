@@ -44,6 +44,7 @@ namespace MayhemWpf
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            iWpfConfig.OnLoad();
         }
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
@@ -52,12 +53,14 @@ namespace MayhemWpf
             {
                 iWpf.OnSaved(ConfigContent.Content as UserControl);
             }
-			DialogResult = true;
+            iWpfConfig.OnClosing();
+            DialogResult = true;
         }
 
         private void Button_Cancel_Click(object sender, RoutedEventArgs e)
         {
             iWpfConfig.OnCancel();
+            iWpfConfig.OnClosing();
             DialogResult = false;
         }
     }
