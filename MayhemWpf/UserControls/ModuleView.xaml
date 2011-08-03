@@ -19,7 +19,7 @@
             <Setter Property="Control.FontSize" Value="16" />
             <Setter Property="Control.Foreground" Value="White" />
         </Style>
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="TriggerButton">
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource EventButton}" x:Key="TriggerButton">
             <Setter Property="FontWeight" Value="Normal" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Background">
@@ -38,7 +38,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="ReactionButton">
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource EventButton}" x:Key="ReactionButton">
             <Setter Property="FontWeight" Value="Normal" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Background">
@@ -66,9 +66,9 @@
                 </StackPanel.Effect>
                 <Button Name="buttonTrigger" Style="{StaticResource TriggerButton}" Width="250" Height="40" Margin="0,0,0,0" Click="ConfigureTrigger_Click">
                     <Grid Width="220" Margin="0,0,0,-2" >
-                        <TextBlock Style="{StaticResource DisplayNameStyle}" Margin="5,-2,14,6" Text="{Binding Connection.Action.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        <TextBlock Style="{StaticResource DisplayNameStyle}" Margin="5,-2,14,6" Text="{Binding Connection.Event.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                         <Image Width="15" Height="16" Margin="6,20,200,-1" Source="/MayhemWpf;component/Images/Settings16.png" />
-                        <TextBlock Style="{StaticResource ConfigurationStringStyle}" Margin="25,18,0,-2" Text="{Binding Connection.Action.ConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        <TextBlock Style="{StaticResource ConfigurationStringStyle}" Margin="25,18,0,-2" Text="{Binding Connection.Event.ConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                     </Grid>
                 </Button>
                 <Button Name="buttonReaction" Style="{StaticResource ReactionButton}" Width="250" Height="40" Margin="-33,0,0,0" Click="ConfigureReaction_Click">
@@ -78,9 +78,9 @@
                         <TextBlock Style="{StaticResource ConfigurationStringStyle}" Margin="25,18,0,-10" Text="{Binding Connection.Reaction.ConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                     </Grid>
                 </Button>
-                <!--<Button Name="buttonReaction" Style="{StaticResource ActionButton}" Width="178" Height="59" Margin="0,0,0,0" />-->
+                <!--<Button Name="buttonReaction" Style="{StaticResource EventButton}" Width="178" Height="59" Margin="0,0,0,0" />-->
                 <!--<Image Source="/MayhemWpf;component/Images/redbluebutton.png" Width="400" Height="40" Stretch="Fill" MouseLeftButtonDown="ConfigureButton_Click" />-->
-                <!--<TextBlock Margin="15,0,0,5" VerticalAlignment="Center" Style="{DynamicResource StyleModuleName}" Text="{Binding Connection.Action.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />-->
+                <!--<TextBlock Margin="15,0,0,5" VerticalAlignment="Center" Style="{DynamicResource StyleModuleName}" Text="{Binding Connection.Event.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />-->
                 <!--<TextBlock Margin="0,0,15,5" VerticalAlignment="Center" HorizontalAlignment="Right"  Style="{DynamicResource StyleModuleName}" Text="{Binding Connection.Reaction.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />-->
                 <!--<StackPanel Orientation="Horizontal" Visibility="{Binding Module.HasConfig, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Converter={StaticResource vizConverter}}" >
                     <Button Width="15" x:Name="ConfigureButton" Style="{DynamicResource ConfigureButton}" Click="ConfigureButton_Click" />

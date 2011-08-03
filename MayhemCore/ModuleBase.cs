@@ -6,7 +6,7 @@ using System.ComponentModel;
 namespace MayhemCore
 {
 	/// <summary>
-	/// This class is extended by ActionBase and ReactionBase
+	/// This class is extended by EventBase and ReactionBase
 	/// </summary>
     [DataContract]
 	public abstract class ModuleBase : IComparable<ModuleBase>, INotifyPropertyChanged

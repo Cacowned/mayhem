@@ -2,17 +2,17 @@
 using System.Runtime.Serialization;
 using System.Text;
 using System.Windows;
+using System.Windows.Forms;
 using DefaultModules.KeypressHelpers;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using System.Windows.Controls;
 
-namespace DefaultModules.Actions
+namespace DefaultModules.Events
 {
     // Because of it's support for shifts and stuff, it won't work in CLI mode.
     [DataContract]
-    public class Keypress : ActionBase, IWpf
+    public class Keypress : EventBase, IWpf
     {
         public const string TAG = "[Key Press]";
 
@@ -26,12 +26,14 @@ namespace DefaultModules.Actions
         private HashSet<System.Windows.Forms.Keys> MonitorKeysDown { get; set; }
 
         public Keypress()
-            : base("Key Press", "This trigger fires on a predefined key press")
+            : base("Key Press", "This event fires on a predefined key press")
         {
+
             hasConfig = true;
 
             // Set our defaults
             MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
+            MonitorKeysDown.Add(Keys.Enter);
 
             interceptKeys = InterceptKeys.GetInstance();
 
@@ -47,7 +49,7 @@ namespace DefaultModules.Actions
         {
             SetConfigString();
         }
-        /*
+
         public void WpfConfig()
         {
             var window = new KeypressConfig();
@@ -68,24 +70,12 @@ namespace DefaultModules.Actions
             }
 
         }
-        */
-
-        public UserControl ConfigurationControl
-        {
-            get { return new KeypressConfig(MonitorKeysDown); }
-        }
-
-        public void OnSaved(UserControl configurationControl)
-        {
-            MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;
-            SetConfigString();
-        }
 
         protected void SetConfigString()
         {
             StringBuilder b = new StringBuilder();
 
-            foreach (System.Windows.Forms.Keys k in MonitorKeysDown)
+            foreach (Keys k in MonitorKeysDown)
             {
                 if (b.Length == 0)
                 {
@@ -122,7 +112,7 @@ namespace DefaultModules.Actions
 
             if (Keysets_Equal() && Enabled)
             {
-                OnActionActivated();
+                OnEventActivated();
             }
 
         }
