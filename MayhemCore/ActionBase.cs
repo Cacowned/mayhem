@@ -3,29 +3,29 @@ using System;
 using System.Runtime.Serialization;
 namespace MayhemCore
 {
-	public delegate void ActionActivateHandler(object sender, EventArgs e);
+	public delegate void EventActivateHandler(object sender, EventArgs e);
 
 	/// <summary>
-	/// Base class for all action modules
+	/// Base class for all event modules
 	/// </summary>
     [DataContract]
-	public abstract class ActionBase : ModuleBase
+	public abstract class EventBase : ModuleBase
 	{
 		/// <summary>
-		/// Event that triggers when the action is activated
+		/// Event that triggers when the event is activated
 		/// </summary>
-		public event ActionActivateHandler ActionActivated;
+		public event EventActivateHandler EventActivated;
 
-		public ActionBase(string name, string description)
+		public EventBase(string name, string description)
 			: base(name, description) {
 		}
 
 		/// <summary>
-		/// Event trigger for when the action is activated. This shouldn't
+		/// Event trigger for when the event is activated. This shouldn't
 		/// need to be overridden, just attached to
 		/// </summary>
-		protected virtual void OnActionActivated() {
-			ActionActivateHandler handler = ActionActivated;
+		protected virtual void OnEventActivated() {
+			EventActivateHandler handler = EventActivated;
 			if (handler != null) {
 				handler(this, null);
 			}

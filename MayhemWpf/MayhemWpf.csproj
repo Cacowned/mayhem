@@ -194,7 +194,7 @@
     <Resource Include="Images\switch_toggle.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\emptyaction.png" />
+    <Resource Include="Images\emptyevent.png" />
     <Resource Include="Images\emptytrigger.png" />
   </ItemGroup>
   <ItemGroup>

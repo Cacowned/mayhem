@@ -19,42 +19,7 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="ReactionButton">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <ImageBrush ImageSource="Images\bluebutton.png"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="EmptyTriggerButton">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <ImageBrush ImageSource="Images\red.png"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid>
-                            <Rectangle Fill="{TemplateBinding Background}" />
-                            <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="25,0,0,3" >
-                                <ContentPresenter.Effect>
-                                    <DropShadowEffect
-                                      ShadowDepth="1"
-                                      Direction="295"
-                                      Color="Black"
-                                      Opacity="0.5"
-                                     BlurRadius="1"/>
-                                </ContentPresenter.Effect>
-                            </ContentPresenter>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="TriggerButton">
+        <Style TargetType="{x:Type Button}" x:Key="EventButton">
             <Setter Property="Background">
                 <Setter.Value>
                     <ImageBrush ImageSource="Images\redbutton.png"/>
@@ -81,7 +46,42 @@
             </Setter>
         </Style>
 
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ActionButton}" x:Key="EmptyActionButton">
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource EventButton}" x:Key="ReactionButton">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="Images\bluebutton.png"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource EventButton}" x:Key="EmptyEventButton">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="Images\red.png"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Rectangle Fill="{TemplateBinding Background}" />
+                            <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="25,0,0,3" >
+                                <ContentPresenter.Effect>
+                                    <DropShadowEffect
+                                      ShadowDepth="1"
+                                      Direction="295"
+                                      Color="Black"
+                                      Opacity="0.5"
+                                     BlurRadius="1"/>
+                                </ContentPresenter.Effect>
+                            </ContentPresenter>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource EventButton}" x:Key="EmptyReactionButton">
             <Setter Property="Background">
                 <Setter.Value>
                     <ImageBrush ImageSource="Images\blue.png"/>
@@ -157,8 +157,8 @@
                                 </TextBlock.Effect>
                             </TextBlock>
                             <StackPanel Orientation="Horizontal">
-                                <Button Name="buttonEmptyTrigger" Content="Create Trigger" Foreground="#DDDDDD" FontWeight="DemiBold" FontSize="18" Style="{StaticResource EmptyTriggerButton}" Width="178" Height="46" Click="ActionListClick" Margin="0,0,0,0" />
-                                <Button Name="buttonEmptyAction" Content="Create Action" FontFamily="Segoe UI" Foreground="#DDDDDD" FontWeight="DemiBold"  FontSize="18" Style="{StaticResource EmptyActionButton}" Width="178" Height="46" Click="ReactionListClick" Margin="10,0,0,0" />
+                                <Button Name="buttonEmptyEvent" Content="Create Event" Foreground="#DDDDDD" FontWeight="DemiBold" FontSize="18" Style="{StaticResource EmptyEventButton}" Width="178" Height="46" Click="EventListClick" Margin="0,0,0,0" />
+                                <Button Name="buttonEmptyReaction" Content="Create Reaction" FontFamily="Segoe UI" Foreground="#DDDDDD" FontWeight="DemiBold"  FontSize="18" Style="{StaticResource EmptyReactionButton}" Width="178" Height="46" Click="ReactionListClick" Margin="10,0,0,0" />
                             </StackPanel>
                         </StackPanel>
 

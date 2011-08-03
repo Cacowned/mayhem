@@ -4,7 +4,7 @@ using System.Windows;
 namespace MayhemWpf
 {
 	/// <summary>
-	/// Interaction logic for ActionList.xaml
+	/// Interaction logic for EventList.xaml
 	/// </summary>
 	public partial class ModuleList : Window
 	{
