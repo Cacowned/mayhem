@@ -5,6 +5,7 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using SpeechLib;
+using System.Windows.Controls;
 
 namespace DefaultModules.Reactions
 {
@@ -42,6 +43,7 @@ namespace DefaultModules.Reactions
             voice.Speak(Message, SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
         }
 
+        /*
         public void WpfConfig()
         {
             var window = new TextToSpeechConfig(Message);
@@ -54,6 +56,17 @@ namespace DefaultModules.Reactions
 
                 SetConfigString();
             }
+        }
+         * */
+
+        public UserControl ConfigurationControl
+        {
+            get { return new TextToSpeechConfig(Message); }
+        }
+
+        public void OnSaved(UserControl configurationControl)
+        {
+            Message = ((TextToSpeechConfig)configurationControl).Message;
         }
 
         private void SetConfigString()

@@ -5,6 +5,7 @@ using System.Windows;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using System.Windows.Controls;
 
 namespace DefaultModules.Reactions
 {
@@ -20,7 +21,8 @@ namespace DefaultModules.Reactions
             {
                 return _fileName;
             }
-            set {
+            set
+            {
                 _fileName = value;
                 SetConfigString();
             }
@@ -44,21 +46,23 @@ namespace DefaultModules.Reactions
             : base("Run Program", "Runs a given program.")
         {
             hasConfig = true;
-         
+
             // Set the default
             FileName = Path.Combine(Environment.GetEnvironmentVariable("Windir"), "System32", "calc.exe");
         }
 
         public override void Perform()
         {
-            try {
+            try
+            {
                 System.Diagnostics.Process.Start(FileName, Arguments);
             }
-            catch {
+            catch
+            {
                 ErrorLog.AddError(ErrorType.Failure, "Could not start the application");
             }
         }
-
+        /*
         public void WpfConfig()
         {
             var window = new RunProgramConfig(FileName, Arguments);
@@ -72,6 +76,20 @@ namespace DefaultModules.Reactions
                 FileName = window.filename;
                 Arguments = window.arguments;
             }
+        }
+        */
+
+        public UserControl ConfigurationControl
+        {
+            get { return new RunProgramConfig(FileName, Arguments); }
+        }
+
+        public void OnSaved(UserControl configurationControl)
+        {
+            RunProgramConfig rpc = configurationControl as RunProgramConfig;
+            FileName = rpc.Filename;
+            Arguments = rpc.Arguments;
+            SetConfigString();
         }
 
         private void SetConfigString()
