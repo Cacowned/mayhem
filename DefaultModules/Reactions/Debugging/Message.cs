@@ -5,6 +5,7 @@ using System.Windows;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using System.Windows.Controls;
 
 namespace DefaultModules.Reactions.Debugging
 {
@@ -18,12 +19,16 @@ namespace DefaultModules.Reactions.Debugging
 
             SetConfigString();
         }
+
+        
         
         public override void Perform()
         {
             Debug.WriteLine(String.Format("{0}: {1}", DateTime.Now.ToLongTimeString(), message));
-        }
 
+            UserControl asdf = new DebugMessageConfig(message);
+        }
+        /*
         public void WpfConfig()
         {
             var window = new DebugMessageConfig(message);
@@ -38,10 +43,20 @@ namespace DefaultModules.Reactions.Debugging
                 SetConfigString();
             }
         }
+        */
+
+        public void OnSaved(UserControl configurationControl)
+        {
+        }
 
         private void SetConfigString()
         {
             ConfigString = message;
+        }
+
+        public UserControl ConfigurationControl
+        {
+            get { return new DebugMessageConfig(message); }
         }
     }
 }

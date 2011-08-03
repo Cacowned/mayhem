@@ -5,6 +5,7 @@ using System.Windows;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using System.Windows.Controls;
 
 namespace DefaultModules.Actions
 {
@@ -127,6 +128,7 @@ namespace DefaultModules.Actions
             Seconds = seconds;
         }
 
+        /*
         public void WpfConfig()
         {
             var window = new TimerConfig(Hours, Minutes, Seconds);
@@ -138,6 +140,19 @@ namespace DefaultModules.Actions
                 Minutes = window.minutes;
                 Seconds = window.seconds;
             }
+        }
+         */
+
+        public UserControl ConfigurationControl
+        {
+            get { return new TimerConfig(Hours, Minutes, Seconds); }
+        }
+
+        public void OnSaved(UserControl configurationControl)
+        {
+            Hours = ((TimerConfig)configurationControl).Hours;
+            Minutes = ((TimerConfig)configurationControl).Minutes;
+            Seconds = ((TimerConfig)configurationControl).Seconds;
         }
         #endregion
 

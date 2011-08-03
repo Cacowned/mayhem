@@ -1,53 +1,60 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Wpf
 {
-	/// <summary>
-	/// Interaction logic for SmsMessageConfig.xaml
-	/// </summary>
-	public partial class SmsMessageConfig : Window
-	{
-		public string to;
-		public string msg;
+    /// <summary>
+    /// Interaction logic for SmsMessageConfig.xaml
+    /// </summary>
+    public partial class SmsMessageConfig : IWpfConfig
+    {
+        public string to;
+        public string msg;
 
-		public string carrierString;
+        public string carrierString;
 
-		protected Dictionary<string, string> carriers;
+        protected Dictionary<string, string> carriers;
 
-		// TODO: This is probably a security hole
-		public string password;
+        // TODO: This is probably a security hole
+        public string password;
 
-		public SmsMessageConfig(string to, string message, Dictionary<string, string> carriers) {
-			this.to = to;
-			this.msg = message;
-			this.carriers = carriers;
+        public SmsMessageConfig(string to, string message, Dictionary<string, string> carriers)
+        {
+            this.to = to;
+            this.msg = message;
+            this.carriers = carriers;
 
-			InitializeComponent();			
-		}
+            InitializeComponent();
+        }
 
-		protected override void OnInitialized(System.EventArgs e) {
-			base.OnInitialized(e);
+        protected override void OnInitialized(System.EventArgs e)
+        {
+            base.OnInitialized(e);
 
-			ToBox.Text = to;
-			MsgBox.Text = msg;
-			Carrier.ItemsSource = this.carriers.Keys;
+            ToBox.Text = to;
+            MsgBox.Text = msg;
+            Carrier.ItemsSource = this.carriers.Keys;
 
-			Carrier.SelectedIndex = 0;
-		}
+            Carrier.SelectedIndex = 0;
+        }
 
-		private void Button_Save_Click(object sender, RoutedEventArgs e) {
+        public override string Title
+        {
+            get { return "SMS Message"; }
+        }
 
-			to = ToBox.Text;
-			msg = MsgBox.Text;
-			carrierString = carriers[Carrier.SelectedValue.ToString()];
+        public override bool OnSave()
+        {
+            to = ToBox.Text;
+            msg = MsgBox.Text;
+            carrierString = carriers[Carrier.SelectedValue.ToString()];
+            return true;
+        }
 
-			DialogResult = true;
-		}
-
-		private void Button_Cancel_Click(object sender, RoutedEventArgs e) {
-			DialogResult = false;
-		}
-	}
+        public override void OnCancel()
+        {
+        }
+    }
 }

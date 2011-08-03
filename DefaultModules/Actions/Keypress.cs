@@ -2,11 +2,11 @@
 using System.Runtime.Serialization;
 using System.Text;
 using System.Windows;
-using System.Windows.Forms;
 using DefaultModules.KeypressHelpers;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using System.Windows.Controls;
 
 namespace DefaultModules.Actions
 {
@@ -28,12 +28,10 @@ namespace DefaultModules.Actions
         public Keypress()
             : base("Key Press", "This trigger fires on a predefined key press")
         {
-
             hasConfig = true;
 
             // Set our defaults
             MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
-            MonitorKeysDown.Add(Keys.Enter);
 
             interceptKeys = InterceptKeys.GetInstance();
 
@@ -49,7 +47,7 @@ namespace DefaultModules.Actions
         {
             SetConfigString();
         }
-
+        /*
         public void WpfConfig()
         {
             var window = new KeypressConfig();
@@ -70,12 +68,24 @@ namespace DefaultModules.Actions
             }
 
         }
+        */
+
+        public UserControl ConfigurationControl
+        {
+            get { return new KeypressConfig(MonitorKeysDown); }
+        }
+
+        public void OnSaved(UserControl configurationControl)
+        {
+            MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;
+            SetConfigString();
+        }
 
         protected void SetConfigString()
         {
             StringBuilder b = new StringBuilder();
 
-            foreach (Keys k in MonitorKeysDown)
+            foreach (System.Windows.Forms.Keys k in MonitorKeysDown)
             {
                 if (b.Length == 0)
                 {

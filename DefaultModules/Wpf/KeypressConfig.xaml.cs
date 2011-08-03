@@ -1,92 +1,94 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Forms;
 using DefaultModules.KeypressHelpers;
+using MayhemCore.ModuleTypes;
+using System.Windows.Controls;
+using System.Diagnostics;
+using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Wpf
 {
-	public partial class KeypressConfig : Window
-	{
-		public string KeysDown {
-			get { return (string)GetValue(KeysDownProperty); }
-			set { SetValue(KeysDownProperty, value); }
-		}
+    public partial class KeypressConfig : IWpfConfig
+    {
+        public HashSet<System.Windows.Forms.Keys> KeysToSave;
+        private HashSet<System.Windows.Forms.Keys> keys_down = new HashSet<System.Windows.Forms.Keys>();
 
-		// Using a DependencyProperty as the backing store for KeysDown.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty KeysDownProperty =
-			DependencyProperty.Register("KeysDown", typeof(string), typeof(KeypressConfig), new UIPropertyMetadata(string.Empty));
+        public KeypressConfig(HashSet<System.Windows.Forms.Keys> MonitorKeysDown)
+        {
+            InitializeComponent();
 
-		public HashSet<Keys> keys_down = new HashSet<Keys>();
+            this.KeysToSave = MonitorKeysDown;
 
-		private InterceptKeys.KeyDownHandler keyDownHandler = null;
+            InterceptKeys.OnInterceptKeyDown += InterceptKeys_OnInterceptKeyDown;
+            InterceptKeys.OnInterceptKeyUp += InterceptKeys_OnInterceptKeyUp;
 
-		public KeypressConfig() {
+            UpdateKeysDown(KeysToSave);
+        }
 
-			InitializeComponent();
+        void InterceptKeys_OnInterceptKeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (!keys_down.Contains(e.KeyCode))
+            {
+                if (keys_down.Count == 0)
+                {
+                    KeysToSave.Clear();
+                }
+                keys_down.Add(e.KeyCode);
+                KeysToSave.Add(e.KeyCode);
 
-			keys_down.Clear();
+                UpdateKeysDown(keys_down);
+            }
+        }
 
-			keyDownHandler = new InterceptKeys.KeyDownHandler(InterceptKeys_OnInterceptKeyDown);
+        void InterceptKeys_OnInterceptKeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (keys_down.Contains(e.KeyCode))
+            {
+                keys_down.Remove(e.KeyCode);
+            }
+        }
 
-			InterceptKeys.OnInterceptKeyDown += keyDownHandler;
-		}
+        void UpdateKeysDown(HashSet<System.Windows.Forms.Keys> keys)
+        {
+            string str = "";
+            foreach (System.Windows.Forms.Keys key in keys)
+            {
+                if (str == "")
+                {
+                    str = key.ToString();
+                }
+                else
+                {
+                    str += " + " + key.ToString();
+                }
+            }
+            Debug.WriteLine(str);
+            textBoxKeys.Text = str;
+        }
 
-		void InterceptKeys_OnInterceptKeyDown(object sender, System.Windows.Forms.KeyEventArgs e) {
-			if (!keys_down.Contains(e.KeyCode)) {
-				keys_down.Add(e.KeyCode);
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            InterceptKeys.OnInterceptKeyDown -= InterceptKeys_OnInterceptKeyDown;
+            InterceptKeys.OnInterceptKeyUp -= InterceptKeys_OnInterceptKeyUp;
+        }
 
-				if (keys_down.Count == 1) {
-					KeysDown = e.KeyCode.ToString();
-				} else {
-					KeysDown += " + " + e.KeyCode.ToString();
-				}
-			}
-		}
+        public override string Title
+        {
+            get { return "Key Press"; }
+        }
 
-		/**<summary>
-		 * 
-		 * Used to add the keypress representation to the widget during de-serialization
-		 * 
-		 * </summary>
-		 */
-		public void Deserialize_AddKey(System.Windows.Forms.Keys k) {
-			if (KeysDown.Length == 0) {
-				KeysDown = k.ToString();
-			} else {
-				KeysDown += " + " + k.ToString();
-			}
-		}
+        public override bool OnSave()
+        {
+            if (KeysToSave.Count == 0)
+            {
+                System.Windows.MessageBox.Show("You must have at least one key pressed");
+                return false;
+            }
+            return true;
+        }
 
-		private void Button_Save_Click(object sender, RoutedEventArgs e) {
-			if (keys_down.Count == 0) {
-				System.Windows.MessageBox.Show("You must have at least one key pressed");
-				return;
-			}
-
-			InterceptKeys.OnInterceptKeyDown -= keyDownHandler;
-
-			keyDownHandler = null;
-
-			DialogResult = true;
-		}
-
-		private void Button_Reset_Click(object sender, RoutedEventArgs e) {
-			KeysDown = "";
-
-			keys_down.Clear();
-
-			if (keyDownHandler == null) {
-				keyDownHandler = new InterceptKeys.KeyDownHandler(InterceptKeys_OnInterceptKeyDown);
-				InterceptKeys.OnInterceptKeyDown += keyDownHandler;
-			}
-		}
-
-		private void Button_Cancel_Click(object sender, RoutedEventArgs e) {
-			DialogResult = false;
-		}
-
-		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-			InterceptKeys.OnInterceptKeyDown -= keyDownHandler;
-		}
-	}
+        public override void OnCancel()
+        {
+        }
+    }
 }

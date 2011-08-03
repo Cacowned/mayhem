@@ -1,32 +1,41 @@
 ﻿using System.Windows;
+using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Wpf
 {
-	/// <summary>
-	/// Interaction logic for TextToSpeechConfig.xaml
-	/// </summary>
-	public partial class TextToSpeechConfig : Window
-	{
-		public string message;
+    /// <summary>
+    /// Interaction logic for TextToSpeechConfig.xaml
+    /// </summary>
+    public partial class TextToSpeechConfig : IWpfConfig
+    {
+        public string Message;
 
-		public TextToSpeechConfig(string message) {
-			this.message = message;
-			InitializeComponent();
+        public TextToSpeechConfig(string message)
+        {
+            this.Message = message;
+            InitializeComponent();
 
-			MessageText.Text = this.message;
-		}
+            MessageText.Text = this.Message;
+        }
 
-		private void Button_Save_Click(object sender, RoutedEventArgs e) {
-			if (MessageText.Text.Trim().Length == 0) {
-				MessageBox.Show("You must provide a message");
-				return;
-			}
-			message = MessageText.Text.Trim();
-			DialogResult = true;
-		}
+        public override string Title
+        {
+            get { return "Text To Speech"; }
+        }
 
-		private void Button_Cancel_Click(object sender, RoutedEventArgs e) {
-			DialogResult = false;
-		}
-	}
+        public override bool OnSave()
+        {
+            if (MessageText.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("You must provide a message");
+                return false;
+            }
+            Message = MessageText.Text.Trim();
+            return true;
+        }
+
+        public override void OnCancel()
+        {
+        }
+    }
 }

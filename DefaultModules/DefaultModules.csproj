@@ -93,6 +93,7 @@
     <ProjectReference Include="..\MayhemDefaultStyles\MayhemDefaultStyles.csproj">
       <Project>{D4441581-1768-4A2A-9A2B-B6A700B96FAD}</Project>
       <Name>MayhemDefaultStyles</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
