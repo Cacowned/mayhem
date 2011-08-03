@@ -42,9 +42,16 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MayhemOpenCVWrapper">
+      <HintPath>..\..\mayhem-modules\MayhemOpenCVWrapper\bin\Debug\MayhemOpenCVWrapper.dll</HintPath>
+    </Reference>
     <Reference Include="NuGet.Core, Version=1.2.20325.9034, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NuGet.Core.1.2.20325.9034\lib\net40\NuGet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCVDLL, Version=1.0.4232.14933, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\mayhemlibs\MayhemLibs\Release\OpenCVDLL.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -128,7 +135,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="App.config" />
