@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Runtime.Serialization;
+using System.Diagnostics;
 namespace MayhemCore
 {
 	/// <summary>
@@ -136,16 +137,20 @@ namespace MayhemCore
         [OnDeserialized]
         public void OnDeserialized(StreamingContext context)
         {
-            Event.connection = this;
-            Reaction.connection = this;
+   
+       
+                Event.connection = this;
+                Reaction.connection = this;
 
-            // Set up the event handler for when the event triggers
-            this.Event.EventActivated += this.OnEventActivated;
+                // Set up the event handler for when the event triggers
+                this.Event.EventActivated += this.OnEventActivated;
 
-            // If we have started up and are enabled, then we need to
-            // actually enable our events and reactions
-            if(Enabled)
-                _Enable();
+                // If we have started up and are enabled, then we need to
+                // actually enable our events and reactions
+                if (Enabled)
+                    _Enable();
+            
+           
         }
 
 	}
