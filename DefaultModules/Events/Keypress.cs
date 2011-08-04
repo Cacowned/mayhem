@@ -6,8 +6,8 @@ using DefaultModules.KeypressHelpers;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using System.Windows.Controls;
 using MayhemDefaultStyles.UserControls;
+using System.Windows.Controls;
 
 namespace DefaultModules.Events
 {
@@ -27,27 +27,27 @@ namespace DefaultModules.Events
         private HashSet<System.Windows.Forms.Keys> MonitorKeysDown { get; set; }
 
         public Keypress()
-            : base("Key Press", "This trigger fires on a predefined key press")
+            : base("Key Press", "This event fires on a predefined key press") { }
+
+        protected override void Initialize()
         {
+            base.Initialize();
+
             hasConfig = true;
 
             // Set our defaults
             MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
+            MonitorKeysDown.Add(Keys.Enter);
 
             interceptKeys = InterceptKeys.GetInstance();
 
             keyDownHandler = new InterceptKeys.KeyDownHandler(Intercept_key_down);
             keyUpHandler = new InterceptKeys.KeyUpHandler(Intercept_key_up);
 
-            
+
             SetConfigString();
         }
 
-        [OnDeserialized]
-        public void OnDeserialized(StreamingContext context)
-        {
-            SetConfigString();
-        }
         /*
         public void WpfConfig()
         {

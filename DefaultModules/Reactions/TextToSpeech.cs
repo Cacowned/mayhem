@@ -13,6 +13,7 @@ namespace DefaultModules.Reactions
     [DataContract]
     public class TextToSpeech : ReactionBase, IWpf
     {
+        #region Configuration Properties
         private string _message;
         [DataMember]
         private string Message
@@ -24,19 +25,23 @@ namespace DefaultModules.Reactions
                 SetConfigString();
             }
         }
+        #endregion
 
         SpVoice voice;
 
         public TextToSpeech()
-            : base("Text To Speech", "Speaks a given phrase.")
+            : base("Text To Speech", "Speaks a given phrase.") { }
+
+        protected override void Initialize()
         {
+            base.Initialize();
+
             hasConfig = true;
 
             // Set the defaults
             Message = "Running Mayhem!";
 
             voice = new SpVoice();
-
         }
 
         public override void Perform()

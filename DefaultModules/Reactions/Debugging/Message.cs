@@ -14,8 +14,12 @@ namespace DefaultModules.Reactions.Debugging
     {
         string message = "Debug Reaction was triggered";
         public Message()
-            : base("Debug: Message", "Generates debug output when triggered")
+            : base("Debug: Message", "Generates debug output when triggered") { }
+
+        protected override void Initialize()
         {
+            base.Initialize();
+
             hasConfig = true;
 
             SetConfigString();
