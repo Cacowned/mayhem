@@ -50,17 +50,17 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MayhemCore\ActionBase.cs">
-      <Link>ActionBase.cs</Link>
-    </Compile>
-    <Compile Include="..\MayhemCore\ActionList.cs">
-      <Link>ActionList.cs</Link>
-    </Compile>
     <Compile Include="..\MayhemCore\Connection.cs">
       <Link>Connection.cs</Link>
     </Compile>
     <Compile Include="..\MayhemCore\ErrorLog.cs">
       <Link>ErrorLog.cs</Link>
+    </Compile>
+    <Compile Include="..\MayhemCore\EventBase.cs">
+      <Link>EventBase.cs</Link>
+    </Compile>
+    <Compile Include="..\MayhemCore\EventList.cs">
+      <Link>EventList.cs</Link>
     </Compile>
     <Compile Include="..\MayhemCore\Mayhem.cs">
       <Link>Mayhem.cs</Link>

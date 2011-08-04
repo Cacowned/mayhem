@@ -1,7 +1,7 @@
 ﻿
 using System;
-using System.Runtime.Serialization;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace MayhemCore
 {
@@ -54,7 +54,7 @@ namespace MayhemCore
                 OnPropertyChanged("ConfigString");
             }
         }
-		
+
 		public virtual void Enable() {
 			this.Enabled = true;
 		}
@@ -65,7 +65,17 @@ namespace MayhemCore
 		public ModuleBase(string name, string description) {
 			this.Name = name;
 			this.Description = description;
+
+            Initialize();
 		}
+
+        [OnDeserializing]
+        private void Deserializing()
+        {
+            Initialize();
+        }
+
+        protected virtual void Initialize() { }
 
 		public override string ToString() {
 			return Name;
