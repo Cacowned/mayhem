@@ -17,11 +17,9 @@ namespace DefaultModules.Events
     {
         public const string TAG = "[Key Press]";
 
-        private HashSet<System.Windows.Forms.Keys> keys_down = new HashSet<System.Windows.Forms.Keys>();
-        private InterceptKeys.KeyDownHandler keyDownHandler = null;
-        private InterceptKeys.KeyUpHandler keyUpHandler = null;
-
         private InterceptKeys interceptKeys;
+
+        public static bool IsConfigOpen = false;
 
         [DataMember]
         private HashSet<System.Windows.Forms.Keys> MonitorKeysDown { get; set; }
@@ -37,39 +35,11 @@ namespace DefaultModules.Events
 
             // Set our defaults
             MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
-            MonitorKeysDown.Add(Keys.Enter);
 
-            interceptKeys = InterceptKeys.GetInstance();
-
-            keyDownHandler = new InterceptKeys.KeyDownHandler(Intercept_key_down);
-            keyUpHandler = new InterceptKeys.KeyUpHandler(Intercept_key_up);
-
+            interceptKeys = InterceptKeys.Instance;
 
             SetConfigString();
         }
-
-        /*
-        public void WpfConfig()
-        {
-            var window = new KeypressConfig();
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            foreach (System.Windows.Forms.Keys k in MonitorKeysDown)
-            {
-                window.Deserialize_AddKey(k);
-            }
-
-            window.ShowDialog();
-
-            if (window.DialogResult == true)
-            {
-                MonitorKeysDown = window.keys_down;
-
-                SetConfigString();
-            }
-
-        }
-        */
 
         public IWpfConfig ConfigurationControl
         {
@@ -78,11 +48,13 @@ namespace DefaultModules.Events
 
         public void OnSaved(IWpfConfig configurationControl)
         {
+            interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
             MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;
+            interceptKeys.AddCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
             SetConfigString();
         }
 
-        protected void SetConfigString()
+        public override void SetConfigString()
         {
             StringBuilder b = new StringBuilder();
 
@@ -105,55 +77,25 @@ namespace DefaultModules.Events
         {
             base.Enable();
 
-            InterceptKeys.OnInterceptKeyDown += keyDownHandler;
-            InterceptKeys.OnInterceptKeyUp += keyUpHandler;
+            interceptKeys.AddCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
         }
 
         public override void Disable()
         {
             base.Disable();
 
-            InterceptKeys.OnInterceptKeyDown -= keyDownHandler;
-            InterceptKeys.OnInterceptKeyUp -= keyUpHandler;
+            interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
         }
 
-        private void Intercept_key_down(object sender, System.Windows.Forms.KeyEventArgs e)
+        void OnKeyCombinationActivated()
         {
-            keys_down.Add(e.KeyCode);
-
-            if (Keysets_Equal() && Enabled)
+            if (!IsConfigOpen)
             {
-                OnEventActivated();
-            }
-
-        }
-
-        private bool Keysets_Equal()
-        {
-            if (keys_down.Count == MonitorKeysDown.Count)
-            {
-                foreach (System.Windows.Forms.Keys k in MonitorKeysDown)
+                if (Enabled)
                 {
-                    bool foundEqiv = false;
-                    foreach (System.Windows.Forms.Keys l in keys_down)
-                    {
-                        if (l == k) { foundEqiv = true; break; }
-                    }
-
-                    if (foundEqiv == false)
-                        return false;
+                    OnEventActivated();
                 }
-                return true;
             }
-            else
-            {
-                return false;
-            }
-        }
-
-        private void Intercept_key_up(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            keys_down.Remove(e.KeyCode);
         }
     }
 }

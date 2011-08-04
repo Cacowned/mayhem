@@ -70,9 +70,15 @@ namespace MayhemCore
 		}
 
         [OnDeserializing]
-        private void Deserializing()
+        private void OnDeserializing(StreamingContext sc)
         {
             Initialize();
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            SetConfigString();
         }
 
         protected virtual void Initialize() { }
@@ -93,5 +99,7 @@ namespace MayhemCore
                 handler(this, new PropertyChangedEventArgs(name));
             }
         }
+
+        public virtual void SetConfigString() { }
 	}
 }
