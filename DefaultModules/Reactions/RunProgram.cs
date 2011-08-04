@@ -98,7 +98,7 @@ namespace DefaultModules.Reactions
             Arguments = rpc.Arguments;
         }
 
-        private void SetConfigString()
+        public override void SetConfigString()
         {
             ConfigString = String.Format("Filename: \"{0}\"\nArguments: \"{1}\"", Path.GetFileName(FileName), Arguments);
         }

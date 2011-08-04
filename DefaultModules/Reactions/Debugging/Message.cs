@@ -54,7 +54,7 @@ namespace DefaultModules.Reactions.Debugging
             SetConfigString();
         }
 
-        private void SetConfigString()
+        public override void SetConfigString()
         {
             ConfigString = message;
         }

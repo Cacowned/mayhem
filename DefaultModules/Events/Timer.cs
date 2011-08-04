@@ -80,7 +80,7 @@ namespace DefaultModules.Events
             Seconds = 2;
         }
 
-        protected void SetConfigString()
+        public override void SetConfigString()
         {
             ConfigString = String.Format("{0} hours, {1} minutes, {2} seconds", Hours, Minutes, Seconds);
         }

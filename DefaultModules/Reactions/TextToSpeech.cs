@@ -75,7 +75,7 @@ namespace DefaultModules.Reactions
             Message = ((TextToSpeechConfig)configurationControl).Message;
         }
 
-        private void SetConfigString()
+        public override void SetConfigString()
         {
             ConfigString = String.Format("Message: \"{0}\"", Message);
         }

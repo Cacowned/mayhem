@@ -1,101 +1,164 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-// TODO: I really don't like needing a reference to Sys.windows.forms. 
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace DefaultModules.KeypressHelpers
 {
-	class InterceptKeys
-	{
-		public static InterceptKeys instance = null;
+    class InterceptKeys
+    {
+        private static InterceptKeys instance = null;
 
-		// windows intercept addresses
-		private const int WH_KEYBOARD_LL = 13;
-		private const int WM_KEYDOWN = 0x0100;
-		private const int WM_SYSKEYDOWN = 0x0104;
-		private const int WM_KEYUP = 0x101;
-		private const int WM_SYSKEYUP = 0x105;
+        // windows intercept addresses
+        private const int WH_KEYBOARD_LL = 13;
+        private const int WM_KEYDOWN = 0x0100;
+        private const int WM_SYSKEYDOWN = 0x0104;
+        private const int WM_KEYUP = 0x101;
+        private const int WM_SYSKEYUP = 0x105;
 
-		private static LowLevelKeyboardProc _proc = HookCallback;
-		private static IntPtr _hookID = IntPtr.Zero;
+        private LowLevelKeyboardProc _proc;
+        private IntPtr _hookID = IntPtr.Zero;
 
-		public delegate void KeyDownHandler(object sender, KeyEventArgs e);
-		public static event KeyDownHandler OnInterceptKeyDown;
+        public delegate void KeyCombinationHandler();
 
-		public delegate void KeyUpHandler(object sender, KeyEventArgs e);
-		public static event KeyUpHandler OnInterceptKeyUp;
+        public delegate void KeyDownHandler(Keys key);
+        public event KeyDownHandler OnKeyDown;
 
-		public static InterceptKeys GetInstance() {
-			if (instance == null)
-				instance = new InterceptKeys();
+        public delegate void KeyUpHandler(Keys key);
+        public event KeyUpHandler OnKeyUp;
 
-			return instance;
-		}
+        private HashSet<Keys> keys_down = new HashSet<Keys>();
 
+        Dictionary<HashSet<Keys>,List<KeyCombinationHandler>> keyCombinationHandlerMap;
 
-		public InterceptKeys() {
-			_hookID = SetHook(_proc);
-		}
+        public static InterceptKeys Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new InterceptKeys();
 
-		~InterceptKeys() {
-			UnhookWindowsHookEx(_hookID);
-		}
+                return instance;
+            }
+        }
 
+        InterceptKeys()
+        {
+            keyCombinationHandlerMap = new Dictionary<HashSet<Keys>, List<KeyCombinationHandler>>();
+            _hookID = SetHook();
+        }
 
-		/*
-		public static void Main()
-		{
-			_hookID = SetHook(_proc);
-			Application.Run();
-			UnhookWindowsHookEx(_hookID);
-		}*/
+        ~InterceptKeys()
+        {
+            UnhookWindowsHookEx(_hookID);
+        }
 
-		private static IntPtr SetHook(LowLevelKeyboardProc proc) {
-			using (Process curProcess = Process.GetCurrentProcess())
-			using (ProcessModule curModule = curProcess.MainModule) {
-				return SetWindowsHookEx(WH_KEYBOARD_LL, proc,
-					GetModuleHandle(curModule.ModuleName), 0);
-			}
-		}
+        public void AddCombinationHandler(HashSet<Keys> keys, KeyCombinationHandler handler)
+        {
+            List<KeyCombinationHandler> listHandlers = null;
+            foreach (HashSet<Keys> k in keyCombinationHandlerMap.Keys)
+            {
+                if (AreKeysetsEqual(keys, k))
+                {
+                    listHandlers = keyCombinationHandlerMap[k];
+                    break;
+                }
+            }
+            if (listHandlers == null)
+            {
+                listHandlers = new List<KeyCombinationHandler>();
+                keyCombinationHandlerMap[keys] = listHandlers;
+            }
+            listHandlers.Add(handler);
+        }
 
-		private delegate IntPtr LowLevelKeyboardProc(
-			int nCode, IntPtr wParam, IntPtr lParam);
+        public void RemoveCombinationHandler(HashSet<Keys> keys, KeyCombinationHandler handler)
+        {
+            foreach (HashSet<Keys> k in keyCombinationHandlerMap.Keys)
+            {
+                if (AreKeysetsEqual(keys, k))
+                {
+                    keyCombinationHandlerMap[k].Remove(handler);
+                    break;
+                }
+            }
+        }
 
-		private static IntPtr HookCallback(
-			int nCode, IntPtr wParam, IntPtr lParam) {
-			if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN)) {
-				int vkCode = Marshal.ReadInt32(lParam);
+        void CheckCombinations()
+        {
+            foreach (HashSet<Keys> k in keyCombinationHandlerMap.Keys)
+            {
+                if (AreKeysetsEqual(k, keys_down))
+                {
+                    List<KeyCombinationHandler> listHandlers = keyCombinationHandlerMap[k];
+                    for (int i = 0; i < listHandlers.Count; i++)
+                    {
+                        listHandlers[i]();
+                    }
+                    break;
+                }
+            }
+        }
 
-				if (OnInterceptKeyDown != null) {
-					KeyEventArgs e = new KeyEventArgs((Keys)vkCode);
-					OnInterceptKeyDown(InterceptKeys.instance, e);
-				}
-			} else if (nCode >= 0 && (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP)) {
-				int vkCode = Marshal.ReadInt32(lParam);
+        private bool AreKeysetsEqual(HashSet<Keys> keys, HashSet<Keys> keys2)
+        {
+            if (keys.Count != keys2.Count)
+                return false;
 
-				if (OnInterceptKeyUp != null) {
-					KeyEventArgs e = new KeyEventArgs((Keys)vkCode);
-					OnInterceptKeyUp(InterceptKeys.instance, e);
-				}
+            return keys.SetEquals(keys2);
+        }
 
-			}
-			return CallNextHookEx(_hookID, nCode, wParam, lParam);
-		}
+        private IntPtr SetHook()
+        {
+            _proc = new LowLevelKeyboardProc(HookCallback);
+            using (Process curProcess = Process.GetCurrentProcess())
+            using (ProcessModule curModule = curProcess.MainModule)
+            {
+                return SetWindowsHookEx(WH_KEYBOARD_LL, _proc,
+                    GetModuleHandle(curModule.ModuleName), 0);
+            }
+        }
 
-		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern IntPtr SetWindowsHookEx(int idHook,
-			LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
+        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		private static extern bool UnhookWindowsHookEx(IntPtr hhk);
+        private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
+            {
+                int vkCode = Marshal.ReadInt32(lParam);
+                Keys key = (Keys)vkCode;
+                keys_down.Add(key);
+                CheckCombinations();
+                if (OnKeyDown != null)
+                {
+                    OnKeyDown(key);
+                }
+            }
+            else if (nCode >= 0 && (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))
+            {
+                int vkCode = Marshal.ReadInt32(lParam);
+                Keys key = (Keys)vkCode;
+                keys_down.Remove(key);
+                if (OnKeyUp != null)
+                {
+                    OnKeyUp(key);
+                }
+            }
+            return CallNextHookEx(_hookID, nCode, wParam, lParam);
+        }
 
-		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
-			IntPtr wParam, IntPtr lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
 
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern IntPtr GetModuleHandle(string lpModuleName);
-	}
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool UnhookWindowsHookEx(IntPtr hhk);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern IntPtr GetModuleHandle(string lpModuleName);
+    }
 }
