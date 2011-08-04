@@ -44,7 +44,7 @@ namespace DefaultModules.Reactions.Debugging
         }
         */
 
-        public void OnSaved(UserControl configurationControl)
+        public void OnSaved(IWpfConfig configurationControl)
         {
             message = ((DebugMessageConfig)configurationControl).Message;
             SetConfigString();

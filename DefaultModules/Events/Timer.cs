@@ -149,7 +149,7 @@ namespace DefaultModules.Events
             get { return new TimerConfig(Hours, Minutes, Seconds); }
         }
 
-        public void OnSaved(UserControl configurationControl)
+        public void OnSaved(IWpfConfig configurationControl)
         {
             Hours = ((TimerConfig)configurationControl).Hours;
             Minutes = ((TimerConfig)configurationControl).Minutes;

@@ -4,76 +4,76 @@ using System.Runtime.Serialization;
 using System.Diagnostics;
 namespace MayhemCore
 {
-	/// <summary>
-	/// This class will be a pairing of an event and reaction
-	/// </summary>
-	[DataContract]
-	public class Connection
-	{
-		/// <summary>
-		/// True if this connection is enabled
-		/// false if disabled.
-		/// </summary>
+    /// <summary>
+    /// This class will be a pairing of an event and reaction
+    /// </summary>
+    [DataContract]
+    public class Connection
+    {
+        /// <summary>
+        /// True if this connection is enabled
+        /// false if disabled.
+        /// </summary>
         [DataMember]
-		public bool Enabled { get;	private set; }
+        public bool Enabled { get; private set; }
 
-		/// <summary>
-		/// The event that this connection is using
-		/// </summary>
+        /// <summary>
+        /// The event that this connection is using
+        /// </summary>
         [DataMember]
-		public EventBase Event { get;  private set; }
+        public EventBase Event { get; private set; }
 
-		/// <summary>
-		/// The reaction that this connection is using
-		/// </summary>
+        /// <summary>
+        /// The reaction that this connection is using
+        /// </summary>
         [DataMember]
-		public ReactionBase Reaction { get; private set; }
+        public ReactionBase Reaction { get; private set; }
 
         public Connection() { }
 
-		/// <summary>
-		/// Create a new connection
-		/// </summary>
-		/// <param name="e">The event to trigger on</param>
-		/// <param name="reaction">The reaction to perform</param>
-		public Connection(EventBase e, ReactionBase reaction) 
+        /// <summary>
+        /// Create a new connection
+        /// </summary>
+        /// <param name="e">The event to trigger on</param>
+        /// <param name="reaction">The reaction to perform</param>
+        public Connection(EventBase e, ReactionBase reaction)
         {
-			// Set our event and reactions 
-			this.Event = e;
-			this.Reaction = reaction;
+            // Set our event and reactions 
+            this.Event = e;
+            this.Reaction = reaction;
 
-			// Set them to have a reference to this connection
-			this.Event.connection = this;
-			this.Reaction.connection = this;
+            // Set them to have a reference to this connection
+            this.Event.connection = this;
+            this.Reaction.connection = this;
 
-			// Set up the event handler for when the event triggers
-			this.Event.EventActivated += this.OnEventActivated;
-		}
+            // Set up the event handler for when the event triggers
+            this.Event.EventActivated += this.OnEventActivated;
+        }
 
-		/// <summary>
-		/// Calls the Reaction when the event gets triggered.
-		/// </summary>
-		private void OnEventActivated(object sender, EventArgs e)
+        /// <summary>
+        /// Calls the Reaction when the event gets triggered.
+        /// </summary>
+        private void OnEventActivated(object sender, EventArgs e)
         {
-			// If we got into this method call, we probably don't need
-			// to check if we are enabled.
-			if (Enabled)
-				Reaction.Perform();
-		}
+            // If we got into this method call, we probably don't need
+            // to check if we are enabled.
+            if (Enabled)
+                Reaction.Perform();
+        }
 
-		/// <summary>
-		/// Enable this connection's
-		/// event and reaction
-		/// </summary>
-		public void Enable() 
+        /// <summary>
+        /// Enable this connection's
+        /// event and reaction
+        /// </summary>
+        public void Enable()
         {
-			// if we are already enabled, just stop
-			if (Enabled) 
+            // if we are already enabled, just stop
+            if (Enabled)
             {
-				return;
-			}
+                return;
+            }
             _Enable();
-		}
+        }
 
         private void _Enable()
         {
@@ -114,16 +114,16 @@ namespace MayhemCore
             }
         }
 
-		public void Disable() 
+        public void Disable()
         {
-			// if we aren't already enabled, just stop
-			if (!Enabled)
+            // if we aren't already enabled, just stop
+            if (!Enabled)
             {
-				return;
-			}
+                return;
+            }
 
-			Event.Disable();
-			Reaction.Disable();
+            Event.Disable();
+            Reaction.Disable();
 
             /* This might need to be changed to be more like
              * Enable() if we decide that modules can
@@ -131,27 +131,22 @@ namespace MayhemCore
              * seem like a reasonable option though, so for
              * now, this will stay as it is
              */
-			Enabled = false;
-		}
+            Enabled = false;
+        }
 
         [OnDeserialized]
         public void OnDeserialized(StreamingContext context)
         {
-   
-       
-                Event.connection = this;
-                Reaction.connection = this;
+            Event.connection = this;
+            Reaction.connection = this;
 
-                // Set up the event handler for when the event triggers
-                this.Event.EventActivated += this.OnEventActivated;
+            // Set up the event handler for when the event triggers
+            this.Event.EventActivated += this.OnEventActivated;
 
-                // If we have started up and are enabled, then we need to
-                // actually enable our events and reactions
-                if (Enabled)
-                    _Enable();
-            
-           
+            // If we have started up and are enabled, then we need to
+            // actually enable our events and reactions
+            if (Enabled)
+                _Enable();
         }
-
-	}
+    }
 }

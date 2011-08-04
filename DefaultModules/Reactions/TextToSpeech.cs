@@ -65,7 +65,7 @@ namespace DefaultModules.Reactions
             get { return new TextToSpeechConfig(Message); }
         }
 
-        public void OnSaved(UserControl configurationControl)
+        public void OnSaved(IWpfConfig configurationControl)
         {
             Message = ((TextToSpeechConfig)configurationControl).Message;
         }

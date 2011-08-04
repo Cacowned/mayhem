@@ -12,6 +12,6 @@ namespace MayhemCore.ModuleTypes
 	{
 //		void WpfConfig();
         IWpfConfig ConfigurationControl { get; }
-        void OnSaved(UserControl configurationControl);
+        void OnSaved(IWpfConfig configurationControl);
 	}
 }

@@ -51,7 +51,7 @@ namespace MayhemWpf
         {
             if (iWpfConfig.OnSave())
             {
-                iWpf.OnSaved(ConfigContent.Content as UserControl);
+                iWpf.OnSaved(ConfigContent.Content as IWpfConfig);
             }
             iWpfConfig.OnClosing();
             DialogResult = true;

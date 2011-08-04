@@ -85,7 +85,7 @@ namespace DefaultModules.Reactions
             get { return new RunProgramConfig(FileName, Arguments); }
         }
 
-        public void OnSaved(UserControl configurationControl)
+        public void OnSaved(IWpfConfig configurationControl)
         {
             RunProgramConfig rpc = configurationControl as RunProgramConfig;
             FileName = rpc.Filename;

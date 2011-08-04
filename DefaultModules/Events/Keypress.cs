@@ -76,7 +76,7 @@ namespace DefaultModules.Events
             get { return new KeypressConfig(MonitorKeysDown); }
         }
 
-        public void OnSaved(UserControl configurationControl)
+        public void OnSaved(IWpfConfig configurationControl)
         {
             MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;
             SetConfigString();
