@@ -12,6 +12,7 @@ namespace DefaultModules.Reactions
     {
         protected const string TAG = "[PlaySound]";
 
+        #region Configuration Properties
         private string _soundPath;
         [DataMember]
         private string SoundPath
@@ -33,6 +34,7 @@ namespace DefaultModules.Reactions
                 }
             }
         }
+        #endregion
 
         object locker = new object();
 
@@ -59,8 +61,12 @@ namespace DefaultModules.Reactions
         }
 
         public PlaySound()
-            : base("Play Sound", "Plays an audio file when triggered.")
+            : base("Play Sound", "Plays an audio file when triggered.") { }
+
+        protected override void Initialize()
         {
+            base.Initialize();
+
             hasConfig = true;
         }
 
