@@ -27,7 +27,7 @@ namespace DefaultModules.Events
             set
             {
                 _hours = value;
-                SetInterval();
+                SetConfigString();
             }
         }
 
@@ -42,7 +42,7 @@ namespace DefaultModules.Events
             set
             {
                 _minutes = value;
-                SetInterval();
+                SetConfigString();
             }
         }
 
@@ -57,15 +57,19 @@ namespace DefaultModules.Events
             set
             {
                 _seconds = value;
-                SetInterval();
+                SetConfigString();
             }
         }
         #endregion
 
-        
+
         public Timer()
-            : base("Timer", "Triggers after a certain amount of time")
+            : base("Timer", "Triggers after a certain amount of time") { }
+
+        protected override void Initialize()
         {
+            base.Initialize();
+
             hasConfig = true;
 
             myTimer = new System.Timers.Timer();
@@ -74,22 +78,6 @@ namespace DefaultModules.Events
 
             // Set our defaults
             Seconds = 2;
-        }
-
-        protected void SetInterval()
-        {
-            double interval = (Hours * 3600 + Minutes * 60 + Seconds) * 1000;
-
-            try {
-                myTimer.Interval = interval;
-            }
-            catch {
-                /* setting the interval throws if the 
-                 * given argument is less than or equal to 0
-                 */
-            }
-
-            SetConfigString();
         }
 
         protected void SetConfigString()
@@ -161,6 +149,20 @@ namespace DefaultModules.Events
         private void myTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             base.OnEventActivated();
+        }
+
+        protected void SetInterval()
+        {
+            double interval = (Hours * 3600 + Minutes * 60 + Seconds) * 1000;
+
+            try {
+                myTimer.Interval = interval;
+            }
+            catch {
+                /* setting the interval throws if the 
+                 * given argument is less than or equal to 0
+                 */
+            }
         }
 
         public override void Enable()

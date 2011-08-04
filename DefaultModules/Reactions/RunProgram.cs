@@ -13,8 +13,8 @@ namespace DefaultModules.Reactions
     [DataContract]
     public class RunProgram : ReactionBase, IWpf
     {
+        #region Configuration Properties
         private string _fileName;
-        private string _arguments;
         [DataMember]
         private string FileName
         {
@@ -28,6 +28,8 @@ namespace DefaultModules.Reactions
                 SetConfigString();
             }
         }
+
+        private string _arguments;
         [DataMember]
         private string Arguments
         {
@@ -41,11 +43,15 @@ namespace DefaultModules.Reactions
                 SetConfigString();
             }
         }
-
+        #endregion
 
         public RunProgram()
-            : base("Run Program", "Runs a given program.")
+            : base("Run Program", "Runs a given program.") { }
+
+        protected override void Initialize()
         {
+            base.Initialize();
+
             hasConfig = true;
 
             // Set the default

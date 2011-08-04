@@ -8,9 +8,7 @@ namespace DefaultModules.Reactions.Media
 	public class PreviousItem : ReactionBase
 	{
 		public PreviousItem()
-			: base("Media: Previous Item", "Goes to the previous item when triggered") 
-        {
-		}
+			: base("Media: Previous Item", "Goes to the previous item when triggered") { }
 
 		public override void Perform()
         {
