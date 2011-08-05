@@ -70,7 +70,10 @@ namespace DefaultModules.KeypressHelpers
                 listHandlers = new List<KeyCombinationHandler>();
                 keyCombinationHandlerMap[keys] = listHandlers;
             }
-            listHandlers.Add(handler);
+            if (!listHandlers.Contains(handler))
+            {
+                listHandlers.Add(handler);
+            }
         }
 
         public void RemoveCombinationHandler(HashSet<Keys> keys, KeyCombinationHandler handler)

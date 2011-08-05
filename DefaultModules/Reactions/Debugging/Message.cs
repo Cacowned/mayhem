@@ -26,8 +26,6 @@ namespace DefaultModules.Reactions.Debugging
         public override void Perform()
         {
             Debug.WriteLine(String.Format("{0}: {1}", DateTime.Now.ToLongTimeString(), message));
-
-            UserControl asdf = new DebugMessageConfig(message);
         }
         /*
         public void WpfConfig()
