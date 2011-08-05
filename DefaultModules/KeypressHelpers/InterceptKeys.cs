@@ -116,10 +116,11 @@ namespace DefaultModules.KeypressHelpers
         {
             _proc = new LowLevelKeyboardProc(HookCallback);
             using (Process curProcess = Process.GetCurrentProcess())
-            using (ProcessModule curModule = curProcess.MainModule)
             {
-                return SetWindowsHookEx(WH_KEYBOARD_LL, _proc,
-                    GetModuleHandle(curModule.ModuleName), 0);
+                using (ProcessModule curModule = curProcess.MainModule)
+                {
+                    return SetWindowsHookEx(WH_KEYBOARD_LL, _proc, GetModuleHandle(curModule.ModuleName), 0);
+                }
             }
         }
 
@@ -131,11 +132,14 @@ namespace DefaultModules.KeypressHelpers
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Keys key = (Keys)vkCode;
-                keys_down.Add(key);
-                CheckCombinations();
-                if (OnKeyDown != null)
+                if (!keys_down.Contains(key))
                 {
-                    OnKeyDown(key);
+                    keys_down.Add(key);
+                    CheckCombinations();
+                    if (OnKeyDown != null)
+                    {
+                        OnKeyDown(key);
+                    }
                 }
             }
             else if (nCode >= 0 && (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))
