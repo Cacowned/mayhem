@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.Serialization;
 using System.Diagnostics;
+using System.Threading.Tasks;
 namespace MayhemCore
 {
     /// <summary>
@@ -58,7 +59,10 @@ namespace MayhemCore
             // If we got into this method call, we probably don't need
             // to check if we are enabled.
             if (Enabled)
-                Reaction.Perform();
+            {
+                Task task = new Task(() => Reaction.Perform());
+                task.Start();
+            }
         }
 
         /// <summary>

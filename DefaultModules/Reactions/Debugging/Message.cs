@@ -21,8 +21,6 @@ namespace DefaultModules.Reactions.Debugging
             base.Initialize();
 
             hasConfig = true;
-
-            SetConfigString();
         }
 
         public override void Perform()

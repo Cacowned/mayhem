@@ -37,8 +37,6 @@ namespace DefaultModules.Events
             MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
 
             interceptKeys = InterceptKeys.Instance;
-
-            SetConfigString();
         }
 
         public IWpfConfig ConfigurationControl
