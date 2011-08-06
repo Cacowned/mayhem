@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace DefaultModules.Wpf
 {
-    public partial class KeypressConfig : IWpfConfig
+    public partial class KeypressConfig : IWpfConfiguration
     {
         public HashSet<System.Windows.Forms.Keys> KeysToSave;
         private HashSet<System.Windows.Forms.Keys> keys_down = new HashSet<System.Windows.Forms.Keys>();

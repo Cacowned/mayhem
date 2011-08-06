@@ -8,7 +8,6 @@ namespace MayhemCore
     /// <summary>
     /// Base class for all event modules
     /// </summary>
-    [DataContract]
     public abstract class EventBase : ModuleBase
     {
         /// <summary>
@@ -16,11 +15,9 @@ namespace MayhemCore
         /// </summary>
         public event EventActivateHandler EventActivated;
 
-        public EventBase(string name, string description)
-            : base(name, description)
+        public EventBase()
         {
         }
-
         /// <summary>
         /// Event trigger for when the event is activated. This shouldn't
         /// need to be overridden, just attached to

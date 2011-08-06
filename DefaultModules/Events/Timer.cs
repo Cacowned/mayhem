@@ -10,8 +10,8 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Events
 {
-    [DataContract]
-    public class Timer : EventBase, ICli, IWpf
+    //[MayhemModule("Timer", "Triggers after a certain amount of time")]
+    public class Timer : EventBase, ICli, IWpfConfigurable
     {
         private System.Timers.Timer myTimer;
 
@@ -64,13 +64,11 @@ namespace DefaultModules.Events
 
 
         public Timer()
-            : base("Timer", "Triggers after a certain amount of time") { }
+        { }
 
         protected override void Initialize()
         {
             base.Initialize();
-
-            hasConfig = true;
 
             myTimer = new System.Timers.Timer();
             myTimer.Elapsed += new ElapsedEventHandler(myTimer_Elapsed);
@@ -132,12 +130,12 @@ namespace DefaultModules.Events
         }
          */
 
-        public IWpfConfig ConfigurationControl
+        public IWpfConfiguration ConfigurationControl
         {
             get { return new TimerConfig(Hours, Minutes, Seconds); }
         }
 
-        public void OnSaved(IWpfConfig configurationControl)
+        public void OnSaved(IWpfConfiguration configurationControl)
         {
             Hours = ((TimerConfig)configurationControl).Hours;
             Minutes = ((TimerConfig)configurationControl).Minutes;

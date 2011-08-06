@@ -6,7 +6,7 @@ using System.Windows.Controls;
 
 namespace MayhemDefaultStyles.UserControls
 {
-    public class IWpfConfig : UserControl
+    public class IWpfConfiguration : UserControl
     {
         public virtual string Title { get { return "Title"; } }
         public virtual bool OnSave() { return true; }

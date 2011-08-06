@@ -47,8 +47,10 @@
     <Compile Include="ConnectionList.cs" />
     <Compile Include="ErrorLog.cs" />
     <Compile Include="Mayhem.cs" />
+    <Compile Include="MayhemModuleAttribute.cs" />
     <Compile Include="ModuleBase.cs" />
     <Compile Include="ModuleList.cs" />
+    <Compile Include="ModuleType.cs" />
     <Compile Include="ModuleTypeResolver.cs" />
     <Compile Include="ModuleTypes\ICli.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

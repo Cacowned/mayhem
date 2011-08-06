@@ -5,7 +5,7 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Wpf
 {
-	public partial class TimerConfig : IWpfConfig
+	public partial class TimerConfig : IWpfConfiguration
 	{
 		public int Hours, Minutes, Seconds;
 

@@ -74,9 +74,15 @@ namespace MayhemWpf.UserControls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (!Connection.Event.HasConfig)
+            {
+                imageSettingsEvent.Visibility = System.Windows.Visibility.Hidden;
                 buttonTrigger.Cursor = null;
+            }
             if (!Connection.Reaction.HasConfig)
+            {
+                imageSettingsReaction.Visibility = System.Windows.Visibility.Hidden;
                 buttonReaction.Cursor = null;
+            }
 
             connectionButtons.Opacity = Connection.Enabled ? 1 : 0.5;
             dropShadow.BlurRadius = Connection.Enabled ? 16 : 4;
@@ -94,7 +100,7 @@ namespace MayhemWpf.UserControls
             bool wasEnabled = Connection.Enabled;
 
             Connection.Disable();
-            ConfigWindow config = new ConfigWindow((IWpf)Connection.Event);
+            ConfigWindow config = new ConfigWindow((IWpfConfigurable)Connection.Event);
             config.ShowDialog();
 
 //            ((IWpf)Connection.Action).WpfConfig();
@@ -117,7 +123,7 @@ namespace MayhemWpf.UserControls
             bool wasEnabled = Connection.Enabled;
 
             Connection.Disable();
-            ConfigWindow config = new ConfigWindow((IWpf)Connection.Reaction);
+            ConfigWindow config = new ConfigWindow((IWpfConfigurable)Connection.Reaction);
             config.ShowDialog();
 //            ((IWpf)Connection.Reaction).WpfConfig();
 
@@ -134,7 +140,7 @@ namespace MayhemWpf.UserControls
             Connection c = ((Button)sender).Tag as Connection;
             c.Disable();
 
-            MayhemInstance.Instance.ConnectionList.Remove(c);
+            Mayhem.Instance.ConnectionList.Remove(c);
         }
 
         private void OnOffClick(object sender, RoutedEventArgs e)

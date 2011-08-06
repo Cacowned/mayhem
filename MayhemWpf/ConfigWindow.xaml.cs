@@ -20,21 +20,21 @@ namespace MayhemWpf
     /// </summary>
     public partial class ConfigWindow : Window
     {
-        IWpf iWpf;
-        IWpfConfig iWpfConfig;
+        IWpfConfigurable iWpf;
+        IWpfConfiguration iWpfConfig;
 
-        public ConfigWindow(IWpf iWpf)
+        public ConfigWindow(IWpfConfigurable iWpf)
         {
             this.Owner = Application.Current.MainWindow;
             this.iWpf = iWpf;
-            this.iWpfConfig = (IWpfConfig)iWpf.ConfigurationControl;
+            this.iWpfConfig = (IWpfConfiguration)iWpf.ConfigurationControl;
             InitializeComponent();
             ConfigContent.Content = iWpfConfig;
 
             buttonCanSave.IsEnabled = iWpfConfig.CanSave;
 
             windowHeader.Text = "Config: " + iWpfConfig.Title;
-            iWpfConfig.CanSavedChanged += new IWpfConfig.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
+            iWpfConfig.CanSavedChanged += new IWpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
         }
 
         void iWpfConfig_CanSavedChanged(bool canSave)
@@ -51,7 +51,7 @@ namespace MayhemWpf
         {
             if (iWpfConfig.OnSave())
             {
-                iWpf.OnSaved(ConfigContent.Content as IWpfConfig);
+                iWpf.OnSaved(ConfigContent.Content as IWpfConfiguration);
             }
             iWpfConfig.OnClosing();
             DialogResult = true;

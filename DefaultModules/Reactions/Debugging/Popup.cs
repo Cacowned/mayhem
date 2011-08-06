@@ -5,10 +5,11 @@ using MayhemCore;
 
 namespace DefaultModules.Reactions.Debugging
 {
-	public class Popup : ReactionBase
+    [MayhemModule("Debug: Popup", "Generates a small popup window when triggered")]
+    public class Popup : ReactionBase
 	{
-		public Popup()
-			: base("Debug: Popup", "Generates a small popup window when triggered") { }
+        public Popup()
+        { }
 
         public override void Perform()
         {

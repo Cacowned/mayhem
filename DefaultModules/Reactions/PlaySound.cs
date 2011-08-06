@@ -7,7 +7,7 @@ using MayhemCore.ModuleTypes;
 
 namespace DefaultModules.Reactions
 {
-    [DataContract]
+    [MayhemModule("Play Sound", "Plays an audio file when triggered")]
     public class PlaySound : ReactionBase, ICli // TODO: Make WPF Compatible
     {
         protected const string TAG = "[PlaySound]";
@@ -61,13 +61,11 @@ namespace DefaultModules.Reactions
         }
 
         public PlaySound()
-            : base("Play Sound", "Plays an audio file when triggered.") { }
+        { }
 
         protected override void Initialize()
         {
             base.Initialize();
-
-            hasConfig = true;
         }
 
 
