@@ -5,10 +5,11 @@ using MayhemCore;
 
 namespace DefaultModules.Reactions.Media
 {
+    [MayhemModule("Media: Next Item", "Goes to the next item when triggered")]
     public class NextItem : ReactionBase
     {
         public NextItem()
-            : base("Media: Next Item", "Goes to the next item when triggered") { }
+        { }
 
         public override void Perform()
         {

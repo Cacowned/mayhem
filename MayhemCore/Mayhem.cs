@@ -11,30 +11,56 @@ namespace MayhemCore
     /// a configuration window. If they don't implement a configuration
     /// window, they don't have to implement this class
     /// </typeparam>
-    public class Mayhem<T>
+    public class Mayhem
     {
         public ConnectionList ConnectionList
         {
             get;
             private set;
         }
-        public EventList<T> EventList
+        public EventList EventList
         {
             get;
             private set;
         }
-        public ReactionList<T> ReactionList
+        public ReactionList ReactionList
         {
             get;
             private set;
         }
 
-        public Mayhem()
+        internal Type ConfigurableType
+        {
+            get;
+            private set;
+        }
+
+        private static Mayhem _instance;
+
+        public static Mayhem Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new Mayhem();
+                }
+
+                return _instance;
+            }
+        }
+
+        Mayhem()
         {
             // Set up our three lists
-            EventList = new EventList<T>();
-            ReactionList = new ReactionList<T>();
+            EventList = new EventList();
+            ReactionList = new ReactionList();
             ConnectionList = new ConnectionList();
+        }
+
+        public void SetConfigurationType(Type configType)
+        {
+            this.ConfigurableType = configType;
         }
 
         /// <summary>

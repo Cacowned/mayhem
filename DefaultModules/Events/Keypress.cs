@@ -12,8 +12,8 @@ using System.Windows.Controls;
 namespace DefaultModules.Events
 {
     // Because of it's support for shifts and stuff, it won't work in CLI mode.
-    [DataContract]
-    public class Keypress : EventBase, IWpf
+    [MayhemModule("Key Press", "This event fires on a predefined key press")]
+    public class Keypress : EventBase, IWpfConfigurable
     {
         public const string TAG = "[Key Press]";
 
@@ -24,14 +24,9 @@ namespace DefaultModules.Events
         [DataMember]
         private HashSet<System.Windows.Forms.Keys> MonitorKeysDown { get; set; }
 
-        public Keypress()
-            : base("Key Press", "This event fires on a predefined key press") { }
-
         protected override void Initialize()
         {
             base.Initialize();
-
-            hasConfig = true;
 
             // Set our defaults
             MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
@@ -39,12 +34,12 @@ namespace DefaultModules.Events
             interceptKeys = InterceptKeys.Instance;
         }
 
-        public IWpfConfig ConfigurationControl
+        public IWpfConfiguration ConfigurationControl
         {
             get { return new KeypressConfig(MonitorKeysDown); }
         }
 
-        public void OnSaved(IWpfConfig configurationControl)
+        public void OnSaved(IWpfConfiguration configurationControl)
         {
             interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
             MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;

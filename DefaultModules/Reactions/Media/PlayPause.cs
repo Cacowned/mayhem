@@ -5,10 +5,12 @@ using MayhemCore;
 
 namespace DefaultModules.Reactions.Media
 {
-	public class PlayPause : ReactionBase
+    [MayhemModule("Media: Play / Pause", "Plays or pauses the current item when triggered")]
+    public class PlayPause : ReactionBase
 	{
-		public PlayPause()
-			: base("Media: Play / Pause", "Plays or pauses the current item when triggered") { }
+        public PlayPause()
+        { 
+        }
 
 		public override void Perform() 
         {

@@ -6,7 +6,7 @@ using System.IO;
 
 namespace DefaultModules.Wpf
 {
-    public partial class RunProgramConfig : IWpfConfig
+    public partial class RunProgramConfig : IWpfConfiguration
     {
         public string Filename;
         public string Arguments;

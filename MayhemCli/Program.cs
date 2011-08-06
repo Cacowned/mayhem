@@ -12,14 +12,15 @@ namespace MayhemCli
 {
 	class Program
 	{
-		static Mayhem<ICli> mayhem;
+		static Mayhem mayhem;
 		static void Main(string[] args) {
 			//Properties.Settings.Default.RunListSettings = "";
 			//Properties.Settings.Default.Save();
 
 			/// TODO: Figure out how to load up the correct assemblies
 			/// 
-			mayhem = new Mayhem<ICli>();
+			mayhem = Mayhem.Instance;
+            mayhem.SetConfigurationType(typeof(ICli));
 
 			if (File.Exists(Base64Serialize<ConnectionList>.filename)) {
 				// Debug.WriteLine(Properties.Settings.Default.RunListSettings);

@@ -10,17 +10,16 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions.Debugging
 {
-    public class Message : ReactionBase, IWpf
+    [MayhemModule("Debug: Message", "Generates debug output when triggered")]
+    public class Message : ReactionBase, IWpfConfigurable
     {
         string message = "Debug Reaction was triggered";
         public Message()
-            : base("Debug: Message", "Generates debug output when triggered") { }
+        { }
 
         protected override void Initialize()
         {
             base.Initialize();
-
-            hasConfig = true;
         }
 
         public override void Perform()
@@ -44,7 +43,7 @@ namespace DefaultModules.Reactions.Debugging
         }
         */
 
-        public void OnSaved(IWpfConfig configurationControl)
+        public void OnSaved(IWpfConfiguration configurationControl)
         {
             message = ((DebugMessageConfig)configurationControl).Message;
             SetConfigString();
@@ -55,7 +54,7 @@ namespace DefaultModules.Reactions.Debugging
             ConfigString = message;
         }
 
-        public IWpfConfig ConfigurationControl
+        public IWpfConfiguration ConfigurationControl
         {
             get { return new DebugMessageConfig(message); }
         }

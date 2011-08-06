@@ -6,7 +6,7 @@ namespace DefaultModules.Wpf
     /// <summary>
     /// Interaction logic for TextToSpeechConfig.xaml
     /// </summary>
-    public partial class TextToSpeechConfig : IWpfConfig
+    public partial class TextToSpeechConfig : IWpfConfiguration
     {
         public string Message;
 

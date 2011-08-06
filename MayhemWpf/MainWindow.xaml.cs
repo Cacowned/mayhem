@@ -18,26 +18,17 @@ namespace MayhemWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public EventBase Event
+        public ModuleType Event
         {
-            get { return (EventBase)GetValue(EventProperty); }
-            set { SetValue(EventProperty, value); }
+            get;
+            set;
         }
 
-        // Using a DependencyProperty as the backing store for Event.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty EventProperty =
-            DependencyProperty.Register("Event", typeof(EventBase), typeof(MainWindow), new UIPropertyMetadata(null));
-
-        public ReactionBase Reaction
+        public ModuleType Reaction
         {
-            get { return (ReactionBase)GetValue(ReactionProperty); }
-            set { SetValue(ReactionProperty, value); }
+            get;
+            set;
         }
-
-        // Using a DependencyProperty as the backing store for Reaction.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ReactionProperty =
-            DependencyProperty.Register("Reaction", typeof(ReactionBase), typeof(MainWindow), new UIPropertyMetadata(null));
-
 
         public ObservableCollection<Error> Errors
         {
@@ -50,10 +41,12 @@ namespace MayhemWpf
             DependencyProperty.Register("Errors", typeof(ObservableCollection<Error>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<Error>()));
 
         private string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
+        Mayhem mayhem;
 
         public MainWindow()
         {
-            Mayhem<IWpf> mayhem = MayhemInstance.Instance;
+            mayhem = Mayhem.Instance;
+            mayhem.SetConfigurationType(typeof(IWpfConfigurable));
 
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules");
 
@@ -66,7 +59,6 @@ namespace MayhemWpf
 
         public void Load()
         {
-            Mayhem<IWpf> mayhem = MayhemInstance.Instance;
             if (File.Exists(filename))
             {
                 using (FileStream stream = new FileStream(filename, FileMode.Open))
@@ -78,8 +70,8 @@ namespace MayhemWpf
                         mayhem.ConnectionList.Clear();
                         // Load all the serialized connections
                         List<Type> allTypes = new List<Type>();
-                        allTypes.AddRange(mayhem.EventList.types);
-                        allTypes.AddRange(mayhem.ReactionList.types);
+                        allTypes.AddRange(mayhem.EventList.ToTypeArray());
+                        allTypes.AddRange(mayhem.ReactionList.ToTypeArray());
                         mayhem.LoadConnections(ConnectionList.Deserialize(stream, allTypes));
 
                         Debug.WriteLine("Starting up with " + mayhem.ConnectionList.Count + " connections");
@@ -101,7 +93,7 @@ namespace MayhemWpf
         {
             using (FileStream stream = new FileStream(filename, FileMode.Create))
             {
-                MayhemInstance.Instance.ConnectionList.Serialize(stream);
+                Mayhem.Instance.ConnectionList.Serialize(stream);
             }
         }
 
@@ -109,7 +101,7 @@ namespace MayhemWpf
         {
             DimMainWindow(true);
 
-            ModuleList dlg = new ModuleList(MayhemInstance.Instance.EventList, "Event List");
+            ModuleList dlg = new ModuleList(Mayhem.Instance.EventList, "Event List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
@@ -121,7 +113,7 @@ namespace MayhemWpf
             {
                 if (dlg.ModulesList.SelectedItem != null)
                 {
-                    Event = (EventBase)dlg.ModulesList.SelectedItem;
+                    Event = (ModuleType)dlg.ModulesList.SelectedItem;
 
                     buttonEmptyEvent.Style = (Style)FindResource("EventButton");
                     buttonEmptyEvent.Content = Event.Name;
@@ -139,7 +131,7 @@ namespace MayhemWpf
         {
             DimMainWindow(true);
 
-            ModuleList dlg = new ModuleList(MayhemInstance.Instance.ReactionList, "Reaction List");
+            ModuleList dlg = new ModuleList(Mayhem.Instance.ReactionList, "Reaction List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
@@ -151,7 +143,7 @@ namespace MayhemWpf
             {
                 if (dlg.ModulesList.SelectedItem != null)
                 {
-                    Reaction = (ReactionBase)dlg.ModulesList.SelectedItem;
+                    Reaction = (ModuleType)dlg.ModulesList.SelectedItem;
 
                     buttonEmptyReaction.Style = (Style)FindResource("ReactionButton");
                     buttonEmptyReaction.Content = Reaction.Name;
@@ -171,13 +163,13 @@ namespace MayhemWpf
             {
 
                 // We have to clone the action and reaction
-                Type t = Event.GetType();
+                Type t = Event.Type;
                 EventBase action = (EventBase)Activator.CreateInstance(t);
 
-                t = Reaction.GetType();
+                t = Reaction.Type;
                 ReactionBase reaction = (ReactionBase)Activator.CreateInstance(t);
 
-                MayhemInstance.Instance.ConnectionList.Add(new Connection(action, reaction));
+                Mayhem.Instance.ConnectionList.Add(new Connection(action, reaction));
 
                 buttonEmptyReaction.Style = (Style)FindResource("EmptyReactionButton");
                 buttonEmptyEvent.Style = (Style)FindResource("EmptyEventButton");

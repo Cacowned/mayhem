@@ -8,10 +8,9 @@ namespace MayhemCore.ModuleTypes
 	/// that wants to be accessible from a WPF
 	/// application needs to implement this interface
 	/// </summary>
-	public interface IWpf
+	public interface IWpfConfigurable
 	{
-//		void WpfConfig();
-        IWpfConfig ConfigurationControl { get; }
-        void OnSaved(IWpfConfig configurationControl);
+        IWpfConfiguration ConfigurationControl { get; }
+        void OnSaved(IWpfConfiguration configurationControl);
 	}
 }

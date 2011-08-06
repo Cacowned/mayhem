@@ -10,8 +10,8 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions
 {
-    [DataContract]
-    public class TextToSpeech : ReactionBase, IWpf
+    [MayhemModule("Text To Speech", "Speaks a given phrase")]
+    public class TextToSpeech : ReactionBase, IWpfConfigurable
     {
         #region Configuration Properties
         private string _message;
@@ -30,13 +30,11 @@ namespace DefaultModules.Reactions
         SpVoice voice;
 
         public TextToSpeech()
-            : base("Text To Speech", "Speaks a given phrase.") { }
+        { }
 
         protected override void Initialize()
         {
             base.Initialize();
-
-            hasConfig = true;
 
             // Set the defaults
             Message = "Running Mayhem!";
@@ -65,12 +63,12 @@ namespace DefaultModules.Reactions
         }
          * */
 
-        public IWpfConfig ConfigurationControl
+        public IWpfConfiguration ConfigurationControl
         {
             get { return new TextToSpeechConfig(Message); }
         }
 
-        public void OnSaved(IWpfConfig configurationControl)
+        public void OnSaved(IWpfConfiguration configurationControl)
         {
             Message = ((TextToSpeechConfig)configurationControl).Message;
         }

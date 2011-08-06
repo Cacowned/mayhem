@@ -7,7 +7,7 @@ namespace DefaultModules.Wpf
     /// <summary>
     /// Interaction logic for DebugMessageConfig.xaml
     /// </summary>
-    public partial class DebugMessageConfig : IWpfConfig
+    public partial class DebugMessageConfig : IWpfConfiguration
     {
         public string Message;
 

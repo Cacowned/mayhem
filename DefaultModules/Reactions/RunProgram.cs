@@ -10,8 +10,8 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions
 {
-    [DataContract]
-    public class RunProgram : ReactionBase, IWpf
+    [MayhemModule("Run Program", "Runs a given program")]
+    public class RunProgram : ReactionBase, IWpfConfigurable
     {
         #region Configuration Properties
         private string _fileName;
@@ -46,13 +46,11 @@ namespace DefaultModules.Reactions
         #endregion
 
         public RunProgram()
-            : base("Run Program", "Runs a given program.") { }
+        { }
 
         protected override void Initialize()
         {
             base.Initialize();
-
-            hasConfig = true;
 
             // Set the default
             FileName = Path.Combine(Environment.GetEnvironmentVariable("Windir"), "System32", "calc.exe");
@@ -69,29 +67,13 @@ namespace DefaultModules.Reactions
                 ErrorLog.AddError(ErrorType.Failure, "Could not start the application");
             }
         }
-        /*
-        public void WpfConfig()
-        {
-            var window = new RunProgramConfig(FileName, Arguments);
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            window.ShowDialog();
-
-            if (window.DialogResult == true)
-            {
-
-                FileName = window.filename;
-                Arguments = window.arguments;
-            }
-        }
-        */
-
-        public IWpfConfig ConfigurationControl
+        public IWpfConfiguration ConfigurationControl
         {
             get { return new RunProgramConfig(FileName, Arguments); }
         }
 
-        public void OnSaved(IWpfConfig configurationControl)
+        public void OnSaved(IWpfConfiguration configurationControl)
         {
             RunProgramConfig rpc = configurationControl as RunProgramConfig;
             FileName = rpc.Filename;

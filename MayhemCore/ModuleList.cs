@@ -12,12 +12,10 @@ namespace MayhemCore
 	/// </summary>
 	/// <typeparam name="T">EventBase or ReactionBase</typeparam>
 	/// <typeparam name="V">The interface type that modules must implement</typeparam>
-	public abstract class ModuleList<T, V> : List<T> where T : ModuleBase
+    public abstract class ModuleList<T> : List<ModuleType>
 	{
-        public List<Type> types;
-		public ModuleList() 
+        public ModuleList() 
         {
-            types = new List<Type>();
 		}
 
         public void ScanModules(string path) 
@@ -64,14 +62,17 @@ namespace MayhemCore
                             // and it implements the correct moduleType
                             if (type.IsSubclassOf(typeof(T)) && !type.IsAbstract)
                             {
-                                // Create an instance
-                                T reaction = (T)Activator.CreateInstance(type);
-                                bool hasConfig = reaction.HasConfig;
-                                if (!hasConfig || (hasConfig && type.GetInterfaces().Contains(typeof(V))))
+                                object [] attList = type.GetCustomAttributes(typeof(MayhemModule), true);
+                                if (attList.Length > 0)
                                 {
+                                    MayhemModule att = attList[0] as MayhemModule;
                                     // Add it to our final list
-                                    this.Add(reaction);
-                                    types.Add(type);
+                                    this.Add(new ModuleType(type, att.Name, att.Description));
+                                }
+                                else
+                                {
+                                    ///TODO: Do something to tell the developer the module has an error
+                                   // throw new Exception("Module does not have MayhemModule attribute set:\n" + type.FullName);
                                 }
                             }
                         }
@@ -82,7 +83,17 @@ namespace MayhemCore
                     Trace.WriteLine("Error opening file: \n" + e);
                 }
 			}
-			this.Sort();
+            this.Sort();
 		}
+
+        public Type[] ToTypeArray()
+        {
+            List<Type> types = new List<Type>();
+            foreach (ModuleType moduleType in this)
+            {
+                types.Add(moduleType.Type);
+            }
+            return types.ToArray();
+        }
 	}
 }
