@@ -50,7 +50,7 @@ namespace MayhemCore
             }
         }
 
-        Mayhem()
+        private Mayhem()
         {
             // Set up our three lists
             EventList = new EventList();
@@ -58,6 +58,11 @@ namespace MayhemCore
             ConnectionList = new ConnectionList();
         }
 
+        /// <summary>
+        /// Sets the type that modules must implement if they are configurable to be added to the
+        /// module lists
+        /// </summary>
+        /// <param name="configType"></param>
         public void SetConfigurationType(Type configType)
         {
             this.ConfigurableType = configType;

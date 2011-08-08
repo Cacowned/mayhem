@@ -75,12 +75,12 @@ namespace MayhemWpf.UserControls
         {
             if (!Connection.Event.HasConfig)
             {
-                imageSettingsEvent.Visibility = System.Windows.Visibility.Hidden;
+                ImageSettingsEvent.Visibility = System.Windows.Visibility.Hidden;
                 buttonTrigger.Cursor = null;
             }
             if (!Connection.Reaction.HasConfig)
             {
-                imageSettingsReaction.Visibility = System.Windows.Visibility.Hidden;
+                ImageSettingsReaction.Visibility = System.Windows.Visibility.Hidden;
                 buttonReaction.Cursor = null;
             }
 
