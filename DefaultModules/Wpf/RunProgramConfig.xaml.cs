@@ -1,8 +1,8 @@
-﻿using System.Windows;
-using Microsoft.Win32;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using MayhemDefaultStyles.UserControls;
-using System.IO;
+using Microsoft.Win32;
 
 namespace DefaultModules.Wpf
 {

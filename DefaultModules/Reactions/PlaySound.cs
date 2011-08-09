@@ -2,13 +2,15 @@
 using System.IO;
 using System.Runtime.Serialization;
 using DefaultModules.LowLevel;
+using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions
 {
     [MayhemModule("Play Sound", "Plays an audio file when triggered")]
-    public class PlaySound : ReactionBase, ICli // TODO: Make WPF Compatible
+    public class PlaySound : ReactionBase, ICli, IWpfConfigurable
     {
         protected const string TAG = "[PlaySound]";
 
@@ -60,9 +62,6 @@ namespace DefaultModules.Reactions
 
         }
 
-        public PlaySound()
-        { }
-
         protected override void Initialize()
         {
             base.Initialize();
@@ -73,11 +72,12 @@ namespace DefaultModules.Reactions
         {
             if (SoundPath != null)
             {
-                // media_playing++;
                 MPlayer m = new MPlayer();
                 m.PlayFile(SoundPath);
             }
         }
+
+        #region Configuration Views
 
         public void CliConfig()
         {
@@ -92,5 +92,18 @@ namespace DefaultModules.Reactions
 
             SoundPath = path;
         }
+
+        public IWpfConfiguration ConfigurationControl
+        {
+            get { return new PlaySoundConfig(SoundPath); }
+        }
+
+        public void OnSaved(IWpfConfiguration configurationControl)
+        {
+            PlaySoundConfig rpc = configurationControl as PlaySoundConfig;
+            SoundPath = rpc.FileName;
+        }
+
+        #endregion
     }
 }
