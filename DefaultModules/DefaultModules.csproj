@@ -72,6 +72,9 @@
     <Compile Include="Wpf\KeypressConfig.xaml.cs">
       <DependentUpon>KeypressConfig.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\PlaySoundConfig.xaml.cs">
+      <DependentUpon>PlaySoundConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\RunProgramConfig.xaml.cs">
       <DependentUpon>RunProgramConfig.xaml</DependentUpon>
     </Compile>
@@ -128,6 +131,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\KeypressConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\PlaySoundConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
