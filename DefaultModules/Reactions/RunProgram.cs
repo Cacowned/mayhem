@@ -10,6 +10,7 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions
 {
+    [DataContract]
     [MayhemModule("Run Program", "Runs a given program")]
     public class RunProgram : ReactionBase, IWpfConfigurable
     {
