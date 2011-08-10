@@ -71,7 +71,6 @@ namespace DefaultModules.Wpf
                     str += " + " + key.ToString();
                 }
             }
-            Debug.WriteLine("str = " + str);
             textBoxKeys.Text = str;
         }
 

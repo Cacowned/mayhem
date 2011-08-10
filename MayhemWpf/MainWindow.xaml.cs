@@ -10,6 +10,7 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace MayhemWpf
 {
@@ -18,17 +19,10 @@ namespace MayhemWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ModuleType Event
-        {
-            get;
-            set;
-        }
-
-        public ModuleType Reaction
-        {
-            get;
-            set;
-        }
+        private ModuleType _event;
+        private EventBase _eventInstance = null;
+        private ModuleType _reaction;
+        private ReactionBase _reactionInstance = null;
 
         public ObservableCollection<Error> Errors
         {
@@ -46,7 +40,8 @@ namespace MayhemWpf
         public MainWindow()
         {
             mayhem = Mayhem.Instance;
-            mayhem.SetConfigurationType(typeof(IWpfConfigurable));
+            MethodInfo setConfigMethod = mayhem.GetType().GetMethod("SetConfigurationType", BindingFlags.NonPublic | BindingFlags.Instance);
+            setConfigMethod.Invoke(mayhem, new object[] { typeof(IWpfConfigurable) });
 
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules");
 
@@ -113,10 +108,11 @@ namespace MayhemWpf
             {
                 if (dlg.ModulesList.SelectedItem != null)
                 {
-                    Event = (ModuleType)dlg.ModulesList.SelectedItem;
+                    _event = dlg.SelectedModule;
+                    _eventInstance = dlg.SelectedModuleInstance as EventBase;
 
                     buttonEmptyEvent.Style = (Style)FindResource("EventButton");
-                    buttonEmptyEvent.Content = Event.Name;
+                    buttonEmptyEvent.Content = _event.Name;
 
                     // Take this item, remove it and add it to the front (MoveToFrontList)
 //                    Mayhem.EventList.Remove(Event);
@@ -143,10 +139,11 @@ namespace MayhemWpf
             {
                 if (dlg.ModulesList.SelectedItem != null)
                 {
-                    Reaction = (ModuleType)dlg.ModulesList.SelectedItem;
+                    _reaction = dlg.SelectedModule;
+                    _reactionInstance = dlg.SelectedModuleInstance as ReactionBase;
 
                     buttonEmptyReaction.Style = (Style)FindResource("ReactionButton");
-                    buttonEmptyReaction.Content = Reaction.Name;
+                    buttonEmptyReaction.Content = _reaction.Name;
 
                     // Take this item, remove it and add it to the front (MoveToFrontList)
 //                    Mayhem.ReactionList.Remove(Reaction);
@@ -159,17 +156,26 @@ namespace MayhemWpf
 
         private void CheckEnableBuild()
         {
-            if (Event != null && Reaction != null)
+            if (_event != null && _reaction != null)
             {
+                EventBase ev;
+                ReactionBase reaction;
+                if (_eventInstance != null)
+                    ev = _eventInstance;
+                else
+                {
+                    Type t = _event.Type;
+                    ev = (EventBase)Activator.CreateInstance(t);
+                }
 
-                // We have to clone the action and reaction
-                Type t = Event.Type;
-                EventBase action = (EventBase)Activator.CreateInstance(t);
-
-                t = Reaction.Type;
-                ReactionBase reaction = (ReactionBase)Activator.CreateInstance(t);
-
-                Mayhem.Instance.ConnectionList.Add(new Connection(action, reaction));
+                if (_reactionInstance != null)
+                    reaction = _reactionInstance;
+                else
+                {
+                    Type t = _reaction.Type;
+                    reaction = (ReactionBase)Activator.CreateInstance(t);
+                }
+                Mayhem.Instance.ConnectionList.Add(new Connection(ev, reaction));
 
                 buttonEmptyReaction.Style = (Style)FindResource("EmptyReactionButton");
                 buttonEmptyEvent.Style = (Style)FindResource("EmptyEventButton");
@@ -177,24 +183,14 @@ namespace MayhemWpf
                 buttonEmptyEvent.Content = "Create Event";
 
 
-                Event = null;
-                Reaction = null;
+                _event = null;
+                _reaction = null;
             }
         }
 
         public static void DimMainWindow(bool dim)
         {
-            WindowCollection wc = Application.Current.Windows;
-
-            MainWindow mainW = null;
-
-            foreach (Window w in wc)
-            {
-                if (w.Name == "MayhemMainWindow")
-                {
-                    mainW = w as MainWindow;
-                }
-            }
+            MainWindow mainW = Application.Current.MainWindow as MainWindow;
 
             if (mainW != null)
             {

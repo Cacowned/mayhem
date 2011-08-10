@@ -29,7 +29,7 @@ namespace MayhemCore
             private set;
         }
 
-        internal Type ConfigurableType
+        public Type ConfigurableType
         {
             get;
             private set;
@@ -63,7 +63,7 @@ namespace MayhemCore
         /// module lists
         /// </summary>
         /// <param name="configType"></param>
-        public void SetConfigurationType(Type configType)
+        private void SetConfigurationType(Type configType)
         {
             this.ConfigurableType = configType;
         }
