@@ -165,6 +165,9 @@ namespace DefaultModules.Events
 
         public override void Enable()
         {
+            // Update our interval with the current values
+            SetInterval();
+
             base.Enable();
             myTimer.Enabled = true;
             myTimer.Start();
