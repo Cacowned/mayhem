@@ -12,6 +12,7 @@ using System.Windows.Controls;
 namespace DefaultModules.Events
 {
     // Because of it's support for shifts and stuff, it won't work in CLI mode.
+    [DataContract]
     [MayhemModule("Key Press", "This event fires on a predefined key press")]
     public class Keypress : EventBase, IWpfConfigurable
     {
@@ -21,8 +22,19 @@ namespace DefaultModules.Events
 
         public static bool IsConfigOpen = false;
 
+        HashSet<System.Windows.Forms.Keys> keysDown;
         [DataMember]
-        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown { get; set; }
+        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown
+        {
+            get
+            {
+                return keysDown;
+            }
+            set
+            {
+                keysDown = value;
+            }
+        }
 
         protected override void Initialize()
         {

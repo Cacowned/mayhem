@@ -3,7 +3,8 @@ using System.Runtime.Serialization;
 
 namespace MayhemCore
 {
-	public abstract class ReactionBase : ModuleBase
+    [DataContract]
+    public abstract class ReactionBase : ModuleBase
 	{
         public ReactionBase()
         {
