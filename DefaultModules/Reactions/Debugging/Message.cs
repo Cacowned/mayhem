@@ -10,6 +10,7 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions.Debugging
 {
+    [DataContract]
     [MayhemModule("Debug: Message", "Generates debug output when triggered")]
     public class Message : ReactionBase, IWpfConfigurable
     {

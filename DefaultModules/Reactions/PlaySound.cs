@@ -9,6 +9,7 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions
 {
+    [DataContract]
     [MayhemModule("Play Sound", "Plays an audio file when triggered")]
     public class PlaySound : ReactionBase, ICli, IWpfConfigurable
     {

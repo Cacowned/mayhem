@@ -5,6 +5,7 @@ using MayhemCore;
 
 namespace DefaultModules.Reactions.Media
 {
+    [DataContract]
     [MayhemModule("Media: Next Item", "Goes to the next item when triggered")]
     public class NextItem : ReactionBase
     {

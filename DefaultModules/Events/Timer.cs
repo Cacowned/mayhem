@@ -10,6 +10,7 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Events
 {
+    [DataContract]
     [MayhemModule("Timer", "Triggers after a certain amount of time")]
     public class Timer : EventBase, ICli, IWpfConfigurable
     {
@@ -91,19 +92,22 @@ namespace DefaultModules.Events
             string input = "";
             int hours, minutes, seconds;
 
-            do {
+            do
+            {
                 Console.Write("{0} Please enter the number of hours to wait: ", TAG);
                 input = Console.ReadLine();
             }
             while (!Int32.TryParse(input, out hours) || !(hours >= 0));
 
-            do {
+            do
+            {
                 Console.Write("{0} Please enter the number of minutes to wait: ", TAG);
                 input = Console.ReadLine();
             }
             while (!Int32.TryParse(input, out minutes) || !(minutes >= 0 && minutes < 60));
 
-            do {
+            do
+            {
                 Console.Write("{0} Please enter the number of seconds to wait: ", TAG);
                 input = Console.ReadLine();
             }
@@ -153,10 +157,12 @@ namespace DefaultModules.Events
         {
             double interval = (Hours * 3600 + Minutes * 60 + Seconds) * 1000;
 
-            try {
+            try
+            {
                 myTimer.Interval = interval;
             }
-            catch {
+            catch
+            {
                 /* setting the interval throws if the 
                  * given argument is less than or equal to 0
                  */
