@@ -38,37 +38,14 @@ namespace MayhemWpf.UserControls
         {
             InitializeComponent();
 
-            animOut = new DoubleAnimation();
-            animOut.To = 0.5;
-            animOut.Duration = new Duration(TimeSpan.FromSeconds(0.25));
-
-            animIn = new DoubleAnimation();
-            animIn.To = 1.0;
-            animIn.Duration = new Duration(TimeSpan.FromSeconds(0.25));
-
-            animBlurOut = new DoubleAnimation();
-            animBlurOut.To = 4;
-            animBlurOut.Duration = new Duration(TimeSpan.FromSeconds(0.25));
-
-            animBlurIn = new DoubleAnimation();
-            animBlurIn.To = 16;
-            animBlurIn.Duration = new Duration(TimeSpan.FromSeconds(0.25));
-
-            animBlurOpacityOut = new DoubleAnimation();
-            animBlurOpacityOut.To = 0.5;
-            animBlurOpacityOut.Duration = new Duration(TimeSpan.FromSeconds(0.25));
-
-            animBlurOpacityIn = new DoubleAnimation();
-            animBlurOpacityIn.To = 0.9;
-            animBlurOpacityIn.Duration = new Duration(TimeSpan.FromSeconds(0.25));
-
-            animBlurDistanceOut = new DoubleAnimation();
-            animBlurDistanceOut.To = 2;
-            animBlurDistanceOut.Duration = new Duration(TimeSpan.FromSeconds(0.25));
-
-            animBlurDistanceIn = new DoubleAnimation();
-            animBlurDistanceIn.To = 5;
-            animBlurDistanceIn.Duration = new Duration(TimeSpan.FromSeconds(0.25));
+            animOut = new DoubleAnimation(0.5, new Duration(TimeSpan.FromSeconds(0.25)));
+            animIn = new DoubleAnimation(1.0, new Duration(TimeSpan.FromSeconds(0.25)));
+            animBlurOut = new DoubleAnimation(4, new Duration(TimeSpan.FromSeconds(0.25)));
+            animBlurIn = new DoubleAnimation(16, new Duration(TimeSpan.FromSeconds(0.25)));
+            animBlurOpacityOut = new DoubleAnimation(0.5, new Duration(TimeSpan.FromSeconds(0.25)));
+            animBlurOpacityIn = new DoubleAnimation(0.9, new Duration(TimeSpan.FromSeconds(0.25)));
+            animBlurDistanceOut = new DoubleAnimation(2, new Duration(TimeSpan.FromSeconds(0.25)));
+            animBlurDistanceIn = new DoubleAnimation(5, new Duration(TimeSpan.FromSeconds(0.25)));
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -103,8 +80,6 @@ namespace MayhemWpf.UserControls
             ConfigWindow config = new ConfigWindow((IWpfConfigurable)Connection.Event);
             config.ShowDialog();
 
-//            ((IWpf)Connection.Action).WpfConfig();
-
             if (wasEnabled)
             {
                 Connection.Enable();
@@ -125,7 +100,6 @@ namespace MayhemWpf.UserControls
             Connection.Disable();
             ConfigWindow config = new ConfigWindow((IWpfConfigurable)Connection.Reaction);
             config.ShowDialog();
-//            ((IWpf)Connection.Reaction).WpfConfig();
 
             if (wasEnabled)
             {
@@ -195,7 +169,6 @@ namespace MayhemWpf.UserControls
                 dropShadow.BeginAnimation(DropShadowEffect.OpacityProperty, animBlurOpacityOut);
                 dropShadow.BeginAnimation(DropShadowEffect.ShadowDepthProperty, animBlurDistanceOut);
             }
-            //connectionButtons.Opacity = Connection.Enabled ? 1 : 0.5;
         }
     }
 }
