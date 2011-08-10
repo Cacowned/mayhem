@@ -54,7 +54,6 @@
     <Compile Include="Events\Timer.cs" />
     <Compile Include="KeypressHelpers\InterceptKeys.cs" />
     <Compile Include="LowLevel\MPlayer.cs" />
-    <Compile Include="LowLevel\Native.cs" />
     <Compile Include="LowLevel\Utils.cs" />
     <Compile Include="LowLevel\VK.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

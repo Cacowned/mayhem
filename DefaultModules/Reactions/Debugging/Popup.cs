@@ -5,9 +5,10 @@ using MayhemCore;
 
 namespace DefaultModules.Reactions.Debugging
 {
+    [DataContract]
     [MayhemModule("Debug: Popup", "Generates a small popup window when triggered")]
     public class Popup : ReactionBase
-	{
+    {
         public Popup()
         { }
 
@@ -15,5 +16,5 @@ namespace DefaultModules.Reactions.Debugging
         {
             MessageBox.Show("Triggered!");
         }
-	}
+    }
 }

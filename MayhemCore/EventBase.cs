@@ -8,6 +8,7 @@ namespace MayhemCore
     /// <summary>
     /// Base class for all event modules
     /// </summary>
+    [DataContract]
     public abstract class EventBase : ModuleBase
     {
         /// <summary>

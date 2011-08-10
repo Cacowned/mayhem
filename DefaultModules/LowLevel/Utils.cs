@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using ZuneTest;
 
 namespace DefaultModules.LowLevel
 {
 	public static class Utils
 	{
+        [DllImport("user32.dll")]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
 		public static bool Is64BitProcess 
         {
 			get { return IntPtr.Size == 8; }
@@ -36,8 +38,8 @@ namespace DefaultModules.LowLevel
 				inputStruct[0].ki = Native.createKeybdInput(key, Native.KEYEVENTF_KEYUP);
 				Native.SendInput(1, inputStruct, Marshal.SizeOf(inputStruct[0]));
 			}*/
-            Native.keybd_event((byte)key, scanCode, 1, UIntPtr.Zero);
-            Native.keybd_event((byte)key, scanCode, 3, UIntPtr.Zero);
+            keybd_event((byte)key, scanCode, 1, UIntPtr.Zero);
+            keybd_event((byte)key, scanCode, 3, UIntPtr.Zero);
 		}
 
 	}
