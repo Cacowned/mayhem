@@ -81,7 +81,7 @@ namespace MayhemWpf
                     SelectedModuleInstance = (IWpfConfigurable)Activator.CreateInstance(SelectedModule.Type);
                     iWpfConfig = (IWpfConfiguration)SelectedModuleInstance.ConfigurationControl;
                     ConfigContent.Content = iWpfConfig;
-                    buttonCanSave.IsEnabled = iWpfConfig.CanSave;
+                    buttonSave.IsEnabled = iWpfConfig.CanSave;
                     windowHeaderConfig.Text = "Config: " + iWpfConfig.Title;
                     iWpfConfig.Loaded += new RoutedEventHandler(iWpfConfig_Loaded);
 
@@ -114,14 +114,19 @@ namespace MayhemWpf
                                    targetWidth, targetHeight);
 
             StartStoryBoard(WindowRect, target);
+
+            buttonChoose.IsEnabled = false;
+            buttonCancel.IsEnabled = false;
+            buttonSave.IsEnabled = true;
+            buttonConfigCancel.IsEnabled = true;
         }
 
-        private void CancelButtonClick(object sender, RoutedEventArgs e)
+        private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
         }
 
-        private void Button_Save_Click(object sender, RoutedEventArgs e)
+        private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
             if (iWpfConfig.OnSave())
             {
@@ -131,11 +136,27 @@ namespace MayhemWpf
             DialogResult = true;
         }
 
-        private void Button_Cancel_Click(object sender, RoutedEventArgs e)
+        private void buttonConfigCancel_Click(object sender, RoutedEventArgs e)
         {
             iWpfConfig.OnCancel();
             iWpfConfig.OnClosing();
-            DialogResult = false;
+
+            animSlideOut.To = new Thickness(0);
+            stackPanelList.BeginAnimation(StackPanel.MarginProperty, animSlideOut);
+
+            animSlideIn.To = new Thickness(290,0,-290,0);
+            animSlideIn.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime * 1.1));
+            stackPanelConfig.BeginAnimation(StackPanel.MarginProperty, animSlideIn);
+
+            Rect target = new Rect(Left - (300 - ActualWidth) / 2, Top - (550 - ActualHeight) / 2,
+                                   300, 550);
+
+            StartStoryBoard(WindowRect, target);
+
+            buttonChoose.IsEnabled = true;
+            buttonCancel.IsEnabled = true;
+            buttonSave.IsEnabled = false;
+            buttonConfigCancel.IsEnabled = false;
         }
 
         #region Window Resizing
@@ -178,7 +199,7 @@ namespace MayhemWpf
             rectAnimation.FillBehavior = FillBehavior.HoldEnd;
 
             // Set the From and To properties of the animation.
-            rectAnimation.From = currentRect;
+//            rectAnimation.From = currentRect;
             rectAnimation.To = targetRect;
 
             // Set the Target of the animation to the Window
@@ -193,6 +214,11 @@ namespace MayhemWpf
             storyBoard.Begin(this);
         }
         #endregion
+
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+
+        }
         #endregion
     }
 }

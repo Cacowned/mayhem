@@ -31,7 +31,7 @@ namespace MayhemWpf
             InitializeComponent();
             ConfigContent.Content = iWpfConfig;
 
-            buttonCanSave.IsEnabled = iWpfConfig.CanSave;
+            buttonSave.IsEnabled = iWpfConfig.CanSave;
 
             windowHeader.Text = "Config: " + iWpfConfig.Title;
             iWpfConfig.CanSavedChanged += new IWpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
@@ -39,7 +39,7 @@ namespace MayhemWpf
 
         void iWpfConfig_CanSavedChanged(bool canSave)
         {
-            buttonCanSave.IsEnabled = canSave;
+            buttonSave.IsEnabled = canSave;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

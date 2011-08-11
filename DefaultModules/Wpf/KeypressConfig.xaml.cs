@@ -7,6 +7,7 @@ using System.Diagnostics;
 using MayhemDefaultStyles.UserControls;
 using DefaultModules.Events;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace DefaultModules.Wpf
 {
@@ -98,6 +99,16 @@ namespace DefaultModules.Wpf
 
         public override void OnCancel()
         {
+        }
+
+        private void IWpfConfiguration_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                // do stuff here.          
+
+                e.Handled = true;
+            }
         }
     }
 }
