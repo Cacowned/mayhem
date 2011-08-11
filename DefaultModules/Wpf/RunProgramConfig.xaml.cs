@@ -16,6 +16,7 @@ namespace DefaultModules.Wpf
             InitializeComponent();
             LocationBox.Text = filename;
             ArgumentsBox.Text = arguments;
+            CanSave = File.Exists(filename);
         }
 
         // Browse for file
