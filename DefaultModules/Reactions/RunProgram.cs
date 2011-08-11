@@ -52,9 +52,6 @@ namespace DefaultModules.Reactions
         protected override void Initialize()
         {
             base.Initialize();
-
-            // Set the default
-            FileName = Path.Combine(Environment.GetEnvironmentVariable("Windir"), "System32", "calc.exe");
         }
 
         public override void Perform()
