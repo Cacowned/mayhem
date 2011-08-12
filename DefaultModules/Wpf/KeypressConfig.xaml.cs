@@ -33,6 +33,8 @@ namespace DefaultModules.Wpf
             interceptKeys.OnKeyUp += InterceptKeys_OnInterceptKeyUp;
 
             UpdateKeysDown(KeysToSave);
+
+            textInvalid.Visibility = Visibility.Collapsed;
         }
 
         void InterceptKeys_OnInterceptKeyDown(Keys key)
@@ -73,6 +75,8 @@ namespace DefaultModules.Wpf
                 }
             }
             textBoxKeys.Text = str;
+            CanSave = keys.Count > 0;
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public override void OnClosing()

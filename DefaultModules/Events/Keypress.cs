@@ -22,7 +22,7 @@ namespace DefaultModules.Events
 
         public static bool IsConfigOpen = false;
 
-        HashSet<System.Windows.Forms.Keys> keysDown;
+        HashSet<System.Windows.Forms.Keys> keysDown = new HashSet<System.Windows.Forms.Keys>();
         [DataMember]
         private HashSet<System.Windows.Forms.Keys> MonitorKeysDown
         {
@@ -39,9 +39,6 @@ namespace DefaultModules.Events
         protected override void Initialize()
         {
             base.Initialize();
-
-            // Set our defaults
-            MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
 
             interceptKeys = InterceptKeys.Instance;
         }

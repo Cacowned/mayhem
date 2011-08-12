@@ -17,6 +17,7 @@ namespace DefaultModules.Wpf
             LocationBox.Text = filename;
             ArgumentsBox.Text = arguments;
             CanSave = File.Exists(filename);
+            textInvalid.Visibility = Visibility.Collapsed;
         }
 
         // Browse for file

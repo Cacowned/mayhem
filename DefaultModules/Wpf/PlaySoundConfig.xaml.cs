@@ -24,6 +24,8 @@ namespace DefaultModules.Wpf
             this.DataContext = this;
 
             this.FileName = filename;
+            CanSave = File.Exists(FileName);
+            textInvalid.Visibility = Visibility.Collapsed;
         }
 
         // Browse for file

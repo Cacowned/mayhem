@@ -17,6 +17,8 @@ namespace DefaultModules.Wpf
             InitializeComponent();
 
             MessageText.Text = this.Message;
+            CanSave = message.Length > 0;
+            textInvalid.Visibility = Visibility.Collapsed;
         }
 
         public override bool OnSave()
@@ -38,6 +40,12 @@ namespace DefaultModules.Wpf
         public override string Title
         {
             get { return "Debug Message"; }
+        }
+
+        private void MessageText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CanSave = MessageText.Text.Length > 0;
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

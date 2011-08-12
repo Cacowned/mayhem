@@ -38,7 +38,7 @@ namespace DefaultModules.Reactions
             base.Initialize();
 
             // Set the defaults
-            Message = "Running Mayhem!";
+            Message = "";
 
             voice = new SpVoice();
         }

@@ -16,9 +16,10 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="0">Message:</TextBlock>
-                <TextBox Name="MessageText" Grid.Column="1" Grid.Row="0" />
+                <TextBox Name="MessageText" Grid.Column="1" Grid.Row="0" TextChanged="MessageText_TextChanged" />
 
             </Grid>
+            <TextBlock Name="textInvalid" Text="Message is invalid" Margin="100,0,0,0" Foreground="#EF0000" Visibility="Visible" />
         </StackPanel>
     </Grid>
 </src:IWpfConfiguration>

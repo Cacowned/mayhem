@@ -84,7 +84,7 @@ namespace MayhemWpf
                     buttonSave.IsEnabled = iWpfConfig.CanSave;
                     windowHeaderConfig.Text = "Config: " + iWpfConfig.Title;
                     iWpfConfig.Loaded += new RoutedEventHandler(iWpfConfig_Loaded);
-
+                    iWpfConfig.CanSavedChanged += new IWpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
                     iWpfConfig.OnLoad();
 
                     hasConfig = true;
@@ -95,6 +95,11 @@ namespace MayhemWpf
             {
                 DialogResult = true;
             }
+        }
+
+        void iWpfConfig_CanSavedChanged(bool canSave)
+        {
+            buttonSave.IsEnabled = canSave;
         }
 
         void iWpfConfig_Loaded(object sender, RoutedEventArgs e)
@@ -117,7 +122,7 @@ namespace MayhemWpf
 
             buttonChoose.IsEnabled = false;
             buttonCancel.IsEnabled = false;
-            buttonSave.IsEnabled = true;
+            buttonSave.IsEnabled = iWpfConfig.CanSave;
             buttonConfigCancel.IsEnabled = true;
         }
 
@@ -144,7 +149,7 @@ namespace MayhemWpf
             animSlideOut.To = new Thickness(0);
             stackPanelList.BeginAnimation(StackPanel.MarginProperty, animSlideOut);
 
-            animSlideIn.To = new Thickness(290,0,-290,0);
+            animSlideIn.To = new Thickness(300,0,-300,0);
             animSlideIn.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime * 1.1));
             stackPanelConfig.BeginAnimation(StackPanel.MarginProperty, animSlideIn);
 
