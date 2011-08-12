@@ -89,7 +89,7 @@
                     <!--<Button Canvas.Right="40" Tag="{Binding}" Click="DeleteConnectionClick">Delete</Button>-->
                     <!--<ToggleButton x:Name="OnOffButton" Canvas.Right="0" Tag="{Binding}" IsChecked="{Binding Path=Enabled, Mode=OneWay}" Click="OnOffClick" />-->
             </StackPanel>
-            <ToggleButton Width="65" Height="35" Margin="5,0,0,0" Cursor="Hand" x:Name="OnOffButton" IsChecked="{Binding Path=Enabled, Mode=OneWay}" Click="OnOffClick">
+            <ToggleButton Width="65" Height="35" Margin="5,0,0,0" Cursor="Hand" x:Name="OnOffButton" IsChecked="{Binding Path=Enabled, Mode=OneWay}" Click="OnOffClick" Focusable="False">
                 <ToggleButton.Style>
                     <Style TargetType="{x:Type ToggleButton}">
                         <Setter Property="Template">
@@ -121,7 +121,7 @@
                     </Style>
                 </ToggleButton.Style>
             </ToggleButton>
-            <Button Canvas.Right="40" Tag="{Binding}" Click="DeleteConnectionClick">Delete</Button>
+            <Button Canvas.Right="40" Tag="{Binding}" Click="DeleteConnectionClick" Focusable="False">Delete</Button>
         </StackPanel>
     </StackPanel>
 </UserControl>
