@@ -16,6 +16,8 @@ namespace DefaultModules.Wpf
             InitializeComponent();
 
             MessageText.Text = this.Message;
+            CanSave = message.Length > 0;
+            textInvalid.Visibility = Visibility.Collapsed;
         }
 
         public override string Title
@@ -36,6 +38,12 @@ namespace DefaultModules.Wpf
 
         public override void OnCancel()
         {
+        }
+
+        private void MessageText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            CanSave = MessageText.Text.Length > 0;
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

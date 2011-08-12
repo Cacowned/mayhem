@@ -5,35 +5,36 @@ using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Wpf
 {
-	public partial class TimerConfig : IWpfConfiguration
-	{
-		public int Hours, Minutes, Seconds;
+    public partial class TimerConfig : IWpfConfiguration
+    {
+        public int Hours, Minutes, Seconds;
 
-		public TimerConfig(int hours, int minutes, int seconds) {
-			this.Hours = hours;
-			this.Minutes = minutes;
-			this.Seconds = seconds;
+        public TimerConfig(int hours, int minutes, int seconds)
+        {
+            this.Hours = hours;
+            this.Minutes = minutes;
+            this.Seconds = seconds;
 
-			InitializeComponent();
-		}
+            InitializeComponent();
+        }
 
-		protected override void OnInitialized(EventArgs e) {
-			base.OnInitialized(e);
-
-			HoursBox.Text = Hours.ToString();
-			MinutesBox.Text = Minutes.ToString();
-			SecondsBox.Text = Seconds.ToString();
-		}
+        public override void OnLoad()
+        {
+            HoursBox.Text = Hours.ToString();
+            MinutesBox.Text = Minutes.ToString();
+            SecondsBox.Text = Seconds.ToString();
+            CheckValidity();
+            textInvalid.Visibility = Visibility.Collapsed;
+        }
 
         public override string Title
         {
             get { return "Timer"; }
         }
 
-        public override bool OnSave()
+        private string CheckValidity()
         {
-            // TODO: Change this error checking to be on text changed
-            bool badsec, badmin, badhour;
+            bool badsec, badmin, badhour, badtotal;
 
             badsec = !(Int32.TryParse(SecondsBox.Text, out Seconds) && (Seconds >= 0 && Seconds < 60));
 
@@ -41,32 +42,45 @@ namespace DefaultModules.Wpf
 
             badhour = !(Int32.TryParse(HoursBox.Text, out Hours) && (Hours >= 0));
 
-            StringBuilder s = new StringBuilder();
-            s.Append("Invalid");
+            badtotal = Seconds == 0 && Minutes == 0 && Hours == 0;
+
+            string s = "Invalid";
 
             if (badsec)
             {
-                s.Append(" seconds");
+                s += " seconds";
             }
             if (badmin)
             {
-                s.Append(" minutes");
+                s += " minutes";
             }
             if (badhour)
             {
-                s.Append(" hours");
+                s += " hours";
             }
+            if (badtotal && !(badsec || badmin || badhour))
+                s = "Timer length must be greater than 0.";
 
-            if (badsec || badmin || badhour)
+            if (badsec || badmin || badhour || badtotal)
             {
-                MessageBox.Show(s.ToString());
-                return false;
+                CanSave = false;
+                return s;
             }
-            return true;
+            else
+            {
+                CanSave = true;
+                return string.Empty;
+            }
         }
 
         public override void OnCancel()
         {
         }
-	}
+
+        private void TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            textInvalid.Text = CheckValidity();
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+        }
+    }
 }
