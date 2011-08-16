@@ -89,13 +89,14 @@ namespace MayhemCore
         [OnDeserializing]
         private void OnDeserializing(StreamingContext sc)
         {
-            _Initialize();
-            Initialize();
+           
         }
 
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
+            _Initialize();
+            Initialize();
             SetConfigString();
         }
 
