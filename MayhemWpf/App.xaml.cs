@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ * App.xaml.cs
+ * 
+ * Mayhem Application Entry Point
+ * 
+ * (c) 2011, Microsoft Applied Sciences Group
+ * 
+ */ 
+using System;
 using System.Linq;
 using System.Windows;
 using NuGet;
