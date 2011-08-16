@@ -1,8 +1,6 @@
-﻿
-using System;
+﻿using System;
 using System.Runtime.Serialization;
-using System.Diagnostics;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace MayhemCore
 {
@@ -61,8 +59,7 @@ namespace MayhemCore
             // to check if we are enabled.
             if (Enabled)
             {
-                Task task = new Task(() => Reaction.Perform());
-                task.Start();
+                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => Reaction.Perform()));
             }
         }
 
