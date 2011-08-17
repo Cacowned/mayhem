@@ -40,8 +40,7 @@ namespace MayhemWpf
         public MainWindow()
         {
             mayhem = Mayhem.Instance;
-            MethodInfo setConfigMethod = mayhem.GetType().GetMethod("SetConfigurationType", BindingFlags.NonPublic | BindingFlags.Instance);
-            setConfigMethod.Invoke(mayhem, new object[] { typeof(IWpfConfigurable) });
+            mayhem.SetConfigurationType(typeof(IWpfConfigurable));
 
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules");
 
