@@ -63,9 +63,14 @@ namespace MayhemCore
         /// module lists
         /// </summary>
         /// <param name="configType"></param>
-        private void SetConfigurationType(Type configType)
+        public void SetConfigurationType(Type configType)
         {
-            this.ConfigurableType = configType;
+            if (this.ConfigurableType != null) {
+                throw new InvalidOperationException("Configuration type has already been set");
+            }
+            else {
+                this.ConfigurableType = configType;
+            }
         }
 
         /// <summary>
