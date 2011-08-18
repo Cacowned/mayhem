@@ -50,6 +50,11 @@ namespace DefaultModules.LowLevel
 			mediaplayer.Play();
 		}
 
+        public void Stop()
+        {
+            mediaplayer.Stop();
+        }
+
 		void p_MediaOpened(object sender, EventArgs e) {
 			Debug.WriteLine(TAG + " Media opened");
 		}
