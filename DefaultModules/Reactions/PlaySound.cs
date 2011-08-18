@@ -15,6 +15,8 @@ namespace DefaultModules.Reactions
     {
         protected const string TAG = "[PlaySound]";
 
+        MPlayer m;
+
         #region Configuration Properties
         private string _soundPath;
         [DataMember]
@@ -40,7 +42,6 @@ namespace DefaultModules.Reactions
         #endregion
 
         object locker = new object();
-
         protected int _media_playing = 0;
         private int MediaPlaying
         {
@@ -73,9 +74,21 @@ namespace DefaultModules.Reactions
         {
             if (SoundPath != null)
             {
-                MPlayer m = new MPlayer();
+                
                 m.PlayFile(SoundPath);
             }
+        }
+
+        public override void Enable()
+        {
+            m = new MPlayer();
+            base.Enable();
+        }
+
+        public override void Disable()
+        {
+            m.Stop();
+            base.Disable();
         }
 
         #region Configuration Views
