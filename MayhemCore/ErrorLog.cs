@@ -17,13 +17,25 @@ namespace MayhemCore
         // Collection that stores all of the errors
         private static ObservableCollection<Error> errors = new ObservableCollection<Error>();
 
-		private static ObservableCollection<Error> minimumError = new ObservableCollection<Error>();
-
         public ErrorLog()
         { }
 
+        // private delegate void AddHandler(ErrorType error, string message);
+
         public static void AddError(ErrorType error, string message) {
+            /*
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(DispatcherPriority.Send, new AddHandler(Add), item);
+            }
+            else
+            {
+                _underlyingCollection.Add(item);
+            }
+            */
+
             Error err = new Error(error, message);
+
             errors.Add(err);
 
             // For the time being, write the error to Debug as well
