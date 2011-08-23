@@ -59,6 +59,10 @@ namespace MayhemCore
             this.Enabled = false;
         }
 
+        public virtual void Delete()
+        {
+        }
+
         private void _Initialize()
         {
             Type configurableType = Mayhem.Instance.ConfigurableType;
