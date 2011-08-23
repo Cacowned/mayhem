@@ -136,6 +136,17 @@ namespace MayhemCore
             Enabled = false;
         }
 
+        public void Delete()
+        {
+            if (Enabled)
+            {
+                Disable();
+            }
+
+            Event.Delete();
+            Reaction.Delete();
+        }
+
         [OnDeserialized]
         public void OnDeserialized(StreamingContext context)
         {
