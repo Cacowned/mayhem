@@ -113,6 +113,7 @@ namespace MayhemWpf.UserControls
         {
             Connection c = ((Button)sender).Tag as Connection;
             c.Disable();
+            c.Delete();
 
             Mayhem.Instance.ConnectionList.Remove(c);
         }
