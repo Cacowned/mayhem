@@ -15,7 +15,7 @@ namespace MayhemCore
         // Do we want to remove things from the beginning?
 
         // Collection that stores all of the errors
-        private static ObservableCollection<Error> errors = new ObservableCollection<Error>();
+        private static BindingCollection<Error> errors = new BindingCollection<Error>();
 
         public ErrorLog()
         { }
@@ -43,7 +43,8 @@ namespace MayhemCore
         }
 
 
-		public static ObservableCollection<Error> Errors {
+        public static BindingCollection<Error> Errors
+        {
 			get {
 				return errors;
 			}
