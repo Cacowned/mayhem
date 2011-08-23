@@ -74,6 +74,7 @@ namespace MayhemCore
             {
                 return;
             }
+            //ThreadPool.QueueUserWorkItem(new WaitCallback((o) => 
             _Enable();
         }
 
