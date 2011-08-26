@@ -73,6 +73,7 @@ namespace MayhemWpf
         {
             bool hasConfig = false;
             SelectedModule = (ModuleType)ModulesList.SelectedItem;
+            SelectedModuleInstance = null;
             Type[] interfaceTypes = SelectedModule.Type.GetInterfaces();
             foreach (Type interfaceType in interfaceTypes)
             {

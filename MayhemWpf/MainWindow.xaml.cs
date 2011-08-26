@@ -105,7 +105,7 @@ namespace MayhemWpf
 
             if (dlg.DialogResult == true)
             {
-                if (dlg.ModulesList.SelectedItem != null)
+                if (dlg.SelectedModule != null)
                 {
                     _event = dlg.SelectedModule;
                     _eventInstance = dlg.SelectedModuleInstance as EventBase;
@@ -136,7 +136,7 @@ namespace MayhemWpf
 
             if (dlg.DialogResult == true)
             {
-                if (dlg.ModulesList.SelectedItem != null)
+                if (dlg.SelectedModule != null)
                 {
                     _reaction = dlg.SelectedModule;
                     _reactionInstance = dlg.SelectedModuleInstance as ReactionBase;
