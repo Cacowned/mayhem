@@ -74,9 +74,13 @@ namespace MayhemWpf.UserControls
 
             MainWindow.DimMainWindow(true);
 
-            bool wasEnabled = Connection.Enabled;
+            Connection.IsConfiguring = true;
 
-            Connection.Disable();
+            bool wasEnabled = Connection.Enabled;
+            if (wasEnabled)
+            {
+                Connection.Disable();
+            }
             ConfigWindow config = new ConfigWindow((IWpfConfigurable)Connection.Event);
             config.ShowDialog();
 
@@ -84,6 +88,7 @@ namespace MayhemWpf.UserControls
             {
                 Connection.Enable();
             }
+            Connection.IsConfiguring = false;
 
             MainWindow.DimMainWindow(false);
         }
@@ -95,9 +100,13 @@ namespace MayhemWpf.UserControls
 
             MainWindow.DimMainWindow(true);
 
-            bool wasEnabled = Connection.Enabled;
+            Connection.IsConfiguring = true;
 
-            Connection.Disable();
+            bool wasEnabled = Connection.Enabled;
+            if (wasEnabled)
+            {
+                Connection.Disable();
+            }
             ConfigWindow config = new ConfigWindow((IWpfConfigurable)Connection.Reaction);
             config.ShowDialog();
 
@@ -105,6 +114,7 @@ namespace MayhemWpf.UserControls
             {
                 Connection.Enable();
             }
+            Connection.IsConfiguring = false;
 
             MainWindow.DimMainWindow(false);
         }
@@ -116,6 +126,7 @@ namespace MayhemWpf.UserControls
             c.Delete();
 
             Mayhem.Instance.ConnectionList.Remove(c);
+            ((MainWindow)Application.Current.MainWindow).Save();
         }
 
         private void OnOffClick(object sender, RoutedEventArgs e)
@@ -170,6 +181,7 @@ namespace MayhemWpf.UserControls
                 dropShadow.BeginAnimation(DropShadowEffect.OpacityProperty, animBlurOpacityOut);
                 dropShadow.BeginAnimation(DropShadowEffect.ShadowDepthProperty, animBlurDistanceOut);
             }
+            ((MainWindow)Application.Current.MainWindow).Save();
         }
     }
 }

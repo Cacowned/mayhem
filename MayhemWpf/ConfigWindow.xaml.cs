@@ -54,6 +54,7 @@ namespace MayhemWpf
                 iWpf.OnSaved(ConfigContent.Content as IWpfConfiguration);
             }
             iWpfConfig.OnClosing();
+            ((MainWindow)Application.Current.MainWindow).Save();
             DialogResult = true;
         }
 
