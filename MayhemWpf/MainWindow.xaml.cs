@@ -11,6 +11,7 @@ using MayhemCore.ModuleTypes;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace MayhemWpf
 {
@@ -83,12 +84,22 @@ namespace MayhemWpf
             Errors = ErrorLog.Errors;
         }
 
-        private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Save_()
         {
             using (FileStream stream = new FileStream(filename, FileMode.Create))
             {
                 Mayhem.Instance.ConnectionList.Serialize(stream);
             }
+        }
+
+        public void Save()
+        {
+            Parallel.Invoke(Save_);
+        }
+
+        private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Save();
         }
 
         private void EventListClick(object sender, RoutedEventArgs e)
@@ -184,6 +195,8 @@ namespace MayhemWpf
 
                 _event = null;
                 _reaction = null;
+
+                Save();
             }
         }
 

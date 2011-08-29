@@ -29,6 +29,21 @@ namespace MayhemCore
         [DataMember]
         public ReactionBase Reaction { get; private set; }
 
+        private bool isConfiguring;
+        public bool IsConfiguring 
+        {
+            get
+            {
+                return isConfiguring;
+            }
+            set
+            {
+                isConfiguring = value;
+                Event.IsConfiguring = value;
+                Reaction.IsConfiguring = value;
+            }
+        }
+
         public Connection() { }
 
         /// <summary>

@@ -16,6 +16,8 @@ namespace MayhemCore
 
         public bool Enabled { get; private set; }
 
+        public bool IsConfiguring { get; set; }
+
         public string Name
         {
             get;
