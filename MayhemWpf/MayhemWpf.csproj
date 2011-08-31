@@ -107,6 +107,10 @@
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
     </Page>
+    <Page Include="UserControls\ErrorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\MayhemHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +121,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserControls\ErrorView.xaml.cs">
+      <DependentUpon>ErrorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\MayhemHeader.xaml.cs">
       <DependentUpon>MayhemHeader.xaml</DependentUpon>
     </Compile>
