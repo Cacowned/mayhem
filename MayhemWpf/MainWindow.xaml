@@ -121,23 +121,31 @@
             </Rectangle.Resources>
         </Rectangle>
 
-        <DockPanel>
-
-            <DockPanel.Resources>
+        <Grid>
+            <Grid.Resources>
                 <DataTemplate x:Key="errorStyle" >
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Time}" />
                         <TextBlock Text="{Binding Message}" />
                     </StackPanel>
                 </DataTemplate>
-            </DockPanel.Resources>
-
-            <ListBox
-				ItemTemplate="{StaticResource errorStyle}"  
-				DockPanel.Dock="Bottom" MaxHeight="130" MinHeight="130" 
-				ItemsSource="{Binding Path=Errors, ElementName=MayhemMainWindow}" Height="130">
-            </ListBox>
-
+            </Grid.Resources>
+            <Grid.Triggers>
+                <EventTrigger SourceName="errorView" RoutedEvent="src:ErrorView.Show">
+                    <BeginStoryboard>
+                        <Storyboard TargetName="errorView">
+                            <ThicknessAnimation To="0,517,0,0" Duration="00:00:00.20" Storyboard.TargetProperty="Margin" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger SourceName="errorView" RoutedEvent="src:ErrorView.Hide">
+                    <BeginStoryboard>
+                        <Storyboard TargetName="errorView">
+                            <ThicknessAnimation To="0,617,0,0" Duration="00:00:00.20" Storyboard.TargetProperty="Margin" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Grid.Triggers>
             <StackPanel Style="{StaticResource BackgroundGradient}">
                 <src:MayhemHeader />
                 <Border BorderThickness="2" CornerRadius="20,20,20,20" BorderBrush="#D7D9DE" Margin="85,4,85,0"  Background="#8890A1" Padding="0,2,0,4">
@@ -196,6 +204,13 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-        </DockPanel>
+            <src:ErrorView Margin="0,617,0,0" x:Name="errorView">
+               
+                <src:ErrorView.Resources>
+                    
+                   
+                </src:ErrorView.Resources>
+            </src:ErrorView>
+        </Grid>
     </Grid>
 </Window>
