@@ -18,6 +18,35 @@ using System.Windows.Threading;
 
 namespace MayhemWpf.UserControls
 {
+    class SingleAnalysisStatusConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (!(value is ErrorType))
+                throw new NotImplementedException("SingleAnalysisStatusConverter can only convert from SingleAnalysisStatus");
+
+            String path = null;
+            switch ((ErrorType)value)
+            {
+                case ErrorType.Failure:
+                    path = "Images/error.png";
+                    break;
+                case ErrorType.Message:
+                    path = "Images/message.png";
+                    break;
+                case ErrorType.Warning:
+                    path = "Images/warning.png";
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+            return new BitmapImage(new Uri("/MayhemWPF;component/" + path, UriKind.Relative));
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
+        }
+    }
     /// <summary>
     /// Interaction logic for ErrorView.xaml
     /// </summary>
@@ -52,17 +81,39 @@ namespace MayhemWpf.UserControls
             add { AddHandler(HideEvent, value); }
             remove { RemoveHandler(HideEvent, value); }
         }
-        
+
+        public static readonly RoutedEvent NotifyEvent = EventManager.RegisterRoutedEvent(
+            "Notify", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ErrorView));
+
+        public event RoutedEventHandler Notify
+        {
+            add { AddHandler(NotifyEvent, value); }
+            remove { RemoveHandler(NotifyEvent, value); }
+        }
+
+        bool isShowing = false;
+
         public ErrorView()
         {
             InitializeComponent();
 
             Errors = ErrorLog.Errors;
+            Errors.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Errors_CollectionChanged);
+        }
+
+        void Errors_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (!isShowing)
+            {
+                RaiseEvent(new RoutedEventArgs(NotifyEvent));
+                StartCloseTimer();
+            }
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Debug.WriteLine("Border: " + e.GetPosition(this));
+            isShowing = true;
             RaiseEvent(new RoutedEventArgs(ShowEvent));
             //Mouse.Capture(this);
             //e.Handled = true;
@@ -70,6 +121,7 @@ namespace MayhemWpf.UserControls
 
         private void MayhemErrorView_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            RaiseEvent(new RoutedEventArgs(ShowEvent));
             //if (e.GetPosition(this).Y < borderNumber.Height)
             //{
             //    Debug.WriteLine("Self: " + e.GetPosition(this));
@@ -78,7 +130,7 @@ namespace MayhemWpf.UserControls
             //}
         }
 
-        private void MayhemErrorView_MouseLeave(object sender, MouseEventArgs e)
+        void StartCloseTimer()
         {
             if (leaveTimer != null)
                 leaveTimer.Stop();
@@ -87,12 +139,24 @@ namespace MayhemWpf.UserControls
             leaveTimer.Start();
         }
 
+        private void MayhemErrorView_MouseLeave(object sender, MouseEventArgs e)
+        {
+            StartCloseTimer();
+        }
+
         void leaveTimer_Tick(object sender, EventArgs e)
         {
+            isShowing = false;
             leaveTimer.Stop();
             leaveTimer = null;
             RaiseEvent(new RoutedEventArgs(HideEvent));
             //Mouse.Capture(null);
+        }
+
+        private void MayhemErrorView_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (leaveTimer != null)
+                leaveTimer.Stop();
         }
     }
 }

@@ -22,7 +22,8 @@ namespace MayhemCore
 
         // private delegate void AddHandler(ErrorType error, string message);
 
-        public static void AddError(ErrorType error, string message) {
+        public static void AddError(ErrorType error, string message)
+        {
             /*
             if (!Dispatcher.CheckAccess())
             {
@@ -36,7 +37,7 @@ namespace MayhemCore
 
             Error err = new Error(error, message);
 
-            errors.Add(err);
+            errors.Insert(0,err);
 
             // For the time being, write the error to Debug as well
             Debug.WriteLine(message);
@@ -45,10 +46,11 @@ namespace MayhemCore
 
         public static BindingCollection<Error> Errors
         {
-			get {
-				return errors;
-			}
-		}
+            get
+            {
+                return errors;
+            }
+        }
 
         // Get all of the errors in the collection
         // with an error type of at least
@@ -62,6 +64,13 @@ namespace MayhemCore
     public class Error
     {
         public DateTime Time { get; private set; }
+        public string TimeString
+        {
+            get
+            {
+                return Time.ToShortTimeString();
+            }
+        }
         public ErrorType Type { get; private set; }
         public string Message { get; private set; }
 
@@ -75,7 +84,8 @@ namespace MayhemCore
     }
 
     // The different types of errors we can have
-    public enum ErrorType {
+    public enum ErrorType
+    {
         Message = 1,
         Warning = 2,
         Failure = 3

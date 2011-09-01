@@ -134,14 +134,21 @@
                 <EventTrigger SourceName="errorView" RoutedEvent="src:ErrorView.Show">
                     <BeginStoryboard>
                         <Storyboard TargetName="errorView">
-                            <ThicknessAnimation To="0,517,0,0" Duration="00:00:00.20" Storyboard.TargetProperty="Margin" />
+                            <ThicknessAnimation To="0,500,0,0" Duration="00:00:00.20" Storyboard.TargetProperty="Margin" />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
                 <EventTrigger SourceName="errorView" RoutedEvent="src:ErrorView.Hide">
                     <BeginStoryboard>
                         <Storyboard TargetName="errorView">
-                            <ThicknessAnimation To="0,617,0,0" Duration="00:00:00.20" Storyboard.TargetProperty="Margin" />
+                            <ThicknessAnimation To="0,630,0,0" Duration="00:00:00.20" Storyboard.TargetProperty="Margin" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger SourceName="errorView" RoutedEvent="src:ErrorView.Notify">
+                    <BeginStoryboard>
+                        <Storyboard TargetName="errorView">
+                            <ThicknessAnimation To="0,600,0,0" Duration="00:00:00.20" Storyboard.TargetProperty="Margin" />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
@@ -204,7 +211,7 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-            <src:ErrorView Margin="0,617,0,0" x:Name="errorView">
+            <src:ErrorView Margin="0,630,0,0" x:Name="errorView">
                
                 <src:ErrorView.Resources>
                     
