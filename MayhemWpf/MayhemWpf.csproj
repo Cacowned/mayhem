@@ -216,6 +216,11 @@
   <ItemGroup>
     <Resource Include="Images\divider.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\error.png" />
+    <Resource Include="Images\message.png" />
+    <Resource Include="Images\warning.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
