@@ -5,6 +5,8 @@ using System.IO;
 using System.Threading;
 using System.Windows.Threading;
 using System.Windows.Controls;
+using System.Collections.ObjectModel;
+using System.Deployment.Application;
 
 namespace MayhemWpf
 {
@@ -22,7 +24,6 @@ namespace MayhemWpf
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MyPropertyProperty =
             DependencyProperty.Register("MyProperty", typeof(IPackage), typeof(InstallModule), new UIPropertyMetadata(null));
-
 
         public InstallModule(IPackage package)
         {
@@ -43,11 +44,24 @@ namespace MayhemWpf
             {
                 // Get the package file
 
-                // Modules path
-                string installPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules");
+                string installPath = "";
+                // if we are running as a clickonce application
+                if (ApplicationDeployment.IsNetworkDeployed)
+                {
+                    installPath = ApplicationDeployment.CurrentDeployment.DataDirectory;
+                }
+                else
+                {
+                    // Modules path
+                    //installPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    //installPath = AppDomain.CurrentDomain.BaseDirectory;
 
+                    installPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages");
+                    //installPath = AppDomain.CurrentDomain.BaseDirectory;
+                }
+                
                 // Create a repository pointing to the local feed
-                var repository = new DataServicePackageRepository(new Uri("http://localhost:58108/nuget/"));
+                var repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
 
                 repository.ProgressAvailable += new EventHandler<ProgressEventArgs>(repository_ProgressAvailable);
 
@@ -58,6 +72,7 @@ namespace MayhemWpf
 
                 // Install the package
                 packageManager.InstallPackage(Package, ignoreDependencies: false);
+
                 DialogResult = true;
             }
             catch (Exception ex)
@@ -85,7 +100,6 @@ namespace MayhemWpf
 
         public class Logger : ILogger
         {
-
             public void Log(MessageLevel level, string message, params object[] args)
             {
                 if (level == MessageLevel.Info)

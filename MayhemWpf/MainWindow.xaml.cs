@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Deployment.Application;
 
 namespace MayhemWpf
 {
@@ -43,7 +44,17 @@ namespace MayhemWpf
             mayhem = Mayhem.Instance;
             mayhem.SetConfigurationType(typeof(IWpfConfigurable));
 
-            string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules");
+            string directory = "";
+            // if we are running as a clickonce application
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                directory = ApplicationDeployment.CurrentDeployment.DataDirectory;
+            }
+            else
+            {
+                directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages");
+                //directory = AppDomain.CurrentDomain.BaseDirectory;
+            }
 
             // Scan for modules in the module directory
             mayhem.EventList.ScanModules(directory);
