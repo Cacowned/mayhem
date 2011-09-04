@@ -65,8 +65,8 @@ namespace MayhemWpf
                         mayhem.ConnectionList.Clear();
                         // Load all the serialized connections
                         List<Type> allTypes = new List<Type>();
-                        allTypes.AddRange(mayhem.EventList.ToTypeArray());
-                        allTypes.AddRange(mayhem.ReactionList.ToTypeArray());
+                        allTypes.AddRange(mayhem.EventList.GetAllTypesInModules());
+                        allTypes.AddRange(mayhem.ReactionList.GetAllTypesInModules());
                         mayhem.LoadConnections(ConnectionList.Deserialize(stream, allTypes));
 
                         Debug.WriteLine("Starting up with " + mayhem.ConnectionList.Count + " connections");

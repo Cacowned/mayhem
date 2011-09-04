@@ -45,6 +45,8 @@ namespace MayhemWpf
         ThicknessAnimation animSlideIn;
         RectAnimation animSize;
 
+        bool isCheckingSizeChanged = false;
+
         const double AnimationTime = 0.2;
 
         public ModuleList(IEnumerable list, string headerText)
@@ -58,7 +60,7 @@ namespace MayhemWpf
 
             ModulesList.ItemsSource = list;
 
-            // In constructor subscribe to the Change even of the WindowRect DependencyProperty
+            // In constructor subscribe to the Change event of the WindowRect DependencyProperty
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ModuleList));
             if (dpd != null)
             {
@@ -67,6 +69,17 @@ namespace MayhemWpf
                     ResizeWindow(WindowRect);
                 });
             }
+        }
+
+        void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double targetWidth = iWpfConfig.Width + 40;
+            double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
+
+            Rect target = new Rect(Left - (targetWidth - ActualWidth) / 2, Top - (targetHeight - ActualHeight) / 2,
+                                   targetWidth, targetHeight);
+
+            StartStoryBoard(WindowRect, target, AnimationTime, false);
         }
 
         private void ChooseButtonClick(object sender, RoutedEventArgs e)
@@ -119,7 +132,7 @@ namespace MayhemWpf
             Rect target = new Rect(Left - (targetWidth - ActualWidth) / 2, Top - (targetHeight - ActualHeight) / 2,
                                    targetWidth, targetHeight);
 
-            StartStoryBoard(WindowRect, target);
+            StartStoryBoard(WindowRect, target, AnimationTime, true);
 
             buttonChoose.IsEnabled = false;
             buttonCancel.IsEnabled = false;
@@ -144,6 +157,12 @@ namespace MayhemWpf
 
         private void buttonConfigCancel_Click(object sender, RoutedEventArgs e)
         {
+            if (isCheckingSizeChanged)
+            {
+                isCheckingSizeChanged = false;
+                ConfigContent.SizeChanged -= new SizeChangedEventHandler(ConfigContent_SizeChanged);
+            }
+
             iWpfConfig.OnCancel();
             iWpfConfig.OnClosing();
 
@@ -157,7 +176,7 @@ namespace MayhemWpf
             Rect target = new Rect(Left - (300 - ActualWidth) / 2, Top - (550 - ActualHeight) / 2,
                                    300, 550);
 
-            StartStoryBoard(WindowRect, target);
+            StartStoryBoard(WindowRect, target, AnimationTime, false);
 
             buttonChoose.IsEnabled = true;
             buttonCancel.IsEnabled = true;
@@ -197,11 +216,11 @@ namespace MayhemWpf
         }
 
         #region Resize Animation
-        private void StartStoryBoard(Rect currentRect, Rect targetRect)
+        private void StartStoryBoard(Rect currentRect, Rect targetRect, double time, bool checkOnComplete)
         {
             // Set up animation duration and behavior
             RectAnimation rectAnimation = new RectAnimation();
-            rectAnimation.Duration = TimeSpan.FromSeconds(AnimationTime);
+            rectAnimation.Duration = TimeSpan.FromSeconds(time);
             rectAnimation.FillBehavior = FillBehavior.HoldEnd;
 
             // Set the From and To properties of the animation.
@@ -217,7 +236,20 @@ namespace MayhemWpf
             Storyboard storyBoard = new Storyboard();
             storyBoard.Children.Add(rectAnimation);
 
+            if (checkOnComplete)
+            {
+                storyBoard.Completed += new EventHandler(storyBoard_Completed);
+            }
             storyBoard.Begin(this);
+        }
+
+        void storyBoard_Completed(object sender, EventArgs e)
+        {
+            if (!isCheckingSizeChanged)
+            {
+                isCheckingSizeChanged = true;
+                ConfigContent.SizeChanged += new SizeChangedEventHandler(ConfigContent_SizeChanged);
+            }
         }
         #endregion
 
