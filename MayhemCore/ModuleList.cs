@@ -14,6 +14,7 @@ namespace MayhemCore
 	/// <typeparam name="V">The interface type that modules must implement</typeparam>
     public abstract class ModuleList<T> : List<ModuleType>
 	{
+        List<Type> allTypes = new List<Type>();
         public ModuleList() 
         {
 		}
@@ -56,7 +57,7 @@ namespace MayhemCore
                     if (assembly != null)
                     {
                         // Go through all the public classes in the assembly
-                        foreach (var type in assembly.GetExportedTypes())
+                        foreach (Type type in assembly.GetExportedTypes())
                         {
                             // If it's parent class is the type we want
                             // and it implements the correct moduleType
@@ -75,6 +76,8 @@ namespace MayhemCore
                                    // throw new Exception("Module does not have MayhemModule attribute set:\n" + type.FullName);
                                 }
                             }
+                            allTypes.Add(type);
+                            Debug.WriteLine(type);
                         }
                     }
                 }
@@ -86,14 +89,14 @@ namespace MayhemCore
             this.Sort();
 		}
 
-        public Type[] ToTypeArray()
+        public Type[] GetAllTypesInModules()
         {
-            List<Type> types = new List<Type>();
-            foreach (ModuleType moduleType in this)
-            {
-                types.Add(moduleType.Type);
-            }
-            return types.ToArray();
+            //List<Type> types = new List<Type>();
+            //foreach (ModuleType moduleType in this)
+            //{
+            //    types.Add(moduleType.Type);
+            //}
+            return allTypes.ToArray();
         }
 	}
 }
