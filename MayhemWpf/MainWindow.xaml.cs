@@ -100,6 +100,10 @@ namespace MayhemWpf
         private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Save();
+            foreach (Connection connection in mayhem.ConnectionList)
+            {
+                connection.Disable();
+            }
         }
 
         private void EventListClick(object sender, RoutedEventArgs e)
