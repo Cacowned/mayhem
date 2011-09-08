@@ -79,14 +79,14 @@ namespace MayhemWpf.UserControls
             bool wasEnabled = Connection.Enabled;
             if (wasEnabled)
             {
-                Connection.Disable();
+                Connection.Disable(null);
             }
             ConfigWindow config = new ConfigWindow((IWpfConfigurable)Connection.Event);
             config.ShowDialog();
 
             if (wasEnabled)
             {
-                Connection.Enable();
+                Connection.Enable(null);
             }
             Connection.IsConfiguring = false;
 
@@ -105,14 +105,14 @@ namespace MayhemWpf.UserControls
             bool wasEnabled = Connection.Enabled;
             if (wasEnabled)
             {
-                Connection.Disable();
+                Connection.Disable(null);
             }
             ConfigWindow config = new ConfigWindow((IWpfConfigurable)Connection.Reaction);
             config.ShowDialog();
 
             if (wasEnabled)
             {
-                Connection.Enable();
+                Connection.Enable(null);
             }
             Connection.IsConfiguring = false;
 
@@ -122,66 +122,59 @@ namespace MayhemWpf.UserControls
         private void DeleteConnectionClick(object sender, RoutedEventArgs e)
         {
             Connection c = ((Button)sender).Tag as Connection;
-            c.Disable();
-            c.Delete();
+            c.Disable(new Action(() =>
+                {
+                    c.Delete();
 
-            Mayhem.Instance.ConnectionList.Remove(c);
-            ((MainWindow)Application.Current.MainWindow).Save();
+                    Mayhem.Instance.ConnectionList.Remove(c);
+                    ((MainWindow)Application.Current.MainWindow).Save();
+                }));
         }
 
         private void OnOffClick(object sender, RoutedEventArgs e)
         {
             ToggleButton button = (ToggleButton)sender;
 
+            Action action = new Action(() =>
+                {
+                    Dispatcher.Invoke((Action)delegate
+                    {
+                        if (!Connection.Enabled)
+                        {
+                            //Debug.WriteLine("Connection didn't enable.");
+
+                            // We wanted to enable it, and it didn't enable
+                            // mark the event as handled so it doesn't
+                            // flip the button
+                            button.IsChecked = false;
+                        }
+                        button.IsChecked = Connection.Enabled;
+                        if (Connection.Enabled)
+                        {
+                            connectionButtons.BeginAnimation(StackPanel.OpacityProperty, animIn);
+                            dropShadow.BeginAnimation(DropShadowEffect.BlurRadiusProperty, animBlurIn);
+                            dropShadow.BeginAnimation(DropShadowEffect.OpacityProperty, animBlurOpacityIn);
+                            dropShadow.BeginAnimation(DropShadowEffect.ShadowDepthProperty, animBlurDistanceIn);
+                        }
+                        else
+                        {
+                            connectionButtons.BeginAnimation(StackPanel.OpacityProperty, animOut);
+                            dropShadow.BeginAnimation(DropShadowEffect.BlurRadiusProperty, animBlurOut);
+                            dropShadow.BeginAnimation(DropShadowEffect.OpacityProperty, animBlurOpacityOut);
+                            dropShadow.BeginAnimation(DropShadowEffect.ShadowDepthProperty, animBlurDistanceOut);
+                        }
+                        ((MainWindow)Application.Current.MainWindow).Save();
+                    });
+                });
+
             if (!Connection.Enabled)
             {
-                Connection.Enable();
-
-                if (!Connection.Enabled)
-                {
-                    //Debug.WriteLine("Connection didn't enable.");
-
-                    // We wanted to enable it, and it didn't enable
-                    // mark the event as handled so it doesn't
-                    // flip the button
-                    button.IsChecked = false;
-                    e.Handled = true;
-                }
-
+                Connection.Enable(action);
             }
             else
             {
-                Connection.Disable();
-
-                if (Connection.Enabled)
-                {
-                    //Debug.WriteLine("Connection didn't disable.");
-                    // We wanted to disable it, and it didn't disable
-                    // mark the event as handled so it doesn't
-                    // flip the button
-                    button.IsChecked = true;
-                    e.Handled = true;
-                }
-                else
-                {
-                    //Debug.WriteLine("Connection disabled");
-                }
+                Connection.Disable(action);
             }
-            if (Connection.Enabled)
-            {
-                connectionButtons.BeginAnimation(StackPanel.OpacityProperty, animIn);
-                dropShadow.BeginAnimation(DropShadowEffect.BlurRadiusProperty, animBlurIn);
-                dropShadow.BeginAnimation(DropShadowEffect.OpacityProperty, animBlurOpacityIn);
-                dropShadow.BeginAnimation(DropShadowEffect.ShadowDepthProperty, animBlurDistanceIn);
-            }
-            else
-            {
-                connectionButtons.BeginAnimation(StackPanel.OpacityProperty, animOut);
-                dropShadow.BeginAnimation(DropShadowEffect.BlurRadiusProperty, animBlurOut);
-                dropShadow.BeginAnimation(DropShadowEffect.OpacityProperty, animBlurOpacityOut);
-                dropShadow.BeginAnimation(DropShadowEffect.ShadowDepthProperty, animBlurDistanceOut);
-            }
-            ((MainWindow)Application.Current.MainWindow).Save();
         }
     }
 }
