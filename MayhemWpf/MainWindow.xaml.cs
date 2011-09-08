@@ -102,7 +102,7 @@ namespace MayhemWpf
             Save();
             foreach (Connection connection in mayhem.ConnectionList)
             {
-                connection.Disable();
+                connection.Disable(null);
             }
         }
 
