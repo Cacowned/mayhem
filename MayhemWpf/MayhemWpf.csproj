@@ -35,7 +35,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -56,9 +56,7 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
@@ -148,9 +146,6 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="App.config" />
-    <None Include="app.manifest">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>

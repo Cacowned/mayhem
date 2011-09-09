@@ -82,57 +82,69 @@ namespace MayhemCore
         /// Enable this connection's
         /// event and reaction
         /// </summary>
-        public void Enable()
+        public void Enable(Action actionOnComplete)
         {
             // if we are already enabled, just stop
             if (Enabled)
             {
                 return;
             }
-            //ThreadPool.QueueUserWorkItem(new WaitCallback((o) => 
-            _Enable();
+            _Enable(actionOnComplete);
         }
 
-        private void _Enable()
+        private void _Enable(Action actionOnComplete)
         {
-            // Enable the event
-            Event.Enable();
-            // If the event didn't enable
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => EnableOnThread(actionOnComplete)));
+        }
+
+        private void EnableOnThread(Action actionOnComplete)
+        {
             if (!Event.Enabled)
             {
-                Enabled = false;
-                // Return out and don't try to 
-                // enable the reaction
-                return;
+                // Enable the event
+                Event.Enable();
+                // If the event didn't enable
+                if (!Event.Enabled)
+                {
+                    Enabled = false;
+                    // Return out and don't try to 
+                    // enable the reaction
+                    return;
+                }
             }
-
-            Reaction.Enable();
             if (!Reaction.Enabled)
             {
-                /* If we got here, then it means
-                 * the event is enabled
-                 * and the reaction won't enable
-                 * 
-                 * we need to disable the event
-                 * and then return out
-                 */
-                Event.Disable();
+                Reaction.Enable();
+                if (!Reaction.Enabled)
+                {
+                    /* If we got here, then it means
+                     * the event is enabled
+                     * and the reaction won't enable
+                     * 
+                     * we need to disable the event
+                     * and then return out
+                     */
+                    Event.Disable();
 
-                Enabled = false;
-                // Now return out
-                return;
+                    Enabled = false;
+                    // Now return out
+                    return;
+                }
             }
-
             /* Double check that both are enabled
              * We shouldn't be able to get here if they aren't
              */
             if (Event.Enabled && Reaction.Enabled)
             {
                 Enabled = true;
+                if (actionOnComplete != null)
+                {
+                    actionOnComplete();
+                }
             }
         }
 
-        public void Disable()
+        public void Disable(Action actionOnComplete)
         {
             // if we aren't already enabled, just stop
             if (!Enabled)
@@ -140,8 +152,19 @@ namespace MayhemCore
                 return;
             }
 
-            Event.Disable();
-            Reaction.Disable();
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DisableOnThread(actionOnComplete)));            
+        }
+
+        private void DisableOnThread(Action actionOnComplete)
+        {
+            if (Event.Enabled)
+            {
+                Event.Disable();
+            }
+            if (Reaction.Enabled)
+            {
+                Reaction.Disable();
+            }
 
             /* This might need to be changed to be more like
              * Enable() if we decide that modules can
@@ -150,13 +173,17 @@ namespace MayhemCore
              * now, this will stay as it is
              */
             Enabled = false;
+            if (actionOnComplete != null)
+            {
+                actionOnComplete();
+            }
         }
 
         public void Delete()
         {
             if (Enabled)
             {
-                Disable();
+                Disable(null);
             }
 
             Event.Delete();
@@ -175,7 +202,7 @@ namespace MayhemCore
             // If we have started up and are enabled, then we need to
             // actually enable our events and reactions
             if (Enabled)
-                _Enable();
+                _Enable(null);
         }
     }
 }
