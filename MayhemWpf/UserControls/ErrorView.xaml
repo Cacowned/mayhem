@@ -41,7 +41,7 @@
             </Border>
             <Border Name="borderListBox" BorderThickness="0,1,0,0" BorderBrush="Black" Height="271">
                 <ListBox Name="listErrors"
-				ItemTemplate="{StaticResource errorStyle}" ItemsSource="{Binding Path=Errors, ElementName=MayhemErrorView}">
+				ItemTemplate="{StaticResource errorStyle}" ItemsSource="{Binding Path=Errors, ElementName=MayhemErrorView}" FontSize="14">
                 </ListBox>
             </Border>
         </StackPanel>

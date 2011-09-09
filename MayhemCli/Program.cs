@@ -119,13 +119,15 @@ namespace MayhemCli
                         // to begin with
                         bool wasEnabled = connection.Enabled;
 
-                        connection.Disable();
-                        ((ICli)connection.Event).CliConfig();
+                        connection.Disable(new Action(() =>
+                            {
+                                ((ICli)connection.Event).CliConfig();
 
-                        if (wasEnabled)
-                        {
-                            connection.Enable();
-                        }
+                                if (wasEnabled)
+                                {
+                                    connection.Enable(null);
+                                }
+                            }));
 
                     }
                 }
@@ -142,13 +144,15 @@ namespace MayhemCli
                         // We want to disable the reaction, and re-enable it if it was enabled
                         // to begin with
                         bool wasEnabled = connection.Enabled;
-                        connection.Disable();
-
-                        ((ICli)connection.Reaction).CliConfig();
-                        if (wasEnabled)
+                        connection.Disable(new Action(() =>
                         {
-                            connection.Enable();
-                        }
+                            ((ICli)connection.Reaction).CliConfig();
+
+                            if (wasEnabled)
+                            {
+                                connection.Enable(null);
+                            }
+                        }));
                     }
                 }
             }
@@ -164,11 +168,11 @@ namespace MayhemCli
                     // Flip whether it is enabled or not
                     if (connection.Enabled)
                     {
-                        connection.Disable();
+                        connection.Disable(null);
                     }
                     else
                     {
-                        connection.Enable();
+                        connection.Enable(null);
                     }
                 }
                 else
@@ -178,7 +182,7 @@ namespace MayhemCli
                     {
                         Console.Write("Which connection? ");
                         int num = validateNumber(numConnections - 1);
-                        mayhem.ConnectionList[num].Disable();
+                        mayhem.ConnectionList[num].Disable(null);
                         mayhem.ConnectionList.RemoveAt(num);
                         Console.WriteLine("Connection " + num + " removed");
                     }
