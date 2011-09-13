@@ -72,6 +72,9 @@ namespace VisionModules.Wpf
                 // start the camera 0 if it isn't already running
                 cam = i.cameras_available[0];
                 if (!cam.running) cam.StartFrameGrabbing();
+
+                cam.OnImageUpdated -= i_OnImageUpdated;
+                cam.OnImageUpdated += i_OnImageUpdated;
                 Debug.WriteLine(TAG + "using " + cam.info.ToString());
             }
             else
@@ -83,35 +86,7 @@ namespace VisionModules.Wpf
      
         }
        
-         /**<summary>
-         * Register / De-Register the image update handler if the window is visible / invisible
-         * </summary>
-         */ 
-        private void Control_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            Debug.WriteLine(TAG+"[MotionDetectorConfig] : IsVisibleChanged");
-            if (this.IsVisible)
-            {
-                if (cam == null)
-                {
-                    OnLoad();
-                }
-                if (cam != null)
-                {
-                    if (!cam.running) cam.StartFrameGrabbing();
-                    cam.OnImageUpdated += i_OnImageUpdated;
-                }
-            }
-            else
-            {
-                if (cam != null)
-                {
-                    cam.OnImageUpdated -= i_OnImageUpdated;
-                    cam.TryStopFrameGrabbing();
-                }
-                
-            }
-        }
+        
 
         /**<summary>
          * Invokes image source setting when a new image is available from the update handler. 
@@ -171,6 +146,16 @@ namespace VisionModules.Wpf
             VisionModulesWPFCommon.DeleteObject(hBmp);
 
 
+        }
+
+        public override void OnClosing()
+        {
+            if (cam != null)
+            {
+                cam.OnImageUpdated -= i_OnImageUpdated;
+                cam.TryStopFrameGrabbing();
+            }
+            base.OnClosing();
         }
      
 

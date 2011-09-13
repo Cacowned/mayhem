@@ -178,6 +178,7 @@ namespace ArduinoModules.Wpf
             // fill the gridViews with the detected pins 
             if (update_pins)
             {
+                // reset analog ids to 0
                 AnalogPinItem.ResetAnalogIDs();
                 arduino.QueryPins();
             }

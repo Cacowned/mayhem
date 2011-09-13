@@ -1,12 +1,13 @@
 ﻿/*
  * ArduinoFirmata.cs
  * 
- * Manages and reads the state of an Arduino running the Firmata Firmware
+ * Manages and reads the state of an Arduino running the Firmata Firmware.
+ * Serial communications backend is MayhemSerial.
  * 
- * For more info see http://firmata.org/wiki/Main_Page --> firmata test 
+ * More info on Firmata:                http://firmata.org/wiki/Main_Page  
+ * More info on the Firmata Procol:     http://www.firmata.org/wiki/V2.2ProtocolDetails
  * 
  * (c) 2011, Microsoft Applied Sciences Group
- * 
  * 
  * Author: Sven Kratz
  */
@@ -74,14 +75,11 @@ namespace ArduinoModules.Firmata
         public static readonly byte REPORT_FIRMWARE = 0x79; // report name and version of the firmware
         public static readonly byte SAMPLING_INTERVAL = 0x7A; // used to set the sampling interval
 
-
         // message reports
         public static readonly byte ANALOG_IO_MESSAGE = 0xE0;
         public static readonly byte DIGITAL_IO_MESSAGE = 0x90;
         public static readonly byte REPORT_ANALOG_PIN = 0xC0;
-        public static readonly byte REPORT_DIGITAL_PORT = 0xD0;
-
-       
+        public static readonly byte REPORT_DIGITAL_PORT = 0xD0;     
     }
 
     public class Pin
