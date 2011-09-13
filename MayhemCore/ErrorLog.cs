@@ -40,7 +40,7 @@ namespace MayhemCore
             errors.Insert(0,err);
 
             // For the time being, write the error to Debug as well
-            Debug.WriteLine(message);
+            Logger.WriteLine(message);
         }
 
 

@@ -17,6 +17,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading;
 using System.Drawing;
+using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {
@@ -32,9 +33,6 @@ namespace MayhemOpenCVWrapper
     /// </summary>
     public class Camera : ImagerBase, IBufferingImager
     {
-        public const string TAG = "[Camera] : ";
-
-
         private static int instances = 0; 
 
         private int index_ = instances++;       // should be incremented on instantiation
@@ -61,8 +59,6 @@ namespace MayhemOpenCVWrapper
         public int frameInterval;
 
         private Thread grabFrm = null;
-
-       
 
         // store LOOP_DURATION ms of footage in the past/future
         public static readonly int LOOP_DURATION = 30000; 
@@ -133,7 +129,7 @@ namespace MayhemOpenCVWrapper
             }
             catch (Exception e)
             {
-                Debug.WriteLine(TAG + "exception during camera init\n" + e.ToString());
+                Logger.WriteLine("exception during camera init\n" + e.ToString());
             }
 
 
@@ -149,14 +145,14 @@ namespace MayhemOpenCVWrapper
             grabFrm = new Thread(GrabFrames);
             try
             {
-                Debug.WriteLine("Starting Frame Grabber");
+                Logger.WriteLine("Starting Frame Grabber");
                 grabFrm.Start();
                 this.running = true;
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Exception while trying to start Framegrab");
-                Debug.WriteLine(e.ToString());
+                Logger.WriteLine("Exception while trying to start Framegrab");
+                Logger.WriteLine(e.ToString());
             }
         }
 
@@ -174,10 +170,10 @@ namespace MayhemOpenCVWrapper
         /// <returns>Success of the deactivation procedure.</returns>
         public override bool TryStopFrameGrabbing()
         {
-            Debug.WriteLine(TAG + index + " TryStopFrameGrabbing");
+            Logger.WriteLine(index + " TryStopFrameGrabbing");
             if (this.OnImageUpdated == null)
             {
-                Debug.WriteLine(TAG + " shutting down camera");
+                Logger.WriteLine(" shutting down camera");
                 //  Stop device
                 StopGrabbing();
                 this.running = false; 
@@ -185,7 +181,7 @@ namespace MayhemOpenCVWrapper
             }
             else
             {
-                Debug.WriteLine(TAG + " handlers still attached, not shutting down camera");
+                Logger.WriteLine(" handlers still attached, not shutting down camera");
                 return false;
             }
         }
@@ -203,12 +199,12 @@ namespace MayhemOpenCVWrapper
 
         private void GrabFrames()
         {
-            Debug.WriteLine(TAG + index + " GrabFrames");
+            Logger.WriteLine(index + " GrabFrames");
             running = true;
 
             while (running)
             {
-                //Debug.WriteLine("Camera: Update!");
+                //Logger.WriteLine("Camera: Update!");
                 lock (thread_locker)
                 {
                     unsafe
@@ -222,7 +218,7 @@ namespace MayhemOpenCVWrapper
                             }
                             catch (Exception e)
                             {
-                                Debug.WriteLine("Cam Exception " + e);
+                                Logger.WriteLine("Cam Exception " + e);
                                 // shutdown cam
                                 running = false;
                             }
@@ -255,13 +251,13 @@ namespace MayhemOpenCVWrapper
 
                 if (OnImageUpdated != null)
                 {
-                    // Debug.Write("Camera: Sending new Frame to listeners!");
+                    // Logger.Write("Camera: Sending new Frame to listeners!");
                     OnImageUpdated(this, new EventArgs());
                 }
 
 
             }
-            Debug.WriteLine(TAG + "GrabFrame Thread terminated");
+            Logger.WriteLine("GrabFrame Thread terminated");
             running = false;
         }
 

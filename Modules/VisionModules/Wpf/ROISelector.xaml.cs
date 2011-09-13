@@ -23,6 +23,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using MayhemCore;
 
 namespace VisionModules.Wpf
 {
@@ -39,7 +40,6 @@ namespace VisionModules.Wpf
             motionBoundingRect.StrokeThickness = 2;
         }
 
-        public const string TAG = "[ROISelectorOverlay] : ";
         //------   ROI Selection with Mouse
 
         private bool startDrag = false;
@@ -74,7 +74,7 @@ namespace VisionModules.Wpf
 
 
 
-            Debug.WriteLine(TAG + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> overlay_MouseLeftButtonUp" + boundingRectOrigin + " -- " + boundingRectSize);
+            Logger.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> overlay_MouseLeftButtonUp" + boundingRectOrigin + " -- " + boundingRectSize);
             this.Cursor = Cursors.Arrow;
             startDrag = false;
             mode = modes.start;
@@ -84,8 +84,7 @@ namespace VisionModules.Wpf
 
         public  void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine(TAG + "onverlay_MouseLeftButtonDown");
-
+            Logger.WriteLine("onverlay_MouseLeftButtonDown");
 
             mode = modes.selecting;
             this.Cursor = Cursors.Cross;
@@ -141,8 +140,7 @@ namespace VisionModules.Wpf
 
         public  void OnMouseMove(object sender, MouseEventArgs e)
         {
-
-            Debug.WriteLine(TAG + "overlay_MouseMove");
+            Logger.WriteLine("overlay_MouseMove");
             if (startDrag)
             {
                 System.Windows.Point position = e.GetPosition(this);
@@ -224,7 +222,7 @@ namespace VisionModules.Wpf
 
         public  void OnMouseLeave(object sender, MouseEventArgs e)
         {
-            Debug.WriteLine(TAG + "onverlay_MouseLeave");
+            Logger.WriteLine("onverlay_MouseLeave");
             if (!(e.LeftButton == MouseButtonState.Pressed))
             {
                 startDrag = false;

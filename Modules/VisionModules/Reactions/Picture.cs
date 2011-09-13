@@ -7,7 +7,7 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
@@ -26,33 +26,26 @@ using System.Timers;
 
 namespace VisionModules.Reactions
 {
-
-
-
     [DataContract]
     [MayhemModule("Picture", "Takes a photo with a webcam and saves it to the hard drive")]
     public class Picture : ReactionBase, IWpfConfigurable
     {
-        public static string TAG = "[Picture] : ";
-
         // default to "My Documents" folder
         [DataMember]
         public string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 
         // The device we are recording from
-        private CameraDriver i = CameraDriver.Instance;    
+        private CameraDriver i = CameraDriver.Instance;
         private ImagerBase cam;
 
-        public Camera.ImageUpdateHandler imageUpdateHandler; 
-
+        public Camera.ImageUpdateHandler imageUpdateHandler;
 
         [DataMember]
         private int selected_device_idx = 0;
 
         // the temporal offset of the picture to be saved
         [DataMember]
-        private double capture_offset_time = 0.0;  
-
+        private double capture_offset_time = 0.0;
 
         public Picture()
         {
@@ -71,16 +64,15 @@ namespace VisionModules.Reactions
             //Disable();
         }
 
-        public void camera_update(object sender ,EventArgs e)
+        public void camera_update(object sender, EventArgs e)
         {
 
         }
 
         public void Setup()
         {
-
             imageUpdateHandler = new Camera.ImageUpdateHandler(camera_update);
-     
+
             if (i == null)
             {
                 i = CameraDriver.Instance;
@@ -95,24 +87,22 @@ namespace VisionModules.Reactions
         /// <summary>
         /// gets called when a new image is acquired by the camera
         /// </summary>
-        
+
         /// TODO: handle this callback in Camera.cs and encapsulate the pixel copying
         public void SaveImage(Bitmap image)
         {
-            Debug.WriteLine(TAG + "SaveImage");
+            Logger.WriteLine("SaveImage");
             DateTime now = DateTime.Now;
             // TODO think of a better naming convention
             string filename = "Mayhem-Snapshot_" + this.Name + "_" + now.Year + "_" + now.Month + "_" + now.Month + "_" + now.Day + "-" + now.Hour + "_" + now.Minute + "_" + now.Second + ".jpg";
             string path = this.folderLocation + "\\" + filename;
-            Debug.WriteLine(TAG + "saving file to " + path);
+            Logger.WriteLine("saving file to " + path);
             image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
         }
 
 
         public override void Enable()
         {
-          
-
             // TODO: Improve this code
             if (selected_device_idx < i.devices_available.Length)
             {
@@ -120,14 +110,11 @@ namespace VisionModules.Reactions
                 cam.OnImageUpdated += imageUpdateHandler;
                 if (cam.running == false)
                     cam.StartFrameGrabbing();
-             
+
             }
 
             base.Enable();
-
         }
-
-
 
         public override void Disable()
         {
@@ -138,7 +125,7 @@ namespace VisionModules.Reactions
 
         public override void Perform()
         {
-            Debug.WriteLine(TAG + "Perform");
+            Logger.WriteLine("Perform");
             // hook up image callback
             // image gets saved when image provider calls back
             // cam.OnImageUpdated += this.imageUpdateHandler;
@@ -148,7 +135,7 @@ namespace VisionModules.Reactions
                 // save image directly
                 SaveImage(cam.ImageAsBitmap());
             }
-            else if (capture_offset_time < 0 && Math.Abs(capture_offset_time) <= Camera.LOOP_DURATION )
+            else if (capture_offset_time < 0 && Math.Abs(capture_offset_time) <= Camera.LOOP_DURATION)
             {
                 // retrieve image from camera buffer
 
@@ -163,15 +150,14 @@ namespace VisionModules.Reactions
                         SaveImage(image);
                     }
                 }
-
             }
             else if ((capture_offset_time > 0 && Math.Abs(capture_offset_time) <= Camera.LOOP_DURATION))
             {
                 // schedule future retrieval of image
-                int time_ms = (int)  capture_offset_time * 1000;
+                int time_ms = (int)capture_offset_time * 1000;
                 Timer t = new Timer(time_ms);
                 t.Elapsed += new ElapsedEventHandler(SaveFutureImage);
-                t.Enabled = true; 
+                t.Enabled = true;
             }
             else
             {
@@ -187,7 +173,7 @@ namespace VisionModules.Reactions
         /// <param name="e"></param>
         private void SaveFutureImage(object sender, ElapsedEventArgs e)
         {
-            Debug.WriteLine(TAG + "SaveFutureImage");
+            Logger.WriteLine("SaveFutureImage");
             if (this.Enabled && cam.running)
                 SaveImage(cam.ImageAsBitmap());
         }
@@ -197,7 +183,6 @@ namespace VisionModules.Reactions
             return time.ToString("yyyyMMddHHmmssffff");
         }
 
-       
         public IWpfConfiguration ConfigurationControl
         {
             get
@@ -223,13 +208,13 @@ namespace VisionModules.Reactions
                 cam = config.deviceList.SelectedItem as Camera;
                 selected_device_idx = config.deviceList.SelectedIndex;
 
-             //   if (wasEnabled)
-             //       this.Enable();
+                //   if (wasEnabled)
+                //       this.Enable();
             }
             else
             {
-                Debug.WriteLine(TAG + "no cam present, using dummy");
-                cam = new DummyCamera(); 
+                Logger.WriteLine("no cam present, using dummy");
+                cam = new DummyCamera();
             }
             capture_offset_time = config.slider_value;
         }

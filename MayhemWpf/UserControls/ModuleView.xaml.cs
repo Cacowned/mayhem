@@ -144,7 +144,7 @@ namespace MayhemWpf.UserControls
                     {
                         if (!Connection.Enabled)
                         {
-                            //Debug.WriteLine("Connection didn't enable.");
+                            //Logger.WriteLine("Connection didn't enable.");
 
                             // We wanted to enable it, and it didn't enable
                             // mark the event as handled so it doesn't

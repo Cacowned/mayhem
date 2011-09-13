@@ -16,20 +16,13 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
+using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {
-
-
     public class CameraDriver
     {
-
-
-        public const string TAG = "[MayhemCameraDriver ] : ";
-
         public static CameraDriver Instance = new CameraDriver();
-
-        // capture interval determining the frame rate
     
         public bool running = false ;
         public int cWidth;
@@ -37,7 +30,6 @@ namespace MayhemOpenCVWrapper
         public CameraInfo[] devices_available = null;
         public Camera[] cameras_available = null; 
         public CameraInfo selected_device = null;
-
       
         public CameraDriver()
         {
@@ -58,12 +50,8 @@ namespace MayhemOpenCVWrapper
                 cameras_available[i++] = cam;  
             }
 
-            Debug.WriteLine(TAG + devices_available.Length + " devices available");
-
+            Logger.WriteLine(devices_available.Length + " devices available");
         }
-
-
-       
 
         /**<summary>
          * Returns a string array of description of all cameras found
@@ -72,14 +60,12 @@ namespace MayhemOpenCVWrapper
          * */
         public CameraInfo[] EnumerateDevices()
         {
-
             CameraInfo[] c = null;
 
             string deviceNames = "";
 
             unsafe
             {
-               
                 int deviceCount = 0;
                 // deviceStrings Buffer will be written to            
                 sbyte[] deviceNameBuf =  new sbyte[1024];
@@ -90,7 +76,6 @@ namespace MayhemOpenCVWrapper
                     OpenCVDLL.OpenCVBindings.EnumerateDevices(deviceStrings, &deviceCount);
                     deviceNames = new String(deviceStrings);                 
                 }       
-
             }
            
             string[] device_strings = deviceNames.Split(';');

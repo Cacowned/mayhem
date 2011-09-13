@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using MayhemCore;
 
 namespace X10Modules.Insteon
 {
@@ -22,15 +23,8 @@ namespace X10Modules.Insteon
 
     public class InsteonController : InsteonControllerBase
     {
-
-        public new static readonly string TAG = "[InsteonController] :";
-
-
-
-        public InsteonController(string portName) : base(portName) {
-        
-            
-
+        public InsteonController(string portName) : base(portName)
+        {
         }
         private bool linking = false;
 
@@ -38,13 +32,9 @@ namespace X10Modules.Insteon
 
        // public Action<List<InsteonDevice>> OnDevicesLinkComplete;
 
-       
-
-
-
         public override void port_DataReceived(string portName, byte[] buffer, int nBytes)
         {
-            Debug.WriteLine(TAG + "port_DataReceived");
+            Logger.WriteLine("port_DataReceived");
            
             // check if data is from the port name we are monitoring
             if (portName == this.portName && lastCommand != null && nBytes > 0)
@@ -52,7 +42,7 @@ namespace X10Modules.Insteon
 
                 if (lastCommand.GetType() == typeof(InsteonBasicCommand))
                 {
-                    Debug.WriteLine(TAG + "Listening for Basic Command Response");
+                    Logger.WriteLine("Listening for Basic Command Response");
                     if (buffer[nBytes - 1] == 0x06)
                     {
                         lastCommand = null;
@@ -73,7 +63,7 @@ namespace X10Modules.Insteon
                     
 
                     InsteonResponseCommand c = lastCommand as InsteonResponseCommand;
-                    Debug.WriteLine(TAG + "Listing for Response Command Response");
+                    Logger.WriteLine("Listing for Response Command Response");
                     // check if an ack has arrived for the last command
                     if (parse_count >= c.length && parse_buf[c.length] == 0x06)
                     {
@@ -91,8 +81,8 @@ namespace X10Modules.Insteon
                         else
                         {
                             // gibberish
-                            Debug.WriteLine(TAG + "Response Length was not as expected");
-                            Debug.WriteLine("Expected " + (c.expectedResponseLength+c.length) + " got " + parse_count);
+                            Logger.WriteLine("Response Length was not as expected");
+                            Logger.WriteLine("Expected " + (c.expectedResponseLength+c.length) + " got " + parse_count);
                             
                             // cleanup
                             ResetRxBuffer();
@@ -103,7 +93,7 @@ namespace X10Modules.Insteon
                 }
                 else
                 {
-                    Debug.WriteLine(TAG + "listeneing for unknown reponse type");
+                    Logger.WriteLine("listening for unknown response type");
                     throw new NotSupportedException();
                 }
             }
@@ -152,14 +142,14 @@ namespace X10Modules.Insteon
             bool wait = waitAck.WaitOne(100);
             if (wait)
             {
-                Debug.WriteLine(TAG + "\n=========\nInsteon Command " + c + " Successful\n==========\n");
+                Logger.WriteLine("\n=========\nInsteon Command " + c + " Successful\n==========\n");
                 lastCommand = null;
                 ResetRxBuffer();
                 return true;
             }
             else
             {
-                Debug.WriteLine(TAG + "Command " + c + " unsuccessful :(");
+                Logger.WriteLine("Command " + c + " unsuccessful :(");
                 lastCommand = null; 
                 ResetRxBuffer();
                 return false;
@@ -196,7 +186,7 @@ namespace X10Modules.Insteon
             bool wait = waitAck.WaitOne(100);
             if (wait)
             {
-                Debug.WriteLine(TAG + "\n=========\nInsteon Command Successful\n==========\n");
+                Logger.WriteLine("\n=========\nInsteon Command Successful\n==========\n");
 
                 InsteonDevice d = new InsteonDevice();
 
@@ -210,7 +200,7 @@ namespace X10Modules.Insteon
                 Array.Copy(parse_buf, lastCommand.length + 8, linkData, 0, 3);
                 d.linkData = linkData;
                 devices.Add(d);
-                Debug.WriteLine("Added device: " + d.ToString());
+                Logger.WriteLine("Added device: " + d.ToString());
 
                 // see if we have more devices in the list 
                 ResetRxBuffer();
@@ -223,7 +213,7 @@ namespace X10Modules.Insteon
                     wait = waitAck.WaitOne(100);
                     if (!wait)
                     {
-                        Debug.WriteLine(TAG + "last device or invalid response");
+                        Logger.WriteLine("last device or invalid response");
                         break;
                     }
 
@@ -239,7 +229,7 @@ namespace X10Modules.Insteon
                     Array.Copy(parse_buf, lastCommand.length + 8, linkData, 0, 3);
                     d.linkData = linkData;
                     devices.Add(d);
-                    Debug.WriteLine("Added device: " + d.ToString());
+                    Logger.WriteLine("Added device: " + d.ToString());
 
                     // see if we have more devices in the list 
                     ResetRxBuffer();
@@ -251,7 +241,7 @@ namespace X10Modules.Insteon
             }
             else
             {
-                Debug.WriteLine(TAG + "\n=========\nInsteon Command FAILED\n==========\n");
+                Logger.WriteLine("\n=========\nInsteon Command FAILED\n==========\n");
                 // cleanup
                 ResetRxBuffer();
                 lastCommand = null;
@@ -275,7 +265,7 @@ namespace X10Modules.Insteon
                 bool wait = waitAck.WaitOne(100);
                 if (wait)
                 {
-                    Debug.WriteLine(TAG + "\n=========\nInsteon Command Successful\n==========\n");
+                    Logger.WriteLine("\n=========\nInsteon Command Successful\n==========\n");
                     return true;
                 }
                 else

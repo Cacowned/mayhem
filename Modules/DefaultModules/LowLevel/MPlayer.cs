@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Media;
+using MayhemCore;
 
 namespace DefaultModules.LowLevel
 {
@@ -45,7 +46,7 @@ namespace DefaultModules.LowLevel
         void mediaplayer_MediaFailed(object sender, ExceptionEventArgs e)
         {
             //throw new NotImplementedException();
-            Debug.WriteLine(TAG + " Media Playback Failed");
+            Logger.WriteLine(" Media Playback Failed");
         }
 
         public void PlayFile(string filePath)
@@ -54,7 +55,7 @@ namespace DefaultModules.LowLevel
             mediaplayer.Dispatcher.Invoke(new Action(delegate()
                 {
                     mediaplayer.Open(new Uri(filePath, UriKind.Absolute));
-                    Debug.WriteLine(TAG + " Starting new media playback " + filePath);
+                    Logger.WriteLine(" Starting new media playback " + filePath);
                     mediaplayer.Play();
                 }));
         }
@@ -66,13 +67,13 @@ namespace DefaultModules.LowLevel
 
         void p_MediaOpened(object sender, EventArgs e)
         {
-            Debug.WriteLine(TAG + " Media opened");
+            Logger.WriteLine(" Media opened");
         }
 
         void p_MediaEnded(object sender, EventArgs e)
         {
 
-            Debug.WriteLine(TAG + " Media Ended!");
+            Logger.WriteLine(" Media Ended!");
             isPlaying = false;
             mediaplayer.Stop();
             mediaplayer.Position = TimeSpan.Zero;

@@ -23,7 +23,7 @@ namespace OfficeModules.Reactions.PowerPoint
             catch (Exception e)
             {
                 ErrorLog.AddError(ErrorType.Failure, "Unable to find the PowerPoint application window.");
-                Debug.Write(e);
+                Logger.Write(e);
             }
         }
 
@@ -56,7 +56,7 @@ namespace OfficeModules.Reactions.PowerPoint
             catch (Exception e)
             {
                 ErrorLog.AddError(ErrorType.Warning, "Can't go to the next slide.");
-                Debug.Write(e);
+                Logger.Write(e);
             }
         }
     }

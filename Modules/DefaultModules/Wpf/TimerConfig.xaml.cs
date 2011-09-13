@@ -8,6 +8,7 @@ namespace DefaultModules.Wpf
     public partial class TimerConfig : IWpfConfiguration
     {
         public int Hours, Minutes, Seconds;
+        bool shouldCheckValidity = false;
 
         public TimerConfig(int hours, int minutes, int seconds)
         {
@@ -24,7 +25,8 @@ namespace DefaultModules.Wpf
             MinutesBox.Text = Minutes.ToString();
             SecondsBox.Text = Seconds.ToString();
             CheckValidity();
-            textInvalid.Visibility = Visibility.Collapsed;
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            shouldCheckValidity = true;
         }
 
         public override string Title
@@ -79,8 +81,11 @@ namespace DefaultModules.Wpf
 
         private void TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            textInvalid.Text = CheckValidity();
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            if (shouldCheckValidity)
+            {
+                textInvalid.Text = CheckValidity();
+                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
     }
 }

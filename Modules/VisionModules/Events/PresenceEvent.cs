@@ -10,7 +10,7 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
@@ -40,33 +40,28 @@ namespace VisionModules.Events
         ON_OFF      // presence     --> no presence
     }
 
-    
-
     [DataContract]
     [MayhemModule("*Presence Detector", "Detects presence of humans in the scene")]
-    public class PresenceEvent :   EventBase, IWpfConfigurable
+    public class PresenceEvent : EventBase, IWpfConfigurable
     {
 
         private enum PresenceStatus
         {
             UNINITIALIZED,
             PRESENCE,
-            NO_PRESENCE       
+            NO_PRESENCE
         };
-
-        private const string TAG = "[PresenceEvent] : ";
 
         // ============== presence detector and camera ==========================
         private Camera cam = null;
         private CameraDriver i = CameraDriver.Instance;
         private PresenceDetectorComponent pd = null;
         private PresenceDetectorComponent.DetectionHandler presenceHandler;
-        private PresenceStatus lastPresenceStatus = PresenceStatus.UNINITIALIZED; 
+        private PresenceStatus lastPresenceStatus = PresenceStatus.UNINITIALIZED;
 
         // ================== suppress repeat triggering
         private const int MIN_TRIGGER_INTERVAL_MS = 1500;
         private DateTime lastTriggerDate = DateTime.MinValue;
-
 
         [DataMember]
         private int selected_device_idx = 0;
@@ -82,10 +77,10 @@ namespace VisionModules.Events
 
         protected override void Initialize()
         {
-            Debug.WriteLine(TAG + "Initialize");
+            Logger.WriteLine("Initialize");
             base.Initialize();
 
-            Debug.WriteLine(TAG + "Enumerating Devices");
+            Logger.WriteLine("Enumerating Devices");
 
             if (i == null)
                 i = CameraDriver.Instance;
@@ -96,18 +91,18 @@ namespace VisionModules.Events
             }
             else
             {
-                Debug.WriteLine(TAG + "No camera available");
+                Logger.WriteLine("No camera available");
             }
 
             pd = new PresenceDetectorComponent(320, 240);
             presenceHandler = new PresenceDetectorComponent.DetectionHandler(m_OnPresenceUpdate);
         }
-        
+
 
         public IWpfConfiguration ConfigurationControl
         {
-            get {
-
+            get
+            {
                 return new PresenceConfig();
             }
         }
@@ -125,14 +120,13 @@ namespace VisionModules.Events
             selected_trigger_mode = config.selected_triggerMode;
 
             if (wasEnabled)
-                this.Enable();   
+                this.Enable();
         }
 
         public override void Enable()
         {
-            Debug.WriteLine(TAG + "Enable");
+            Logger.WriteLine("Enable");
             base.Enable();
-            
 
             if (cam != null)
             {
@@ -141,23 +135,21 @@ namespace VisionModules.Events
                 pd.RegisterForImages(cam);
                 pd.OnPresenceUpdate += presenceHandler;
             }
-
         }
 
         public override void Disable()
         {
-            Debug.WriteLine(TAG + "Disable");
+            Logger.WriteLine("Disable");
             base.Disable();
             pd.OnPresenceUpdate -= presenceHandler;
             if (cam != null)
             {
                 pd.UnregisterForImages(cam);
                 cam.TryStopFrameGrabbing();
-            }         
+            }
         }
 
-
-        public void m_OnPresenceUpdate (object sender, System.Drawing.Point[] points)
+        public void m_OnPresenceUpdate(object sender, System.Drawing.Point[] points)
         {
             PresenceDetectorComponent presenceDetector = sender as PresenceDetectorComponent;
 
@@ -169,19 +161,19 @@ namespace VisionModules.Events
             }
             else
             {
-                bool activated = false; 
+                bool activated = false;
 
                 // decide whether to activate
                 switch (selected_trigger_mode)
                 {
-                      
+
                     case PresenceTriggerMode.OFF_ON:
                         if (lastPresenceStatus == PresenceStatus.NO_PRESENCE && presence == true)
-                            activated = true; 
-                        break; 
+                            activated = true;
+                        break;
                     case PresenceTriggerMode.ON_OFF:
                         if (lastPresenceStatus == PresenceStatus.PRESENCE && presence == false)
-                            activated = true; 
+                            activated = true;
                         break;
                     case PresenceTriggerMode.TOGGLE:
                         if (lastPresenceStatus == PresenceStatus.PRESENCE && presence == false ||

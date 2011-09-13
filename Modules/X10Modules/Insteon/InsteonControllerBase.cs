@@ -26,7 +26,6 @@ namespace X10Modules
     {
         public class NotInitializedException : Exception{}
 
-        public  static readonly string TAG = "[InsteonControllerBase] :";
         protected static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.instance;
         protected string portName = null;
         public bool initialized = false;
@@ -56,8 +55,6 @@ namespace X10Modules
             // TODO
         }
 
-       
-
         public virtual void Dispose()
          {
              this.initialized = false; 
@@ -69,7 +66,6 @@ namespace X10Modules
         {
             throw new NotImplementedException();
         }
-      
 
         public void ResetRxBuffer()
         {
@@ -77,6 +73,5 @@ namespace X10Modules
             parse_buf = new byte[1024];
             parse_count = 0; ;
         }
-
     }
 }

@@ -22,13 +22,12 @@ using System.Management;
 using System.Collections;
 using Microsoft.Win32;
 using System.Threading;
+using MayhemCore;
 
 namespace MayhemSerial
 {
-  
     public class MayhemSerialPortMgr
     {
-        public static readonly string TAG = "[MayhemSerial] : ";
         public string[] serialPortNames; 
         private Dictionary<string, SerialPort> connections = new Dictionary<string, SerialPort>();
 
@@ -61,7 +60,6 @@ namespace MayhemSerial
         // serialPortname, buffer, length
         public Action<string, byte[], int> OnDataReceived;  
 
-
         // handlers
 
         SerialDataReceivedEventHandler serial_received; 
@@ -70,12 +68,9 @@ namespace MayhemSerial
 
         private readonly int VERBOSITY_LEVEL = 0; 
 
-        
-
         //checking for presence of serial ports
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern SafeFileHandle CreateFile(string lpFileName, int dwDesiredAccess, int dwShareMode, IntPtr securityAttrs, int dwCreationDisposition, int dwFlagsAndAttributes, IntPtr hTemplateFile);
-
 
         public MayhemSerialPortMgr()
         {
@@ -98,7 +93,7 @@ namespace MayhemSerial
                 var isValid = SerialPort.GetPortNames().Any(x => string.Compare(x, name, true) == 0);
                 if (!isValid)
                 {
-                    Debug.Write(TAG + "UpdatePortList --> removing invalid name: " + name); 
+                    Logger.Write("UpdatePortList --> removing invalid name: " + name); 
                     connections.Remove(name);
                 }
             }
@@ -113,16 +108,13 @@ namespace MayhemSerial
                     SafeFileHandle hFile = CreateFile(@"\\.\" + name, -1073741824, 0, IntPtr.Zero, 3, dwFlagsAndAttributes, IntPtr.Zero);
                     if (!hFile.IsInvalid)
                     {
-                        Debug.WriteLine(TAG + "UpdatePortList --> adding name: " + name); 
+                        Logger.WriteLine("UpdatePortList --> adding name: " + name); 
                         //throw new System.IO.IOException(string.Format("{0} port is already open", portName));
                         connections.Add(name, null);
                     }
                     hFile.Close();
                 }
             }
-
-            
-
         }
 
         /// <summary>
@@ -145,9 +137,7 @@ namespace MayhemSerial
                                            settings.dataBits,
                                            settings.stopBits);
                     port.Open();
-
                 }
-
 
                 if (port.IsOpen)
                 {
@@ -163,21 +153,17 @@ namespace MayhemSerial
 
                     connections[portName] = port;
 
-
                     OnDataReceived += new Action<string, byte[], int>(listener.port_DataReceived);
 
                     return true;
                 }
                 else
                 {
-                    Debug.WriteLine(TAG + "port did not open!");
+                    Logger.WriteLine("port did not open!");
                     port.Disposed += new EventHandler(port_Disposed);
                     port.Close();
                     return false;
                 }
-                
-                
-                
             }
             return false; 
         }
@@ -189,16 +175,14 @@ namespace MayhemSerial
         /// <param name="listener"></param>
         public void DisconnectListener(string portName, ISerialPortDataListener listener)
         {
-           // Debug.WriteLine(TAG + "DisconnectListener");
+           // Logger.WriteLine("DisconnectListener");
            // if (portName != null && connections.Keys.Contains(portName) && connections[portName] == null)
            // {
            //SerialPort port = connections[portName];
             //    port.DataReceived -= listener.port_DataReceived; 
            // }
             OnDataReceived -= listener.port_DataReceived;
-
         }
-      
 
         public void DisconnectPort(string portName)
         {
@@ -259,7 +243,7 @@ namespace MayhemSerial
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void WriteToPort(string portName,  byte[] buffer, int count)
         {
-            Debug.WriteLine(TAG + "Port: " + portName + " sending " + count + " bytes ");
+            Logger.WriteLine("Port: " + portName + " sending " + count + " bytes ");
             if (allowWrite)
             {
                 if (connections.Keys.Contains(portName) && connections[portName] != null && connections[portName].IsOpen)
@@ -293,7 +277,7 @@ namespace MayhemSerial
             }
             catch (Exception e)
             {
-                Debug.WriteLine(TAG + e);
+                Logger.WriteLine(e);
                 return oReturnTable;
             }
             return oReturnTable;
@@ -344,7 +328,7 @@ namespace MayhemSerial
         /// <returns>List of port name strings that correspond to an Arduino COM port</returns>
         public Dictionary<string, string> getInsteonPortNames()
         {
-            Debug.WriteLine(TAG + "getInsteonPortNames"); 
+            Logger.WriteLine("getInsteonPortNames"); 
             UpdatePortList();
 
             Dictionary<string,string> pNames = new Dictionary<string,string>();
@@ -353,7 +337,7 @@ namespace MayhemSerial
 
             foreach (string portName in connections.Keys)
             {
-                Debug.WriteLine(TAG + "Trying (A) " + portName);
+                Logger.WriteLine("Trying (A) " + portName);
               
                     if (connections[portName] == null)
                     {
@@ -375,7 +359,7 @@ namespace MayhemSerial
                             }
                             catch (Exception e)
                             {
-                                Debug.WriteLine(TAG + "Exception: " + e);
+                                Logger.WriteLine("Exception: " + e);
                                 continue;
                             }
 
@@ -395,7 +379,7 @@ namespace MayhemSerial
                         }
                         catch (ObjectDisposedException e)
                         {
-                            Debug.WriteLine(TAG + "ObjectDisposedException (A) " + e);
+                            Logger.WriteLine("ObjectDisposedException (A) " + e);
                             continue;
                         }
                        
@@ -403,7 +387,7 @@ namespace MayhemSerial
                 }
                 else if (connections[portName].IsOpen)
                 {
-                    Debug.WriteLine(TAG + "Trying (B) " + portName);
+                    Logger.WriteLine("Trying (B) " + portName);
                     try
                     {
                         SerialPort port = connections[portName];
@@ -442,7 +426,7 @@ namespace MayhemSerial
                     }
                     catch ( ObjectDisposedException e)
                     {
-                         Debug.WriteLine(TAG + "ObjectDisposedException (B) " + e);
+                         Logger.WriteLine("ObjectDisposedException (B) " + e);
                     }
                  }
 
@@ -491,7 +475,7 @@ namespace MayhemSerial
                         string friendlyName = queryObj["Name"].ToString();
                         string portName = queryObj["DeviceID"].ToString();
                         arduinoNames.Add(portName, friendlyName);
-                        Debug.WriteLine(TAG + "found Arduino UNO, Portname " + friendlyName);
+                        Logger.WriteLine("found Arduino UNO, Portname " + friendlyName);
 
                     }
                 }
@@ -499,7 +483,7 @@ namespace MayhemSerial
             }
             catch (ManagementException me)
             {
-                Debug.WriteLine(TAG + "managementException: " + me);
+                Logger.WriteLine("managementException: " + me);
                 foreach (string key in connections.Keys)
                 {
                     arduinoNames.Add(key, key); 
@@ -519,13 +503,11 @@ namespace MayhemSerial
 
         #endregion
 
-
-
         //--------------------------------
         #region data received and other callbacks
         void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            //Debug.WriteLine(TAG + "----> port_DataReceived <----");
+            //Logger.WriteLine("----> port_DataReceived <----");
 
             if (allowRX)
             {
@@ -542,7 +524,7 @@ namespace MayhemSerial
                     {
                         for (int i = 0; i < nBytes; i++)
                         {
-                            Debug.Write(i + " "); Debug.WriteLine("{0,10:X}", rx[i]);
+                            Logger.Write(i + " "); Logger.WriteLine("{0,10:X}", rx[i]);
                         }
                     }
                 }
@@ -562,7 +544,7 @@ namespace MayhemSerial
                     }
                     catch (ObjectDisposedException ex)
                     {
-                        Debug.WriteLine(TAG + "attempt to send data to disposed object " + ex);
+                        Logger.WriteLine("attempt to send data to disposed object " + ex);
                     }
                 }
                 //  hold on to a copy of the last buffer just in case
@@ -570,20 +552,20 @@ namespace MayhemSerial
             }
             else
             {
-                Debug.WriteLine(TAG + "ignoring!");
+                Logger.WriteLine("ignoring!");
             }
         }
 
         void port_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
             //throw new NotImplementedException();
-            Debug.WriteLine(TAG + "port_errorReceived " + e.ToString());
+            Logger.WriteLine("port_errorReceived " + e.ToString());
         }
 
         void port_Disposed(object sender, EventArgs e)
         {
             //throw new NotImplementedException();
-            Debug.WriteLine(TAG + "port Disposed: " + e.ToString());
+            Logger.WriteLine("port Disposed: " + e.ToString());
             SerialPort disposedPort = sender as SerialPort;
 
             connections.Remove(disposedPort.PortName);

@@ -5,19 +5,14 @@ using System.Text;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Threading;
+using MayhemCore;
 
 namespace X10Modules.Insteon
 {
     public class X10Controller : InsteonControllerBase
     {
-
-        public new static readonly string TAG = "[X10Controller] :";
-
-
-
         public static Dictionary<X10HouseCode, Dictionary<X10UnitCode, bool>> deviceStates = null ;
      
-
         /// <summary>
         /// Just use base constructor
         /// </summary>
@@ -37,11 +32,8 @@ namespace X10Modules.Insteon
                     {
                         deviceStates[hCode][uCode] = false; 
                     }
-                  
                 }
-
             }
-
         }
       
 
@@ -57,22 +49,18 @@ namespace X10Modules.Insteon
             buf[1] = 0x63;
             buf[3] = 0x80;
 
-           
-
-
-
             // do the magic for byte 2
             byte hCode = (byte)((Convert.ToByte(houseCode) & (byte)0xf) << 4);
             byte cCode = (byte)((Convert.ToByte(command) & (byte)0xf));
             buf[2] = (byte)(hCode | cCode);
 
-            Debug.WriteLine(TAG + "House/Command: {0,10:X} {1,10:X} {2,10:X} {3,10:X}", buf[0], buf[1], buf[2], buf[3]);
+            Logger.WriteLine("House/Command: {0,10:X} {1,10:X} {2,10:X} {3,10:X}", buf[0], buf[1], buf[2], buf[3]);
             mSerial.WriteToPort(portName, buf, 4);
             bool wait = waitAck.WaitOne(100);
 
             if (wait)
             {
-                Debug.WriteLine(TAG + "\n=======================\nX10-ACK -- Command Successful\n====================");
+                Logger.WriteLine("\n=======================\nX10-ACK -- Command Successful\n====================");
                 return true;
             }
 
@@ -131,7 +119,7 @@ namespace X10Modules.Insteon
 
             buf1[2] = (byte)(hCode | uCode);
             buf1[3] = 0x00; // 0x00 terminates unit selection
-            Debug.WriteLine("House/Unit: {0,10:X}", buf1[2]);
+            Logger.WriteLine("House/Unit: {0,10:X}", buf1[2]);
 
             mSerial.WriteToPort(portName, buf1, 4);
             waitForData = true;
@@ -140,10 +128,10 @@ namespace X10Modules.Insteon
             {
                 Thread.Sleep(30);
                 // got an ack from the port -- now send command
-                Debug.WriteLine(TAG + "X10-ACK");
+                Logger.WriteLine("X10-ACK");
                 buf1[2] = (byte)(hCode | cCode);
                 buf1[3] = 0x80; // 0x80 terminates command code
-                Debug.WriteLine("House/Command: {0,10:X} {1,10:X} {2,10:X} {3,10:X}", buf1[0], buf1[1], buf1[2], buf1[3]);
+                Logger.WriteLine("House/Command: {0,10:X} {1,10:X} {2,10:X} {3,10:X}", buf1[0], buf1[1], buf1[2], buf1[3]);
                 int retry = 10;
                 waitForData = true;
                 wait = waitAck.WaitOne(100);
@@ -153,12 +141,12 @@ namespace X10Modules.Insteon
                     mSerial.WriteToPort(portName, buf1, 4);
                     wait = waitAck.WaitOne(100);
                     Thread.Sleep(15);
-                    Debug.WriteLine(TAG + "retry : " + retry);
+                    Logger.WriteLine("retry : " + retry);
                 }
 
                 if (wait)
                 {
-                    Debug.WriteLine(TAG + "\n=======================\nX10-ACK -- Command Successful\n====================");
+                    Logger.WriteLine("\n=======================\nX10-ACK -- Command Successful\n====================");
                     return true;
                 }
                 else

@@ -32,6 +32,7 @@ using Image=System.Drawing.Image;
 using Point = System.Drawing.Point;
 using System.Drawing.Drawing2D;
 using MayhemOpenCVWrapper.LowLevel;
+using MayhemCore;
 
 
 namespace VisionModules.Wpf
@@ -40,12 +41,8 @@ namespace VisionModules.Wpf
     /// Interaction logic for ObjectDetectorConfig.xaml
     /// </summary>
     /// 
-
-    
-    
     public partial class ObjectDetectorConfig : IWpfConfiguration
     {
-        public const string TAG = "[VisionModules.Wpf.ObjectDetectorConfig] :";
         public string location;
 
         public Camera selected_camera = null;
@@ -79,9 +76,6 @@ namespace VisionModules.Wpf
                 overlay.DisplayBoundingRect(value);
             }
         }
- 
-        
-
         public ObjectDetectorConfig(ObjectDetectorEvent objDetector, object captureDevice)
         {
             objectDetectorEvent = objDetector;
@@ -94,9 +88,6 @@ namespace VisionModules.Wpf
             {
                 od.set_template(templateImg);
             }
-            
-
-
         }
 
         public override void OnLoad()
@@ -117,11 +108,11 @@ namespace VisionModules.Wpf
                     cam.OnImageUpdated += i_OnImageUpdated;
                     cam.StartFrameGrabbing();
                 }
-                Debug.WriteLine(TAG + "using " + cam.info.ToString());
+                Logger.WriteLine("using " + cam.info.ToString());
             }
             else
             {
-                Debug.WriteLine(TAG + "No camera available");
+                Logger.WriteLine("No camera available");
             }
 
 
@@ -148,7 +139,7 @@ namespace VisionModules.Wpf
          */
         protected virtual void SetCameraImageSource()
         {
-            //Debug.WriteLine("[SetCameraImageSource] ");
+            //Logger.WriteLine("[SetCameraImageSource] ");
 
             //int stride = 320 * 3;
             Bitmap BackBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -191,19 +182,19 @@ namespace VisionModules.Wpf
                 List<Point> iKeyPts = od.lastImageKeyPoints;
                 Point[] corners = od.lastCornerPoints;
 
-                Debug.WriteLine(TAG + "SetCameraImageSource --> Drawing Overlay");
+                Logger.WriteLine("SetCameraImageSource --> Drawing Overlay");
                 Graphics g = Graphics.FromImage(BackBuffer);
                 if (templatePreview != null)
                     g.DrawImage(templatePreview, 0, 0);
 
                 if (matches != null )
                 {
-                    Debug.WriteLine("Matching Points:");
+                    Logger.WriteLine("Matching Points:");
                     foreach (Point p in matches)
                     {
-                        Debug.Write(p + " , ");
+                        Logger.Write(p + " , ");
                     }
-                    Debug.WriteLine("");
+                    Logger.WriteLine("");
                 }
 
                 // draw template keypoints (hScalef and wScalef must be correct!)
@@ -311,7 +302,7 @@ namespace VisionModules.Wpf
          * </summary> */
          public override bool OnSave()
         {
-            Debug.WriteLine(TAG + "OnSave!!!!!!!!");
+            Logger.WriteLine("OnSave!!!!!!!!");
             selected_camera = DeviceList.SelectedItem as Camera;
             // cam.OnImageUpdated -= imageUpdateHandler;
 
@@ -322,7 +313,7 @@ namespace VisionModules.Wpf
                 {
                     this.objectDetectorEvent.setTemplateImage(this.templateImg);
                     this.objectDetectorEvent.templatePreview = templatePreview;
-                    Debug.WriteLine(TAG + "OnSave --> successfully assigned template image");
+                    Logger.WriteLine("OnSave --> successfully assigned template image");
                 }
                 
             }
@@ -334,7 +325,7 @@ namespace VisionModules.Wpf
            /// </summary>
             private void Control_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
             {
-                Debug.WriteLine(TAG + "[MotionDetectorConfig] : IsVibleChanged");
+                Logger.WriteLine("[MotionDetectorConfig] : IsVibleChanged");
                 if (this.IsVisible)
                 {
                     if (cam == null)
@@ -415,7 +406,7 @@ namespace VisionModules.Wpf
                    
                 }
 
-                Debug.WriteLine(TAG + "Image Loaded Successfully");
+                Logger.WriteLine("Image Loaded Successfully");
 
                 // update helper text
                 helperText.Content = "image set (event is now ready to work)";
@@ -425,7 +416,7 @@ namespace VisionModules.Wpf
             else
             {
                // System.Windows.Forms.MessageBox.Show("File Selection Error", "Mayhem", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                Debug.WriteLine(TAG + "user clicked cancel");
+                Logger.WriteLine("user clicked cancel");
                 return;
             }         
         }
