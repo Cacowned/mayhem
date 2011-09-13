@@ -124,10 +124,13 @@ namespace MayhemWpf.UserControls
             Connection c = ((Button)sender).Tag as Connection;
             c.Disable(new Action(() =>
                 {
-                    c.Delete();
+                    Dispatcher.Invoke((Action)delegate
+                    {
+                        c.Delete();
 
-                    Mayhem.Instance.ConnectionList.Remove(c);
-                    ((MainWindow)Application.Current.MainWindow).Save();
+                        Mayhem.Instance.ConnectionList.Remove(c);
+                        ((MainWindow)Application.Current.MainWindow).Save();
+                    });
                 }));
         }
 

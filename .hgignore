@@ -13,3 +13,4 @@ glob:Debug/
 syntax: glob
 Mayhem-Dev.sdf
 glob:*.rej
+*.orig

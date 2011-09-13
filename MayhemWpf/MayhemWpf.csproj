@@ -33,15 +33,13 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <BuildPackage>true</BuildPackage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -50,7 +48,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -63,9 +61,9 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NuGet.Core, Version=1.5.20818.9011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="NuGet.Core, Version=1.0.11220.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NuGet.Core.1.5.20818.9011\lib\net40-Client\NuGet.Core.dll</HintPath>
+      <HintPath>..\packages\NuGet.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -147,8 +145,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="App.config" />
-    <None Include="packages.config" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
@@ -226,36 +222,21 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <Choose>
-    <When Condition=" '$(Configuration)'=='Debug' ">
-      <ItemGroup>
-        <ProjectReference Include="..\MayhemCore\MayhemCore.csproj">
-          <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
-          <Name>MayhemCore</Name>
-        </ProjectReference>
-        <ProjectReference Include="..\MayhemDefaultStyles\MayhemDefaultStyles.csproj">
-          <Project>{D4441581-1768-4A2A-9A2B-B6A700B96FAD}</Project>
-          <Name>MayhemDefaultStyles</Name>
-        </ProjectReference>
-      </ItemGroup>
-    </When>
-    <When Condition=" '$(Configuration)'=='Release' ">
-      <ItemGroup>
-        <Reference Include="MayhemCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>bin\Release\Packages\MayhemCore.0.1.177\lib\MayhemCore.dll</HintPath>
-        </Reference>
-        <Reference Include="MayhemDefaultStyles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>bin\Release\Packages\MayhemDefaultStyles.0.1.177\lib\MayhemDefaultStyles.dll</HintPath>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
+  <ItemGroup>
+    <ProjectReference Include="..\MayhemCore\MayhemCore.csproj">
+      <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
+      <Name>MayhemCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MayhemDefaultStyles\MayhemDefaultStyles.csproj">
+      <Project>{D4441581-1768-4A2A-9A2B-B6A700B96FAD}</Project>
+      <Name>MayhemDefaultStyles</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
