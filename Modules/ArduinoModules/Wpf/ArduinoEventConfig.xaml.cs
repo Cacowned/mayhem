@@ -166,6 +166,7 @@ namespace ArduinoModules.Wpf
                 // reset analog ids to 0
                 AnalogPinItem.ResetAnalogIDs();
                 arduino.QueryPins();
+                Arduino_OnInitialized(this, null);
             }
 
         }
@@ -228,16 +229,14 @@ namespace ArduinoModules.Wpf
                     if (pin.GetPinID() == p.id)
                         pin.SetPinState(p.value);
                 }
-                      
+                    
             }
-
-
         }
 
         public void Arduino_OnPinAdded(Pin p)
         {
             //throw new NotImplementedException();
-            Debug.WriteLine("arduino_OnPinAdded: " + p.analog_channel );
+            Logger.WriteLine("arduino_OnPinAdded: " + p.id );
 
             if (p.mode != PIN_MODE.ANALOG && 
                 p.mode != PIN_MODE.UNASSIGNED && 
@@ -246,7 +245,7 @@ namespace ArduinoModules.Wpf
                 DigitalPinItem pItem = new DigitalPinItem(false, p.id, DIGITAL_PIN_CHANGE.LOW);
                 Dispatcher.Invoke(new Action(() => { digital_pin_items.Add(pItem); }), null); 
                 // set digital pin mode to input
-                if (p.mode != PIN_MODE.INPUT)
+                if (p.mode != PIN_MODE.INPUT && p.flagged == false)
                 {
                     arduino.SetPinMode(p, PIN_MODE.INPUT);
                 }

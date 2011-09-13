@@ -100,7 +100,8 @@ namespace ArduinoModules.Firmata
         public byte analog_channel;
         public UInt64 supported_modes;
         public int value;
-        public int id; 
+        public int id;
+        public bool flagged = false;                // in use by a module
     }
 
     /// <summary>Extension methods for EventHandler-type delegates.</summary>
@@ -268,7 +269,8 @@ namespace ArduinoModules.Firmata
                 pin_info[i].analog_channel = 127;
                 pin_info[i].supported_modes = 0;
                 pin_info[i].value = 0;
-                pin_info[i].id = i; 
+                pin_info[i].id = i;
+                pin_info[i].flagged = false;
             }
 
             // send handshake

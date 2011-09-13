@@ -16,6 +16,7 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemDefaultStyles.UserControls;
 using System.Runtime.Serialization;
+using ArduinoModules.Wpf;
 
 namespace ArduinoModules.Reactions
 {
@@ -31,12 +32,17 @@ namespace ArduinoModules.Reactions
 
         public IWpfConfiguration ConfigurationControl
         {
-            get { throw new NotImplementedException(); }
+            get 
+            {
+                return new ArduinoDigitalWriteConfig();
+            }
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)
         {
             throw new NotImplementedException();
         }
+
+        public ArduinoDigitalWrite() { }
     }
 }
