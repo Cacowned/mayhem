@@ -51,10 +51,11 @@ namespace ArduinoModules.Events
 
         public ArduinoEvent()
         {
-            Initialize();
+            Init(new StreamingContext());
         }
 
-        protected override void  Initialize()
+        [OnDeserializing]
+        private void Init(StreamingContext s)
         {
  	         base.Initialize() ;
 
@@ -76,6 +77,32 @@ namespace ArduinoModules.Events
         }
 
 
+        public override void Enable()
+        {
+            base.Enable();
+
+            if (OnAnalogPinChanged != null && OnDigitalPinChanged != null && arduino != null)
+            {
+
+                arduino.OnAnalogPinChanged -= OnAnalogPinChanged;
+                arduino.OnDigitalPinChanged -= OnDigitalPinChanged;
+
+                arduino.OnAnalogPinChanged += OnAnalogPinChanged;
+                arduino.OnDigitalPinChanged += OnDigitalPinChanged;
+            }
+
+
+        }
+
+        public override void Disable()
+        {
+            base.Disable();
+            if (arduino != null)
+            {
+                arduino.OnAnalogPinChanged -= OnAnalogPinChanged;
+                arduino.OnDigitalPinChanged -= OnDigitalPinChanged;
+            }
+        }
 
         public void OnSaved(IWpfConfiguration configurationControl)
         {
@@ -86,11 +113,15 @@ namespace ArduinoModules.Events
             List<DigitalPinItem> digitalPinsMonitor = new List<DigitalPinItem>();
             List<AnalogPinItem> analogPinsMonitor = new List<AnalogPinItem>();
 
+            bool enabled = this.Enabled;
+
             // save references to pins to monitor
             // attach callbacks to arduino events
             if (arduino != null)
             {
-                
+                arduino.OnAnalogPinChanged -= OnAnalogPinChanged;
+                arduino.OnDigitalPinChanged -= OnDigitalPinChanged;
+
                 foreach (DigitalPinItem p in config.digital_pin_items)
                 {
                     if (p.Selected)
@@ -106,12 +137,13 @@ namespace ArduinoModules.Events
                 monitorAnalogPins = analogPinsMonitor;
                 monitorDigitalPins = digitalPinsMonitor; 
 
-                arduino.OnAnalogPinChanged -= OnAnalogPinChanged;
-                arduino.OnDigitalPinChanged -= OnDigitalPinChanged;
-                arduino.OnAnalogPinChanged += OnAnalogPinChanged;
-                arduino.OnDigitalPinChanged += OnDigitalPinChanged; 
+              
 
-
+                if (enabled)
+                {
+                    arduino.OnAnalogPinChanged += OnAnalogPinChanged;
+                    arduino.OnDigitalPinChanged += OnDigitalPinChanged; 
+                }
 
             }
 
@@ -135,7 +167,7 @@ namespace ArduinoModules.Events
                     }
                     else if (d.ChangeType == DIGITAL_PIN_CHANGE.HIGH)
                     {
-                        if (d.GetDigitalPinState() > 0)
+                        if (p.value > 0)
                         {
                             // fire
                             base.OnEventActivated();
@@ -143,7 +175,7 @@ namespace ArduinoModules.Events
                     }
                     else if (d.ChangeType == DIGITAL_PIN_CHANGE.LOW)
                     {
-                        if (d.GetDigitalPinState() == 0)
+                        if (p.value == 0)
                         {
                             // fire
                             base.OnEventActivated();
@@ -157,7 +189,8 @@ namespace ArduinoModules.Events
                             base.OnEventActivated();
                         }
                     }
-                    p.value = d.GetDigitalPinState();
+                   // p.value = d.GetDigitalPinState();
+                    d.SetPinState(p.value);
                 }
             }
             
