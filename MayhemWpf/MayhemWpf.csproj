@@ -226,10 +226,12 @@
     <ProjectReference Include="..\MayhemCore\MayhemCore.csproj">
       <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
       <Name>MayhemCore</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\MayhemDefaultStyles\MayhemDefaultStyles.csproj">
       <Project>{D4441581-1768-4A2A-9A2B-B6A700B96FAD}</Project>
       <Name>MayhemDefaultStyles</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
