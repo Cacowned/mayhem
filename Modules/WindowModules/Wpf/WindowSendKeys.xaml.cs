@@ -126,7 +126,7 @@ namespace WindowModules.Wpf
             if (key == Key.RWin)
                 key = Key.LWin;
 
-            Debug.WriteLine(key);
+            Logger.WriteLine(key);
 
             keys.Add(key);
   //          SetText();

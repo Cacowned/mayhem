@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using Phidgets;
 using MayhemDefaultStyles.UserControls;
 using System.Diagnostics;
+using MayhemCore;
 
 namespace PhidgetModules.Wpf
 {
@@ -68,7 +69,7 @@ namespace PhidgetModules.Wpf
             }
             catch (Exception erf)
             {
-                Debug.WriteLine("Phidget1066AdvServoConfig: " + erf);
+                Logger.WriteLine("Phidget1066AdvServoConfig: " + erf);
             }
             PositionSlider.Maximum = AdvServo.servos[Index].PositionMax;
             PositionSlider.Minimum = AdvServo.servos[Index].PositionMin;

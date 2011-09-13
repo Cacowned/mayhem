@@ -18,6 +18,7 @@ using System.Drawing;
 using System.Diagnostics;
 using System.IO;
 using System.Drawing.Imaging;
+using MayhemCore;
 
 namespace PhoneModules
 {
@@ -61,7 +62,7 @@ namespace PhoneModules
             }
             catch (Exception erf)
             {
-                Debug.WriteLine(erf);
+                Logger.WriteLine(erf);
             }
 
             MemoryStream ms = new MemoryStream();

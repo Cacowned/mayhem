@@ -28,7 +28,6 @@ namespace ArduinoModules.Events
     [MayhemModule("Arduino Event", "**Testing** Detects Pin Changes in Arduino")]
     public class ArduinoEvent : EventBase, IWpfConfigurable
     {
-        private const string TAG = "[ArduinoEvent] : ";
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
 
         [DataMember]
@@ -40,8 +39,6 @@ namespace ArduinoModules.Events
          //arduino.OnDigitalPinChanged += new Action<Pin>(arduino_OnDigitalPinChanged);
          //arduino.OnAnalogPinChanged += new Action<Pin>(arduino_OnAnalogPinChanged);
          
-
-      
         private Action<Pin> OnDigitalPinChanged; // = new Action<Pin>(arduino_OnDigitalPinChanged);
         private Action<Pin> OnAnalogPinChanged; // = new Action<Pin>(arduino_OnAnalogPinChanged);
 
@@ -51,8 +48,6 @@ namespace ArduinoModules.Events
 
         private const int ACTIVATE_MIN_DELAY = 50;  //minimum activation interval
         DateTime lastActivated = DateTime.MinValue;
-
-
 
         public ArduinoEvent()
         {
@@ -72,7 +67,7 @@ namespace ArduinoModules.Events
         {
             get
             {
-                Debug.WriteLine(TAG + "ConfigurationControl");
+                Logger.WriteLine("ConfigurationControl");
 
                 // TODO
   

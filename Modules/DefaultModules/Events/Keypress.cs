@@ -17,8 +17,6 @@ namespace DefaultModules.Events
     [MayhemModule("Key Press", "This event fires on a predefined key press")]
     public class Keypress : EventBase, IWpfConfigurable
     {
-        public const string TAG = "[Key Press]";
-
         private InterceptKeys interceptKeys;
 
         public static bool IsConfigOpen = false;

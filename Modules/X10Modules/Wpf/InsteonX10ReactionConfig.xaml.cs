@@ -9,7 +9,7 @@
  * Author: Sven Kratz
  * 
  * 
- */ 
+ */
 
 
 using System;
@@ -30,6 +30,7 @@ using MayhemSerial;
 using System.Diagnostics;
 using X10Modules.Insteon;
 using System.Threading;
+using MayhemCore;
 
 namespace X10Modules.Wpf
 {
@@ -38,30 +39,25 @@ namespace X10Modules.Wpf
     /// </summary>
     public partial class InsteonX10ReactionConfig : IWpfConfiguration
     {
-        public static readonly string TAG = "[InsteonX10ReactionConfig] : ";
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
         private X10Controller x10 = null;
 
-
         public X10HouseCode selected_housecode
         {
-            get { return (X10HouseCode) Enum.Parse(typeof(X10HouseCode),(string)houseID.SelectedValue);}  
+            get { return (X10HouseCode)Enum.Parse(typeof(X10HouseCode), (string)houseID.SelectedValue); }
         }
 
         public X10UnitCode selected_unitcode
         {
-
-            get { return (X10UnitCode)Enum.Parse(typeof(X10UnitCode), (string)unitID.SelectedValue); }  
+            get { return (X10UnitCode)Enum.Parse(typeof(X10UnitCode), (string)unitID.SelectedValue); }
         }
 
         public X10CommandCode selected_commandcode
         {
-            
-            
-            get 
-            {             
-                    return (X10CommandCode)Enum.Parse(typeof(X10CommandCode), (string)commandID.SelectedValue);
-            }  
+            get
+            {
+                return (X10CommandCode)Enum.Parse(typeof(X10CommandCode), (string)commandID.SelectedValue);
+            }
         }
 
         public string selected_portName
@@ -73,8 +69,6 @@ namespace X10Modules.Wpf
         {
             InitializeComponent();
 
-            
-
             Init();
         }
 
@@ -85,10 +79,8 @@ namespace X10Modules.Wpf
         {
             serial.UpdatePortList();
             // TODO: make this auto-detect the X10 Module, like for the Arduino Uno
-           // deviceList.ItemsSource = serial.serialPortNames;
+            // deviceList.ItemsSource = serial.serialPortNames;
 
-           
-       
             Dictionary<string, string> portList = serial.getInsteonPortNames();
 
             if (portList.Count > 0)
@@ -96,9 +88,8 @@ namespace X10Modules.Wpf
                 deviceList.ItemsSource = portList;
                 deviceList.DisplayMemberPath = "Value";
                 deviceList.SelectedValuePath = "Key";
-                deviceList.SelectedIndex = 0; 
+                deviceList.SelectedIndex = 0;
             }
-
 
             List<string> houseCodes = Enum.GetNames(typeof(X10HouseCode)).ToList(); houseCodes.Sort();
             houseID.ItemsSource = houseCodes;
@@ -118,11 +109,8 @@ namespace X10Modules.Wpf
             houseID.SelectedIndex = 0;
             unitID.SelectedIndex = 0;
             commandID.SelectedIndex = 0;
-
-
-
         }
-           
+
         /// <summary>
         /// Tests Actions
         /// </summary>
@@ -131,29 +119,29 @@ namespace X10Modules.Wpf
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // test x10 module
-            string portname = (string) deviceList.SelectedValue;
+            string portname = (string)deviceList.SelectedValue;
             if (x10 == null)
-                 x10 = new X10Controller(portname);
+                x10 = new X10Controller(portname);
             if (x10.initialized)
             {
-                Debug.WriteLine(TAG + "initialized");
+                Logger.WriteLine("initialized");
                 // send a test command
                 // x10.X10SendCommand(0x6, 0x6, 0x2);
                 // start the sending thread explicitly
                 // todo:: factory pattern etc. 
-                
+
                 // start threaded as x10 might require some send repeats, etc.. 
                 // TODO: delegate to handle the send result
                 X10HouseCode houseC = selected_housecode;
                 X10UnitCode unitC = selected_unitcode;
                 X10CommandCode commandC = selected_commandcode;
 
-                new Thread( new System.Threading.ThreadStart(() => x10.X10SendCommand(houseC, unitC, commandC)) ).Start();
-             
-                
+                new Thread(new System.Threading.ThreadStart(() => x10.X10SendCommand(houseC, unitC, commandC))).Start();
+
+
                 //x10.X10SendHouseCommand(X10HouseCode.A, X10CommandCode.ALL_UNITS_OFF); 
             }
-           
+
         }
 
         /// <summary>
@@ -164,8 +152,8 @@ namespace X10Modules.Wpf
         {
             if (x10 != null)
                 x10.Dispose();
-            Debug.WriteLine(TAG + "OnSave");
-            return true; 
+            Logger.WriteLine("OnSave");
+            return true;
         }
     }
 }

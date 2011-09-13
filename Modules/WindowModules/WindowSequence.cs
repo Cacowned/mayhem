@@ -93,7 +93,7 @@ namespace WindowModules
                         }
                         if (isMatch)
                         {
-                            Debug.WriteLine("Found: " + hwnd);
+                            Logger.WriteLine("Found: " + hwnd);
                             foreach (WindowAction action in actionInfo.WindowActions)
                             {
                                 action.Perform(hwnd);

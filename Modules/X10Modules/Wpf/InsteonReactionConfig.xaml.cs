@@ -29,6 +29,7 @@ using MayhemSerial;
 using X10Modules.Insteon;
 using System.Diagnostics;
 using System.Threading;
+using MayhemCore;
 
 namespace X10Modules.Wpf
 {
@@ -37,7 +38,6 @@ namespace X10Modules.Wpf
     /// </summary>
     public partial class InsteonReactionConfig : IWpfConfiguration
     {
-        public static readonly string TAG = "[InsteonReactionConfig] : ";
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
         private InsteonController insteonController = null;
 
@@ -137,7 +137,7 @@ namespace X10Modules.Wpf
         /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine(TAG + "Button_Click");
+            Logger.WriteLine("Button_Click");
             string portname = (string) deviceList.SelectedValue;
             if (insteonController == null)
             {
@@ -145,7 +145,7 @@ namespace X10Modules.Wpf
             }
             if (insteonController.initialized)
             {
-                Debug.WriteLine(TAG + "insteon initialized");
+                Logger.WriteLine("insteon initialized");
 
 
                 byte[] address = selected_device_address;
@@ -170,7 +170,7 @@ namespace X10Modules.Wpf
         /// <param name="e"></param>
         private void btn_link_devices_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine(TAG + "btn_link_devices_Click");
+            Logger.WriteLine("btn_link_devices_Click");
             string portname = (string)deviceList.SelectedValue;
             btn_link_devices.Content = "Stop Linking";
             if (insteonController == null)
@@ -180,16 +180,11 @@ namespace X10Modules.Wpf
 
             if (insteonController.initialized)
             {
-                Debug.WriteLine("Insteon Initialized");
-                
-
-                byte[] address = selected_device_address;
+                Logger.WriteLine("Insteon Initialized");
             }
 
             if (!linking)
             {
-
-               
                 if (insteonController.initialized)
                 {
                     linking = true; 
@@ -205,7 +200,6 @@ namespace X10Modules.Wpf
                         TimerCallback cb = (S) => { btn_link_devices.Content = "Link More Devices"; };
                         Timer t = new Timer(cb, null, 2500, 0);
                     }
-
                 }
             }
             else
@@ -227,9 +221,7 @@ namespace X10Modules.Wpf
                     cbox_link_devices.SelectedIndex = 0;
                 }
             }
-  
         }
-
      
 
         /// <summary>
@@ -242,7 +234,7 @@ namespace X10Modules.Wpf
         {
          
             byte[] selection = cbox_link_devices.SelectedValue as byte[];
-            Debug.WriteLine(TAG + "cbox_link_devices_selectionChanged " +
+            Logger.WriteLine("cbox_link_devices_selectionChanged " +
              String.Format("{0:x2}:{1:x2}:{2:x2}", selection[0], selection[1], selection[2]));
 
             devAddr0.Text = String.Format("{0:x2}", selection[0]);
