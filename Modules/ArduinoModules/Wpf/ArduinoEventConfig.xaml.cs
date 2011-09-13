@@ -152,9 +152,16 @@ namespace ArduinoModules.Wpf
         #region IWpfConfigurable overrides
         public override void OnClosing()
         {
+            arduino.OnAnalogPinChanged -= arduino_OnAnalogPinChanged;
+            arduino.OnDigitalPinChanged -= arduino_OnDigitalPinChanged;
+            arduino.OnPinAdded -= arduino_OnPinAdded;
+            arduino.OnInitialized -= arduino_OnInitialized;
+
             t.Enabled = false;
             base.OnClosing();
         }
+
+       
 
         public override string Title
         {
