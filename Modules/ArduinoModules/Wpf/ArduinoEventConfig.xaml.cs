@@ -43,7 +43,7 @@ namespace ArduinoModules.Wpf
     /// </summary>
     public partial class ArduinoEventConfig : IWpfConfiguration
     {
-
+        public static string TAG = "[ArduinoEventConfig] :";
         
 
         /// <summary>
@@ -70,17 +70,29 @@ namespace ArduinoModules.Wpf
             //public int pin_id { get { return pin_id_; } }
 
             // state
-            private bool pin_state = false; 
+            private bool digitalPinState = false;
+
            
             public string PinState
             {
                 get  {
-                    if (pin_state)
+                    if (digitalPinState)
                         return "HIGH";
                     else
                         return "LOW";
                     }
             }
+
+            /// <summary>
+            /// Set the digital pin state. Explicitly implemented setter, to be able to provide a string
+            /// representation to a datagrid.
+            /// </summary>
+            /// <param name="state"></param>
+            public void SetPinState(bool state)
+            {
+                digitalPinState = state; 
+            }
+           
       
             public DigitalPinItem(bool check, int id, DIGITAL_PIN_CHANGE change)
             {
@@ -184,7 +196,7 @@ namespace ArduinoModules.Wpf
         public ObservableCollection<DigitalPinItem> digital_pin_items = new ObservableCollection<DigitalPinItem>();
         public ObservableCollection<AnalogPinItem> analog_pin_items = new ObservableCollection<AnalogPinItem>();
 
-        //private BackgroundWorker bg_analogPinUpdate = new BackgroundWorker();
+        private BackgroundWorker bg_pinUpdate = new BackgroundWorker();
 
         public ArduinoEventConfig()
         {
@@ -218,10 +230,17 @@ namespace ArduinoModules.Wpf
             // background workers
 
             //bg_analogPinUpdate.DoWork += new DoWorkEventHandler(this.updateAnalogPins);
-            
 
+            bg_pinUpdate.DoWork += new DoWorkEventHandler((object o, DoWorkEventArgs e) => 
+            
+            {
+                Dispatcher.Invoke(new Action(() => {digitalPins.Items.Refresh();}),  DispatcherPriority.Background);
+                Dispatcher.Invoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.Background);
+            });
             
         }
+
+       
 
         private void IWpfConfiguration_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -271,15 +290,16 @@ namespace ArduinoModules.Wpf
         void arduino_OnAnalogPinChanged(Pin p)
         {
             //throw new NotImplementedException();
-            Debug.WriteLine("arduino_OnAnalogPinChanged: " + p.analog_channel + " v:"+p.value );
+            //Debug.WriteLine(TAG+ "arduino_OnAnalogPinChanged: " + p.analog_channel + " v:"+p.value );
             if (p.analog_channel < analog_pin_items.Count)
             {
                
                 // refresh data grid items
                 analog_pin_items[p.analog_channel].SetAnalogValue(p.value);
-                //if (!bg_analogPinUpdate.IsBusy)
+                if (!bg_pinUpdate.IsBusy)
+                    bg_pinUpdate.RunWorkerAsync();
                 //    bg_analogPinUpdate.RunWorkerAsync();
-                Dispatcher.Invoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.Background);
+                //Dispatcher.Invoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.ApplicationIdle);
 
             }
 
@@ -288,7 +308,20 @@ namespace ArduinoModules.Wpf
 
         void arduino_OnDigitalPinChanged(Pin p)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            Debug.WriteLine(TAG + "arduino_OnDigitalPinChanged " + p.id + " " + p.value);
+
+            if (p.id < digital_pin_items.Count)
+            {
+               bool state =  (p.value > 0) ? true : false;
+               digital_pin_items[p.id].SetPinState(state);
+               // run the state update in the background
+               if (!bg_pinUpdate.IsBusy)
+                   bg_pinUpdate.RunWorkerAsync();
+               //Dispatcher.Invoke(new Action(() => {digitalPins.Items.Refresh();}),DispatcherPriority.ApplicationIdle);
+            }
+
+
         }
 
         private void arduino_OnPinAdded(Pin p)
@@ -296,14 +329,17 @@ namespace ArduinoModules.Wpf
             //throw new NotImplementedException();
             Debug.WriteLine("arduino_OnPinAdded: " + p.analog_channel );
 
-            if (p.mode !=  PIN_MODE.ANALOG && 
+            if (p.mode != PIN_MODE.ANALOG && 
                 p.mode != PIN_MODE.UNASSIGNED && 
                 p.mode != PIN_MODE.SHIFT)
             {
                 DigitalPinItem pItem = new DigitalPinItem(false, p.id, DIGITAL_PIN_CHANGE.LOW);
                 Dispatcher.Invoke(new Action(() => { digital_pin_items.Add(pItem); }), null); 
                 // set digital pin mode to input
-                arduino.SetPinMode(p, PIN_MODE.INPUT);
+                if (p.mode != PIN_MODE.INPUT)
+                {
+                    arduino.SetPinMode(p, PIN_MODE.INPUT);
+                }
             }
             else if (p.mode == PIN_MODE.ANALOG)
             {
