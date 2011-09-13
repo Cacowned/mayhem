@@ -45,6 +45,10 @@ namespace ArduinoModules.Wpf
         public ANALOG_PIN_CHANGE ChangeType { get { return monitor_pin_change; } set { monitor_pin_change = value; } }
 
         private int firmata_pin_id_ = 0;
+        public int GetPinID()
+        {
+            return firmata_pin_id_;
+        }
         //public int pin_id { get { return pin_id_; } }
 
         private int setValue = 0;

@@ -123,31 +123,76 @@ namespace ArduinoModules.Events
         {
             foreach (DigitalPinItem d in monitorDigitalPins)
             {
-                if (p.value != d.GetDigitalPinState())
+                if (d.GetPinID() == p.id)
                 {
                     if (d.ChangeType == DIGITAL_PIN_CHANGE.FALLING)
                     {
-                        // TODO
+                        if (p.value > 0 && d.GetDigitalPinState() == 0)
+                        {
+                            // fire
+                            base.OnEventActivated();
+                        }
                     }
                     else if (d.ChangeType == DIGITAL_PIN_CHANGE.HIGH)
                     {
-                        // TODO
+                        if (d.GetDigitalPinState() > 0)
+                        {
+                            // fire
+                            base.OnEventActivated();
+                        }
                     }
                     else if (d.ChangeType == DIGITAL_PIN_CHANGE.LOW)
                     {
-                        // TODO
+                        if (d.GetDigitalPinState() == 0)
+                        {
+                            // fire
+                            base.OnEventActivated();
+                        }
                     }
                     else if (d.ChangeType == DIGITAL_PIN_CHANGE.RISING)
                     {
-                        // TODO
+                        if (p.value == 0 && d.GetDigitalPinState() > 0)
+                        {
+                            // fire
+                            base.OnEventActivated();
+                        }
                     }
+                    p.value = d.GetDigitalPinState();
                 }
             }
+            
         }
 
         public void arduino_OnAnalogPinChanged(Pin p)
         {
-
+            foreach (AnalogPinItem a in monitorAnalogPins)
+            {
+                if (a.GetPinID() == p.id)
+                {
+                    if (a.ChangeType == ANALOG_PIN_CHANGE.EQUALS)
+                    {
+                        if (a.SetValue == p.value)
+                        {
+                            base.OnEventActivated();
+                        }
+                    }
+                    else if (a.ChangeType == ANALOG_PIN_CHANGE.GREATER)
+                    {
+                        if (a.SetValue <= p.value)
+                        {
+                            base.OnEventActivated();
+                        }
+                    }
+                    else if (a.ChangeType == ANALOG_PIN_CHANGE.LOWER)
+                    {
+                        if (a.SetValue >= p.value)
+                        {
+                            base.OnEventActivated(); 
+                        }
+                    }
+                    a.SetAnalogValue(p.value);
+                }
+            }
         }
     }
 }
