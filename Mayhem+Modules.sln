@@ -8,12 +8,19 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemDefaultStyles", "MayhemDefaultStyles\MayhemDefaultStyles.csproj", "{D4441581-1768-4A2A-9A2B-B6A700B96FAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoModules", "Modules\ArduinoModules\ArduinoModules.csproj", "{2BC67C14-10D8-48C1-B1E3-B9C06EFD7029}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D4441581-1768-4A2A-9A2B-B6A700B96FAD} = {D4441581-1768-4A2A-9A2B-B6A700B96FAD}
+		{F2267792-04A9-4FAF-ABBC-4ADFD68881F4} = {F2267792-04A9-4FAF-ABBC-4ADFD68881F4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultModules", "Modules\DefaultModules\DefaultModules.csproj", "{21F131F9-56F2-4339-A625-EDB4A3F086D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemOpenCVWrapper", "Modules\MayhemOpenCVWrapper\MayhemOpenCVWrapper.csproj", "{B04222E3-9FC3-4827-A40F-8AE68CABB834}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemSerial", "Modules\MayhemSerial\MayhemSerial.csproj", "{EB69EA74-75DB-4171-858A-B4BC4F6857E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F2267792-04A9-4FAF-ABBC-4ADFD68881F4} = {F2267792-04A9-4FAF-ABBC-4ADFD68881F4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeModules", "Modules\OfficeModules\OfficeModules.csproj", "{760C6B5A-5259-453B-BFF4-1AC6F8C8193C}"
 EndProject
@@ -26,6 +33,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowModules", "Modules\WindowModules\WindowModules.csproj", "{D62B7AA2-1D1C-4C37-B45E-E762A7AF0E90}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsteonAndX10Modules", "Modules\X10Modules\InsteonAndX10Modules.csproj", "{FA6E0A6F-9595-4F47-9866-0B6D21483B5B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F2267792-04A9-4FAF-ABBC-4ADFD68881F4} = {F2267792-04A9-4FAF-ABBC-4ADFD68881F4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XboxModules", "Modules\XboxModules\XboxModules.csproj", "{40F3228B-D4A1-42D0-AABF-E48451D31806}"
 EndProject
