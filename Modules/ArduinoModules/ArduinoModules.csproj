@@ -59,7 +59,9 @@
     <Compile Include="Wpf\ArduinoEventConfig.xaml.cs">
       <DependentUpon>ArduinoEventConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\StretchPropertyExt.cs" />
+    <Compile Include="Wpf\Helpers\AnalogPinItem.cs" />
+    <Compile Include="Wpf\Helpers\DigitalPinItem.cs" />
+    <Compile Include="Wpf\Helpers\StretchPropertyExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reactions\" />
