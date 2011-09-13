@@ -78,7 +78,7 @@ namespace ArduinoModules.Wpf
 
         // analog value
         private int aValue = 0;
-        public int AnalogValue { get { return aValue; } }
+        public int CurrentAnalogValue { get { return aValue; } }
 
         /// <summary>
         /// Sets the analog value for display
