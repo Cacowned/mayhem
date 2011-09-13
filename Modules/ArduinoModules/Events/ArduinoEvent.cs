@@ -35,13 +35,7 @@ namespace ArduinoModules.Events
         public string arduinoPortName = String.Empty;
 
         private ArduinoFirmata arduino = null; 
-
-         //arduino.OnPinAdded += new Action<Pin>(arduino_OnPinAdded);
-         //arduino.OnDigitalPinChanged += new Action<Pin>(arduino_OnDigitalPinChanged);
-         //arduino.OnAnalogPinChanged += new Action<Pin>(arduino_OnAnalogPinChanged);
-         
-
-      
+   
         private Action<Pin> OnDigitalPinChanged; // = new Action<Pin>(arduino_OnDigitalPinChanged);
         private Action<Pin> OnAnalogPinChanged; // = new Action<Pin>(arduino_OnAnalogPinChanged);
 
@@ -51,8 +45,6 @@ namespace ArduinoModules.Events
 
         private const int ACTIVATE_MIN_DELAY = 50;  //minimum activation interval
         DateTime lastActivated = DateTime.MinValue;
-
-
 
         public ArduinoEvent()
         {
