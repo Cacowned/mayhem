@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 
 namespace MayhemWpf
@@ -18,6 +19,12 @@ namespace MayhemWpf
 	{
         Dictionary<string, Assembly> dependencies = new Dictionary<string, Assembly>();
         bool wantsUpdates = false;
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SetDllDirectory(string lpPathName);
+
+        HashSet<string> setDirectories = new HashSet<string>();
 
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
@@ -100,6 +107,13 @@ namespace MayhemWpf
             string[] files = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Packages"), "*.dll", SearchOption.AllDirectories);
             foreach (string file in files)
             {
+                FileInfo fi = new FileInfo(file);
+                if (!setDirectories.Contains(fi.DirectoryName))
+                {
+                    setDirectories.Add(fi.DirectoryName);
+                    //set the dll path so it can find the dlls
+                    SetDllDirectory(fi.DirectoryName);
+                }
                 try
                 {
                     Assembly assembly = Assembly.LoadFrom(file);

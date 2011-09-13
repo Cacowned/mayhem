@@ -64,32 +64,45 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="openCVDLLs\opencv_calib3d230.dll" />
-    <Content Include="openCVDLLs\opencv_calib3d230d.dll" />
-    <Content Include="openCVDLLs\opencv_contrib230.dll" />
-    <Content Include="openCVDLLs\opencv_contrib230d.dll" />
-    <Content Include="openCVDLLs\opencv_core230.dll" />
-    <Content Include="openCVDLLs\opencv_core230d.dll" />
-    <Content Include="openCVDLLs\opencv_features2d230.dll" />
-    <Content Include="openCVDLLs\opencv_features2d230d.dll" />
-    <Content Include="openCVDLLs\opencv_flann230.dll" />
-    <Content Include="openCVDLLs\opencv_flann230d.dll" />
-    <Content Include="openCVDLLs\opencv_gpu230.dll" />
-    <Content Include="openCVDLLs\opencv_gpu230d.dll" />
-    <Content Include="openCVDLLs\opencv_highgui230.dll" />
-    <Content Include="openCVDLLs\opencv_highgui230d.dll" />
-    <Content Include="openCVDLLs\opencv_imgproc230.dll" />
-    <Content Include="openCVDLLs\opencv_imgproc230d.dll" />
-    <Content Include="openCVDLLs\opencv_legacy230.dll" />
-    <Content Include="openCVDLLs\opencv_legacy230d.dll" />
-    <Content Include="openCVDLLs\opencv_ml230.dll" />
-    <Content Include="openCVDLLs\opencv_ml230d.dll" />
-    <Content Include="openCVDLLs\opencv_objdetect230.dll" />
-    <Content Include="openCVDLLs\opencv_objdetect230d.dll" />
-    <Content Include="openCVDLLs\opencv_video230.dll" />
-    <Content Include="openCVDLLs\opencv_video230d.dll" />
-    <Content Include="openCVDLLs\tbb.dll" />
-    <Content Include="openCVDLLs\tbb_debug.dll" />
+    <None Include="openCVDLLs\opencv_calib3d230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_contrib230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_core230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_features2d230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_flann230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_gpu230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_highgui230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_imgproc230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_legacy230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_ml230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_objdetect230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\opencv_video230.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="openCVDLLs\tbb.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
