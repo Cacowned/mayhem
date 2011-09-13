@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using MayhemDefaultStyles.UserControls;
 using MayhemCore.ModuleTypes;
 using MayhemCore;
+using System.Threading;
 
 namespace MayhemWpf
 {
@@ -50,20 +51,27 @@ namespace MayhemWpf
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
         {
+            IWpfConfiguration config = ConfigContent.Content as IWpfConfiguration;
             if (iWpfConfig.OnSave())
             {
-                iWpf.OnSaved(ConfigContent.Content as IWpfConfiguration);
+                iWpf.OnSaved(config);
                 ((ModuleBase)iWpf).SetConfigString();
             }
-            iWpfConfig.OnClosing();
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+                {
+                    iWpfConfig.OnClosing();
+                }));
             ((MainWindow)Application.Current.MainWindow).Save();
             DialogResult = true;
         }
 
         private void Button_Cancel_Click(object sender, RoutedEventArgs e)
         {
-            iWpfConfig.OnCancel();
-            iWpfConfig.OnClosing();
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+                {
+                    iWpfConfig.OnCancel();
+                    iWpfConfig.OnClosing();
+                }));
             DialogResult = false;
         }
     }
