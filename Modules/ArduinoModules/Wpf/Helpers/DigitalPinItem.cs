@@ -3,7 +3,7 @@
  * DitialPinItem.cs
  * 
  * 
- * Data model for Gridviews on Arduino digital pins
+ * Data model for Gridviews on Arduino digital pins for ArduinoEventConfig
  * 
  * 
  * (c) 2011, Microsoft Applied Sciences Group

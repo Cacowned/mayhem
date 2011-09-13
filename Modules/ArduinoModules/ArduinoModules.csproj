@@ -55,17 +55,23 @@
   <ItemGroup>
     <Compile Include="Firmata\ArduinoFirmata.cs" />
     <Compile Include="Events\ArduinoEvent.cs" />
+    <Compile Include="Firmata\IArduinoEventListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reactions\ArduinoAnalogWrite.cs" />
+    <Compile Include="Reactions\ArduinoDigitalWrite.cs" />
+    <Compile Include="Reactions\ArduinoServoWrite.cs" />
+    <Compile Include="Wpf\ArduinoDigitalWriteConfig.xaml.cs">
+      <DependentUpon>ArduinoDigitalWriteConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\ArduinoEventConfig.xaml.cs">
       <DependentUpon>ArduinoEventConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\Helpers\AnalogPinItem.cs" />
     <Compile Include="Wpf\Helpers\DigitalPinItem.cs" />
+    <Compile Include="Wpf\Helpers\DigitalPinWriteItem.cs" />
     <Compile Include="Wpf\Helpers\StretchPropertyExt.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Reactions\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\MayhemSerial\MayhemSerial.csproj">
       <Project>{EB69EA74-75DB-4171-858A-B4BC4F6857E6}</Project>
@@ -73,6 +79,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Wpf\ArduinoDigitalWriteConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wpf\ArduinoEventConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

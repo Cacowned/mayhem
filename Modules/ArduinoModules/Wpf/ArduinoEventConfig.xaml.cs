@@ -42,7 +42,7 @@ namespace ArduinoModules.Wpf
     /// <summary>
     /// Interaction logic for ArduinoEventConfig.xaml
     /// </summary>
-    public partial class ArduinoEventConfig : IWpfConfiguration
+    public partial class ArduinoEventConfig : IWpfConfiguration, IArduinoEventListener
     {
         public static string TAG = "[ArduinoEventConfig] :";
         
@@ -151,10 +151,12 @@ namespace ArduinoModules.Wpf
                 analog_pin_items.Clear();
                 digital_pin_items.Clear();
 
-                arduino.OnAnalogPinChanged -= arduino_OnAnalogPinChanged;
-                arduino.OnDigitalPinChanged -= arduino_OnDigitalPinChanged;
-                arduino.OnPinAdded -= arduino_OnPinAdded;
-                arduino.OnInitialized -= arduino_OnInitialized;
+                /*
+                arduino.OnAnalogPinChanged -= Arduino_OnAnalogPinChanged;
+                arduino.OnDigitalPinChanged -= Arduino_OnDigitalPinChanged;
+                arduino.OnPinAdded -= Arduino_OnPinAdded;
+                arduino.OnInitialized -= Arduino_OnInitialized;*/
+                arduino.DeregisterListener(this);
 
             }
             
@@ -164,14 +166,16 @@ namespace ArduinoModules.Wpf
 
             arduino = ArduinoFirmata.InstanceForPortname(portname);
 
-            arduino.OnAnalogPinChanged -= arduino_OnAnalogPinChanged;
-            arduino.OnDigitalPinChanged -= arduino_OnDigitalPinChanged;
-            arduino.OnPinAdded -= arduino_OnPinAdded;
-            arduino.OnInitialized -= arduino_OnInitialized;
-            arduino.OnPinAdded += new Action<Pin>(arduino_OnPinAdded);
-            arduino.OnDigitalPinChanged += new Action<Pin>(arduino_OnDigitalPinChanged);
-            arduino.OnAnalogPinChanged += new Action<Pin>(arduino_OnAnalogPinChanged);
-            arduino.OnInitialized += new EventHandler(arduino_OnInitialized);
+            /*
+            arduino.OnAnalogPinChanged -= Arduino_OnAnalogPinChanged;
+            arduino.OnDigitalPinChanged -= Arduino_OnDigitalPinChanged;
+            arduino.OnPinAdded -= Arduino_OnPinAdded;
+            arduino.OnInitialized -= Arduino_OnInitialized;
+            arduino.OnPinAdded += Arduino_OnPinAdded;
+            arduino.OnDigitalPinChanged += Arduino_OnDigitalPinChanged;
+            arduino.OnAnalogPinChanged += Arduino_OnAnalogPinChanged;
+            arduino.OnInitialized += Arduino_OnInitialized;*/
+            arduino.RegisterListener(this);
 
             // update pins if the arduino already exists
             // this makes arduino call the OnPinAdded callbacks, which in turn
@@ -188,16 +192,16 @@ namespace ArduinoModules.Wpf
         #region IWpfConfigurable overrides
         public override void OnClosing()
         {
-            arduino.OnAnalogPinChanged -= arduino_OnAnalogPinChanged;
-            arduino.OnDigitalPinChanged -= arduino_OnDigitalPinChanged;
-            arduino.OnPinAdded -= arduino_OnPinAdded;
-            arduino.OnInitialized -= arduino_OnInitialized;
-
+            /*
+            arduino.OnAnalogPinChanged -= Arduino_OnAnalogPinChanged;
+            arduino.OnDigitalPinChanged -= Arduino_OnDigitalPinChanged;
+            arduino.OnPinAdded -= Arduino_OnPinAdded;
+            arduino.OnInitialized -= Arduino_OnInitialized;*/
+            arduino.DeregisterListener(this);
             t.Enabled = false;
             base.OnClosing();
         }
-
-       
+     
 
         public override string Title
         {
@@ -209,9 +213,9 @@ namespace ArduinoModules.Wpf
         #endregion
 
 
-        #region Arduino Event Handlers
+        #region IArduinoEventListener
 
-        void arduino_OnInitialized(object sender, EventArgs e)
+        public void Arduino_OnInitialized(object sender, EventArgs e)
         {
             //throw new NotImplementedException();
             Dispatcher.Invoke(new Action(() =>
@@ -222,26 +226,18 @@ namespace ArduinoModules.Wpf
 
         }
 
-        void arduino_OnAnalogPinChanged(Pin p)
+        public void Arduino_OnAnalogPinChanged(Pin p)
         {
             //throw new NotImplementedException();
             //Debug.WriteLine(TAG+ "arduino_OnAnalogPinChanged: " + p.analog_channel + " v:"+p.value );
             if (p.analog_channel < analog_pin_items.Count)
-            {
-               
+            {             
                 // refresh data grid items
-                analog_pin_items[p.analog_channel].SetAnalogValue(p.value);
-                //if (!bg_pinUpdate.IsBusy)
-                //    bg_pinUpdate.RunWorkerAsync();
-                //    bg_analogPinUpdate.RunWorkerAsync();
-                //Dispatcher.Invoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.ApplicationIdle);
-
+                analog_pin_items[p.analog_channel].SetAnalogValue(p.value);               
             }
-
-
         }
 
-        void arduino_OnDigitalPinChanged(Pin p)
+        public void Arduino_OnDigitalPinChanged(Pin p)
         {
             //throw new NotImplementedException();
             Debug.WriteLine(TAG + "arduino_OnDigitalPinChanged " + p.id + " " + p.value);
@@ -254,14 +250,13 @@ namespace ArduinoModules.Wpf
                     if (pin.GetPinID() == p.id)
                         pin.SetPinState(p.value);
                 }
-             
-              // Dispatcher.BeginInvoke(new Action(() => {digitalPins.Items.Refresh();}),DispatcherPriority.Render);
+                      
             }
 
 
         }
 
-        private void arduino_OnPinAdded(Pin p)
+        public void Arduino_OnPinAdded(Pin p)
         {
             //throw new NotImplementedException();
             Debug.WriteLine("arduino_OnPinAdded: " + p.analog_channel );
@@ -371,5 +366,7 @@ namespace ArduinoModules.Wpf
 
 
 
+
+        
     }
 }
