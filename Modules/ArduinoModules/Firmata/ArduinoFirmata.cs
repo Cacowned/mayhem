@@ -298,7 +298,7 @@ namespace ArduinoModules.Firmata
         /// <param name="e"></param>
         public void port_DataReceived(string portName, byte[] buffer, int numBytes)
         {
-            Debug.WriteLine(TAG + "port_DataReceived");
+            // Debug.WriteLine(TAG + "port_DataReceived");
 
             // make a local deep copy of the RX buffer
             byte[] buf = new byte[numBytes];
