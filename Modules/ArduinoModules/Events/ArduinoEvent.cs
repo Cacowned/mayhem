@@ -49,6 +49,11 @@ namespace ArduinoModules.Events
         private List<AnalogPinItem> monitorAnalogPins = new List<AnalogPinItem>();
 
 
+        private const int ACTIVATE_MIN_DELAY = 50;  //minimum activation interval
+        DateTime lastActivated = DateTime.MinValue;
+
+
+
         public ArduinoEvent()
         {
             Init(new StreamingContext());
@@ -151,6 +156,24 @@ namespace ArduinoModules.Events
 
         }
 
+        /// <summary>
+        /// Limit activation rate to 10ms
+        /// </summary>
+        private void Activate()
+        {
+            DateTime now = DateTime.Now;
+
+            TimeSpan ts = now - lastActivated;
+
+            if (ts.TotalMilliseconds >= ACTIVATE_MIN_DELAY)
+            {
+                // call activate on base
+                base.OnEventActivated();
+                lastActivated = DateTime.Now;
+            }
+            
+        }
+
         public void arduino_OnDigitalPinChanged(Pin p)
         {
             if (this.Enabled)
@@ -164,7 +187,7 @@ namespace ArduinoModules.Events
                             if (p.value > 0 && d.GetDigitalPinState() == 0)
                             {
                                 // fire
-                                base.OnEventActivated();
+                                Activate();
                             }
                         }
                         else if (d.ChangeType == DIGITAL_PIN_CHANGE.HIGH)
@@ -172,7 +195,7 @@ namespace ArduinoModules.Events
                             if (p.value > 0)
                             {
                                 // fire
-                                base.OnEventActivated();
+                                Activate();
                             }
                         }
                         else if (d.ChangeType == DIGITAL_PIN_CHANGE.LOW)
@@ -180,7 +203,7 @@ namespace ArduinoModules.Events
                             if (p.value == 0)
                             {
                                 // fire
-                                base.OnEventActivated();
+                                Activate();
                             }
                         }
                         else if (d.ChangeType == DIGITAL_PIN_CHANGE.RISING)
@@ -188,7 +211,7 @@ namespace ArduinoModules.Events
                             if (p.value == 0 && d.GetDigitalPinState() > 0)
                             {
                                 // fire
-                                base.OnEventActivated();
+                                Activate();
                             }
                         }
                         // p.value = d.GetDigitalPinState();
