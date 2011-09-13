@@ -98,7 +98,7 @@ namespace ArduinoModules.Wpf
             
             {
                 Dispatcher.BeginInvoke(new Action(() => {digitalPins.Items.Refresh();}),  DispatcherPriority.Render);
-                Dispatcher.BeginInvoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.Render);
+                Dispatcher.BeginInvoke(new Action(() => {analogPins.Items.Refresh(); }), DispatcherPriority.Render);
             });
 
             bg_pinUpdate.WorkerSupportsCancellation = true;
@@ -205,12 +205,14 @@ namespace ArduinoModules.Wpf
 
             if (p.id < digital_pin_items.Count)
             {
-               //bool state =  (p.value > 0) ? true : false;
-               digital_pin_items[p.id].SetPinState(p.value);
-               // run the state update in the background
-               //if (!bg_pinUpdate.IsBusy)
-              //     bg_pinUpdate.RunWorkerAsync();
-               //Dispatcher.Invoke(new Action(() => {digitalPins.Items.Refresh();}),DispatcherPriority.ApplicationIdle);
+               
+                foreach (DigitalPinItem pin in digital_pin_items)
+                {
+                    if (pin.GetPinID() == p.id)
+                        pin.SetPinState(p.value);
+                }
+             
+              // Dispatcher.BeginInvoke(new Action(() => {digitalPins.Items.Refresh();}),DispatcherPriority.Render);
             }
 
 
