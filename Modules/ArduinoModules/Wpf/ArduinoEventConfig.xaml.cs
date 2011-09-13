@@ -45,12 +45,6 @@ namespace ArduinoModules.Wpf
     {
         public static string TAG = "[ArduinoEventConfig] :";
         
-
-       
-
-       
-
-
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
         private int itemSelected = -1;
         private Dictionary<string, string>  deviceNamesIds = null;
@@ -61,6 +55,19 @@ namespace ArduinoModules.Wpf
         public ObservableCollection<AnalogPinItem> analog_pin_items = new ObservableCollection<AnalogPinItem>();
 
         private BackgroundWorker bg_pinUpdate = new BackgroundWorker();
+
+        public string arduinoPortName
+        {
+            get
+            {
+                if (arduino != null)
+                {
+                    return arduino.portName;
+                }
+                return null;
+
+            }
+        }
 
         public ArduinoEventConfig()
         {
@@ -77,23 +84,7 @@ namespace ArduinoModules.Wpf
                 deviceList.SelectedValuePath = "Key";
                 deviceList.SelectedIndex = 0; 
             }
-
-            //////// DEBUG
-            //DigitalPinItem pItem = new DigitalPinItem(false, -3, DIGITAL_PIN_CHANGE.LOW);
-            //digital_pin_items.Add(pItem);
-            //pItem = new DigitalPinItem(false, -2, DIGITAL_PIN_CHANGE.LOW);
-            //digital_pin_items.Add(pItem);
-            //pItem = new DigitalPinItem(false, -1, DIGITAL_PIN_CHANGE.LOW);
-            //digital_pin_items.Add(pItem);
-
-            //AnalogPinItem dummy = new AnalogPinItem(false, -3, ANALOG_PIN_CHANGE.EQUALS);
-            //analog_pin_items.Add(dummy);
-            //dummy = new AnalogPinItem(false, -2, ANALOG_PIN_CHANGE.EQUALS);
-            //analog_pin_items.Add(dummy); 
-
-            // background workers
-
-            //bg_analogPinUpdate.DoWork += new DoWorkEventHandler(this.updateAnalogPins);
+       
 
             bg_pinUpdate.DoWork += new DoWorkEventHandler((object o, DoWorkEventArgs e) => 
             
@@ -120,36 +111,52 @@ namespace ArduinoModules.Wpf
             }
         }
 
+        /// <summary>
+        /// Executes intial connection with the Arduino Board
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string portname = (string)deviceList.SelectedValue;
 
             if (arduino == null)
-                arduino = new ArduinoFirmata(portname);
-
+                arduino = ArduinoFirmata.InstanceForPortname(portname);
            
             arduino.OnPinAdded += new Action<Pin>(arduino_OnPinAdded);
             arduino.OnDigitalPinChanged += new Action<Pin>(arduino_OnDigitalPinChanged);
             arduino.OnAnalogPinChanged += new Action<Pin>(arduino_OnAnalogPinChanged);
             arduino.OnInitialized += new EventHandler(arduino_OnInitialized);
-               
-           
-
-            
-    
         }
+
+        #region IWpfConfigurable overrides
+        public override void OnClosing()
+        {
+            base.OnClosing();
+        }
+
+        public override string Title
+        {
+            get
+            {
+                return "Arduino Event";
+            }
+        }
+        #endregion
+
+
+        #region Arduino Event Handlers
 
         void arduino_OnInitialized(object sender, EventArgs e)
         {
             //throw new NotImplementedException();
-            Dispatcher.Invoke(new Action(() => { 
+            Dispatcher.Invoke(new Action(() =>
+            {
                 connectButton.Content = "Connected";
                 connectButton.IsEnabled = false;
             }), null);
-            
-        }
 
-        #region Arduino Event Handlers
+        }
 
         void arduino_OnAnalogPinChanged(Pin p)
         {
@@ -177,8 +184,8 @@ namespace ArduinoModules.Wpf
 
             if (p.id < digital_pin_items.Count)
             {
-               bool state =  (p.value > 0) ? true : false;
-               digital_pin_items[p.id].SetPinState(state);
+               //bool state =  (p.value > 0) ? true : false;
+               digital_pin_items[p.id].SetPinState(p.value);
                // run the state update in the background
                if (!bg_pinUpdate.IsBusy)
                    bg_pinUpdate.RunWorkerAsync();

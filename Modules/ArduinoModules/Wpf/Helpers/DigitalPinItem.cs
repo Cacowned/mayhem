@@ -45,14 +45,20 @@ namespace ArduinoModules.Wpf
         //public int pin_id { get { return pin_id_; } }
 
         // state
-        private bool digitalPinState = false;
+        private int  digitalPinState_ = 0;
+
+        /// <summary>
+        /// Explicit getter implementation to avoid getting columnized
+        /// </summary>
+        /// <returns></returns>
+        public int GetDigitalPinState(){ return digitalPinState_;}
 
 
-        public string PinState
+        public string CurrentPinState
         {
             get
             {
-                if (digitalPinState)
+                if (digitalPinState_>0)
                     return "HIGH";
                 else
                     return "LOW";
@@ -64,9 +70,9 @@ namespace ArduinoModules.Wpf
         /// representation to a datagrid.
         /// </summary>
         /// <param name="state"></param>
-        public void SetPinState(bool state)
+        public void SetPinState(int state)
         {
-            digitalPinState = state;
+            digitalPinState_ = state;
         }
 
 
