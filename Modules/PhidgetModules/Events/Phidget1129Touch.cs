@@ -20,7 +20,6 @@ namespace PhidgetModules.Events
         {
             Index = ((Phidget1129TouchConfig)configurationControl).Index;
             OnTurnOn = ((Phidget1129TouchConfig)configurationControl).OnTurnOn;
-            SetConfigString();
         }
 
         public string ConvertToString(int value)

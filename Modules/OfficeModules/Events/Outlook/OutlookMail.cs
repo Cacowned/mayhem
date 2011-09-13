@@ -28,8 +28,6 @@ namespace OfficeModules.Events.Outlook
 
         public override void Enable()
         {
-
-
             // When enabled, try and get the outlook instance            
             try
             {

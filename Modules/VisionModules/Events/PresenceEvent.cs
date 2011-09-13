@@ -101,8 +101,6 @@ namespace VisionModules.Events
 
             pd = new PresenceDetectorComponent(320, 240);
             presenceHandler = new PresenceDetectorComponent.DetectionHandler(m_OnPresenceUpdate);
-
-            SetConfigString();
         }
         
 
@@ -127,9 +125,7 @@ namespace VisionModules.Events
             selected_trigger_mode = config.selected_triggerMode;
 
             if (wasEnabled)
-                this.Enable();
-
-            SetConfigString();      
+                this.Enable();   
         }
 
         public override void Enable()

@@ -28,7 +28,6 @@ namespace PhidgetModules.Events
         {
             Index = ((Phidget1103IRReflectiveConfig)configurationControl).Index;
             OnTurnOn = ((Phidget1103IRReflectiveConfig)configurationControl).OnTurnOn;
-            SetConfigString();
         }
 
         public override void SetConfigString()

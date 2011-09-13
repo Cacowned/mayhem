@@ -72,11 +72,6 @@ namespace PhidgetModules.Events
             ConfigString = String.Format("Triggers when input #{0} {1}", Index, type);
         }
 
-        public void OnSaved(UserControl configurationControl)
-        {
-            // TODO
-        }
-
         // The input has changed, do the work here
         protected void InputChanged(object sender, InputChangeEventArgs e)
         {

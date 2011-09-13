@@ -150,6 +150,7 @@ namespace MayhemWpf
             if (iWpfConfig.OnSave())
             {
                 SelectedModuleInstance.OnSaved(ConfigContent.Content as IWpfConfiguration);
+                ((ModuleBase)SelectedModuleInstance).SetConfigString();
             }
             iWpfConfig.OnClosing();
             DialogResult = true;

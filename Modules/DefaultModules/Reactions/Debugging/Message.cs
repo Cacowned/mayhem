@@ -24,7 +24,6 @@ namespace DefaultModules.Reactions.Debugging
         public void OnSaved(IWpfConfiguration configurationControl)
         {
             MessageText = ((DebugMessageConfig)configurationControl).Message;
-            SetConfigString();
         }
 
         public override void SetConfigString()

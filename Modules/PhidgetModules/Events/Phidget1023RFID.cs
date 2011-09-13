@@ -42,7 +42,6 @@ namespace PhidgetModules.Events
         public void OnSaved(IWpfConfiguration configurationControl)
         {
             Tag = ((Phidget1023RFIDConfig)configurationControl).TagID;
-            SetConfigString();
         }
 
         public override void SetConfigString()

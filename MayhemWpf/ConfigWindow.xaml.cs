@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MayhemDefaultStyles.UserControls;
 using MayhemCore.ModuleTypes;
+using MayhemCore;
 
 namespace MayhemWpf
 {
@@ -52,6 +53,7 @@ namespace MayhemWpf
             if (iWpfConfig.OnSave())
             {
                 iWpf.OnSaved(ConfigContent.Content as IWpfConfiguration);
+                ((ModuleBase)iWpf).SetConfigString();
             }
             iWpfConfig.OnClosing();
             ((MainWindow)Application.Current.MainWindow).Save();

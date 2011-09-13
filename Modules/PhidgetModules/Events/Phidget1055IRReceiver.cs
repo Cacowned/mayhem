@@ -45,7 +45,6 @@ namespace PhidgetModules.Events
         public void OnSaved(IWpfConfiguration configurationControl)
         {
             Code = ((Phidget1055IRReceiveConfig)configurationControl).Code;
-            SetConfigString();
         }
 
         public override void SetConfigString()
