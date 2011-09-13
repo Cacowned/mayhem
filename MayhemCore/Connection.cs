@@ -87,7 +87,10 @@ namespace MayhemCore
             // if we are already enabled, just stop
             if (Enabled)
             {
-                actionOnComplete();
+                if (actionOnComplete != null)
+                {
+                    actionOnComplete();
+                }
                 return;
             }
             _Enable(actionOnComplete);
@@ -150,7 +153,10 @@ namespace MayhemCore
             // if we aren't already enabled, just stop
             if (!Enabled)
             {
-                actionOnComplete();
+                if (actionOnComplete != null)
+                {
+                    actionOnComplete();
+                }
                 return;
             }
 
