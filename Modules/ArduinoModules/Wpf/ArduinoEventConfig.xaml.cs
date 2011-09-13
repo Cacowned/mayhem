@@ -33,7 +33,8 @@ using ArduinoModules.Firmata;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
-using System.Windows.Threading; 
+using System.Windows.Threading;
+using System.Timers; 
 
 namespace ArduinoModules.Wpf
 {
@@ -53,6 +54,12 @@ namespace ArduinoModules.Wpf
         // collections driving the itemPanels
         public ObservableCollection<DigitalPinItem> digital_pin_items = new ObservableCollection<DigitalPinItem>();
         public ObservableCollection<AnalogPinItem> analog_pin_items = new ObservableCollection<AnalogPinItem>();
+
+
+        Timer t = new Timer(1000);
+
+
+
 
         private BackgroundWorker bg_pinUpdate = new BackgroundWorker();
 
@@ -86,13 +93,26 @@ namespace ArduinoModules.Wpf
             }
        
 
+
             bg_pinUpdate.DoWork += new DoWorkEventHandler((object o, DoWorkEventArgs e) => 
             
             {
-                Dispatcher.Invoke(new Action(() => {digitalPins.Items.Refresh();}),  DispatcherPriority.Background);
-                Dispatcher.Invoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.Background);
+                Dispatcher.BeginInvoke(new Action(() => {digitalPins.Items.Refresh();}),  DispatcherPriority.Render);
+                Dispatcher.BeginInvoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.Render);
             });
-            
+
+            bg_pinUpdate.WorkerSupportsCancellation = true;
+
+            t.AutoReset = true;
+            t.Elapsed += new ElapsedEventHandler(t_Elapsed);
+            t.Enabled = true;
+        }
+
+        void t_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //throw new NotImplementedException();
+            if (!bg_pinUpdate.IsBusy)
+                bg_pinUpdate.RunWorkerAsync();
         }
 
        
@@ -132,6 +152,7 @@ namespace ArduinoModules.Wpf
         #region IWpfConfigurable overrides
         public override void OnClosing()
         {
+            t.Enabled = false;
             base.OnClosing();
         }
 
@@ -167,8 +188,8 @@ namespace ArduinoModules.Wpf
                
                 // refresh data grid items
                 analog_pin_items[p.analog_channel].SetAnalogValue(p.value);
-                if (!bg_pinUpdate.IsBusy)
-                    bg_pinUpdate.RunWorkerAsync();
+                //if (!bg_pinUpdate.IsBusy)
+                //    bg_pinUpdate.RunWorkerAsync();
                 //    bg_analogPinUpdate.RunWorkerAsync();
                 //Dispatcher.Invoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.ApplicationIdle);
 
@@ -187,8 +208,8 @@ namespace ArduinoModules.Wpf
                //bool state =  (p.value > 0) ? true : false;
                digital_pin_items[p.id].SetPinState(p.value);
                // run the state update in the background
-               if (!bg_pinUpdate.IsBusy)
-                   bg_pinUpdate.RunWorkerAsync();
+               //if (!bg_pinUpdate.IsBusy)
+              //     bg_pinUpdate.RunWorkerAsync();
                //Dispatcher.Invoke(new Action(() => {digitalPins.Items.Refresh();}),DispatcherPriority.ApplicationIdle);
             }
 
@@ -252,7 +273,53 @@ namespace ArduinoModules.Wpf
 
         #endregion
 
+        private void digitalPins_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            t.Enabled = false;
+            while (bg_pinUpdate.IsBusy) ;
 
+            (sender as DataGrid).RowEditEnding -= digitalPins_RowEditEnding;
+            (sender as DataGrid).CommitEdit();
+           // (sender as DataGrid).Items.Refresh();
+            (sender as DataGrid).RowEditEnding += digitalPins_RowEditEnding;
+
+            bg_pinUpdate.RunWorkerAsync();
+            t.Enabled = true;
+
+        }
+
+        private void digitalPins_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            bg_pinUpdate.CancelAsync();
+            t.Enabled = false;
+            while (bg_pinUpdate.IsBusy) ;
+        }
+
+        private void analogPins_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            bg_pinUpdate.CancelAsync();
+            t.Enabled = false;
+            while (bg_pinUpdate.IsBusy) ;
+
+            (sender as DataGrid).RowEditEnding -= analogPins_RowEditEnding;
+            (sender as DataGrid).CommitEdit();        
+            (sender as DataGrid).RowEditEnding += analogPins_RowEditEnding;
+
+            bg_pinUpdate.RunWorkerAsync();
+            t.Enabled = true;
+
+        }
+
+        private void analogPins_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            bg_pinUpdate.CancelAsync();
+            t.Enabled = false;
+            while (bg_pinUpdate.IsBusy) ;
+        }
+
+       
+
+        
    
     }
 }
