@@ -48,6 +48,7 @@ namespace DefaultModules.KeypressHelpers
         InterceptKeys()
         {
             keyCombinationHandlerMap = new Dictionary<HashSet<Keys>, List<KeyCombinationHandler>>();
+            _proc = new LowLevelKeyboardProc(HookCallback);
         }
 
         ~InterceptKeys()
@@ -133,7 +134,6 @@ namespace DefaultModules.KeypressHelpers
         {
             if (_hookID == IntPtr.Zero)
             {
-                _proc = new LowLevelKeyboardProc(HookCallback);
                 using (Process curProcess = Process.GetCurrentProcess())
                 {
                     using (ProcessModule curModule = curProcess.MainModule)

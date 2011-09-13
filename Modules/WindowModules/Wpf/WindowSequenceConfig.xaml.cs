@@ -92,14 +92,25 @@ namespace WindowModules.Wpf
             if (p.MainWindowHandle == IntPtr.Zero || p.MainWindowHandle == thisWindowHandle )
                 return;
 
-            string filename = p.MainModule.FileName;
+            string filename;
+
+            try
+            {
+                filename = p.MainModule.FileName;
+            }
+            catch
+            {
+                filename = WMIProcess.GetFilename(procID);
+            }
+            if (filename != null)
+            {
+                FileInfo fi = new FileInfo(filename);
+                filename = fi.Name;
+            }
 
             StringBuilder sb = new StringBuilder(200);
             Native.GetWindowText(handle, sb, sb.Capacity);
             string title = sb.ToString();
-
-            FileInfo fi = new FileInfo(filename);
-            filename = fi.Name;
 
             if (SelectedWindow == null ||
                 SelectedWindow.FileName != filename ||

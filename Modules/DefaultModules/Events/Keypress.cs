@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Windows;
+using System.Threading;
+using System.Windows.Threading;
 using DefaultModules.KeypressHelpers;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemDefaultStyles.UserControls;
-using System.Windows.Controls;
 
 namespace DefaultModules.Events
 {
@@ -22,6 +23,8 @@ namespace DefaultModules.Events
 
         public static bool IsConfigOpen = false;
 
+        Thread mainThread;
+
         [DataMember]
         private HashSet<System.Windows.Forms.Keys> MonitorKeysDown
         {
@@ -34,6 +37,7 @@ namespace DefaultModules.Events
             base.Initialize();
 
             interceptKeys = InterceptKeys.Instance;
+            mainThread = Thread.CurrentThread;
 
             MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
         }
@@ -72,8 +76,10 @@ namespace DefaultModules.Events
         public override void Enable()
         {
             base.Enable();
-
-            interceptKeys.AddCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
+            Dispatcher.FromThread(mainThread).Invoke((Action)delegate
+            {
+                interceptKeys.AddCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
+            });
         }
 
         public override void Disable()
