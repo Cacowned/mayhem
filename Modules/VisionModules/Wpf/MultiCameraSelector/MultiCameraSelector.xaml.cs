@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
+using MayhemCore;
 
 namespace VisionModules.Wpf
 {
@@ -25,9 +26,6 @@ namespace VisionModules.Wpf
     /// </summary>
     public partial class MultiCameraSelector : UserControl
     {
-
-        public const string TAG = "[MultiCameraSelector] :";
-
         public Camera selected_camera = null;
 
         private CameraDriver i = null; //CameraDriver.Instance;
@@ -64,7 +62,7 @@ namespace VisionModules.Wpf
         {
             i = CameraDriver.Instance;
 
-            Debug.WriteLine(TAG + "Nr of Cameras available: " + i.cameras_available.Length);
+            Logger.WriteLine("Nr of Cameras available: " + i.cameras_available.Length);
             foreach (Camera c in i.cameras_available)
             {
                 deviceList.Items.Add(c);
@@ -87,11 +85,11 @@ namespace VisionModules.Wpf
                     {
                         c.OnImageUpdated += i_OnImageUpdated;
                         c.StartFrameGrabbing();
-                        Debug.WriteLine(TAG + "using " + c.info.ToString());
-                        Debug.WriteLine(TAG + "Camera IDX " + c.index);
+                        Logger.WriteLine("using " + c.info.ToString());
+                        Logger.WriteLine("Camera IDX " + c.index);
                     }
 
-                    Debug.WriteLine("Adding...");
+                    Logger.WriteLine("Adding...");
 
                     //camera_preview_panel.Children.Add(canv);
                     int width = (int)(camera_preview_panel.Width / 3);
@@ -114,7 +112,7 @@ namespace VisionModules.Wpf
             }
             else
             {
-                Debug.WriteLine(TAG + "No camera available");
+                Logger.WriteLine("No camera available");
                 
             }
         }
@@ -148,9 +146,7 @@ namespace VisionModules.Wpf
         ///</summary>       
         protected virtual void SetCameraImageSource(Camera cam)
         {
-
-            Debug.WriteLine("[SetCameraImageSource] ");
-            Debug.WriteLine("New Image on Camera " + cam.index + " : " + cam.info);
+            Logger.WriteLine("New Image on Camera " + cam.index + " : " + cam.info);
 
             Bitmap bm = cam.ImageAsBitmap();
 
@@ -178,7 +174,7 @@ namespace VisionModules.Wpf
             }
             else
             {
-                // Debug.WriteLine("NULL!");
+                // Logger.WriteLine("NULL!");
             }
 
         }
@@ -190,7 +186,7 @@ namespace VisionModules.Wpf
         /// <param name="e"></param>
         public void VisibilityChanged(bool visibility)
         {
-            Debug.WriteLine(TAG + "IsVisibleChanged");
+            Logger.WriteLine("IsVisibleChanged");
             if (visibility)
             {
 
@@ -215,7 +211,7 @@ namespace VisionModules.Wpf
 
         private void bborder_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Debug.WriteLine(TAG + "bborder_MouseLeftButtonUp");
+            Logger.WriteLine("bborder_MouseLeftButtonUp");
             if (selected_preview_img != null)
             {
                 selected_preview_img.BorderBrush = Brushes.Transparent;
@@ -234,7 +230,7 @@ namespace VisionModules.Wpf
 
             if (item_index >= 0)
             {
-                Debug.WriteLine(TAG + "item index " + item_index);
+                Logger.WriteLine("item index " + item_index);
                 deviceList.SelectedIndex = item_index;
                 this.selected_camera = cams[item_index];
                 if (OnCameraSelected != null)

@@ -14,7 +14,7 @@ namespace WindowModules
         [DataMember]
         public string Title = "";
         [DataMember]
-        public bool CheckFileName = false;
+        public bool CheckFileName = true;
         [DataMember]
         public bool CheckTitle = false;
         //[DataMember]

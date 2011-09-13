@@ -77,6 +77,8 @@ namespace MayhemWpf
 
         public void Load()
         {
+            Logger.WriteLine("asdf");
+            Logger.WriteLine("asdf");
             if (File.Exists(filename))
             {
                 using (FileStream stream = new FileStream(filename, FileMode.Open))
@@ -92,12 +94,12 @@ namespace MayhemWpf
                         allTypes.AddRange(mayhem.ReactionList.GetAllTypesInModules());
                         mayhem.LoadConnections(ConnectionList.Deserialize(stream, allTypes));
 
-                        Debug.WriteLine("Starting up with " + mayhem.ConnectionList.Count + " connections");
+                        Logger.WriteLine("Starting up with " + mayhem.ConnectionList.Count + " connections");
 
                     }
                     catch (SerializationException e)
                     {
-                        Debug.WriteLine("(De-)SerializationException " + e);
+                        Logger.WriteLine("(De-)SerializationException " + e);
                     }
                 }
             }

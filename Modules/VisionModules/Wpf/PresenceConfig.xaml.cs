@@ -15,6 +15,7 @@ using MayhemDefaultStyles.UserControls;
 using System.Diagnostics;
 using MayhemOpenCVWrapper;
 using VisionModules.Events;
+using MayhemCore;
 
 namespace VisionModules.Wpf
 {
@@ -23,8 +24,6 @@ namespace VisionModules.Wpf
     /// </summary>
     public partial class PresenceConfig : IWpfConfiguration
     {
-        public const string TAG = "[PresenceConfig] :";
-
         // the selected camera
         private Camera camera_selected_ = null;  
         public Camera camera_selected
@@ -51,7 +50,7 @@ namespace VisionModules.Wpf
             camera_selector.OnCameraSelected += new MultiCameraSelector.CameraSelectedHandler(                
                     (Camera c) => 
                         {
-                            Debug.WriteLine(TAG + "Handling OnCameraSelected");
+                            Logger.WriteLine("Handling OnCameraSelected");
                             camera_selected_ = c; 
                         }
                     );
@@ -61,7 +60,7 @@ namespace VisionModules.Wpf
 
         private void Control_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            Debug.WriteLine(TAG + "IsVisibleChanged");
+            Logger.WriteLine("IsVisibleChanged");
             camera_selector.VisibilityChanged(this.IsVisible);
         }
 
@@ -86,7 +85,7 @@ namespace VisionModules.Wpf
 
         private void rb_triggerMode_toggle_Checked(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine(TAG + "rb_triggerMode_toggle_Checked");
+            Logger.WriteLine("rb_triggerMode_toggle_Checked");
 
             RadioButton rb = sender as RadioButton;
 

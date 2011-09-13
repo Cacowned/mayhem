@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using MayhemCore;
 
 namespace DefaultModules.KeypressHelpers
 {
@@ -138,7 +139,7 @@ namespace DefaultModules.KeypressHelpers
                 {
                     using (ProcessModule curModule = curProcess.MainModule)
                     {
-                        Debug.WriteLine("Setting hook");
+                        Logger.WriteLine("Setting hook");
                         _hookID = SetWindowsHookEx(WH_KEYBOARD_LL, _proc, GetModuleHandle(curModule.ModuleName), 0);
                     }
                 }
@@ -149,7 +150,7 @@ namespace DefaultModules.KeypressHelpers
         {
             if (_hookID != IntPtr.Zero)
             {
-                Debug.WriteLine("Removing hook");
+                Logger.WriteLine("Removing hook");
                 UnhookWindowsHookEx(_hookID);
                 _hookID = IntPtr.Zero;
             }
@@ -163,7 +164,7 @@ namespace DefaultModules.KeypressHelpers
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Keys key = (Keys)vkCode;
-                Debug.WriteLine("Add: " + key + " " + wParam + " " + lParam + " " + vkCode);
+                Logger.WriteLine("Add: " + key + " " + wParam + " " + lParam + " " + vkCode);
                 if (!keys_down.Contains(key))
                 {
                     keys_down.Add(key);
@@ -179,7 +180,7 @@ namespace DefaultModules.KeypressHelpers
                 int vkCode = Marshal.ReadInt32(lParam);
                 Keys key = (Keys)vkCode;
                 keys_down.Remove(key);
-                Debug.WriteLine("Remove: " + key);
+                Logger.WriteLine("Remove: " + key);
                 if (OnKeyUp != null)
                 {
                     OnKeyUp(key);

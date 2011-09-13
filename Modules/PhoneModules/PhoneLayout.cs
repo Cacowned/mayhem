@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.Reflection;
 using System.Diagnostics;
+using MayhemCore;
 
 namespace PhoneModules
 {
@@ -143,7 +144,7 @@ namespace PhoneModules
             }
             catch(Exception erf)
             {
-                Debug.WriteLine(erf);
+                Logger.WriteLine(erf);
             }
 
             StringBuilder sb = new StringBuilder();

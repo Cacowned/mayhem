@@ -20,13 +20,12 @@ using System.Diagnostics;
 using MayhemOpenCVWrapper;
 using OpenCVDLL;
 using System.Windows;
+using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
     public class FaceDetectorComponent : IVisionEventComponent
     {
-
-        public static string TAG = "[FaceDetector] : ";
         private FaceDetector fd; 
         public delegate void DetectionHandler(object sender, List<Point> points);
         public event DetectionHandler OnFaceDetected;
@@ -48,7 +47,7 @@ namespace MayhemOpenCVWrapper.LowLevel
          */ 
         public override void update_frame(object sender, EventArgs e)
         {
-            Debug.WriteLine(TAG + "frame nr "+frameCount);
+            Logger.WriteLine("frame nr "+frameCount);
             frameCount++;
             Camera camera = sender as Camera;
 
@@ -72,7 +71,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 }
             }
 
-            Debug.WriteLineIf(VERBOSE_DEBUG, ">>>>> Got " + numFacesCoords+ " face coords ");
+            Logger.WriteLineIf(VERBOSE_DEBUG, ">>>>> Got " + numFacesCoords+ " face coords ");
 
             if (numFacesCoords == 0) return;
 
@@ -86,7 +85,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             {
                 Point p1 = new Point(faceCoords[cpIdx++], faceCoords[cpIdx++]);
                 Point p2 = new Point(faceCoords[cpIdx++], faceCoords[cpIdx++]);
-                Debug.WriteLineIf(VERBOSE_DEBUG, "Point 1: " + p1 + " Point 2: " + p2);
+                Logger.WriteLineIf(VERBOSE_DEBUG, "Point 1: " + p1 + " Point 2: " + p2);
 
                 points.Add(p1);
                 points.Add(p2);

@@ -19,17 +19,12 @@ namespace MayhemOpenCVWrapper.LowLevel
 {
     public class PresenceDetectorComponent : IVisionEventComponent
     {
-
-        public const string TAG = "[PresenceDetectorComponent] : ";
-
         private OpenCVDLL.PresenceDetector pd;
 
         public delegate void DetectionHandler(object sender, Point[] points);
         public event DetectionHandler OnPresenceUpdate;
 
         private bool presence_ = false;
-
-        
 
         public bool presence
         {
@@ -48,7 +43,6 @@ namespace MayhemOpenCVWrapper.LowLevel
             // copy over image data to the DLL 
             lock (camera.thread_locker)
             {
-
                 unsafe
                 {
                     fixed (byte* ptr = camera.imageBuffer)
@@ -68,7 +62,6 @@ namespace MayhemOpenCVWrapper.LowLevel
             {
                 OnPresenceUpdate(this, points);
             }
-
         }
     }
 }

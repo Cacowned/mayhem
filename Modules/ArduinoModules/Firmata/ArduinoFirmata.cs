@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.ComponentModel;
 using Timer = System.Timers.Timer;
+using MayhemCore;
 
 
 namespace ArduinoModules.Firmata
@@ -143,7 +144,6 @@ namespace ArduinoModules.Firmata
         private string portName_ = null;             // name of the serial port
         public string portName { get { return portName_; } }
 
-        public static readonly string TAG = "[ArduinoFirmata] : ";
         private MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.instance;
         public bool initialized = false;
 
@@ -242,14 +242,14 @@ namespace ArduinoModules.Firmata
         /// <returns>Initialized instance of Arduino bound to specified port name.</returns>
         public static ArduinoFirmata InstanceForPortname(string serialPortName)
         {
-            Debug.WriteLine(TAG + "InstanceForPortname"); 
+            Logger.WriteLine("InstanceForPortname"); 
             if (instances.Keys.Contains(serialPortName) && instances[serialPortName] != null)
             {
                 return instances[serialPortName];
             }
             else
             {
-                Debug.WriteLine(TAG + "creating new instance for port " + serialPortName);
+                Logger.WriteLine("creating new instance for port " + serialPortName);
                 instances[serialPortName] = new ArduinoFirmata(serialPortName);
                 return instances[serialPortName];
             }
@@ -260,8 +260,6 @@ namespace ArduinoModules.Firmata
         /// </summary>
         private void InitializeFirmata()
         {
-            
-
             // initialize pin info
             for (int i = 0; i < 128; i++)
             {
@@ -281,7 +279,6 @@ namespace ArduinoModules.Firmata
 
            // readPinsTimer.Elapsed += new System.Timers.ElapsedEventHandler(readPinsTimer_Elapsed);
             //readPinsTimer.Enabled = true;
-            
         }
 
         void readPinsTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -367,7 +364,7 @@ namespace ArduinoModules.Firmata
         /// <param name="e"></param>
         public void port_DataReceived(string portName, byte[] buffer, int numBytes)
         {
-            // Debug.WriteLine(TAG + "port_DataReceived");
+            // Logger.WriteLine("port_DataReceived");
 
             // make a local deep copy of the RX buffer
             byte[] buf = new byte[numBytes];
@@ -433,7 +430,7 @@ namespace ArduinoModules.Firmata
         private void ProcessMessage()
         {
             byte cmd = (byte)(parse_buf[0] & (byte)0xF0);
-            //Debug.WriteLine(TAG + "ProcessMessage bytes" + parse_count + " cmd " + cmd);
+            //Logger.WriteLine("ProcessMessage bytes" + parse_count + " cmd " + cmd);
 
             if (cmd == FIRMATA_MSG.ANALOG_IO_MESSAGE && parse_count == 3) 
             {
@@ -458,7 +455,7 @@ namespace ArduinoModules.Firmata
 		        int port_num = (parse_buf[0] & (byte) 0x0F);
 		        int port_val = parse_buf[1] | (parse_buf[2] << 7);
 		        int pin = port_num * 8;
-		       // Debug.WriteLine(TAG+String.Format("PIN: {0}, port_num = {1}, port_val = {2}", pin,port_num, port_val));
+		       // Logger.WriteLine(String.Format("PIN: {0}, port_num = {1}, port_val = {2}", pin,port_num, port_val));
 
                 // basically: go through the bits in the register and mask with 1
 		        for (; pin <  128; pin++) {                   
@@ -474,7 +471,7 @@ namespace ArduinoModules.Firmata
                             val = 0;
                         }
 
-                        Debug.WriteLine("pin " + pin + " val " + val);
+                        Logger.WriteLine("pin " + pin + " val " + val);
 				        if (pin_info[pin].value != val) {
 					       
                             
@@ -605,7 +602,7 @@ namespace ArduinoModules.Firmata
                     if (parse_count > 7) pin_info[pin].value |= (byte)(parse_buf[6] << 14);
                     //add_pin(pin);
 
-                    Debug.WriteLine(TAG + "Added Pin! " + pin + " " + pin_info[pin].mode + " " + pin_info[pin].value);
+                    Logger.WriteLine("Added Pin! " + pin + " " + pin_info[pin].mode + " " + pin_info[pin].value);
 
                     /////////////////////// post asynchronous event on main thread
                     if (this.OnPinAdded != null)

@@ -18,7 +18,7 @@ namespace DefaultModules.Reactions.Debugging
 
         public override void Perform()
         {
-            Debug.WriteLine(String.Format("{0}: {1}", DateTime.Now.ToLongTimeString(), MessageText));
+            Logger.WriteLine(String.Format("{0}: {1}", DateTime.Now.ToLongTimeString(), MessageText));
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)

@@ -112,7 +112,7 @@ namespace MayhemWpf.UserControls
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine("Border: " + e.GetPosition(this));
+            Logger.WriteLine("Border: " + e.GetPosition(this));
             isShowing = true;
             RaiseEvent(new RoutedEventArgs(ShowEvent));
             //Mouse.Capture(this);
@@ -124,7 +124,7 @@ namespace MayhemWpf.UserControls
             RaiseEvent(new RoutedEventArgs(ShowEvent));
             //if (e.GetPosition(this).Y < borderNumber.Height)
             //{
-            //    Debug.WriteLine("Self: " + e.GetPosition(this));
+            //    Logger.WriteLine("Self: " + e.GetPosition(this));
             //    RaiseEvent(new RoutedEventArgs(HideEvent));
             //    Mouse.Capture(null);
             //}
