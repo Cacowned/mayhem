@@ -94,7 +94,6 @@ namespace XboxModules.Events
             buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
             XboxButtons = ((XboxButtonConfig)configurationControl).SaveButtons;
             buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);
-            SetConfigString();
         }
 
         public IWpfConfiguration ConfigurationControl

@@ -45,7 +45,6 @@ namespace DefaultModules.Reactions
         public void OnSaved(IWpfConfiguration configurationControl)
         {
             Message = ((TextToSpeechConfig)configurationControl).Message;
-            SetConfigString();
         }
 
         public override void SetConfigString()

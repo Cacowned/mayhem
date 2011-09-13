@@ -21,7 +21,6 @@ namespace PhidgetModules.Events
             Index = ((Phidget1101IRDistanceConfig)configurationControl).Index;
             TopValue = ((Phidget1101IRDistanceConfig)configurationControl).TopValue;
             BottomValue = ((Phidget1101IRDistanceConfig)configurationControl).BottomValue;
-            SetConfigString();
         }
 
         protected override bool IsValidInput(int value)

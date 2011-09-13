@@ -101,7 +101,6 @@ namespace DefaultModules.Reactions
         {
             PlaySoundConfig rpc = configurationControl as PlaySoundConfig;
             SoundPath = rpc.FileName;
-            SetConfigString();
         }
 
         #endregion

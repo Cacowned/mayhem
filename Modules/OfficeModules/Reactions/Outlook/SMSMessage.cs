@@ -121,7 +121,6 @@ namespace OutlookModules.Reactions.Outlook
             To = ((SmsMessageConfig)configurationControl).To;
             Message = ((SmsMessageConfig)configurationControl).Message;
             CarrierString = ((SmsMessageConfig)configurationControl).CarrierString;
-            SetConfigString();
         }
     }
 }

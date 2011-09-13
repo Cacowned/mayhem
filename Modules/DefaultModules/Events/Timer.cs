@@ -86,8 +86,6 @@ namespace DefaultModules.Events
             Hours = hours;
             Minutes = minutes;
             Seconds = seconds;
-
-            SetConfigString();
         }
 
         public IWpfConfiguration ConfigurationControl
@@ -100,7 +98,6 @@ namespace DefaultModules.Events
             Hours = ((TimerConfig)configurationControl).Hours;
             Minutes = ((TimerConfig)configurationControl).Minutes;
             Seconds = ((TimerConfig)configurationControl).Seconds;
-            SetConfigString();
         }
         #endregion
 

@@ -52,8 +52,6 @@ namespace DefaultModules.Reactions
             RunProgramConfig rpc = configurationControl as RunProgramConfig;
             FileName = rpc.Filename;
             Arguments = rpc.Arguments;
-
-            SetConfigString();
         }
 
         public override void Enable()

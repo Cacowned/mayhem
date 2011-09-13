@@ -48,8 +48,6 @@ namespace PhidgetModules.Reaction
         {
             Code = ((Phidget1055IRTransmitConfig)configurationControl).Code;
             CodeInfo = ((Phidget1055IRTransmitConfig)configurationControl).CodeInfo;
-
-            SetConfigString();
         }
 
         public override void SetConfigString()

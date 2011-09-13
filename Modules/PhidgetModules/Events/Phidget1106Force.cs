@@ -21,7 +21,6 @@ namespace PhidgetModules.Events
             Index = ((Phidget1106ForceConfig)configurationControl).Index;
             TopValue = ((Phidget1106ForceConfig)configurationControl).TopValue;
             Increasing = ((Phidget1106ForceConfig)configurationControl).Increasing;
-            SetConfigString();
         }
 
         public override double Convert(int value)

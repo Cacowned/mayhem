@@ -82,11 +82,6 @@ namespace VisionModules.Events
             {
                 m.SetMotionBoundaryRect(boundingRect);
             }
-
-            SetConfigString();
-
-
-
         }
 
         void m_OnMotionUpdate(object sender, List<System.Drawing.Point> points)
@@ -142,8 +137,6 @@ namespace VisionModules.Events
 
             if (wasEnabled)
                 this.Enable();
-
-            SetConfigString();
         }
 
         public override void Enable()

@@ -52,8 +52,6 @@ namespace PhidgetModules.Reaction
         {
             Index = ((PhidgetDigitalOutputConfig)configurationControl).Index;
             OutputType = ((PhidgetDigitalOutputConfig)configurationControl).OutputType;
-
-            SetConfigString();
         }
 
         public override void SetConfigString()
