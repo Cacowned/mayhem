@@ -8,12 +8,12 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using OpenCVDLL;
+using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
     public class ObjectDetectorComponent : IVisionEventComponent
     {
-        public static string TAG = "[ObjectDetector] : ";
         public delegate void DetectionHandler(object sender, List<Point> points);
         public event DetectionHandler OnObjectDetected;
 
@@ -65,8 +65,6 @@ namespace MayhemOpenCVWrapper.LowLevel
             od = new OpenCVDLL.SURFObjectDetector(width, height); 
         }
 
-        
-
        /** <summary>
         *  Method to set the template image for the object detector
         * </summary>
@@ -107,7 +105,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             }
             else
             {
-                Debug.WriteLine("Pixel Format not supported yet!");
+                Logger.WriteLine("Pixel Format not supported yet!");
                 templateIsSet = false;
                 throw(new NotImplementedException());
             }
@@ -115,24 +113,20 @@ namespace MayhemOpenCVWrapper.LowLevel
 
         public override void update_frame(object sender, EventArgs e)
         {
-            Debug.WriteLine(TAG + "frame nr " + frameCount++);
+            Logger.WriteLine("frame nr " + frameCount++);
             Camera camera = sender as Camera;
 
             if (templateIsSet)
             {
-
                 // transmit frame
                 lock (camera.thread_locker)
                 {
-
                     unsafe
                     {
                         fixed (byte* ptr = camera.imageBuffer)
                         {
                             od.ProcessFrame(ptr);
                         }
-
-
                     }
                 }
 
@@ -162,9 +156,9 @@ namespace MayhemOpenCVWrapper.LowLevel
                     }
                 }
 
-                Debug.WriteLine(TAG + "==== Results of SURF descriptor calculation ====");
-                Debug.WriteLine("TemplateKeyPoints: " + nTKeyPts + " ImageKeyPoints " + nIKeyPts + " nMatches " + nMatchingPairs);
-                Debug.Write("Matching Indices: ");
+                Logger.WriteLine("==== Results of SURF descriptor calculation ====");
+                Logger.WriteLine("TemplateKeyPoints: " + nTKeyPts + " ImageKeyPoints " + nIKeyPts + " nMatches " + nMatchingPairs);
+                Logger.Write("Matching Indices: ");
 
                 // template key points
                 List<Point> tempKeyPoints = new List<Point>();
@@ -182,13 +176,10 @@ namespace MayhemOpenCVWrapper.LowLevel
                 }
                 this.lastImageKeyPoints_ = imageKeyPoints;
 
-               
-                
                 // point correspondences
                 for (int i = 0; i < nMatchingPairs; i+=2)
                 {
-                    Debug.Write(matchPairIndices[i] + "," + matchPairIndices[i + 1] + " ");
-
+                    Logger.Write(matchPairIndices[i] + "," + matchPairIndices[i + 1] + " ");
                 }
 
                 // calculate list of matching points in input image
@@ -209,7 +200,6 @@ namespace MayhemOpenCVWrapper.LowLevel
 
                     imageMatchingPoints.Add(tPoint);
                     imageMatchingPoints.Add(iPoint);
-
                 }
 
                 lastImageMatchingPoints_ = imageMatchingPoints;
@@ -235,14 +225,11 @@ namespace MayhemOpenCVWrapper.LowLevel
                         Point cp = new Point(cornerPoints[j++], cornerPoints[j++]);
                         lastCornerPoints_[k] = cp;
                     }
-                    
                 }
                 else
                 {
                     lastCornerPoints_ = null; 
                 }
-
-               
 
                 // TODO: --------------------- firing mechanism
                 if (OnObjectDetected != null && imageMatchingPoints.Count>= DETECT_THRESH && frameCount > 20)
@@ -250,12 +237,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                     OnObjectDetected(this, imageMatchingPoints);
                 }
                 // --------------------------------------------
-
             }
-
-
-
         }
-
     }
 }

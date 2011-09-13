@@ -12,16 +12,12 @@ using System.Diagnostics;
 using MayhemDefaultStyles.UserControls;
 using MayhemOpenCVWrapper.LowLevel;
 
-
-
-
 namespace VisionModules.Events
 {
     [DataContract]
     [MayhemModule("Face Detector", "Detects if and how many faces are in the scene")]
     public class FaceDetectorEvent : EventBase, IWpfConfigurable
     {
-        private const string TAG = "[FaceDetectorEvent] : ";
         private const int detectionInterval = 2500; //ms
         private DateTime lastFacesDetected = DateTime.Now;
         private FaceDetectorComponent fd;
@@ -42,7 +38,6 @@ namespace VisionModules.Events
         {
             Initialize();
         }
-
       
          /** <summary>
          * Called when deserialized / on instantiation
@@ -58,7 +53,7 @@ namespace VisionModules.Events
             }
             else
             {
-                Debug.WriteLine(TAG + "No camera available");
+                Logger.WriteLine("No camera available");
             }
 
             fd = new FaceDetectorComponent();
@@ -78,12 +73,11 @@ namespace VisionModules.Events
             TimeSpan ts = DateTime.Now - lastFacesDetected;
             if (points.Count > 0 && ts.TotalMilliseconds > detectionInterval)
             {
-                Debug.WriteLine(TAG + "m_onFaceDetected");
+                Logger.WriteLine("m_onFaceDetected");
                 base.OnEventActivated();
 
                 lastFacesDetected = DateTime.Now;
             }
-
         }
 
         protected new void SetConfigString()
@@ -95,7 +89,7 @@ namespace VisionModules.Events
         {
             get
             {
-                Debug.WriteLine(TAG + " get ConfigurationControl!");
+                Logger.WriteLine(" get ConfigurationControl!");
 
                 // TODO
                 //string folderLocation = "";
@@ -107,8 +101,6 @@ namespace VisionModules.Events
 
                 config.DeviceList.SelectedIndex = selected_device_idx;
 
-                
-
                 return config;
             }
         }
@@ -116,7 +108,7 @@ namespace VisionModules.Events
         public override void Enable()
         {
             base.Enable();
-            Debug.WriteLine(TAG + "EnableTrigger");
+            Logger.WriteLine("EnableTrigger");
 
             // TODO: Improve this code
             if (selected_device_idx < i.devices_available.Length)
@@ -129,13 +121,12 @@ namespace VisionModules.Events
             // register the trigger's faceDetection update handler
             fd.RegisterForImages(cam);
             fd.OnFaceDetected += m_onFaceDetected;
-
         }
 
         public override void Disable()
         {
             base.Disable();
-            Debug.WriteLine(TAG + "DisableTrigger");
+            Logger.WriteLine("DisableTrigger");
             // de-register the trigger's faceDetection update handler
             fd.UnregisterForImages(cam);
             fd.OnFaceDetected -= m_onFaceDetected;
@@ -145,7 +136,7 @@ namespace VisionModules.Events
 
         public  void OnSaved(IWpfConfiguration configurationControl)
         {
-            Debug.WriteLine(TAG + "OnSaved!");
+            Logger.WriteLine("OnSaved!");
       
             //   folderLocation = ((FaceDetectConfig)configurationControl).location;
 
@@ -159,7 +150,7 @@ namespace VisionModules.Events
             // set the selected bounding rectangle
             boundingRect = ((MotionDetectorConfig)configurationControl).overlay.GetBoundingRect();
 
-            Debug.WriteLine("BOUNDING RECT : " + boundingRect); 
+            Logger.WriteLine("BOUNDING RECT : " + boundingRect); 
             
             // TODO: m.SetMotionBoundaryRect(boundingRect); 
 

@@ -12,13 +12,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows;
 using MayhemOpenCVWrapper.LowLevel;
+using MayhemCore;
 
 
 namespace VisionModules.Wpf
 {
     public  class FaceDetectConfig : MotionDetectorConfig
     {
-        private new const string TAG = "[FaceDetectConfig] : ";
         // use custom face detector to give feedback in the config window
         private FaceDetectorComponent fd;
         private FaceDetectorComponent.DetectionHandler faceDetectUpdateHandler;
@@ -46,9 +46,8 @@ namespace VisionModules.Wpf
          */
         public override void SetCameraImageSource()
         {
-            Debug.WriteLine("[FaceDetectConfig : SetCameraImageSource] ");
             // send a frame to the detector
-            Debug.WriteLine("Updating Face Detector Points");
+            Logger.WriteLine("Updating Face Detector Points");
             fd.update_frame(cam, null);
 
             //int stride = 320 * 3;
@@ -81,7 +80,7 @@ namespace VisionModules.Wpf
             // mark face points if face has been detected
             if (faceDetectorPoints.Count > 0)
             {
-                Debug.WriteLine(TAG+"Drawing Face Detector Points..."); 
+                Logger.WriteLine("Drawing Face Detector Points..."); 
 
                 // make a local copy of the detector points
                 List<System.Drawing.Point> points = new List<System.Drawing.Point>();
@@ -103,17 +102,17 @@ namespace VisionModules.Wpf
 
                 for (int k = 0; k < points.Count; k+=2)
                 {
-                    Debug.Write(TAG + "Drawing --- " + k);
+                    Logger.Write("Drawing --- " + k);
                     int x = points[k].X;
                     int y = points[k].Y;
                     int w = points[k + 1].X-x;
                     int h = points[k+1].Y-y;
-                    Debug.Write(x + " " + y + " w " + w + " h " + h + " " );
+                    Logger.Write(x + " " + y + " w " + w + " h " + h + " " );
                     g.DrawRectangle(pen, x, y, w, h);
                 }
             
 
-                Debug.WriteLine("Done");
+                Logger.WriteLine("Done");
 
 
             }
@@ -138,7 +137,7 @@ namespace VisionModules.Wpf
          */ 
         void m_onFaceDetected(object sender, List<System.Drawing.Point> points)
         {
-            Debug.WriteLine("[FaceDetectConfig] : Got Points from Face Detector!");
+            Logger.WriteLine("Got Points from Face Detector!");
             // update the points in a synchronized block
             lock (this)
             {

@@ -77,7 +77,7 @@ namespace MayhemCore
                                 }
                             }
                             allTypes.Add(type);
-                            //Debug.WriteLine(type);
+                            //Logger.WriteLine(type);
                         }
                     }
                 }

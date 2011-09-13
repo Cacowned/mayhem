@@ -8,7 +8,7 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
@@ -27,17 +27,16 @@ using System.Threading;
 namespace X10Modules.Reactions
 {
     [DataContract]
-    [MayhemModule("X10Reaction","**Testing** Triggers X10 Commands")]
+    [MayhemModule("X10Reaction", "**Testing** Triggers X10 Commands")]
     public class InsteonX10Reaction : ReactionBase, IWpfConfigurable
     {
-        private const string TAG = "[InsteonX10Reaction] : ";
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
 
         [DataMember]
         private X10HouseCode houseCode = X10HouseCode.A;
 
         [DataMember]
-        private X10UnitCode unitCode = X10UnitCode.U1; 
+        private X10UnitCode unitCode = X10UnitCode.U1;
 
         [DataMember]
         private X10CommandCode commandCode = X10CommandCode.ON;
@@ -45,16 +44,15 @@ namespace X10Modules.Reactions
         [DataMember]
         private string serialPortName = string.Empty;
 
-        private X10Controller x10Controller = null; 
+        private X10Controller x10Controller = null;
 
         public IWpfConfiguration ConfigurationControl
         {
-            get 
-            { 
-               // throw new NotImplementedException();
-                Debug.WriteLine(TAG + "ConfigurationControl");
+            get
+            {
+                Logger.WriteLine("ConfigurationControl");
                 InsteonX10ReactionConfig config = new InsteonX10ReactionConfig();
-                return config; 
+                return config;
             }
         }
 
@@ -65,37 +63,34 @@ namespace X10Modules.Reactions
             serial = MayhemSerialPortMgr.instance;
             if (serial.PortExists(this.serialPortName))
             {
-                x10Controller = new X10Controller(serialPortName); 
+                x10Controller = new X10Controller(serialPortName);
             }
         }
 
-
-        public  void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(IWpfConfiguration configurationControl)
         {
-            Debug.WriteLine(TAG + "OnSaved"); 
+            Logger.WriteLine("OnSaved");
             // TODO
-            //throw new NotImplementedException();
             InsteonX10ReactionConfig c = configurationControl as InsteonX10ReactionConfig;
 
             houseCode = c.selected_housecode;
             unitCode = c.selected_unitcode;
             commandCode = c.selected_commandcode;
-            serialPortName = ""+c.selected_portName;
+            serialPortName = "" + c.selected_portName;
             if (x10Controller != null)
             {
                 x10Controller.Dispose();
             }
-            x10Controller = new X10Controller(serialPortName); 
+            x10Controller = new X10Controller(serialPortName);
 
 
         }
 
         public override void Perform()
         {
-            Debug.WriteLine(TAG + "Perform()");
-            //throw new NotImplementedException();
-           // TODO: evaluate if starting a new thread each time is a good idea
-            new Thread(new System.Threading.ThreadStart(() =>  x10Controller.X10SendCommand(houseCode, unitCode, commandCode))).Start();
+            Logger.WriteLine("Perform()");
+            // TODO: evaluate if starting a new thread each time is a good idea
+            new Thread(new System.Threading.ThreadStart(() => x10Controller.X10SendCommand(houseCode, unitCode, commandCode))).Start();
         }
     }
 }

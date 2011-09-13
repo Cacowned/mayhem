@@ -170,10 +170,10 @@ namespace PhoneModules
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                Logger.WriteLine(e);
             }
             isServiceRunning = true;
-            Debug.WriteLine("Phone service started");
+            Logger.WriteLine("Phone service started");
             return true;
         }
 
@@ -186,7 +186,7 @@ namespace PhoneModules
 
         void service_EventCalled(string eventText)
         {
-            Debug.WriteLine("Event called: " + eventText);
+            Logger.WriteLine("Event called: " + eventText);
             if (EventCalled != null)
             {
                 EventCalled(eventText);

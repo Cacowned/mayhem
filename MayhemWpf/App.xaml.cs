@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Threading;
 using System.Runtime.InteropServices;
 
-
 namespace MayhemWpf
 {
 	/// <summary>
@@ -32,7 +31,7 @@ namespace MayhemWpf
 
             //foreach (string arg in e.Args)
             //{
-            //    Debug.WriteLine(arg);
+            //    Logger.WriteLine(arg);
             //}
 
             if (e.Args.Any())
@@ -78,7 +77,7 @@ namespace MayhemWpf
             {
                 manager.LocalRepository.GetPackages();
 
-                Debug.WriteLine(package.GetFullName());
+                Logger.WriteLine(package.GetFullName());
 
                 //var existingPackage = manager.LocalRepository.FindPackage(package.Id);
                 //if (existingPackage == null)

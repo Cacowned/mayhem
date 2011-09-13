@@ -15,6 +15,7 @@ using System.IO;
 using System.Windows.Media.Animation;
 using System.Diagnostics;
 using Microsoft.Win32;
+using MayhemCore;
 
 namespace PhoneModules.Controls
 {
@@ -107,7 +108,7 @@ namespace PhoneModules.Controls
 
         void PhoneUIElement_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine("Down");
+            Logger.WriteLine("Down");
             startPoint = e.GetPosition(Parent as Canvas);
             startCanvasLoc = new Point(Canvas.GetLeft(this), Canvas.GetTop(this));
             //elementMoved = false;
@@ -120,7 +121,7 @@ namespace PhoneModules.Controls
         {
             if (isMovingElement && e.LeftButton == MouseButtonState.Pressed)
             {
-                Debug.WriteLine("Move");
+                Logger.WriteLine("Move");
                 //elementMoved = true;
                 Point point = e.GetPosition(Parent as Canvas);
                 double x = startCanvasLoc.X + point.X - startPoint.X;
@@ -136,7 +137,7 @@ namespace PhoneModules.Controls
 
         private void canvas1_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine("Up");
+            Logger.WriteLine("Up");
             //if (currentlyMovingElement != null)
             //{
             //if (!elementMoved)
@@ -202,7 +203,7 @@ namespace PhoneModules.Controls
 
         private void PhoneUIElement_LostFocus(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Lost focus");
+            Logger.WriteLine("Lost focus");
             //this.Focus();
             textBox1.CaretBrush = new SolidColorBrush(Colors.Transparent);
             buttonText.Background = defaultButtonBrush;

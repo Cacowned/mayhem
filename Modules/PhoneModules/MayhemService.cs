@@ -9,6 +9,7 @@ using System.Threading;
 using System.ServiceModel.Web;
 using System.ServiceModel.Channels;
 using System.Reflection;
+using MayhemCore;
 
 namespace PhoneModules
 {
@@ -68,7 +69,7 @@ namespace PhoneModules
             MessageProperties messageProperties = context.IncomingMessageProperties;
             RemoteEndpointMessageProperty endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
 
-            Debug.WriteLine(update + " " + WebOperationContext.Current.IncomingRequest.UserAgent);
+            Logger.WriteLine(update + " " + WebOperationContext.Current.IncomingRequest.UserAgent);
             WebOperationContext.Current.OutgoingResponse.ContentType = "text/html";
 
             if (!resetEvents.ContainsKey(endpointProperty.Address))
@@ -98,7 +99,7 @@ namespace PhoneModules
         }
         public void Event(string text)
         {
-            Debug.WriteLine("Event " + text);
+            Logger.WriteLine("Event " + text);
             if (EventCalled != null)
             {
                 EventCalled(text);
@@ -130,7 +131,7 @@ namespace PhoneModules
             }
             catch (Exception erf)
             {
-                Debug.WriteLine(erf);
+                Logger.WriteLine(erf);
             }
             return css;
         }

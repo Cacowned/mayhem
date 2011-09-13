@@ -40,8 +40,6 @@ namespace XboxModules.Events
 
         #endregion
 
-        protected const string TAG = "[Xbox]";
-
         protected override void Initialize()
         {
             base.Initialize();
@@ -86,11 +84,9 @@ namespace XboxModules.Events
                 }
             }
         }
-
         
         public void OnSaved(IWpfConfiguration configurationControl)
         {
-
             buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
             XboxButtons = ((XboxButtonConfig)configurationControl).SaveButtons;
             buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);

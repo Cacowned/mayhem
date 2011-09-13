@@ -29,7 +29,6 @@ namespace X10Modules.Reactions
     [MayhemModule("InsteonReaction", "**Testing** Triggers Insteon Commands")]
     public class InsteonReaction : ReactionBase, IWpfConfigurable
     {
-        private const string TAG = "[InsteonReaction] : ";
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
 
         [DataMember]
@@ -66,12 +65,9 @@ namespace X10Modules.Reactions
         {
             get 
             {
-
                 //throw new NotImplementedException();
-                Debug.WriteLine(TAG + "ConfigurationControl");
+                Logger.WriteLine("ConfigurationControl");
                 return new InsteonReactionConfig();
-            
-            
             }
         }
 

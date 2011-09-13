@@ -15,6 +15,7 @@ using MayhemOpenCVWrapper;
 using System.Diagnostics;
 using System.Drawing;
 using MayhemDefaultStyles.UserControls;
+using MayhemCore;
 
 namespace VisionModules.Wpf
 {
@@ -23,12 +24,10 @@ namespace VisionModules.Wpf
     /// </summary>
     public partial class MotionDetectorConfig : IWpfConfiguration
     {
-        public const string TAG = "[MotionDetectorConfig] :";
         private CameraDriver i = CameraDriver.Instance;
         protected Camera cam = null;
         public Camera selected_camera = null;
        
-
         private delegate void VoidHandler();
 
         // basically forward assignments to the actual overlay
@@ -54,10 +53,8 @@ namespace VisionModules.Wpf
 
         public override void OnLoad()
         {
-          
             // populate device list
-
-            Debug.WriteLine(TAG+"OnLoad");
+            Logger.WriteLine("OnLoad");
 
             foreach (Camera c in i.cameras_available)
             {
@@ -75,18 +72,15 @@ namespace VisionModules.Wpf
 
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.OnImageUpdated += i_OnImageUpdated;
-                Debug.WriteLine(TAG + "using " + cam.info.ToString());
+                Logger.WriteLine("using " + cam.info.ToString());
             }
             else
             {
-                Debug.WriteLine(TAG + "No camera available");
+                Logger.WriteLine("No camera available");
             }
 
            // overlay.DisplayBoundingRect();
-     
         }
-       
-        
 
         /**<summary>
          * Invokes image source setting when a new image is available from the update handler. 
@@ -94,7 +88,6 @@ namespace VisionModules.Wpf
          */
         public void i_OnImageUpdated(object sender, EventArgs e)
         {
-            Debug.WriteLine("[i_OnImageUpdated] ");
             Dispatcher.Invoke(new VoidHandler(SetCameraImageSource), null);
         }
 
@@ -104,8 +97,6 @@ namespace VisionModules.Wpf
          */ 
         public virtual void SetCameraImageSource()
         {
-            Debug.WriteLine("[SetCameraImageSource] ");
-
             /*
             //int stride = 320 * 3;
             Bitmap BackBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -144,8 +135,6 @@ namespace VisionModules.Wpf
 
             BackBuffer.Dispose();
             VisionModulesWPFCommon.DeleteObject(hBmp);
-
-
         }
 
         public override void OnClosing()

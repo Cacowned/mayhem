@@ -13,8 +13,6 @@ namespace DefaultModules.Reactions
     [MayhemModule("Play Sound", "Plays an audio file when triggered")]
     public class PlaySound : ReactionBase, ICli, IWpfConfigurable
     {
-        protected const string TAG = "[PlaySound]";
-
         MPlayer m;
 
         #region Configuration Properties
@@ -84,7 +82,7 @@ namespace DefaultModules.Reactions
 
             do
             {
-                Console.WriteLine(String.Format("{0} Enter the path for the audio file", TAG));
+                Console.WriteLine(String.Format("{0} Enter the path for the audio file", "[PlaySound]"));
                 path = Console.ReadLine();
             }
             while (!File.Exists(path));

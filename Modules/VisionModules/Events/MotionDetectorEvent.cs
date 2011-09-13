@@ -26,8 +26,6 @@ namespace VisionModules.Events
     [MayhemModule("Motion Detector", "Detects when there is motion in the frame")]
     public class MotionDetector : EventBase, IWpfConfigurable
     {
-
-        private const string TAG = "[MotionDetector] : ";
         private DateTime lastMotionDetected = DateTime.Now;
         private const int detectionInterval = 5000; //ms
 
@@ -35,7 +33,6 @@ namespace VisionModules.Events
         
         [DataMember]
         Rect boundingRect = new Rect(0,0,0,0);
-
 
         private MotionDetectorComponent.DetectionHandler motionUpdateHandler;
 
@@ -58,10 +55,10 @@ namespace VisionModules.Events
          * </summary> */
         protected override void Initialize()
         {
-            Debug.WriteLine(TAG + "Initialize");
+            Logger.WriteLine("Initialize");
             base.Initialize();
 
-            Debug.WriteLine(TAG + "Enumerating Devices");
+            Logger.WriteLine("Enumerating Devices");
 
             if (i == null)
                 i = CameraDriver.Instance; 
@@ -72,7 +69,7 @@ namespace VisionModules.Events
             }
             else
             {
-                Debug.WriteLine(TAG + "No camera available");
+                Logger.WriteLine("No camera available");
             }
 
             m = new MotionDetectorComponent(320, 240);
@@ -91,7 +88,7 @@ namespace VisionModules.Events
             if (ts.TotalMilliseconds > detectionInterval)
             {
 
-                Debug.WriteLine(TAG + "m_OnMotionUpdate");
+                Logger.WriteLine("m_OnMotionUpdate");
 
                 // trigger the reaction
                 base.OnEventActivated();
@@ -142,7 +139,7 @@ namespace VisionModules.Events
         public override void Enable()
         {
             base.Enable();
-            Debug.WriteLine(TAG + "Enable");
+            Logger.WriteLine("Enable");
 
             // TODO: Improve this code
             if (selected_device_idx < i.devices_available.Length)
@@ -161,7 +158,7 @@ namespace VisionModules.Events
         public override void Disable()
         {
             base.Disable();
-            Debug.WriteLine(TAG + "Disable");
+            Logger.WriteLine("Disable");
             // de-register the trigger's motion update handler
             m.UnregisterForImages(cam);
             m.OnMotionUpdate -= motionUpdateHandler;

@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Diagnostics;
+using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {
@@ -23,23 +24,22 @@ namespace MayhemOpenCVWrapper
     {
         public override event ImageUpdateHandler OnImageUpdated;
 
-        public const string TAG = "[DummyCamera] :";
         public  override Bitmap ImageAsBitmap()
         {
-            Debug.WriteLine(TAG + "returning dummy image");
+            Logger.WriteLine("returning dummy image");
             // todo: add Mayhem's logo or something 
             return new Bitmap(320, 240);
         }
 
         public override  void StartFrameGrabbing()
         {
-            Debug.WriteLine(TAG + "StartFrameGrabbing");
+            Logger.WriteLine("StartFrameGrabbing");
             // no-op
         }
 
         public override bool TryStopFrameGrabbing()
         {
-            Debug.WriteLine(TAG + "TryStopFrameGrabbing");
+            Logger.WriteLine("TryStopFrameGrabbing");
             return true; 
         }
     }
