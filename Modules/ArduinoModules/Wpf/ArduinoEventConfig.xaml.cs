@@ -44,7 +44,8 @@ namespace ArduinoModules.Wpf
     /// Interaction logic for ArduinoEventConfig.xaml
     /// </summary>
     public partial class ArduinoEventConfig : IWpfConfiguration, IArduinoEventListener
-    {
+    {     
+        
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
         private int itemSelected = -1;
         private Dictionary<string, string>  deviceNamesIds = null;
@@ -137,11 +138,7 @@ namespace ArduinoModules.Wpf
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //analog_pin_items.Clear();
-            //digital_pin_items.Clear();
-
-
+        {    
             string portname = (string)deviceList.SelectedValue;
             bool update_pins = false; 
 
@@ -170,6 +167,7 @@ namespace ArduinoModules.Wpf
                 AnalogPinItem.ResetAnalogIDs();
                 arduino.QueryPins();
             }
+
         }
 
         #region IWpfConfigurable overrides
@@ -208,7 +206,8 @@ namespace ArduinoModules.Wpf
 
         public void Arduino_OnAnalogPinChanged(Pin p)
         {
-            //Logger.WriteLine("arduino_OnAnalogPinChanged: " + p.analog_channel + " v:"+p.value );
+            //throw new NotImplementedException();
+            //Debug.WriteLine(TAG+ "arduino_OnAnalogPinChanged: " + p.analog_channel + " v:"+p.value );
             if (p.analog_channel < analog_pin_items.Count)
             {             
                 // refresh data grid items
@@ -218,7 +217,8 @@ namespace ArduinoModules.Wpf
 
         public void Arduino_OnDigitalPinChanged(Pin p)
         {
-            Logger.WriteLine("arduino_OnDigitalPinChanged " + p.id + " " + p.value);
+            //throw new NotImplementedException();
+            Logger.WriteLine( "arduino_OnDigitalPinChanged " + p.id + " " + p.value);
 
             if (p.id < digital_pin_items.Count)
             {
@@ -230,11 +230,14 @@ namespace ArduinoModules.Wpf
                 }
                       
             }
+
+
         }
 
         public void Arduino_OnPinAdded(Pin p)
         {
-            Logger.WriteLine("arduino_OnPinAdded: " + p.analog_channel );
+            //throw new NotImplementedException();
+            Debug.WriteLine("arduino_OnPinAdded: " + p.analog_channel );
 
             if (p.mode != PIN_MODE.ANALOG && 
                 p.mode != PIN_MODE.UNASSIGNED && 
@@ -253,6 +256,9 @@ namespace ArduinoModules.Wpf
                 AnalogPinItem aItem = new AnalogPinItem(false, p.id, ANALOG_PIN_CHANGE.EQUALS);
                 Dispatcher.Invoke(new Action(() => { analog_pin_items.Add(aItem);}), null);
             }
+
+
+
         }
 
         #endregion

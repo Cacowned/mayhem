@@ -1,7 +1,7 @@
 ﻿/*
  * ArduinoEvent.cs
  * 
- * An event that reacts to basic Arduino events such as pin state changes. 
+ * An event that triggers to basic Arduino pin state changes. 
  * 
  * (c) 2011, Microsoft Applied Sciences Group
  * 
@@ -28,7 +28,7 @@ namespace ArduinoModules.Events
     [MayhemModule("Arduino Event", "**Testing** Detects Pin Changes in Arduino")]
     public class ArduinoEvent : EventBase, IWpfConfigurable
     {
-        private const string TAG = "[ArduinoEvent] : ";
+       
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
 
         [DataMember]
@@ -64,7 +64,7 @@ namespace ArduinoModules.Events
         {
             get
             {
-                Debug.WriteLine(TAG + "ConfigurationControl");
+                Logger.WriteLine("ConfigurationControl");
 
                 // TODO
   
