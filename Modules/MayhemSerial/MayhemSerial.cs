@@ -525,7 +525,7 @@ namespace MayhemSerial
         #region data received and other callbacks
         void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            Debug.WriteLine(TAG + "----> port_DataReceived <----");
+            //Debug.WriteLine(TAG + "----> port_DataReceived <----");
 
             if (allowRX)
             {
