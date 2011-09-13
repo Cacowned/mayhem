@@ -138,15 +138,50 @@ namespace ArduinoModules.Wpf
         /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string portname = (string)deviceList.SelectedValue;
+            //analog_pin_items.Clear();
+            //digital_pin_items.Clear();
 
-            if (arduino == null)
-                arduino = ArduinoFirmata.InstanceForPortname(portname);
-           
+
+            string portname = (string)deviceList.SelectedValue;
+            bool update_pins = false; 
+
+            if (arduino != null)
+            {
+                // clear pin containers and unhook event ghandlers
+                analog_pin_items.Clear();
+                digital_pin_items.Clear();
+
+                arduino.OnAnalogPinChanged -= arduino_OnAnalogPinChanged;
+                arduino.OnDigitalPinChanged -= arduino_OnDigitalPinChanged;
+                arduino.OnPinAdded -= arduino_OnPinAdded;
+                arduino.OnInitialized -= arduino_OnInitialized;
+
+            }
+            
+            // update pins ? 
+            if (ArduinoFirmata.InstanceExists(portname))
+                update_pins = true;
+
+            arduino = ArduinoFirmata.InstanceForPortname(portname);
+
+            arduino.OnAnalogPinChanged -= arduino_OnAnalogPinChanged;
+            arduino.OnDigitalPinChanged -= arduino_OnDigitalPinChanged;
+            arduino.OnPinAdded -= arduino_OnPinAdded;
+            arduino.OnInitialized -= arduino_OnInitialized;
             arduino.OnPinAdded += new Action<Pin>(arduino_OnPinAdded);
             arduino.OnDigitalPinChanged += new Action<Pin>(arduino_OnDigitalPinChanged);
             arduino.OnAnalogPinChanged += new Action<Pin>(arduino_OnAnalogPinChanged);
             arduino.OnInitialized += new EventHandler(arduino_OnInitialized);
+
+            // update pins if the arduino already exists
+            // this makes arduino call the OnPinAdded callbacks, which in turn
+            // fill the gridViews with the detected pins 
+            if (update_pins)
+            {
+                AnalogPinItem.ResetAnalogIDs();
+                arduino.QueryPins();
+            }
+
         }
 
         #region IWpfConfigurable overrides
@@ -282,6 +317,10 @@ namespace ArduinoModules.Wpf
 
         #endregion
 
+        
+
+        #region GridView Responsiveness while updating 
+       
         private void digitalPins_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
             t.Enabled = false;
@@ -289,7 +328,7 @@ namespace ArduinoModules.Wpf
 
             (sender as DataGrid).RowEditEnding -= digitalPins_RowEditEnding;
             (sender as DataGrid).CommitEdit();
-           // (sender as DataGrid).Items.Refresh();
+            // (sender as DataGrid).Items.Refresh();
             (sender as DataGrid).RowEditEnding += digitalPins_RowEditEnding;
 
             bg_pinUpdate.RunWorkerAsync();
@@ -326,9 +365,10 @@ namespace ArduinoModules.Wpf
             while (bg_pinUpdate.IsBusy) ;
         }
 
-       
+        #endregion
 
-        
-   
+
+
+
     }
 }
