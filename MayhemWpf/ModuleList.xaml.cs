@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.ComponentModel;
+using System.Threading;
 
 namespace MayhemWpf
 {
@@ -147,12 +148,16 @@ namespace MayhemWpf
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
+            IWpfConfiguration config = ConfigContent.Content as IWpfConfiguration;
             if (iWpfConfig.OnSave())
             {
-                SelectedModuleInstance.OnSaved(ConfigContent.Content as IWpfConfiguration);
+                SelectedModuleInstance.OnSaved(config);
                 ((ModuleBase)SelectedModuleInstance).SetConfigString();
             }
-            iWpfConfig.OnClosing();
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+                {
+                    iWpfConfig.OnClosing();
+                }));
             DialogResult = true;
         }
 
@@ -164,8 +169,11 @@ namespace MayhemWpf
                 ConfigContent.SizeChanged -= new SizeChangedEventHandler(ConfigContent_SizeChanged);
             }
 
-            iWpfConfig.OnCancel();
-            iWpfConfig.OnClosing();
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+                {
+                    iWpfConfig.OnCancel();
+                    iWpfConfig.OnClosing();
+                }));
 
             animSlideOut.To = new Thickness(0);
             stackPanelList.BeginAnimation(StackPanel.MarginProperty, animSlideOut);
