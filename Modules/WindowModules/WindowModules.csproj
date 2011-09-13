@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -68,6 +69,7 @@
     <Compile Include="Native.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WindowInfo.cs" />
+    <Compile Include="WMIProcess.cs" />
     <Compile Include="Wpf\WindowClose.xaml.cs">
       <DependentUpon>WindowClose.xaml</DependentUpon>
     </Compile>
