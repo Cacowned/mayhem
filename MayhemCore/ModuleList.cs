@@ -19,13 +19,10 @@ namespace MayhemCore
         {
 		}
 
-        public void ScanModules(string path) 
+        public bool ScanModules(string path) 
         {
             // Load up all the types of things that we want in the application root
-            FindTypes(path);
-            //Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modules"));
-            //FindTypes(Path.Combine(Application.StartupPath, "modules"));
-            //FindTypes(Application.StartupPath);
+            return FindTypes(path);
         }
 
 		/// <summary>
@@ -33,7 +30,7 @@ namespace MayhemCore
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		protected void FindTypes(string path)
+		protected bool FindTypes(string path)
         {
 			if (String.IsNullOrEmpty(path))
             {
@@ -42,6 +39,9 @@ namespace MayhemCore
 
             // Clear this of all the modules
             this.Clear();
+
+            if (!Directory.Exists(path))
+                return false;
 
 			string[] pluginFiles = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
 
@@ -77,16 +77,17 @@ namespace MayhemCore
                                 }
                             }
                             allTypes.Add(type);
-                            Debug.WriteLine(type);
+                            //Debug.WriteLine(type);
                         }
                     }
                 }
-                catch (Exception e)
+                catch // (Exception e)
                 {
-                    Trace.WriteLine("Error opening file: \n" + e);
+                  //  Trace.WriteLine("Error opening file: \n" + e);
                 }
 			}
             this.Sort();
+            return true;
 		}
 
         public Type[] GetAllTypesInModules()

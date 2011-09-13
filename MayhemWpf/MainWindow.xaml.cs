@@ -41,6 +41,14 @@ namespace MayhemWpf
 
         public MainWindow()
         {
+            if (!UriParser.IsKnownScheme("pack"))
+                UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
+
+            ResourceDictionary dict = new ResourceDictionary();
+            Uri uri = new Uri("/MayhemDefaultStyles;component/Styles.xaml", UriKind.Relative);
+            dict.Source = uri;
+            Application.Current.Resources.MergedDictionaries.Add(dict);
+
             mayhem = Mayhem.Instance;
             mayhem.SetConfigurationType(typeof(IWpfConfigurable));
 
@@ -53,12 +61,16 @@ namespace MayhemWpf
             else
             {
                 directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages");
-                //directory = AppDomain.CurrentDomain.BaseDirectory;
             }
 
             // Scan for modules in the module directory
-            mayhem.EventList.ScanModules(directory);
-            mayhem.ReactionList.ScanModules(directory);
+            bool foundModules = mayhem.EventList.ScanModules(directory);
+            foundModules &= mayhem.ReactionList.ScanModules(directory);
+            if (!foundModules)
+            {
+                ///TODO: Do something user-friendly here
+                throw new Exception("No modules!");
+            }
 
             InitializeComponent();
         }

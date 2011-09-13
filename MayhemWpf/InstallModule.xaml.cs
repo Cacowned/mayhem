@@ -27,6 +27,14 @@ namespace MayhemWpf
 
         public InstallModule(IPackage package)
         {
+            if (!UriParser.IsKnownScheme("pack"))
+                UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
+
+            ResourceDictionary dict = new ResourceDictionary();
+            Uri uri = new Uri("/MayhemDefaultStyles;component/Styles.xaml", UriKind.Relative);
+            dict.Source = uri;
+            Application.Current.Resources.MergedDictionaries.Add(dict);
+
             this.Package = package;
 
             InitializeComponent();
@@ -73,6 +81,9 @@ namespace MayhemWpf
                 // Install the package
                 packageManager.InstallPackage(Package, ignoreDependencies: false);
 
+                Progress.Value = 100;
+                Progress.Dispatcher.Invoke(EmptyDelagate, DispatcherPriority.Render);
+                Thread.Sleep(200);
                 DialogResult = true;
             }
             catch (Exception ex)
