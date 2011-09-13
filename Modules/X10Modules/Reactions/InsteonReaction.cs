@@ -12,18 +12,15 @@
 
 // TODO: SERIALIZATION 
 
- 
-using System;
-using System.Collections.Generic;
+
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using MayhemDefaultStyles.UserControls;
 using MayhemSerial;
 using X10Modules.Insteon;
-using MayhemDefaultStyles.UserControls;
-using System.Diagnostics;
 using X10Modules.Wpf;
 
 namespace X10Modules.Reactions

@@ -21,7 +21,6 @@ namespace PhidgetModules.Events
             Index = ((Phidget1133SoundConfig)configurationControl).Index;
             TopValue = ((Phidget1133SoundConfig)configurationControl).TopValue;
             Increasing = ((Phidget1133SoundConfig)configurationControl).Increasing;
-            SetConfigString();
         }
 
         public override double Convert(int value)

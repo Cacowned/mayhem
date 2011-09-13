@@ -139,7 +139,6 @@ namespace PhoneModules
             {
                 PhoneUIElementButton button = ((PhoneFormDesigner)configurationControl).SelectedElement as PhoneUIElementButton;
                 id = button.LayoutInfo.ID;
-                SetConfigString();
             }
         }
     }

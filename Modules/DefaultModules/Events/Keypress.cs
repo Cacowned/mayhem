@@ -22,18 +22,11 @@ namespace DefaultModules.Events
 
         public static bool IsConfigOpen = false;
 
-        HashSet<System.Windows.Forms.Keys> keysDown = new HashSet<System.Windows.Forms.Keys>();
         [DataMember]
         private HashSet<System.Windows.Forms.Keys> MonitorKeysDown
         {
-            get
-            {
-                return keysDown;
-            }
-            set
-            {
-                keysDown = value;
-            }
+            get;
+            set;
         }
 
         protected override void Initialize()
@@ -41,6 +34,8 @@ namespace DefaultModules.Events
             base.Initialize();
 
             interceptKeys = InterceptKeys.Instance;
+
+            MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
         }
 
         public IWpfConfiguration ConfigurationControl
@@ -53,7 +48,6 @@ namespace DefaultModules.Events
             interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
             MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;
             interceptKeys.AddCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
-            SetConfigString();
         }
 
         public override void SetConfigString()

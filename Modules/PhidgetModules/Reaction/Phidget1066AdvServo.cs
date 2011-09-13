@@ -81,7 +81,6 @@ namespace PhidgetModules.Reaction
         {
             ServoType = (configurationControl as Phidget1066AdvServoConfig).ServoType;
             Position = (configurationControl as Phidget1066AdvServoConfig).Position;
-            SetConfigString();
         }
 
         public override void SetConfigString()

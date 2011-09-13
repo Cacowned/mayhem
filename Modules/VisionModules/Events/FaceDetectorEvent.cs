@@ -70,8 +70,6 @@ namespace VisionModules.Events
             {
                 m.SetMotionBoundaryRect(boundingRect);
             } */
-
-            SetConfigString();
         }
 
         void m_onFaceDetected(object sender, List<System.Drawing.Point> points)
@@ -167,11 +165,6 @@ namespace VisionModules.Events
 
             if (wasEnabled)
                 this.Enable();
-
-            SetConfigString();
-
-
-
         }
     }
 }

@@ -78,7 +78,6 @@ namespace VisionModules.Reactions
 
         public void Setup()
         {
-            SetConfigString();
 
             imageUpdateHandler = new Camera.ImageUpdateHandler(camera_update);
      
@@ -233,7 +232,6 @@ namespace VisionModules.Reactions
                 cam = new DummyCamera(); 
             }
             capture_offset_time = config.slider_value;
-            SetConfigString();
         }
 
         private new void SetConfigString()

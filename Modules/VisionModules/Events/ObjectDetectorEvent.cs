@@ -130,8 +130,6 @@ namespace VisionModules.Events
             // -----------
 
             Debug.WriteLine(testString);
-
-            SetConfigString();
         }
 
         void m_onObjectDetected(object sender, List<Point> matchingKeyPoints)
@@ -260,8 +258,6 @@ namespace VisionModules.Events
             // TODO: od.SetDetectionBoundaryRect(boundingRect) 
 
             testString = "FOOBAR";
-
-            SetConfigString();
         }
     }
 }
