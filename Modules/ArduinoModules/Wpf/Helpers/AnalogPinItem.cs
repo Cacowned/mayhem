@@ -53,6 +53,11 @@ namespace ArduinoModules.Wpf
 
         private int setValue = 0;
 
+        public static void ResetAnalogIDs()
+        {
+            analog_pin_id = 0;
+        }
+
         // change threshold value set by user
         public int SetValue
         {
@@ -76,7 +81,6 @@ namespace ArduinoModules.Wpf
                         setValue = 1024;
                 }
             }
-
         }
 
 
