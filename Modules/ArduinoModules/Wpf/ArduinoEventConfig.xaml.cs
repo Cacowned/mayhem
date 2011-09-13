@@ -116,6 +116,7 @@ namespace ArduinoModules.Wpf
         }
 
        
+        
 
         private void IWpfConfiguration_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -150,12 +151,6 @@ namespace ArduinoModules.Wpf
                 // clear pin containers and unhook event ghandlers
                 analog_pin_items.Clear();
                 digital_pin_items.Clear();
-
-                /*
-                arduino.OnAnalogPinChanged -= Arduino_OnAnalogPinChanged;
-                arduino.OnDigitalPinChanged -= Arduino_OnDigitalPinChanged;
-                arduino.OnPinAdded -= Arduino_OnPinAdded;
-                arduino.OnInitialized -= Arduino_OnInitialized;*/
                 arduino.DeregisterListener(this);
 
             }
@@ -164,17 +159,7 @@ namespace ArduinoModules.Wpf
             if (ArduinoFirmata.InstanceExists(portname))
                 update_pins = true;
 
-            arduino = ArduinoFirmata.InstanceForPortname(portname);
-
-            /*
-            arduino.OnAnalogPinChanged -= Arduino_OnAnalogPinChanged;
-            arduino.OnDigitalPinChanged -= Arduino_OnDigitalPinChanged;
-            arduino.OnPinAdded -= Arduino_OnPinAdded;
-            arduino.OnInitialized -= Arduino_OnInitialized;
-            arduino.OnPinAdded += Arduino_OnPinAdded;
-            arduino.OnDigitalPinChanged += Arduino_OnDigitalPinChanged;
-            arduino.OnAnalogPinChanged += Arduino_OnAnalogPinChanged;
-            arduino.OnInitialized += Arduino_OnInitialized;*/
+            arduino = ArduinoFirmata.InstanceForPortname(portname);       
             arduino.RegisterListener(this);
 
             // update pins if the arduino already exists
@@ -192,13 +177,10 @@ namespace ArduinoModules.Wpf
         #region IWpfConfigurable overrides
         public override void OnClosing()
         {
-            /*
-            arduino.OnAnalogPinChanged -= Arduino_OnAnalogPinChanged;
-            arduino.OnDigitalPinChanged -= Arduino_OnDigitalPinChanged;
-            arduino.OnPinAdded -= Arduino_OnPinAdded;
-            arduino.OnInitialized -= Arduino_OnInitialized;*/
             arduino.DeregisterListener(this);
             t.Enabled = false;
+            bg_pinUpdate.CancelAsync();
+            bg_pinUpdate.Dispose();
             base.OnClosing();
         }
      
