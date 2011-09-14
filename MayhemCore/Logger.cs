@@ -17,14 +17,14 @@ namespace MayhemCore
             return "[" + callingClass + "." + callingMethod + "] ";
         }
 
-        public static void Write(object o)
+        public static void Write(object obj)
         {
-            Debug.Write(GetCallStackString() + o);
+            Debug.Write(GetCallStackString() + obj);
         }
 
-        public static void WriteLine(object o)
+        public static void WriteLine(object obj)
         {
-            Debug.WriteLine(GetCallStackString() + o);
+            Debug.WriteLine(GetCallStackString() + obj);
         }
 
         public static void WriteLine(string format, params object [] args)
@@ -32,11 +32,11 @@ namespace MayhemCore
             Debug.WriteLine(GetCallStackString() + format, args);
         }
 
-        public static void WriteLineIf(bool condition, object o)
+        public static void WriteLineIf(bool condition, object obj)
         {
             if (condition)
             {
-                WriteLine(o);
+                WriteLine(obj);
             }
         }
     }

@@ -6,7 +6,7 @@ using MayhemCore;
 namespace DefaultModules.Reactions.Media
 {
     [DataContract]
-    [MayhemModuleAttribute("Media: Next Item", "Goes to the next item when triggered")]
+    [MayhemModule("Media: Next Item", "Goes to the next item when triggered")]
     public class NextItem : ReactionBase
     {
         public override void Perform()

@@ -41,7 +41,7 @@ namespace VisionModules.Events
     }
 
     [DataContract]
-    [MayhemModuleAttribute("*Presence Detector", "Detects presence of humans in the scene")]
+    [MayhemModule("*Presence Detector", "Detects presence of humans in the scene")]
     public class PresenceEvent : EventBase, IWpfConfigurable
     {
 
