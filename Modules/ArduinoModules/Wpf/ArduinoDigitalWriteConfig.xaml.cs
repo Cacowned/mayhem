@@ -81,6 +81,13 @@ namespace ArduinoModules.Wpf
                 deviceList.SelectedValuePath = "Key";
                 deviceList.SelectedIndex = 0;
             }
+
+            // directly display the list if there is only one board attached
+            if (deviceNamesIds.Count == 1)
+            {
+                connectButton_Click(this, null);
+            }
+
        
         }
 
@@ -116,6 +123,8 @@ namespace ArduinoModules.Wpf
                 AnalogPinItem.ResetAnalogIDs();
                 arduino.QueryPins();
             }
+
+            connectButton.IsEnabled = false;
         }
 
         public override void OnClosing()
@@ -161,5 +170,20 @@ namespace ArduinoModules.Wpf
 
         }
         #endregion
+
+        private void deviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox box = sender as ComboBox;
+
+            if (arduino != null && (string) box.SelectedValue != (string) arduino.portName)
+            {
+                connectButton.IsEnabled = true;
+            }
+            else
+            {
+                connectButton.IsEnabled = false;
+            }
+                
+        }
     }
 }

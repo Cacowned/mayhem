@@ -9,7 +9,7 @@
         <StackPanel Orientation="Vertical">
             <Label>Select COM port on which an Arduino is connected:</Label>
             <StackPanel Orientation="Horizontal">
-                <ComboBox Name="deviceList" Width="200"></ComboBox>
+                <ComboBox Name="deviceList" Width="200" SelectionChanged="deviceList_SelectionChanged"></ComboBox>
                 <Button Name="connectButton" Margin="10 0 0 0" Click="connectButton_Click">Connect</Button>
             </StackPanel>
             <Label>Set digital pin output modes when triggered:</Label>
