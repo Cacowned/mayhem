@@ -18,19 +18,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ArduinoModules.Firmata;
+using System.Runtime.Serialization;
 
 namespace ArduinoModules.Wpf
 {
     /// <summary>
     /// Items for Ditial pins ItemsControl 
     /// </summary>
+    [DataContract]
     public class DigitalPinItem
     {
         // selected
+        [DataMember]
         private bool isChecked = false;
         public bool Selected { get { return isChecked; } set { isChecked = value; } }
 
         // friendly name
+        [DataMember]
         private string pinName_;
         public string PinName
         {
@@ -38,9 +42,11 @@ namespace ArduinoModules.Wpf
         }
 
         // change type
+        [DataMember]
         private DIGITAL_PIN_CHANGE monitor_pin_change_ { get; set; }
         public DIGITAL_PIN_CHANGE ChangeType { get { return monitor_pin_change_; } set { monitor_pin_change_ = value; } }
 
+        [DataMember]
         private int firmata_pin_id_ = 0;
         public int GetPinID()
         {
@@ -49,7 +55,7 @@ namespace ArduinoModules.Wpf
         //public int pin_id { get { return pin_id_; } }
 
         // state
-
+        [DataMember]
         private int  digitalPinState_ = 0;
 
         /// <summary>
