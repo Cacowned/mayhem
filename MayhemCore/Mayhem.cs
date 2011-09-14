@@ -90,9 +90,5 @@ namespace MayhemCore
                 ConnectionList.Add(c);
             }
         }
-
-        public void Stop()
-        {
-        }
     }
 }

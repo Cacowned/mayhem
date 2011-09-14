@@ -34,7 +34,7 @@ namespace MayhemCore
         {
 			if (String.IsNullOrEmpty(path))
             {
-				throw new ArgumentNullException("The given path is null or empty");
+				throw new ArgumentNullException(path, "The given path is null or empty");
 			}
 
             // Clear this of all the modules
