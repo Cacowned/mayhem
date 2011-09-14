@@ -49,13 +49,15 @@ namespace ArduinoModules.Wpf
         //public int pin_id { get { return pin_id_; } }
 
         // state
+
         private int  digitalPinState_ = 0;
 
         /// <summary>
-        /// Explicit getter implementation to avoid getting columnized
+        /// Explicit getter/setter implementation to avoid getting columnized
         /// </summary>
         /// <returns></returns>
         public int GetDigitalPinState(){ return digitalPinState_;}
+       
 
 
         public string CurrentPinState
