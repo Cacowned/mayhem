@@ -40,7 +40,15 @@ namespace MayhemCore
     {
         public int Compare(ModuleType x, ModuleType y)
         {
-            return String.Compare(x.Name, y.Name);
+            EnsureNotNull(x);
+            EnsureNotNull(y);
+            return String.Compare(x.Name, y.Name, StringComparison.Ordinal);
+        }
+
+        private static void EnsureNotNull(ModuleType type)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
         }
     }
 }

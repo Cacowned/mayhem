@@ -23,6 +23,11 @@ namespace MayhemCore
         // Used at deserialization
         public override Type ResolveName(string typeName, string typeNamespace, Type declaredType, DataContractResolver knownTypeResolver)
         {
+            if (knownTypeResolver == null)
+            {
+                throw new ArgumentNullException("knownTypeResolver");
+            }
+
             Type t = knownTypeResolver.ResolveName(typeName, typeNamespace, declaredType, null);
             if (t != null)
                 return t;
