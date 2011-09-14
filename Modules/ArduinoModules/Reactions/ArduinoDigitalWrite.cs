@@ -128,7 +128,7 @@ namespace ArduinoModules.Reactions
         {
             get 
             {
-                return new ArduinoDigitalWriteConfig();
+                return new ArduinoDigitalWriteConfig(this.writePins);
             }
         }
 
