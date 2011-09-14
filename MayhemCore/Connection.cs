@@ -58,8 +58,8 @@ namespace MayhemCore
             this.Reaction = reaction;
 
             // Set them to have a reference to this connection
-            this.Event.connection = this;
-            this.Reaction.connection = this;
+            this.Event.Connection = this;
+            this.Reaction.Connection = this;
 
             // Set up the event handler for when the event triggers
             this.Event.EventActivated += this.OnEventActivated;
@@ -201,8 +201,8 @@ namespace MayhemCore
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            Event.connection = this;
-            Reaction.connection = this;
+            Event.Connection = this;
+            Reaction.Connection = this;
 
             // Set up the event handler for when the event triggers
             this.Event.EventActivated += this.OnEventActivated;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MayhemCore
 {
-    public class ModuleType : IComparable
+    public class ModuleType
     {
         public Type Type
         {
@@ -30,21 +30,17 @@ namespace MayhemCore
             this.Description = description;
         }
 
-        public int CompareTo(object obj)
-        {
-            if (obj is ModuleType)
-            {
-                return Name.CompareTo(((ModuleType)obj).Name);
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
         public override string ToString()
         {
             return Name;
+        }
+    }
+
+    public class ModuleTypeComparer : IComparer<ModuleType>
+    {
+        public int Compare(ModuleType x, ModuleType y)
+        {
+            return x.Name.CompareTo(y.Name);
         }
     }
 }

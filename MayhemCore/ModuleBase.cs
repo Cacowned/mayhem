@@ -12,7 +12,7 @@ namespace MayhemCore
     public abstract class ModuleBase : IComparable<ModuleBase>, INotifyPropertyChanged
     {
         // A reference to the connection that holds this module.
-        public Connection connection;
+        public Connection Connection { get; set; }
 
         public bool Enabled { get; private set; }
 

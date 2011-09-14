@@ -86,7 +86,7 @@ namespace MayhemCore
                   //  Trace.WriteLine("Error opening file: \n" + e);
                 }
 			}
-            this.Sort();
+            this.Sort(new ModuleTypeComparer());
             return true;
 		}
 
