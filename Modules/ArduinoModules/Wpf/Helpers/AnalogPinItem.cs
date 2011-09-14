@@ -18,22 +18,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ArduinoModules.Firmata;
+using System.Runtime.Serialization;
 
 namespace ArduinoModules.Wpf
 {
     /// <summary>
     /// Items for Ditial pins ItemsControl 
     /// </summary>
+    [DataContract]
     public class AnalogPinItem
     {
+        [DataMember]
         private static int analog_pin_id = 0;
 
         // selected 
+        [DataMember]
         private bool isChecked;
         public bool Selected { get { return isChecked; } set { isChecked = value; } }
 
 
         // friendly Name
+        [DataMember]
         private string pinName_;
         public string PinName
         {
@@ -41,9 +46,11 @@ namespace ArduinoModules.Wpf
         }
 
         // pin change type
+        [DataMember]
         private ANALOG_PIN_CHANGE monitor_pin_change { get; set; }
         public ANALOG_PIN_CHANGE ChangeType { get { return monitor_pin_change; } set { monitor_pin_change = value; } }
 
+        [DataMember]
         private int firmata_pin_id_ = 0;
         public int GetPinID()
         {
@@ -51,6 +58,7 @@ namespace ArduinoModules.Wpf
         }
         //public int pin_id { get { return pin_id_; } }
 
+        [DataMember]
         private int setValue = 0;
 
         public static void ResetAnalogIDs()
@@ -85,6 +93,7 @@ namespace ArduinoModules.Wpf
 
 
         // analog value
+        [DataMember]
         private int aValue = 0;
         public int CurrentAnalogValue { get { return aValue; } }
 

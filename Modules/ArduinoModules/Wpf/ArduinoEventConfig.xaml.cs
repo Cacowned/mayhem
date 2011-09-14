@@ -59,6 +59,8 @@ namespace ArduinoModules.Wpf
         Timer t = new Timer(1000);
 
 
+        private List<DigitalPinItem> preset_digital_pins = null;
+        private List<AnalogPinItem> preset_analog_pins = null; 
 
 
         private BackgroundWorker bg_pinUpdate = new BackgroundWorker();
@@ -76,8 +78,11 @@ namespace ArduinoModules.Wpf
             }
         }
 
-        public ArduinoEventConfig()
+        public ArduinoEventConfig(List<DigitalPinItem> reaction_digital_pins, List<AnalogPinItem> reaction_analog_pins )
         {
+            preset_digital_pins = reaction_digital_pins;
+            preset_analog_pins = reaction_analog_pins;
+
             InitializeComponent();
             digitalPins.ItemsSource = digital_pin_items;
             analogPins.ItemsSource = analog_pin_items;

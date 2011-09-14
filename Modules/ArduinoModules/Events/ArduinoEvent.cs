@@ -74,7 +74,7 @@ namespace ArduinoModules.Events
 
                 // TODO
   
-                ArduinoEventConfig config = new ArduinoEventConfig();           
+                ArduinoEventConfig config = new ArduinoEventConfig(monitorDigitalPins, monitorAnalogPins);           
                 return config;
             }
         }
