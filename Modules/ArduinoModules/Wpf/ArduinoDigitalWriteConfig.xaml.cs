@@ -30,6 +30,7 @@ namespace ArduinoModules.Wpf
         private Dictionary<string, string> deviceNamesIds = null;
         private ArduinoFirmata arduino = null;
         private ObservableCollection<DigitalPinWriteItem> pin_items = new ObservableCollection<DigitalPinWriteItem>();
+        private List<DigitalPinWriteItem> reaction_set_pins = null;                     // pins already configured by the reaction 
 
         public string arduinoPortName
         {
@@ -62,8 +63,9 @@ namespace ArduinoModules.Wpf
         }
         
 
-        public ArduinoDigitalWriteConfig()
+        public ArduinoDigitalWriteConfig(List<DigitalPinWriteItem> set_pins)
         {
+            reaction_set_pins = set_pins;
             InitializeComponent();
             Init();
         }
@@ -95,8 +97,6 @@ namespace ArduinoModules.Wpf
         {
             string portname = (string)deviceList.SelectedValue;
             
-
-
             bool update_pins = false;
 
             if (arduino != null)
@@ -164,6 +164,19 @@ namespace ArduinoModules.Wpf
                 p.mode != PIN_MODE.SHIFT)
             {
                 DigitalPinWriteItem pw = new DigitalPinWriteItem(false, p.id, DIGITAL_WRITE_MODE.HIGH);
+
+                // see if pin is already contained in set pins and take over the settings
+                foreach (DigitalPinWriteItem setPin in reaction_set_pins)
+                {
+                    if (setPin.GetPinID() == p.id)
+                    {
+                        // pin has already been configured
+                        // use the existing DigitalPinWriteItem
+                        pw = setPin;
+                        Logger.WriteLine("Using already configured pin " + pw.GetPinID());
+                    }
+                }
+
                 Dispatcher.Invoke(new Action(() => { pin_items.Add(pw); }), null);
             }
             
