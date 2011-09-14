@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Windows.Media;
 using MayhemCore;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace DefaultModules.LowLevel
 {
@@ -14,6 +16,10 @@ namespace DefaultModules.LowLevel
         public static string TAG = "[MPlayer]";
 
         private bool isPlaying_ = false;
+
+        private Thread runThread = null;
+
+        private Uri fileToPlay = null; 
 
         public bool isPlaying
         {
@@ -38,9 +44,8 @@ namespace DefaultModules.LowLevel
 
         public MPlayer()
         {
-            mediaplayer.MediaEnded += new EventHandler(p_MediaEnded);
-            mediaplayer.MediaOpened += new EventHandler(p_MediaOpened);
-            mediaplayer.MediaFailed += new EventHandler<ExceptionEventArgs>(mediaplayer_MediaFailed);
+            runThread = new Thread(new ThreadStart(t_StartPlaying)); 
+            
         }
 
         void mediaplayer_MediaFailed(object sender, ExceptionEventArgs e)
@@ -51,18 +56,39 @@ namespace DefaultModules.LowLevel
 
         public void PlayFile(string filePath)
         {
-            isPlaying = true;
+            fileToPlay = new Uri(filePath, UriKind.Absolute);
+            runThread.Start();
+
+            
+            /*
             mediaplayer.Dispatcher.Invoke(new Action(delegate()
                 {
                     mediaplayer.Open(new Uri(filePath, UriKind.Absolute));
                     Logger.WriteLine(" Starting new media playback " + filePath);
                     mediaplayer.Play();
                 }));
+           */
+        }
+
+        private void t_StartPlaying()
+        {
+            Dispatcher.CurrentDispatcher.VerifyAccess();
+            mediaplayer = new MediaPlayer();
+            mediaplayer.MediaEnded += new EventHandler(p_MediaEnded);
+            mediaplayer.MediaOpened += new EventHandler(p_MediaOpened);
+            mediaplayer.MediaFailed += new EventHandler<ExceptionEventArgs>(mediaplayer_MediaFailed);
+            mediaplayer.Open(fileToPlay);
+            mediaplayer.Play();
+            Dispatcher.Run();  
+
+
         }
 
         public void Stop()
         {
-            mediaplayer.Stop();
+            Logger.WriteLine("");
+          //  mediaplayer.Stop();
+            mediaplayer.Dispatcher.BeginInvoke(new Action(delegate(){ mediaplayer.Stop(); }), DispatcherPriority.Send);
         }
 
         void p_MediaOpened(object sender, EventArgs e)
