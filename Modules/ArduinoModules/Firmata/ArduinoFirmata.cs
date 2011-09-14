@@ -151,7 +151,7 @@ namespace ArduinoModules.Firmata
         private string portName_ = null;             // name of the serial port
         public string portName { get { return portName_; } }
 
-        private MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.instance;
+        private static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.instance;
         public bool initialized = false;
 
         // parsing
@@ -251,23 +251,27 @@ namespace ArduinoModules.Firmata
         public static ArduinoFirmata InstanceForPortname(string serialPortName)
         {
             Logger.WriteLine("InstanceForPortname");
-            if (serialPortName != String.Empty)
-            {
+            if (serialPortName != String.Empty && serialPortName != null)
+            {                        
+
                 if (instances.Keys.Contains(serialPortName) && instances[serialPortName] != null)
                 {
                     return instances[serialPortName];
                 }
                 else
                 {
-                    Logger.WriteLine("creating new instance for port " + serialPortName);
-                    instances[serialPortName] = new ArduinoFirmata(serialPortName);
-                    return instances[serialPortName];
+                    Dictionary<string, string> portNames = mSerial.getArduinoPortNames();
+
+                    if (portNames.Keys.Contains(serialPortName))
+                    {
+
+                        Logger.WriteLine("creating new instance for port " + serialPortName);
+                        instances[serialPortName] = new ArduinoFirmata(serialPortName);
+                        return instances[serialPortName];
+                    }
                 }
-            }
-            else
-            {
-                return null; 
-            }
+            }          
+            return null;
         }
 
         /// <summary>
