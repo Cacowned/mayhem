@@ -122,20 +122,22 @@ namespace ArduinoModules.Events
                 foreach (DigitalPinItem p in config.digital_pin_items)
                 {
                     if (p.Selected)
-                        digitalPinsMonitor.Add(p);
+                    {     
+                        // TODO: arduino.FlagPin(p)
+                        digitalPinsMonitor.Add(p);                       
+                    }
                 }
 
                 foreach (AnalogPinItem a in config.analog_pin_items)
                 {
+                    // TODO: arduino.FlagPin(p)
                     if (a.Selected)
                         analogPinsMonitor.Add(a);
                 }
 
                 monitorAnalogPins = analogPinsMonitor;
                 monitorDigitalPins = digitalPinsMonitor; 
-
-              
-
+             
                 if (enabled)
                 {
                     arduino.OnAnalogPinChanged += OnAnalogPinChanged;
