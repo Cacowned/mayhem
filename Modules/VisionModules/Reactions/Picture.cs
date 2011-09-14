@@ -27,7 +27,7 @@ using System.Timers;
 namespace VisionModules.Reactions
 {
     [DataContract]
-    [MayhemModule("Picture", "Takes a photo with a webcam and saves it to the hard drive")]
+    [MayhemModuleAttribute("Picture", "Takes a photo with a webcam and saves it to the hard drive")]
     public class Picture : ReactionBase, IWpfConfigurable
     {
         // default to "My Documents" folder

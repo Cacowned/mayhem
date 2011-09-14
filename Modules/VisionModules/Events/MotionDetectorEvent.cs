@@ -23,7 +23,7 @@ using MayhemOpenCVWrapper.LowLevel;
 namespace VisionModules.Events
 {
     [DataContract]
-    [MayhemModule("Motion Detector", "Detects when there is motion in the frame")]
+    [MayhemModuleAttribute("Motion Detector", "Detects when there is motion in the frame")]
     public class MotionDetector : EventBase, IWpfConfigurable
     {
         private DateTime lastMotionDetected = DateTime.Now;

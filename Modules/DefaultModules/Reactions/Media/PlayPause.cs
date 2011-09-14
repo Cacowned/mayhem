@@ -6,7 +6,7 @@ using MayhemCore;
 namespace DefaultModules.Reactions.Media
 {
     [DataContract]
-    [MayhemModule("Media: Play / Pause", "Plays or pauses the current item when triggered")]
+    [MayhemModuleAttribute("Media: Play / Pause", "Plays or pauses the current item when triggered")]
     public class PlayPause : ReactionBase
     {
         public override void Perform()

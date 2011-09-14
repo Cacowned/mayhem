@@ -77,10 +77,10 @@ namespace MayhemCore
                     break;
                 }
             }
-            object[] attList = GetType().GetCustomAttributes(typeof(MayhemModule), true);
+            object[] attList = GetType().GetCustomAttributes(typeof(MayhemModuleAttribute), true);
             if (attList.Length > 0)
             {
-                MayhemModule att = attList[0] as MayhemModule;
+                MayhemModuleAttribute att = attList[0] as MayhemModuleAttribute;
                 this.Name = att.Name;
                 this.Description = att.Name;
             }

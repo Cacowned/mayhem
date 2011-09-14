@@ -3,7 +3,7 @@
 namespace MayhemCore
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class MayhemModule : Attribute
+    public sealed class MayhemModuleAttribute : Attribute
     {
         public string Name
         {
@@ -17,7 +17,7 @@ namespace MayhemCore
             private set;
         }
 
-        public MayhemModule(string name, string description)
+        public MayhemModuleAttribute(string name, string description)
         {
             this.Name = name;
             this.Description = description;
