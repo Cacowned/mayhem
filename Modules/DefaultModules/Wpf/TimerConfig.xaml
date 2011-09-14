@@ -27,7 +27,7 @@
                 <TextBox Name="SecondsBox" Grid.Column="1" Grid.Row="2" TextChanged="TextChanged"/>
 
             </Grid>
-            <TextBlock Name="textInvalid" Text="Filename is invalid" Margin="100,0,0,0" Foreground="#EF0000" Visibility="Visible" />
+            <TextBlock Name="textInvalid" Text="" Margin="100,0,0,0" Foreground="#EF0000" Visibility="Collapsed" />
         </StackPanel>
     </Grid>
 </src:IWpfConfiguration>
