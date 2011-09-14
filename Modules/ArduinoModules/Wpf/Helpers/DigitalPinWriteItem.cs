@@ -21,8 +21,14 @@ namespace ArduinoModules.Wpf.Helpers
 {
     public class DigitalPinWriteItem
     {
-        private bool active_;
-        public bool Active { get; set; }
+        // if checked, output is activated on this pin 
+        private bool active_ = false;
+        public bool Active
+        {
+            get { return active_; }
+            set { active_ = value; }
+        
+        }
 
 
         private int firmata_id=0;
@@ -55,7 +61,7 @@ namespace ArduinoModules.Wpf.Helpers
 
         public DigitalPinWriteItem(bool check, int id, DIGITAL_WRITE_MODE mode)
         {
-            Active = check;
+            active_ = check;
             firmata_id = id;
             WriteMode = mode; 
         }

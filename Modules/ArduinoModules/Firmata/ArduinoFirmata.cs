@@ -379,16 +379,17 @@ namespace ArduinoModules.Firmata
         /// <param name="value"></param>
         private void DigitalWrite(Pin p, int value)
         {
+            pin_info[p.id].value = value;
             byte[] buf = new byte[3];
             int portNumber = (p.id >> 3) & 0x0F;
-            UInt16 port_val = 0; 
+            UInt16 port_val = 0;       
             for (int i = 0; i < 8; i++)
             {
                 int idx = portNumber * 8 + i; 
                 if (p.mode == PIN_MODE.OUTPUT || p.mode == PIN_MODE.INPUT)
                 {
-                    pin_info[i].value = value;
-                    if (value>0)
+                   
+                    if (pin_info[i].value>0)
                     {
                         port_val |= (UInt16) (1<< i);
                     }

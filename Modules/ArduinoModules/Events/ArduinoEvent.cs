@@ -215,6 +215,7 @@ namespace ArduinoModules.Events
             }
         }
 
+
         public void arduino_OnAnalogPinChanged(Pin p)
         {
             if (this.Enabled)
@@ -227,21 +228,21 @@ namespace ArduinoModules.Events
                         {
                             if (a.SetValue == p.value)
                             {
-                                base.OnEventActivated();
+                                Activate();
                             }
                         }
                         else if (a.ChangeType == ANALOG_PIN_CHANGE.GREATER)
                         {
                             if (a.SetValue <= p.value)
                             {
-                                base.OnEventActivated();
+                                Activate();
                             }
                         }
                         else if (a.ChangeType == ANALOG_PIN_CHANGE.LOWER)
                         {
                             if (a.SetValue >= p.value)
                             {
-                                base.OnEventActivated();
+                                Activate();
                             }
                         }
                         a.SetAnalogValue(p.value);

@@ -97,12 +97,12 @@ namespace ArduinoModules.Reactions
                     }
                     else if (p.WriteMode == DIGITAL_WRITE_MODE.PULSE_OFF) // pin will be set to OFF for a short period
                     {
-                        arduino.DigitalWrite(p.GetPinID(), p.GetPinState());
+                        arduino.DigitalWrite(p.GetPinID(), p.SetPinState(1));
                     }
                     else if (p.WriteMode == DIGITAL_WRITE_MODE.PULSE_ON)   // pin will be set to ON for a short period
                     {
 
-                        arduino.DigitalWrite(p.GetPinID(), p.SetPinState(1));
+                        arduino.DigitalWrite(p.GetPinID(), p.SetPinState(0));
                     }
                     else if (p.WriteMode == DIGITAL_WRITE_MODE.TOGGLE)     // pin is initially set to  0 and toggles from there
                     {
