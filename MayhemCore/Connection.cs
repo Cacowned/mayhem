@@ -199,7 +199,7 @@ namespace MayhemCore
         }
 
         [OnDeserialized]
-        public void OnDeserialized(StreamingContext context)
+        private void OnDeserialized(StreamingContext context)
         {
             Event.connection = this;
             Reaction.connection = this;

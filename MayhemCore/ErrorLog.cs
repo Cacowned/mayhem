@@ -17,7 +17,7 @@ namespace MayhemCore
         // Collection that stores all of the errors
         private static BindingCollection<Error> errors = new BindingCollection<Error>();
 
-        public ErrorLog()
+        private ErrorLog()
         { }
 
         // private delegate void AddHandler(ErrorType error, string message);

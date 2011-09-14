@@ -3,8 +3,6 @@ using System;
 using System.Runtime.Serialization;
 namespace MayhemCore
 {
-    public delegate void EventActivateHandler(object sender, EventArgs e);
-
     /// <summary>
     /// Base class for all event modules
     /// </summary>
@@ -14,7 +12,7 @@ namespace MayhemCore
         /// <summary>
         /// Event that triggers when the event is activated
         /// </summary>
-        public event EventActivateHandler EventActivated;
+        public event EventHandler EventActivated;
 
         public EventBase()
         {
@@ -25,11 +23,7 @@ namespace MayhemCore
         /// </summary>
         protected virtual void OnEventActivated()
         {
-            EventActivateHandler handler = EventActivated;
-            if (handler != null)
-            {
-                handler(this, null);
-            }
+            EventActivated(this, null);
         }
     }
 }

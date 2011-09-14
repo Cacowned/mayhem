@@ -27,7 +27,7 @@ namespace MayhemCore
         /// </summary> 
         /// <param name="list">The list from which the elements are copied.</param> 
         /// <exception cref="System.ArgumentNullException">The list parameter cannot be null.</exception> 
-        public BindingCollection(List<T> list) : base(list) 
+        public BindingCollection(Collection<T> list) : base(list) 
         { 
             InstallSynchronizationContext(); 
         } 

@@ -12,7 +12,7 @@ namespace MayhemCore
 	/// </summary>
 	public class ConnectionList : ObservableCollection<Connection>
 	{
-        public static ConnectionList Deserialize(Stream stream, List<Type> types)
+        public static ConnectionList Deserialize(Stream stream, ICollection<Type> types)
         {
             ConnectionList obj = null;
             DataContractSerializer dcs = new DataContractSerializer(typeof(ConnectionList));

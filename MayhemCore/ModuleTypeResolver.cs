@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.Xml;
+using System.Collections.ObjectModel;
 
 namespace MayhemCore
 {
     public class ModuleTypeResolver : DataContractResolver
     {
-        List<Type> types;
+        ICollection<Type> types;
 
         public ModuleTypeResolver()
         {
         }
-        public ModuleTypeResolver(List<Type> types)
+        public ModuleTypeResolver(ICollection<Type> types)
         {
             this.types = types;
         }
