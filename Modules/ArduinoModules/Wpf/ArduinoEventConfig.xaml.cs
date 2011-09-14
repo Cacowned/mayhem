@@ -91,8 +91,12 @@ namespace ArduinoModules.Wpf
                 deviceList.SelectedValuePath = "Key";
                 deviceList.SelectedIndex = 0; 
             }
-       
 
+            // connect to board if there is only one arduino present
+            if (deviceNamesIds.Count == 1)
+            {
+                Button_Click(this, null);
+            }
 
             bg_pinUpdate.DoWork += new DoWorkEventHandler((object o, DoWorkEventArgs e) => 
             
@@ -106,6 +110,8 @@ namespace ArduinoModules.Wpf
             t.AutoReset = true;
             t.Elapsed += new ElapsedEventHandler(t_Elapsed);
             t.Enabled = true;
+
+
         }
 
         void t_Elapsed(object sender, ElapsedEventArgs e)
@@ -118,19 +124,10 @@ namespace ArduinoModules.Wpf
        
         
 
-        private void IWpfConfiguration_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (this.IsVisible)
-            {
-                if (itemSelected < 0)
-                {
-                    serial.UpdatePortList();
-                   // deviceList.ItemsSource = serial.serialPortNames;
-                    deviceList.SelectedIndex = 0;
-                }
+       
 
-            }
-        }
+        #region WPF Events
+       
 
         /// <summary>
         /// Executes intial connection with the Arduino Board
@@ -170,6 +167,21 @@ namespace ArduinoModules.Wpf
             }
 
         }
+
+        private void deviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox box = sender as ComboBox;
+
+            if (arduino != null && (string)box.SelectedValue != (string)arduino.portName)
+            {
+                connectButton.IsEnabled = true;
+            }
+            else
+            {
+                connectButton.IsEnabled = false;
+            }
+        }
+        #endregion
 
         #region IWpfConfigurable overrides
         public override void OnClosing()
@@ -340,10 +352,6 @@ namespace ArduinoModules.Wpf
 
         #endregion
 
-
-
-
-
-        
+           
     }
 }

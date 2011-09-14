@@ -3,14 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemDefaultStyles.UserControls;assembly=MayhemDefaultStyles"
              xmlns:ext="clr-namespace:ArduinoModules.Wpf"
-             Width="400" IsVisibleChanged="IWpfConfiguration_IsVisibleChanged"
+             Width="400" 
              Name="root">
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Vertical">
                 <Label>Select COM port on which an Arduino is connected:</Label>
                 <StackPanel Orientation="Horizontal">
-                    <ComboBox Name="deviceList" Width="200"></ComboBox>
+                    <ComboBox Name="deviceList" Width="200" SelectionChanged="deviceList_SelectionChanged"></ComboBox>
                     <Button Name="connectButton" Margin="10 0 0 0" Click="Button_Click">Connect</Button>         
                 </StackPanel>
                 <ScrollViewer VerticalScrollBarVisibility="Visible" MaxHeight="500">
