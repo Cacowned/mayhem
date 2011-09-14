@@ -52,15 +52,15 @@ namespace MayhemWpf.UserControls
     /// </summary>
     public partial class ErrorView : UserControl
     {
-        public ObservableCollection<Error> Errors
+        public ObservableCollection<MayhemError> Errors
         {
-            get { return (ObservableCollection<Error>)GetValue(ErrorsProperty); }
+            get { return (ObservableCollection<MayhemError>)GetValue(ErrorsProperty); }
             set { SetValue(ErrorsProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Errors.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ErrorsProperty =
-            DependencyProperty.Register("Errors", typeof(ObservableCollection<Error>), typeof(ErrorView), new UIPropertyMetadata(new ObservableCollection<Error>()));
+            DependencyProperty.Register("Errors", typeof(ObservableCollection<MayhemError>), typeof(ErrorView), new UIPropertyMetadata(new ObservableCollection<MayhemError>()));
 
         public static readonly RoutedEvent ShowEvent = EventManager.RegisterRoutedEvent(
             "Show", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ErrorView));

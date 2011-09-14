@@ -9,16 +9,13 @@ namespace MayhemCore
     // There should be only one of these
     // We should be able to write to the error log from
     // any class, thus it is static
-    public class ErrorLog
+    public static class ErrorLog
     {
         // What do we do if this thing gets huge? It will keep using up memory. 
         // Do we want to remove things from the beginning?
 
         // Collection that stores all of the errors
-        private static BindingCollection<Error> errors = new BindingCollection<Error>();
-
-        private ErrorLog()
-        { }
+        private static BindingCollection<MayhemError> errors = new BindingCollection<MayhemError>();
 
         // private delegate void AddHandler(ErrorType error, string message);
 
@@ -35,7 +32,7 @@ namespace MayhemCore
             }
             */
 
-            Error err = new Error(error, message);
+            MayhemError err = new MayhemError(error, message);
 
             errors.Insert(0,err);
 
@@ -44,7 +41,7 @@ namespace MayhemCore
         }
 
 
-        public static BindingCollection<Error> Errors
+        public static BindingCollection<MayhemError> Errors
         {
             get
             {
@@ -55,13 +52,13 @@ namespace MayhemCore
         // Get all of the errors in the collection
         // with an error type of at least
         // minimum type
-        public static IEnumerable<Error> GetErrors(ErrorType minimumType)
+        public static IEnumerable<MayhemError> GetErrors(ErrorType minimumType)
         {
             return errors.Where(x => x.Type > minimumType);
         }
     }
 
-    public class Error
+    public class MayhemError
     {
         public DateTime Time { get; private set; }
         public string TimeString
@@ -74,7 +71,7 @@ namespace MayhemCore
         public ErrorType Type { get; private set; }
         public string Message { get; private set; }
 
-        public Error(ErrorType type, string message)
+        public MayhemError(ErrorType type, string message)
         {
             this.Type = type;
             this.Message = message;

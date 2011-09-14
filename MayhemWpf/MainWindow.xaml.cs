@@ -26,15 +26,15 @@ namespace MayhemWpf
         private ModuleType _reaction;
         private ReactionBase _reactionInstance = null;
 
-        public ObservableCollection<Error> Errors
+        public ObservableCollection<MayhemError> Errors
         {
-            get { return (ObservableCollection<Error>)GetValue(ErrorsProperty); }
+            get { return (ObservableCollection<MayhemError>)GetValue(ErrorsProperty); }
             set { SetValue(ErrorsProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Errors.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ErrorsProperty =
-            DependencyProperty.Register("Errors", typeof(ObservableCollection<Error>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<Error>()));
+            DependencyProperty.Register("Errors", typeof(ObservableCollection<MayhemError>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<MayhemError>()));
 
         private string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
         Mayhem mayhem;
