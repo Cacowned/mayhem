@@ -71,7 +71,7 @@ namespace ArduinoModules.Wpf
                 {
                     return arduino.portName;
                 }
-                return null;
+                return String.Empty;
 
             }
         }
