@@ -31,10 +31,11 @@ namespace ArduinoModules.Firmata
     /// </summary>
     public enum DIGITAL_WRITE_MODE
     {
-        HIGH,       // pull pin high
-        LOW,        // pull low
-        TOGGLE_ON,  // pull pin high for a short interval
-        TOGGLE_OFF  // pull pin low for a short interval
+        TOGGLE,         // pin toggles, initially set to 0
+        HIGH,           // pull pin high
+        LOW,            // pull low
+        PULSE_ON,       // pull pin high for a short interval
+        PULSE_OFF       // pull pin low for a short interval
     }
 
     /// <summary>
@@ -94,14 +95,19 @@ namespace ArduinoModules.Firmata
         public static readonly byte REPORT_DIGITAL_PORT = 0xD0;     
     }
 
+    /// <summary>
+    /// Represents an  arduino pin
+    /// </summary>
     public class Pin
     {
         public PIN_MODE mode;
         public byte analog_channel;
         public UInt64 supported_modes;
         public int value;
-        public int id; 
+        public int id;
+        public bool flagged = false;                // in use by a module
     }
+    
 
     /// <summary>Extension methods for EventHandler-type delegates.</summary>
     public static class EventExtensions
@@ -139,6 +145,7 @@ namespace ArduinoModules.Firmata
     public class ArduinoFirmata : ISerialPortDataListener
     {
 
+
         private static Dictionary<string, ArduinoFirmata> instances = new Dictionary<string, ArduinoFirmata>();
 
         private string portName_ = null;             // name of the serial port
@@ -167,8 +174,9 @@ namespace ArduinoModules.Firmata
         private AsyncOperation operation;
 
         private Timer readPinsTimer = new Timer(20);
+
+
         
-       
 
         private ArduinoFirmata(string serialPortName)
         {
@@ -242,16 +250,23 @@ namespace ArduinoModules.Firmata
         /// <returns>Initialized instance of Arduino bound to specified port name.</returns>
         public static ArduinoFirmata InstanceForPortname(string serialPortName)
         {
-            Logger.WriteLine("InstanceForPortname"); 
-            if (instances.Keys.Contains(serialPortName) && instances[serialPortName] != null)
+            Logger.WriteLine("InstanceForPortname");
+            if (serialPortName != String.Empty)
             {
-                return instances[serialPortName];
+                if (instances.Keys.Contains(serialPortName) && instances[serialPortName] != null)
+                {
+                    return instances[serialPortName];
+                }
+                else
+                {
+                    Logger.WriteLine("creating new instance for port " + serialPortName);
+                    instances[serialPortName] = new ArduinoFirmata(serialPortName);
+                    return instances[serialPortName];
+                }
             }
             else
             {
-                Logger.WriteLine("creating new instance for port " + serialPortName);
-                instances[serialPortName] = new ArduinoFirmata(serialPortName);
-                return instances[serialPortName];
+                return null; 
             }
         }
 
@@ -268,7 +283,8 @@ namespace ArduinoModules.Firmata
                 pin_info[i].analog_channel = 127;
                 pin_info[i].supported_modes = 0;
                 pin_info[i].value = 0;
-                pin_info[i].id = i; 
+                pin_info[i].id = i;
+                pin_info[i].flagged = false;
             }
 
             // send handshake
@@ -302,6 +318,8 @@ namespace ArduinoModules.Firmata
 
         }
 
+        #region Outgoing commands
+      
         /// <summary>
         /// Public Exposure of QueryPins
         /// </summary>
@@ -339,6 +357,52 @@ namespace ArduinoModules.Firmata
 
 
         /// <summary>
+        /// Public DigitalWrite exposure (for the time being) 
+        /// </summary>
+        /// <param name="pinIndex"></param>
+        /// <param name="val"></param>
+        public void DigitalWrite(int pinIndex, int val)
+        {
+            // retrieve the pin to write to from the index
+            if (pinIndex >= 0 && pinIndex <= 128)
+            {
+                Pin writePin = pin_info[pinIndex];
+                DigitalWrite(writePin, val);
+            }
+        }
+
+
+        /// <summary>
+        /// Sets the logic value of the pin 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="value"></param>
+        private void DigitalWrite(Pin p, int value)
+        {
+            byte[] buf = new byte[3];
+            int portNumber = (p.id >> 3) & 0x0F;
+            UInt16 port_val = 0; 
+            for (int i = 0; i < 8; i++)
+            {
+                int idx = portNumber * 8 + i; 
+                if (p.mode == PIN_MODE.OUTPUT || p.mode == PIN_MODE.INPUT)
+                {
+                    pin_info[i].value = value;
+                    if (value>0)
+                    {
+                        port_val |= (UInt16) (1<< i);
+                    }
+                }
+            }
+
+            buf[0] = (byte)(0x90 | portNumber);
+            buf[1] = (byte)(port_val & 0x7f);
+            buf[2] = (byte)((port_val >> 7) & 0x7f);
+
+            mSerial.WriteToPort(portName_, buf, 3);
+        }
+
+        /// <summary>
         /// Set the pin mode to one of the supported modes
         /// The pin mode change message consists of three bytes 
         /// --- 
@@ -352,9 +416,14 @@ namespace ArduinoModules.Firmata
         public void SetPinMode(Pin p, PIN_MODE mode)
         {
             pin_info[p.id].mode = mode;
+            // flag this pin as an output pin (?)
+            if (mode == PIN_MODE.OUTPUT)
+                pin_info[p.id].flagged = true;
             byte[] buf = new byte[3] { FIRMATA_MSG.PIN_MODE_SET, (byte)p.id, (byte) mode };
             mSerial.WriteToPort(portName_, buf, buf.Length);
         }
+
+#endregion
 
 
         /// <summary>
