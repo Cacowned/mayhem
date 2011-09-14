@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.Windows;
 using MayhemDefaultStyles.UserControls;
 
@@ -25,7 +24,6 @@ namespace DefaultModules.Wpf
             MinutesBox.Text = Minutes.ToString();
             SecondsBox.Text = Seconds.ToString();
             CheckValidity();
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
             shouldCheckValidity = true;
         }
 
