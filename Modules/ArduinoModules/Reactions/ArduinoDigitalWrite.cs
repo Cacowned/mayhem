@@ -34,6 +34,34 @@ namespace ArduinoModules.Reactions
         public override void Perform()
         {
             //throw new NotImplementedException();
+            if (arduino != null)
+            {
+                foreach (DigitalPinWriteItem p in writePins)
+                {
+                    if (p.WriteMode == DIGITAL_WRITE_MODE.HIGH)             // pin will be set to HIGH
+                    {
+                       // p.SetPinState(1);
+                        arduino.DigitalWrite(p.GetPinID(), p.SetPinState(1));
+                    }
+                    else if (p.WriteMode == DIGITAL_WRITE_MODE.LOW)         // pin will be set to LOW
+                    {
+                        //p.SetPinState(0);
+                        arduino.DigitalWrite(p.GetPinID(), p.SetPinState(0));
+                    }
+                    else if (p.WriteMode == DIGITAL_WRITE_MODE.PULSE_OFF) // pin will be set to OFF for a short period
+                    {
+                       
+                    }
+                    else if (p.WriteMode == DIGITAL_WRITE_MODE.PULSE_ON)   // pin will be set to ON for a short period
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else if (p.WriteMode == DIGITAL_WRITE_MODE.TOGGLE)     // pin is initially set to  0 and toggles from there
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+            }
         }
 
         public IWpfConfiguration ConfigurationControl
@@ -61,23 +89,24 @@ namespace ArduinoModules.Reactions
                 {
                     if (p.WriteMode == DIGITAL_WRITE_MODE.HIGH)             // pin will be set to HIGH
                     {
-
+                        // TODO
                     }
                     else if (p.WriteMode == DIGITAL_WRITE_MODE.LOW)         // pin will be set to LOW
                     {
-
+                        // TODO
                     }
                     else if (p.WriteMode == DIGITAL_WRITE_MODE.PULSE_OFF) // pin will be set to OFF for a short period
                     {
-                        arduino.DigitalWrite(p.GetPinID(), 1);
+                        arduino.DigitalWrite(p.GetPinID(), p.GetPinState());
                     }
                     else if (p.WriteMode == DIGITAL_WRITE_MODE.PULSE_ON)   // pin will be set to ON for a short period
                     {
-                        arduino.DigitalWrite(p.GetPinID(), 0);
+
+                        arduino.DigitalWrite(p.GetPinID(), p.SetPinState(1));
                     }
                     else if (p.WriteMode == DIGITAL_WRITE_MODE.TOGGLE)     // pin is initially set to  0 and toggles from there
                     {
-                        arduino.DigitalWrite(p.GetPinID(), 0);
+                        arduino.DigitalWrite(p.GetPinID(), p.SetPinState(0));
                     }
                 }
             }
