@@ -260,6 +260,14 @@ namespace ArduinoModules.Wpf
                 p.mode != PIN_MODE.SHIFT)
             {
                 DigitalPinItem pItem = new DigitalPinItem(false, p.id, DIGITAL_PIN_CHANGE.LOW);
+                foreach (DigitalPinItem setPin in preset_digital_pins)
+                {
+                    if (setPin.GetPinID() == p.id)
+                    {
+                        pItem = setPin;
+                        Logger.WriteLine("Using already configured pin " + setPin.GetPinID());
+                    }
+                }
                 Dispatcher.Invoke(new Action(() => { digital_pin_items.Add(pItem); }), null); 
                 // set digital pin mode to input
                 if (p.mode != PIN_MODE.INPUT && p.flagged == false)
@@ -269,7 +277,16 @@ namespace ArduinoModules.Wpf
             }
             else if (p.mode == PIN_MODE.ANALOG)
             {
+               
                 AnalogPinItem aItem = new AnalogPinItem(false, p.id, ANALOG_PIN_CHANGE.EQUALS);
+                foreach (AnalogPinItem setPin in preset_analog_pins)
+                {
+                    if (setPin.GetPinID() == p.id)
+                    {
+                        aItem = setPin;
+                        Logger.WriteLine("Using already configured pin " + setPin.GetPinID());
+                    }
+                }
                 Dispatcher.Invoke(new Action(() => { analog_pin_items.Add(aItem);}), null);
             }
 
