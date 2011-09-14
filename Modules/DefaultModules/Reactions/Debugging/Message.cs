@@ -11,7 +11,7 @@ using MayhemDefaultStyles.UserControls;
 namespace DefaultModules.Reactions.Debugging
 {
     [DataContract]
-    [MayhemModule("Debug: Message", "Generates debug output when triggered")]
+    [MayhemModuleAttribute("Debug: Message", "Generates debug output when triggered")]
     public class Message : ReactionBase, IWpfConfigurable
     {
         private string MessageText { get; set; }

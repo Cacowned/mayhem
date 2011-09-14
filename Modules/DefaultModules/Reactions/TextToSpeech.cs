@@ -11,7 +11,7 @@ using MayhemDefaultStyles.UserControls;
 namespace DefaultModules.Reactions
 {
     [DataContract]
-    [MayhemModule("Text To Speech", "Speaks a given phrase")]
+    [MayhemModuleAttribute("Text To Speech", "Speaks a given phrase")]
     public class TextToSpeech : ReactionBase, IWpfConfigurable
     {
         #region Configuration Properties

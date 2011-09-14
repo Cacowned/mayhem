@@ -52,7 +52,7 @@ namespace MayhemCore
         // Get all of the errors in the collection
         // with an error type of at least
         // minimum type
-        public static IEnumerable<MayhemError> GetErrors(ErrorType minimumType)
+        public static IEnumerable<MayhemError> GetErrorsAtLevel(ErrorType minimumType)
         {
             return errors.Where(x => x.Type > minimumType);
         }

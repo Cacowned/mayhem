@@ -60,17 +60,17 @@ namespace MayhemCore
                             // and it implements the correct moduleType
                             if (type.IsSubclassOf(typeof(T)) && !type.IsAbstract)
                             {
-                                object [] attList = type.GetCustomAttributes(typeof(MayhemModule), true);
+                                object [] attList = type.GetCustomAttributes(typeof(MayhemModuleAttribute), true);
                                 if (attList.Length > 0)
                                 {
-                                    MayhemModule att = attList[0] as MayhemModule;
+                                    MayhemModuleAttribute att = attList[0] as MayhemModuleAttribute;
                                     // Add it to our final list
                                     this.Add(new ModuleType(type, att.Name, att.Description));
                                 }
                                 else
                                 {
                                     ///TODO: Do something to tell the developer the module has an error
-                                   // throw new Exception("Module does not have MayhemModule attribute set:\n" + type.FullName);
+                                   // throw new Exception("Module does not have MayhemModuleAttribute attribute set:\n" + type.FullName);
                                 }
                             }
                             allTypes.Add(type);
