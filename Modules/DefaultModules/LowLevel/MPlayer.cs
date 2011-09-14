@@ -44,7 +44,8 @@ namespace DefaultModules.LowLevel
 
         public MPlayer()
         {
-            runThread = new Thread(new ThreadStart(t_StartPlaying)); 
+            runThread = new Thread(new ThreadStart(t_StartPlaying));
+            runThread.IsBackground = true;
             
         }
 
