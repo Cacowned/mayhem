@@ -9,7 +9,7 @@ namespace MayhemCore
     /// This class is extended by EventBase and ReactionBase
     /// </summary>
     [DataContract]
-    public abstract class ModuleBase : IComparable<ModuleBase>, INotifyPropertyChanged
+    public abstract class ModuleBase : INotifyPropertyChanged
     {
         // A reference to the connection that holds this module.
         public Connection Connection { get; set; }
@@ -86,7 +86,7 @@ namespace MayhemCore
             }
         }
 
-        public ModuleBase()
+        protected ModuleBase()
         {
             _Initialize();
             Initialize();
@@ -110,11 +110,6 @@ namespace MayhemCore
         public override string ToString()
         {
             return Name;
-        }
-
-        public int CompareTo(ModuleBase obj)
-        {
-            return String.Compare(this.Name, obj.Name);
         }
 
         protected void OnPropertyChanged(string name)

@@ -3,21 +3,21 @@
 namespace MayhemCore
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class MayhemModule : Attribute
+    public sealed class MayhemModule : Attribute
     {
         public string Name
         {
             get;
-            set;
+            private set;
         }
 
         public string Description
         {
             get;
-            set;
+            private set;
         }
 
-        public MayhemModule(string name, string description)  // url is a positional parameter
+        public MayhemModule(string name, string description)
         {
             this.Name = name;
             this.Description = description;
