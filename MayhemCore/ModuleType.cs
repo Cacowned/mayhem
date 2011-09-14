@@ -40,7 +40,7 @@ namespace MayhemCore
     {
         public int Compare(ModuleType x, ModuleType y)
         {
-            return x.Name.CompareTo(y.Name);
+            return String.Compare(x.Name, y.Name);
         }
     }
 }

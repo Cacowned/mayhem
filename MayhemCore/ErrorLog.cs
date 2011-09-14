@@ -83,8 +83,8 @@ namespace MayhemCore
     // The different types of errors we can have
     public enum ErrorType
     {
-        Message = 1,
-        Warning = 2,
-        Failure = 3
+        Message = 0,
+        Warning = 1,
+        Failure = 2
     }
 }

@@ -14,9 +14,6 @@ namespace MayhemCore
         /// </summary>
         public event EventHandler EventActivated;
 
-        public EventBase()
-        {
-        }
         /// <summary>
         /// Event trigger for when the event is activated. This shouldn't
         /// need to be overridden, just attached to

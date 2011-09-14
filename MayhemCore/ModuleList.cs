@@ -15,9 +15,6 @@ namespace MayhemCore
     public abstract class ModuleList<T> : List<ModuleType>
 	{
         List<Type> allTypes = new List<Type>();
-        public ModuleList() 
-        {
-		}
 
         public bool ScanModules(string path) 
         {
