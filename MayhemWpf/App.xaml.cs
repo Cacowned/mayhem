@@ -107,18 +107,21 @@ namespace MayhemWpf
             foreach (string file in files)
             {
                 FileInfo fi = new FileInfo(file);
-                if (!setDirectories.Contains(fi.DirectoryName))
-                {
-                    setDirectories.Add(fi.DirectoryName);
-                    //set the dll path so it can find the dlls
-                    SetDllDirectory(fi.DirectoryName);
-                }
+                
                 try
                 {
                     Assembly assembly = Assembly.LoadFrom(file);
                     dependencies.Add(assembly.FullName, assembly);
                 }
-                catch { }
+                catch
+                {
+                    if (!setDirectories.Contains(fi.DirectoryName))
+                    {
+                        setDirectories.Add(fi.DirectoryName);
+                        //set the dll path so it can find the dlls
+                        SetDllDirectory(fi.DirectoryName);
+                    }
+                }
             }
 
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
