@@ -25,6 +25,10 @@ namespace ArduinoModules.Wpf.Helpers
         public bool Active { get; set; }
 
         private int firmata_id=0;
+        public int GetPinID()
+        {
+            return firmata_id;
+        }
 
         private DIGITAL_WRITE_MODE write_mode_; 
         public DIGITAL_WRITE_MODE WriteMode
