@@ -16,13 +16,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ArduinoModules.Firmata;
+using System.Runtime.Serialization;
+
 
 namespace ArduinoModules.Wpf.Helpers
 {
+    [DataContract]
     public class DigitalPinWriteItem
     {
         // if checked, output is activated on this pin 
+        [DataMember]
         private bool active_ = false;
+
         public bool Active
         {
             get { return active_; }
@@ -30,19 +35,22 @@ namespace ArduinoModules.Wpf.Helpers
         
         }
 
-
+        [DataMember]
         private int firmata_id=0;
+
         public int GetPinID()
         {
             return firmata_id;
         }
 
+        [DataMember]
         private DIGITAL_WRITE_MODE write_mode_; 
         public DIGITAL_WRITE_MODE WriteMode
         {
             get { return write_mode_; }
             set { write_mode_ = value; }
         }
+
         
         public string PinName
         {
@@ -51,6 +59,7 @@ namespace ArduinoModules.Wpf.Helpers
 
 
         // state
+        [DataMember]
         private int digitalPinState_ = 0;
         /// <summary>
         /// Explicit getter/setter implementation to avoid getting columnized
