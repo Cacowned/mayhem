@@ -11,7 +11,7 @@ using MayhemDefaultStyles.UserControls;
 namespace DefaultModules.Events
 {
     [DataContract]
-    [MayhemModuleAttribute("Timer", "Triggers after a certain amount of time")]
+    [MayhemModule("Timer", "Triggers after a certain amount of time")]
     public class Timer : EventBase, ICli, IWpfConfigurable
     {
         private System.Timers.Timer myTimer;

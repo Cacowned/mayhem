@@ -14,7 +14,7 @@ namespace DefaultModules.Events
 {
     // Because of it's support for shifts and stuff, it won't work in CLI mode.
     [DataContract]
-    [MayhemModuleAttribute("Key Press", "This event fires on a predefined key press")]
+    [MayhemModule("Key Press", "This event fires on a predefined key press")]
     public class Keypress : EventBase, IWpfConfigurable
     {
         private InterceptKeys interceptKeys;
