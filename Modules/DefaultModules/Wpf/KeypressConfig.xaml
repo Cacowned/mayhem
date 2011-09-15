@@ -7,7 +7,7 @@
         <StackPanel>
             <TextBlock TextWrapping="WrapWithOverflow">Please enter a combination of keys which will activate this event.</TextBlock>
             <TextBlock Name="textBoxKeys" TextWrapping="WrapWithOverflow" Margin="0,25,0,0" MinHeight="35" FontSize="14" TextAlignment="Center" FontWeight="Bold" />
-            <TextBlock Name="textInvalid" Text="Key combination is invalid" HorizontalAlignment="Center" Foreground="#EF0000" />
+            <TextBlock Name="textInvalid" Text="Key combination is invalid" HorizontalAlignment="Center" Foreground="#EF0000" Visibility="Collapsed" />
         </StackPanel>
     </Grid>
 </src:IWpfConfiguration>

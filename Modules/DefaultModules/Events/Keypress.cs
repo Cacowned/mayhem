@@ -23,7 +23,9 @@ namespace DefaultModules.Events
         // when one of them is being configured
         public static bool IsConfigOpen = false;
 
-        Thread mainThread;
+        private Thread mainThread;
+
+        #region Configuration
 
         [DataMember]
         private HashSet<System.Windows.Forms.Keys> MonitorKeysDown
@@ -31,6 +33,8 @@ namespace DefaultModules.Events
             get;
             set;
         }
+
+        #endregion
 
         protected override void Initialize()
         {
@@ -40,18 +44,6 @@ namespace DefaultModules.Events
             mainThread = Thread.CurrentThread;
 
             MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
-        }
-
-        public IWpfConfiguration ConfigurationControl
-        {
-            get { return new KeypressConfig(MonitorKeysDown); }
-        }
-
-        public void OnSaved(IWpfConfiguration configurationControl)
-        {
-            interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
-            MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;
-            interceptKeys.AddCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
         }
 
         public override void SetConfigString()
@@ -73,6 +65,32 @@ namespace DefaultModules.Events
             ConfigString = "Keys: " + b.ToString();
         }
 
+        #region Configuration Views
+        public IWpfConfiguration ConfigurationControl
+        {
+            get { return new KeypressConfig(MonitorKeysDown); }
+        }
+
+        public void OnSaved(IWpfConfiguration configurationControl)
+        {
+            interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
+            MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;
+            interceptKeys.AddCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
+        }
+
+        #endregion
+
+        private void OnKeyCombinationActivated()
+        {
+            if (!IsConfigOpen)
+            {
+                if (Enabled)
+                {
+                    OnEventActivated();
+                }
+            }
+        }
+
         public override void Enable()
         {
             base.Enable();
@@ -87,17 +105,6 @@ namespace DefaultModules.Events
             base.Disable();
 
             interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
-        }
-
-        void OnKeyCombinationActivated()
-        {
-            if (!IsConfigOpen)
-            {
-                if (Enabled)
-                {
-                    OnEventActivated();
-                }
-            }
         }
     }
 }
