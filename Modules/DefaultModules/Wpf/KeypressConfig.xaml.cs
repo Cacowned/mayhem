@@ -30,7 +30,6 @@ namespace DefaultModules.Wpf
         }
 
         public override string Title
-            keyCombination = new HashSet<Keys>(MonitorKeysDown);
         {
             get { return "Key Press"; }
         }
