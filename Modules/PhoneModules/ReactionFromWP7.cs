@@ -10,7 +10,7 @@ using MayhemDefaultStyles.UserControls;
 namespace PhoneModules
 {
     [DataContract]
-    [MayhemModuleAttribute("WP7 Reaction", "Triggers from WP7 Mayhem")]
+    [MayhemModule("WP7 Reaction", "Triggers from WP7 Mayhem")]
     public class ReactionFromWP7 : EventBase, IWpfConfigurable
     {
         PhoneConnector phoneConnector = PhoneConnector.Instance;

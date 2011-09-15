@@ -59,6 +59,8 @@ namespace ArduinoModules.Wpf
         Timer t = new Timer(1000);
 
 
+        private List<DigitalPinItem> preset_digital_pins = null;
+        private List<AnalogPinItem> preset_analog_pins = null; 
 
 
         private BackgroundWorker bg_pinUpdate = new BackgroundWorker();
@@ -71,13 +73,16 @@ namespace ArduinoModules.Wpf
                 {
                     return arduino.portName;
                 }
-                return null;
+                return String.Empty;
 
             }
         }
 
-        public ArduinoEventConfig()
+        public ArduinoEventConfig(List<DigitalPinItem> reaction_digital_pins, List<AnalogPinItem> reaction_analog_pins )
         {
+            preset_digital_pins = reaction_digital_pins;
+            preset_analog_pins = reaction_analog_pins;
+
             InitializeComponent();
             digitalPins.ItemsSource = digital_pin_items;
             analogPins.ItemsSource = analog_pin_items;
@@ -91,8 +96,12 @@ namespace ArduinoModules.Wpf
                 deviceList.SelectedValuePath = "Key";
                 deviceList.SelectedIndex = 0; 
             }
-       
 
+            // connect to board if there is only one arduino present
+            if (deviceNamesIds.Count == 1)
+            {
+                Button_Click(this, null);
+            }
 
             bg_pinUpdate.DoWork += new DoWorkEventHandler((object o, DoWorkEventArgs e) => 
             
@@ -106,6 +115,8 @@ namespace ArduinoModules.Wpf
             t.AutoReset = true;
             t.Elapsed += new ElapsedEventHandler(t_Elapsed);
             t.Enabled = true;
+
+
         }
 
         void t_Elapsed(object sender, ElapsedEventArgs e)
@@ -118,19 +129,10 @@ namespace ArduinoModules.Wpf
        
         
 
-        private void IWpfConfiguration_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (this.IsVisible)
-            {
-                if (itemSelected < 0)
-                {
-                    serial.UpdatePortList();
-                   // deviceList.ItemsSource = serial.serialPortNames;
-                    deviceList.SelectedIndex = 0;
-                }
+       
 
-            }
-        }
+        #region WPF Events
+       
 
         /// <summary>
         /// Executes intial connection with the Arduino Board
@@ -166,9 +168,25 @@ namespace ArduinoModules.Wpf
                 // reset analog ids to 0
                 AnalogPinItem.ResetAnalogIDs();
                 arduino.QueryPins();
+                Arduino_OnInitialized(this, null);
             }
 
         }
+
+        private void deviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox box = sender as ComboBox;
+
+            if (arduino != null && (string)box.SelectedValue != (string)arduino.portName)
+            {
+                connectButton.IsEnabled = true;
+            }
+            else
+            {
+                connectButton.IsEnabled = false;
+            }
+        }
+        #endregion
 
         #region IWpfConfigurable overrides
         public override void OnClosing()
@@ -228,32 +246,47 @@ namespace ArduinoModules.Wpf
                     if (pin.GetPinID() == p.id)
                         pin.SetPinState(p.value);
                 }
-                      
+                    
             }
-
-
         }
 
         public void Arduino_OnPinAdded(Pin p)
         {
             //throw new NotImplementedException();
-            Debug.WriteLine("arduino_OnPinAdded: " + p.analog_channel );
+            Logger.WriteLine("arduino_OnPinAdded: " + p.id );
 
             if (p.mode != PIN_MODE.ANALOG && 
                 p.mode != PIN_MODE.UNASSIGNED && 
                 p.mode != PIN_MODE.SHIFT)
             {
                 DigitalPinItem pItem = new DigitalPinItem(false, p.id, DIGITAL_PIN_CHANGE.LOW);
+                foreach (DigitalPinItem setPin in preset_digital_pins)
+                {
+                    if (setPin.GetPinID() == p.id)
+                    {
+                        pItem = setPin;
+                        Logger.WriteLine("Using already configured pin " + setPin.GetPinID());
+                    }
+                }
                 Dispatcher.Invoke(new Action(() => { digital_pin_items.Add(pItem); }), null); 
                 // set digital pin mode to input
-                if (p.mode != PIN_MODE.INPUT)
+                if (p.mode != PIN_MODE.INPUT && p.flagged == false)
                 {
                     arduino.SetPinMode(p, PIN_MODE.INPUT);
                 }
             }
             else if (p.mode == PIN_MODE.ANALOG)
             {
+               
                 AnalogPinItem aItem = new AnalogPinItem(false, p.id, ANALOG_PIN_CHANGE.EQUALS);
+                foreach (AnalogPinItem setPin in preset_analog_pins)
+                {
+                    if (setPin.GetPinID() == p.id)
+                    {
+                        aItem = setPin;
+                        Logger.WriteLine("Using already configured pin " + setPin.GetPinID());
+                    }
+                }
                 Dispatcher.Invoke(new Action(() => { analog_pin_items.Add(aItem);}), null);
             }
 
@@ -341,10 +374,6 @@ namespace ArduinoModules.Wpf
 
         #endregion
 
-
-
-
-
-        
+           
     }
 }

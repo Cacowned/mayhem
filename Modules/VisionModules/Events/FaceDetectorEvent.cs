@@ -15,7 +15,7 @@ using MayhemOpenCVWrapper.LowLevel;
 namespace VisionModules.Events
 {
     [DataContract]
-    [MayhemModuleAttribute("Face Detector", "Detects if and how many faces are in the scene")]
+    [MayhemModule("Face Detector", "Detects if and how many faces are in the scene")]
     public class FaceDetectorEvent : EventBase, IWpfConfigurable
     {
         private const int detectionInterval = 2500; //ms
