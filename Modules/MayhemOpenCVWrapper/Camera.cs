@@ -235,8 +235,8 @@ namespace MayhemOpenCVWrapper
                      loop_buffer.Enqueue(b);
                 }
                 else
-                {
-                    loop_buffer.Dequeue();
+                {                   
+                    loop_buffer.Dequeue();                  // gc should handle the spurious bitmap                             
                     loop_buffer.Enqueue(b);
                 }
 
