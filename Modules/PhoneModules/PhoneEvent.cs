@@ -14,7 +14,7 @@ using System.IO;
 namespace PhoneModules
 {
     [DataContract]
-    [MayhemModuleAttribute("Phone Remote", "Triggers from phone")]
+    [MayhemModule("Phone Remote", "Triggers from phone")]
     public class PhoneEvent : EventBase, IWpfConfigurable
     {
         PhoneLayout phoneLayout = PhoneLayout.Instance;

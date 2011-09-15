@@ -23,6 +23,11 @@ namespace MayhemCore
         // Used at deserialization
         public override Type ResolveName(string typeName, string typeNamespace, Type declaredType, DataContractResolver knownTypeResolver)
         {
+            if (knownTypeResolver == null)
+            {
+                throw new ArgumentNullException("knownTypeResolver");
+            }
+
             Type t = knownTypeResolver.ResolveName(typeName, typeNamespace, declaredType, null);
             if (t != null)
                 return t;
@@ -38,6 +43,16 @@ namespace MayhemCore
         // Used at serialization
         public override bool TryResolveType(Type type, Type declaredType, DataContractResolver knownTypeResolver, out XmlDictionaryString typeName, out XmlDictionaryString typeNamespace)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
+            if (declaredType == null)
+            {
+                throw new ArgumentNullException("declaredType");
+            }
+
             string name = type.FullName;
             string namesp = type.Assembly.FullName;
             typeName = new XmlDictionaryString(XmlDictionary.Empty, name, 0);

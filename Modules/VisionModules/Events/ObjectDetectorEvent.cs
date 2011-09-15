@@ -31,7 +31,7 @@ using System.Collections;
 namespace VisionModules.Events
 {
     [DataContract]
-    [MayhemModuleAttribute("Object Detector", "Detects objects in scene matching a template image")]
+    [MayhemModule("Object Detector", "Detects objects in scene matching a template image")]
     public class ObjectDetectorEvent : EventBase, IWpfConfigurable
     {
         private const int detectionInterval = 2500; //ms

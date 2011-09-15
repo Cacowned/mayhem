@@ -11,7 +11,7 @@ using MayhemDefaultStyles.UserControls;
 namespace DefaultModules.Reactions
 {
     [DataContract]
-    [MayhemModuleAttribute("Run Program", "Runs a given program")]
+    [MayhemModule("Run Program", "Runs a given program")]
     public class RunProgram : ReactionBase, IWpfConfigurable
     {
         #region Configuration Properties

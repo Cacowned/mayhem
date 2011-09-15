@@ -30,34 +30,40 @@ namespace ArduinoModules.Events
     {
        
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
-
-        [DataMember]
-        public string arduinoPortName = String.Empty;
-
+       
         private ArduinoFirmata arduino = null; 
    
         private Action<Pin> OnDigitalPinChanged; // = new Action<Pin>(arduino_OnDigitalPinChanged);
         private Action<Pin> OnAnalogPinChanged; // = new Action<Pin>(arduino_OnAnalogPinChanged);
 
-        private List<DigitalPinItem> monitorDigitalPins = new List<DigitalPinItem>();
-        private List<AnalogPinItem> monitorAnalogPins = new List<AnalogPinItem>();
-
-
         private const int ACTIVATE_MIN_DELAY = 50;  //minimum activation interval
         DateTime lastActivated = DateTime.MinValue;
+
+        [DataMember]
+        public string arduinoPortName = String.Empty;
+
+        [DataMember]
+        private List<DigitalPinItem> monitorDigitalPins = new List<DigitalPinItem>();
+
+        [DataMember]
+        private List<AnalogPinItem> monitorAnalogPins = new List<AnalogPinItem>();
 
         public ArduinoEvent()
         {
             Init(new StreamingContext());
         }
 
-        [OnDeserializing]
+        [OnDeserialized]
         private void Init(StreamingContext s)
         {
- 	         base.Initialize() ;
-
-             OnDigitalPinChanged = new Action<Pin>(arduino_OnDigitalPinChanged);
+            if (arduinoPortName != String.Empty)
+            {
+                arduino = ArduinoFirmata.InstanceForPortname(arduinoPortName);
+            }
+            
+            OnDigitalPinChanged = new Action<Pin>(arduino_OnDigitalPinChanged);
              OnAnalogPinChanged  = new Action<Pin>(arduino_OnAnalogPinChanged);
+
         }
 
         public IWpfConfiguration ConfigurationControl
@@ -68,7 +74,7 @@ namespace ArduinoModules.Events
 
                 // TODO
   
-                ArduinoEventConfig config = new ArduinoEventConfig();           
+                ArduinoEventConfig config = new ArduinoEventConfig(monitorDigitalPins, monitorAnalogPins);           
                 return config;
             }
         }
@@ -122,20 +128,22 @@ namespace ArduinoModules.Events
                 foreach (DigitalPinItem p in config.digital_pin_items)
                 {
                     if (p.Selected)
-                        digitalPinsMonitor.Add(p);
+                    {     
+                        // TODO: arduino.FlagPin(p)
+                        digitalPinsMonitor.Add(p);                       
+                    }
                 }
 
                 foreach (AnalogPinItem a in config.analog_pin_items)
                 {
+                    // TODO: arduino.FlagPin(p)
                     if (a.Selected)
                         analogPinsMonitor.Add(a);
                 }
 
                 monitorAnalogPins = analogPinsMonitor;
                 monitorDigitalPins = digitalPinsMonitor; 
-
-              
-
+             
                 if (enabled)
                 {
                     arduino.OnAnalogPinChanged += OnAnalogPinChanged;
@@ -213,6 +221,7 @@ namespace ArduinoModules.Events
             }
         }
 
+
         public void arduino_OnAnalogPinChanged(Pin p)
         {
             if (this.Enabled)
@@ -225,21 +234,21 @@ namespace ArduinoModules.Events
                         {
                             if (a.SetValue == p.value)
                             {
-                                base.OnEventActivated();
+                                Activate();
                             }
                         }
                         else if (a.ChangeType == ANALOG_PIN_CHANGE.GREATER)
                         {
                             if (a.SetValue <= p.value)
                             {
-                                base.OnEventActivated();
+                                Activate();
                             }
                         }
                         else if (a.ChangeType == ANALOG_PIN_CHANGE.LOWER)
                         {
                             if (a.SetValue >= p.value)
                             {
-                                base.OnEventActivated();
+                                Activate();
                             }
                         }
                         a.SetAnalogValue(p.value);
