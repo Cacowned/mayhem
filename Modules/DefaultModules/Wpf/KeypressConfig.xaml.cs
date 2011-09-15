@@ -14,6 +14,7 @@ namespace DefaultModules.Wpf
     public partial class KeypressConfig : IWpfConfiguration
     {
         public HashSet<System.Windows.Forms.Keys> KeysToSave;
+        public HashSet<System.Windows.Forms.Keys> keyCombination;
         private HashSet<System.Windows.Forms.Keys> keys_down = new HashSet<System.Windows.Forms.Keys>();
         private InterceptKeys interceptKeys;
 
@@ -22,6 +23,7 @@ namespace DefaultModules.Wpf
             InitializeComponent();
 
             this.KeysToSave = MonitorKeysDown;
+            keyCombination = new HashSet<Keys>(MonitorKeysDown);
         }
 
         public override void OnLoad()
@@ -33,7 +35,7 @@ namespace DefaultModules.Wpf
             interceptKeys.OnKeyDown += InterceptKeys_OnInterceptKeyDown;
             interceptKeys.OnKeyUp += InterceptKeys_OnInterceptKeyUp;
 
-            UpdateKeysDown(KeysToSave);
+            UpdateKeysDown(keyCombination);
 
             textInvalid.Visibility = Visibility.Collapsed;
         }
@@ -44,12 +46,12 @@ namespace DefaultModules.Wpf
             {
                 if (keys_down.Count == 0)
                 {
-                    KeysToSave.Clear();
+                    keyCombination.Clear();
                 }
                 keys_down.Add(key);
-                KeysToSave.Add(key);
+                keyCombination.Add(key);
 
-                UpdateKeysDown(KeysToSave);
+                UpdateKeysDown(keyCombination);
             }
         }
 
@@ -95,10 +97,15 @@ namespace DefaultModules.Wpf
 
         public override bool OnSave()
         {
-            if (KeysToSave.Count == 0)
+            if (keyCombination.Count == 0)
             {
                 System.Windows.MessageBox.Show("You must have at least one key pressed");
                 return false;
+            }
+            KeysToSave.Clear();
+            foreach (Keys key in keyCombination)
+            {
+                KeysToSave.Add(key);
             }
             return true;
         }

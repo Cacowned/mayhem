@@ -19,6 +19,8 @@ namespace DefaultModules.Events
     {
         private InterceptKeys interceptKeys;
 
+        // If there are multiple keypress events, we want to disable their activation 
+        // when one of them is being configured
         public static bool IsConfigOpen = false;
 
         Thread mainThread;
