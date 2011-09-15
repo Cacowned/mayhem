@@ -1,0 +1,32 @@
+﻿<src:IWpfConfiguration x:Class="OfficeModules.Wpf.SmsMessageConfig"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:src="clr-namespace:MayhemDefaultStyles.UserControls;assembly=MayhemDefaultStyles"
+			 Width="400">
+
+	<Grid>
+		<StackPanel>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="100" />
+					<ColumnDefinition Width="290" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+
+				<TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="0">To:</TextBlock>
+				<TextBox Name="ToBox" Grid.Column="1" Grid.Row="0" />
+
+				<TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="1">Carrier:</TextBlock>
+				<ComboBox DockPanel.Dock="Right" Name="Carrier" MinWidth="100" Grid.Column="1" Grid.Row="1" />
+
+				<TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="2">Message:</TextBlock>
+				<TextBox TextWrapping="Wrap" AcceptsReturn="True" Name="MsgBox" Grid.Column="1" Grid.Row="2" Height="70"/>
+			</Grid>
+		</StackPanel>
+	</Grid>
+</src:IWpfConfiguration>
