@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Packages\</OutputPath>
+    <OutputPath>..\..\bin\Packages\PhidgetModules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,20 +25,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Packages\</OutputPath>
+    <OutputPath>..\..\bin\Packages\PhidgetModules\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MayhemCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Mayhem\MayhemCore\bin\Debug\MayhemCore.dll</HintPath>
-    </Reference>
-    <Reference Include="MayhemDefaultStyles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Mayhem\MayhemDefaultStyles\bin\Debug\MayhemDefaultStyles.dll</HintPath>
-    </Reference>
     <Reference Include="Phidget21.NET, Version=2.1.7.48, Culture=neutral, PublicKeyToken=c2b1f2a3594bce52, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -171,6 +163,18 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
+      <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
+      <Name>MayhemCore</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
+      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
+      <Name>MayhemWpf</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

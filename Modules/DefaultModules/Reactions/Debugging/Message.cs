@@ -6,7 +6,7 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Reactions.Debugging
 {
@@ -14,6 +14,7 @@ namespace DefaultModules.Reactions.Debugging
     [MayhemModule("Debug: Message", "Generates debug output when triggered")]
     public class Message : ReactionBase, IWpfConfigurable
     {
+        [DataMember]
         private string MessageText { get; set; }
 
         public override void Perform()

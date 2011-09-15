@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:src="clr-namespace:MayhemDefaultStyles.UserControls;assembly=MayhemDefaultStyles"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              xmlns:visionmods="clr-namespace:VisionModules.Wpf"
              mc:Ignorable="d" 
              Width="400">

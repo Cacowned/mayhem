@@ -4,7 +4,7 @@ using System.Windows.Threading;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Events
 {

@@ -5,7 +5,7 @@ using System.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using XboxModules.Events;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace XboxModules.Wpf
 {

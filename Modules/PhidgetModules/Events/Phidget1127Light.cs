@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 
 namespace PhidgetModules.Events

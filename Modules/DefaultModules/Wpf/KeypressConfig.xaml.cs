@@ -4,7 +4,7 @@ using DefaultModules.KeypressHelpers;
 using MayhemCore.ModuleTypes;
 using System.Windows.Controls;
 using System.Diagnostics;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using DefaultModules.Events;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -13,15 +13,25 @@ namespace DefaultModules.Wpf
 {
     public partial class KeypressConfig : IWpfConfiguration
     {
-        public HashSet<System.Windows.Forms.Keys> KeysToSave;
-        private HashSet<System.Windows.Forms.Keys> keys_down = new HashSet<System.Windows.Forms.Keys>();
+        public HashSet<Keys> KeysToSave;
+        public HashSet<System.Windows.Forms.Keys> keyCombination;
+
+        private HashSet<Keys> keys_down = new HashSet<Keys>();
         private InterceptKeys interceptKeys;
+
+        private bool shouldCheckValidity = false;
 
         public KeypressConfig(HashSet<System.Windows.Forms.Keys> MonitorKeysDown)
         {
-            InitializeComponent();
-
             this.KeysToSave = MonitorKeysDown;
+            keyCombination = new HashSet<Keys>(MonitorKeysDown);
+
+            InitializeComponent();
+        }
+
+        public override string Title
+        {
+            get { return "Key Press"; }
         }
 
         public override void OnLoad()
@@ -33,27 +43,27 @@ namespace DefaultModules.Wpf
             interceptKeys.OnKeyDown += InterceptKeys_OnInterceptKeyDown;
             interceptKeys.OnKeyUp += InterceptKeys_OnInterceptKeyUp;
 
-            UpdateKeysDown(KeysToSave);
+            UpdateKeysDown(keyCombination);
 
-            textInvalid.Visibility = Visibility.Collapsed;
+            shouldCheckValidity = true;
         }
 
-        void InterceptKeys_OnInterceptKeyDown(Keys key)
+        private void InterceptKeys_OnInterceptKeyDown(Keys key)
         {
             if (!keys_down.Contains(key))
             {
                 if (keys_down.Count == 0)
                 {
-                    KeysToSave.Clear();
+                    keyCombination.Clear();
                 }
                 keys_down.Add(key);
-                KeysToSave.Add(key);
+                keyCombination.Add(key);
 
-                UpdateKeysDown(KeysToSave);
+                UpdateKeysDown(keyCombination);
             }
         }
 
-        void InterceptKeys_OnInterceptKeyUp(Keys key)
+        private void InterceptKeys_OnInterceptKeyUp(Keys key)
         {
             if (keys_down.Contains(key))
             {
@@ -61,7 +71,7 @@ namespace DefaultModules.Wpf
             }
         }
 
-        void UpdateKeysDown(HashSet<System.Windows.Forms.Keys> keys)
+        private void UpdateKeysDown(HashSet<System.Windows.Forms.Keys> keys)
         {
             string str = "";
             foreach (System.Windows.Forms.Keys key in keys)
@@ -76,8 +86,12 @@ namespace DefaultModules.Wpf
                 }
             }
             textBoxKeys.Text = str;
+
             CanSave = keys.Count > 0;
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            if (shouldCheckValidity)
+            {
+                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
 
         public override void OnClosing()
@@ -88,23 +102,19 @@ namespace DefaultModules.Wpf
             interceptKeys.OnKeyUp -= InterceptKeys_OnInterceptKeyUp;
         }
 
-        public override string Title
-        {
-            get { return "Key Press"; }
-        }
-
         public override bool OnSave()
         {
-            if (KeysToSave.Count == 0)
+            if (keyCombination.Count == 0)
             {
                 System.Windows.MessageBox.Show("You must have at least one key pressed");
                 return false;
             }
+            KeysToSave.Clear();
+            foreach (Keys key in keyCombination)
+            {
+                KeysToSave.Add(key);
+            }
             return true;
-        }
-
-        public override void OnCancel()
-        {
         }
 
         private void IWpfConfiguration_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Packages\</OutputPath>
+    <OutputPath>..\..\bin\Packages\InsteonAndX10Modules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,18 +25,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Packages\</OutputPath>
+    <OutputPath>..\..\bin\Packages\InsteonAndX10Modules\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MayhemCore">
-      <HintPath>..\..\Mayhem\MayhemCore\bin\Debug\MayhemCore.dll</HintPath>
-    </Reference>
-    <Reference Include="MayhemDefaultStyles">
-      <HintPath>..\..\Mayhem\MayhemDefaultStyles\bin\Debug\MayhemDefaultStyles.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -72,9 +66,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
+      <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
+      <Name>MayhemCore</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
+      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
+      <Name>MayhemWpf</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\MayhemSerial\MayhemSerial.csproj">
       <Project>{EB69EA74-75DB-4171-858A-B4BC4F6857E6}</Project>
       <Name>MayhemSerial</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

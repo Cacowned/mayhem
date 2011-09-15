@@ -8,7 +8,7 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using OOutlook = Microsoft.Office.Interop.Outlook;
 using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace OutlookModules.Reactions.Outlook
 {

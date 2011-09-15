@@ -5,7 +5,7 @@ using DefaultModules.LowLevel;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Reactions
 {
@@ -52,6 +52,10 @@ namespace DefaultModules.Reactions
             if (SoundPath != null && File.Exists(SoundPath))
             {
                 m.PlayFile(SoundPath);
+            }
+            else
+            {
+                ErrorLog.AddError(ErrorType.Failure, "The sound file doesn't exist");
             }
         }
 

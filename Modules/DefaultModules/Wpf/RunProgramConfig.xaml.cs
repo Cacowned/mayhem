@@ -1,24 +1,47 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using Microsoft.Win32;
 
 namespace DefaultModules.Wpf
 {
     public partial class RunProgramConfig : IWpfConfiguration
     {
-        public string Filename;
-        public string Arguments;
+        public string Filename, Arguments;
+
+        private bool shouldCheckValidity = false;
 
         public RunProgramConfig(string filename, string arguments)
         {
+            this.Filename = filename;
+            this.Arguments = arguments;
+
             InitializeComponent();
-            LocationBox.Text = filename;
-            ArgumentsBox.Text = arguments;
-            CanSave = File.Exists(filename);
-            textInvalid.Visibility = Visibility.Collapsed;
         }
+
+        public override string Title
+        {
+            get { return "Run Program"; }
+        }
+
+        public override void OnLoad()
+        {
+            LocationBox.Text = Filename;
+            ArgumentsBox.Text = Arguments;
+
+            shouldCheckValidity = true;
+        }
+
+        private void CheckValidity()
+        {
+            Filename = LocationBox.Text;
+            Arguments = ArgumentsBox.Text;
+
+            CanSave = Filename.Length > 0 && File.Exists(Filename);
+        }
+
+
 
         // Browse for file
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -34,24 +57,15 @@ namespace DefaultModules.Wpf
             }
         }
 
-        public override string Title
-        {
-            get { return "Run Program"; }
-        }
-
-        public override bool OnSave()
-        {
-            return true;
-        }
-
-        public override void OnCancel()
-        {
-        }
 
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CanSave = File.Exists(LocationBox.Text);
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            if (shouldCheckValidity)
+            {
+                CheckValidity();
+
+                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
     }
 }

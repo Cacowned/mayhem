@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Packages\</OutputPath>
+    <OutputPath>..\..\bin\Packages\PhoneModules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Packages\</OutputPath>
+    <OutputPath>..\..\bin\Packages\PhoneModules\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -111,10 +111,12 @@
     <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
       <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
       <Name>MayhemCore</Name>
+      <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\MayhemDefaultStyles\MayhemDefaultStyles.csproj">
-      <Project>{D4441581-1768-4A2A-9A2B-B6A700B96FAD}</Project>
-      <Name>MayhemDefaultStyles</Name>
+    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
+      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
+      <Name>MayhemWpf</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

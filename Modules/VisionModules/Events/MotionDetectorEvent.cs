@@ -17,7 +17,7 @@ using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
 using System.Collections.Generic;
 using System.Diagnostics;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using MayhemOpenCVWrapper.LowLevel;
 
 namespace VisionModules.Events

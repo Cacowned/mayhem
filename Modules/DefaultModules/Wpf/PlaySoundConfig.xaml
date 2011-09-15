@@ -2,16 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:src="clr-namespace:MayhemDefaultStyles.UserControls;assembly=MayhemDefaultStyles"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              Width="400" >
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Width="70" VerticalAlignment="Center">File:</TextBlock>
-                <TextBox Name="LocationBox" Width="250" Margin="0,0,10,0" Text="{Binding FileName, Mode=TwoWay}" TextChanged="LocationBox_TextChanged" />
+                <TextBox Name="LocationBox" Width="250" Margin="0,0,10,0" TextChanged="LocationBox_TextChanged" />
                 <Button Width="60" Height="25" Click="Button_Click">Browse</Button>
             </StackPanel>
-            <TextBlock Name="textInvalid" Text="Filename is invalid" Margin="80,0,0,0" Foreground="#EF0000" Visibility="Visible" />
+            <TextBlock Name="textInvalid" Text="Filename is invalid" Margin="80,0,0,0" Foreground="#EF0000" Visibility="Collapsed" />
         </StackPanel>
     </Grid>
 </src:IWpfConfiguration>

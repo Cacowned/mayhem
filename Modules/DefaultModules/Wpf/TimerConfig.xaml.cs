@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Windows;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
     public partial class TimerConfig : IWpfConfiguration
     {
         public int Hours, Minutes, Seconds;
-        bool shouldCheckValidity = false;
+        
+        private bool shouldCheckValidity = false;
 
         public TimerConfig(int hours, int minutes, int seconds)
         {
@@ -18,18 +19,18 @@ namespace DefaultModules.Wpf
             InitializeComponent();
         }
 
+        public override string Title
+        {
+            get { return "Timer"; }
+        }
+
         public override void OnLoad()
         {
             HoursBox.Text = Hours.ToString();
             MinutesBox.Text = Minutes.ToString();
             SecondsBox.Text = Seconds.ToString();
-            CheckValidity();
-            shouldCheckValidity = true;
-        }
 
-        public override string Title
-        {
-            get { return "Timer"; }
+            shouldCheckValidity = true;
         }
 
         private string CheckValidity()
@@ -71,10 +72,6 @@ namespace DefaultModules.Wpf
                 CanSave = true;
                 return string.Empty;
             }
-        }
-
-        public override void OnCancel()
-        {
         }
 
         private void TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
