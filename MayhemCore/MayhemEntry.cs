@@ -11,7 +11,7 @@ namespace MayhemCore
     /// a configuration window. If they don't implement a configuration
     /// window, they don't have to implement this class
     /// </typeparam>
-    public class Mayhem
+    public class MayhemEntry
     {
         public ConnectionList ConnectionList
         {
@@ -35,22 +35,22 @@ namespace MayhemCore
             private set;
         }
 
-        private static Mayhem _instance;
+        private static MayhemEntry _instance;
 
-        public static Mayhem Instance
+        public static MayhemEntry Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new Mayhem();
+                    _instance = new MayhemEntry();
                 }
 
                 return _instance;
             }
         }
 
-        private Mayhem()
+        private MayhemEntry()
         {
             // Set up our three lists
             EventList = new EventList();

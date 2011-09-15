@@ -8,7 +8,7 @@ using MayhemCore.ModuleTypes;
 using System.Windows;
 using PhoneModules.Controls;
 using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using System.IO;
 
 namespace PhoneModules

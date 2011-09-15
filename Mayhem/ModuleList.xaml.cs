@@ -1,18 +1,17 @@
-﻿using System.Collections;
-using System.Windows;
-using MayhemCore.ModuleTypes;
-using MayhemDefaultStyles.UserControls;
-using MayhemCore;
-using System.Windows.Media.Animation;
-using System;
-using System.Windows.Controls;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Windows.Interop;
+﻿using System;
+using System.Collections;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Interop;
+using System.Windows.Media.Animation;
+using MayhemCore;
+using MayhemCore.ModuleTypes;
+using MayhemWpf.UserControls;
 
-namespace MayhemWpf
+namespace Mayhem
 {
     /// <summary>
     /// Interaction logic for EventList.xaml

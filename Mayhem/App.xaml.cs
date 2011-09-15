@@ -9,7 +9,7 @@ using System.Threading;
 using System.Windows;
 using NuGet;
 
-namespace MayhemWpf
+namespace Mayhem
 {
 	/// <summary>
 	/// Interaction logic for App.xaml
@@ -113,9 +113,9 @@ namespace MayhemWpf
             if (wantsUpdates)
             {
                 if (Environment.GetCommandLineArgs().Contains("-localrepo"))
-                    Process.Start("MayhemWpf.exe", "-installupdates -localrepo");
+                    Process.Start("Mayhem.exe", "-installupdates -localrepo");
                 else
-                    Process.Start("MayhemWpf.exe", "-installupdates");
+                    Process.Start("Mayhem.exe", "-installupdates");
 
             }
         }

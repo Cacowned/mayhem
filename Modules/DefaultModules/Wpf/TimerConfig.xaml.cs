@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {

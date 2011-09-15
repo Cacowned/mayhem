@@ -21,7 +21,7 @@ using Point = System.Drawing.Point;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
 using MayhemOpenCVWrapper.LowLevel;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.Serialization;

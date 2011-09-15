@@ -8,7 +8,7 @@ using System.Windows.Media.Animation;
 using System;
 using System.Windows.Media.Effects;
 
-namespace MayhemWpf.UserControls
+namespace Mayhem.UserControls
 {
     /// <summary>
     /// Interaction logic for ModuleView.xaml
@@ -128,7 +128,7 @@ namespace MayhemWpf.UserControls
                     {
                         c.Delete();
 
-                        Mayhem.Instance.ConnectionList.Remove(c);
+                        MayhemEntry.Instance.ConnectionList.Remove(c);
                         ((MainWindow)Application.Current.MainWindow).Save();
                     });
                 }));

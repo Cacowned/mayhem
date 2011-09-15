@@ -14,7 +14,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Deployment.Application;
 
-namespace MayhemWpf
+namespace Mayhem
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -37,7 +37,7 @@ namespace MayhemWpf
             DependencyProperty.Register("Errors", typeof(ObservableCollection<MayhemError>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<MayhemError>()));
 
         private string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
-        Mayhem mayhem;
+        MayhemEntry mayhem;
 
         public MainWindow()
         {
@@ -45,11 +45,11 @@ namespace MayhemWpf
                 UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
 
             ResourceDictionary dict = new ResourceDictionary();
-            Uri uri = new Uri("/MayhemDefaultStyles;component/Styles.xaml", UriKind.Relative);
+            Uri uri = new Uri("/MayhemWpf;component/Styles.xaml", UriKind.Relative);
             dict.Source = uri;
             Application.Current.Resources.MergedDictionaries.Add(dict);
 
-            mayhem = Mayhem.Instance;
+            mayhem = MayhemEntry.Instance;
             mayhem.SetConfigurationType(typeof(IWpfConfigurable));
 
             string directory = "";
@@ -77,8 +77,6 @@ namespace MayhemWpf
 
         public void Load()
         {
-            Logger.WriteLine("asdf");
-            Logger.WriteLine("asdf");
             if (File.Exists(filename))
             {
                 using (FileStream stream = new FileStream(filename, FileMode.Open))
@@ -113,7 +111,7 @@ namespace MayhemWpf
         {
             using (FileStream stream = new FileStream(filename, FileMode.Create))
             {
-                Mayhem.Instance.ConnectionList.Serialize(stream);
+                MayhemEntry.Instance.ConnectionList.Serialize(stream);
             }
         }
 
@@ -135,7 +133,7 @@ namespace MayhemWpf
         {
             DimMainWindow(true);
 
-            ModuleList dlg = new ModuleList(Mayhem.Instance.EventList, "Event List");
+            ModuleList dlg = new ModuleList(MayhemEntry.Instance.EventList, "Event List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
@@ -166,7 +164,7 @@ namespace MayhemWpf
         {
             DimMainWindow(true);
 
-            ModuleList dlg = new ModuleList(Mayhem.Instance.ReactionList, "Reaction List");
+            ModuleList dlg = new ModuleList(MayhemEntry.Instance.ReactionList, "Reaction List");
             dlg.Owner = this;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dlg.ModulesList.SelectedIndex = 0;
@@ -214,7 +212,7 @@ namespace MayhemWpf
                     Type t = _reaction.Type;
                     reaction = (ReactionBase)Activator.CreateInstance(t);
                 }
-                Mayhem.Instance.ConnectionList.Add(new Connection(ev, reaction));
+                MayhemEntry.Instance.ConnectionList.Add(new Connection(ev, reaction));
 
                 buttonEmptyReaction.Style = (Style)FindResource("EmptyReactionButton");
                 buttonEmptyEvent.Style = (Style)FindResource("EmptyEventButton");

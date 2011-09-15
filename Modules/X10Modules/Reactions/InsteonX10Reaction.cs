@@ -17,7 +17,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using MayhemSerial;
 using System.Diagnostics;
 using X10Modules.Wpf;

@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 using Phidgets;
 using Phidgets.Events;
 using System.Windows.Threading;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace PhidgetModules.Wpf
 {
