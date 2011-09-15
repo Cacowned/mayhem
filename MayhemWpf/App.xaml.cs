@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Linq;
-using System.Windows;
-using NuGet;
-using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows;
+using NuGet;
 
 namespace MayhemWpf
 {
@@ -40,6 +40,10 @@ namespace MayhemWpf
                 {
                     CheckForUpdates(true);
                 }
+                else if (e.Args.Contains("-noupdates"))
+                {
+                    // Do nothing
+                }
                 else
                 {
                     LoadDependencies();
@@ -67,29 +71,6 @@ namespace MayhemWpf
                 Application.Current.Exit += new ExitEventHandler(Current_Exit);
                 ThreadPool.QueueUserWorkItem(new WaitCallback(CheckForUpdates));
             }
-            /*
-            var repository = PackageRepositoryFactory.Default.CreateRepository(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\MayhemPackages"));
-            var manager = new PackageManager(repository, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"));
-            IQueryable<IPackage> packages = repository.GetPackages();
-
-            List<IPackage> packagesList = packages.ToList();
-            foreach (IPackage package in packagesList)
-            {
-                manager.LocalRepository.GetPackages();
-
-                Logger.WriteLine(package.GetFullName());
-
-                //var existingPackage = manager.LocalRepository.FindPackage(package.Id);
-                //if (existingPackage == null)
-                //{
-                    manager.InstallPackage(package, false);
-                //}
-                //else if (package.Version > existingPackage.Version)
-                //{
-                //    manager.UpdatePackage(package, false);
-                //}
-            }
-            */
 
             //Load the correct dependency assemblies
             LoadDependencies();
@@ -131,7 +112,11 @@ namespace MayhemWpf
         {
             if (wantsUpdates)
             {
-                Process.Start("MayhemWpf.exe", "-installupdates");
+                if (Environment.GetCommandLineArgs().Contains("-localrepo"))
+                    Process.Start("MayhemWpf.exe", "-installupdates -localrepo");
+                else
+                    Process.Start("MayhemWpf.exe", "-installupdates");
+
             }
         }
 
@@ -144,7 +129,12 @@ namespace MayhemWpf
         {
             try
             {
-                var repository = PackageRepositoryFactory.Default.CreateRepository(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\MayhemPackages"));
+                IPackageRepository repository;
+                if(Environment.GetCommandLineArgs().Contains("-localrepo"))
+                    repository = new LocalPackageRepository(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\MayhemPackages\\Packages"));
+                else
+                    repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
+
                 var manager = new PackageManager(repository, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"));
 
                 List<IPackage> packagesLocal = manager.LocalRepository.GetPackages().ToList();

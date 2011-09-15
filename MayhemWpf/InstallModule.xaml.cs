@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Windows;
-using NuGet;
-using System.IO;
-using System.Threading;
-using System.Windows.Threading;
-using System.Windows.Controls;
-using System.Collections.ObjectModel;
 using System.Deployment.Application;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
+using NuGet;
 
 namespace MayhemWpf
 {
@@ -51,7 +51,6 @@ namespace MayhemWpf
             try
             {
                 // Get the package file
-
                 string installPath = "";
                 // if we are running as a clickonce application
                 if (ApplicationDeployment.IsNetworkDeployed)
@@ -60,18 +59,18 @@ namespace MayhemWpf
                 }
                 else
                 {
-                    // Modules path
-                    //installPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    //installPath = AppDomain.CurrentDomain.BaseDirectory;
-
                     installPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages");
-                    //installPath = AppDomain.CurrentDomain.BaseDirectory;
                 }
                 
-                // Create a repository pointing to the local feed
-                var repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
-
-                repository.ProgressAvailable += new EventHandler<ProgressEventArgs>(repository_ProgressAvailable);
+                // Create a repository pointing to the feed
+                IPackageRepository repository;
+                if (Environment.GetCommandLineArgs().Contains("-localrepo"))
+                    repository = new LocalPackageRepository(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\MayhemPackages\\Packages"));
+                else
+                {
+                    repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
+                    ((DataServicePackageRepository)repository).ProgressAvailable += new EventHandler<ProgressEventArgs>(repository_ProgressAvailable);
+                }
 
                 // Create a package manager to install and resolve dependencies
                 var packageManager = new PackageManager(repository, installPath);
@@ -90,7 +89,7 @@ namespace MayhemWpf
             {
                 // Fail
                 MessageBox.Show(ex.Message);
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
 
                 DialogResult = false;
             }
@@ -115,7 +114,7 @@ namespace MayhemWpf
             {
                 if (level == MessageLevel.Info)
                 {
-                    Console.WriteLine(message, args);
+                    Debug.WriteLine(message, args);
                 }
             }
         }
