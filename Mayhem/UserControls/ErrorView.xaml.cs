@@ -16,7 +16,7 @@ using MayhemCore;
 using System.Diagnostics;
 using System.Windows.Threading;
 
-namespace MayhemWpf.UserControls
+namespace Mayhem.UserControls
 {
     class SingleAnalysisStatusConverter : IValueConverter
     {
@@ -40,7 +40,7 @@ namespace MayhemWpf.UserControls
                 default:
                     throw new NotSupportedException();
             }
-            return new BitmapImage(new Uri("/MayhemWPF;component/" + path, UriKind.Relative));
+            return new BitmapImage(new Uri("/Mayhem;component/" + path, UriKind.Relative));
         }
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

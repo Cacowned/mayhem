@@ -14,7 +14,7 @@ using MayhemOpenCVWrapper;
 using System.Diagnostics;
 using System.Drawing;
 using System;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
 using System.Collections.Generic;

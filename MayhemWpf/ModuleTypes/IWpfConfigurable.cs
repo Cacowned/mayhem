@@ -1,5 +1,5 @@
 ﻿using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace MayhemCore.ModuleTypes
 {

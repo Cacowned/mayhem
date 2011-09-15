@@ -4,7 +4,7 @@ using DefaultModules.KeypressHelpers;
 using MayhemCore.ModuleTypes;
 using System.Windows.Controls;
 using System.Diagnostics;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using DefaultModules.Events;
 using System.Windows.Forms;
 using System.Windows.Input;

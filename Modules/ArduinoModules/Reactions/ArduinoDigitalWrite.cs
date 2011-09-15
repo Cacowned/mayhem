@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using System.Runtime.Serialization;
 using ArduinoModules.Wpf;
 using ArduinoModules.Wpf.Helpers;

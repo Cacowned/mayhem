@@ -8,7 +8,7 @@ using Microsoft.Win32;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using MessagingToolkit.QRCode.Codec;
 using System.Net;
 using System.IO;

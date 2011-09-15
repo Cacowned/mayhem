@@ -6,7 +6,7 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using SpeechLib;
 using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Reactions
 {

@@ -27,7 +27,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using MayhemSerial;
 using ArduinoModules.Firmata;
 using System.Diagnostics;

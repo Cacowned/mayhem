@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Threading;
 using NuGet;
 
-namespace MayhemWpf
+namespace Mayhem
 {
     /// <summary>
     /// Interaction logic for InstallModule.xaml
@@ -31,7 +31,7 @@ namespace MayhemWpf
                 UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
 
             ResourceDictionary dict = new ResourceDictionary();
-            Uri uri = new Uri("/MayhemDefaultStyles;component/Styles.xaml", UriKind.Relative);
+            Uri uri = new Uri("/Mayhem;component/Styles.xaml", UriKind.Relative);
             dict.Source = uri;
             Application.Current.Resources.MergedDictionaries.Add(dict);
 

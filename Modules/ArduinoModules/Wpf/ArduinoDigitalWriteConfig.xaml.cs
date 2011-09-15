@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using System.Collections.ObjectModel;
 using ArduinoModules.Wpf.Helpers;
 using ArduinoModules.Firmata;

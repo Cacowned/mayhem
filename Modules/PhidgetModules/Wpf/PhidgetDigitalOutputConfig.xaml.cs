@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using PhidgetModules.Reaction;
 using Phidgets;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace PhidgetModules.Wpf
 {

@@ -67,7 +67,7 @@ namespace MayhemCore
 
         private void _Initialize()
         {
-            Type configurableType = Mayhem.Instance.ConfigurableType;
+            Type configurableType = MayhemEntry.Instance.ConfigurableType;
             Type[] interfaceTypes = GetType().GetInterfaces();
             foreach (Type interfaceType in interfaceTypes)
             {
