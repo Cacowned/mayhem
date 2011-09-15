@@ -53,6 +53,10 @@ namespace DefaultModules.Reactions
             {
                 m.PlayFile(SoundPath);
             }
+            else
+            {
+                ErrorLog.AddError(ErrorType.Failure, "The sound file doesn't exist");
+            }
         }
 
         public override void Enable()
