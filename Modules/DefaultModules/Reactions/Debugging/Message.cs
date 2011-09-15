@@ -14,6 +14,7 @@ namespace DefaultModules.Reactions.Debugging
     [MayhemModule("Debug: Message", "Generates debug output when triggered")]
     public class Message : ReactionBase, IWpfConfigurable
     {
+        [DataMember]
         private string MessageText { get; set; }
 
         public override void Perform()

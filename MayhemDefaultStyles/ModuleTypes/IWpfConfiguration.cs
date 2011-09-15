@@ -15,7 +15,9 @@ namespace MayhemDefaultStyles.UserControls
         public virtual void OnClosing() { }
         public delegate void ConfigCanSaveHandler(bool canSave);
         public event ConfigCanSaveHandler CanSavedChanged;
-        private bool canSave = true;
+        
+        // When the configuration windows open, you can't save without changing fields.
+        private bool canSave = false;
         public bool CanSave
         {
             get
