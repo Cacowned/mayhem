@@ -8,24 +8,26 @@ namespace DefaultModules.Wpf
 {
     public partial class PlaySoundConfig : IWpfConfiguration
     {
-        public string FileName
-        {
-            get { return (string)GetValue(FileNameProperty); }
-            set { SetValue(FileNameProperty, value); }
-        }
+        public string FileName;
 
-        public static readonly DependencyProperty FileNameProperty =
-            DependencyProperty.Register("FileName", typeof(string), typeof(PlaySoundConfig), new UIPropertyMetadata(null));
-
+        private bool shouldCheckValidity = false;
         
         public PlaySoundConfig(string filename)
         {
-            InitializeComponent();
-            this.DataContext = this;
-
             this.FileName = filename;
-            CanSave = File.Exists(FileName);
-            textInvalid.Visibility = Visibility.Collapsed;
+            InitializeComponent();
+        }
+
+        public override string Title
+        {
+            get { return "Play Sound"; }
+        }
+
+        public override void OnLoad()
+        {
+            LocationBox.Text = FileName;
+
+            shouldCheckValidity = true;
         }
 
         // Browse for file
@@ -43,24 +45,21 @@ namespace DefaultModules.Wpf
             }
         }
 
-        public override string Title
+        private bool CheckValidity()
         {
-            get { return "Play Sound"; }
-        }
+            CanSave = File.Exists(FileName);
 
-        public override bool OnSave()
-        {
-            return true;
-        }
-
-        public override void OnCancel()
-        {
+            return CanSave;
         }
 
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CanSave = File.Exists(FileName);
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            if (shouldCheckValidity)
+            {
+                CheckValidity();
+
+                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
     }
 }

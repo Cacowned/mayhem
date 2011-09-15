@@ -13,15 +13,24 @@ namespace DefaultModules.Wpf
 {
     public partial class KeypressConfig : IWpfConfiguration
     {
-        public HashSet<System.Windows.Forms.Keys> KeysToSave;
-        private HashSet<System.Windows.Forms.Keys> keys_down = new HashSet<System.Windows.Forms.Keys>();
+        public HashSet<Keys> KeysToSave;
+        
+
+        private HashSet<Keys> keys_down = new HashSet<Keys>();
         private InterceptKeys interceptKeys;
+
+        private bool shouldCheckValidity = false;
 
         public KeypressConfig(HashSet<System.Windows.Forms.Keys> MonitorKeysDown)
         {
-            InitializeComponent();
-
             this.KeysToSave = MonitorKeysDown;
+
+            InitializeComponent();
+        }
+
+        public override string Title
+        {
+            get { return "Key Press"; }
         }
 
         public override void OnLoad()
@@ -35,10 +44,10 @@ namespace DefaultModules.Wpf
 
             UpdateKeysDown(KeysToSave);
 
-            textInvalid.Visibility = Visibility.Collapsed;
+            shouldCheckValidity = true;
         }
 
-        void InterceptKeys_OnInterceptKeyDown(Keys key)
+        private void InterceptKeys_OnInterceptKeyDown(Keys key)
         {
             if (!keys_down.Contains(key))
             {
@@ -53,7 +62,7 @@ namespace DefaultModules.Wpf
             }
         }
 
-        void InterceptKeys_OnInterceptKeyUp(Keys key)
+        private void InterceptKeys_OnInterceptKeyUp(Keys key)
         {
             if (keys_down.Contains(key))
             {
@@ -61,7 +70,7 @@ namespace DefaultModules.Wpf
             }
         }
 
-        void UpdateKeysDown(HashSet<System.Windows.Forms.Keys> keys)
+        private void UpdateKeysDown(HashSet<System.Windows.Forms.Keys> keys)
         {
             string str = "";
             foreach (System.Windows.Forms.Keys key in keys)
@@ -76,8 +85,12 @@ namespace DefaultModules.Wpf
                 }
             }
             textBoxKeys.Text = str;
+
             CanSave = keys.Count > 0;
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            if (shouldCheckValidity)
+            {
+                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
 
         public override void OnClosing()
@@ -88,11 +101,6 @@ namespace DefaultModules.Wpf
             interceptKeys.OnKeyUp -= InterceptKeys_OnInterceptKeyUp;
         }
 
-        public override string Title
-        {
-            get { return "Key Press"; }
-        }
-
         public override bool OnSave()
         {
             if (KeysToSave.Count == 0)
@@ -101,10 +109,6 @@ namespace DefaultModules.Wpf
                 return false;
             }
             return true;
-        }
-
-        public override void OnCancel()
-        {
         }
 
         private void IWpfConfiguration_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
