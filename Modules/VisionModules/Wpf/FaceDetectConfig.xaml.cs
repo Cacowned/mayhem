@@ -37,6 +37,7 @@ namespace VisionModules.Wpf
             faceDetectorPoints = new List<System.Drawing.Point>();
 
             fd.OnFaceDetected += m_onFaceDetected;
+            CanSave = true;
 
         }
 

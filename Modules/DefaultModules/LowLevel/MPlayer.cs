@@ -44,8 +44,9 @@ namespace DefaultModules.LowLevel
 
         public MPlayer()
         {
-            runThread = new Thread(new ThreadStart(t_StartPlaying));
+            runThread = new Thread(new ThreadStart(t_runDispatcher));
             runThread.IsBackground = true;
+            runThread.Start();
             
         }
 
@@ -58,37 +59,26 @@ namespace DefaultModules.LowLevel
         public void PlayFile(string filePath)
         {
             fileToPlay = new Uri(filePath, UriKind.Absolute);
-            runThread.Start();
-
-            
-            /*
-            mediaplayer.Dispatcher.Invoke(new Action(delegate()
-                {
-                    mediaplayer.Open(new Uri(filePath, UriKind.Absolute));
-                    Logger.WriteLine(" Starting new media playback " + filePath);
-                    mediaplayer.Play();
-                }));
-           */
+           
+            mediaplayer.Dispatcher.BeginInvoke(new Action(delegate() {
+                mediaplayer.Open(fileToPlay);
+                mediaplayer.Play(); }), null);
         }
 
-        private void t_StartPlaying()
+        private void t_runDispatcher()
         {
+            
             Dispatcher.CurrentDispatcher.VerifyAccess();
             mediaplayer = new MediaPlayer();
             mediaplayer.MediaEnded += new EventHandler(p_MediaEnded);
             mediaplayer.MediaOpened += new EventHandler(p_MediaOpened);
             mediaplayer.MediaFailed += new EventHandler<ExceptionEventArgs>(mediaplayer_MediaFailed);
-            mediaplayer.Open(fileToPlay);
-            mediaplayer.Play();
             Dispatcher.Run();  
-
-
         }
 
         public void Stop()
         {
             Logger.WriteLine("");
-          //  mediaplayer.Stop();
             mediaplayer.Dispatcher.BeginInvoke(new Action(delegate(){ mediaplayer.Stop(); }), DispatcherPriority.Send);
         }
 
