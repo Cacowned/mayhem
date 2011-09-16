@@ -1,0 +1,33 @@
+﻿<src:IWpfConfiguration x:Class="PhidgetModules.Wpf.Phidget1066AdvServoConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+			 xmlns:common="clr-namespace:PhidgetModules.Wpf.UserControls"
+             Width="400">
+
+    <Grid>
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="290" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Servo Type:</TextBlock>
+                <ComboBox Name="TypeComboBox" Grid.Column="1" Grid.Row="0" SelectionChanged="TypeComboBox_SelectionChanged" />
+
+
+                <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Move To Position:</TextBlock>
+                <DockPanel Grid.Column="1" Grid.Row="1">
+                    <TextBlock Name="PositionText" Width="40" DockPanel.Dock="Right" IsEnabled="False" TextAlignment="Center" />
+                    <Slider Name="PositionSlider" ValueChanged="PositionSlider_ValueChanged" />
+                </DockPanel>
+
+            </Grid>
+        </StackPanel>
+    </Grid>
+</src:IWpfConfiguration>
