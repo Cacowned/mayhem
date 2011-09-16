@@ -34,6 +34,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AviFile">
+      <HintPath>References\AviFile.dll</HintPath>
+    </Reference>
     <Reference Include="OpenCVDLL">
       <HintPath>..\References\OpenCVDLL.dll</HintPath>
     </Reference>
@@ -63,6 +66,7 @@
     <Compile Include="CameraSettings.cs" />
     <Compile Include="LowLevel\PresenceDetectorComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Video.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="openCVDLLs\opencv_calib3d230.dll">

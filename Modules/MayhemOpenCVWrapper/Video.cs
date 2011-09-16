@@ -8,7 +8,7 @@ using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {
-    class Video
+    public class Video
     {
         double offset = 0; 
         private Camera camera = null;

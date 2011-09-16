@@ -16,7 +16,7 @@ using MayhemOpenCVWrapper;
 
 namespace VisionModules.Wpf
 {
-    class VideoConfig : PictureConfig
+    public class VideoConfig : PictureConfig
     {
 
         public  VideoConfig(string location, double capture_offset_time) : base(location, capture_offset_time)
@@ -37,6 +37,11 @@ namespace VisionModules.Wpf
             lbl_slider_title.Content = "Select the time offset (max) " + Camera.LOOP_DURATION + "s in the future for the video to be recorded.";
             lbl_img_save.Content = "Click the button below to choose the location of saved videos:"; 
 
+        }
+
+        public new string Title()
+        {
+            return "Video Reaction";
         }
 
     }
