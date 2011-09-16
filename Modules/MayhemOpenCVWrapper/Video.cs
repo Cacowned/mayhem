@@ -30,7 +30,9 @@ namespace MayhemOpenCVWrapper
         public event Action<bool> OnVideoSaved;
         
 
-        public Video(Camera c, string fileName)
+
+
+        public Video(Camera c, string fileName, bool compress)
         {
             Camera camera = c;
             frameRate = 1000 / camera.settings.updateRate_ms;
@@ -43,9 +45,35 @@ namespace MayhemOpenCVWrapper
 
             if (video_frames.Count > 0)
             {
-                aviManager = new AviManager(fileName,false);                                    // false creates a new file
-                stream = aviManager.AddVideoStream(true, frameRate, video_frames[0].image);     // add first frame as an example of the video's format
-                
+                aviManager = new AviManager(fileName,false);
+
+
+                Avi.AVICOMPRESSOPTIONS opts = new Avi.AVICOMPRESSOPTIONS();
+                opts.fccType         = (UInt32)Avi.mmioStringToFOURCC("vids", 0);
+                opts.fccHandler      = (UInt32)Avi.mmioStringToFOURCC("CVID", 0);
+                opts.dwKeyFrameEvery = 0;
+                opts.dwQuality       = 1000;  // 0 .. 10000
+                opts.dwFlags         = 0;  // AVICOMRPESSF_KEYFRAMES = 4
+                opts.dwBytesPerSecond= 0;
+                opts.lpFormat        = new IntPtr(0);
+                opts.cbFormat        = 0;
+                opts.lpParms         = new IntPtr(0);
+                opts.cbParms         = 0;
+                opts.dwInterleaveEvery = 0;
+
+                // false creates a new file
+                if (compress)
+                {
+                    Logger.WriteLine("Saving Compressed");
+                    stream = aviManager.AddVideoStream(opts, frameRate, video_frames[0].image);     // add first frame as an example of the video's format
+                }
+                else
+                {
+                    Logger.WriteLine("Saving Uncompressed");
+                    stream = aviManager.AddVideoStream(false, frameRate, video_frames[0].image); 
+                }
+              
+
                 // add the frames
                 ThreadPool.QueueUserWorkItem(new WaitCallback(t_add_frames));         
             }

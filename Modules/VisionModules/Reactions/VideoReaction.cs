@@ -40,23 +40,36 @@ namespace VisionModules.Reactions
         [DataMember]
         private double capture_offset_time = 0;
 
+        [DataMember]
+        private bool compress = false;
+
         // The device we are recording from
         private CameraDriver i = CameraDriver.Instance;
         private Camera cam = null;
 
         private string last_video_saved = String.Empty;
 
-        private bool video_saving = true; 
+        private bool video_saving = false; 
 
         public VideoReaction()
         {
-            Setup();
+            Setup(new StreamingContext());
         }
 
         [OnDeserialized]
-        public void Setup()
+        public void Setup(StreamingContext s)
         {
-        
+            Logger.WriteLine("");
+            if (i == null)
+            {
+                i = CameraDriver.Instance;
+            }
+
+            if (selected_device_idx < i.devices_available.Length)
+            {
+                Logger.WriteLine("Startup with camera " + selected_device_idx);
+                cam = i.cameras_available[selected_device_idx];
+            }
         }
 
 
@@ -66,7 +79,7 @@ namespace VisionModules.Reactions
             Logger.WriteLine("SaveImage");
             DateTime now = DateTime.Now;
             // TODO think of a better naming convention
-            string fileName = "Mayhem-Video_" + this.Name + "_" + now.Year + "_" + now.Month + "_" + now.Month + "_" + now.Day + "-" + now.Hour + "_" + now.Minute + "_" + now.Second + ".avi";
+            string fileName = "Mayhem-Video_" + now.Year + "_" + now.Month + "_" + now.Day + "-" + now.Hour + "_" + now.Minute + "_" + now.Second + ".avi";
             string path = this.folderLocation + "\\" + fileName;
             last_video_saved = path; 
             Logger.WriteLine("saving file to " + path);
@@ -74,7 +87,7 @@ namespace VisionModules.Reactions
             if (Directory.Exists(folderLocation))
             {
                 video_saving = true; 
-                Video v = new Video(cam, path);
+                Video v = new Video(cam, path, compress);
                 v.OnVideoSaved += new Action<bool>(v_OnVideoSaved);
             }
             else
@@ -95,10 +108,42 @@ namespace VisionModules.Reactions
             MessageBox.Show("Video Saved to: " + last_video_saved);
         }
 
+        /// <summary>
+        /// When triggered, start write of video to disk
+        /// video_saving flags video saving mode, so that repeat triggers won't save
+        /// multiple copies of the same video
+        /// </summary>
         public override void Perform()
         {
+            Logger.WriteLine("");
             if (!video_saving && cam != null)
+            {
+                video_saving = true; 
                 SaveVideo();
+            }
+        }
+
+        public override void Enable()
+        {
+            Logger.WriteLine("");
+            if (selected_device_idx < i.devices_available.Length)
+            {
+                cam = i.cameras_available[selected_device_idx];
+                //cam.OnImageUpdated += imageUpdateHandler;
+                if (cam.running == false)
+                    cam.StartFrameGrabbing();
+
+            }
+            base.Enable();
+        }
+
+        public override void Disable()
+        {
+            base.Disable();
+            if (cam != null)
+            {
+                cam.TryStopFrameGrabbing();
+            }
         }
 
         public IWpfConfiguration ConfigurationControl
@@ -117,6 +162,7 @@ namespace VisionModules.Reactions
 
             VideoConfig config = configurationControl as VideoConfig;
             folderLocation = config.location;
+            compress = config.compress_video; 
 
             if (config.deviceList.HasItems)
             {
@@ -130,6 +176,9 @@ namespace VisionModules.Reactions
             }
 
             capture_offset_time = config.slider_value;
+
+            if (wasEnabled)
+                this.Enable();
         }
     }
 }
