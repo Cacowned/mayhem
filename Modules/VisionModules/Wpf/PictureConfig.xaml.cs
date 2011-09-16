@@ -168,7 +168,7 @@ namespace VisionModules.Wpf
             slider_tickbar.Minimum = -capture_size_s;
             slider_tickbar.Maximum = capture_size_s;*/
             
-
+            CanSave = true; 
 
         }
 
@@ -250,12 +250,21 @@ namespace VisionModules.Wpf
             }
         }
 
+        public override void OnCancel()
+        {
+            OnClosing();
+        }
+
         public override bool OnSave()
         {
             selected_camera = deviceList.SelectedItem as Camera;
+            
+            OnClosing();
      
             return true;
         }
+
+  
 
         public override string Title
         {
