@@ -87,6 +87,7 @@
     <Compile Include="Wpf\ROISelector.xaml.cs">
       <DependentUpon>ROISelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\VideoConfig.cs" />
     <Compile Include="Wpf\VisionModulesWPFCommon.cs" />
   </ItemGroup>
   <ItemGroup>
