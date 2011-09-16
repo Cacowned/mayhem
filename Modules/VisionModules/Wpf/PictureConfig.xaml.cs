@@ -281,6 +281,7 @@ namespace VisionModules.Wpf
         /// <param name="e"></param>
         private void root_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            /*
             Logger.WriteLine("IsVisibleChanged");
             if (this.IsVisible)
             {
@@ -299,7 +300,7 @@ namespace VisionModules.Wpf
                     c.OnImageUpdated -= i_OnImageUpdated;
                     c.TryStopFrameGrabbing();
                 }
-            }
+            }*/
         }
 
         #region Highlighting the camera preview selection 
