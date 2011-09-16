@@ -3,13 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              Width="400">
+
     <Grid>
-        <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0">Message:</TextBlock>
-                <TextBox Name="MessageText" Width="330" TextChanged="MessageText_TextChanged" />
-            </StackPanel>
-            <TextBlock Name="textInvalid" Text="Message is invalid" Margin="60,0,0,0" Foreground="#EF0000" Visibility="Collapsed" />
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="300" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Message:</TextBlock>
+        <TextBox Name="MessageBox" Grid.Column="1" Grid.Row="0" TextChanged="MessageText_TextChanged" />
+
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1">Message is invalid</TextBlock>
     </Grid>
 </src:IWpfConfiguration>

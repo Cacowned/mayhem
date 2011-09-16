@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization;
-using DefaultModules.LowLevel;
+using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
@@ -24,29 +25,6 @@ namespace DefaultModules.Reactions
         }
         #endregion
 
-        object locker = new object();
-        protected int _media_playing = 0;
-        private int MediaPlaying
-        {
-            get
-            {
-                lock (locker)
-                {
-                    return _media_playing;
-                }
-
-            }
-
-            set
-            {
-                lock (locker)
-                {
-                    _media_playing = value;
-                }
-            }
-
-        }
-
         public override void Perform()
         {
             if (SoundPath != null && File.Exists(SoundPath))
@@ -55,7 +33,7 @@ namespace DefaultModules.Reactions
             }
             else
             {
-                ErrorLog.AddError(ErrorType.Failure, "The sound file doesn't exist");
+                ErrorLog.AddError(ErrorType.Failure, EnglishStrings.PlaySound_FileNotFound);
             }
         }
 
@@ -68,7 +46,7 @@ namespace DefaultModules.Reactions
             }
             else
             {
-                ErrorLog.AddError(ErrorType.Warning, "The sound file does not exist");
+                ErrorLog.AddError(ErrorType.Warning, EnglishStrings.PlaySound_FileNotFound);
             }
         }
 
@@ -82,11 +60,13 @@ namespace DefaultModules.Reactions
 
         public void CliConfig()
         {
+            string TAG = "[Play Sound]";
+
             string path = "";
 
             do
             {
-                Console.WriteLine(String.Format("{0} Enter the path for the audio file", "[PlaySound]"));
+                Console.WriteLine(String.Format(CultureInfo.CurrentCulture, EnglishStrings.PlaySound_CliConfig_AudioPath, TAG));
                 path = Console.ReadLine();
             }
             while (!File.Exists(path));
@@ -109,7 +89,7 @@ namespace DefaultModules.Reactions
 
         public override void SetConfigString()
         {
-            ConfigString = String.Format("{0}", SoundPath);
+            ConfigString = String.Format(CultureInfo.CurrentCulture, "{0}", SoundPath);
         }
     }
 }

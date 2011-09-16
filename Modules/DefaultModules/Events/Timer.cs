@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.Windows.Threading;
+using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
@@ -36,7 +38,7 @@ namespace DefaultModules.Events
             set;
         }
         #endregion
-        
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -52,34 +54,34 @@ namespace DefaultModules.Events
 
         public override void SetConfigString()
         {
-            ConfigString = String.Format("{0} hours, {1} minutes, {2} seconds", Hours, Minutes, Seconds);
+            ConfigString = String.Format(CultureInfo.CurrentCulture, EnglishStrings.Timer_ConfigString, Hours, Minutes, Seconds);
         }
 
         #region Configuration Views
         public void CliConfig()
         {
-            string TAG = "[TIMER]";
+            string TAG = "[Timer]";
 
             string input = "";
             int hours, minutes, seconds;
 
             do
             {
-                Console.Write("{0} Please enter the number of hours to wait: ", TAG);
+                Console.Write(EnglishStrings.Timer_CliConfig_HoursToWait, TAG);
                 input = Console.ReadLine();
             }
             while (!Int32.TryParse(input, out hours) || !(hours >= 0));
 
             do
             {
-                Console.Write("{0} Please enter the number of minutes to wait: ", TAG);
+                Console.Write(EnglishStrings.Timer_CliConfig_MinutesToWait, TAG);
                 input = Console.ReadLine();
             }
             while (!Int32.TryParse(input, out minutes) || !(minutes >= 0 && minutes < 60));
 
             do
             {
-                Console.Write("{0} Please enter the number of seconds to wait: ", TAG);
+                Console.Write(EnglishStrings.Timer_CliConfig_SecondsToWait, TAG);
                 input = Console.ReadLine();
             }
             while (!Int32.TryParse(input, out seconds) || !(seconds >= 0 && seconds < 60));
@@ -97,21 +99,23 @@ namespace DefaultModules.Events
 
         public void OnSaved(IWpfConfiguration configurationControl)
         {
-            Hours = ((TimerConfig)configurationControl).Hours;
-            Minutes = ((TimerConfig)configurationControl).Minutes;
-            Seconds = ((TimerConfig)configurationControl).Seconds;
+            TimerConfig config = (TimerConfig)configurationControl;
+            Hours = config.Hours;
+            Minutes = config.Minutes;
+            Seconds = config.Seconds;
         }
         #endregion
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         protected void SetInterval()
         {
-
             try
             {
                 myTimer.Interval = new TimeSpan(Hours, Minutes, Seconds);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
+                // we should never get here
                 Logger.WriteLine("Can't set timer interval. Exception: {0}", e.Message);
             }
         }

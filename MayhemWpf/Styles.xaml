@@ -86,4 +86,20 @@
         </Setter>
         <Setter Property="Cursor" Value="Hand" />
     </Style>
+
+
+    <!-- This is the label that shows up in the configuration user controls to label rows -->
+    <Style TargetType="{x:Type TextBlock}" x:Key="ConfigLabel">
+        
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+
+        <Setter Property="Margin" Value="0,0,10,0" />
+    </Style>
+
+    <!-- Error messages on config windows -->
+    <Style TargetType="{x:Type TextBlock}" x:Key="ConfigErrorMessage">
+        <Setter Property="Foreground" Value="#EF0000" />
+        <Setter Property="Visibility" Value="Collapsed" />
+    </Style>
 </ResourceDictionary>

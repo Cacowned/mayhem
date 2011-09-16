@@ -3,8 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace DefaultModules.LowLevel
 {
-	public static class Utils
-	{
+    public static class Utilities
+    {
         [DllImport("user32.dll")]
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
@@ -22,39 +22,39 @@ namespace DefaultModules.LowLevel
             MAPVK_VK_TO_VSC_EX = 0x04
         }
 
-		public static bool Is64BitProcess 
+        public static bool Is64BitProcess
         {
-			get { return IntPtr.Size == 8; }
-		}
+            get { return IntPtr.Size == 8; }
+        }
 
-		public static void SendKey(ushort key) 
+        public static void SendKey(ushort key)
         {
-			/*if (Is64BitProcess) {
-				Native.INPUT_64[] inputStruct = new Native.INPUT_64[1];
-				inputStruct[0] = new Native.INPUT_64();
-				inputStruct[0].type = Native.INPUT_KEYBOARD;
+            /*if (Is64BitProcess) {
+                Native.INPUT_64[] inputStruct = new Native.INPUT_64[1];
+                inputStruct[0] = new Native.INPUT_64();
+                inputStruct[0].type = Native.INPUT_KEYBOARD;
 
-				// Key down the actual key-code
-				inputStruct[0].ki = Native.createKeybdInput(key, 0);
-				Native.SendInput(1, inputStruct, Marshal.SizeOf(inputStruct[0]));
-				// Key up the actual key-code
-				inputStruct[0].ki = Native.createKeybdInput(key, Native.KEYEVENTF_KEYUP);
-				Native.SendInput(1, inputStruct, Marshal.SizeOf(inputStruct[0]));
-			} else {
-				Native.INPUT_86[] inputStruct = new Native.INPUT_86[1];
-				inputStruct[0] = new Native.INPUT_86();
-				inputStruct[0].type = Native.INPUT_KEYBOARD;
+                // Key down the actual key-code
+                inputStruct[0].ki = Native.createKeybdInput(key, 0);
+                Native.SendInput(1, inputStruct, Marshal.SizeOf(inputStruct[0]));
+                // Key up the actual key-code
+                inputStruct[0].ki = Native.createKeybdInput(key, Native.KEYEVENTF_KEYUP);
+                Native.SendInput(1, inputStruct, Marshal.SizeOf(inputStruct[0]));
+            } else {
+                Native.INPUT_86[] inputStruct = new Native.INPUT_86[1];
+                inputStruct[0] = new Native.INPUT_86();
+                inputStruct[0].type = Native.INPUT_KEYBOARD;
 
-				// Key down the actual key-code
-				inputStruct[0].ki = Native.createKeybdInput(key, 0);
-				Native.SendInput(1, inputStruct, Marshal.SizeOf(inputStruct[0]));
-				// Key up the actual key-code
-				inputStruct[0].ki = Native.createKeybdInput(key, Native.KEYEVENTF_KEYUP);
-				Native.SendInput(1, inputStruct, Marshal.SizeOf(inputStruct[0]));
-			}*/
+                // Key down the actual key-code
+                inputStruct[0].ki = Native.createKeybdInput(key, 0);
+                Native.SendInput(1, inputStruct, Marshal.SizeOf(inputStruct[0]));
+                // Key up the actual key-code
+                inputStruct[0].ki = Native.createKeybdInput(key, Native.KEYEVENTF_KEYUP);
+                Native.SendInput(1, inputStruct, Marshal.SizeOf(inputStruct[0]));
+            }*/
             keybd_event((byte)key, (byte)MapVirtualKey(key, 0), 0, UIntPtr.Zero);
             keybd_event((byte)key, (byte)MapVirtualKey(key, 0), KEYEVENTF_KEYUP, UIntPtr.Zero);
-		}
+        }
 
-	}
+    }
 }

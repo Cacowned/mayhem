@@ -1,7 +1,7 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package >
   <metadata>
-    <id>MayhemDefaultStyles</id>
+    <id>MayhemWpf</id>
     <version>1.0</version>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
