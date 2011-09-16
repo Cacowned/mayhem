@@ -68,8 +68,20 @@ namespace MayhemOpenCVWrapper
 
         // fifo buffer that stores last x images
         private Queue<BitmapTimestamp> loop_buffer = new Queue<BitmapTimestamp>();
+
+        /// <summary>
+        /// Return all loop buffer items
+        /// </summary>
+        public List<BitmapTimestamp> buffer_items
+        {
+            get
+            {
+                return loop_buffer.ToList<BitmapTimestamp>();
+            }
+        }
         
 
+        
 
         public Camera(CameraInfo info, CameraSettings settings)
         {
@@ -274,6 +286,9 @@ namespace MayhemOpenCVWrapper
             return this.info.FriendlyName();
         }
 
+
+        
+
         /// <summary>
         /// IBufferingImager Method -- return index image from end of queue 
         /// </summary>
@@ -309,6 +324,10 @@ namespace MayhemOpenCVWrapper
                 return DateTime.MinValue;
             }
         }
+
+
+
+
     }
 
     // TODO: Add a dummy camera (in case no real device is attached!) 

@@ -1,4 +1,16 @@
-﻿using System;
+﻿/*
+ * 
+ * MPlayer.cs
+ * 
+ * Very basic playback framework for audio files.
+ * 
+ * (c) 2010, 2011 Microsoft Applied Sciences Group
+ * 
+ * 
+ * Author: Sven Kratz
+ * 
+ */ 
+using System;
 using System.Diagnostics;
 using System.Windows.Media;
 using MayhemCore;
