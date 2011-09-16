@@ -20,11 +20,6 @@ namespace PhoneModules
         PhoneLayout phoneLayout = PhoneLayout.Instance;
         PhoneConnector phoneConnector = PhoneConnector.Instance;
 
-        //---- ADDED TO AVOID ERROR
-        bool IsConfiguring = false; 
-        // -----------------------
-      
-
         [DataMember]
         private string id = "";
 
