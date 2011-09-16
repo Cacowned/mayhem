@@ -1,65 +1,25 @@
-﻿/*
- * 
- * MPlayer.cs
- * 
- * Very basic playback framework for audio files.
- * 
- * (c) 2010, 2011 Microsoft Applied Sciences Group
- * 
- * 
- * Author: Sven Kratz
- * 
- */ 
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Windows.Media;
 using MayhemCore;
 using System.Windows.Threading;
 using System.Threading;
 
-namespace DefaultModules.LowLevel
+namespace DefaultModules
 {
     class MPlayer
     {
         public MediaPlayer mediaplayer = new MediaPlayer();
-
-        private object locker = new object();
-
-        public static string TAG = "[MPlayer]";
-
-        private bool isPlaying_ = false;
-
+        
         private Thread runThread = null;
 
-        private Uri fileToPlay = null; 
-
-        public bool isPlaying
-        {
-            get
-            {
-                lock (locker)
-                {
-                    return isPlaying_;
-                }
-
-            }
-            set
-            {
-                lock (locker)
-                {
-                    isPlaying_ = value;
-                }
-
-            }
-
-        }
+        private Uri fileToPlay = null;
 
         public MPlayer()
         {
-            runThread = new Thread(new ThreadStart(t_runDispatcher));
+            runThread = new Thread(new ThreadStart(t_StartPlaying));
             runThread.IsBackground = true;
-            runThread.Start();
-            
+
         }
 
         void mediaplayer_MediaFailed(object sender, ExceptionEventArgs e)
@@ -71,27 +31,42 @@ namespace DefaultModules.LowLevel
         public void PlayFile(string filePath)
         {
             fileToPlay = new Uri(filePath, UriKind.Absolute);
-           
-            mediaplayer.Dispatcher.BeginInvoke(new Action(delegate() {
-                mediaplayer.Open(fileToPlay);
-                mediaplayer.Play(); }), null);
+            runThread.Start();
+
+
+            /*
+            mediaplayer.Dispatcher.Invoke(new Action(delegate()
+                {
+                    mediaplayer.Open(new Uri(filePath, UriKind.Absolute));
+                    Logger.WriteLine(" Starting new media playback " + filePath);
+                    mediaplayer.Play();
+                }));
+           */
         }
 
-        private void t_runDispatcher()
+        private void t_StartPlaying()
         {
-            
             Dispatcher.CurrentDispatcher.VerifyAccess();
             mediaplayer = new MediaPlayer();
             mediaplayer.MediaEnded += new EventHandler(p_MediaEnded);
             mediaplayer.MediaOpened += new EventHandler(p_MediaOpened);
             mediaplayer.MediaFailed += new EventHandler<ExceptionEventArgs>(mediaplayer_MediaFailed);
-            Dispatcher.Run();  
+            mediaplayer.Open(fileToPlay);
+            mediaplayer.Play();
+            Dispatcher.Run();
+
+
         }
 
         public void Stop()
         {
             Logger.WriteLine("");
-            mediaplayer.Dispatcher.BeginInvoke(new Action(delegate(){ mediaplayer.Stop(); }), DispatcherPriority.Send);
+            mediaplayer.Dispatcher.BeginInvoke(new Action(delegate()
+                {
+                    mediaplayer.Stop();
+                }),
+                DispatcherPriority.Send
+            );
         }
 
         void p_MediaOpened(object sender, EventArgs e)
@@ -103,7 +78,6 @@ namespace DefaultModules.LowLevel
         {
 
             Logger.WriteLine(" Media Ended!");
-            isPlaying = false;
             mediaplayer.Stop();
             mediaplayer.Position = TimeSpan.Zero;
         }

@@ -1,8 +1,8 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
 using Microsoft.Win32;
-using System.IO;
 
 namespace DefaultModules.Wpf
 {
@@ -11,7 +11,7 @@ namespace DefaultModules.Wpf
         public string FileName;
 
         private bool shouldCheckValidity = false;
-        
+
         public PlaySoundConfig(string filename)
         {
             this.FileName = filename;
@@ -35,7 +35,7 @@ namespace DefaultModules.Wpf
         {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.CheckPathExists = true;
-            dlg.Filter = "All Supported Audio | *.mp3; *.wma; *.wav | MP3s | *.mp3 | WMAs | *.wma | WAVs | *.wav"; 
+            dlg.Filter = "All Supported Audio | *.mp3; *.wma; *.wav | MP3s | *.mp3 | WMAs | *.wma | WAVs | *.wav";
             dlg.DefaultExt = ".mp3";
             dlg.FileName = FileName;
 

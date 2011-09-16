@@ -41,8 +41,6 @@ namespace DefaultModules.Wpf
             CanSave = Filename.Length > 0 && File.Exists(Filename);
         }
 
-
-
         // Browse for file
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -56,7 +54,6 @@ namespace DefaultModules.Wpf
                 LocationBox.Text = Filename;
             }
         }
-
 
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
