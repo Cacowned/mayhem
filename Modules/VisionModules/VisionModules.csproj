@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AviFile">
+      <HintPath>References\AviFile.dll</HintPath>
+    </Reference>
     <Reference Include="OpenCVDLL">
       <HintPath>..\References\OpenCVDLL.dll</HintPath>
       <Private>False</Private>
@@ -64,6 +67,7 @@
     </Compile>
     <Compile Include="Reactions\Picture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reactions\Video.cs" />
     <Compile Include="Wpf\FaceDetectConfig.xaml.cs" />
     <Compile Include="Wpf\MotionDetectorConfig.xaml.cs">
       <DependentUpon>MotionDetectorConfig.xaml</DependentUpon>
@@ -83,6 +87,7 @@
     <Compile Include="Wpf\ROISelector.xaml.cs">
       <DependentUpon>ROISelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\VideoConfig.cs" />
     <Compile Include="Wpf\VisionModulesWPFCommon.cs" />
   </ItemGroup>
   <ItemGroup>
