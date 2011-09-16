@@ -62,7 +62,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="KeypressHelpers\InterceptKeys.cs" />
     <Compile Include="MPlayer.cs" />
-    <Compile Include="LowLevel\Utils.cs" />
+    <Compile Include="LowLevel\Utilities.cs" />
     <Compile Include="LowLevel\VK.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reactions\Debugging\Message.cs" />
