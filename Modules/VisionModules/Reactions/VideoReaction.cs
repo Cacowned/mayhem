@@ -23,6 +23,7 @@ using System.IO;
 using System.Windows;
 using VisionModules.Wpf;
 using MayhemWpf.UserControls;
+using System.Threading;
 
 namespace VisionModules.Reactions
 {
@@ -118,8 +119,22 @@ namespace VisionModules.Reactions
             Logger.WriteLine("");
             if (!video_saving && cam != null)
             {
-                video_saving = true; 
-                SaveVideo();
+                video_saving = true;
+                if (capture_offset_time == 0)
+                {
+                    SaveVideo();
+                }
+                else
+                {
+                    /*
+                  
+                    Timer t = new Timer(capture_offset_time);
+                    t.Elapsed+=new ElapsedEventHandler((object sender, ElapsedEventArgs e) => { SaveVideo();});
+                    t.Enabled = true;*/
+                    Logger.WriteLine("Recording Video with offset: " + capture_offset_time + "s");
+                    Timer t = new Timer(new TimerCallback((object state) => {SaveVideo();}),this, (int) (capture_offset_time*1000), Timeout.Infinite);
+                  
+                }
             }
         }
 
