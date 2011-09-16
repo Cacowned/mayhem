@@ -33,7 +33,7 @@ namespace DefaultModules.Reactions
             }
             else
             {
-                ErrorLog.AddError(ErrorType.Failure, EnglishStrings.PlaySound_FileNotFound);
+                ErrorLog.AddError(ErrorType.Failure, Strings.PlaySound_FileNotFound);
             }
         }
 
@@ -46,7 +46,7 @@ namespace DefaultModules.Reactions
             }
             else
             {
-                ErrorLog.AddError(ErrorType.Warning, EnglishStrings.PlaySound_FileNotFound);
+                ErrorLog.AddError(ErrorType.Warning, Strings.PlaySound_FileNotFound);
             }
         }
 
@@ -66,7 +66,7 @@ namespace DefaultModules.Reactions
 
             do
             {
-                Console.WriteLine(String.Format(CultureInfo.CurrentCulture, EnglishStrings.PlaySound_CliConfig_AudioPath, TAG));
+                Console.WriteLine(String.Format(CultureInfo.CurrentCulture, Strings.PlaySound_CliConfig_AudioPath, TAG));
                 path = Console.ReadLine();
             }
             while (!File.Exists(path));

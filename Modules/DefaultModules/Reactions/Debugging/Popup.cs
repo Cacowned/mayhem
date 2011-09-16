@@ -9,7 +9,7 @@ namespace DefaultModules.Reactions
     {
         public override void Perform()
         {
-            MessageBox.Show(EnglishStrings.Popup_MessageText);
+            MessageBox.Show(Strings.Popup_MessageText);
         }
     }
 }

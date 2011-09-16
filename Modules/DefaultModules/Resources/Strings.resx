@@ -130,13 +130,14 @@
     <value>Could not start the application</value>
   </data>
   <data name="RunProgram_ConfigString" xml:space="preserve">
-    <value>File name: \"{0}\"\nArguments: \"{1}\"</value>
+    <value>File name: "{0}"
+Arguments: "{1}"</value>
   </data>
   <data name="RunProgram_FileNotFound" xml:space="preserve">
-    <value>Could not find the application.</value>
+    <value>The application does not exist at the specified location.</value>
   </data>
   <data name="TextToSpeech_ConfigString" xml:space="preserve">
-    <value>Message: \"{0}\""</value>
+    <value>Message: "{0}"</value>
   </data>
   <data name="Timer_CliConfig_HoursToWait" xml:space="preserve">
     <value>{0} Please enter the number of hours to wait:</value>

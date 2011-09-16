@@ -33,13 +33,20 @@ namespace DefaultModules.Reactions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public override void Perform()
         {
-            try
+            if (File.Exists(FileName))
             {
-                System.Diagnostics.Process.Start(FileName, Arguments);
+                try
+                {
+                    System.Diagnostics.Process.Start(FileName, Arguments);
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.RunProgram_CantStartProgram);
+                }
             }
-            catch
+            else
             {
-                ErrorLog.AddError(ErrorType.Failure, EnglishStrings.RunProgram_CantStartProgram);
+                ErrorLog.AddError(ErrorType.Failure, Strings.RunProgram_FileNotFound);
             }
         }
 
@@ -63,13 +70,13 @@ namespace DefaultModules.Reactions
             }
             else
             {
-                ErrorLog.AddError(ErrorType.Failure, EnglishStrings.RunProgram_FileNotFound);
+                ErrorLog.AddError(ErrorType.Failure, Strings.RunProgram_FileNotFound);
             }
         }
 
         public override void SetConfigString()
         {
-            ConfigString = String.Format(CultureInfo.CurrentCulture, EnglishStrings.RunProgram_ConfigString, Path.GetFileName(FileName), Arguments);
+            ConfigString = String.Format(CultureInfo.CurrentCulture, Strings.RunProgram_ConfigString, Path.GetFileName(FileName), Arguments);
         }
     }
 }

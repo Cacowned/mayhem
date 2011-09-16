@@ -54,7 +54,7 @@ namespace DefaultModules.Events
 
         public override void SetConfigString()
         {
-            ConfigString = String.Format(CultureInfo.CurrentCulture, EnglishStrings.Timer_ConfigString, Hours, Minutes, Seconds);
+            ConfigString = String.Format(CultureInfo.CurrentCulture, Strings.Timer_ConfigString, Hours, Minutes, Seconds);
         }
 
         #region Configuration Views
@@ -67,21 +67,21 @@ namespace DefaultModules.Events
 
             do
             {
-                Console.Write(EnglishStrings.Timer_CliConfig_HoursToWait, TAG);
+                Console.Write(Strings.Timer_CliConfig_HoursToWait, TAG);
                 input = Console.ReadLine();
             }
             while (!Int32.TryParse(input, out hours) || !(hours >= 0));
 
             do
             {
-                Console.Write(EnglishStrings.Timer_CliConfig_MinutesToWait, TAG);
+                Console.Write(Strings.Timer_CliConfig_MinutesToWait, TAG);
                 input = Console.ReadLine();
             }
             while (!Int32.TryParse(input, out minutes) || !(minutes >= 0 && minutes < 60));
 
             do
             {
-                Console.Write(EnglishStrings.Timer_CliConfig_SecondsToWait, TAG);
+                Console.Write(Strings.Timer_CliConfig_SecondsToWait, TAG);
                 input = Console.ReadLine();
             }
             while (!Int32.TryParse(input, out seconds) || !(seconds >= 0 && seconds < 60));

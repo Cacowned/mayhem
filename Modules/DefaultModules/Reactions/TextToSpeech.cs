@@ -49,7 +49,7 @@ namespace DefaultModules.Reactions
 
         public override void SetConfigString()
         {
-            ConfigString = String.Format(CultureInfo.CurrentCulture, EnglishStrings.TextToSpeech_ConfigString, Message);
+            ConfigString = String.Format(CultureInfo.CurrentCulture, Strings.TextToSpeech_ConfigString, Message);
         }
     }
 }
