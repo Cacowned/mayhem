@@ -16,6 +16,7 @@ using System.Windows.Media.Animation;
 using System.Diagnostics;
 using Microsoft.Win32;
 using MayhemCore;
+using System.Globalization;
 
 namespace PhoneModules.Controls
 {
@@ -27,6 +28,7 @@ namespace PhoneModules.Controls
         Point startPoint;
         Point startCanvasLoc;
         bool isMovingElement = false;
+        bool isGridOnRight = true;
 
         public new PhoneLayoutButton LayoutInfo
         {
@@ -74,9 +76,6 @@ namespace PhoneModules.Controls
                     image1.Source = bi;
                     image1.Width = bi.Width;
                     image1.Height = bi.Height;
-                    //textBox1.Visibility = System.Windows.Visibility.Hidden;
-                    //this.Width = bi.Width+10;
-                    //this.Height = bi.Height;
                     image1.Visibility = System.Windows.Visibility.Visible;
                     border1.Visibility = Visibility.Hidden;
                 }
@@ -95,6 +94,7 @@ namespace PhoneModules.Controls
         {
             InitializeComponent();
             defaultButtonBrush = buttonText.Background;
+            stackPanel1.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
         }
 
         private void PhoneUIElement_Loaded(object sender, RoutedEventArgs e)
@@ -104,14 +104,15 @@ namespace PhoneModules.Controls
                 Storyboard storyB = (Storyboard)borderSelected.FindResource("storyboardSelected");
                 storyB.Begin();
             }
+            ResizeTextBox(false);
         }
 
         void PhoneUIElement_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Logger.WriteLine("Down");
             startPoint = e.GetPosition(Parent as Canvas);
+            if (!isGridOnRight)
+                startPoint.X -= gridEdit.ActualWidth;
             startCanvasLoc = new Point(Canvas.GetLeft(this), Canvas.GetTop(this));
-            //elementMoved = false;
             isMovingElement = true;
             Mouse.Capture(this);
             PhoneUIElement_LostFocus(null, null);
@@ -121,51 +122,38 @@ namespace PhoneModules.Controls
         {
             if (isMovingElement && e.LeftButton == MouseButtonState.Pressed)
             {
-                Logger.WriteLine("Move");
-                //elementMoved = true;
                 Point point = e.GetPosition(Parent as Canvas);
                 double x = startCanvasLoc.X + point.X - startPoint.X;
                 double y = startCanvasLoc.Y + point.Y - startPoint.Y;
                 x = Math.Min(Math.Max(0, x), 320 - borderSelected.ActualWidth);
                 y = Math.Min(Math.Max(0, y), 450 - borderSelected.ActualHeight);
+                
+                if (x + ActualWidth > 320)
+                {
+                    if (isGridOnRight)
+                    {
+                        isGridOnRight = false;
+                        stackPanel1.Children.Remove(gridEdit);
+                        stackPanel1.Children.Insert(0, gridEdit);
+                    }
+                }
+                else if (!isGridOnRight)
+                {
+                    isGridOnRight = true;
+                    //x += gridEdit.ActualWidth;
+                    stackPanel1.Children.Remove(gridEdit);
+                    stackPanel1.Children.Insert(1, gridEdit);
+                }
+                if (!isGridOnRight)
+                    x -= gridEdit.ActualWidth;
+
                 Canvas.SetLeft(this, x);
                 Canvas.SetTop(this, y);
-        //        this.LayoutInfo.X = x;
-     //           this.LayoutInfo.Y = y;
             }
         }
 
         private void canvas1_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            Logger.WriteLine("Up");
-            //if (currentlyMovingElement != null)
-            //{
-            //if (!elementMoved)
-            //{
-            //if (selectedBorder.Child is PhoneUIElementButton)
-            //{
-            //currentlySelectedElement = currentlyMovingElement;
-            //currentlySelectedElement.BorderBrush = new SolidColorBrush(Colors.White);
-            //stackPanelProperties.IsEnabled = true;
-            //textBoxText.Text = (currentlySelectedElement.Child as PhoneUIElement).Text;
-            //if (currentlySelectedElement.Child is PhoneUIElementButton)
-            //{
-            //    textBoxImage.Text = (currentlySelectedElement.Child as PhoneUIElementButton).ImageFile;
-            //}
-            //}
-            //}
-            //}
-            //else
-            //{
-            //    if (currentlySelectedElement != null)
-            //    {
-            //        currentlySelectedElement.BorderBrush = new SolidColorBrush(Colors.Transparent);
-            //        currentlySelectedElement = null;
-            //        stackPanelProperties.IsEnabled = false;
-            //    }
-            //}
-            //CanSave = (currentlySelectedElement != null);
-            //currentlyMovingElement = null;
             Mouse.Capture(null);
             isMovingElement = false;
         }
@@ -188,6 +176,7 @@ namespace PhoneModules.Controls
             textBox1.Focus();
             buttonText.Background = new SolidColorBrush(Colors.LightSkyBlue);
             buttonText.UpdateLayout();
+            ResizeTextBox(true);
         }
 
         private void buttonImage_Click(object sender, RoutedEventArgs e)
@@ -203,7 +192,6 @@ namespace PhoneModules.Controls
 
         private void PhoneUIElement_LostFocus(object sender, RoutedEventArgs e)
         {
-            Logger.WriteLine("Lost focus");
             //this.Focus();
             textBox1.CaretBrush = new SolidColorBrush(Colors.Transparent);
             buttonText.Background = defaultButtonBrush;
@@ -213,6 +201,21 @@ namespace PhoneModules.Controls
             textBox1.IsHitTestVisible = false;
             textBox1.BorderThickness = new Thickness(0);
             textBox1.SelectionLength = 0;
+            ResizeTextBox(false);
+        }
+
+        void ResizeTextBox(bool editing)
+        {
+            Typeface myTypeface = new Typeface(textBox1.FontFamily, textBox1.FontStyle, textBox1.FontWeight, textBox1.FontStretch);
+            FormattedText ft = new FormattedText(textBox1.Text, CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight, myTypeface, textBox1.FontSize, Brushes.Black);
+            textBox1.Width = ft.WidthIncludingTrailingWhitespace + (editing ? 10 : 5);
+            border1.Width = textBox1.Width + 15;
+        }
+
+        private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ResizeTextBox(true);
         }
     }
 }

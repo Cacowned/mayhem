@@ -67,9 +67,9 @@ namespace Mayhem.UserControls
             dropShadow.ShadowDepth = Connection.Enabled ? 5 : 2;
         }
 
-        private void ConfigureTrigger_Click(object sender, RoutedEventArgs e)
+        void ShowConfig(ModuleBase configurable)
         {
-            if (!Connection.Event.HasConfig)
+            if (!configurable.HasConfig)
                 return;
 
             MainWindow.DimMainWindow(true);
@@ -93,30 +93,14 @@ namespace Mayhem.UserControls
             MainWindow.DimMainWindow(false);
         }
 
+        private void ConfigureTrigger_Click(object sender, RoutedEventArgs e)
+        {
+            ShowConfig(Connection.Event);
+        }
+
         private void ConfigureReaction_Click(object sender, RoutedEventArgs e)
         {
-            if (!Connection.Reaction.HasConfig)
-                return;
-
-            MainWindow.DimMainWindow(true);
-
-            Connection.IsConfiguring = true;
-
-            bool wasEnabled = Connection.Enabled;
-            if (wasEnabled)
-            {
-                Connection.Disable(null);
-            }
-            ConfigWindow config = new ConfigWindow((IWpfConfigurable)Connection.Reaction);
-            config.ShowDialog();
-
-            if (wasEnabled)
-            {
-                Connection.Enable(null);
-            }
-            Connection.IsConfiguring = false;
-
-            MainWindow.DimMainWindow(false);
+            ShowConfig(Connection.Event);
         }
 
         private void DeleteConnectionClick(object sender, RoutedEventArgs e)

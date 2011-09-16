@@ -45,6 +45,7 @@ namespace PhoneModules
 
         public override void OnLoad()
         {
+            CanSave = true;
             QRCodeEncoder qrCodeEncoder = new QRCodeEncoder();
             qrCodeEncoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
 
@@ -52,11 +53,15 @@ namespace PhoneModules
             IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
             string text = "";
             text += "19283:";
+            textPort.Text = "19283";
             for (int i = 0; i < localIPs.Length; i++)
             {
                 if (localIPs[i].AddressFamily.ToString() == "InterNetwork")
                 {
                     text += localIPs[i] + ":";
+                    if (textIP.Text.Length > 0)
+                        textIP.Text += ", ";
+                    textIP.Text += localIPs[i];
                 }
             }
             System.Drawing.Bitmap image = null;
