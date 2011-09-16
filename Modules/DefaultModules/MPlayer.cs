@@ -15,6 +15,8 @@ namespace DefaultModules
 
         private Uri fileToPlay = null;
 
+        private bool isPlaying = false; 
+
         public MPlayer()
         {
             runThread = new Thread(new ThreadStart(t_StartPlaying));
@@ -31,7 +33,11 @@ namespace DefaultModules
         public void PlayFile(string filePath)
         {
             fileToPlay = new Uri(filePath, UriKind.Absolute);
-            runThread.Start();
+            if (!isPlaying)
+            {
+                isPlaying = true; 
+                runThread.Start();
+            }
 
 
             /*
@@ -46,6 +52,7 @@ namespace DefaultModules
 
         private void t_StartPlaying()
         {
+            
             Dispatcher.CurrentDispatcher.VerifyAccess();
             mediaplayer = new MediaPlayer();
             mediaplayer.MediaEnded += new EventHandler(p_MediaEnded);
@@ -60,7 +67,9 @@ namespace DefaultModules
 
         public void Stop()
         {
+
             Logger.WriteLine("");
+
             mediaplayer.Dispatcher.BeginInvoke(new Action(delegate()
                 {
                     mediaplayer.Stop();
@@ -76,7 +85,7 @@ namespace DefaultModules
 
         void p_MediaEnded(object sender, EventArgs e)
         {
-
+            isPlaying = false; 
             Logger.WriteLine(" Media Ended!");
             mediaplayer.Stop();
             mediaplayer.Position = TimeSpan.Zero;
