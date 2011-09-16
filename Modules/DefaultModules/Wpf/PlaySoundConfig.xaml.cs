@@ -42,6 +42,7 @@ namespace DefaultModules.Wpf
             if (dlg.ShowDialog() == true)
             {
                 FileName = dlg.FileName;
+                LocationBox.Text = FileName;
             }
         }
 
