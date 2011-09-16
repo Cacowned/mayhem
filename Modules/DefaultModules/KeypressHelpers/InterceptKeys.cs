@@ -7,7 +7,7 @@ using MayhemCore;
 
 namespace DefaultModules.KeypressHelpers
 {
-    class InterceptKeys
+    class InterceptKeys : IDisposable
     {
         private static InterceptKeys instance = null;
 
@@ -50,6 +50,17 @@ namespace DefaultModules.KeypressHelpers
         {
             keyCombinationHandlerMap = new Dictionary<HashSet<Keys>, List<KeyCombinationHandler>>();
             _proc = new LowLevelKeyboardProc(HookCallback);
+        }
+
+        ~InterceptKeys()
+        {
+            RemoveHook();
+        }
+
+        public void Dispose()
+        {
+            RemoveHook();
+            GC.SuppressFinalize(this);
         }
 
         public void AddRef()
