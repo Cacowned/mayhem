@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Windows;
+using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Reactions
 {
@@ -30,6 +30,7 @@ namespace DefaultModules.Reactions
         }
         #endregion
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public override void Perform()
         {
             try
@@ -38,7 +39,7 @@ namespace DefaultModules.Reactions
             }
             catch
             {
-                ErrorLog.AddError(ErrorType.Failure, "Could not start the application");
+                ErrorLog.AddError(ErrorType.Failure, EnglishStrings.RunProgram_CantStartProgram);
             }
         }
 
@@ -62,13 +63,13 @@ namespace DefaultModules.Reactions
             }
             else
             {
-                ErrorLog.AddError(ErrorType.Failure, "Could not find the application:\n" + FileName);
+                ErrorLog.AddError(ErrorType.Failure, EnglishStrings.RunProgram_FileNotFound);
             }
         }
 
         public override void SetConfigString()
         {
-            ConfigString = String.Format("Filename: \"{0}\"\nArguments: \"{1}\"", Path.GetFileName(FileName), Arguments);
+            ConfigString = String.Format(CultureInfo.CurrentCulture, EnglishStrings.RunProgram_ConfigString, Path.GetFileName(FileName), Arguments);
         }
     }
 }

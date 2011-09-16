@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:my="clr-namespace:PhoneModules.Controls"
              mc:Ignorable="d" Loaded="PhoneUIElement_Loaded" MouseMove="canvas1_PreviewMouseMove" MouseUp="canvas1_PreviewMouseUp" MouseDown="PhoneUIElement_PreviewMouseDown" >
-    <StackPanel Orientation="Horizontal">
+    <StackPanel Orientation="Horizontal" Name="stackPanel1">
         <StackPanel.Triggers>
             <EventTrigger RoutedEvent="Border.MouseEnter">
                 <BeginStoryboard>
@@ -61,7 +61,7 @@
                 <Border Name="border1" Width="100" Height="40" CornerRadius="15" BorderBrush="Gray" BorderThickness="1" Background="White" >
                     <!--<Rectangle Height="37" HorizontalAlignment="Left" Margin="333,24,0,0" Name="rectangle1" Stroke="Gray" VerticalAlignment="Top" Width="115" RadiusX="15" RadiusY="15" />-->
                     <!--<TextBlock Height="15" HorizontalAlignment="Left" Name="textBlock1" Text="Button" VerticalAlignment="Center" FontFamily="Arial" FontSize="14" FontWeight="Bold" Width="101" TextAlignment="Center" />-->
-                    <TextBox Height="23" HorizontalAlignment="Left" Name="textBox1" Text="Button" VerticalAlignment="Center" FontFamily="Arial" FontSize="14" FontWeight="Bold" Width="92" TextAlignment="Center" Margin="3,7,0,8" BorderThickness="0" VerticalContentAlignment="Center" IsHitTestVisible="False" />
+                    <TextBox Height="23" HorizontalAlignment="Center" Name="textBox1" Text="Button" VerticalAlignment="Center" FontFamily="Arial" FontSize="14" FontWeight="Bold" BorderThickness="0" VerticalContentAlignment="Center" IsHitTestVisible="False" TextChanged="textBox1_TextChanged" />
                     <!--<Image Name="imageEdit" Source="/PhoneModules;component/knewstuff-32.png" Margin="81,0,6,23" Opacity="0" />-->
                 </Border>
                 <Image Name="image1" Width="50" Height="30" Visibility="Hidden" />

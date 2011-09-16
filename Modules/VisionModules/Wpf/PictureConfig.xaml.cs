@@ -14,7 +14,7 @@ using MayhemOpenCVWrapper;
 using System.Diagnostics;
 using System.Drawing;
 using System;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
 using System.Collections.Generic;
@@ -168,7 +168,7 @@ namespace VisionModules.Wpf
             slider_tickbar.Minimum = -capture_size_s;
             slider_tickbar.Maximum = capture_size_s;*/
             
-
+            CanSave = true; 
 
         }
 
@@ -250,12 +250,21 @@ namespace VisionModules.Wpf
             }
         }
 
+        public override void OnCancel()
+        {
+            OnClosing();
+        }
+
         public override bool OnSave()
         {
             selected_camera = deviceList.SelectedItem as Camera;
+            
+            OnClosing();
      
             return true;
         }
+
+  
 
         public override string Title
         {
@@ -272,6 +281,7 @@ namespace VisionModules.Wpf
         /// <param name="e"></param>
         private void root_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            /*
             Logger.WriteLine("IsVisibleChanged");
             if (this.IsVisible)
             {
@@ -290,7 +300,7 @@ namespace VisionModules.Wpf
                     c.OnImageUpdated -= i_OnImageUpdated;
                     c.TryStopFrameGrabbing();
                 }
-            }
+            }*/
         }
 
         #region Highlighting the camera preview selection 

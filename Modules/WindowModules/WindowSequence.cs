@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using WindowModules.Wpf;
 using System.Diagnostics;
 

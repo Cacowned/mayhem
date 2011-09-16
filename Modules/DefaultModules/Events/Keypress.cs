@@ -8,20 +8,20 @@ using DefaultModules.KeypressHelpers;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Events
 {
     // Because of it's support for shifts and stuff, it won't work in CLI mode.
     [DataContract]
     [MayhemModule("Key Press", "This event fires on a predefined key press")]
-    public class Keypress : EventBase, IWpfConfigurable
+    public class KeyPress : EventBase, IWpfConfigurable
     {
         private InterceptKeys interceptKeys;
 
         // If there are multiple keypress events, we want to disable their activation 
         // when one of them is being configured
-        public static bool IsConfigOpen = false;
+        public static bool IsConfigOpen { get; set; }
 
         private Thread mainThread;
 

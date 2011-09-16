@@ -21,7 +21,7 @@ using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
 using System.Drawing;
 using System.Diagnostics;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using System.Timers;
 
 namespace VisionModules.Reactions

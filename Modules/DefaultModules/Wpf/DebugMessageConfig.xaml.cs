@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
@@ -26,14 +26,14 @@ namespace DefaultModules.Wpf
 
         public override void OnLoad()
         {
-            MessageText.Text = this.Message;
+            MessageBox.Text = this.Message;
 
             shouldCheckValidity = true;
         }
 
         private void CheckValidity()
         {
-            Message = MessageText.Text.Trim();
+            Message = MessageBox.Text.Trim();
             CanSave = Message.Length > 0;
         }
 

@@ -9,7 +9,7 @@ using MayhemCore.ModuleTypes;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
 using System.Diagnostics;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using MayhemOpenCVWrapper.LowLevel;
 
 namespace VisionModules.Events

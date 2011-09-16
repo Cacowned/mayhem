@@ -114,9 +114,9 @@
       <Name>MayhemCore</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\MayhemDefaultStyles\MayhemDefaultStyles.csproj">
-      <Project>{D4441581-1768-4A2A-9A2B-B6A700B96FAD}</Project>
-      <Name>MayhemDefaultStyles</Name>
+    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
+      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
+      <Name>MayhemWpf</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

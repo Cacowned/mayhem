@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using DefaultModules.KeypressHelpers;
-using MayhemCore.ModuleTypes;
-using System.Windows.Controls;
-using System.Diagnostics;
-using MayhemDefaultStyles.UserControls;
-using DefaultModules.Events;
 using System.Windows.Forms;
 using System.Windows.Input;
+using DefaultModules.Events;
+using DefaultModules.KeypressHelpers;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
@@ -36,7 +33,7 @@ namespace DefaultModules.Wpf
 
         public override void OnLoad()
         {
-            Keypress.IsConfigOpen = true;
+            KeyPress.IsConfigOpen = true;
 
             interceptKeys = InterceptKeys.Instance;
             interceptKeys.AddRef();
@@ -97,7 +94,7 @@ namespace DefaultModules.Wpf
         public override void OnClosing()
         {
             interceptKeys.RemoveRef();
-            Keypress.IsConfigOpen = false;
+            KeyPress.IsConfigOpen = false;
             interceptKeys.OnKeyDown -= InterceptKeys_OnInterceptKeyDown;
             interceptKeys.OnKeyUp -= InterceptKeys_OnInterceptKeyUp;
         }

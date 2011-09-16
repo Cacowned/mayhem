@@ -176,7 +176,7 @@ namespace PhoneModules
                             //sb.AppendLine("<input type=\"image\" src=\"Images/" + button.ID + "\"");
                             width = 96;
                             height = 96;
-                            sb.AppendLine("<input type=\"image\" src=\"Images/" + button.ID + "\" width=\"" + width + "\" height=\"" + height + "\"");
+                            sb.AppendLine("<input type=\"image\" src=\"Images/" + button.ID + "\"");
                         }
 
                         sb.AppendLine("onClick=\"sendEvent('" + button.ID + "')\"");

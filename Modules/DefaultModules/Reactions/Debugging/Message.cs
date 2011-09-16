@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.Serialization;
-using System.Windows;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
-namespace DefaultModules.Reactions.Debugging
+namespace DefaultModules.Reactions
 {
     [DataContract]
     [MayhemModule("Debug: Message", "Generates debug output when triggered")]
@@ -19,7 +17,7 @@ namespace DefaultModules.Reactions.Debugging
 
         public override void Perform()
         {
-            Logger.WriteLine(String.Format("{0}: {1}", DateTime.Now.ToLongTimeString(), MessageText));
+            Logger.WriteLine(String.Format(CultureInfo.CurrentCulture, "{0}: {1}", DateTime.Now.ToLongTimeString(), MessageText));
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)

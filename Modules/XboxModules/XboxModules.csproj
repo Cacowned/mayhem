@@ -31,11 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Microsoft.Xna.Framework.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -72,9 +70,9 @@
       <Name>MayhemCore</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\MayhemDefaultStyles\MayhemDefaultStyles.csproj">
-      <Project>{D4441581-1768-4A2A-9A2B-B6A700B96FAD}</Project>
-      <Name>MayhemDefaultStyles</Name>
+    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
+      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
+      <Name>MayhemWpf</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

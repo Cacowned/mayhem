@@ -19,7 +19,7 @@ using System.Text;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using System.Runtime.Serialization;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
 using System.Diagnostics;

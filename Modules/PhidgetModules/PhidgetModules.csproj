@@ -31,8 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Phidget21.NET, Version=2.1.7.48, Culture=neutral, PublicKeyToken=c2b1f2a3594bce52, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Phidget21.NET">
+      <HintPath>..\References\Phidget21.NET.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -162,17 +162,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
       <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
       <Name>MayhemCore</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\MayhemDefaultStyles\MayhemDefaultStyles.csproj">
-      <Project>{D4441581-1768-4A2A-9A2B-B6A700B96FAD}</Project>
-      <Name>MayhemDefaultStyles</Name>
+    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
+      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
+      <Name>MayhemWpf</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

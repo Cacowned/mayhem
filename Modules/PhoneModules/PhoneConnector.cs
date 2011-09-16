@@ -155,7 +155,7 @@ namespace PhoneModules
             {
                 host.Open();
             }
-            catch (System.ServiceModel.AddressAccessDeniedException e)
+            catch (System.ServiceModel.AddressAccessDeniedException)
             {
                 OpenServerHelper();
                 try

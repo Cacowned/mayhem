@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Windows;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
     public partial class TimerConfig : IWpfConfiguration
     {
         public int Hours, Minutes, Seconds;
-        
+
         private bool shouldCheckValidity = false;
 
         public TimerConfig(int hours, int minutes, int seconds)
