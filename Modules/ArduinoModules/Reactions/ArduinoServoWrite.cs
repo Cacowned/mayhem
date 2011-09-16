@@ -15,7 +15,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace ArduinoModules.Reactions
 {

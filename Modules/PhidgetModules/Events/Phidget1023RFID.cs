@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System.Windows.Controls;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using Phidgets;
 using Phidgets.Events;

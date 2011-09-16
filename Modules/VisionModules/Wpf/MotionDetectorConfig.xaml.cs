@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 using MayhemOpenCVWrapper;
 using System.Diagnostics;
 using System.Drawing;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 using MayhemCore;
 
 namespace VisionModules.Wpf

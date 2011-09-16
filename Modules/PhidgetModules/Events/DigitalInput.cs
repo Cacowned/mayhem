@@ -7,7 +7,7 @@ using PhidgetModules.Wpf;
 using System.Windows;
 using Phidgets.Events;
 using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
+using MayhemWpf.UserControls;
 
 namespace PhidgetModules.Events
 {

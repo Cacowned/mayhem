@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
-using System.Windows;
+using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using MayhemWpf.UserControls;
 using SpeechLib;
-using System.Windows.Controls;
-using MayhemDefaultStyles.UserControls;
 
 namespace DefaultModules.Reactions
 {
@@ -36,7 +36,7 @@ namespace DefaultModules.Reactions
         {
             voice.Speak(Message, SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
         }
-        
+
         public IWpfConfiguration ConfigurationControl
         {
             get { return new TextToSpeechConfig(Message); }
@@ -49,7 +49,7 @@ namespace DefaultModules.Reactions
 
         public override void SetConfigString()
         {
-            ConfigString = String.Format("Message: \"{0}\"", Message);
+            ConfigString = String.Format(CultureInfo.CurrentCulture, EnglishStrings.TextToSpeech_ConfigString, Message);
         }
     }
 }

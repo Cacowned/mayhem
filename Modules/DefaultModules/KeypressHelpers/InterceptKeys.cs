@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using MayhemCore;
 
 namespace DefaultModules.KeypressHelpers
 {
-    class InterceptKeys
+    class InterceptKeys : IDisposable
     {
         private static InterceptKeys instance = null;
 
@@ -31,7 +31,7 @@ namespace DefaultModules.KeypressHelpers
 
         private HashSet<Keys> keys_down = new HashSet<Keys>();
 
-        Dictionary<HashSet<Keys>,List<KeyCombinationHandler>> keyCombinationHandlerMap;
+        Dictionary<HashSet<Keys>, List<KeyCombinationHandler>> keyCombinationHandlerMap;
 
         public static InterceptKeys Instance
         {
@@ -54,6 +54,13 @@ namespace DefaultModules.KeypressHelpers
 
         ~InterceptKeys()
         {
+            RemoveHook();
+        }
+
+        public void Dispose()
+        {
+            RemoveHook();
+            GC.SuppressFinalize(this);
         }
 
         public void AddRef()
@@ -123,7 +130,7 @@ namespace DefaultModules.KeypressHelpers
             }
         }
 
-        private bool AreKeysetsEqual(HashSet<Keys> keys, HashSet<Keys> keys2)
+        private static bool AreKeysetsEqual(HashSet<Keys> keys, HashSet<Keys> keys2)
         {
             if (keys.Count != keys2.Count)
                 return false;

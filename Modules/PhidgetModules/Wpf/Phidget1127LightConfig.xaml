@@ -1,7 +1,7 @@
 ﻿<src:IWpfConfiguration x:Class="PhidgetModules.Wpf.Phidget1127LightConfig"
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:src="clr-namespace:MayhemDefaultStyles.UserControls;assembly=MayhemDefaultStyles"
+			 xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
 			 xmlns:common="clr-namespace:PhidgetModules.Wpf.UserControls"
 			 Width="400">
     <Grid>

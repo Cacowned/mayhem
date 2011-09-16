@@ -40,8 +40,6 @@ namespace PhoneModules
     [ServiceBehavior(Name = "MayhemService", InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class MayhemService : IMayhemService
     {
-        string formData = null;
-        string nextData = null;
         string html = null;
         string htmlWP7 = null;
         string htmlIOS = null;
