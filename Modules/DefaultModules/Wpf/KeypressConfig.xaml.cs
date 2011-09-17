@@ -10,19 +10,29 @@ namespace DefaultModules.Wpf
 {
     public partial class KeypressConfig : IWpfConfiguration
     {
+        // This is the public field Keypress uses to get which keys to use
         public HashSet<Keys> KeysToSave;
-        public HashSet<System.Windows.Forms.Keys> keyCombination;
-
+        
         private HashSet<Keys> keys_down = new HashSet<Keys>();
-        private InterceptKeys interceptKeys;
+
+        // Contains the string the interface binds to
+        public string KeysDownText
+        {
+            get { return (string)GetValue(KeysDownTextProperty); }
+            set { SetValue(KeysDownTextProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for KeysDownText.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty KeysDownTextProperty =
+            DependencyProperty.Register("KeysDownText", typeof(string), typeof(KeypressConfig), new UIPropertyMetadata(string.Empty));
 
         private bool shouldCheckValidity = false;
 
-        public KeypressConfig(HashSet<System.Windows.Forms.Keys> MonitorKeysDown)
+        public KeypressConfig(HashSet<Keys> MonitorKeysDown)
         {
-            this.KeysToSave = MonitorKeysDown;
-            keyCombination = new HashSet<Keys>(MonitorKeysDown);
+            KeysToSave = new HashSet<Keys>(MonitorKeysDown);
 
+            this.DataContext = this;
             InitializeComponent();
         }
 
@@ -35,12 +45,12 @@ namespace DefaultModules.Wpf
         {
             KeyPress.IsConfigOpen = true;
 
-            interceptKeys = InterceptKeys.Instance;
-            interceptKeys.AddRef();
-            interceptKeys.OnKeyDown += InterceptKeys_OnInterceptKeyDown;
-            interceptKeys.OnKeyUp += InterceptKeys_OnInterceptKeyUp;
+            InterceptKeys keys = InterceptKeys.Instance;
+            keys.AddRef();
+            keys.OnKeyDown += InterceptKeys_OnInterceptKeyDown;
+            keys.OnKeyUp += InterceptKeys_OnInterceptKeyUp;
 
-            UpdateKeysDown(keyCombination);
+            UpdateKeysDown();
 
             shouldCheckValidity = true;
         }
@@ -51,12 +61,12 @@ namespace DefaultModules.Wpf
             {
                 if (keys_down.Count == 0)
                 {
-                    keyCombination.Clear();
+                    KeysToSave.Clear();
                 }
                 keys_down.Add(key);
-                keyCombination.Add(key);
+                KeysToSave.Add(key);
 
-                UpdateKeysDown(keyCombination);
+                UpdateKeysDown();
             }
         }
 
@@ -68,10 +78,10 @@ namespace DefaultModules.Wpf
             }
         }
 
-        private void UpdateKeysDown(HashSet<System.Windows.Forms.Keys> keys)
+        private void UpdateKeysDown()
         {
             string str = "";
-            foreach (System.Windows.Forms.Keys key in keys)
+            foreach (Keys key in KeysToSave)
             {
                 if (str == "")
                 {
@@ -82,9 +92,9 @@ namespace DefaultModules.Wpf
                     str += " + " + key.ToString();
                 }
             }
-            textBoxKeys.Text = str;
+            KeysDownText = str;
 
-            CanSave = keys.Count > 0;
+            CanSave = KeysToSave.Count > 0;
             if (shouldCheckValidity)
             {
                 textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
@@ -93,25 +103,12 @@ namespace DefaultModules.Wpf
 
         public override void OnClosing()
         {
-            interceptKeys.RemoveRef();
-            KeyPress.IsConfigOpen = false;
-            interceptKeys.OnKeyDown -= InterceptKeys_OnInterceptKeyDown;
-            interceptKeys.OnKeyUp -= InterceptKeys_OnInterceptKeyUp;
-        }
+            InterceptKeys keys = InterceptKeys.Instance;
+            keys.RemoveRef();
+            keys.OnKeyDown -= InterceptKeys_OnInterceptKeyDown;
+            keys.OnKeyUp -= InterceptKeys_OnInterceptKeyUp;
 
-        public override bool OnSave()
-        {
-            if (keyCombination.Count == 0)
-            {
-                System.Windows.MessageBox.Show("You must have at least one key pressed");
-                return false;
-            }
-            KeysToSave.Clear();
-            foreach (Keys key in keyCombination)
-            {
-                KeysToSave.Add(key);
-            }
-            return true;
+            KeyPress.IsConfigOpen = false;
         }
 
         private void IWpfConfiguration_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

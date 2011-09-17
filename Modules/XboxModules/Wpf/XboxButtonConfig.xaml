@@ -5,9 +5,10 @@
         Width="400" >
 
 	<Grid>
-		<StackPanel>
-			<TextBlock TextWrapping="WrapWithOverflow">Please enter a combination of buttons which will activate this event.</TextBlock>
-			<TextBlock TextWrapping="WrapWithOverflow" Margin="0 50 0 20" MinHeight="50" Text="{Binding ButtonsDown}" FontSize="14" TextAlignment="Center" FontWeight="Bold" />
-		</StackPanel>
+        <StackPanel>
+            <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Please enter a combination of buttons which will activate this event.</TextBlock>
+            <TextBlock Name="textBoxButtons" TextWrapping="WrapWithOverflow" Margin="0,25,0,0" MinHeight="35" FontSize="14" TextAlignment="Center" FontWeight="Bold" Text="{Binding ButtonsDown}" />
+            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Text="Key combination is invalid" HorizontalAlignment="Center" />
+        </StackPanel>
 	</Grid>
 </src:IWpfConfiguration>

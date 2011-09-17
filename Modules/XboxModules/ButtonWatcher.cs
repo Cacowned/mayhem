@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
-using System.ComponentModel;
-using MayhemCore;
-using Microsoft.Xna.Framework;
-using System.Threading;
 
 namespace XboxModules
 {
@@ -43,8 +36,6 @@ namespace XboxModules
         }
 
         #endregion
-
-        
 
         public void AddCombinationHandler(Buttons buttons, KeyCombinationHandler handler)
         {
