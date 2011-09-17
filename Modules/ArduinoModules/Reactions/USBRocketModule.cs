@@ -7,16 +7,16 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
 using System.Collections.ObjectModel;
-
 using System.Threading;
-using Indy.Rocket.Core;
+using UsbLibrary;
+using DefaultModules.Wpf;
+using System.Windows.Threading;
+
 
 namespace ArduinoModules.Reactions
 {
 
-    using System;
-    using System.Threading;
-    using UsbLibrary;
+
   
 
     
@@ -29,44 +29,35 @@ namespace ArduinoModules.Reactions
         private int pid = 0x0701;
 
         private string[] devices;
-        private Rocket r = null;
+       
 
-        UsbHidPort mDevice = new UsbHidPort();
+        UsbHidPort mDevice;
         bool mConnected = false;
         byte[] mCmdData = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         public USBRocketLauncher()
         {
-
+            mDevice = new UsbHidPort();
             mDevice.VendorId = vid;
             mDevice.ProductId = pid;
             mDevice.CheckDevicePresent();
-            
+           
             mDevice.SpecifiedDevice.DataRecieved += new DataRecievedEventHandler(e_DataReceived);
             mConnected = true;
 
             mCmdData[1] = 16;
             mDevice.SpecifiedDevice.SendData(mCmdData);
-            
 
-            /*
-            r = new Rocket(vid, pid);
-            r.Connect();
-            Thread.Sleep(50);
-            if (r.Connected)
-            {
-                r.MissileFired += new MissileFiredDelegate(r_MissileFired);
-                Logger.WriteLine("Rocket Connected");
-                r.FireOnce();
-            }*/
-              
-           
+            Dispatcher.CurrentDispatcher.VerifyAccess();
+            Dispatcher.Run();
 
         }
 
         void e_DataReceived(object o, DataRecievedEventArgs e)
         {
-            Logger.WriteLine("data");
+            
+            int fireState = e.data[1] & (1 << 7);
+            Logger.WriteLine("FireState: "+fireState);
         }
 
      
@@ -97,7 +88,7 @@ namespace ArduinoModules.Reactions
         {
             get {
                 USBRocketLauncher launcher = new USBRocketLauncher();
-                return new IWpfConfiguration();
+                return new DebugMessageConfig("foo");
             }
         }
 

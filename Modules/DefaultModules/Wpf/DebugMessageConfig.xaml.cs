@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
 
-namespace DefaultModules.Wpf
+ namespace DefaultModules.Wpf
 {
     /// <summary>
     /// Interaction logic for DebugMessageConfig.xaml
