@@ -33,6 +33,9 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="RocketLauncher">
+      <HintPath>..\..\..\..\..\Downloads\rocket-12777\Demo\bin\Debug\RocketLauncher.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -44,6 +47,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UsbLibrary, Version=1.0.2792.1105, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\Downloads\rocket-12777\Demo\bin\Debug\UsbLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +60,7 @@
     <Compile Include="Reactions\ArduinoAnalogWrite.cs" />
     <Compile Include="Reactions\ArduinoDigitalWrite.cs" />
     <Compile Include="Reactions\ArduinoServoWrite.cs" />
+    <Compile Include="Reactions\USBRocketModule.cs" />
     <Compile Include="Wpf\ArduinoDigitalWriteConfig.xaml.cs">
       <DependentUpon>ArduinoDigitalWriteConfig.xaml</DependentUpon>
     </Compile>
