@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using MayhemCore;
-using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
-using System.Diagnostics;
 using OfficeModules.Resources;
+using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions
 {
-    [DataContract]
-    [MayhemModule("PowerPoint: Next Slide", "Navigates to the next slide")]
-    public class PptNextSlide : ReactionBase
+    [MayhemModule("PowerPoint: Last Slide", "Navigates to the previous slide")]
+    public class PptPrevSlide : ReactionBase
     {
         private OPowerPoint.Application oApp;
 
@@ -43,7 +40,7 @@ namespace OfficeModules.Reactions
                 // If we have a presentation window, go to the next slide
                 if (windows == 1)
                 {
-                    oApp.SlideShowWindows[1].View.Next();
+                    oApp.SlideShowWindows[1].View.Previous();
                 }
                 else if (windows == 0)
                 {
@@ -56,7 +53,7 @@ namespace OfficeModules.Reactions
             }
             catch (Exception e)
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_CantChangeSlidesNext);
+                ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_CantChangeSlidesPrevious);
                 Logger.Write(e);
             }
         }
