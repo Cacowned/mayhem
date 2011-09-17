@@ -4,8 +4,9 @@ using MayhemCore;
 using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using OfficeModules.Resources;
 
-namespace OfficeModules.Reactions.PowerPoint
+namespace OfficeModules.Reactions
 {
     [DataContract]
     [MayhemModule("PowerPoint: Last Slide", "Navigates to the previous slide")]
@@ -22,7 +23,7 @@ namespace OfficeModules.Reactions.PowerPoint
             }
             catch (Exception e)
             {
-                ErrorLog.AddError(ErrorType.Failure, "Unable to find the PowerPoint application window.");
+                ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
                 Logger.Write(e);
             }
         }
@@ -46,16 +47,16 @@ namespace OfficeModules.Reactions.PowerPoint
                 }
                 else if (windows == 0)
                 {
-                    ErrorLog.AddError(ErrorType.Warning, "You must be in a slideshow view to change slide");
+                    ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_NoWindowCantChange);
                 }
                 else // more than one window
                 {
-                    ErrorLog.AddError(ErrorType.Message, "More than one slideshow window detected, using the first one.");
+                    ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_MoreThanOneWindow);
                 }
             }
             catch (Exception e)
             {
-                ErrorLog.AddError(ErrorType.Warning, "Can't go to the previous slide.");
+                ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_CantChangeSlidesPrevious);
                 Logger.Write(e);
             }
         }

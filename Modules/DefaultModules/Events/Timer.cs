@@ -47,7 +47,7 @@ namespace DefaultModules.Events
             myTimer.Tick += new EventHandler(myTimer_Tick);
         }
 
-        void myTimer_Tick(object sender, EventArgs e)
+        private void myTimer_Tick(object sender, EventArgs e)
         {
             OnEventActivated();
         }
@@ -106,7 +106,6 @@ namespace DefaultModules.Events
         }
         #endregion
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         protected void SetInterval()
         {
             try
@@ -116,7 +115,7 @@ namespace DefaultModules.Events
             catch (Exception e)
             {
                 // we should never get here
-                Logger.WriteLine("Can't set timer interval. Exception: {0}", e.Message);
+                Logger.WriteLine(Strings.Timer_CantSetInterval, e.Message);
             }
         }
 
