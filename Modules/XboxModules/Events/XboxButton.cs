@@ -1,16 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.Serialization;
-using System.Threading;
-using System.Windows;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
+using MayhemWpf.UserControls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using XboxModules.Resources;
 using XboxModules.Wpf;
-using System.Windows.Controls;
-using MayhemWpf.UserControls;
 
 namespace XboxModules.Events
 {
@@ -20,7 +15,7 @@ namespace XboxModules.Events
     {
         private ButtonWatcher buttonWatcher;
 
-        public static bool IsConfigOpen = false;
+        public static bool IsConfigOpen { get; set; }
 
         #region Configuration
         [DataMember]
@@ -29,20 +24,22 @@ namespace XboxModules.Events
             get;
             set;
         }
-
+        
         [DataMember]
         private PlayerIndex Player
         {
             get;
             set;
         }
-
+        
 
         #endregion
 
         protected override void Initialize()
         {
             base.Initialize();
+
+            Player = PlayerIndex.One;
 
             buttonWatcher = ButtonWatcher.Instance;
         }
@@ -52,12 +49,37 @@ namespace XboxModules.Events
             ConfigString = XboxButtons.ButtonString();
         }
 
+        #region Configuration Views
+        public void OnSaved(IWpfConfiguration configurationControl)
+        {
+            buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
+            XboxButtons = ((XboxButtonConfig)configurationControl).ButtonsToSave;
+            buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);
+        }
+
+        public IWpfConfiguration ConfigurationControl
+        {
+            get { return new XboxButtonConfig(XboxButtons); }
+        }
+        #endregion
+
+        private void OnKeyCombinationActivated()
+        {
+            if (!IsConfigOpen)
+            {
+                if (Enabled)
+                {
+                    OnEventActivated();
+                }
+            }
+        }
+
         public override void Enable()
         {
             var state = GamePad.GetState(Player);
             if (!state.IsConnected)
             {
-                ErrorLog.AddError(ErrorType.Failure, "Xbox Controller is not plugged in. Not Enabling.");
+                ErrorLog.AddError(ErrorType.Failure, Strings.XboxButton_CantEnable);
             }
             else
             {
@@ -72,38 +94,6 @@ namespace XboxModules.Events
             base.Disable();
 
             buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
-        }
-
-        void OnKeyCombinationActivated()
-        {
-            if (!IsConfigOpen)
-            {
-                if (Enabled)
-                {
-                    OnEventActivated();
-                }
-            }
-        }
-        
-        public void OnSaved(IWpfConfiguration configurationControl)
-        {
-            buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
-            XboxButtons = ((XboxButtonConfig)configurationControl).SaveButtons;
-            buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);
-        }
-
-        public IWpfConfiguration ConfigurationControl
-        {
-            get { return new XboxButtonConfig(XboxButtons); }
-        }
-
-        /// <summary>
-        /// Checks the gamepad state against the one saved from configuration
-        /// </summary>
-        /// <param name="checkState"></param>
-        public bool StateEquals(GamePadButtons checkState)
-        {
-            return XboxButtons.Equals(checkState);
         }
     }
 }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.ComponentModel;
-using System.Threading;
-using System.Windows;
-using Microsoft.Xna.Framework;
+﻿using System.Windows;
+using MayhemWpf.UserControls;
 using Microsoft.Xna.Framework.Input;
 using XboxModules.Events;
-using MayhemWpf.UserControls;
 
 namespace XboxModules.Wpf
 {
@@ -14,98 +10,101 @@ namespace XboxModules.Wpf
     /// </summary>
     public partial class XboxButtonConfig : IWpfConfiguration
     {
+        public Buttons ButtonsToSave;
+
         // TODO: Make this configurable
-        protected PlayerIndex player = PlayerIndex.One;
-
-        ButtonEvents.ButtonDownHandler down_handler;
-        ButtonEvents.ButtonUpHandler up_handler;
-
         private Buttons down_buttons;
-        public Buttons SaveButtons;
 
-
-        public string ButtonsDown
+        // Contains the string the interface binds to
+        public string ButtonsDownText
         {
-            get { return (string)GetValue(ButtonsDownProperty); }
-            set { SetValue(ButtonsDownProperty, value); }
+            get { return (string)GetValue(ButtonsDownTextProperty); }
+            set { SetValue(ButtonsDownTextProperty, value); }
         }
 
-        public static readonly DependencyProperty ButtonsDownProperty =
-            DependencyProperty.Register("ButtonsDown", typeof(string), typeof(XboxButtonConfig), new UIPropertyMetadata(string.Empty));
+        public static readonly DependencyProperty ButtonsDownTextProperty =
+            DependencyProperty.Register("ButtonsDownText", typeof(string), typeof(XboxButtonConfig), new UIPropertyMetadata(string.Empty));
+
+        private bool shouldCheckValidity = false;
 
         public XboxButtonConfig(Buttons buttons)
         {
+            ButtonsToSave = buttons;
+
             this.DataContext = this;
             InitializeComponent();
-
-            SaveButtons = buttons;
-
-            down_handler = new ButtonEvents.ButtonDownHandler(Instance_OnButtonDown);
-            up_handler = new ButtonEvents.ButtonUpHandler(Instance_OnButtonUp);
-        }
-
-        public override void OnLoad()
-        {
-            ButtonEvents.Instance.OnButtonDown += down_handler;
-            ButtonEvents.Instance.OnButtonUp += up_handler;
-
-            ButtonEvents.Instance.AddRef();
-
-            UpdateButtonsDown(SaveButtons);
-        }
-
-        void Instance_OnButtonDown(Buttons button)
-        {
-            if (!down_buttons.HasFlag(button))
-            {
-                if (down_buttons == 0)
-                {
-                    SaveButtons = 0;
-                }
-                down_buttons |= button;
-                SaveButtons |= button;
-
-                UpdateButtonsDown(SaveButtons);
-            }
-            down_buttons |= button;
-        }
-
-        void Instance_OnButtonUp(Buttons button)
-        {
-            // remove button from buttons_down
-            down_buttons &= ~button;
-        }
-
-        void UpdateButtonsDown(Buttons buttons)
-        {
-            Dispatcher.Invoke((Action)delegate
-            {
-                ButtonsDown = buttons.ButtonString();
-                CanSave = buttons != 0;
-            });
-        }
-
-        public override bool OnSave()
-        {
-            ///TODO: Should this be here?
-            //bwButtons.CancelAsync();
-            if (SaveButtons == 0)
-            {
-                MessageBox.Show("You must push at least one button");
-                return false;
-            }
-            return true;
-        }
-
-        public override void OnClosing()
-        {
-            ButtonEvents.Instance.RemoveRef();
-            base.OnClosing();
         }
 
         public override string Title
         {
             get { return "Xbox Button"; }
+        }
+
+        public override void OnLoad()
+        {
+            XboxButton.IsConfigOpen = true;
+
+            ButtonEvents buttons = ButtonEvents.Instance;
+            buttons.AddRef();
+            buttons.OnButtonDown += Instance_OnButtonDown;
+            buttons.OnButtonUp += Instance_OnButtonUp;
+
+            UpdateButtonsDown();
+
+            shouldCheckValidity = true;
+        }
+
+        private void Instance_OnButtonDown(Buttons button)
+        {
+            // If this button isn't down already
+            if (!down_buttons.HasFlag(button))
+            {
+                // and we have no buttons down
+                if (down_buttons == 0)
+                {
+                    // then this is the first hit of a new combination. 
+                    // clear out the buttons we were going to save
+                    ButtonsToSave = 0;
+                }
+                // Add the button
+                down_buttons |= button;
+                ButtonsToSave |= button;
+
+                // And update the string
+                UpdateButtonsDown();
+            }
+            //down_buttons |= button;
+        }
+
+        private void Instance_OnButtonUp(Buttons button)
+        {
+            // remove button from buttons_down
+            down_buttons &= ~button;
+        }
+
+        private void UpdateButtonsDown()
+        {
+            //Dispatcher.Invoke((Action)delegate
+            //{
+                ButtonsDownText = ButtonsToSave.ButtonString();
+                CanSave = ButtonsToSave != 0;
+
+                if (shouldCheckValidity)
+                {
+                    textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+                }
+
+            //});
+        }
+
+        public override void OnClosing()
+        {
+            ButtonEvents buttons = ButtonEvents.Instance;
+            buttons.RemoveRef();
+            buttons.OnButtonDown -= Instance_OnButtonDown;
+            buttons.OnButtonUp -= Instance_OnButtonUp;
+
+            XboxButton.IsConfigOpen = false;
         }
     }
 }

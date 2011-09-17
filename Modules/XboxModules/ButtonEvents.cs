@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Input;
 using System.ComponentModel;
-using Microsoft.Xna.Framework;
-using MayhemCore;
 using System.Threading;
+using MayhemCore;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using XboxModules.Resources;
 
 namespace XboxModules
 {
-    class ButtonEvents
+    class ButtonEvents : IDisposable
     {
         public delegate void ButtonDownHandler(Buttons button);
         public event ButtonDownHandler OnButtonDown;
@@ -18,7 +16,7 @@ namespace XboxModules
         public delegate void ButtonUpHandler(Buttons button);
         public event ButtonUpHandler OnButtonUp;
 
-        public Buttons DownButtons;
+        //public Buttons DownButtons { get; private set; }
 
         protected BackgroundWorker bw;
 
@@ -40,6 +38,12 @@ namespace XboxModules
 
         ButtonEvents()
         {
+        }
+
+        public void Dispose()
+        {
+            bw.CancelAsync();
+            bw.Dispose();
         }
 
         public void AddRef()
@@ -98,7 +102,7 @@ namespace XboxModules
 
                 if (!controller.IsConnected)
                 {
-                    ErrorLog.AddError(ErrorType.Warning, "Xbox Controller is not plugged in. Waiting longer before next check.");
+                    ErrorLog.AddError(ErrorType.Warning, Strings.XboxButton_NotPluggedIn);
                     // It's not plugged in, we might as well wait a full second
                     // before checking again
                     Thread.Sleep(1000);
@@ -153,7 +157,7 @@ namespace XboxModules
                     if (prev_state.Y == ButtonState.Pressed && current_state.Y == ButtonState.Released)
                         ButtonUp(Buttons.Y);
 
-                    DownButtons = current_state.AsButtons();
+                    //DownButtons = current_state.AsButtons();
                     prev_state = current_state;
                 }
                 Thread.Sleep(50);
