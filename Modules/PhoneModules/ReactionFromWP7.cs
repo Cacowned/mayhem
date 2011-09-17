@@ -27,7 +27,7 @@ namespace PhoneModules
         {
             if (eventText == id)
             {
-                base.OnEventActivated();
+                base.Trigger();
             }
         }
 

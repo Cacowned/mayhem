@@ -62,7 +62,7 @@ namespace PhidgetModules
 
                 if (IsInRange(value) && !IsInRange(lastValue))
                 {
-                    OnEventActivated();
+                    Trigger();
                 }
 
                 lastValue = value;

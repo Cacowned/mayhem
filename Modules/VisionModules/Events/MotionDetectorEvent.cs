@@ -91,7 +91,7 @@ namespace VisionModules.Events
                 Logger.WriteLine("m_OnMotionUpdate");
 
                 // trigger the reaction
-                base.OnEventActivated();
+                base.Trigger();
 
                 lastMotionDetected = DateTime.Now;
             }

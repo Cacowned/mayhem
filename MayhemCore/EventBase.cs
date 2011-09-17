@@ -18,7 +18,7 @@ namespace MayhemCore
         /// Event trigger for when the event is activated. This shouldn't
         /// need to be overridden, just attached to
         /// </summary>
-        protected virtual void OnEventActivated()
+        protected virtual void Trigger()
         {
             EventActivated(this, null);
         }

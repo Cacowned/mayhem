@@ -55,11 +55,11 @@ namespace PhidgetModules
 
             if (OnTurnOn && value >= TopThreshold && lastValue < TopThreshold)
             {
-                OnEventActivated();
+                Trigger();
             }
             else if (!OnTurnOn && value <= BottomThreshold && lastValue > BottomThreshold)
             {
-                OnEventActivated();
+                Trigger();
             }
 
             lastValue = value;

@@ -69,7 +69,7 @@ namespace XboxModules.Events
             {
                 if (Enabled)
                 {
-                    OnEventActivated();
+                    Trigger();
                 }
             }
         }

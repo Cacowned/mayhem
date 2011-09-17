@@ -55,7 +55,7 @@ namespace PhidgetModules.Events
         {
             if (e.Tag == Tag)
             {
-                OnEventActivated();
+                Trigger();
                 rfid.LED = true;
             }
         }

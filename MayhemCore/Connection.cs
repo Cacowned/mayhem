@@ -62,13 +62,13 @@ namespace MayhemCore
             this.Reaction.Connection = this;
 
             // Set up the event handler for when the event triggers
-            this.Event.EventActivated += this.OnEventActivated;
+            this.Event.EventActivated += this.Trigger;
         }
 
         /// <summary>
         /// Calls the Reaction when the event gets triggered.
         /// </summary>
-        private void OnEventActivated(object sender, EventArgs e)
+        private void Trigger(object sender, EventArgs e)
         {
             // If we got into this method call, we probably don't need
             // to check if we are enabled.
@@ -205,7 +205,7 @@ namespace MayhemCore
             Reaction.Connection = this;
 
             // Set up the event handler for when the event triggers
-            this.Event.EventActivated += this.OnEventActivated;
+            this.Event.EventActivated += this.Trigger;
 
             // If we have started up and are enabled, then we need to
             // actually enable our events and reactions

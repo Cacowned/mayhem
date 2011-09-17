@@ -188,7 +188,7 @@ namespace VisionModules.Events
                 if (activated && span.TotalMilliseconds >= MIN_TRIGGER_INTERVAL_MS)
                 {
                     lastTriggerDate = DateTime.Now;
-                    base.OnEventActivated();
+                    base.Trigger();
                 }
             }
 
