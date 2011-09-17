@@ -1,39 +1,36 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
+﻿using System.Runtime.InteropServices;
 using MayhemCore;
-using OOutlook = Microsoft.Office.Interop.Outlook;
 using OfficeModules.Resources;
+using OOutlook = Microsoft.Office.Interop.Outlook;
 
 namespace OfficeModules.Events
 {
-    [DataContract]
-    [MayhemModule("Outlook Reminder", "Triggers when a reminder goes off for an outlook event")]
-    public class OutlookReminder : EventBase
+    [MayhemModule("Outlook New Mail", "Triggers when a new email is received")]
+    public class OutlookMail : EventBase
     {
         private OOutlook.Application outlook;
-        private OOutlook.ApplicationEvents_11_ReminderEventHandler reminderEvent;
-        
+        private OOutlook.ApplicationEvents_11_NewMailEventHandler mailEvent;
+
         protected override void Initialize()
         {
             base.Initialize();
+
             // Create the event handler delegate to attach
-            reminderEvent = new OOutlook.ApplicationEvents_11_ReminderEventHandler(GotReminder);
+            mailEvent = new OOutlook.ApplicationEvents_11_NewMailEventHandler(GotMail);
         }
 
-        private void GotReminder(object sender)
+        private void GotMail()
         {
-            base.Trigger();
+            Trigger();
         }
 
         public override void Enable()
         {
-            // When enabled, try and get the outlook instance
+            // When enabled, try and get the outlook instance            
             try
             {
                 outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
-                outlook.Reminder += reminderEvent;
+                outlook.NewMail += mailEvent;
 
                 base.Enable();
             }
@@ -47,9 +44,12 @@ namespace OfficeModules.Events
         {
             base.Disable();
 
-            outlook.Reminder -= reminderEvent;
+            if (outlook != null)
+            {
+                outlook.NewMail -= mailEvent;
 
-            outlook = null;
+                outlook = null;
+            }
         }
     }
 }
