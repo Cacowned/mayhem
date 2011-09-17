@@ -4,15 +4,16 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using MayhemCore;
 using OOutlook = Microsoft.Office.Interop.Outlook;
+using OfficeModules.Resources;
 
-namespace OfficeModules.Events.Outlook
+namespace OfficeModules.Events
 {
     [DataContract]
     [MayhemModule("Outlook Reminder", "Triggers when a reminder goes off for an outlook event")]
     public class OutlookReminder : EventBase
     {
-        protected OOutlook.Application outlook;
-        protected OOutlook.ApplicationEvents_11_ReminderEventHandler reminderEvent;
+        private OOutlook.Application outlook;
+        private OOutlook.ApplicationEvents_11_ReminderEventHandler reminderEvent;
         
         protected override void Initialize()
         {
@@ -28,22 +29,18 @@ namespace OfficeModules.Events.Outlook
 
         public override void Enable()
         {
-
             // When enabled, try and get the outlook instance
             try
             {
                 outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
+                outlook.Reminder += reminderEvent;
+
+                base.Enable();
             }
             catch
             {
-                ErrorLog.AddError(ErrorType.Warning, "Unable to find the open Outlook application");
-                return;
+                ErrorLog.AddError(ErrorType.Warning, Strings.Outlook_ApplicationNotFound);
             }
-
-            base.Enable();
-
-            outlook.Reminder += reminderEvent;
-
         }
 
         public override void Disable()

@@ -3,15 +3,15 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using MayhemCore;
 using OOutlook = Microsoft.Office.Interop.Outlook;
+using OfficeModules.Resources;
 
-namespace OfficeModules.Events.Outlook
+namespace OfficeModules.Events
 {
-    [DataContract]
     [MayhemModule("Outlook New Mail", "Triggers when a new email is received")]
     public class OutlookMail : EventBase
     {
-        protected OOutlook.Application outlook;
-        protected OOutlook.ApplicationEvents_11_NewMailEventHandler mailEvent;
+        private OOutlook.Application outlook;
+        private OOutlook.ApplicationEvents_11_NewMailEventHandler mailEvent;
 
         protected override void Initialize()
         {
@@ -23,7 +23,7 @@ namespace OfficeModules.Events.Outlook
 
         private void GotMail()
         {
-            base.OnEventActivated();
+            OnEventActivated();
         }
 
         public override void Enable()
@@ -32,20 +32,19 @@ namespace OfficeModules.Events.Outlook
             try
             {
                 outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
+                outlook.NewMail += mailEvent;
+
+                base.Enable();
             }
             catch
             {
-                ErrorLog.AddError(ErrorType.Warning, "Unable to find the open Outlook application");
-                return;
+                ErrorLog.AddError(ErrorType.Warning, Strings.Outlook_ApplicationNotFound);
             }
-
-            base.Enable();
-
-            outlook.NewMail += mailEvent;
         }
 
         public override void Disable()
         {
+            base.Disable();
 
             // TODO: Sometimes outlook is null here
             // how is that possible?
@@ -55,8 +54,6 @@ namespace OfficeModules.Events.Outlook
 
                 outlook = null;
             }
-
-            base.Disable();
         }
     }
 }
