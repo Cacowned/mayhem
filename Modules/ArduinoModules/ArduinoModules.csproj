@@ -33,9 +33,6 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="RocketLauncher">
-      <HintPath>..\..\..\..\..\Downloads\rocket-12777\Demo\bin\Debug\RocketLauncher.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -48,7 +45,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UsbLibrary, Version=1.0.2792.1105, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\Downloads\rocket-12777\Demo\bin\Debug\UsbLibrary.dll</HintPath>
+      <HintPath>..\References\UsbLibrary.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -83,6 +80,10 @@
       <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
       <Name>MayhemWpf</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\DefaultModules\DefaultModules.csproj">
+      <Project>{21F131F9-56F2-4339-A625-EDB4A3F086D1}</Project>
+      <Name>DefaultModules</Name>
     </ProjectReference>
     <ProjectReference Include="..\MayhemSerial\MayhemSerial.csproj">
       <Project>{EB69EA74-75DB-4171-858A-B4BC4F6857E6}</Project>
