@@ -65,7 +65,7 @@ namespace PhidgetModules.Events
                 {
 
                     // then trigger
-                    OnEventActivated();
+                    Trigger();
                 }
 
                 lastSignal = DateTime.Now;

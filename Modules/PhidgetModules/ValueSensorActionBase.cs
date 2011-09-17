@@ -62,11 +62,11 @@ namespace PhidgetModules
 
                 if (Increasing && value > TopValue && lastValue < TopValue)
                 {
-                    OnEventActivated();
+                    Trigger();
                 }
                 else if (!Increasing && value < TopValue && lastValue > TopValue)
                 {
-                    OnEventActivated();
+                    Trigger();
                 }
 
                 lastValue = value;

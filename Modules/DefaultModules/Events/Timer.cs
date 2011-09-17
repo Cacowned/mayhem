@@ -49,7 +49,7 @@ namespace DefaultModules.Events
 
         private void myTimer_Tick(object sender, EventArgs e)
         {
-            OnEventActivated();
+            Trigger();
         }
 
         public override void SetConfigString()

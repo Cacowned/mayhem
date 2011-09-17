@@ -74,7 +74,7 @@ namespace VisionModules.Events
             if (points.Count > 0 && ts.TotalMilliseconds > detectionInterval)
             {
                 Logger.WriteLine("m_onFaceDetected");
-                base.OnEventActivated();
+                base.Trigger();
 
                 lastFacesDetected = DateTime.Now;
             }

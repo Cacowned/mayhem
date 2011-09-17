@@ -23,7 +23,7 @@ namespace OfficeModules.Events
 
         private void GotMail()
         {
-            OnEventActivated();
+            Trigger();
         }
 
         public override void Enable()

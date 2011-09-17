@@ -85,13 +85,13 @@ namespace PhidgetModules.Events
                 // then trigger
                 if (e.Value == true && OnWhenOn)
                 {
-                    OnEventActivated();
+                    Trigger();
                 }
                 // otherwise, if it its off, and we trigger
                 // when it turns off, then trigger
                 else if (e.Value == false && !OnWhenOn)
                 {
-                    OnEventActivated();
+                    Trigger();
                 }
             }
         }

@@ -86,7 +86,7 @@ namespace DefaultModules.Events
             {
                 if (Enabled)
                 {
-                    OnEventActivated();
+                    Trigger();
                 }
             }
         }

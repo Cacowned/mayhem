@@ -168,7 +168,7 @@ namespace ArduinoModules.Events
             if (ts.TotalMilliseconds >= ACTIVATE_MIN_DELAY)
             {
                 // call activate on base
-                base.OnEventActivated();
+                base.Trigger();
                 lastActivated = DateTime.Now;
             }
             

@@ -24,7 +24,7 @@ namespace OfficeModules.Events
 
         private void GotReminder(object sender)
         {
-            base.OnEventActivated();
+            base.Trigger();
         }
 
         public override void Enable()
