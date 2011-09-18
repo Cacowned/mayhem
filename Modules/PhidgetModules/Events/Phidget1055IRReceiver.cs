@@ -24,15 +24,15 @@ namespace PhidgetModules.Events
         }
         #endregion
 
-        protected IR ir;
-        protected IRCodeEventHandler gotCode;
-        protected DateTime lastSignal;
+        private IR ir;
+        private IRCodeEventHandler gotCode;
+        private DateTime lastSignal;
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            ir = InterfaceFactory.GetIR();
+            ir = InterfaceFactory.IR;
 
             gotCode = new IRCodeEventHandler(ir_Code);
         }
@@ -53,7 +53,7 @@ namespace PhidgetModules.Events
         }
 
         // When we receive a code
-        void ir_Code(object sender, IRCodeEventArgs e)
+        private void ir_Code(object sender, IRCodeEventArgs e)
         {
             // If the data matches,
             // Do we care about the number of times it was repeated?

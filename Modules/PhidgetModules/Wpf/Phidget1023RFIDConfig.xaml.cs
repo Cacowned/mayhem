@@ -26,24 +26,26 @@ namespace PhidgetModules.Wpf
 
         public Phidget1023RFIDConfig(string tagId)
         {
-            this.rfid = InterfaceFactory.GetRFID();
+            this.rfid = InterfaceFactory.Rfid;
             TagID = tagId;
 
+            this.DataContext = this;
             InitializeComponent();
         }
 
         //Tag event handler...we'll display the tag code in the field on the GUI
-        void RfidTag(object sender, TagEventArgs e)
+        private void RfidTag(object sender, TagEventArgs e)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
                 {
+                    CanSave = true;
                     rfid.LED = true;
                     TagID = e.Tag;
                 }));
         }
 
         //Tag event handler...we'll display the tag code in the field on the GUI
-        void LostRfidTag(object sender, TagEventArgs e)
+        private void LostRfidTag(object sender, TagEventArgs e)
         {
             rfid.LED = false;
         }
@@ -74,7 +76,7 @@ namespace PhidgetModules.Wpf
         {
             get
             {
-                return "Phidget - RFID";
+                return "Phidget - Rfid";
             }
         }
     }

@@ -4,9 +4,12 @@
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              Width="400">
     <Grid>
-        <StackPanel>
-            <TextBlock TextWrapping="WrapWithOverflow">Please touch a tag to the RFID reader.</TextBlock>
-            <TextBlock TextWrapping="WrapWithOverflow" Margin="0 50 0 20" MinHeight="50" Text="{Binding TagID, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" FontSize="14" TextAlignment="Center" FontWeight="Bold" />
-        </StackPanel>
+
+        <Grid>
+            <StackPanel>
+                <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Please touch a tag to the RFID reader.</TextBlock>
+                <TextBlock TextWrapping="WrapWithOverflow" Margin="0,25,0,0" MinHeight="35" FontSize="14" TextAlignment="Center" FontWeight="Bold" Text="{Binding TagId}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </src:IWpfConfiguration>

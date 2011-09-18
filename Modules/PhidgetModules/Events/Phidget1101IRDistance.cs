@@ -13,7 +13,7 @@ namespace PhidgetModules.Events
     {
         public IWpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1101IRDistanceConfig(ifKit, Index, TopValue, BottomValue, ConvertToString); }
+            get { return new Phidget1101IRDistanceConfig(IfKit, Index, TopValue, BottomValue, ConvertToString); }
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)

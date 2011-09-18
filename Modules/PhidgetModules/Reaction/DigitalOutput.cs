@@ -31,13 +31,13 @@ namespace PhidgetModules.Reaction
         #endregion
 
         // The interface kit we are using for the sensors
-        protected InterfaceKit ifKit;
+        private InterfaceKit ifKit;
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            this.ifKit = InterfaceFactory.GetInterface();
+            this.ifKit = InterfaceFactory.Interface;
 
             Index = 0;
             OutputType = DigitalOutputType.Toggle;
@@ -88,7 +88,7 @@ namespace PhidgetModules.Reaction
             }
 
             /*
-            this.ifKit.outputs[index] = flag;
+            this.IfKit.outputs[index] = flag;
             flag = !flag;
              */
         }

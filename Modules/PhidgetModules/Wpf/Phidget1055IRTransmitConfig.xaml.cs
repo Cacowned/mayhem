@@ -35,7 +35,7 @@ namespace PhidgetModules.Reaction
 
         public Phidget1055IRTransmitConfig(IRCode code, IRCodeInfo codeInfo)
         {
-            ir = InterfaceFactory.GetIR();
+            ir = InterfaceFactory.IR;
             Code = code;
             CodeInfo = codeInfo;
 
