@@ -26,10 +26,15 @@ namespace MayhemWpf.UserControls
             }
             set
             {
-                canSave = value;
-                if (CanSavedChanged != null)
+                // Only do this if the flag is being switched
+                if (value != canSave)
                 {
-                    CanSavedChanged(canSave);
+                    canSave = value;
+
+                    if (CanSavedChanged != null)
+                    {
+                        CanSavedChanged(canSave);
+                    }
                 }
             }
         }
