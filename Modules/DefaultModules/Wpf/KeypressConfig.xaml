@@ -6,7 +6,7 @@
     <Grid>
         <StackPanel>
             <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Please enter a combination of keys which will activate this event.</TextBlock>
-            <TextBlock TextWrapping="WrapWithOverflow" Margin="0,25,0,0" MinHeight="35" FontSize="14" TextAlignment="Center" FontWeight="Bold" Text="{Binding KeysDownText}" />
+            <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding KeysDownText}" />
             <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Text="At lease one button must be pushed." HorizontalAlignment="Center" />
         </StackPanel>
     </Grid>

@@ -102,4 +102,15 @@
         <Setter Property="Foreground" Value="#EF0000" />
         <Setter Property="Visibility" Value="Collapsed" />
     </Style>
+
+    <!-- Big text on a config window. Things like KeyPress and Xbox Controller -->
+    <Style TargetType="{x:Type TextBlock}" x:Key="ConfigBigText">
+        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+        <Setter Property="Margin" Value="0,25,0,0" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="MinHeight" Value="35" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="FontWeight" Value="Bold" />
+        
+    </Style>
 </ResourceDictionary>

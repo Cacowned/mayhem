@@ -5,9 +5,9 @@
              Width="400">
     <Grid>
         <StackPanel>
-            <TextBlock TextWrapping="WrapWithOverflow" TextAlignment="Center">Send the IR Code to watch for.</TextBlock>
-            <TextBlock Name="NoReciever" TextAlignment="Center" Foreground="#EF0000">Can't find the IR Reciever</TextBlock>
-            <TextBlock TextWrapping="WrapWithOverflow" Margin="0 50 0 0" MinHeight="50" Text="{Binding Code}" FontSize="14" TextAlignment="Center" FontWeight="Bold" />
+            <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Send the IR Code to watch for.</TextBlock>
+            <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding Code}" />
+            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReciever" Text="Can't find the IR Reciever" HorizontalAlignment="Center" />
         </StackPanel>
     </Grid>
 </src:IWpfConfiguration>
