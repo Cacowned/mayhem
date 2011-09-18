@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using Phidgets.Events;
+using System;
 
 namespace PhidgetModules
 {
@@ -33,8 +34,8 @@ namespace PhidgetModules
 
         #endregion
 
-        protected double value;
-        protected double lastValue;
+        protected double CurrentValue { get; set; }
+        protected double LastValue { get; set; }
 
         protected override void Initialize()
         {
@@ -45,24 +46,24 @@ namespace PhidgetModules
             OnTurnOn = true;
         }
 
-        protected override void SensorChange(object sender, SensorChangeEventArgs e)
+        protected override void SensorChange(object sender, SensorChangeEventArgs ex)
         {
             // We only care about the index we are watching
-            if (e.Index != Index)
+            if (ex.Index != Index)
                 return;
 
-            value = e.Value;
+            CurrentValue = ex.Value;
 
-            if (OnTurnOn && value >= TopThreshold && lastValue < TopThreshold)
+            if (OnTurnOn && CurrentValue >= TopThreshold && LastValue < TopThreshold)
             {
                 Trigger();
             }
-            else if (!OnTurnOn && value <= BottomThreshold && lastValue > BottomThreshold)
+            else if (!OnTurnOn && CurrentValue <= BottomThreshold && LastValue > BottomThreshold)
             {
                 Trigger();
             }
 
-            lastValue = value;
+            LastValue = CurrentValue;
         }
     }
 }

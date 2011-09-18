@@ -34,7 +34,7 @@ namespace PhidgetModules.Wpf
 
         public Phidget1055IRReceiveConfig(IRCode code)
         {
-            ir = InterfaceFactory.GetIR();
+            ir = InterfaceFactory.IR;
             Code = code;
 
             this.DataContext = this;

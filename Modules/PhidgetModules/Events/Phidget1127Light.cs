@@ -13,7 +13,7 @@ namespace PhidgetModules.Events
     {
         public IWpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1127LightConfig(ifKit, Index, TopValue, Increasing, ConvertToString); }
+            get { return new Phidget1127LightConfig(IfKit, Index, TopValue, Increasing, ConvertToString); }
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)

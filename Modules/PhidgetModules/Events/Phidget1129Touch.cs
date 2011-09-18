@@ -13,7 +13,7 @@ namespace PhidgetModules.Events
     {
         public IWpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1129TouchConfig(ifKit, Index, OnTurnOn, ConvertToString); }
+            get { return new Phidget1129TouchConfig(IfKit, Index, OnTurnOn, ConvertToString); }
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)

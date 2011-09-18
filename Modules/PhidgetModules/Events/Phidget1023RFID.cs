@@ -11,8 +11,8 @@ using Phidgets.Events;
 namespace PhidgetModules.Events
 {
     [DataContract]
-    [MayhemModule("Phidget: RFID", "Triggers with a certain RFID Tag")]
-    public class Phidget1023RFID : EventBase, IWpfConfigurable
+    [MayhemModule("Phidget: Rfid", "Triggers with a certain Rfid Tag")]
+    public class Phidget1023Rfid : EventBase, IWpfConfigurable
     {
         #region Configuration
         // This is the tag we are watching for
@@ -25,13 +25,13 @@ namespace PhidgetModules.Events
 
         #endregion
 
-        protected RFID rfid;
+        private RFID rfid;
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            rfid = InterfaceFactory.GetRFID();
+            rfid = InterfaceFactory.Rfid;
         }
 
         public IWpfConfiguration ConfigurationControl
@@ -46,12 +46,12 @@ namespace PhidgetModules.Events
 
         public override void SetConfigString()
         {
-            ConfigString = String.Format("RFID Tag ID {0}", Tag);
+            ConfigString = String.Format("Rfid Tag ID {0}", Tag);
         }
 
 
         //Tag event handler...we'll display the tag code in the field on the GUI
-        void RfidTag(object sender, TagEventArgs e)
+        private void RfidTag(object sender, TagEventArgs e)
         {
             if (e.Tag == Tag)
             {

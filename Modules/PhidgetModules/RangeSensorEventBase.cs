@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using Phidgets.Events;
+using System;
 
 namespace PhidgetModules
 {
@@ -24,15 +25,15 @@ namespace PhidgetModules
 
         #endregion
 
-        protected double value;
-        protected double lastValue;
+        protected double CurrentValue { get; set; }
+        protected double LastValue { get; set; }
 
         protected override void Initialize()
         {
             base.Initialize();
 
             // put it somewhere in the middle
-            value = lastValue = TopValue - BottomValue;
+            CurrentValue = LastValue = TopValue - BottomValue;
 
             TopValue = 85;
             BottomValue = 20;
@@ -50,22 +51,22 @@ namespace PhidgetModules
             return value > BottomValue && value < TopValue;
         }
 
-        protected override void SensorChange(object sender, SensorChangeEventArgs e)
+        protected override void SensorChange(object sender, SensorChangeEventArgs ex)
         {
             // We only care about the index we are watching
-            if (e.Index != Index)
+            if (ex.Index != Index)
                 return;
 
-            if (IsValidInput(e.Value))
+            if (IsValidInput(ex.Value))
             {
-                value = Convert(e.Value);
+                CurrentValue = Convert(ex.Value);
 
-                if (IsInRange(value) && !IsInRange(lastValue))
+                if (IsInRange(CurrentValue) && !IsInRange(LastValue))
                 {
                     Trigger();
                 }
 
-                lastValue = value;
+                LastValue = CurrentValue;
             }
         }
     }

@@ -30,13 +30,13 @@ namespace PhidgetModules.Reaction
         }
         #endregion
 
-        protected IR ir;
+        private IR ir;
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            ir = InterfaceFactory.GetIR();
+            ir = InterfaceFactory.IR;
         }
 
         public IWpfConfiguration ConfigurationControl

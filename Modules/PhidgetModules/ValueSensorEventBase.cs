@@ -9,7 +9,7 @@ namespace PhidgetModules
         #region Configuration
         /// <summary>
         /// If this is true, then we want to trigger when
-        /// the value goes from below the topValue to above the
+        /// the CurrentValue goes from below the topValue to above the
         /// topValue. If it is false, then we trigger when we go
         /// from above to below
         /// </summary>
@@ -29,9 +29,8 @@ namespace PhidgetModules
 
         #endregion
 
-        protected double value;
-
-        protected double lastValue;
+        protected double CurrentValue { get; set; }
+        protected double LastValue { get; set; }
 
         protected override void Initialize()
         {
@@ -40,7 +39,7 @@ namespace PhidgetModules
             Increasing = true;
             TopValue = 85;
 
-            value = lastValue = TopValue;
+            CurrentValue = LastValue = TopValue;
         }
 
         public abstract double Convert(int value);
@@ -50,26 +49,26 @@ namespace PhidgetModules
             return true;
         }
 
-        protected override void SensorChange(object sender, SensorChangeEventArgs e)
+        protected override void SensorChange(object sender, SensorChangeEventArgs ex)
         {
             // We only care about the index we are watching
-            if (e.Index != Index)
+            if (ex.Index != Index)
                 return;
 
-            if (IsValidRange(e.Value))
+            if (IsValidRange(ex.Value))
             {
-                value = Convert(e.Value);
+                CurrentValue = Convert(ex.Value);
 
-                if (Increasing && value > TopValue && lastValue < TopValue)
+                if (Increasing && CurrentValue > TopValue && LastValue < TopValue)
                 {
                     Trigger();
                 }
-                else if (!Increasing && value < TopValue && lastValue > TopValue)
+                else if (!Increasing && CurrentValue < TopValue && LastValue > TopValue)
                 {
                     Trigger();
                 }
 
-                lastValue = value;
+                LastValue = CurrentValue;
             }
         }
     }

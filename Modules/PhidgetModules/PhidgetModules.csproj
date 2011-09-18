@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\MayhemRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,16 +51,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\DigitalInput.cs" />
-    <Compile Include="Events\Phidget1023RFID.cs" />
+    <Compile Include="Events\Phidget1023Rfid.cs" />
     <Compile Include="Events\Phidget1055IRReceiver.cs" />
     <Compile Include="Events\Phidget1101IRDistance.cs" />
     <Compile Include="Events\Phidget1103IRReflective.cs" />
     <Compile Include="Events\Phidget1106Force.cs" />
     <Compile Include="Events\Phidget1127Light.cs" />
     <Compile Include="Events\Phidget1129Touch.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InterfaceFactory.cs" />
-    <Compile Include="OnOffSensorActionBase.cs" />
-    <Compile Include="RangeSensorActionBase.cs" />
+    <Compile Include="OnOffSensorEventBase.cs" />
+    <Compile Include="RangeSensorEventBase.cs" />
     <Compile Include="Reaction\DigitalOutput.cs" />
     <Compile Include="Reaction\Phidget1055IRTransmit.cs" />
     <Compile Include="Wpf\Phidget1055IRTransmitConfig.xaml.cs">
@@ -94,9 +96,9 @@
       <DependentUpon>Phidget1133SoundConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Events\Phidget1133Sound.cs" />
-    <Compile Include="SensorActionBase.cs" />
+    <Compile Include="SensorEventBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ValueSensorActionBase.cs" />
+    <Compile Include="ValueSensorEventBase.cs" />
     <Compile Include="Wpf\PhidgetDigitalInputConfig.xaml.cs">
       <DependentUpon>PhidgetDigitalInputConfig.xaml</DependentUpon>
     </Compile>

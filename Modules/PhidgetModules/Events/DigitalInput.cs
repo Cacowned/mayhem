@@ -35,15 +35,15 @@ namespace PhidgetModules.Events
         #endregion
 
         // The interface kit we are using for the sensors
-        protected InterfaceKit ifKit;
+        private InterfaceKit ifKit;
 
-        protected InputChangeEventHandler inputChangeHandler;
+        private InputChangeEventHandler inputChangeHandler;
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            this.ifKit = InterfaceFactory.GetInterface();
+            this.ifKit = InterfaceFactory.Interface;
             inputChangeHandler = new InputChangeEventHandler(InputChanged);
 
             Index = 0;
@@ -73,23 +73,23 @@ namespace PhidgetModules.Events
         }
 
         // The input has changed, do the work here
-        protected void InputChanged(object sender, InputChangeEventArgs e)
+        protected void InputChanged(object sender, InputChangeEventArgs ex)
         {
-            // If e.value is true, then it used to be false.
+            // If e.CurrentValue is true, then it used to be false.
             // Trigger when appropriate
 
             // We are dealing with the right input
-            if (e.Index == Index)
+            if (ex.Index == Index)
             {
                 // If its true and we turn on when it turns on
                 // then trigger
-                if (e.Value == true && OnWhenOn)
+                if (ex.Value == true && OnWhenOn)
                 {
                     Trigger();
                 }
                 // otherwise, if it its off, and we trigger
                 // when it turns off, then trigger
-                else if (e.Value == false && !OnWhenOn)
+                else if (ex.Value == false && !OnWhenOn)
                 {
                     Trigger();
                 }

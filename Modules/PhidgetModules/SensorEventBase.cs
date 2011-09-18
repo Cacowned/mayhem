@@ -20,18 +20,18 @@ namespace PhidgetModules
         #endregion
 
         // The interface kit we are using for the sensors
-        protected static InterfaceKit ifKit;
+        protected static InterfaceKit IfKit { get; private set; }
 
-        protected SensorChangeEventHandler handler;
+        private SensorChangeEventHandler handler;
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            // If we don't have an ifKit yet, create one
-            if (ifKit == null)
+            // If we don't have an IfKit yet, create one
+            if (IfKit == null)
             {
-                ifKit = InterfaceFactory.GetInterface();
+                IfKit = InterfaceFactory.Interface;
             }
 
             handler = new SensorChangeEventHandler(SensorChange);
@@ -40,21 +40,21 @@ namespace PhidgetModules
             Index = 0;
         }
 
-        protected abstract void SensorChange(object sender, SensorChangeEventArgs e);
+        protected abstract void SensorChange(object sender, SensorChangeEventArgs ex);
 
         public override void Enable()
         {
             base.Enable();
-            ifKit.SensorChange += handler;
+            IfKit.SensorChange += handler;
         }
 
         public override void Disable()
         {
             base.Disable();
 
-            if (ifKit != null)
+            if (IfKit != null)
             {
-                ifKit.SensorChange -= handler;
+                IfKit.SensorChange -= handler;
             }
 
         }
