@@ -81,7 +81,7 @@ namespace Mayhem.UserControls
             {
                 Connection.Disable(null);
             }
-            ConfigWindow config = new ConfigWindow((IWpfConfigurable)Connection.Event);
+            ConfigWindow config = new ConfigWindow((IWpfConfigurable)configurable);
             config.ShowDialog();
 
             if (wasEnabled)
@@ -100,7 +100,7 @@ namespace Mayhem.UserControls
 
         private void ConfigureReaction_Click(object sender, RoutedEventArgs e)
         {
-            ShowConfig(Connection.Event);
+            ShowConfig(Connection.Reaction);
         }
 
         private void DeleteConnectionClick(object sender, RoutedEventArgs e)
