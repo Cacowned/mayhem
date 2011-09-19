@@ -67,24 +67,28 @@ namespace PhoneModules
 
         public Stream Html(bool update)
         {
-            if (html == null)
+            if(isShuttingDown)
+                return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));
+            else if (html == null)
                 return null;
 
             OperationContext context = OperationContext.Current;
             MessageProperties messageProperties = context.IncomingMessageProperties;
             RemoteEndpointMessageProperty endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+            string key = endpointProperty.Address + ":" + endpointProperty.Port;
 
-            Logger.WriteLine(update + " " + WebOperationContext.Current.IncomingRequest.UserAgent);
+            Logger.WriteLine(update + " " + key + " " + WebOperationContext.Current.IncomingRequest.UserAgent);
             WebOperationContext.Current.OutgoingResponse.ContentType = "text/html";
 
-            if (!resetEvents.ContainsKey(endpointProperty.Address))
+            if (!resetEvents.ContainsKey(key))
             {
                 AutoResetEvent a = new AutoResetEvent(false);
-                resetEvents[endpointProperty.Address] = a;
+                resetEvents[key] = a;
             }
+            Debug.WriteLine(resetEvents.Count);
             if (!update)
             {
-                resetEvents[endpointProperty.Address].Reset();
+                resetEvents[key].Reset();
 
                 string userAgent = WebOperationContext.Current.IncomingRequest.UserAgent;
                 if(userAgent.IndexOf("iPhone") >= 0 || userAgent.IndexOf("iPad") >= 0)
@@ -96,17 +100,22 @@ namespace PhoneModules
                 else
                     return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlWP7));
             }
-            else if (resetEvents[endpointProperty.Address].WaitOne(5000))
+            else 
             {
-                if (isShuttingDown)
+                Interlocked.Increment(ref numToKill);
+                if (resetEvents[key].WaitOne(30000))
                 {
-                    Logger.WriteLine("Killed service");
-                    if (Interlocked.Decrement(ref numToKill) == 0)
-                        killResetEvent.Set();
-                    return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));
+                    Interlocked.Decrement(ref numToKill);
+                    if (isShuttingDown)
+                    {
+                        if (numToKill == 0)
+                            killResetEvent.Set();
+                        Logger.WriteLine("Killed service " + numToKill);
+                        return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));
+                    }
+                    else
+                        return new MemoryStream(ASCIIEncoding.Default.GetBytes(insideDiv));
                 }
-                else
-                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(insideDiv));
             }
             return null;
         }
@@ -153,6 +162,7 @@ namespace PhoneModules
         public void SetInsideDiv(string insideDiv)
         {
             this.insideDiv = insideDiv;
+            Debug.WriteLine(resetEvents.Count);
             foreach (AutoResetEvent ev in resetEvents.Values)
             {
                 ev.Set();
@@ -179,7 +189,8 @@ namespace PhoneModules
             isShuttingDown = true;
             if (resetEvents.Count > 0)
             {
-                numToKill = resetEvents.Count;
+                //numToKill = resetEvents.Count;
+                Debug.WriteLine(numToKill);
                 foreach (AutoResetEvent ev in resetEvents.Values)
                 {
                     ev.Set();

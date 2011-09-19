@@ -86,9 +86,9 @@ namespace Mayhem.UserControls
 
             if (wasEnabled)
             {
-                Connection.Enable(null);
+                Connection.Enable(new Action(() => Dispatcher.Invoke((Action)delegate { Connection.IsConfiguring = false; })));
             }
-            Connection.IsConfiguring = false;
+            //Connection.IsConfiguring = false;
 
             MainWindow.DimMainWindow(false);
         }
