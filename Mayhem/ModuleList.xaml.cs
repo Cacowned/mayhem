@@ -148,15 +148,14 @@ namespace Mayhem
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
             IWpfConfiguration config = ConfigContent.Content as IWpfConfiguration;
-            if (iWpfConfig.OnSave())
-            {
-                SelectedModuleInstance.OnSaved(config);
-                ((ModuleBase)SelectedModuleInstance).SetConfigString();
-            }
+            iWpfConfig.OnSave();
+            SelectedModuleInstance.OnSaved(config);
+            ((ModuleBase)SelectedModuleInstance).SetConfigString();
+            
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
-                {
-                    iWpfConfig.OnClosing();
-                }));
+            {
+                iWpfConfig.OnClosing();
+            }));
             DialogResult = true;
         }
 

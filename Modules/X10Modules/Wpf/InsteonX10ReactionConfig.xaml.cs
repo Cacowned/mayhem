@@ -148,12 +148,11 @@ namespace X10Modules.Wpf
         /// called when the module config save button is clicked s
         /// </summary>
         /// <returns></returns>
-        public override bool OnSave()
+        public override void OnSave()
         {
             if (x10 != null)
                 x10.Dispose();
             Logger.WriteLine("OnSave");
-            return true;
         }
     }
 }

@@ -149,13 +149,12 @@ namespace VisionModules.Wpf
         }
      
 
-        public override bool OnSave()
+        public override void OnSave()
         {
             selected_camera = DeviceList.SelectedItem as Camera;
             // cam.OnImageUpdated -= imageUpdateHandler;
 
             cam = selected_camera;
-            return true;
         }
 
        
