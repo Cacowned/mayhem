@@ -18,6 +18,8 @@ namespace PhoneModules
         public string ID;
         public double X;
         public double Y;
+        public double Width;
+        public double Height;
     }
 
     public class PhoneLayoutButton : PhoneLayoutElement
@@ -161,8 +163,8 @@ namespace PhoneModules
                         if (button.ImageFile == null || button.ImageFile == "")
                         {
                             sb.AppendLine("<input type=\"button\" value=\"" + button.Text + "\" class=\"button\"");
-                            width = button.Text.Length * 9 + 25;
-                            height = 50;
+                            width = (int)button.Width;
+                            height = (int)button.Height;
                         }
                         else
                         {

@@ -50,6 +50,8 @@ namespace MayhemCore
             }
         }
 
+        public event EventHandler ShuttingDown;
+
         private MayhemEntry()
         {
             // Set up our three lists
@@ -88,6 +90,14 @@ namespace MayhemCore
             foreach (Connection c in connections)
             {
                 ConnectionList.Add(c);
+            }
+        }
+
+        public void Shutdown()
+        {
+            if (ShuttingDown != null)
+            {
+                ShuttingDown(this, null);
             }
         }
     }
