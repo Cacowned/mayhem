@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Deployment.Application;
+using System.Threading;
 
 namespace Mayhem
 {
@@ -25,6 +26,8 @@ namespace Mayhem
         private EventBase _eventInstance = null;
         private ModuleType _reaction;
         private ReactionBase _reactionInstance = null;
+
+        AutoResetEvent waitForSave = new AutoResetEvent(false);
 
         public ObservableCollection<MayhemError> Errors
         {
@@ -41,6 +44,7 @@ namespace Mayhem
 
         public MainWindow()
         {
+            Application.Current.Exit += new ExitEventHandler(Application_Exit);
             if (!UriParser.IsKnownScheme("pack"))
                 UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
 
@@ -113,6 +117,7 @@ namespace Mayhem
             {
                 MayhemEntry.Instance.ConnectionList.Serialize(stream);
             }
+            waitForSave.Set();
         }
 
         public void Save()
@@ -120,9 +125,11 @@ namespace Mayhem
             Parallel.Invoke(Save_);
         }
 
-        private void AppClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        void Application_Exit(object sender, ExitEventArgs e)
         {
             Save();
+            waitForSave.WaitOne();
+            mayhem.Shutdown();
             foreach (Connection connection in mayhem.ConnectionList)
             {
                 connection.Disable(null);

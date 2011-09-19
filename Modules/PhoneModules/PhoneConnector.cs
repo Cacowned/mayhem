@@ -41,11 +41,14 @@ namespace PhoneModules
                 {
                     ThreadPool.QueueUserWorkItem(new WaitCallback(o =>
                         {
-                            string insideDiv;
-                            string html = PhoneLayout.Instance.SerializeToHtml(out insideDiv);
-                            service.SetHtml(html);
-                            service.SetInsideDiv(insideDiv);
-                            //service.SetFormData(formData);
+                            if (service != null)
+                            {
+                                string insideDiv;
+                                string html = PhoneLayout.Instance.SerializeToHtml(out insideDiv);
+                                service.SetHtml(html);
+                                service.SetInsideDiv(insideDiv);
+                                //service.SetFormData(formData);
+                            }
                         }));
                 }
             }
@@ -74,6 +77,15 @@ namespace PhoneModules
 
         PhoneConnector()
         {
+            MayhemEntry.Instance.ShuttingDown += new EventHandler(Mayhem_ShuttingDown);
+        }
+
+        void Mayhem_ShuttingDown(object sender, EventArgs e)
+        {
+            if (service != null)
+            {
+                service.ShuttingDown();
+            }
         }
 
         public static PhoneConnector Instance
@@ -93,6 +105,7 @@ namespace PhoneModules
             return true;
         }
 
+
         public void Disable()
         {
             //if (isServiceRunning)
@@ -100,8 +113,13 @@ namespace PhoneModules
             //    refCount--;
             //    if (refCount == 0)
             //    {
-            //        isServiceRunning = false;
-            //        host.Close();
+            //        if (service != null)
+            //        {
+            //            service.ShuttingDown();
+            //        }
+            //        //isServiceRunning = false;
+            //        //host.Close();
+            //        service = null;
             //    }
             //}
         }
@@ -174,6 +192,10 @@ namespace PhoneModules
             }
             isServiceRunning = true;
             Logger.WriteLine("Phone service started");
+
+            WebChannelFactory<IMayhemService> myChannelFactory = new WebChannelFactory<IMayhemService>(new Uri(address.ToString()));
+            service = myChannelFactory.CreateChannel();
+
             return true;
         }
 

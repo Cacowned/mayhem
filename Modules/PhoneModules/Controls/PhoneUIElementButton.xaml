@@ -67,9 +67,9 @@
                 <Image Name="image1" Width="50" Height="30" Visibility="Hidden" />
             </Grid>
         </Border>
-        <Grid Name="gridEdit" Margin="5,0,0,0" Opacity="0">
-            <Button Name="buttonText" Height="22" Margin="0,0,0,26" Click="buttonText_Click">Text</Button>
-            <Button Name="buttonImage" Margin="0,25,0,5" Height="22" Click="buttonImage_Click">Image</Button>
+        <Grid Name="gridEdit" Margin="0,0,0,0" Opacity="0">
+            <Button Name="buttonText" Height="22" Margin="5,0,5,26" Click="buttonText_Click">Text</Button>
+            <Button Name="buttonImage" Margin="5,25,5,5" Height="22" Click="buttonImage_Click">Image</Button>
         </Grid>
     </StackPanel>
 </my:PhoneUIElement>

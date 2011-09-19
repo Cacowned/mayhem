@@ -140,8 +140,10 @@ namespace PhoneModules
                     PhoneUIElementButton button = canvas1.Children[i] as PhoneUIElementButton;
                     button.LayoutInfo.ImageFile = button.ImageFile;
                     button.LayoutInfo.Text = button.Text;
-                    button.LayoutInfo.X = Canvas.GetLeft(button);
+                    button.LayoutInfo.X = Canvas.GetLeft(button) + (button.IsGridOnRight ? 0 : button.gridEdit.ActualWidth);
                     button.LayoutInfo.Y = Canvas.GetTop(button);
+                    button.LayoutInfo.Width = button.border1.ActualWidth;
+                    button.LayoutInfo.Height = button.border1.ActualHeight;
                 }
             }
             return true;
