@@ -30,6 +30,12 @@ namespace PhoneModules.Controls
         bool isMovingElement = false;
         bool isGridOnRight = true;
 
+        public bool IsGridOnRight
+        {
+            get { return isGridOnRight; }
+            set { isGridOnRight = value; }
+        }
+
         public new PhoneLayoutButton LayoutInfo
         {
             get

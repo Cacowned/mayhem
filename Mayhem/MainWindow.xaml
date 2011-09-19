@@ -6,8 +6,7 @@
 		xmlns:common="clr-namespace:Mayhem.UserControls;assembly=Mayhem"
 		xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
 		Title="Mayhem" Height="686" Width="645" ResizeMode="CanMinimize"
-		x:Name="MayhemMainWindow"
-		Closing="AppClosing">
+		x:Name="MayhemMainWindow" >
     <Window.Resources>
         <Style TargetType="{x:Type ToggleButton}">
             <Setter Property="Width" Value="35" />

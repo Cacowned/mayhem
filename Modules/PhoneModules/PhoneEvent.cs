@@ -79,7 +79,7 @@ namespace PhoneModules
 
         public override void Enable()
         {
-            if (!IsConfiguring)
+            if (!IsConfiguring && !Enabled)
             {
                 phoneLayout.EnableButton(id);
 
@@ -96,7 +96,7 @@ namespace PhoneModules
 
         public override void Disable()
         {
-            if (!IsConfiguring)
+            if (!IsConfiguring && Enabled)
             {
                 phoneLayout.DisableButton(id);
                 phoneConnector.Disable();
