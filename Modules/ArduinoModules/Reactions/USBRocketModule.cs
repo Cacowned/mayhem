@@ -41,6 +41,8 @@ namespace ArduinoModules.Reactions
             mDevice.VendorId = vid;
             mDevice.ProductId = pid;
             mDevice.CheckDevicePresent();
+
+           
            
             mDevice.SpecifiedDevice.DataRecieved += new DataRecievedEventHandler(e_DataReceived);
             mConnected = true;
