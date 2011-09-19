@@ -5,19 +5,27 @@
         %%INSERTSTYLEHERE%%
         <script type="text/javascript">
             var http_request = false;
+            function seterror() {
+                document.location = 'mayhem:error';
+                window.external.notify('mayhem:error');
+            }
             function updateFromServer() {
                 if (http_request.readyState == 4) {
                     if (http_request.status == 200) {
                         if (http_request.responseText.length > 0) {
                             e = document.getElementById('aDiv');
-                            e.innerHTML = http_request.responseText;
+                            if (http_request.responseText == "kill") {
+                                seterror();
+                            }
+                            else {
+                                e.innerHTML = http_request.responseText;
+                            }
                         }
                         setTimeout("waitForUpdate()", 3000);
                     }
                     else {
-                        document.location = 'mayhem:error';
-                        window.external.notify('mayhem:error');
-                    }                    
+                        seterror();
+                    }
                 }
             }
 
@@ -60,8 +68,7 @@
                     clearTimeout(requestTimer);
                     if (req.status != 200)
                     {
-                        document.location = 'mayhem:error';
-                        window.external.notify('mayhem:error');
+                        seterror();
                     }
                 };
 

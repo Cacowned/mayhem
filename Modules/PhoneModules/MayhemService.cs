@@ -35,6 +35,10 @@ namespace PhoneModules
         [OperationContract]
         [WebGet(UriTemplate = "Images/{id}")]
         Stream Images(string id);
+
+        [OperationContract]
+        [WebGet]
+        void ShuttingDown();
     }
 
     [ServiceBehavior(Name = "MayhemService", InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
@@ -46,8 +50,11 @@ namespace PhoneModules
         string htmlAndroid = null;
         string insideDiv = null;
         object locker = new object();
+        bool isShuttingDown = false;
 
         private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(30);
+        ManualResetEvent killResetEvent = new ManualResetEvent(false);
+        int numToKill = 0;
 
         Dictionary<string, AutoResetEvent> resetEvents = new Dictionary<string, AutoResetEvent>();
 
@@ -91,10 +98,19 @@ namespace PhoneModules
             }
             else if (resetEvents[endpointProperty.Address].WaitOne(5000))
             {
-                return new MemoryStream(ASCIIEncoding.Default.GetBytes(insideDiv));
+                if (isShuttingDown)
+                {
+                    Logger.WriteLine("Killed service");
+                    if (Interlocked.Decrement(ref numToKill) == 0)
+                        killResetEvent.Set();
+                    return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));
+                }
+                else
+                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(insideDiv));
             }
             return null;
         }
+
         public void Event(string text)
         {
             Logger.WriteLine("Event " + text);
@@ -137,9 +153,9 @@ namespace PhoneModules
         public void SetInsideDiv(string insideDiv)
         {
             this.insideDiv = insideDiv;
-            foreach (AutoResetEvent events in resetEvents.Values)
+            foreach (AutoResetEvent ev in resetEvents.Values)
             {
-                events.Set();
+                ev.Set();
             }
         }
 
@@ -155,6 +171,23 @@ namespace PhoneModules
                         return ms.ToArray();
                     ms.Write(buffer, 0, read);
                 }
+            }
+        }
+
+        public void ShuttingDown()
+        {
+            isShuttingDown = true;
+            if (resetEvents.Count > 0)
+            {
+                numToKill = resetEvents.Count;
+                foreach (AutoResetEvent ev in resetEvents.Values)
+                {
+                    ev.Set();
+                }
+
+                killResetEvent.WaitOne();
+
+                Thread.Sleep(10);
             }
         }
 
