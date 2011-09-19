@@ -37,7 +37,7 @@ namespace PhidgetModules.Wpf
             DecreasingRadio.IsChecked = !Increasing;
         }
 
-        public override bool OnSave()
+        public override void OnSave()
         {
             if (!double.TryParse(textBoxTopValue.Text, out TopValue) && TopValue >= 0)
             {
@@ -47,10 +47,7 @@ namespace PhidgetModules.Wpf
             {
                 Increasing = (bool)IncreasingRadio.IsChecked;
                 Index = SensorDataBox.Index;
-
-                return true;
             }
-            return false;
         }
 
         public override string Title

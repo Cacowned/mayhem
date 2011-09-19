@@ -81,11 +81,6 @@ namespace PhoneModules
             get { return "Reaction From WP7"; }
         }
 
-        public override bool OnSave()
-        {
-            return true;
-        }
-
         public override void OnCancel()
         {
         }

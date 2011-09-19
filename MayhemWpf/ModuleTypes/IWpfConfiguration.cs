@@ -9,7 +9,7 @@ namespace MayhemWpf.UserControls
     public class IWpfConfiguration : UserControl
     {
         public virtual string Title { get { return "Title"; } }
-        public virtual bool OnSave() { return true; }
+        public virtual void OnSave() { }
         public virtual void OnCancel() { }
         public virtual void OnLoad() { }
         public virtual void OnClosing() { }

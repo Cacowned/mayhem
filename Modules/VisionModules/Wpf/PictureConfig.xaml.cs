@@ -255,13 +255,11 @@ namespace VisionModules.Wpf
             OnClosing();
         }
 
-        public override bool OnSave()
+        public override void OnSave()
         {
             selected_camera = deviceList.SelectedItem as Camera;
             
             OnClosing();
-     
-            return true;
         }
 
   

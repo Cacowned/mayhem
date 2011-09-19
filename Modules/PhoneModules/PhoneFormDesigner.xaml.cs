@@ -131,7 +131,7 @@ namespace PhoneModules
             get { return "Phone"; }
         }
 
-        public override bool OnSave()
+        public override void OnSave()
         {
             for (int i = 0; i < canvas1.Children.Count; i++)
             {
@@ -146,7 +146,6 @@ namespace PhoneModules
                     button.LayoutInfo.Height = button.border1.ActualHeight;
                 }
             }
-            return true;
         }
 
         public override void OnCancel()

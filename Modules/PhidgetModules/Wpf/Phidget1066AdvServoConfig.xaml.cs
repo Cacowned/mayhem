@@ -96,11 +96,10 @@ namespace PhidgetModules.Wpf
             PositionText.Text = PositionSlider.Value.ToString("0.##");
         }
 
-        public override bool OnSave()
+        public override void OnSave()
         {
             ServoType = (ServoServo.ServoType)Enum.Parse(typeof(ServoServo.ServoType), TypeComboBox.SelectedItem.ToString());
             Position = PositionSlider.Value;
-            return true;
         }
 
         

@@ -55,7 +55,7 @@ namespace PhidgetModules.Wpf
             Index = box.SelectedIndex;
         }
 
-        public override bool OnSave()
+        public override void OnSave()
         {
             Index = OutputBox.SelectedIndex;
 
@@ -69,8 +69,6 @@ namespace PhidgetModules.Wpf
                 case "Turn Off": OutputType = DigitalOutputType.Off;
                     break;
             }
-
-            return true;
         }
 
         public override string Title

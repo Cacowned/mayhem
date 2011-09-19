@@ -127,7 +127,7 @@ namespace WindowModules.Wpf
             }
         }
 
-        public override bool OnSave()
+        public override void OnSave()
         {
             timer.Stop();
             timer = null;
@@ -140,7 +140,6 @@ namespace WindowModules.Wpf
                 ((WindowActionConfigControl)wac.Config).Save();
                 ActionInfo.WindowActions.Add(controlMap[wac.Config]);
             }
-            return true;
         }
 
         public override void OnCancel()

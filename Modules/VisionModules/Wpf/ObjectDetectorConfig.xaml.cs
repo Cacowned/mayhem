@@ -300,7 +300,7 @@ namespace VisionModules.Wpf
         /**<summary>
          * Method gets called when the save button is clicked
          * </summary> */
-         public override bool OnSave()
+         public override void OnSave()
         {
             Logger.WriteLine("OnSave!!!!!!!!");
             selected_camera = DeviceList.SelectedItem as Camera;
@@ -315,9 +315,7 @@ namespace VisionModules.Wpf
                     this.objectDetectorEvent.templatePreview = templatePreview;
                     Logger.WriteLine("OnSave --> successfully assigned template image");
                 }
-                
             }
-            return true;
         }
 
            /// <summary>

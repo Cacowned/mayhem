@@ -37,7 +37,7 @@ namespace PhidgetModules.Wpf
             textBoxBottomValue.Text = BottomValue.ToString();
         }
 
-        public override bool OnSave()
+        public override void OnSave()
         {
             if (!double.TryParse(textBoxTopValue.Text, out TopValue) && TopValue >= 0)
             {
@@ -54,9 +54,7 @@ namespace PhidgetModules.Wpf
             else
             {
                 Index = SensorDataBox.Index;
-                return true;
             }
-            return false;
         }
 
         public override string Title
