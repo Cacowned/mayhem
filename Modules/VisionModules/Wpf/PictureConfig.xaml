@@ -32,7 +32,10 @@
             </StackPanel>
             <Label Name="lbl_img_save">Click the button below to choose location of saved images:</Label>
             <Button Name="img_save_button" Click="Button_Click_1">Image Save Location</Button>
-            
+            <StackPanel Orientation="Horizontal">
+                <Label>Current Location: </Label>
+                <Label Margin="5 0 0 0" Name="lbl_current_loc" Content="{Binding location}"></Label>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </src:IWpfConfiguration>
