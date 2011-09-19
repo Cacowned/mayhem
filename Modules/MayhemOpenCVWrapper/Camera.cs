@@ -96,29 +96,37 @@ namespace MayhemOpenCVWrapper
         public override Bitmap ImageAsBitmap()
         {
             //int stride = 320 * 3;
-            Bitmap backBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, 320, 240);
-
-            // get at the bitmap data in a nicer way
-            System.Drawing.Imaging.BitmapData bmpData =
-                backBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
-                backBuffer.PixelFormat);
-
-            int bufSize = this.bufSize;
-
-            IntPtr ImgPtr = bmpData.Scan0;
-
-            // grab the image
-
-            lock (thread_locker)
+            try
             {
-                // Copy the RGB values back to the bitmap
-                System.Runtime.InteropServices.Marshal.Copy(this.imageBuffer, 0, ImgPtr, bufSize);
+                Bitmap backBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+                System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, 320, 240);
+
+                // get at the bitmap data in a nicer way
+                System.Drawing.Imaging.BitmapData bmpData =
+                    backBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                    backBuffer.PixelFormat);
+
+                int bufSize = this.bufSize;
+
+                IntPtr ImgPtr = bmpData.Scan0;
+
+                // grab the image
+
+                lock (thread_locker)
+                {
+                    // Copy the RGB values back to the bitmap
+                    System.Runtime.InteropServices.Marshal.Copy(this.imageBuffer, 0, ImgPtr, bufSize);
+                }
+                // Unlock the bits.
+                backBuffer.UnlockBits(bmpData);
+                return backBuffer;
             }
-            // Unlock the bits.
-            backBuffer.UnlockBits(bmpData);
-            return backBuffer;
+            catch (ArgumentException ex)
+            {
+                Logger.WriteLine("ArgumentException: " + ex);
+                return new Bitmap(320,240); 
+            }
         }
 
         /// <summary>
