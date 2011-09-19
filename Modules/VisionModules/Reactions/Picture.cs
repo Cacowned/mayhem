@@ -78,7 +78,7 @@ namespace VisionModules.Reactions
                 i = CameraDriver.Instance;
             }
 
-            if (selected_device_idx < i.devices_available.Length)
+            if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
             }
@@ -104,7 +104,7 @@ namespace VisionModules.Reactions
         public override void Enable()
         {
             // TODO: Improve this code
-            if (selected_device_idx < i.devices_available.Length)
+            if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
                 cam.OnImageUpdated += imageUpdateHandler;
