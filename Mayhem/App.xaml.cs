@@ -19,12 +19,6 @@ namespace Mayhem
         Dictionary<string, Assembly> dependencies = new Dictionary<string, Assembly>();
         bool wantsUpdates = false;
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool SetDllDirectory(string lpPathName);
-
-        HashSet<string> setDirectories = new HashSet<string>();
-
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
@@ -96,12 +90,6 @@ namespace Mayhem
                 }
                 catch
                 {
-                    if (!setDirectories.Contains(fi.DirectoryName))
-                    {
-                        setDirectories.Add(fi.DirectoryName);
-                        //set the dll path so it can find the dlls
-                        SetDllDirectory(fi.DirectoryName);
-                    }
                 }
             }
 
