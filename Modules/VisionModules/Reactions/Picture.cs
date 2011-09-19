@@ -98,6 +98,8 @@ namespace VisionModules.Reactions
             string path = this.folderLocation + "\\" + filename;
             Logger.WriteLine("saving file to " + path);
             image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
+            // VERY important! 
+            image.Dispose();
         }
 
 
@@ -157,7 +159,9 @@ namespace VisionModules.Reactions
                 int time_ms = (int)capture_offset_time * 1000;
                 Timer t = new Timer(time_ms);
                 t.Elapsed += new ElapsedEventHandler(SaveFutureImage);
+                t.AutoReset = false; 
                 t.Enabled = true;
+             
             }
             else
             {
