@@ -1,0 +1,22 @@
+﻿<src:IWpfConfiguration x:Class="DefaultModules.Wpf.DebugMessageConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             Width="400">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="300" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Message:</TextBlock>
+        <TextBox Name="MessageBox" Grid.Column="1" Grid.Row="0" TextChanged="MessageText_TextChanged" />
+
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1">Message is invalid</TextBlock>
+    </Grid>
+</src:IWpfConfiguration>
