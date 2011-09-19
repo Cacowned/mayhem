@@ -82,6 +82,8 @@ namespace VisionModules.Reactions
             {
                 cam = i.cameras_available[selected_device_idx];
             }
+
+            SetConfigString();
         }
 
         /// <summary>
@@ -197,6 +199,8 @@ namespace VisionModules.Reactions
             }
         }
 
+        
+
         public void OnSaved(IWpfConfiguration configurationControl)
         {
             PictureConfig config = configurationControl as PictureConfig;
@@ -221,9 +225,10 @@ namespace VisionModules.Reactions
                 cam = new DummyCamera();
             }
             capture_offset_time = config.slider_value;
+            SetConfigString();
         }
 
-        private new void SetConfigString()
+        public override void SetConfigString()
         {
             ConfigString = String.Format("Save Location: \"{0}\"", folderLocation);
         }
