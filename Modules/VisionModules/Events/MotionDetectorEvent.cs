@@ -79,6 +79,9 @@ namespace VisionModules.Events
             {
                 m.SetMotionBoundaryRect(boundingRect);
             }
+
+           
+              
         }
 
         void m_OnMotionUpdate(object sender, List<System.Drawing.Point> points)

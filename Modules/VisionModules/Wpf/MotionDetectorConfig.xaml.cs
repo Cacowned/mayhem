@@ -73,11 +73,16 @@ namespace VisionModules.Wpf
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.OnImageUpdated += i_OnImageUpdated;
                 Logger.WriteLine("using " + cam.info.ToString());
+
+                // alow saving in this state
+                this.CanSave = true; 
             }
             else
             {
                 Logger.WriteLine("No camera available");
             }
+
+
 
            // overlay.DisplayBoundingRect();
         }
