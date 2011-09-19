@@ -23,15 +23,7 @@ namespace PhidgetModules.Reaction
         public static readonly DependencyProperty CodeProperty =
             DependencyProperty.Register("Code", typeof(IRCode), typeof(Phidget1055IRTransmitConfig), new UIPropertyMetadata(null));
 
-        public IRCodeInfo CodeInfo
-        {
-            get { return (IRCodeInfo)GetValue(CodeInfoProperty); }
-            set { SetValue(CodeInfoProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for CodeInfo.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CodeInfoProperty =
-            DependencyProperty.Register("CodeInfo", typeof(IRCodeInfo), typeof(Phidget1055IRTransmitConfig), new UIPropertyMetadata(null));
+        public IRCodeInfo CodeInfo { get; private set; }
 
         public Phidget1055IRTransmitConfig(IRCode code, IRCodeInfo codeInfo)
         {
@@ -39,9 +31,26 @@ namespace PhidgetModules.Reaction
             Code = code;
             CodeInfo = codeInfo;
 
+            this.DataContext = this;
             InitializeComponent();
         }
 
+        public override string Title
+        {
+            get
+            {
+                return "Phidget - IR Transmit";
+            }
+        }
+
+        public override void OnLoad()
+        {
+            ir.Learn += ir_Learn;
+            ir.Attach += ir_Attach;
+            ir.Detach += ir_Detach;
+        }
+
+        #region Phidget Event Handlers
         void ir_Learn(object sender, IRLearnEventArgs e)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
@@ -51,32 +60,28 @@ namespace PhidgetModules.Reaction
             }));
         }
 
-        public override void OnLoad()
+        private void ir_Attach(object sender, Phidgets.Events.AttachEventArgs e)
         {
-            ir.Learn += ir_Learn;
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                this.NoReciever.Visibility = Visibility.Collapsed;
+            }));
         }
+
+        private void ir_Detach(object sender, DetachEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                this.NoReciever.Visibility = Visibility.Visible;
+            }));
+        }
+        #endregion
 
         public override void OnClosing()
         {
             ir.Learn -= ir_Learn;
-        }
-
-        public override bool OnSave()
-        {
-            if (Code == null || CodeInfo == null)
-            {
-                MessageBox.Show("You must send a code.");
-                return false;
-            }
-            return true;
-        }
-
-        public override string Title
-        {
-            get
-            {
-                return "Phidget - IR Transmit";
-            }
+            ir.Attach -= ir_Attach;
+            ir.Detach -= ir_Detach;
         }
     }
 }

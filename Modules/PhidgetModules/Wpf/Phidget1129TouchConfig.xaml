@@ -4,26 +4,22 @@
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              xmlns:common="clr-namespace:PhidgetModules.Wpf.UserControls"
              Width="400">
-    <Grid>
-        <StackPanel>
-            <common:SensorData x:Name="SensorDataBox" />
-            <StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="290"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
+    <StackPanel>
+        <common:SensorData x:Name="SensorDataBox" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-                    <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Trigger When:</TextBlock>
-                    <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <RadioButton Name="OnWhenOn" GroupName="OnWhenOn" Content="Goes On" IsChecked="True" />
-                        <RadioButton Name="OnWhenOff" GroupName="OnWhenOn" Content="Turns Off" />
-                    </StackPanel>
-                </Grid>
+            <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Trigger When:</TextBlock>
+            <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
+                <RadioButton Name="OnWhenOn" GroupName="OnWhenOn" Content="Goes On" IsChecked="True" />
+                <RadioButton Name="OnWhenOff" GroupName="OnWhenOn" Content="Turns Off" />
             </StackPanel>
-        </StackPanel>
-    </Grid>
+        </Grid>
+    </StackPanel>
 </src:IWpfConfiguration>

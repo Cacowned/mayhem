@@ -5,29 +5,32 @@
 			 xmlns:common="clr-namespace:PhidgetModules.Wpf.UserControls"
              Width="400">
 
-    <Grid>
-        <StackPanel>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="290" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Servo Type:</TextBlock>
-                <ComboBox Name="TypeComboBox" Grid.Column="1" Grid.Row="0" SelectionChanged="TypeComboBox_SelectionChanged" />
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="300" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
 
-                <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Move To Position:</TextBlock>
-                <DockPanel Grid.Column="1" Grid.Row="1">
-                    <TextBlock Name="PositionText" Width="40" DockPanel.Dock="Right" IsEnabled="False" TextAlignment="Center" />
-                    <Slider Name="PositionSlider" ValueChanged="PositionSlider_ValueChanged" />
-                </DockPanel>
 
-            </Grid>
-        </StackPanel>
-    </Grid>
+            <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Servo Type:</TextBlock>
+            <ComboBox Name="TypeComboBox" Grid.Column="1" Grid.Row="0" SelectionChanged="TypeComboBox_SelectionChanged" />
+
+            <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Move To Position:</TextBlock>
+            <DockPanel Grid.Column="1" Grid.Row="1">
+                <TextBlock Name="PositionText" Width="40" DockPanel.Dock="Right" IsEnabled="False" TextAlignment="Center" />
+                <Slider Name="PositionSlider" ValueChanged="PositionSlider_ValueChanged" />
+            </DockPanel>
+
+            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="Invalid" Text="Can't find the Servo controller" Grid.Column="1" Grid.Row="3" Visibility="Visible" />
+        </Grid>
+            
+            
+    </StackPanel>
 </src:IWpfConfiguration>

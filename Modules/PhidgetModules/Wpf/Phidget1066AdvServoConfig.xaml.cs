@@ -18,18 +18,23 @@ using MayhemCore;
 
 namespace PhidgetModules.Wpf
 {
+    /*
+     * TODO: Make this configuration window more robust. For example, it should enable
+     * and disable things when they servo controller is plugged in.
+     */
+
     /// <summary>
     /// Interaction logic for Phidget1066AdvServoConfig.xaml
     /// </summary>
     public partial class Phidget1066AdvServoConfig : IWpfConfiguration
     {
-        public int Index { get; set; }
+        public int Index { get; private set; }
 
-        public AdvancedServo AdvServo { get; set; }
+        public AdvancedServo AdvServo { get; private set; }
 
-        public ServoServo.ServoType ServoType { get; set; }
+        public ServoServo.ServoType ServoType { get; private set; }
 
-        public double Position { get; set; }
+        public double Position { get; private set; }
 
         public Phidget1066AdvServoConfig(AdvancedServo servo, int index, ServoServo.ServoType servoType, double position)
         {
@@ -41,6 +46,14 @@ namespace PhidgetModules.Wpf
             InitializeComponent();
         }
 
+        public override string Title
+        {
+            get
+            {
+                return "Phidget - Adv. Servo";
+            }
+        }
+
         public override void OnLoad()
         {
             foreach (String servoType in Enum.GetNames(typeof(ServoServo.ServoType)))
@@ -49,6 +62,7 @@ namespace PhidgetModules.Wpf
 
                 if (servoType.Equals(ServoServo.ServoType.USER_DEFINED.ToString()))
                     break;
+
                 TypeComboBox.Items.Add(servoType);
 
                 // Select the type we are given originally.
@@ -89,12 +103,6 @@ namespace PhidgetModules.Wpf
             return true;
         }
 
-        public override string Title
-        {
-            get
-            {
-                return "Phidget - Adv. Servo";
-            }
-        }
+        
     }
 }
