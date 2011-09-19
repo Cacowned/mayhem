@@ -78,6 +78,7 @@ namespace VisionModules.Wpf
             {
                 Logger.WriteLine("No camera available");
             }
+            CanSave = true;
 
            // overlay.DisplayBoundingRect();
         }
