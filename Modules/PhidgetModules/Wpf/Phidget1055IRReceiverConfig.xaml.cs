@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Phidgets;
-using Phidgets.Events;
+﻿using System.Windows;
 using System.Windows.Threading;
 using MayhemWpf.UserControls;
+using Phidgets;
+using Phidgets.Events;
 
 namespace PhidgetModules.Wpf
 {
@@ -41,32 +29,6 @@ namespace PhidgetModules.Wpf
             InitializeComponent();
         }
 
-        
-
-        public override void OnLoad()
-        {
-            ir.Code += new IRCodeEventHandler(ir_Code);
-            ir.Attach += new AttachEventHandler(ir_Attach);
-            ir.Detach += new DetachEventHandler(ir_Detach);
-        }
-
-        public override void OnClosing()
-        {
-            ir.Code -= ir_Code;
-            ir.Attach -= ir_Attach;
-            ir.Detach -= ir_Detach;
-        }
-
-        public override bool OnSave()
-        {
-            if (Code == null)
-            {
-                MessageBox.Show("You must send a code.");
-                return false;
-            }
-            return true;
-        }
-
         public override string Title
         {
             get
@@ -75,15 +37,24 @@ namespace PhidgetModules.Wpf
             }
         }
 
-        void ir_Code(object sender, IRCodeEventArgs e)
+        public override void OnLoad()
+        {
+            ir.Code += ir_Code;
+            ir.Attach += ir_Attach;
+            ir.Detach += ir_Detach;
+        }
+
+        #region Phidget Event Handlers
+        private void ir_Code(object sender, IRCodeEventArgs e)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
+                CanSave = true;
                 this.Code = e.Code;
             }));
         }
 
-        void ir_Attach(object sender, Phidgets.Events.AttachEventArgs e)
+        private void ir_Attach(object sender, Phidgets.Events.AttachEventArgs e)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
@@ -91,12 +62,20 @@ namespace PhidgetModules.Wpf
             }));
         }
 
-        void ir_Detach(object sender, DetachEventArgs e)
+        private void ir_Detach(object sender, DetachEventArgs e)
         {
- 	        this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
                 this.NoReciever.Visibility = Visibility.Visible;
             }));
+        }
+        #endregion
+
+        public override void OnClosing()
+        {
+            ir.Code -= ir_Code;
+            ir.Attach -= ir_Attach;
+            ir.Detach -= ir_Detach;
         }
     }
 }

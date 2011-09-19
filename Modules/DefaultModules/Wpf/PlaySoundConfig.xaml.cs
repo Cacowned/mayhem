@@ -8,7 +8,7 @@ namespace DefaultModules.Wpf
 {
     public partial class PlaySoundConfig : IWpfConfiguration
     {
-        public string FileName;
+        public string FileName { get; private set; }
 
         private bool shouldCheckValidity = false;
 

@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
+using MayhemWpf.UserControls;
 using Phidgets;
 using Phidgets.Events;
-using MayhemWpf.UserControls;
 
 namespace PhidgetModules.Wpf
 {
@@ -23,7 +23,6 @@ namespace PhidgetModules.Wpf
         public static readonly DependencyProperty TagIDProperty =
             DependencyProperty.Register("TagID", typeof(string), typeof(Phidget1023RFIDConfig), new UIPropertyMetadata(string.Empty));
 
-
         public Phidget1023RFIDConfig(string tagId)
         {
             this.rfid = InterfaceFactory.Rfid;
@@ -33,51 +32,70 @@ namespace PhidgetModules.Wpf
             InitializeComponent();
         }
 
-        //Tag event handler...we'll display the tag code in the field on the GUI
-        private void RfidTag(object sender, TagEventArgs e)
-        {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-                {
-                    CanSave = true;
-                    rfid.LED = true;
-                    TagID = e.Tag;
-                }));
-        }
-
-        //Tag event handler...we'll display the tag code in the field on the GUI
-        private void LostRfidTag(object sender, TagEventArgs e)
-        {
-            rfid.LED = false;
-        }
-
-        public override void OnLoad()
-        {
-            rfid.Tag += RfidTag;
-            rfid.TagLost += LostRfidTag;
-        }
-
-        public override void OnClosing()
-        {
-            rfid.Tag -= RfidTag;
-            rfid.TagLost -= LostRfidTag;
-        }
-
-        public override bool OnSave()
-        {
-            if (TagID == string.Empty)
-            {
-                MessageBox.Show("You must configure a tag.");
-                return false;
-            }
-            return true;
-        }
-
         public override string Title
         {
             get
             {
                 return "Phidget - Rfid";
             }
+        }
+
+        public override void OnLoad()
+        {
+            rfid.Tag += RfidTag;
+            rfid.TagLost += LostRfidTag;
+
+            rfid.Attach += RfidAttach;
+            rfid.Detach += RfidDetach;
+        }
+
+        #region Phidget Event Handlers
+
+        //Tag event handler...we'll display the tag code in the field on the GUI
+        private void RfidTag(object sender, TagEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                CanSave = true;
+                rfid.LED = true;
+                TagID = e.Tag;
+            }));
+        }
+
+        //Tag event handler...we'll display the tag code in the field on the GUI
+        private void LostRfidTag(object sender, TagEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                rfid.LED = false;
+            }));
+        }
+
+        private void RfidAttach(object sender, Phidgets.Events.AttachEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                this.NoReader.Visibility = Visibility.Collapsed;
+            }));
+        }
+
+        private void RfidDetach(object sender, DetachEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                this.NoReader.Visibility = Visibility.Visible;
+            }));
+        }
+
+        #endregion
+
+        public override void OnClosing()
+        {
+            rfid.Tag -= RfidTag;
+            rfid.TagLost -= LostRfidTag;
+
+            rfid.Attach -= RfidAttach;
+            rfid.Detach -= RfidDetach;
         }
     }
 }

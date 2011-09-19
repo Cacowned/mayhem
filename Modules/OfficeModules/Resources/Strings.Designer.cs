@@ -113,23 +113,5 @@ namespace OfficeModules.Resources {
                 return ResourceManager.GetString("PowerPoint_NoWindowCantChange", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t send SMS Message..
-        /// </summary>
-        internal static string SMS_CantSend {
-            get {
-                return ResourceManager.GetString("SMS_CantSend", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} Exception caught..
-        /// </summary>
-        internal static string SMS_ExceptionCaught {
-            get {
-                return ResourceManager.GetString("SMS_ExceptionCaught", resourceCulture);
-            }
-        }
     }
 }

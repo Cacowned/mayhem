@@ -4,27 +4,23 @@
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              xmlns:common="clr-namespace:PhidgetModules.Wpf.UserControls"
              Width="400">
-    <Grid>
-        <StackPanel>
-            <common:SensorData x:Name="SensorDataBox" />
-            <StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="290" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
+    <StackPanel Orientation="Vertical">
+        <common:SensorData x:Name="SensorDataBox" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="300" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-                    <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Top Value:</TextBlock>
-                    <TextBox Name="textBoxTopValue" Grid.Column="1" Grid.Row="0" />
+            <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Top Value:</TextBlock>
+            <TextBox Name="textBoxTopValue" Grid.Column="1" Grid.Row="0" />
 
-                    <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Bottom Value:</TextBlock>
-                    <TextBox Name="textBoxBottomValue" Grid.Column="1" Grid.Row="1" />
-                </Grid>
-            </StackPanel>
-        </StackPanel>
-    </Grid>
+            <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Bottom Value:</TextBlock>
+            <TextBox Name="textBoxBottomValue" Grid.Column="1" Grid.Row="1" />
+        </Grid>
+    </StackPanel>
 </src:IWpfConfiguration>

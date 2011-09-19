@@ -135,10 +135,4 @@
   <data name="PowerPoint_NoWindowCantChange" xml:space="preserve">
     <value>You must be in a slideshow view to change slide.</value>
   </data>
-  <data name="SMS_CantSend" xml:space="preserve">
-    <value>Can't send SMS Message.</value>
-  </data>
-  <data name="SMS_ExceptionCaught" xml:space="preserve">
-    <value>{0} Exception caught.</value>
-  </data>
 </root>

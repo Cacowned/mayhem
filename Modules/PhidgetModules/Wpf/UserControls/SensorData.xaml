@@ -7,17 +7,17 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
-                <ColumnDefinition Width="290" />
+                <ColumnDefinition Width="300" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Raw Value:</TextBlock>
+            <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Raw Value:</TextBlock>
             <TextBox Name="ValueBox" IsEnabled="False" Grid.Column="1" Grid.Row="0" />
 
-            <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Sensor:</TextBlock>
+            <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Sensor:</TextBlock>
 			<ComboBox Name="SensorBox" Grid.Column="1" Grid.Row="1" SelectionChanged="SensorBox_SelectionChanged" ItemsSource="{Binding IfKit.sensors}" />
 
         </Grid>

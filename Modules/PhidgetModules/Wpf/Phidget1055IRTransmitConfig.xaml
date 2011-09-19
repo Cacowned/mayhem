@@ -5,8 +5,9 @@
              Width="400">
     <Grid>
         <StackPanel>
-            <TextBlock TextWrapping="WrapWithOverflow">Press the button on the remote control that we will retransmit.</TextBlock>
-            <TextBlock TextWrapping="WrapWithOverflow" Margin="0 50 0 20" MinHeight="50" Text="{Binding Code, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" FontSize="14" TextAlignment="Center" FontWeight="Bold" />
+            <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Press the button on the remote control that we will retransmit.</TextBlock>
+            <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding Code}" />
+            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReciever" Text="Can't find the IR Transceiver" HorizontalAlignment="Center" Visibility="Visible"  />
         </StackPanel>
     </Grid>
 </src:IWpfConfiguration>

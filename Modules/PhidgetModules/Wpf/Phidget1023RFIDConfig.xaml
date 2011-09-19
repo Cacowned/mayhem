@@ -8,7 +8,8 @@
         <Grid>
             <StackPanel>
                 <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Please touch a tag to the RFID reader.</TextBlock>
-                <TextBlock TextWrapping="WrapWithOverflow" Margin="0,25,0,0" MinHeight="35" FontSize="14" TextAlignment="Center" FontWeight="Bold" Text="{Binding TagId}" />
+                <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding TagId}" />
+                <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReader" Text="Can't find the RFID reader" HorizontalAlignment="Center" Visibility="Visible" />
             </StackPanel>
         </Grid>
     </Grid>
