@@ -1,0 +1,85 @@
+﻿<html>
+	<head>
+		<title>Mayhem</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=9" />
+        %%INSERTSTYLEHERE%%
+        <script type="text/javascript">
+            var http_request = false;
+            function seterror() {
+                document.location = 'mayhem:error';
+                window.external.notify('mayhem:error');
+            }
+            function updateFromServer() {
+                if (http_request.readyState == 4) {
+                    if (http_request.status == 200) {
+                        if (http_request.responseText.length > 0) {
+                            e = document.getElementById('aDiv');
+                            if (http_request.responseText == "kill") {
+                                seterror();
+                            }
+                            else {
+                                e.innerHTML = http_request.responseText;
+                            }
+                        }
+                        setTimeout("waitForUpdate()", 3000);
+                    }
+                    else {
+                        seterror();
+                    }
+                }
+            }
+
+            function waitForUpdate() {
+                http_request = false;
+                if (window.XMLHttpRequest) {
+                    http_request = new XMLHttpRequest();
+                    if (http_request.overrideMimeType) {
+                        http_request.overrideMimeType('text/html');
+                    }
+                }
+                if (!http_request) {
+                    return false;
+                }
+                var url = 'Html?update=True&t=' + new Date().getTime();
+                http_request.onreadystatechange = updateFromServer;
+                http_request.open('GET', url, true);
+                http_request.send(null);
+            }
+
+            function sendEvent(id) {
+                var req = false;
+                if (window.XMLHttpRequest) {
+                    req = new XMLHttpRequest();
+                    if (req.overrideMimeType) {
+                        req.overrideMimeType('text/html');
+                    }
+                }
+                if (!req) {
+                    return false;
+                }
+                var url = 'Event/' + id + '?t=' + new Date().getTime();
+               
+                var requestTimer = setTimeout(function () {
+                    req.abort();
+                    // Handle timeout situation, e.g. Retry or inform user.
+                }, 4000);
+                req.onreadystatechange = function () {
+                    if (req.readyState != 4) { return; }
+                    clearTimeout(requestTimer);
+                    if (req.status != 200)
+                    {
+                        seterror();
+                    }
+                };
+
+               req.open('GET', url, true);
+               req.send(null);
+            }
+        </script>
+	</head>
+	<body onload="setTimeout('waitForUpdate()',3000)">
+        <div id="aDiv">
+            %%INSERTBODYHERE%%
+        </div>
+	</body>
+</html>
