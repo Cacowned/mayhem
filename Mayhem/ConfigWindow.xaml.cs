@@ -41,15 +41,14 @@ namespace Mayhem
         private void Button_Save_Click(object sender, RoutedEventArgs e)
         {
             IWpfConfiguration config = ConfigContent.Content as IWpfConfiguration;
-            if (iWpfConfig.OnSave())
-            {
-                iWpf.OnSaved(config);
-                ((ModuleBase)iWpf).SetConfigString();
-            }
+            iWpfConfig.OnSave();
+            iWpf.OnSaved(config);
+            ((ModuleBase)iWpf).SetConfigString();
+            
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
-                {
-                    iWpfConfig.OnClosing();
-                }));
+            {
+                iWpfConfig.OnClosing();
+            }));
             ((MainWindow)Application.Current.MainWindow).Save();
             DialogResult = true;
         }
@@ -57,10 +56,10 @@ namespace Mayhem
         private void Button_Cancel_Click(object sender, RoutedEventArgs e)
         {
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
-                {
-                    iWpfConfig.OnCancel();
-                    iWpfConfig.OnClosing();
-                }));
+            {
+                iWpfConfig.OnCancel();
+                iWpfConfig.OnClosing();
+            }));
             DialogResult = false;
         }
     }

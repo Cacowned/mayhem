@@ -41,12 +41,11 @@ namespace PhidgetModules.Wpf
             TurnsOffRadio.IsChecked = !OnWhenOn;
         }
 
-        public override bool OnSave()
+        public override void OnSave()
         {
             Index = InputBox.SelectedIndex;
 
             OnWhenOn = (bool)GoesOnRadio.IsChecked;
-            return true;
         }
 
         public override string Title

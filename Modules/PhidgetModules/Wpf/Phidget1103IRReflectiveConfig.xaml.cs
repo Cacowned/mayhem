@@ -35,12 +35,10 @@ namespace PhidgetModules.Wpf
             OnWhenOff.IsChecked = !OnTurnOn;
         }
 
-        public override bool OnSave()
+        public override void OnSave()
         {
             OnTurnOn = (bool)OnWhenOn.IsChecked;
             Index = SensorDataBox.Index;
-
-            return true;
         }
 
         public override string Title
