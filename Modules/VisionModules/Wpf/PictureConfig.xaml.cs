@@ -242,7 +242,9 @@ namespace VisionModules.Wpf
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
-            dlg.SelectedPath = location;
+            dlg.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            
 
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
