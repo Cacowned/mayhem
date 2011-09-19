@@ -65,6 +65,7 @@ namespace VisionModules.Wpf
         {
             this.location = location;
             slider_value = capture_offset_time;
+            this.DataContext = this; 
 
             InitializeComponent();
             Init();
@@ -75,6 +76,8 @@ namespace VisionModules.Wpf
             // TODO: Enumerate devices
 
             // populate device list
+
+            lbl_current_loc.Content = location; 
 
             Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
 
@@ -167,8 +170,12 @@ namespace VisionModules.Wpf
             slider_tickbar.Ticks = tickMarks;
             slider_tickbar.Minimum = -capture_size_s;
             slider_tickbar.Maximum = capture_size_s;*/
-            
+
+           
+
             CanSave = true; 
+
+
 
         }
 
@@ -249,6 +256,7 @@ namespace VisionModules.Wpf
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 location = dlg.SelectedPath;
+                lbl_current_loc.Content = location; 
             }
         }
 
