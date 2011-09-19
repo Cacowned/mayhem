@@ -4,6 +4,7 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
+using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Events
 {
@@ -21,13 +22,16 @@ namespace PhidgetModules.Events
 
         public IWpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1103IRReflectiveConfig(IfKit, Index, OnTurnOn, ConvertToString); }
+            get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1103IRReflective(OnTurnOn)); }
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)
         {
-            Index = ((Phidget1103IRReflectiveConfig)configurationControl).Index;
-            OnTurnOn = ((Phidget1103IRReflectiveConfig)configurationControl).OnTurnOn;
+            SensorConfig sensor = configurationControl as SensorConfig;
+            Config1103IRReflective config = sensor.Sensor as Config1103IRReflective;
+
+            Index = sensor.Index;
+            OnTurnOn = config.OnTurnOn;
         }
 
         public override void SetConfigString()

@@ -4,6 +4,7 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
+using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Events
 {
@@ -13,14 +14,17 @@ namespace PhidgetModules.Events
     {
         public IWpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1101IRDistanceConfig(IfKit, Index, TopValue, BottomValue, ConvertToString); }
+            get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1101IRDistance(TopValue, BottomValue)); }
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)
         {
-            Index = ((Phidget1101IRDistanceConfig)configurationControl).Index;
-            TopValue = ((Phidget1101IRDistanceConfig)configurationControl).TopValue;
-            BottomValue = ((Phidget1101IRDistanceConfig)configurationControl).BottomValue;
+            SensorConfig sensor = configurationControl as SensorConfig;
+            Config1101IRDistance config = sensor.Sensor as Config1101IRDistance;
+
+            Index = sensor.Index;
+            TopValue = config.TopValue;
+            BottomValue = config.BottomValue;
         }
 
         protected override bool IsValidInput(int value)

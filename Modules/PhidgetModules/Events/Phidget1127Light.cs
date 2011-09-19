@@ -4,6 +4,7 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
+using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Events
 {
@@ -13,14 +14,17 @@ namespace PhidgetModules.Events
     {
         public IWpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1127LightConfig(IfKit, Index, TopValue, Increasing, ConvertToString); }
+            get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1127Light(TopValue, Increasing)); }
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)
         {
-            Index = ((Phidget1127LightConfig)configurationControl).Index;
-            TopValue = ((Phidget1127LightConfig)configurationControl).TopValue;
-            Increasing = ((Phidget1127LightConfig)configurationControl).Increasing;
+            SensorConfig sensor = configurationControl as SensorConfig;
+            Config1127Light config = sensor.Sensor as Config1127Light;
+
+            Index = sensor.Index;
+            TopValue = config.TopValue;
+            Increasing = config.Increasing;
         }
 
         public override double Convert(int value)
