@@ -63,7 +63,7 @@ namespace VisionModules.Events
             if (i == null)
                 i = CameraDriver.Instance; 
             
-            if (selected_device_idx < i.devices_available.Length)
+            if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
             }
@@ -145,7 +145,7 @@ namespace VisionModules.Events
             Logger.WriteLine("Enable");
 
             // TODO: Improve this code
-            if (selected_device_idx < i.devices_available.Length)
+            if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
                 if (cam.running == false)

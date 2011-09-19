@@ -27,9 +27,15 @@ namespace MayhemOpenCVWrapper
         public bool running = false ;
         public int cWidth;
         public int cHeight;
-        public CameraInfo[] devices_available = null;
-        public Camera[] cameras_available = null; 
+        private List<CameraInfo> devices_available = new List<CameraInfo>();
+        public List<Camera> cameras_available = new List<Camera>(); 
         public CameraInfo selected_device = null;
+
+        public int DeviceCount
+        {
+            get { return cameras_available.Count; }
+        }
+
       
         public CameraDriver()
         {
@@ -39,18 +45,24 @@ namespace MayhemOpenCVWrapper
             devices_available = EnumerateDevices();
 
             // instantiate all cameras found
-
-            cameras_available = new Camera[devices_available.Length];
-
-            int i = 0; 
-
-            foreach (CameraInfo c in devices_available)
+            if (devices_available.Count > 0)
             {
-                Camera cam = new Camera(c, CameraSettings.DEFAULTS());
-                cameras_available[i++] = cam;  
-            }
+               
 
-            Logger.WriteLine(devices_available.Length + " devices available");
+                int i = 0;
+
+                foreach (CameraInfo c in devices_available)
+                {
+                    Camera cam = new Camera(c, CameraSettings.DEFAULTS());
+                    cameras_available.Add(cam);
+                }
+
+                Logger.WriteLine(devices_available.Count + " devices available");
+            }
+            else
+            {
+                Logger.WriteLine("NO CAMERAS PRESENT");
+            }
         }
 
         /**<summary>
@@ -58,9 +70,9 @@ namespace MayhemOpenCVWrapper
          * index in the array corresponds to the camera's device ID
          * </summary>
          * */
-        public CameraInfo[] EnumerateDevices()
+        public List<CameraInfo> EnumerateDevices()
         {
-            CameraInfo[] c = null;
+            List<CameraInfo> c = new List<CameraInfo>();
 
             string deviceNames = "";
 
@@ -77,20 +89,22 @@ namespace MayhemOpenCVWrapper
                     deviceNames = new String(deviceStrings);                 
                 }       
             }
-           
-            string[] device_strings = deviceNames.Split(';');
-            //items in device_strings correspond to the actual devices
 
-            if (device_strings.Length > 0)
+            if (deviceNames != string.Empty)
             {
-                c = new CameraInfo[device_strings.Length];
+                string[] device_strings = deviceNames.Split(';');
+                //items in device_strings correspond to the actual devices
 
-                for (int i = 0; i < device_strings.Length; i++)
+                if (device_strings.Length > 0)
                 {
-                    c[i] = new CameraInfo(i, device_strings[i]);
+                  
+
+                    for (int i = 0; i < device_strings.Length; i++)
+                    {
+                        c.Add( new CameraInfo(i, device_strings[i]) ) ;
+                    }
                 }
             }
-
             return c;
         }
 

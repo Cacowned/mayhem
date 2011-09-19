@@ -45,9 +45,9 @@ namespace VisionModules.Events
         protected override void Initialize()
         {
             if (i == null)
-                i = CameraDriver.Instance; 
+                i = CameraDriver.Instance;
 
-            if (selected_device_idx < i.devices_available.Length)
+            if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
             }
@@ -111,7 +111,7 @@ namespace VisionModules.Events
             Logger.WriteLine("EnableTrigger");
 
             // TODO: Improve this code
-            if (selected_device_idx < i.devices_available.Length)
+            if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
                 if (cam.running == false)
