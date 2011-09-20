@@ -25,7 +25,8 @@ using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using System.Windows.Data;
 using System.Windows.Controls.Primitives;
-using MayhemCore; 
+using MayhemCore;
+using System.Threading; 
 namespace VisionModules.Wpf
 {
 
@@ -88,8 +89,12 @@ namespace VisionModules.Wpf
 
             deviceList.SelectedIndex = 0;
 
+            
+
             if (i.DeviceCount > 0)
             {
+                // Response timeout for the camera
+                Thread.Sleep(350);
                 // start the camera 0 if it isn't already running
            
  
