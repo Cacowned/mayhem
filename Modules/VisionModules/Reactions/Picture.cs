@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Diagnostics;
 using MayhemWpf.UserControls;
 using System.Timers;
+using System.Threading;
 
 namespace VisionModules.Reactions
 {
@@ -112,8 +113,8 @@ namespace VisionModules.Reactions
             {
                 cam = i.cameras_available[selected_device_idx];
                 cam.OnImageUpdated += imageUpdateHandler;
-                if (cam.running == false)
-                    cam.StartFrameGrabbing();
+                Thread.Sleep(350);
+                cam.StartFrameGrabbing();
 
             }
 
@@ -125,6 +126,7 @@ namespace VisionModules.Reactions
             base.Disable();
             cam.OnImageUpdated -= imageUpdateHandler;
             cam.TryStopFrameGrabbing();
+            Thread.Sleep(350); 
         }
 
         public override void Perform()
@@ -159,7 +161,7 @@ namespace VisionModules.Reactions
             {
                 // schedule future retrieval of image
                 int time_ms = (int)capture_offset_time * 1000;
-                Timer t = new Timer(time_ms);
+                System.Timers.Timer t = new System.Timers.Timer(time_ms);
                 t.Elapsed += new ElapsedEventHandler(SaveFutureImage);
                 t.AutoReset = false; 
                 t.Enabled = true;

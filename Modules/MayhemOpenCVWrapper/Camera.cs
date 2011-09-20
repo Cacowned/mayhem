@@ -200,7 +200,7 @@ namespace MayhemOpenCVWrapper
                 Logger.WriteLine(" shutting down camera");
                 //  Stop device
                 StopGrabbing();
-                this.running = false; 
+                this.running = false;           
                 return true;
             }
             else
