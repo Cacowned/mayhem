@@ -24,14 +24,18 @@ namespace MayhemOpenCVWrapper.LowLevel
         /// <summary>
         /// Register and unregister for image callbacks
         /// </summary> 
-        public virtual void RegisterForImages(Camera c)
+        public virtual void RegisterForImages(ImagerBase c)
         {
-            imageUpdateHandler = new Camera.ImageUpdateHandler(update_frame);
-            c.OnImageUpdated += imageUpdateHandler;
+            if (c != null)
+            {
+                imageUpdateHandler = new Camera.ImageUpdateHandler(update_frame);
+                c.OnImageUpdated += imageUpdateHandler;
+            }
         }
-        public virtual void UnregisterForImages(Camera c)
+        public virtual void UnregisterForImages(ImagerBase c)
         {
-            c.OnImageUpdated -= imageUpdateHandler;
+            if (c != null)
+                c.OnImageUpdated -= imageUpdateHandler;
         }
 
         /// <summary>

@@ -108,12 +108,11 @@ namespace VisionModules.Wpf
                 }
 
                 camera_preview_panel.ItemsSource = camera_previews;
-
+                selected_camera = cams[0];
             }
             else
             {
-                Logger.WriteLine("No camera available");
-                
+                Logger.WriteLine("No camera available");              
             }
         }
 
