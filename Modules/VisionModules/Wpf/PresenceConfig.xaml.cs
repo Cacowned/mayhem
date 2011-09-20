@@ -54,6 +54,8 @@ namespace VisionModules.Wpf
                             camera_selected_ = c; 
                         }
                     );
+            if (camera_selector.camera_previews.Count > 0)
+                this.CanSave = true; 
         }
 
         
@@ -73,6 +75,12 @@ namespace VisionModules.Wpf
         {
             base.OnClosing();
             camera_selector.OnClosing();
+        }
+
+        public override void OnSave()
+        {
+            base.OnSave();
+            camera_selected_ = camera_selector.selected_camera; 
         }
 
         public override string Title

@@ -25,7 +25,8 @@ using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using System.Windows.Data;
 using System.Windows.Controls.Primitives;
-using MayhemCore; 
+using MayhemCore;
+using System.Threading; 
 namespace VisionModules.Wpf
 {
 
@@ -65,6 +66,7 @@ namespace VisionModules.Wpf
         {
             this.location = location;
             slider_value = capture_offset_time;
+            this.DataContext = this; 
 
             InitializeComponent();
             Init();
@@ -76,7 +78,9 @@ namespace VisionModules.Wpf
 
             // populate device list
 
-            Logger.WriteLine("Nr of Cameras available: " + i.cameras_available.Length);
+            lbl_current_loc.Content = location; 
+
+            Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
 
             foreach (Camera c in i.cameras_available)
             {
@@ -85,8 +89,12 @@ namespace VisionModules.Wpf
 
             deviceList.SelectedIndex = 0;
 
-            if (i.devices_available.Length > 0)
+            
+
+            if (i.DeviceCount > 0)
             {
+                // Response timeout for the camera
+                Thread.Sleep(350);
                 // start the camera 0 if it isn't already running
            
  
@@ -167,8 +175,12 @@ namespace VisionModules.Wpf
             slider_tickbar.Ticks = tickMarks;
             slider_tickbar.Minimum = -capture_size_s;
             slider_tickbar.Maximum = capture_size_s;*/
-            
+
+           
+
             CanSave = true; 
+
+
 
         }
 
@@ -242,11 +254,14 @@ namespace VisionModules.Wpf
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
-            dlg.SelectedPath = location;
+            dlg.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            
 
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 location = dlg.SelectedPath;
+                lbl_current_loc.Content = location; 
             }
         }
 

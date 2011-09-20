@@ -2,10 +2,11 @@
 using System.Windows;
 using Phidgets;
 using MayhemWpf.UserControls;
+using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Wpf
 {
-    public partial class Phidget1103IRReflectiveConfig : IWpfConfiguration
+    public partial class Config1103IRReflective : PhidgetConfigControl
     {
         public int Index;
         public bool OnTurnOn;
@@ -14,32 +15,25 @@ namespace PhidgetModules.Wpf
         public InterfaceKit IfKit;
 
 
-        public Phidget1103IRReflectiveConfig(InterfaceKit ifKit, int index, bool onTurnOn, Func<int, string> conversion)
+        public Config1103IRReflective(bool onTurnOn)
         {
-            this.Index = index;
             this.OnTurnOn = onTurnOn;
-
-            this.convertor = conversion;
-            this.IfKit = ifKit;
 
             InitializeComponent();
         }
 
         public override void OnLoad()
         {
-            SensorDataBox.Index = Index;
-            SensorDataBox.IfKit = IfKit;
-            SensorDataBox.convertor = convertor;
-
             OnWhenOn.IsChecked = OnTurnOn;
             OnWhenOff.IsChecked = !OnTurnOn;
         }
 
+        /*
         public override void OnSave()
         {
             OnTurnOn = (bool)OnWhenOn.IsChecked;
-            Index = SensorDataBox.Index;
         }
+         */
 
         public override string Title
         {

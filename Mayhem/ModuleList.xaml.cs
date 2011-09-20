@@ -72,7 +72,7 @@ namespace Mayhem
             }
         }
 
-        void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             double targetWidth = iWpfConfig.Width + 40;
             double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
@@ -112,12 +112,15 @@ namespace Mayhem
             }
         }
 
-        void iWpfConfig_CanSavedChanged(bool canSave)
+        private void iWpfConfig_CanSavedChanged(bool canSave)
         {
-            buttonSave.IsEnabled = canSave;
+            Dispatcher.Invoke(new Action(delegate()
+            {
+                buttonSave.IsEnabled = canSave;
+            }));
         }
 
-        void iWpfConfig_Loaded(object sender, RoutedEventArgs e)
+        private void iWpfConfig_Loaded(object sender, RoutedEventArgs e)
         {
             WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
             double targetWidth = iWpfConfig.Width + 40;

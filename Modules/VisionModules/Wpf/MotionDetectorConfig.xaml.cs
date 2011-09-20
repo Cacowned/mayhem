@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Drawing;
 using MayhemWpf.UserControls;
 using MayhemCore;
+using System.Threading;
 
 namespace VisionModules.Wpf
 {
@@ -26,7 +27,10 @@ namespace VisionModules.Wpf
     {
         private CameraDriver i = CameraDriver.Instance;
         protected Camera cam = null;
-        public Camera selected_camera = null;
+        public Camera selected_camera
+        {
+                get { return cam;}
+        }
        
         private delegate void VoidHandler();
 
@@ -45,13 +49,16 @@ namespace VisionModules.Wpf
 
 
 
-        public MotionDetectorConfig()
+        public MotionDetectorConfig(Camera c)
         {
+            cam = c; 
             InitializeComponent();
+            Init(); 
+
         }
 
 
-        public override void OnLoad()
+        public  void Init()
         {
             // populate device list
             Logger.WriteLine("OnLoad");
@@ -61,24 +68,40 @@ namespace VisionModules.Wpf
                 DeviceList.Items.Add(c);
             }
 
-            DeviceList.SelectedIndex = 0;
-
-            if (i.devices_available.Length > 0)
+            if (cam == null)
             {
+                DeviceList.SelectedIndex = 0;
+            }
+
+            // Thread sleep to wait for the camera to revive itself from recent shutdown. Todo: Fix this 
+            Thread.Sleep(250); 
+            if (i.DeviceCount > 0)
+            {
+                int camera_index = (cam != null && cam.info.deviceId < i.DeviceCount) ? cam.info.deviceId : 0; 
 
                 // start the camera 0 if it isn't already running
-                cam = i.cameras_available[0];
-                if (!cam.running) cam.StartFrameGrabbing();
+                cam = i.cameras_available[camera_index];
+                DeviceList.SelectedIndex = camera_index; 
 
-                cam.OnImageUpdated -= i_OnImageUpdated;
-                cam.OnImageUpdated += i_OnImageUpdated;
+                if (!cam.running)
+                {
+                    cam.OnImageUpdated -= i_OnImageUpdated;
+                    cam.OnImageUpdated += i_OnImageUpdated;
+                    cam.StartFrameGrabbing();                 
+                }
+                
                 Logger.WriteLine("using " + cam.info.ToString());
+
+                // alow saving in this state
+                this.CanSave = true;
+               
             }
             else
             {
                 Logger.WriteLine("No camera available");
             }
-            CanSave = true;
+
+
 
            // overlay.DisplayBoundingRect();
         }
@@ -144,17 +167,17 @@ namespace VisionModules.Wpf
             {
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.TryStopFrameGrabbing();
-            }
+            }     
             base.OnClosing();
+            Thread.Sleep(500);
         }
+
+        
      
 
         public override void OnSave()
         {
-            selected_camera = DeviceList.SelectedItem as Camera;
-            // cam.OnImageUpdated -= imageUpdateHandler;
-
-            cam = selected_camera;
+            cam = DeviceList.SelectedItem as Camera;            
         }
 
        

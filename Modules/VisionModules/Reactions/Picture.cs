@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Diagnostics;
 using MayhemWpf.UserControls;
 using System.Timers;
+using System.Threading;
 
 namespace VisionModules.Reactions
 {
@@ -78,10 +79,12 @@ namespace VisionModules.Reactions
                 i = CameraDriver.Instance;
             }
 
-            if (selected_device_idx < i.devices_available.Length)
+            if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
             }
+
+            SetConfigString();
         }
 
         /// <summary>
@@ -98,18 +101,20 @@ namespace VisionModules.Reactions
             string path = this.folderLocation + "\\" + filename;
             Logger.WriteLine("saving file to " + path);
             image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
+            // VERY important! 
+            image.Dispose();
         }
 
 
         public override void Enable()
         {
             // TODO: Improve this code
-            if (selected_device_idx < i.devices_available.Length)
+            if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
                 cam.OnImageUpdated += imageUpdateHandler;
-                if (cam.running == false)
-                    cam.StartFrameGrabbing();
+                Thread.Sleep(350);
+                cam.StartFrameGrabbing();
 
             }
 
@@ -121,6 +126,7 @@ namespace VisionModules.Reactions
             base.Disable();
             cam.OnImageUpdated -= imageUpdateHandler;
             cam.TryStopFrameGrabbing();
+            Thread.Sleep(350); 
         }
 
         public override void Perform()
@@ -155,9 +161,11 @@ namespace VisionModules.Reactions
             {
                 // schedule future retrieval of image
                 int time_ms = (int)capture_offset_time * 1000;
-                Timer t = new Timer(time_ms);
+                System.Timers.Timer t = new System.Timers.Timer(time_ms);
                 t.Elapsed += new ElapsedEventHandler(SaveFutureImage);
+                t.AutoReset = false; 
                 t.Enabled = true;
+             
             }
             else
             {
@@ -193,6 +201,8 @@ namespace VisionModules.Reactions
             }
         }
 
+        
+
         public void OnSaved(IWpfConfiguration configurationControl)
         {
             PictureConfig config = configurationControl as PictureConfig;
@@ -217,9 +227,10 @@ namespace VisionModules.Reactions
                 cam = new DummyCamera();
             }
             capture_offset_time = config.slider_value;
+            SetConfigString();
         }
 
-        private new void SetConfigString()
+        public override void SetConfigString()
         {
             ConfigString = String.Format("Save Location: \"{0}\"", folderLocation);
         }

@@ -2,41 +2,31 @@
 using System.Windows;
 using Phidgets;
 using MayhemWpf.UserControls;
+using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Wpf
 {
 
-    public partial class Phidget1101IRDistanceConfig : IWpfConfiguration
+    public partial class Config1101IRDistance : PhidgetConfigControl
     {
-        public int Index;
         public double TopValue;
         public double BottomValue;
 
-        protected Func<int, string> convertor;
-        private InterfaceKit IfKit;
-
-
-        public Phidget1101IRDistanceConfig(InterfaceKit ifKit, int index, double topValue, double bottomValue, Func<int, string> conversion)
+        public Config1101IRDistance(double topValue, double bottomValue)
         {
-            this.Index = index;
             this.TopValue = topValue;
             this.BottomValue = bottomValue;
-            this.IfKit = ifKit;
-            this.convertor = conversion;
 
             InitializeComponent();
         }
 
         public override void OnLoad()
         {
-            SensorDataBox.Index = Index;
-            SensorDataBox.IfKit = IfKit;
-            SensorDataBox.convertor = convertor;
-
             textBoxTopValue.Text = TopValue.ToString();
             textBoxBottomValue.Text = BottomValue.ToString();
         }
 
+        /*
         public override void OnSave()
         {
             if (!double.TryParse(textBoxTopValue.Text, out TopValue) && TopValue >= 0)
@@ -56,6 +46,7 @@ namespace PhidgetModules.Wpf
                 Index = SensorDataBox.Index;
             }
         }
+         */
 
         public override string Title
         {
