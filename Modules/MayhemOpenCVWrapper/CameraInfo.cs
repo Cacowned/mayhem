@@ -40,6 +40,11 @@ namespace MayhemOpenCVWrapper
             return "" + deviceId + " : " + description;
         }
 
+        public static CameraInfo DummyInfo()
+        {
+            return new CameraInfo(0, "Dummmy Camera");
+        }
+
     }
 
 

@@ -99,7 +99,7 @@ namespace VisionModules.Wpf
 
             DeviceList.SelectedIndex = 0;
 
-            if (i.devices_available.Length > 0)
+            if (i.DeviceCount > 0)
             {
                 // start the camera 0 if it isn't already running
                 cam = i.cameras_available[0];

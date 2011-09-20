@@ -14,15 +14,7 @@ namespace PhidgetModules.Wpf.UserControls
     {
         public Func<int, string> convertor;
 
-        public int Index
-        {
-            get { return (int)GetValue(IndexProperty); }
-            set { SetValue(IndexProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Index.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IndexProperty =
-            DependencyProperty.Register("Index", typeof(int), typeof(SensorData), new UIPropertyMetadata(0));
+        public int Index { get; set; }
 
         public InterfaceKit IfKit;
 
@@ -33,10 +25,21 @@ namespace PhidgetModules.Wpf.UserControls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (IfKit != null)
-            {
-                this.IfKit.SensorChange += SensorChange;
+            IfKit.Attach += IfKit_Attach;
+            IfKit.SensorChange += SensorChange;
 
+            SetUpSensorBox();
+        }
+
+        private void IfKit_Attach(object sender, AttachEventArgs e)
+        {
+            SetUpSensorBox();
+        }
+
+        private void SetUpSensorBox()
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
                 for (int i = 0; i < IfKit.sensors.Count; i++)
                 {
                     SensorBox.Items.Add(i);
@@ -44,10 +47,14 @@ namespace PhidgetModules.Wpf.UserControls
 
                 this.SensorBox.SelectedIndex = Index;
 
-                // We want to start with some data.
-                SetString(convertor(IfKit.sensors[Index].Value));
-            }
+                if (IfKit.sensors.Count > 0)
+                {
+                    // We want to start with some data.
+                    SetString(convertor(IfKit.sensors[Index].Value));
+                }
+            }));
         }
+
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             this.IfKit.SensorChange -= SensorChange;
@@ -56,23 +63,22 @@ namespace PhidgetModules.Wpf.UserControls
         protected void SensorChange(object sender, SensorChangeEventArgs e)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-                   {
-                       // We only care about the index we are looking at.
-                       if (e.Index == Index)
-                       {
-                           SetString(convertor(e.Value));
+            {
+                // We only care about the index we are looking at.
+                if (e.Index == Index)
+                {
+                    SetString(convertor(e.Value));
 
-                       }
-                   }));
-
+                }
+            }));
         }
 
         protected void SetString(string text)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-                   {
-                       this.ValueBox.Text = text;
-                   }));
+            {
+                this.ValueBox.Text = text;
+            }));
         }
 
         private void SensorBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

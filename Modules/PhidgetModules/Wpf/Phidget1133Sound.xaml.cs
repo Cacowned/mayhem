@@ -2,41 +2,34 @@
 using System.Windows;
 using Phidgets;
 using MayhemWpf.UserControls;
+using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Wpf
 {
-    public partial class Phidget1106ForceConfig : IWpfConfiguration
+    /// <summary>
+    /// Interaction logic for _1133SoundConfig.xaml
+    /// </summary>
+    public partial class Config1133Sound : PhidgetConfigControl
     {
-        public int Index;
         public double TopValue;
         public bool Increasing;
 
-        public InterfaceKit IfKit;
-        protected Func<int, string> convertor;
-
-        public Phidget1106ForceConfig(InterfaceKit ifKit, int index, double topValue, bool increasing, Func<int, string> conversion)
+        public Config1133Sound(double topValue, bool increasing)
         {
-            this.Index = index;
             this.TopValue = topValue;
-
-            this.IfKit = ifKit;
-            this.convertor = conversion;
 
             InitializeComponent();
         }
 
         public override void OnLoad()
         {
-            SensorDataBox.Index = Index;
-            SensorDataBox.IfKit = IfKit;
-            SensorDataBox.convertor = convertor;
-
             textBoxTopValue.Text = TopValue.ToString();
 
             IncreasingRadio.IsChecked = Increasing;
             DecreasingRadio.IsChecked = !Increasing;
         }
 
+        /*
         public override void OnSave()
         {
             if (!double.TryParse(textBoxTopValue.Text, out TopValue) && TopValue >= 0)
@@ -49,12 +42,13 @@ namespace PhidgetModules.Wpf
                 Index = SensorDataBox.Index;
             }
         }
+        */
 
         public override string Title
         {
             get
             {
-                return "Phidget - Force";
+                return "Phidget - Sound";
             }
         }
     }

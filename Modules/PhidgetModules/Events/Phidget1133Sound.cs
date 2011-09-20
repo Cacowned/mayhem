@@ -4,6 +4,7 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
+using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Events
 {
@@ -13,14 +14,17 @@ namespace PhidgetModules.Events
     {
         public IWpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1133SoundConfig(IfKit, Index, TopValue, Increasing, ConvertToString); }
+            get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1133Sound(TopValue, Increasing)); }
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)
         {
-            Index = ((Phidget1133SoundConfig)configurationControl).Index;
-            TopValue = ((Phidget1133SoundConfig)configurationControl).TopValue;
-            Increasing = ((Phidget1133SoundConfig)configurationControl).Increasing;
+            SensorConfig sensor = configurationControl as SensorConfig;
+            Config1133Sound config = sensor.Sensor as Config1133Sound;
+
+            Index = sensor.Index;
+            TopValue = config.TopValue;
+            Increasing = config.Increasing;
         }
 
         public override double Convert(int value)

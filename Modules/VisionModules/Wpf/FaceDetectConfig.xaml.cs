@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Windows;
 using MayhemOpenCVWrapper.LowLevel;
 using MayhemCore;
+using MayhemOpenCVWrapper;
 
 
 namespace VisionModules.Wpf
@@ -25,8 +26,10 @@ namespace VisionModules.Wpf
 
         List<System.Drawing.Point> faceDetectorPoints = new List<System.Drawing.Point>();
 
+        private CameraDriver i = CameraDriver.Instance;
 
-        public FaceDetectConfig() : base()
+
+        public FaceDetectConfig(Camera c) : base(c)
            
         {
             
@@ -37,7 +40,10 @@ namespace VisionModules.Wpf
             faceDetectorPoints = new List<System.Drawing.Point>();
 
             fd.OnFaceDetected += m_onFaceDetected;
-            CanSave = true;
+            if (i.DeviceCount > 0)
+                CanSave = true;
+
+
 
         }
 

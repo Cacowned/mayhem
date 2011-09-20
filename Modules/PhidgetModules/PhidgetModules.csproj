@@ -61,6 +61,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InterfaceFactory.cs" />
     <Compile Include="OnOffSensorEventBase.cs" />
+    <Compile Include="Wpf\UserControls\PhidgetConfigControl.cs" />
     <Compile Include="RangeSensorEventBase.cs" />
     <Compile Include="Reaction\DigitalOutput.cs" />
     <Compile Include="Reaction\Phidget1055IRTransmit.cs" />
@@ -77,23 +78,23 @@
     <Compile Include="Wpf\Phidget1066AdvServoConfig.xaml.cs">
       <DependentUpon>Phidget1066AdvServoConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\Phidget1103IRReflectiveConfig.xaml.cs">
-      <DependentUpon>Phidget1103IRReflectiveConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\Config1103IRReflective.xaml.cs">
+      <DependentUpon>Config1103IRReflective.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\Phidget1101IRDistanceConfig.xaml.cs">
-      <DependentUpon>Phidget1101IRDistanceConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\Config1101IRDistance.xaml.cs">
+      <DependentUpon>Config1101IRDistance.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\Phidget1106ForceConfig.xaml.cs">
-      <DependentUpon>Phidget1106ForceConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\Config1106Force.xaml.cs">
+      <DependentUpon>Config1106Force.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\Phidget1127LightConfig.xaml.cs">
-      <DependentUpon>Phidget1127LightConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\Config1127Light.xaml.cs">
+      <DependentUpon>Config1127Light.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\Phidget1129TouchConfig.xaml.cs">
-      <DependentUpon>Phidget1129TouchConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\Config1129Touch.xaml.cs">
+      <DependentUpon>Config1129Touch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\Phidget1133SoundConfig.xaml.cs">
-      <DependentUpon>Phidget1133SoundConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\Phidget1133Sound.xaml.cs">
+      <DependentUpon>Phidget1133Sound.xaml</DependentUpon>
     </Compile>
     <Compile Include="Events\Phidget1133Sound.cs" />
     <Compile Include="SensorEventBase.cs" />
@@ -104,6 +105,9 @@
     </Compile>
     <Compile Include="Wpf\PhidgetDigitalOutputConfig.xaml.cs">
       <DependentUpon>PhidgetDigitalOutputConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\UserControls\SensorConfig.xaml.cs">
+      <DependentUpon>SensorConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\UserControls\SensorData.xaml.cs">
       <DependentUpon>SensorData.xaml</DependentUpon>
@@ -126,27 +130,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\Phidget1103IRReflectiveConfig.xaml">
+    <Page Include="Wpf\Config1103IRReflective.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\Phidget1101IRDistanceConfig.xaml">
+    <Page Include="Wpf\Config1101IRDistance.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\Phidget1106ForceConfig.xaml">
+    <Page Include="Wpf\Config1106Force.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\Phidget1127LightConfig.xaml">
+    <Page Include="Wpf\Config1127Light.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\Phidget1129TouchConfig.xaml">
+    <Page Include="Wpf\Config1129Touch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\Phidget1133SoundConfig.xaml">
+    <Page Include="Wpf\Phidget1133Sound.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -155,6 +159,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\PhidgetDigitalOutputConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\UserControls\SensorConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

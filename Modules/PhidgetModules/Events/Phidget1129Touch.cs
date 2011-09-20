@@ -4,6 +4,7 @@ using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
+using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Events
 {
@@ -13,13 +14,16 @@ namespace PhidgetModules.Events
     {
         public IWpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1129TouchConfig(IfKit, Index, OnTurnOn, ConvertToString); }
+            get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1129Touch(OnTurnOn)); }
         }
 
         public void OnSaved(IWpfConfiguration configurationControl)
         {
-            Index = ((Phidget1129TouchConfig)configurationControl).Index;
-            OnTurnOn = ((Phidget1129TouchConfig)configurationControl).OnTurnOn;
+            SensorConfig sensor = configurationControl as SensorConfig;
+            Config1129Touch config = sensor.Sensor as Config1129Touch;
+
+            Index = sensor.Index;
+            OnTurnOn = config.OnTurnOn;
         }
 
         public string ConvertToString(int value)

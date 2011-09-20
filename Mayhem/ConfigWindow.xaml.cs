@@ -3,6 +3,7 @@ using System.Windows;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Windows.Threading;
 
 namespace Mayhem
 {
@@ -30,7 +31,10 @@ namespace Mayhem
 
         void iWpfConfig_CanSavedChanged(bool canSave)
         {
-            buttonSave.IsEnabled = canSave;
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                buttonSave.IsEnabled = canSave;
+            }));
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -44,7 +48,7 @@ namespace Mayhem
             iWpfConfig.OnSave();
             iWpf.OnSaved(config);
             ((ModuleBase)iWpf).SetConfigString();
-            
+
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
             {
                 iWpfConfig.OnClosing();

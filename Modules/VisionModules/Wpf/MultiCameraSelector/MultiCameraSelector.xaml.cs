@@ -62,7 +62,7 @@ namespace VisionModules.Wpf
         {
             i = CameraDriver.Instance;
 
-            Logger.WriteLine("Nr of Cameras available: " + i.cameras_available.Length);
+            Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
             foreach (Camera c in i.cameras_available)
             {
                 deviceList.Items.Add(c);
@@ -70,7 +70,7 @@ namespace VisionModules.Wpf
 
             deviceList.SelectedIndex = 0;
 
-            if (i.devices_available.Length > 0)
+            if (i.DeviceCount > 0)
             {
                 // start the camera 0 if it isn't already running
 
@@ -108,12 +108,11 @@ namespace VisionModules.Wpf
                 }
 
                 camera_preview_panel.ItemsSource = camera_previews;
-
+                selected_camera = cams[0];
             }
             else
             {
-                Logger.WriteLine("No camera available");
-                
+                Logger.WriteLine("No camera available");              
             }
         }
 
