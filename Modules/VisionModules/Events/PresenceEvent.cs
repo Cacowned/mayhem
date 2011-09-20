@@ -53,7 +53,7 @@ namespace VisionModules.Events
         };
 
         // ============== presence detector and camera ==========================
-        private Camera cam = null;
+        private ImagerBase cam = null;
         private CameraDriver i = CameraDriver.Instance;
         private PresenceDetectorComponent pd = null;
         private PresenceDetectorComponent.DetectionHandler presenceHandler;
@@ -115,10 +115,16 @@ namespace VisionModules.Events
             if (this.Enabled)
                 this.Disable();
 
-            cam = config.camera_selected;
-            selected_device_idx = cam.index;
-            selected_trigger_mode = config.selected_triggerMode;
-
+            if (cam != null)
+            {
+                cam = config.camera_selected;
+                selected_device_idx = cam.info.deviceId;
+                selected_trigger_mode = config.selected_triggerMode;
+            }
+            else
+            {
+                cam = new DummyCamera();
+            }
             if (wasEnabled)
                 this.Enable();
         }

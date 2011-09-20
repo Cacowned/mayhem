@@ -77,6 +77,12 @@ namespace VisionModules.Wpf
             camera_selector.OnClosing();
         }
 
+        public override void OnSave()
+        {
+            base.OnSave();
+            camera_selected_ = camera_selector.selected_camera; 
+        }
+
         public override string Title
         {
             get
