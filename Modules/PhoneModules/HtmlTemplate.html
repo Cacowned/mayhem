@@ -5,6 +5,7 @@
         %%INSERTSTYLEHERE%%
         <script type="text/javascript">
             var http_request = false;
+            var requestUpdateTimer = null;
             function seterror() {
                 document.location = 'mayhem:error';
                 window.external.notify('mayhem:error');
@@ -12,6 +13,7 @@
             function updateFromServer() {
                 if (http_request.readyState == 4) {
                     if (http_request.status == 200) {
+                        clearTimeout(requestUpdateTimer);
                         if (http_request.responseText.length > 0) {
                             e = document.getElementById('aDiv');
                             if (http_request.responseText == "kill") {
@@ -28,7 +30,6 @@
                     }
                 }
             }
-
             function waitForUpdate() {
                 http_request = false;
                 if (window.XMLHttpRequest) {
@@ -40,12 +41,14 @@
                 if (!http_request) {
                     return false;
                 }
+                requestUpdateTimer = setTimeout(function () {
+                    http_request.abort();
+                }, 15000);
                 var url = 'Html?update=True&t=' + new Date().getTime();
                 http_request.onreadystatechange = updateFromServer;
                 http_request.open('GET', url, true);
                 http_request.send(null);
             }
-
             function sendEvent(id) {
                 var req = false;
                 if (window.XMLHttpRequest) {
@@ -61,7 +64,6 @@
                
                 var requestTimer = setTimeout(function () {
                     req.abort();
-                    // Handle timeout situation, e.g. Retry or inform user.
                 }, 4000);
                 req.onreadystatechange = function () {
                     if (req.readyState != 4) { return; }

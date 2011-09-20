@@ -85,6 +85,10 @@ namespace PhoneModules
                 AutoResetEvent a = new AutoResetEvent(false);
                 resetEvents[key] = a;
             }
+            //else
+            //{
+            //    resetEvents[key].Set();
+            //}
             Debug.WriteLine(resetEvents.Count);
             if (!update)
             {
@@ -103,19 +107,21 @@ namespace PhoneModules
             else 
             {
                 Interlocked.Increment(ref numToKill);
-                if (resetEvents[key].WaitOne(30000))
+                if (resetEvents[key].WaitOne(10000))
                 {
                     Interlocked.Decrement(ref numToKill);
                     if (isShuttingDown)
                     {
+                        Logger.WriteLine("Killed service " + numToKill);
                         if (numToKill == 0)
                             killResetEvent.Set();
-                        Logger.WriteLine("Killed service " + numToKill);
                         return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));
                     }
                     else
                         return new MemoryStream(ASCIIEncoding.Default.GetBytes(insideDiv));
                 }
+                else
+                    Interlocked.Decrement(ref numToKill);
             }
             return null;
         }
@@ -187,7 +193,7 @@ namespace PhoneModules
         public void ShuttingDown()
         {
             isShuttingDown = true;
-            if (resetEvents.Count > 0)
+            if (numToKill > 0)
             {
                 //numToKill = resetEvents.Count;
                 Debug.WriteLine(numToKill);
@@ -196,9 +202,9 @@ namespace PhoneModules
                     ev.Set();
                 }
 
-                killResetEvent.WaitOne();
+                killResetEvent.WaitOne(5000);
 
-                Thread.Sleep(10);
+                Thread.Sleep(100);
             }
         }
 

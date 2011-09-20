@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
         Title="ConfigWindow" Height="300" Width="300" Loaded="Window_Loaded"
-        WindowStyle="None" ResizeMode="NoResize" BorderThickness="2" WindowStartupLocation="CenterOwner" SizeToContent="WidthAndHeight" >
+        WindowStyle="None" ResizeMode="NoResize" BorderThickness="2" WindowStartupLocation="CenterOwner" SizeToContent="WidthAndHeight" ShowInTaskbar="False" >
     <Grid>
         <StackPanel Style="{StaticResource BackgroundGradient}">
             <src:WindowHeader x:Name="windowHeader" />

@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Diagnostics;
 
 namespace Mayhem
 {
@@ -190,6 +191,12 @@ namespace Mayhem
             buttonSave.IsEnabled = false;
             buttonConfigCancel.IsEnabled = false;
         }
+
+        void ListBoxItem_MouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            ChooseButtonClick(sender, e);
+        }
+
 
         #region Window Resizing
         public Rect WindowRect
