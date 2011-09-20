@@ -167,9 +167,9 @@ namespace VisionModules.Wpf
             {
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.TryStopFrameGrabbing();
-            }
-            Thread.Sleep(500);
+            }     
             base.OnClosing();
+            Thread.Sleep(500);
         }
 
         

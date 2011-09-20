@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using MayhemWpf.UserControls;
 using MayhemOpenCVWrapper.LowLevel;
+using System.Threading;
 
 namespace VisionModules.Events
 {
@@ -128,10 +129,14 @@ namespace VisionModules.Events
 
             // set the selected bounding rectangle
             boundingRect = ((MotionDetectorConfig)configurationControl).selectedBoundingRect;
-            m.SetMotionBoundaryRect(boundingRect); 
+            m.SetMotionBoundaryRect(boundingRect);
 
             if (this.Enabled)
+            {
                 this.Disable();
+                Thread.Sleep(350);
+            }
+
             // assign selected cam
             cam = ((MotionDetectorConfig)configurationControl).selected_camera;
 
@@ -150,9 +155,8 @@ namespace VisionModules.Events
             if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
-                if (cam.running == false)
-                    cam.StartFrameGrabbing();
-
+                Thread.Sleep(350);
+                cam.StartFrameGrabbing();
             }
             // register the trigger's motion update handler
             m.RegisterForImages(cam);
@@ -169,6 +173,7 @@ namespace VisionModules.Events
             m.OnMotionUpdate -= motionUpdateHandler;
             // try to shut down the camera
             cam.TryStopFrameGrabbing();
+            Thread.Sleep(350);
         }
        
     }
