@@ -42,7 +42,7 @@ namespace MayhemOpenCVWrapper
             get { return index_;}
         }
 
-        public CameraInfo info;
+        public new CameraInfo info;
         public CameraSettings settings;
 
         public bool is_initialized = false;
@@ -76,7 +76,15 @@ namespace MayhemOpenCVWrapper
         {
             get
             {
-                return loop_buffer.ToList<BitmapTimestamp>();
+                List<BitmapTimestamp> items_out = new List<BitmapTimestamp>(); 
+               
+                // return ;
+                foreach (BitmapTimestamp b in loop_buffer.ToList<BitmapTimestamp>())
+                {
+                    items_out.Add(b.Clone() as BitmapTimestamp);
+                }
+
+                return items_out;
             }
         }
         
@@ -227,6 +235,12 @@ namespace MayhemOpenCVWrapper
         {
             Logger.WriteLine(index + " GrabFrames");
 
+
+            foreach (BitmapTimestamp b in loop_buffer)
+            {
+                b.Dispose();
+            }
+
             // purge the video buffer
             loop_buffer.Clear(); 
 
@@ -259,15 +273,18 @@ namespace MayhemOpenCVWrapper
                 // add an item to the queue buffer
                 BitmapTimestamp b = new BitmapTimestamp(ImageAsBitmap());
 
+                
                 if (loop_buffer.Count < LOOP_BUFFER_MAX_LENGTH)
                 {
-                     loop_buffer.Enqueue(b);
-                }
-                else
-                {                   
-                    loop_buffer.Dequeue();                  // gc should handle the spurious bitmap                             
                     loop_buffer.Enqueue(b);
                 }
+                else
+                {
+                    BitmapTimestamp destroyMe = loop_buffer.Dequeue();
+                    destroyMe.Dispose();
+                    loop_buffer.Enqueue(b);
+                }
+                
 
                 if (running)
                 {
