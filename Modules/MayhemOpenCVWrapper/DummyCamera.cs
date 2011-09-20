@@ -24,7 +24,7 @@ namespace MayhemOpenCVWrapper
     {
         public override event ImageUpdateHandler OnImageUpdated;
 
-        public CameraInfo info = CameraInfo.DummyInfo();
+        public new CameraInfo info = CameraInfo.DummyInfo();
         public  override Bitmap ImageAsBitmap()
         {
             Logger.WriteLine("returning dummy image");
