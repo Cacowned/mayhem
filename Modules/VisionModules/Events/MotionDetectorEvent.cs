@@ -110,7 +110,7 @@ namespace VisionModules.Events
         {
             get
             {
-                MotionDetectorConfig config = new MotionDetectorConfig(); // pass the parameters to initially populate the window in the constructor
+                MotionDetectorConfig config = new MotionDetectorConfig(this.cam); // pass the parameters to initially populate the window in the constructor
                 config.DeviceList.SelectedIndex = selected_device_idx;
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {
@@ -138,6 +138,8 @@ namespace VisionModules.Events
             if (wasEnabled)
                 this.Enable();
         }
+
+    
 
         public override void Enable()
         {

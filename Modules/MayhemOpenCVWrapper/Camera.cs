@@ -162,17 +162,21 @@ namespace MayhemOpenCVWrapper
                 InitializeCaptureDevice(info, settings);
             }
 
-            grabFrm = new Thread(GrabFrames);
-            try
+            if (!this.running)
             {
-                Logger.WriteLine("Starting Frame Grabber");
-                grabFrm.Start();
-                this.running = true;
-            }
-            catch (Exception e)
-            {
-                Logger.WriteLine("Exception while trying to start Framegrab");
-                Logger.WriteLine(e.ToString());
+                grabFrm = new Thread(GrabFrames);
+                try
+                {
+                    Logger.WriteLine("Starting Frame Grabber");
+                    grabFrm.Start();
+                    this.running = true;
+                    Thread.Sleep(200);
+                }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Exception while trying to start Framegrab");
+                    Logger.WriteLine(e.ToString());
+                }
             }
         }
 
@@ -214,6 +218,7 @@ namespace MayhemOpenCVWrapper
             if (grabFrm.IsAlive)
                 grabFrm.Join(500);
             OpenCVDLL.OpenCVBindings.StopCamera(this.info.deviceId);
+            Thread.Sleep(200);
 
         }
 
