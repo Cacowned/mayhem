@@ -167,6 +167,7 @@ namespace DefaultModules.KeypressHelpers
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
+            Debug.WriteLine(nCode + " " + wParam.ToInt32() + " " + lParam.ToInt32());
             if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
             {
                 int vkCode = Marshal.ReadInt32(lParam);

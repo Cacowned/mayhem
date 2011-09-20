@@ -11,12 +11,12 @@
             <Grid>
                 <CheckBox Name="checkBoxApplication" VerticalAlignment="Center" IsChecked="True" />
                 <TextBlock FontSize="14" VerticalAlignment="Center" Margin="20,0,0,0">Application:</TextBlock>
-                <TextBox Name="textBoxApplication" Margin="110,0,0,0" FontSize="14" />
+                <TextBox Name="textBoxApplication" Margin="110,0,0,0" FontSize="14" TextChanged="textBox_TextChanged" />
             </Grid>
             <Grid Margin="0,5,0,0">
                 <CheckBox Name="checkBoxTitle" VerticalAlignment="Center" IsChecked="True" />
                 <TextBlock FontSize="14" VerticalAlignment="Center" Margin="20,0,0,0">Window Title:</TextBlock>
-                <TextBox Name="textBoxWindowTitle" Margin="110,0,0,0" FontSize="14" />
+                <TextBox Name="textBoxWindowTitle" Margin="110,0,0,0" FontSize="14" TextChanged="textBox_TextChanged" />
             </Grid>
             <Separator></Separator>
             <TextBlock TextAlignment="Center">Select the actions to take</TextBlock>
