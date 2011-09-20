@@ -164,6 +164,7 @@ namespace MayhemOpenCVWrapper
 
             if (!this.running)
             {
+                
                 grabFrm = new Thread(GrabFrames);
                 try
                 {
@@ -225,8 +226,11 @@ namespace MayhemOpenCVWrapper
         private void GrabFrames()
         {
             Logger.WriteLine(index + " GrabFrames");
-            running = true;
 
+            // purge the video buffer
+            loop_buffer.Clear(); 
+
+            running = true;
             while (running)
             {
                 //Logger.WriteLine("Camera: Update!");
