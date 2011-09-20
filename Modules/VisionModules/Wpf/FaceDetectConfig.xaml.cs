@@ -29,7 +29,7 @@ namespace VisionModules.Wpf
         private CameraDriver i = CameraDriver.Instance;
 
 
-        public FaceDetectConfig() : base()
+        public FaceDetectConfig(Camera c) : base(c)
            
         {
             

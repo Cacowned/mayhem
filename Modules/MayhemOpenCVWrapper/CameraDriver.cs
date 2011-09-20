@@ -47,9 +47,6 @@ namespace MayhemOpenCVWrapper
             // instantiate all cameras found
             if (devices_available.Count > 0)
             {
-               
-
-                int i = 0;
 
                 foreach (CameraInfo c in devices_available)
                 {
@@ -96,9 +93,7 @@ namespace MayhemOpenCVWrapper
                 //items in device_strings correspond to the actual devices
 
                 if (device_strings.Length > 0)
-                {
-                  
-
+                {                  
                     for (int i = 0; i < device_strings.Length; i++)
                     {
                         c.Add( new CameraInfo(i, device_strings[i]) ) ;

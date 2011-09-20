@@ -11,6 +11,7 @@ using MayhemOpenCVWrapper;
 using System.Diagnostics;
 using MayhemWpf.UserControls;
 using MayhemOpenCVWrapper.LowLevel;
+using System.Threading;
 
 namespace VisionModules.Events
 {
@@ -91,9 +92,7 @@ namespace VisionModules.Events
             {
                 Logger.WriteLine(" get ConfigurationControl!");
 
-                // TODO
-                //string folderLocation = "";
-                FaceDetectConfig config = new FaceDetectConfig();
+                FaceDetectConfig config = new FaceDetectConfig(this.cam);
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {            
                     config.selectedBoundingRect = boundingRect;
@@ -107,15 +106,17 @@ namespace VisionModules.Events
 
         public override void Enable()
         {
+            Logger.WriteLine("");
             base.Enable();
-            Logger.WriteLine("EnableTrigger");
+            
 
             // TODO: Improve this code
             if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
-                if (cam.running == false)
-                    cam.StartFrameGrabbing();
+                //if (cam.running == false)
+                Thread.Sleep(350);
+                cam.StartFrameGrabbing();
 
             }
             // register the trigger's faceDetection update handler
@@ -125,13 +126,16 @@ namespace VisionModules.Events
 
         public override void Disable()
         {
+            Logger.WriteLine("");
             base.Disable();
-            Logger.WriteLine("DisableTrigger");
+         
             // de-register the trigger's faceDetection update handler
             fd.UnregisterForImages(cam);
             fd.OnFaceDetected -= m_onFaceDetected;
             // try to shut down the camera
             cam.TryStopFrameGrabbing();
+            // Give Camera Time to do its thing 
+            Thread.Sleep(250); 
         }
 
         public  void OnSaved(IWpfConfiguration configurationControl)
