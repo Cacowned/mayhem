@@ -222,6 +222,18 @@ namespace WindowModules.Wpf
                     return;
             }
             Add(action);
+            CheckCanSave();
+        }
+
+        void CheckCanSave()
+        {
+            CanSave = ((textBoxApplication.Text.Length > 0 && checkBoxApplication.IsChecked == true) ||
+                      (textBoxWindowTitle.Text.Length > 0 && checkBoxTitle.IsChecked == true)) && stackPanelActions.Children.Count > 0;
+        }
+
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckCanSave();
         }
     }
 }
