@@ -6,13 +6,13 @@
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              xmlns:visionmods="clr-namespace:VisionModules.Wpf"
              mc:Ignorable="d" 
-             Width="400">
+             Width="400" Loaded="UserControl_Loaded">
     <Grid>
         <StackPanel>
-            <ItemsControl  BorderThickness="0" Name="camera_preview_panel" Width="400" Height="200" ItemsSource="{Binding ElementName=root, Path=camera_previews}">
+            <ItemsControl  BorderThickness="0" Name="camera_preview_panel" Width="400" MaxHeight="200" ItemsSource="{Binding ElementName=root, Path=camera_previews}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel  Name="camera_preview_panel_itemsPanel"  IsItemsHost="True" Width="400" Height="200" ItemWidth="133" ItemHeight="99"></WrapPanel>
+                        <WrapPanel  Name="camera_preview_panel_itemsPanel"  IsItemsHost="True" Width="400"  MaxHeight="200" ItemWidth="133" ItemHeight="99"></WrapPanel>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>

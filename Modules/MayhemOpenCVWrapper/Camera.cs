@@ -72,7 +72,7 @@ namespace MayhemOpenCVWrapper
         private Thread grabFrm = null;
 
         // store LOOP_DURATION ms of footage in the past/future
-        public static readonly int LOOP_DURATION = 30000; 
+        public  const int LOOP_DURATION = 30000; 
 
         // calculate amount of storage needed for the given duration 
         private int LOOP_BUFFER_MAX_LENGTH = LOOP_DURATION / CameraSettings.DEFAULTS().updateRate_ms;

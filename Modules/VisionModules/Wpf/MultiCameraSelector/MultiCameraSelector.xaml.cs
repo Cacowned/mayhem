@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ *  MultiCameraSelector.xaml.cs
+ * 
+ *  Code-Behind for the multi-camera selector. 
+ *  
+ *  (c) 2011, Microsoft Applied Sciences Group
+ * 
+ *  Author: Sven Kratz
+ * 
+ */ 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +37,6 @@ namespace VisionModules.Wpf
     public partial class MultiCameraSelector : UserControl
     {
         public Camera selected_camera = null;
-
         private CameraDriver i = null; //CameraDriver.Instance;
         protected List<Camera> cams = new List<Camera>();
 
@@ -72,13 +81,9 @@ namespace VisionModules.Wpf
 
             if (i.DeviceCount > 0)
             {
-                // start the camera 0 if it isn't already running
-
-
                 // attach canvases with camera images to camera_preview_panel
                 foreach (Camera c in i.cameras_available)
                 {
-
                     cams.Add(c);
 
                     if (!c.running)
@@ -98,13 +103,10 @@ namespace VisionModules.Wpf
                     preview_width = width;
                     preview_height = height;
 
-
                     // the camera previews are drawn onto an ImageBrush, which is shown in the 
                     // background of the DataTemplate
 
                     camera_previews.Add(new ImageBrush());
-
-
                 }
 
                 camera_preview_panel.ItemsSource = camera_previews;
@@ -120,7 +122,6 @@ namespace VisionModules.Wpf
         {
             //cam.OnImageUpdated -= i_OnImageUpdated;
             //cam.TryStopFrameGrabbing();
-
             foreach (Camera c in cams)
             {
                 c.OnImageUpdated -= i_OnImageUpdated;
@@ -135,7 +136,6 @@ namespace VisionModules.Wpf
         ///
         public void i_OnImageUpdated(object sender, EventArgs e)
         {
-
             Dispatcher.Invoke(new ImageUpdateHandler(SetCameraImageSource), sender);
             //SetCameraImageSource();
         }
@@ -148,9 +148,7 @@ namespace VisionModules.Wpf
             Logger.WriteLine("New Image on Camera " + cam.index + " : " + cam.Info);
 
             Bitmap bm = cam.ImageAsBitmap();
-
             Bitmap shrink = ImageProcessing.ScaleWithFixedSize(bm, preview_width, preview_height);
-
 
             // convert bitmap to an hBitmap pointer and apply it as imagebrush imagesource
             IntPtr hBmp = shrink.GetHbitmap();
@@ -158,7 +156,6 @@ namespace VisionModules.Wpf
             s.Freeze();
 
             camera_previews[cam.index].ImageSource = s;
-
 
             // dispose of all the unneeded data
             VisionModulesWPFCommon.DeleteObject(hBmp);
@@ -175,7 +172,6 @@ namespace VisionModules.Wpf
             {
                 // Logger.WriteLine("NULL!");
             }
-
         }
 
         /// <summary>
@@ -276,5 +272,10 @@ namespace VisionModules.Wpf
         }
 
         #endregion
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
