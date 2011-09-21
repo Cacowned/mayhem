@@ -73,8 +73,6 @@ namespace VisionModules.Reactions
             }
         }
 
-
-
         public void SaveVideo()
         {
             Logger.WriteLine("SaveImage");
@@ -126,11 +124,6 @@ namespace VisionModules.Reactions
                 }
                 else
                 {
-                    /*
-                  
-                    Timer t = new Timer(capture_offset_time);
-                    t.Elapsed+=new ElapsedEventHandler((object sender, ElapsedEventArgs e) => { SaveVideo();});
-                    t.Enabled = true;*/
                     Logger.WriteLine("Recording Video with offset: " + capture_offset_time + "s");
                     Timer t = new Timer(new TimerCallback((object state) => { SaveVideo(); }), this, (int)(capture_offset_time * 1000), Timeout.Infinite);
 
