@@ -33,6 +33,9 @@ namespace MayhemOpenCVWrapper.LowLevel
 
         private int frameCount = 0;
 
+        private int[] contourPoints = new int[1200];
+        private List<Point> points = new List<Point>();
+
         public MotionDetectorComponent(int width, int height)
         {
             m = new OpenCVDLL.MotionDetector(width, height);
@@ -44,31 +47,35 @@ namespace MayhemOpenCVWrapper.LowLevel
 
             int numPoints = 0;
 
-            int[] contourPoints = new int[1200];
-
-            lock (camera.thread_locker)
+            for (int i = 0; i < contourPoints.Length; i++)
             {
-                unsafe
-                {
-                    fixed (byte* ptr = camera.imageBuffer)
-                    {
-                        fixed (int* buf = contourPoints)
-                        {
-                            m.ProcessFrame(ptr, buf, &numPoints);
+                contourPoints[i] = 0; 
+            }
 
-                            Marshal.Copy((IntPtr)buf, contourPoints, 0, numPoints);
+                lock (camera.thread_locker)
+                {
+                    unsafe
+                    {
+                        fixed (byte* ptr = camera.imageBuffer)
+                        {
+                            fixed (int* buf = contourPoints)
+                            {
+                                m.ProcessFrame(ptr, buf, &numPoints);
+
+                                Marshal.Copy((IntPtr)buf, contourPoints, 0, numPoints);
+                            }
                         }
                     }
                 }
-            }
 
             Logger.WriteLineIf(VERBOSE_DEBUG, "Got " + numPoints + " contourpoints");
 
             if (numPoints == 0) return;
 
             int cpIdx = 0;
-
-            List<Point> points = new List<Point>();
+          
+            points.Clear();
+            
 
             for (cpIdx = 0; cpIdx < numPoints; )
             {
@@ -128,7 +135,6 @@ namespace MayhemOpenCVWrapper.LowLevel
                 }
             }
             frameCount++;
-
         }
 
         /*

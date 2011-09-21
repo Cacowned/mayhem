@@ -85,7 +85,7 @@ namespace VisionModules.Wpf
                     {
                         c.OnImageUpdated += i_OnImageUpdated;
                         c.StartFrameGrabbing();
-                        Logger.WriteLine("using " + c.info.ToString());
+                        Logger.WriteLine("using " + c.Info.ToString());
                         Logger.WriteLine("Camera IDX " + c.index);
                     }
 
@@ -145,7 +145,7 @@ namespace VisionModules.Wpf
         ///</summary>       
         protected virtual void SetCameraImageSource(Camera cam)
         {
-            Logger.WriteLine("New Image on Camera " + cam.index + " : " + cam.info);
+            Logger.WriteLine("New Image on Camera " + cam.index + " : " + cam.Info);
 
             Bitmap bm = cam.ImageAsBitmap();
 

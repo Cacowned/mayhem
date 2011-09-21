@@ -92,11 +92,19 @@ namespace MayhemOpenCVWrapper
                 frames++;
             }
             aviManager.Close();
+            
+
+            foreach (BitmapTimestamp img in video_frames)
+            {
+                img.Dispose(); 
+            }
+
             Logger.WriteLine("Created AVI with " + frames + " frames.");
             if (this.OnVideoSaved != null)
             {
                 OnVideoSaved(true);
             }
+
         }     
     }
 }

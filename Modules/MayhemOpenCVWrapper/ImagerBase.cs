@@ -18,8 +18,8 @@ namespace MayhemOpenCVWrapper
 {
    
     public abstract class ImagerBase
-    {
-          public CameraInfo info;
+    {  
+          abstract public CameraInfo Info { get;  }
           public bool running; 
           public delegate void ImageUpdateHandler(object sender, EventArgs e);
           public abstract event ImageUpdateHandler OnImageUpdated;

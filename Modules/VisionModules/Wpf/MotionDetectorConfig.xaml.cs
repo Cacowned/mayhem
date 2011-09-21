@@ -77,7 +77,7 @@ namespace VisionModules.Wpf
             Thread.Sleep(250); 
             if (i.DeviceCount > 0)
             {
-                int camera_index = (cam != null && cam.info.deviceId < i.DeviceCount) ? cam.info.deviceId : 0; 
+                int camera_index = (cam != null && cam.Info.deviceId < i.DeviceCount) ? cam.Info.deviceId : 0; 
 
                 // start the camera 0 if it isn't already running
                 cam = i.cameras_available[camera_index];
@@ -90,7 +90,7 @@ namespace VisionModules.Wpf
                     cam.StartFrameGrabbing();                 
                 }
                 
-                Logger.WriteLine("using " + cam.info.ToString());
+                Logger.WriteLine("using " + cam.Info.ToString());
 
                 // alow saving in this state
                 this.CanSave = true;

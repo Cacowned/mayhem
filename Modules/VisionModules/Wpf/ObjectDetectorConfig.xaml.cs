@@ -108,7 +108,7 @@ namespace VisionModules.Wpf
                     cam.OnImageUpdated += i_OnImageUpdated;
                     cam.StartFrameGrabbing();
                 }
-                Logger.WriteLine("using " + cam.info.ToString());
+                Logger.WriteLine("using " + cam.Info.ToString());
             }
             else
             {

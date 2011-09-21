@@ -42,7 +42,18 @@ namespace MayhemOpenCVWrapper
             get { return index_;}
         }
 
-        public new CameraInfo info;
+        private CameraInfo info;
+
+        public override CameraInfo Info
+        {
+            get
+            {
+                //throw new NotImplementedException();
+                return info; 
+            }
+           
+        }
+
         public CameraSettings settings;
 
         public bool is_initialized = false;

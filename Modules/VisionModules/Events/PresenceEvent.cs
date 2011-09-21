@@ -118,7 +118,7 @@ namespace VisionModules.Events
             if (cam != null)
             {
                 cam = config.camera_selected;
-                selected_device_idx = cam.info.deviceId;
+                selected_device_idx = cam.Info.deviceId;
                 selected_trigger_mode = config.selected_triggerMode;
             }
             else
