@@ -27,7 +27,7 @@
             <TextBlock Margin="5 0 5 0" TextWrapping="Wrap"  Height="47" Width="390">Click drop down list below to select a camera or click one of the preview images above.</TextBlock>
             <ComboBox Name="deviceList" SelectionChanged="deviceList_SelectionChanged" />
             <Label Name="lbl_slider_title">Select the time offset in seconds of the image to be taken:</Label>
-            <StackPanel Name="slider_panel" Orientation="Horizontal">
+            <StackPanel Name="slider_panel" Orientation="Vertical">
                 <Slider Name="slider_capture_offset" Height="23"  Width="220" Value="{Binding ElementName=root, Path=slider_value}" ValueChanged="slider_capture_offset_ValueChanged" />
             </StackPanel>
             <Label Name="lbl_img_save">Click the button below to choose location of saved images:</Label>
