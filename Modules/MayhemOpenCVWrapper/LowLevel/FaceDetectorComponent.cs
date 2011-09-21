@@ -39,6 +39,11 @@ namespace MayhemOpenCVWrapper.LowLevel
             fd = new FaceDetector(320, 240);
         }
 
+        ~FaceDetectorComponent()
+        {
+            Logger.WriteLine("dtor");
+            fd.Dispose();
+        }
        
 
         /* <summary>

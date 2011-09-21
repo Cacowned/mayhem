@@ -41,6 +41,12 @@ namespace MayhemOpenCVWrapper.LowLevel
             m = new OpenCVDLL.MotionDetector(width, height);
         }
 
+        ~MotionDetectorComponent()
+        {
+            Logger.WriteLine("dtor");
+            m.Dispose();
+        }
+
         public override void update_frame(object sender, EventArgs e)
         {
             Camera camera = sender as Camera;
@@ -62,7 +68,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                         {
                             m.ProcessFrame(ptr, buf, &numPoints);
 
-                            Marshal.Copy((IntPtr)buf, contourPoints, 0, numPoints);
+                            //Marshal.Copy((IntPtr)buf, contourPoints, 0, numPoints);
                         }
                     }
                 }
@@ -82,7 +88,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 Point p1 = new Point(contourPoints[cpIdx++], contourPoints[cpIdx++]);
                 Point p2 = new Point(contourPoints[cpIdx++], contourPoints[cpIdx++]);
                 Logger.WriteLineIf(VERBOSE_DEBUG, "Point 1: " + p1 + " Point 2: " + p2);
-
+                
                 points.Add(p1);
                 points.Add(p2);
             }
