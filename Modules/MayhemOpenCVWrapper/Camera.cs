@@ -281,21 +281,22 @@ namespace MayhemOpenCVWrapper
                 }
                 
                
-                // add an item to the queue buffer
-                BitmapTimestamp b = new BitmapTimestamp(ImageAsBitmap());
+               
 
                 
                 if (loop_buffer.Count < LOOP_BUFFER_MAX_LENGTH)
                 {
-                    loop_buffer.Enqueue(b);
+                   loop_buffer.Enqueue( new BitmapTimestamp(ImageAsBitmap()));
                 }
                 else
                 {
-                    BitmapTimestamp destroyMe = loop_buffer.Dequeue();
-                    destroyMe.Dispose();
-                    loop_buffer.Enqueue(b);
+                   BitmapTimestamp destroyMe = loop_buffer.Dequeue();
+                   destroyMe.Dispose();
+                   loop_buffer.Enqueue( new BitmapTimestamp(ImageAsBitmap()));
                 }
-                
+
+
+              
 
                 if (running)
                 {

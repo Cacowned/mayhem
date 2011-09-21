@@ -52,21 +52,21 @@ namespace MayhemOpenCVWrapper.LowLevel
                 contourPoints[i] = 0; 
             }
 
-                lock (camera.thread_locker)
+            lock (camera.thread_locker)
+            {
+                unsafe
                 {
-                    unsafe
+                    fixed (byte* ptr = camera.imageBuffer)
                     {
-                        fixed (byte* ptr = camera.imageBuffer)
+                        fixed (int* buf = contourPoints)
                         {
-                            fixed (int* buf = contourPoints)
-                            {
-                                m.ProcessFrame(ptr, buf, &numPoints);
+                            m.ProcessFrame(ptr, buf, &numPoints);
 
-                                Marshal.Copy((IntPtr)buf, contourPoints, 0, numPoints);
-                            }
+                            Marshal.Copy((IntPtr)buf, contourPoints, 0, numPoints);
                         }
                     }
                 }
+            }
 
             Logger.WriteLineIf(VERBOSE_DEBUG, "Got " + numPoints + " contourpoints");
 
