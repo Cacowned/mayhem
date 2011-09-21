@@ -35,12 +35,10 @@ namespace VisionModules.Wpf
         public static Byte[] BitmapToArray(Bitmap b)
         {
             BinaryFormatter bf = new BinaryFormatter();
-            //BinaryWriter br = new BinaryWriter();
             MemoryStream ms = new MemoryStream();
             bf.Serialize(ms, b);
             Byte[] bytes =  ms.ToArray();
             return bytes;
-
         }
 
         /// <summary>
@@ -54,7 +52,6 @@ namespace VisionModules.Wpf
             MemoryStream ms = new MemoryStream(bytes);
             // binary formatter should not be required
             Bitmap b = (Bitmap) bf.Deserialize(ms); 
-
             return b;
         }
 
