@@ -13,6 +13,7 @@ using System.ServiceModel.Web;
 using System.IO;
 using NetFwTypeLib;
 using System.Windows;
+using System.Reflection;
 
 namespace PhoneModules
 {
@@ -201,9 +202,15 @@ namespace PhoneModules
 
         void OpenServerHelper()
         {
-            MessageBox.Show("Mayhem will automatically configure your network settings. Say yes.", "Mayhem Phone Modules");
-            Process p = Process.Start(new ProcessStartInfo("Modules\\PhoneServerHelper.exe"));
-            p.WaitForExit();
+            FileInfo fi = new FileInfo(Assembly.GetCallingAssembly().Location);
+            string pathOfHelper = Path.Combine(fi.DirectoryName, "PhoneServerHelper.exe");
+            if (File.Exists(pathOfHelper))
+            {
+                MessageBox.Show("Mayhem will automatically configure your network settings. Say yes.", "Mayhem Phone Modules");
+
+                Process p = Process.Start(new ProcessStartInfo(pathOfHelper));
+                p.WaitForExit();
+            }
         }
 
         void service_EventCalled(string eventText)
