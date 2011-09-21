@@ -30,12 +30,14 @@ namespace VisionModules.Wpf
 
         private CheckBox compress;
 
+        private const int video_duration_s = Camera.LOOP_DURATION / 1000; 
+
         private  Dictionary<string, VIDEO_RECORDING_MODE> checkbox_items =
             new Dictionary<string, VIDEO_RECORDING_MODE>()
             {
-                {"Default", VIDEO_RECORDING_MODE.MID_EVENT},
-                {"Pre-Event", VIDEO_RECORDING_MODE.PRE_EVENT},
-                {"Post-Event", VIDEO_RECORDING_MODE.POST_EVENT}
+                {video_duration_s/2+"s before until " + video_duration_s/2 + "s after the event (default)", VIDEO_RECORDING_MODE.MID_EVENT},
+                {video_duration_s+"s before the event until the event occurred", VIDEO_RECORDING_MODE.PRE_EVENT},
+                {"instant of event until " +video_duration_s+"s after the event", VIDEO_RECORDING_MODE.POST_EVENT}
             };
         private ComboBox cbx_time_offset;
 
@@ -78,12 +80,12 @@ namespace VisionModules.Wpf
 
             slider_panel.Children.Remove(slider_capture_offset);
 
-            int max_duration = Camera.LOOP_DURATION / 1000; 
+            
 
             cbx_time_offset.ItemsSource = checkbox_items;
             cbx_time_offset.SelectedValuePath = "Value";
             cbx_time_offset.DisplayMemberPath = "Key";
-            cbx_time_offset.Width = 120;
+            cbx_time_offset.Width = 300;
             cbx_time_offset.SelectedIndex = 0;
             slider_panel.Children.Add(cbx_time_offset);
             
@@ -94,7 +96,7 @@ namespace VisionModules.Wpf
             slider_capture_offset.SelectionStart = 0;
             slider_capture_offset.SelectionEnd = max_duration;*/
 
-            lbl_slider_title.Content = "Select the time offset (max) " + max_duration + "s in the future for the video to be recorded.";
+            lbl_slider_title.Content = "Select the time frame of the "+video_duration_s+"s video recording:";
             lbl_img_save.Content = "Click the button below to choose the location of saved videos:";
             img_save_button.Content = "Video Save Location";
             
