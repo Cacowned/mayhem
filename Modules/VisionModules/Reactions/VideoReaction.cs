@@ -194,7 +194,7 @@ namespace VisionModules.Reactions
                 cam = null; 
             }
 
-            capture_offset_time = config.slider_value;
+            capture_offset_time = config.temporal_offset;
 
             if (wasEnabled)
                 this.Enable();

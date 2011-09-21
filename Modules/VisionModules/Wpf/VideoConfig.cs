@@ -20,7 +20,34 @@ namespace VisionModules.Wpf
     public class VideoConfig : PictureConfig
     {
 
-        private CheckBox compress; 
+       
+        private enum VIDEO_RECORDING_MODE
+        {
+            PRE_EVENT = 0,                                        // record 30s prior to the event
+            POST_EVENT = Camera.LOOP_DURATION / 1000,             // record 30s after event
+            MID_EVENT = (Camera.LOOP_DURATION / 1000) / 2         // record 15s before and 15s after the event
+        }
+
+        private CheckBox compress;
+
+        private  Dictionary<string, VIDEO_RECORDING_MODE> checkbox_items =
+            new Dictionary<string, VIDEO_RECORDING_MODE>()
+            {
+                {"Default", VIDEO_RECORDING_MODE.MID_EVENT},
+                {"Pre-Event", VIDEO_RECORDING_MODE.PRE_EVENT},
+                {"Post-Event", VIDEO_RECORDING_MODE.POST_EVENT}
+            };
+        private ComboBox cbx_time_offset;
+
+
+        public int temporal_offset
+        {
+            get
+            {
+                return (int) cbx_time_offset.SelectedValue;
+            }
+        }
+
         public bool compress_video
         {
             get 
@@ -47,24 +74,35 @@ namespace VisionModules.Wpf
         /// </summary>
         public new void Init()
         {
+            cbx_time_offset = new ComboBox();
+
+            slider_panel.Children.Remove(slider_capture_offset);
+
             int max_duration = Camera.LOOP_DURATION / 1000; 
+
+            cbx_time_offset.ItemsSource = checkbox_items;
+            cbx_time_offset.SelectedValuePath = "Value";
+            cbx_time_offset.DisplayMemberPath = "Key";
+            cbx_time_offset.Width = 120;
+            cbx_time_offset.SelectedIndex = 0;
+            slider_panel.Children.Add(cbx_time_offset);
+            
+            /**** old code using the slider (may be revived at some point) 
             slider_capture_offset.Minimum = 0;
             slider_capture_offset.Maximum = max_duration;
             // changes to the duration selection
             slider_capture_offset.SelectionStart = 0;
-            slider_capture_offset.SelectionEnd = max_duration;
+            slider_capture_offset.SelectionEnd = max_duration;*/
 
             lbl_slider_title.Content = "Select the time offset (max) " + max_duration + "s in the future for the video to be recorded.";
             lbl_img_save.Content = "Click the button below to choose the location of saved videos:";
             img_save_button.Content = "Video Save Location";
-
+            
             compress = new CheckBox();
             compress.Content = "Compress Video";
+            compress.Margin = new System.Windows.Thickness(5, 0, 0, 0);
 
             slider_panel.Children.Add(compress);
-
-            
-
         }
 
         public override string Title
