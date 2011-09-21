@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
@@ -34,6 +35,12 @@ namespace MayhemOpenCVWrapper.LowLevel
         public PresenceDetectorComponent(int width, int height)
         {
             pd = new OpenCVDLL.PresenceDetector(width, height);
+        }
+
+        ~PresenceDetectorComponent()
+        {
+            Logger.WriteLine("dtor");
+            pd.Dispose();
         }
 
         public override void update_frame(object sender, EventArgs e)
