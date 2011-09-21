@@ -6,7 +6,7 @@ using System.Windows.Controls;
 
 namespace PhidgetModules.Wpf.UserControls
 {
-    public abstract class PhidgetConfigControl : UserControl
+    public class PhidgetConfigControl : UserControl
     {
         public virtual string Title
         {

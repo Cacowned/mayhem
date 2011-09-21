@@ -35,9 +35,7 @@ namespace PhidgetModules.Wpf.UserControls
             this.IfKit = ifKit;
             this.Convertor = conversion;
 
-
             this.Sensor = control;
-            sensorControls.Children.Add(control);
 
             InitializeComponent();
         }
@@ -47,6 +45,8 @@ namespace PhidgetModules.Wpf.UserControls
             SensorDataBox.Index = Index;
             SensorDataBox.IfKit = IfKit;
             SensorDataBox.convertor = Convertor;
+
+            sensorControl.Content = Sensor;
 
             IfKit.Attach += ifKit_Attach;
 

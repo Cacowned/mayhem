@@ -7,9 +7,8 @@
     
     <StackPanel>
         <common:SensorData x:Name="SensorDataBox" />
-        
-        <StackPanel Name="sensorControls">
-        </StackPanel>
+
+        <ContentControl Name="sensorControl" Width="400" />
         
         <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1" Visibility="Visible">Plug in a phidget interface kit.</TextBlock>
     </StackPanel>
