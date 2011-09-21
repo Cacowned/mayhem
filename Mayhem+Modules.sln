@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayhem", "Mayhem\Mayhem.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemWpf", "MayhemWpf\MayhemWpf.csproj", "{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneServerHelper", "Modules\PhoneModules\PhoneServerHelper\PhoneServerHelper.csproj", "{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -220,6 +222,18 @@ Global
 		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Release|Win32.ActiveCfg = Release|Any CPU
 		{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}.Release|x86.ActiveCfg = Release|Any CPU
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Debug|Win32.ActiveCfg = Debug|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Debug|x86.ActiveCfg = Debug|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Debug|x86.Build.0 = Debug|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Release|Any CPU.ActiveCfg = Release|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Release|Mixed Platforms.Build.0 = Release|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Release|Win32.ActiveCfg = Release|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Release|x86.ActiveCfg = Release|x86
+		{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
