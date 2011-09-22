@@ -70,6 +70,7 @@ namespace WindowModules.Wpf
             timer = new Timer(500);
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Start();
+            CheckCanSave();
         }
 
         public static int GetProcessThreadFromWindow(IntPtr hwnd)
