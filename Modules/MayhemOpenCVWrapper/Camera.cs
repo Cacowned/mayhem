@@ -34,7 +34,6 @@ namespace MayhemOpenCVWrapper
     public class Camera : ImagerBase, IBufferingImager
     {
         private static int instances = 0; 
-
         private int index_ = instances++;       // should be incremented on instantiation
 
         public int index
@@ -50,12 +49,10 @@ namespace MayhemOpenCVWrapper
             {
                 //throw new NotImplementedException();
                 return info; 
-            }
-           
+            }    
         }
 
         public CameraSettings settings;
-
         public bool is_initialized = false;
         
 
@@ -66,10 +63,8 @@ namespace MayhemOpenCVWrapper
 
         public override event ImageUpdateHandler OnImageUpdated;
 
-        // (ms) : update rate with which the camera thread requests new images
+        // update rate (ms) with which the camera thread requests new images
         public int frameInterval;
-
-        private Thread grabFrm = null;
 
         // store LOOP_DURATION ms of footage in the past/future
         public  const int LOOP_DURATION = 30000; 
@@ -129,7 +124,6 @@ namespace MayhemOpenCVWrapper
             try
             {
                 Bitmap backBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
                 System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, 320, 240);
 
                 // get at the bitmap data in a nicer way
@@ -138,11 +132,9 @@ namespace MayhemOpenCVWrapper
                     backBuffer.PixelFormat);
 
                 int bufSize = this.bufSize;
-
                 IntPtr ImgPtr = bmpData.Scan0;
 
                 // grab the image
-
                 lock (thread_locker)
                 {
                     // Copy the RGB values back to the bitmap
@@ -165,7 +157,6 @@ namespace MayhemOpenCVWrapper
         private void InitializeCaptureDevice(CameraInfo info, CameraSettings settings)
         {
             is_initialized = false;
-
             try
             {
                 OpenCVDLL.OpenCVBindings.InitCapture(info.deviceId, settings.resX, settings.resY);
@@ -180,8 +171,6 @@ namespace MayhemOpenCVWrapper
             {
                 Logger.WriteLine("exception during camera init\n" + e.ToString());
             }
-
-
         }
 
         public override void StartFrameGrabbing()
@@ -200,7 +189,7 @@ namespace MayhemOpenCVWrapper
                     //grabFrm.Start();
                     // TODO: run this code in the ThreadPool
                     grabFramesReset = new ManualResetEvent(false); 
-                    ThreadPool.QueueUserWorkItem((object o) => { GrabFrames(); });
+                    ThreadPool.QueueUserWorkItem((object o) => { GrabFrames_Thread(); });
                     Thread.Sleep(200);
                 }
                 catch (Exception e)
@@ -210,7 +199,6 @@ namespace MayhemOpenCVWrapper
                 }
             }
         }
-
 
         // TODO: override the event handler and just add this to the process of 
         // removing handlers
@@ -262,7 +250,10 @@ namespace MayhemOpenCVWrapper
             }
         }
 
-        private void GrabFrames()
+        /// <summary>
+        /// Thread that updates the frame buffer periodically from videoInputLib via OpenCVDLL 
+        /// </summary>
+        private void GrabFrames_Thread()
         {
             try
             {
@@ -276,12 +267,12 @@ namespace MayhemOpenCVWrapper
                     }
                 }
 
-                // purge the video buffer
+                // purge the video buffer when starting frame grabbing
+                // we don't need the previously recorded and potentially very old bitmaps in the buffer
                 lock (this)
                 {
                     loop_buffer.Clear();
                 }
-
                 running = true;
                 while (running)
                 {
@@ -290,7 +281,6 @@ namespace MayhemOpenCVWrapper
                     {
                         unsafe
                         {
-
                             fixed (byte* ptr = imageBuffer)
                             {
                                 try
@@ -335,40 +325,26 @@ namespace MayhemOpenCVWrapper
                         // Logger.Write("Camera: Sending new Frame to listeners!");
                         OnImageUpdated(this, new EventArgs());
                     }
-
-
                 }
             }
             catch (Exception ex)
             {
-                Logger.WriteLine("GrabFrame Thread Exception: " + ex);
+                Logger.WriteLine("GrabFrame Thread Exception:\n" + ex);
             }
             finally
             {
-                Logger.WriteLine("GrabFrame Thread terminated");
+                Logger.WriteLine("GrabFrame Thread terminated normally");
                 running = false;
                 // signal termination of this thread 
                 grabFramesReset.Set();
             }
-
         }
-
-        public void Release()
-        {
-            running = false;
-            OpenCVDLL.OpenCVBindings.StopCamera(this.info.deviceId);
-            is_initialized = false;
-        }
-
 
         public override string ToString()
         {
             return this.info.FriendlyName();
         }
-
-
-        
-
+      
         /// <summary>
         /// IBufferingImager Method -- return index image from end of queue 
         /// </summary>
@@ -404,11 +380,5 @@ namespace MayhemOpenCVWrapper
                 return DateTime.MinValue;
             }
         }
-
-
-
-
     }
-
-    // TODO: Add a dummy camera (in case no real device is attached!) 
 }
