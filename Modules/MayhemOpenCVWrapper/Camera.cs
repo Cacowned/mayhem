@@ -197,7 +197,6 @@ namespace MayhemOpenCVWrapper
                 {
                     Logger.WriteLine("Starting Frame Grabber");
                     grabFrm.Start();
-                    this.running = true;
                     Thread.Sleep(200);
                 }
                 catch (Exception e)
@@ -240,13 +239,16 @@ namespace MayhemOpenCVWrapper
 
         private void StopGrabbing()
         {
-            is_initialized = false;
-            running = false;
-            // Wait for frame grab thread to end or 500ms timeout to elapse
-            if (grabFrm.IsAlive)
-                grabFrm.Join(500);
-            OpenCVDLL.OpenCVBindings.StopCamera(this.info.deviceId);
-            Thread.Sleep(200);
+            if (is_initialized)
+            {
+                is_initialized = false;
+                running = false;
+                // Wait for frame grab thread to end or 500ms timeout to elapse
+                if (grabFrm.IsAlive)
+                    grabFrm.Join(500);
+                OpenCVDLL.OpenCVBindings.StopCamera(this.info.deviceId);
+                Thread.Sleep(200);
+            }
 
         }
 
@@ -290,9 +292,6 @@ namespace MayhemOpenCVWrapper
                     }
                 }
 
-
-
-
                 lock (this)
                 {
                     if (loop_buffer.Count < LOOP_BUFFER_MAX_LENGTH)
@@ -306,10 +305,7 @@ namespace MayhemOpenCVWrapper
                         loop_buffer.Enqueue(new BitmapTimestamp(ImageAsBitmap()));
                     }
                 }
-
-
-              
-
+            
                 if (running)
                 {
                     Thread.Sleep(frameInterval);
