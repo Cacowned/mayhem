@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
 using MayhemCore;
+using System.Collections.ObjectModel;
 
 namespace MayhemOpenCVWrapper
 {
@@ -24,18 +25,20 @@ namespace MayhemOpenCVWrapper
     {
         public static CameraDriver Instance = new CameraDriver();
     
-        public bool running = false ;
         public int cWidth;
         public int cHeight;
         private List<CameraInfo> devices_available = new List<CameraInfo>();
-        public List<Camera> cameras_available = new List<Camera>(); 
-        public CameraInfo selected_device = null;
+        private List<Camera> cameras_available_ = new List<Camera>(); 
+
+        public  ReadOnlyCollection<Camera> cameras_available
+        {
+            get { return cameras_available_.AsReadOnly(); }
+        }
 
         public int DeviceCount
         {
-            get { return cameras_available.Count; }
+            get { return cameras_available_.Count; }
         }
-
       
         public CameraDriver()
         {
@@ -51,7 +54,7 @@ namespace MayhemOpenCVWrapper
                 foreach (CameraInfo c in devices_available)
                 {
                     Camera cam = new Camera(c, CameraSettings.DEFAULTS());
-                    cameras_available.Add(cam);
+                    cameras_available_.Add(cam);
                 }
 
                 Logger.WriteLine(devices_available.Count + " devices available");
@@ -62,15 +65,15 @@ namespace MayhemOpenCVWrapper
             }
         }
 
-        /**<summary>
-         * Returns a string array of description of all cameras found
-         * index in the array corresponds to the camera's device ID
-         * </summary>
-         * */
-        public List<CameraInfo> EnumerateDevices()
+        /// <summary>
+        ///  Returns cameraInfo objects of all cameras found
+        ///  index in the array corresponds to the camera's device ID
+        ///  Works by parsing a string returned by OpenCVDLL. 
+        ///  TODO: Return a managed object directly from C++/Clr, getting rid of the unsafe code
+        /// </summary>
+        private List<CameraInfo> EnumerateDevices()
         {
             List<CameraInfo> c = new List<CameraInfo>();
-
             string deviceNames = "";
 
             unsafe
@@ -79,14 +82,12 @@ namespace MayhemOpenCVWrapper
                 // deviceStrings Buffer will be written to            
                 sbyte[] deviceNameBuf =  new sbyte[1024];
                 
-
                 fixed (sbyte* deviceStrings = deviceNameBuf)
                 {
                     OpenCVDLL.OpenCVBindings.EnumerateDevices(deviceStrings, &deviceCount);
                     deviceNames = new String(deviceStrings);                 
                 }       
             }
-
             if (deviceNames != string.Empty)
             {
                 string[] device_strings = deviceNames.Split(';');
@@ -102,6 +103,5 @@ namespace MayhemOpenCVWrapper
             }
             return c;
         }
-
     }
 }
