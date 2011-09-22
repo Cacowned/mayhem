@@ -1,4 +1,15 @@
-﻿using System;
+﻿/*
+ * BitmapTimestamp.cs
+ * 
+ * Container class that attaches a Timestamp to standard Bitmaps, 
+ * to have some additional metadata for Modules to use
+ * 
+ * (c) 2011, Microsoft Applied Sciences Group
+ * 
+ * Author: Sven Kratz
+ * 
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +22,6 @@ namespace MayhemOpenCVWrapper
     {
         public DateTime timeStamp = DateTime.Now;
         public Bitmap image;
-
-
 
         public BitmapTimestamp(Bitmap i)
         {

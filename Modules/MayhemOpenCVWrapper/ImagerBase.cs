@@ -1,7 +1,7 @@
 ﻿/*
  * ImagerBase.cs
  * 
- * Abstract base class for imaging devices, i.e. cameras of video capture cards. 
+ * Abstract base class for imaging devices, i.e. cameras or video capture cards. 
  * 
  * (c) 2011, Microsoft Applied Sciences Group
  * 
@@ -16,7 +16,6 @@ using System.Drawing;
 
 namespace MayhemOpenCVWrapper
 {
-   
     public abstract class ImagerBase
     {  
           abstract public CameraInfo Info { get;  }

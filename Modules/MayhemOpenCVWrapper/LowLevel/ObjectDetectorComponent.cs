@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ * ObjectDetectorComponent.cs
+ * 
+ * Low level object interfacing with the presence detector component. 
+ * 
+ * (c) 2011, Microsoft Applied Sciences Group
+ * 
+ * Author: Sven Kratz
+ * 
+ */ 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
