@@ -145,16 +145,17 @@ namespace VisionModules.Events
             Logger.WriteLine("Enable");
 
             // TODO: Improve this code
-            if (selected_device_idx < i.DeviceCount)
+            if (!IsConfiguring && selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
                 if (cam.running == false)
                     cam.StartFrameGrabbing();
-
+                // register the trigger's motion update handler
+                od.RegisterForImages(cam);
+                od.OnObjectDetected += objectDetectHandler;
+                od.OnObjectDetected -= objectDetectHandler;
             }
-            // register the trigger's motion update handler
-            od.RegisterForImages(cam);
-            od.OnObjectDetected += objectDetectHandler;
+           
         }
 
 
@@ -172,13 +173,16 @@ namespace VisionModules.Events
         {
             base.Disable();
             Logger.WriteLine("Disable");
-
-            // correct module disabling procedure
-            od.UnregisterForImages(cam);
+      
             od.OnObjectDetected -= objectDetectHandler;
-            cam.TryStopFrameGrabbing();
+            if (cam != null)
+                od.UnregisterForImages(cam);
 
-
+            if (cam != null && !IsConfiguring)
+            {
+                // correct module disabling procedure               
+                cam.TryStopFrameGrabbing();
+            }
         }
 
         protected new void SetConfigString()
