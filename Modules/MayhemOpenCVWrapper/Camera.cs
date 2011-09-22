@@ -21,9 +21,6 @@ using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {
-
-   
-
     /// <summary>
     /// This class packages the functions for individual camera devices
     /// Modules using vision will now have the ability to request image updates from
@@ -33,16 +30,16 @@ namespace MayhemOpenCVWrapper
     /// </summary>
     public class Camera : ImagerBase, IBufferingImager
     {
-        private static int instances = 0; 
+        #region Fields and Properties
+        private static int instances = 0;       // static counter of camera instances intialized
+        
         private int index_ = instances++;       // should be incremented on instantiation
-
         public int index
         {
             get { return index_;}
         }
 
         private CameraInfo info;
-
         public override CameraInfo Info
         {
             get
@@ -53,30 +50,38 @@ namespace MayhemOpenCVWrapper
         }
 
         public CameraSettings settings;
-        public bool is_initialized = false;
-        
-
+        public bool is_initialized = false;      
         public int bufSize;
         public byte[] imageBuffer;
-
         public object thread_locker = new object();
-
         public override event ImageUpdateHandler OnImageUpdated;
-
         // update rate (ms) with which the camera thread requests new images
         public int frameInterval;
-
         // store LOOP_DURATION ms of footage in the past/future
         public  const int LOOP_DURATION = 30000; 
-
         // calculate amount of storage needed for the given duration 
         private int LOOP_BUFFER_MAX_LENGTH = LOOP_DURATION / CameraSettings.DEFAULTS().updateRate_ms;
-
         // fifo buffer that stores last x images
         private Queue<BitmapTimestamp> loop_buffer = new Queue<BitmapTimestamp>();
+        // check for thread termination   
+        private ManualResetEvent grabFramesReset;
+        #endregion
 
-        // check for thread termination
-        private ManualResetEvent grabFramesReset; 
+        #region Contstructor / Destructor
+        public Camera(CameraInfo info, CameraSettings settings)
+        {
+            this.info = info;
+            this.settings = settings;
+        }
+
+        ~Camera()
+        {
+            Logger.WriteLine("dtor");
+            StopGrabbing();
+        }
+        #endregion
+
+        #region Bitmap Export
 
         /// <summary>
         /// Return copies all loop buffer items
@@ -102,23 +107,11 @@ namespace MayhemOpenCVWrapper
                 return items_out;
             }
         }
-        
-        public Camera(CameraInfo info, CameraSettings settings)
-        {
-            this.info = info;
-            this.settings = settings;
-        }
 
-         ~Camera()
-        {
-            Logger.WriteLine("dtor");
-            StopGrabbing();
-        }
-
-         /// <summary>
-         /// Returns latest image as a Bitmap
-         /// </summary>
-         /// <returns>Bitmap containing the image data</returns>
+        /// <summary>
+        /// Returns latest image as a Bitmap
+        /// </summary>
+        /// <returns>Bitmap containing the image data</returns>
         public override Bitmap ImageAsBitmap()
         {
             try
@@ -147,9 +140,11 @@ namespace MayhemOpenCVWrapper
             catch (ArgumentException ex)
             {
                 Logger.WriteLine("ArgumentException: " + ex);
-                return new Bitmap(320,240); 
+                return new Bitmap(320, 240);      
             }
         }
+
+        #endregion            
 
         /// <summary>
         /// Initializes the camera via the videoinput lib
@@ -173,6 +168,8 @@ namespace MayhemOpenCVWrapper
             }
         }
 
+        #region Frame Grabbing Start/Stop
+      
         public override void StartFrameGrabbing()
         {
             if (!is_initialized)
@@ -249,6 +246,7 @@ namespace MayhemOpenCVWrapper
                 Thread.Sleep(200);
             }
         }
+        #endregion
 
         /// <summary>
         /// Thread that updates the frame buffer periodically from videoInputLib via OpenCVDLL 
@@ -344,7 +342,8 @@ namespace MayhemOpenCVWrapper
         {
             return this.info.FriendlyName();
         }
-      
+
+        #region IBufferingImager Methods
         /// <summary>
         /// IBufferingImager Method -- return index image from end of queue 
         /// </summary>
@@ -381,4 +380,5 @@ namespace MayhemOpenCVWrapper
             }
         }
     }
+        #endregion
 }
