@@ -40,6 +40,14 @@ namespace PhidgetModules.Wpf.UserControls
             InitializeComponent();
         }
 
+        public override string Title
+        {
+            get
+            {
+                return Sensor.Title;
+            }
+        }
+
         public override void OnLoad()
         {
             SensorDataBox.Index = Index;

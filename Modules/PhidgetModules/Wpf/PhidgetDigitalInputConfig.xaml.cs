@@ -2,6 +2,8 @@
 using Phidgets;
 using System.Windows;
 using MayhemWpf.UserControls;
+using Phidgets.Events;
+using System.Windows.Threading;
 
 namespace PhidgetModules.Wpf
 {
@@ -30,21 +32,30 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
-            for (int i = 0; i < IfKit.inputs.Count; i++)
-            {
-                InputBox.Items.Add(i);
-            }
-
-            this.InputBox.SelectedIndex = Index;
+            IfKit.Attach += ifKit_Attach;
 
             GoesOnRadio.IsChecked = OnWhenOn;
             TurnsOffRadio.IsChecked = !OnWhenOn;
         }
 
+        private void ifKit_Attach(object sender, AttachEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                CanSave = true;
+
+                for (int i = 0; i < IfKit.inputs.Count; i++)
+                {
+                    InputBox.Items.Add(i);
+                }
+
+                this.InputBox.SelectedIndex = Index;
+            }));
+        }
+
         public override void OnSave()
         {
             Index = InputBox.SelectedIndex;
-
             OnWhenOn = (bool)GoesOnRadio.IsChecked;
         }
 

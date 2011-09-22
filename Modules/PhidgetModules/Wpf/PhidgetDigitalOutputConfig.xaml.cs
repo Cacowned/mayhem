@@ -3,6 +3,8 @@ using System.Windows.Controls;
 using PhidgetModules.Reaction;
 using Phidgets;
 using MayhemWpf.UserControls;
+using Phidgets.Events;
+using System.Windows.Threading;
 
 namespace PhidgetModules.Wpf
 {
@@ -29,10 +31,7 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
-            for (int i = 0; i < IfKit.outputs.Count; i++)
-            {
-                OutputBox.Items.Add(i);
-            }
+            IfKit.Attach += ifKit_Attach;
 
             this.OutputBox.SelectedIndex = Index;
 
@@ -47,6 +46,19 @@ namespace PhidgetModules.Wpf
                 case DigitalOutputType.Off: this.ControlBox.SelectedIndex = 2;
                     break;
             }
+        }
+
+        private void ifKit_Attach(object sender, AttachEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                CanSave = true;
+
+                for (int i = 0; i < IfKit.outputs.Count; i++)
+                {
+                    OutputBox.Items.Add(i);
+                }
+            }));
         }
 
         private void OutputBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
