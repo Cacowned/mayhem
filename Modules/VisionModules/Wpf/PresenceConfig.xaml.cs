@@ -68,7 +68,7 @@ namespace VisionModules.Wpf
            
 
             // evil hack to get the camera selector to actually show the selection!
-            System.Timers.Timer tt = new System.Timers.Timer(200);
+            System.Timers.Timer tt = new System.Timers.Timer(250);
             tt.AutoReset = false; 
             tt.Elapsed+= new System.Timers.ElapsedEventHandler((object o, System.Timers.ElapsedEventArgs e) => {
                 Logger.WriteLine("Timer Callback");
