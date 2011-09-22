@@ -2,6 +2,7 @@
 using MayhemWpf.UserControls;
 using Microsoft.Xna.Framework.Input;
 using XboxModules.Events;
+using System;
 
 namespace XboxModules.Wpf
 {
@@ -84,8 +85,8 @@ namespace XboxModules.Wpf
 
         private void UpdateButtonsDown()
         {
-            //Dispatcher.Invoke((Action)delegate
-            //{
+            Dispatcher.Invoke((Action)delegate
+            {
                 ButtonsDownText = ButtonsToSave.ButtonString();
                 CanSave = ButtonsToSave != 0;
 
@@ -94,7 +95,7 @@ namespace XboxModules.Wpf
                     textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
                 }
 
-            //});
+            });
         }
 
         public override void OnClosing()
