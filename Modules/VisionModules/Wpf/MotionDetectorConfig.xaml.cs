@@ -54,7 +54,6 @@ namespace VisionModules.Wpf
             cam = c; 
             InitializeComponent();
             Init(); 
-
         }
 
 
@@ -101,9 +100,6 @@ namespace VisionModules.Wpf
                 Logger.WriteLine("No camera available");
             }
 
-
-
-           // overlay.DisplayBoundingRect();
         }
 
         /**<summary>
@@ -120,33 +116,7 @@ namespace VisionModules.Wpf
          * </summary>
          */ 
         public virtual void SetCameraImageSource()
-        {
-            /*
-            //int stride = 320 * 3;
-            Bitmap BackBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, 320, 240);
-
-            // get at the bitmap data in a nicer way
-            System.Drawing.Imaging.BitmapData bmpData =
-                BackBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
-                BackBuffer.PixelFormat);
-
-            int bufSize = cam.bufSize;
-
-            IntPtr ImgPtr = bmpData.Scan0;
-
-            // grab the image
-
-
-            lock (cam.thread_locker)
-            {
-                // Copy the RGB values back to the bitmap
-                System.Runtime.InteropServices.Marshal.Copy(cam.imageBuffer, 0, ImgPtr, bufSize);
-            }
-            // Unlock the bits.
-            BackBuffer.UnlockBits(bmpData); */
-
+        {          
             Bitmap BackBuffer = cam.ImageAsBitmap();
 
             IntPtr hBmp;
@@ -163,21 +133,43 @@ namespace VisionModules.Wpf
 
         public override void OnClosing()
         {
-            if (cam != null)
+            Logger.WriteLine("OnClosing");
+            foreach (Camera c in i.cameras_available)
             {
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.TryStopFrameGrabbing();
-            }     
+                Thread.Sleep(200);
+            }
+            
             base.OnClosing();
-            Thread.Sleep(500);
+            
         }
-
-        
-     
-
+      
         public override void OnSave()
         {
             cam = DeviceList.SelectedItem as Camera;            
+        }
+
+        private void DeviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Logger.WriteLine("");
+            Camera selected_cam = DeviceList.SelectedItem as Camera;
+
+            if (selected_cam != cam)
+            {
+                Logger.WriteLine("Switching Cam to " + selected_cam.Info.FriendlyName());
+             
+                cam.OnImageUpdated -= i_OnImageUpdated;
+                if (cam.running)
+                    cam.TryStopFrameGrabbing();
+
+                // switch the camera display
+                cam = selected_cam;
+                cam.OnImageUpdated -= i_OnImageUpdated; 
+                cam.OnImageUpdated += i_OnImageUpdated;
+                if (!cam.running)
+                    cam.StartFrameGrabbing();
+            }
         }
 
        

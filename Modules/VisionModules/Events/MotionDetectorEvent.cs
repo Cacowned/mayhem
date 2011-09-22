@@ -152,16 +152,16 @@ namespace VisionModules.Events
             Logger.WriteLine("Enable");
 
             // TODO: Improve this code
-            if (selected_device_idx < i.DeviceCount)
+            if (!IsConfiguring && selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
-                Thread.Sleep(350);
-                cam.StartFrameGrabbing();
-            }
-            // register the trigger's motion update handler
-            m.RegisterForImages(cam);
-            m.OnMotionUpdate += motionUpdateHandler;
-
+                if (!cam.running)
+                    cam.StartFrameGrabbing();
+                // register the trigger's motion update handler
+                m.RegisterForImages(cam);
+                m.OnMotionUpdate -= motionUpdateHandler;
+                m.OnMotionUpdate += motionUpdateHandler;
+            }      
         }
 
         public override void Disable()
@@ -169,11 +169,15 @@ namespace VisionModules.Events
             base.Disable();
             Logger.WriteLine("Disable");
             // de-register the trigger's motion update handler
-            m.UnregisterForImages(cam);
             m.OnMotionUpdate -= motionUpdateHandler;
-            // try to shut down the camera
-            cam.TryStopFrameGrabbing();
-            Thread.Sleep(350);
+            if (cam != null )
+                m.UnregisterForImages(cam); 
+            if (cam != null && !IsConfiguring)
+            {            
+                // try to shut down the camera
+                cam.TryStopFrameGrabbing();
+            }
+            //Thread.Sleep(350);
         }
        
     }
