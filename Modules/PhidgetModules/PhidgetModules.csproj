@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2BAE1E42-8103-43DB-B9E6-5828B45FE746}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PhidgetModules</RootNamespace>
+    <AssemblyName>PhidgetModules</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Packages\PhidgetModules\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\MayhemRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Packages\PhidgetModules\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Phidget21.NET">
+      <HintPath>..\References\Phidget21.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events\DigitalInput.cs" />
+    <Compile Include="Events\Phidget1023Rfid.cs" />
+    <Compile Include="Events\Phidget1055IRReceiver.cs" />
+    <Compile Include="Events\Phidget1101IRDistance.cs" />
+    <Compile Include="Events\Phidget1103IRReflective.cs" />
+    <Compile Include="Events\Phidget1106Force.cs" />
+    <Compile Include="Events\Phidget1127Light.cs" />
+    <Compile Include="Events\Phidget1129Touch.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="InterfaceFactory.cs" />
+    <Compile Include="OnOffSensorEventBase.cs" />
+    <Compile Include="Wpf\UserControls\PhidgetConfigControl.cs" />
+    <Compile Include="RangeSensorEventBase.cs" />
+    <Compile Include="Reaction\DigitalOutput.cs" />
+    <Compile Include="Reaction\Phidget1055IRTransmit.cs" />
+    <Compile Include="Wpf\Phidget1055IRTransmitConfig.xaml.cs">
+      <DependentUpon>Phidget1055IRTransmitConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Reaction\Phidget1066AdvServo.cs" />
+    <Compile Include="Wpf\Phidget1023RFIDConfig.xaml.cs">
+      <DependentUpon>Phidget1023RFIDConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Phidget1055IRReceiverConfig.xaml.cs">
+      <DependentUpon>Phidget1055IRReceiverConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Phidget1066AdvServoConfig.xaml.cs">
+      <DependentUpon>Phidget1066AdvServoConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Config1103IRReflective.xaml.cs">
+      <DependentUpon>Config1103IRReflective.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Config1101IRDistance.xaml.cs">
+      <DependentUpon>Config1101IRDistance.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Config1106Force.xaml.cs">
+      <DependentUpon>Config1106Force.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Config1127Light.xaml.cs">
+      <DependentUpon>Config1127Light.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Config1129Touch.xaml.cs">
+      <DependentUpon>Config1129Touch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Phidget1133Sound.xaml.cs">
+      <DependentUpon>Phidget1133Sound.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Events\Phidget1133Sound.cs" />
+    <Compile Include="SensorEventBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueSensorEventBase.cs" />
+    <Compile Include="Wpf\PhidgetDigitalInputConfig.xaml.cs">
+      <DependentUpon>PhidgetDigitalInputConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\PhidgetDigitalOutputConfig.xaml.cs">
+      <DependentUpon>PhidgetDigitalOutputConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\UserControls\SensorConfig.xaml.cs">
+      <DependentUpon>SensorConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\UserControls\SensorData.xaml.cs">
+      <DependentUpon>SensorData.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Wpf\Phidget1055IRTransmitConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Phidget1023RFIDConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\Phidget1055IRReceiverConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Phidget1066AdvServoConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Config1103IRReflective.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Config1101IRDistance.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Config1106Force.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Config1127Light.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Config1129Touch.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\Phidget1133Sound.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\PhidgetDigitalInputConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\PhidgetDigitalOutputConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\UserControls\SensorConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\UserControls\SensorData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
+      <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
+      <Name>MayhemCore</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
+      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
+      <Name>MayhemWpf</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="phidget21.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
