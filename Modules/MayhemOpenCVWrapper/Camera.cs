@@ -81,31 +81,39 @@ namespace MayhemOpenCVWrapper
         private Queue<BitmapTimestamp> loop_buffer = new Queue<BitmapTimestamp>();
 
         /// <summary>
-        /// Return all loop buffer items
+        /// Return copies all loop buffer items
         /// </summary>
         public List<BitmapTimestamp> buffer_items
         {
             get
             {
-                List<BitmapTimestamp> items_out = new List<BitmapTimestamp>(); 
-               
+                List<BitmapTimestamp> items_out = new List<BitmapTimestamp>();
+                List<BitmapTimestamp> buffer_items;
+
+                lock (this)
+                {
+                    buffer_items = loop_buffer.ToList<BitmapTimestamp>();
+                }
+
                 // return ;
-                foreach (BitmapTimestamp b in loop_buffer.ToList<BitmapTimestamp>())
+                foreach (BitmapTimestamp b in buffer_items)
                 {
                     items_out.Add(b.Clone() as BitmapTimestamp);
                 }
-
                 return items_out;
             }
         }
         
-
-        
-
         public Camera(CameraInfo info, CameraSettings settings)
         {
             this.info = info;
             this.settings = settings;
+        }
+
+         ~Camera()
+        {
+            Logger.WriteLine("dtor");
+            StopGrabbing();
         }
 
      /// <summary>
@@ -246,10 +254,12 @@ namespace MayhemOpenCVWrapper
         {
             Logger.WriteLine(index + " GrabFrames");
 
-
-            foreach (BitmapTimestamp b in loop_buffer)
+            lock (this)
             {
-                b.Dispose();
+                foreach (BitmapTimestamp b in loop_buffer)
+                {
+                    b.Dispose();
+                }
             }
 
             // purge the video buffer
@@ -279,20 +289,22 @@ namespace MayhemOpenCVWrapper
                         }
                     }
                 }
-                
-               
-               
 
-                
-                if (loop_buffer.Count < LOOP_BUFFER_MAX_LENGTH)
+
+
+
+                lock (this)
                 {
-                   loop_buffer.Enqueue( new BitmapTimestamp(ImageAsBitmap()));
-                }
-                else
-                {
-                   BitmapTimestamp destroyMe = loop_buffer.Dequeue();
-                   destroyMe.Dispose();
-                   loop_buffer.Enqueue( new BitmapTimestamp(ImageAsBitmap()));
+                    if (loop_buffer.Count < LOOP_BUFFER_MAX_LENGTH)
+                    {
+                        loop_buffer.Enqueue(new BitmapTimestamp(ImageAsBitmap()));
+                    }
+                    else
+                    {
+                        BitmapTimestamp destroyMe = loop_buffer.Dequeue();
+                        destroyMe.Dispose();
+                        loop_buffer.Enqueue(new BitmapTimestamp(ImageAsBitmap()));
+                    }
                 }
 
 
