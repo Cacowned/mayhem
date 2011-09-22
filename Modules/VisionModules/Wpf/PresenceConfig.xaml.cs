@@ -39,10 +39,35 @@ namespace VisionModules.Wpf
         }
 
 
-        public PresenceConfig()
+        public PresenceConfig(int selectedCameraIndex, PresenceTriggerMode selectedTriggerMode)
         {
             InitializeComponent();
             Init();
+
+            selected_triggerMode_ = selectedTriggerMode; 
+
+            // set the previous trigger mode
+            switch (selectedTriggerMode)
+            {
+                case PresenceTriggerMode.TOGGLE :
+                     rb_triggerMode_toggle.IsChecked = true; 
+                     break;
+                case PresenceTriggerMode.ON_OFF :
+                     rb_triggerMode_onOff.IsChecked = true;
+                     break;
+                case PresenceTriggerMode.OFF_ON :
+                     rb_triggerMode_offOn.IsChecked = true;
+                     break;                  
+            }
+
+            if (selectedCameraIndex < CameraDriver.Instance.cameras_available.Count)
+            {
+                // set the  previous camera selection
+                camera_selector.deviceList.SelectedIndex = selectedCameraIndex;
+                
+            }
+
+
         }
 
         private void Init()

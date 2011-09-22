@@ -1,13 +1,13 @@
 ﻿/*
  * ObjectDetectorComponent.cs
  * 
- * Low level object interfacing with the presence detector component. 
+ * Low level object interfacing with the OpenCVDLL object detector component. 
  * 
  * (c) 2011, Microsoft Applied Sciences Group
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 using System;
 using System.Collections.Generic;
 using System.Linq;
