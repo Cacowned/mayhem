@@ -103,7 +103,12 @@ namespace VisionModules.Events
         {
             get
             {
-                return new PresenceConfig();
+                int cam_index = 0;
+                if (cam != null)
+                {
+                    cam_index = cam.Info.deviceId;
+                }
+                return new PresenceConfig(cam_index, selected_trigger_mode);
             }
         }
 

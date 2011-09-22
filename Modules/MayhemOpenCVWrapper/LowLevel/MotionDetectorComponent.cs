@@ -1,7 +1,7 @@
 ﻿/*
  * PresenceDetectorComponent.cs
  * 
- * Low level object interfacing with the motion detector component. 
+ * Low level object interfacing with the OpenCVDLL motion detector. 
  * 
  * (c) 2011, Microsoft Applied Sciences Group
  * 

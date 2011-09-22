@@ -218,8 +218,6 @@ namespace VisionModules.Wpf
             // see which item we have selected
             ImageBrush brush = b.Background as ImageBrush;
 
-
-
             int item_index = camera_previews.IndexOf(brush);
 
             if (item_index >= 0)
@@ -245,7 +243,7 @@ namespace VisionModules.Wpf
             {
                 selected_preview_img.BorderBrush = Brushes.Transparent;
                 int selected_index = deviceList.SelectedIndex;
-                // selected_preview_img = camera_preview_panel.Items[selected_index] as Border;
+                selected_preview_img = camera_preview_panel.Items[selected_index] as Border;
 
                 selected_preview_img = borders[selected_index];
                 selected_preview_img.BorderBrush = Brushes.Red;
