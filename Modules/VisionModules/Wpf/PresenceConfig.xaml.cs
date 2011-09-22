@@ -16,6 +16,7 @@ using System.Diagnostics;
 using MayhemOpenCVWrapper;
 using VisionModules.Events;
 using MayhemCore;
+using System.Threading;
 
 namespace VisionModules.Wpf
 {
@@ -24,6 +25,7 @@ namespace VisionModules.Wpf
     /// </summary>
     public partial class PresenceConfig : IWpfConfiguration
     {
+        public int selectedIndex = 0; 
         // the selected camera
         private Camera camera_selected_ = null;  
         public Camera camera_selected
@@ -41,7 +43,10 @@ namespace VisionModules.Wpf
 
         public PresenceConfig(int selectedCameraIndex, PresenceTriggerMode selectedTriggerMode)
         {
+            this.selectedIndex = selectedCameraIndex; 
+           
             InitializeComponent();
+            
             Init();
 
             selected_triggerMode_ = selectedTriggerMode; 
@@ -56,18 +61,26 @@ namespace VisionModules.Wpf
                      rb_triggerMode_onOff.IsChecked = true;
                      break;
                 case PresenceTriggerMode.OFF_ON :
-                     rb_triggerMode_offOn.IsChecked = true;
+                     rb_triggerMode_offOn.IsChecked = true;                 
                      break;                  
             }
 
-            if (selectedCameraIndex < CameraDriver.Instance.cameras_available.Count)
-            {
-                // set the  previous camera selection
-                camera_selector.deviceList.SelectedIndex = selectedCameraIndex;
+           
+
+            // evil hack to get the camera selector to actually show the selection!
+            System.Timers.Timer tt = new System.Timers.Timer(200);
+            tt.AutoReset = false; 
+            tt.Elapsed+= new System.Timers.ElapsedEventHandler((object o, System.Timers.ElapsedEventArgs e) => {
+                Logger.WriteLine("Timer Callback");
+                Dispatcher.Invoke((Action)(() => { 
+                    camera_selector.deviceList.SelectedIndex = this.selectedIndex;
+                    camera_selector.deviceList_SelectionChanged(this, null); 
+                }) ); 
                 
-            }
+            });
+            tt.Enabled = true;
 
-
+            camera_selector.deviceList.SelectedIndex = selectedCameraIndex;
         }
 
         private void Init()

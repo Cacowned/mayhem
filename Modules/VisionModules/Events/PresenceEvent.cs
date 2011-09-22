@@ -64,7 +64,7 @@ namespace VisionModules.Events
         private DateTime lastTriggerDate = DateTime.MinValue;
 
         [DataMember]
-        private int selected_device_idx = 0;
+        private int selected_device_idx;
 
         [DataMember]
         private PresenceTriggerMode selected_trigger_mode = PresenceTriggerMode.TOGGLE;
@@ -75,7 +75,14 @@ namespace VisionModules.Events
             Initialize();
         }
 
+
         protected override void Initialize()
+        {
+            Initialize(new StreamingContext());
+        }
+
+        [OnDeserialized]
+        protected void Initialize(StreamingContext  s)
         {
             Logger.WriteLine("Initialize");
             base.Initialize();

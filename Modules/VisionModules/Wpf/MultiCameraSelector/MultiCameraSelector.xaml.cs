@@ -54,7 +54,9 @@ namespace VisionModules.Wpf
         private Border selected_preview_img = null;
 
         public delegate void CameraSelectedHandler(Camera c);
-        public event CameraSelectedHandler OnCameraSelected; 
+        public event CameraSelectedHandler OnCameraSelected;
+
+        public int index = 0; 
 
 
         public MultiCameraSelector()
@@ -237,7 +239,7 @@ namespace VisionModules.Wpf
         }
 
 
-        private void deviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void deviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (selected_preview_img != null)
             {
@@ -254,6 +256,30 @@ namespace VisionModules.Wpf
                     OnCameraSelected(this.selected_camera);
                 }
             }
+            else
+            {
+                PresenceConfig c = sender as PresenceConfig;
+
+                int selected_index = 0;
+                if (c != null)
+                {
+                    selected_index = c.selectedIndex;        
+                }
+
+
+
+                // select a new preview image, if it is a sane alternative
+                if (selected_index < borders.Count)
+                {
+                    selected_preview_img = borders[selected_index];
+                    selected_preview_img.BorderBrush = Brushes.Red;
+                    this.selected_camera = cams[selected_index];
+                    if (OnCameraSelected != null)
+                    {
+                        OnCameraSelected(this.selected_camera);
+                    }
+                }
+            }
         }
 
         private void bborder_Loaded(object sender, RoutedEventArgs e)
@@ -265,7 +291,7 @@ namespace VisionModules.Wpf
         private void bborder_Unloaded(object sender, RoutedEventArgs e)
         {
             Border b = sender as Border;
-            borders.Remove(b);
+            borders.Remove(b);          
         }
 
         #endregion
