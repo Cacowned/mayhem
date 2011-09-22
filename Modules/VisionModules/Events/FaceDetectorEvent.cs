@@ -59,13 +59,6 @@ namespace VisionModules.Events
 
             fd = new FaceDetectorComponent();
             faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetected);
-
-            // TODO
-            /*
-            if (boundingRect.Width > 0 && boundingRect.Height > 0)
-            {
-                m.SetMotionBoundaryRect(boundingRect);
-            } */
         }
 
         void m_onFaceDetected(object sender, List<System.Drawing.Point> points)
@@ -111,31 +104,32 @@ namespace VisionModules.Events
             
 
             // TODO: Improve this code
-            if (selected_device_idx < i.DeviceCount)
+            if (!IsConfiguring && selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
                 //if (cam.running == false)
                 Thread.Sleep(350);
                 cam.StartFrameGrabbing();
-
-            }
-            // register the trigger's faceDetection update handler
-            fd.RegisterForImages(cam);
-            fd.OnFaceDetected += m_onFaceDetected;
+                // register the trigger's faceDetection update handler
+                fd.RegisterForImages(cam);
+                fd.OnFaceDetected -= m_onFaceDetected;
+                fd.OnFaceDetected += m_onFaceDetected;
+            }        
         }
 
         public override void Disable()
         {
             Logger.WriteLine("");
             base.Disable();
-         
-            // de-register the trigger's faceDetection update handler
-            fd.UnregisterForImages(cam);
             fd.OnFaceDetected -= m_onFaceDetected;
-            // try to shut down the camera
-            cam.TryStopFrameGrabbing();
-            // Give Camera Time to do its thing 
-            Thread.Sleep(250); 
+            if (cam != null)
+                fd.UnregisterForImages(cam); 
+            if (!IsConfiguring && cam != null)
+            {
+                // de-register the trigger's faceDetection update handler                
+                // try to shut down the camera           
+                cam.TryStopFrameGrabbing();              
+            }
         }
 
         public  void OnSaved(IWpfConfiguration configurationControl)

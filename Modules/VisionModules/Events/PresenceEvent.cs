@@ -134,12 +134,13 @@ namespace VisionModules.Events
             Logger.WriteLine("Enable");
             base.Enable();
 
-            if (cam != null)
+            if (cam != null && !IsConfiguring)
             {
-                if (cam.running == false)
+                if (!cam.running)
                     cam.StartFrameGrabbing();
                 pd.RegisterForImages(cam);
-                pd.OnPresenceUpdate += presenceHandler;
+                pd.OnPresenceUpdate -= presenceHandler;
+                pd.OnPresenceUpdate += presenceHandler;               
             }
         }
 
@@ -149,16 +150,17 @@ namespace VisionModules.Events
             base.Disable();
             pd.OnPresenceUpdate -= presenceHandler;
             if (cam != null)
-            {
                 pd.UnregisterForImages(cam);
-                cam.TryStopFrameGrabbing();
+            // only disable the camera if the event is not configuring
+            if (!IsConfiguring && cam != null)
+            {          
+                    cam.TryStopFrameGrabbing();
             }
         }
 
         public void m_OnPresenceUpdate(object sender, System.Drawing.Point[] points)
         {
             PresenceDetectorComponent presenceDetector = sender as PresenceDetectorComponent;
-
             bool presence = presenceDetector.presence;
 
             if (lastPresenceStatus == PresenceStatus.UNINITIALIZED)

@@ -85,14 +85,13 @@ namespace VisionModules.Wpf
                 foreach (Camera c in i.cameras_available)
                 {
                     cams.Add(c);
-
-                    if (!c.running)
-                    {
-                        c.OnImageUpdated += i_OnImageUpdated;
-                        c.StartFrameGrabbing();
-                        Logger.WriteLine("using " + c.Info.ToString());
-                        Logger.WriteLine("Camera IDX " + c.index);
-                    }
+                    c.OnImageUpdated -= i_OnImageUpdated;
+                    c.OnImageUpdated += i_OnImageUpdated;
+                    
+                    c.StartFrameGrabbing();
+                    Logger.WriteLine("using " + c.Info.ToString());
+                    Logger.WriteLine("Camera IDX " + c.index);
+                    
 
                     Logger.WriteLine("Adding...");
 

@@ -48,15 +48,22 @@ namespace MayhemOpenCVWrapper.LowLevel
             Camera camera = sender as Camera;
 
             // copy over image data to the DLL 
-            lock (camera.thread_locker)
+            try
             {
-                unsafe
+                lock (camera.thread_locker)
                 {
-                    fixed (byte* ptr = camera.imageBuffer)
-                    {                  
-                            pd.ProcessFrame(ptr);  
+                    unsafe
+                    {
+                        fixed (byte* ptr = camera.imageBuffer)
+                        {
+                            pd.ProcessFrame(ptr);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Frame Grab Exception!\n" + ex);
             }
 
             // find out what the results are
