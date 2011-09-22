@@ -8,6 +8,8 @@ using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
 using WindowModules.Wpf;
 using System.Diagnostics;
+using System.IO;
+using System.Threading;
 
 namespace WindowModules
 {
@@ -79,7 +81,21 @@ namespace WindowModules
                 {
                     Process p = Process.GetProcessById(procid);
                     bool isMatch = true;
-                    if (actionInfo.WindowInfo.CheckFileName && !p.MainModule.FileName.ToLower().EndsWith(actionInfo.WindowInfo.FileName.ToLower()))
+                    string filename;
+                    try
+                    {
+                        filename = p.MainModule.FileName;
+                    }
+                    catch
+                    {
+                        filename = WMIProcess.GetFilename(procid);
+                    }
+                    if (filename != null)
+                    {
+                        FileInfo fi = new FileInfo(filename);
+                        filename = fi.Name;
+                    }
+                    if (actionInfo.WindowInfo.CheckFileName && !filename.ToLower().EndsWith(actionInfo.WindowInfo.FileName.ToLower()))
                         isMatch = false;
                     if (isMatch)
                     {
@@ -97,6 +113,7 @@ namespace WindowModules
                             foreach (WindowAction action in actionInfo.WindowActions)
                             {
                                 action.Perform(hwnd);
+                                Thread.Sleep(50);
                             }
                         }
                     }
