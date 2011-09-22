@@ -1,4 +1,17 @@
-﻿using System;
+﻿/*
+ * Video.cs
+ * Allows Mayhem to write AVI files from lists of Bitmaps
+ * 
+ * Uses AviFile Library by Corinna John
+ * http://www.codeproject.com/KB/audio-video/avifilewrapper.aspx
+ * Licensed as FOSS under Code Project Open License: http://www.codeproject.com/info/cpol10.aspx
+ * 
+ * (c) 2011, Microsoft Applied Scienced Group
+ * 
+ * Author: Sven Kratz
+ * 
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,28 +23,20 @@ namespace MayhemOpenCVWrapper
 {
     public class Video
     {
-        double offset = 0; 
-        private Camera camera = null;
         private List<BitmapTimestamp> video_frames = new List<BitmapTimestamp>();
 
         // video stream settings
         private double frameRate;
         private int width;
         private int height;
-        private bool isCompressed = true; 
 
         // video stream
         VideoStream stream = null;
         AviManager aviManager = null;
-
         private int frames = 0;
-
 
         public event Action<bool> OnVideoSaved;
         
-
-
-
         public Video(Camera c, string fileName, bool compress)
         {
             Camera camera = c;
@@ -46,7 +51,6 @@ namespace MayhemOpenCVWrapper
             if (video_frames.Count > 0)
             {
                 aviManager = new AviManager(fileName,false);
-
 
                 Avi.AVICOMPRESSOPTIONS opts = new Avi.AVICOMPRESSOPTIONS();
                 opts.fccType         = (UInt32)Avi.mmioStringToFOURCC("vids", 0);
@@ -73,7 +77,6 @@ namespace MayhemOpenCVWrapper
                     stream = aviManager.AddVideoStream(false, frameRate, video_frames[0].image); 
                 }
               
-
                 // add the frames
                 ThreadPool.QueueUserWorkItem(new WaitCallback(t_add_frames));         
             }
@@ -104,7 +107,6 @@ namespace MayhemOpenCVWrapper
             {
                 OnVideoSaved(true);
             }
-
         }     
     }
 }
