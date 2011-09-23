@@ -64,7 +64,7 @@ namespace VisionModules.Events
         private DateTime lastTriggerDate = DateTime.MinValue;
 
         [DataMember]
-        private int selected_device_idx = 0;
+        private int selected_device_idx;
 
         [DataMember]
         private PresenceTriggerMode selected_trigger_mode = PresenceTriggerMode.TOGGLE;
@@ -75,7 +75,14 @@ namespace VisionModules.Events
             Initialize();
         }
 
+
         protected override void Initialize()
+        {
+            Initialize(new StreamingContext());
+        }
+
+        [OnDeserialized]
+        protected void Initialize(StreamingContext  s)
         {
             Logger.WriteLine("Initialize");
             base.Initialize();
@@ -98,12 +105,16 @@ namespace VisionModules.Events
             presenceHandler = new PresenceDetectorComponent.DetectionHandler(m_OnPresenceUpdate);
         }
 
-
         public IWpfConfiguration ConfigurationControl
         {
             get
             {
-                return new PresenceConfig();
+                int cam_index = 0;
+                if (cam != null)
+                {
+                    cam_index = cam.Info.deviceId;
+                }
+                return new PresenceConfig(cam_index, selected_trigger_mode);
             }
         }
 
@@ -134,12 +145,13 @@ namespace VisionModules.Events
             Logger.WriteLine("Enable");
             base.Enable();
 
-            if (cam != null)
+            if (cam != null && !IsConfiguring)
             {
-                if (cam.running == false)
+                if (!cam.running)
                     cam.StartFrameGrabbing();
                 pd.RegisterForImages(cam);
-                pd.OnPresenceUpdate += presenceHandler;
+                pd.OnPresenceUpdate -= presenceHandler;
+                pd.OnPresenceUpdate += presenceHandler;               
             }
         }
 
@@ -149,8 +161,10 @@ namespace VisionModules.Events
             base.Disable();
             pd.OnPresenceUpdate -= presenceHandler;
             if (cam != null)
-            {
                 pd.UnregisterForImages(cam);
+            // only disable the camera if the event is not configuring
+            if (!IsConfiguring && cam != null)
+            {
                 cam.TryStopFrameGrabbing();
             }
         }
@@ -158,7 +172,6 @@ namespace VisionModules.Events
         public void m_OnPresenceUpdate(object sender, System.Drawing.Point[] points)
         {
             PresenceDetectorComponent presenceDetector = sender as PresenceDetectorComponent;
-
             bool presence = presenceDetector.presence;
 
             if (lastPresenceStatus == PresenceStatus.UNINITIALIZED)

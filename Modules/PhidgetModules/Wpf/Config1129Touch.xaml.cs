@@ -19,7 +19,7 @@ namespace PhidgetModules.Wpf
         public Config1129Touch(bool onTurnOn)
         {
             this.OnTurnOn = onTurnOn;
-            //InitializeComponent();
+            InitializeComponent();
         }
 
         public override string Title

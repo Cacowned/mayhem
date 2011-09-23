@@ -39,19 +39,40 @@ namespace Mayhem
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            iWpfConfig.OnLoad();
+            try
+            {
+                iWpfConfig.OnLoad();
+            }
+            catch
+            {
+                MessageBox.Show("Error loading " + iWpfConfig.Name, "Mayhem: Error", MessageBoxButton.OK);
+            }
         }
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
         {
             IWpfConfiguration config = ConfigContent.Content as IWpfConfiguration;
-            iWpfConfig.OnSave();
-            iWpf.OnSaved(config);
-            ((ModuleBase)iWpf).SetConfigString();
+            try
+            {
+                iWpfConfig.OnSave();
+                iWpf.OnSaved(config);
+                ((ModuleBase)iWpf).SetConfigString();
+            }
+            catch
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Error saving " + iWpfConfig.Name);
+            }
 
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
             {
-                iWpfConfig.OnClosing();
+                try
+                {
+                    iWpfConfig.OnClosing();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error closing " + iWpfConfig.Name + "'s configuration");
+                }
             }));
             ((MainWindow)Application.Current.MainWindow).Save();
             DialogResult = true;
@@ -61,8 +82,15 @@ namespace Mayhem
         {
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
             {
-                iWpfConfig.OnCancel();
-                iWpfConfig.OnClosing();
+                try
+                {
+                    iWpfConfig.OnCancel();
+                    iWpfConfig.OnClosing();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error cancelling " + iWpfConfig.Name + "'s configuration");
+                }
             }));
             DialogResult = false;
         }

@@ -93,14 +93,21 @@ namespace Mayhem
             {
                 if (interfaceType.Equals(typeof(IWpfConfigurable)))
                 {
-                    SelectedModuleInstance = (IWpfConfigurable)Activator.CreateInstance(SelectedModule.Type);
-                    iWpfConfig = (IWpfConfiguration)SelectedModuleInstance.ConfigurationControl;
-                    ConfigContent.Content = iWpfConfig;
-                    buttonSave.IsEnabled = iWpfConfig.CanSave;
-                    windowHeaderConfig.Text = "Config: " + iWpfConfig.Title;
-                    iWpfConfig.Loaded += new RoutedEventHandler(iWpfConfig_Loaded);
-                    iWpfConfig.CanSavedChanged += new IWpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
-                    iWpfConfig.OnLoad();
+                    try
+                    {
+                        SelectedModuleInstance = (IWpfConfigurable)Activator.CreateInstance(SelectedModule.Type);
+                        iWpfConfig = (IWpfConfiguration)SelectedModuleInstance.ConfigurationControl;
+                        ConfigContent.Content = iWpfConfig;
+                        buttonSave.IsEnabled = iWpfConfig.CanSave;
+                        windowHeaderConfig.Text = "Config: " + iWpfConfig.Title;
+                        iWpfConfig.Loaded += new RoutedEventHandler(iWpfConfig_Loaded);
+                        iWpfConfig.CanSavedChanged += new IWpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
+                        iWpfConfig.OnLoad();
+                    }
+                    catch (Exception erf)
+                    {
+                        MessageBox.Show("Error creating " + SelectedModule.Name, "Mayhem: Error", MessageBoxButton.OK);
+                    }
 
                     hasConfig = true;
                     break;
@@ -152,13 +159,27 @@ namespace Mayhem
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
             IWpfConfiguration config = ConfigContent.Content as IWpfConfiguration;
-            iWpfConfig.OnSave();
-            SelectedModuleInstance.OnSaved(config);
-            ((ModuleBase)SelectedModuleInstance).SetConfigString();
+            try
+            {
+                iWpfConfig.OnSave();
+                SelectedModuleInstance.OnSaved(config);
+                ((ModuleBase)SelectedModuleInstance).SetConfigString();
+            }
+            catch
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Error saving " + SelectedModule.Name);
+            }
             
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
             {
-                iWpfConfig.OnClosing();
+                try
+                {
+                    iWpfConfig.OnClosing();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error closing " + SelectedModule.Name + "'s configuration");
+                }
             }));
             DialogResult = true;
         }
@@ -173,8 +194,15 @@ namespace Mayhem
 
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
                 {
-                    iWpfConfig.OnCancel();
-                    iWpfConfig.OnClosing();
+                    try
+                    {
+                        iWpfConfig.OnCancel();
+                        iWpfConfig.OnClosing();
+                    }
+                    catch
+                    {
+                        ErrorLog.AddError(ErrorType.Failure, "Error cancelling " + SelectedModule.Name + "'s configuration");
+                    }
                 }));
 
             animSlideOut.To = new Thickness(0);

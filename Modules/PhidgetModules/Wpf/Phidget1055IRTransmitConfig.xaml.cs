@@ -55,6 +55,7 @@ namespace PhidgetModules.Reaction
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
+                this.CanSave = true;
                 this.Code = e.LearnedCode.Code;
                 this.CodeInfo = e.LearnedCode.CodeInfo;
             }));

@@ -14,7 +14,7 @@
                 </Canvas>
             </StackPanel>
             <Label>Click drop down list below to select a camera:</Label>
-            <ComboBox Name="DeviceList" />
+            <ComboBox Name="DeviceList" SelectionChanged="DeviceList_SelectionChanged" />
         </StackPanel>
     </Grid>
 </src:IWpfConfiguration>

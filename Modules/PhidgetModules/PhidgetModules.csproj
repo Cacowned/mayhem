@@ -93,8 +93,8 @@
     <Compile Include="Wpf\Config1129Touch.xaml.cs">
       <DependentUpon>Config1129Touch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\Phidget1133Sound.xaml.cs">
-      <DependentUpon>Phidget1133Sound.xaml</DependentUpon>
+    <Compile Include="Wpf\Config1133Sound.xaml.cs">
+      <DependentUpon>Config1133Sound.xaml</DependentUpon>
     </Compile>
     <Compile Include="Events\Phidget1133Sound.cs" />
     <Compile Include="SensorEventBase.cs" />
@@ -150,7 +150,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\Phidget1133Sound.xaml">
+    <Page Include="Wpf\Config1133Sound.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

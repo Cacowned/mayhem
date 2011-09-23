@@ -21,9 +21,6 @@ using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {
-
-   
-
     /// <summary>
     /// This class packages the functions for individual camera devices
     /// Modules using vision will now have the ability to request image updates from
@@ -33,92 +30,93 @@ namespace MayhemOpenCVWrapper
     /// </summary>
     public class Camera : ImagerBase, IBufferingImager
     {
-        private static int instances = 0; 
-
+        #region Fields and Properties
+        private static int instances = 0;       // static counter of camera instances intialized
+        
         private int index_ = instances++;       // should be incremented on instantiation
-
         public int index
         {
             get { return index_;}
         }
 
         private CameraInfo info;
-
         public override CameraInfo Info
         {
             get
             {
                 //throw new NotImplementedException();
                 return info; 
-            }
-           
+            }    
         }
 
         public CameraSettings settings;
-
-        public bool is_initialized = false;
-        
-
+        public bool is_initialized = false;      
         public int bufSize;
         public byte[] imageBuffer;
-
         public object thread_locker = new object();
-
         public override event ImageUpdateHandler OnImageUpdated;
-
-        // (ms) : update rate with which the camera thread requests new images
+        // update rate (ms) with which the camera thread requests new images
         public int frameInterval;
-
-        private Thread grabFrm = null;
-
         // store LOOP_DURATION ms of footage in the past/future
-        public static readonly int LOOP_DURATION = 30000; 
-
+        public  const int LOOP_DURATION = 30000; 
         // calculate amount of storage needed for the given duration 
         private int LOOP_BUFFER_MAX_LENGTH = LOOP_DURATION / CameraSettings.DEFAULTS().updateRate_ms;
-
         // fifo buffer that stores last x images
         private Queue<BitmapTimestamp> loop_buffer = new Queue<BitmapTimestamp>();
+        // check for thread termination   
+        private ManualResetEvent grabFramesReset;
+        #endregion
 
-        /// <summary>
-        /// Return all loop buffer items
-        /// </summary>
-        public List<BitmapTimestamp> buffer_items
-        {
-            get
-            {
-                List<BitmapTimestamp> items_out = new List<BitmapTimestamp>(); 
-               
-                // return ;
-                foreach (BitmapTimestamp b in loop_buffer.ToList<BitmapTimestamp>())
-                {
-                    items_out.Add(b.Clone() as BitmapTimestamp);
-                }
-
-                return items_out;
-            }
-        }
-        
-
-        
-
+        #region Contstructor / Destructor
         public Camera(CameraInfo info, CameraSettings settings)
         {
             this.info = info;
             this.settings = settings;
         }
 
-     /// <summary>
-     /// Returns latest image as a Bitmap
-     /// </summary>
-     /// <returns>Bitmap containing the image data</returns>
+        ~Camera()
+        {
+            Logger.WriteLine("dtor");
+            StopGrabbing();
+        }
+        #endregion
+
+        #region Bitmap Export
+
+        /// <summary>
+        /// Return copies all loop buffer items
+        /// </summary>
+        public List<BitmapTimestamp> buffer_items
+        {
+            get
+            {
+                List<BitmapTimestamp> items_out = new List<BitmapTimestamp>();
+                List<BitmapTimestamp> buffer_items;
+
+                // critical section: don't let the read thread dispose of bitmaps before we copy them first
+                lock (this)
+                {
+                    buffer_items = loop_buffer.ToList<BitmapTimestamp>();
+
+                    // return ;
+                    foreach (BitmapTimestamp b in buffer_items)
+                    {
+                        items_out.Add(b.Clone() as BitmapTimestamp);
+                    }
+                }
+                return items_out;
+            }
+        }
+
+        /// <summary>
+        /// Returns latest image as a Bitmap
+        /// </summary>
+        /// <returns>Bitmap containing the image data</returns>
         public override Bitmap ImageAsBitmap()
         {
-            //int stride = 320 * 3;
             try
             {
                 Bitmap backBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
                 System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, 320, 240);
 
                 // get at the bitmap data in a nicer way
@@ -127,11 +125,9 @@ namespace MayhemOpenCVWrapper
                     backBuffer.PixelFormat);
 
                 int bufSize = this.bufSize;
-
                 IntPtr ImgPtr = bmpData.Scan0;
 
                 // grab the image
-
                 lock (thread_locker)
                 {
                     // Copy the RGB values back to the bitmap
@@ -144,9 +140,11 @@ namespace MayhemOpenCVWrapper
             catch (ArgumentException ex)
             {
                 Logger.WriteLine("ArgumentException: " + ex);
-                return new Bitmap(320,240); 
+                return new Bitmap(320, 240);      
             }
         }
+
+        #endregion            
 
         /// <summary>
         /// Initializes the camera via the videoinput lib
@@ -154,13 +152,11 @@ namespace MayhemOpenCVWrapper
         private void InitializeCaptureDevice(CameraInfo info, CameraSettings settings)
         {
             is_initialized = false;
-
             try
             {
                 OpenCVDLL.OpenCVBindings.InitCapture(info.deviceId, settings.resX, settings.resY);
                 bufSize = OpenCVDLL.OpenCVBindings.GetImageSize();
                 imageBuffer = new byte[bufSize];
-
                 frameInterval = CameraSettings.DEFAULTS().updateRate_ms;
 
                 // StartFrameGrabbing();
@@ -170,10 +166,10 @@ namespace MayhemOpenCVWrapper
             {
                 Logger.WriteLine("exception during camera init\n" + e.ToString());
             }
-
-
         }
 
+        #region Frame Grabbing Start/Stop
+      
         public override void StartFrameGrabbing()
         {
             if (!is_initialized)
@@ -182,14 +178,15 @@ namespace MayhemOpenCVWrapper
             }
 
             if (!this.running)
-            {
-                
-                grabFrm = new Thread(GrabFrames);
+            {        
+                //grabFrm = new Thread(GrabFrames);
                 try
                 {
                     Logger.WriteLine("Starting Frame Grabber");
-                    grabFrm.Start();
-                    this.running = true;
+                    //grabFrm.Start();
+                    // TODO: run this code in the ThreadPool
+                    grabFramesReset = new ManualResetEvent(false); 
+                    ThreadPool.QueueUserWorkItem((object o) => { GrabFrames_Thread(); });
                     Thread.Sleep(200);
                 }
                 catch (Exception e)
@@ -199,7 +196,6 @@ namespace MayhemOpenCVWrapper
                 }
             }
         }
-
 
         // TODO: override the event handler and just add this to the process of 
         // removing handlers
@@ -232,109 +228,122 @@ namespace MayhemOpenCVWrapper
 
         private void StopGrabbing()
         {
-            is_initialized = false;
-            running = false;
-            // Wait for frame grab thread to end or 500ms timeout to elapse
-            if (grabFrm.IsAlive)
-                grabFrm.Join(500);
-            OpenCVDLL.OpenCVBindings.StopCamera(this.info.deviceId);
-            Thread.Sleep(200);
-
-        }
-
-        private void GrabFrames()
-        {
-            Logger.WriteLine(index + " GrabFrames");
-
-
-            foreach (BitmapTimestamp b in loop_buffer)
+            if (is_initialized)
             {
-                b.Dispose();
-            }
-
-            // purge the video buffer
-            loop_buffer.Clear(); 
-
-            running = true;
-            while (running)
-            {
-                //Logger.WriteLine("Camera: Update!");
-                lock (thread_locker)
+                is_initialized = false;
+                running = false;
+                // Wait for frame grab thread to end or 500ms timeout to elapse
+                grabFramesReset.WaitOne(500);
+                try
                 {
-                    unsafe
-                    {
+                    OpenCVDLL.OpenCVBindings.StopCamera(this.info.deviceId);
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteLine("Exception While Shutting Down Cam: " + ex);
+                }
 
-                        fixed (byte* ptr = imageBuffer)
+                Thread.Sleep(200);
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// Thread that updates the frame buffer periodically from videoInputLib via OpenCVDLL 
+        /// </summary>
+        private void GrabFrames_Thread()
+        {
+            try
+            {
+                Logger.WriteLine(index + " GrabFrames");
+
+                lock (this)
+                {
+                    foreach (BitmapTimestamp b in loop_buffer)
+                    {
+                        b.Dispose();
+                    }
+                }
+
+                // purge the video buffer when starting frame grabbing
+                // we don't need the previously recorded and potentially very old bitmaps in the buffer
+                lock (this)
+                {
+                    loop_buffer.Clear();
+                }
+                running = true;
+                while (running)
+                {
+                    //Logger.WriteLine("Camera: Update!");
+                    lock (thread_locker)
+                    {
+                        unsafe
                         {
-                            try
-                            {                           
-                                OpenCVDLL.OpenCVBindings.GetNextFrame(this.index, ptr);                           
-                            }
-                            catch (Exception e)
+                            fixed (byte* ptr = imageBuffer)
                             {
-                                Logger.WriteLine("Cam Exception " + e);
-                                // shutdown cam
-                                running = false;
+                                try
+                                {
+                                    OpenCVDLL.OpenCVBindings.GetNextFrame(this.index, ptr);
+                                }
+                                catch (Exception e)
+                                {
+                                    Logger.WriteLine("Cam Exception " + e);
+                                    // shutdown cam
+                                    running = false;
+                                }
                             }
                         }
                     }
+
+                    lock (this)
+                    {
+                        if (loop_buffer.Count < LOOP_BUFFER_MAX_LENGTH)
+                        {
+                            loop_buffer.Enqueue(new BitmapTimestamp(ImageAsBitmap()));
+                        }
+                        else
+                        {
+                            BitmapTimestamp destroyMe = loop_buffer.Dequeue();
+                            destroyMe.Dispose();
+                            loop_buffer.Enqueue(new BitmapTimestamp(ImageAsBitmap()));
+                        }
+                    }
+
+                    if (running)
+                    {
+                        Thread.Sleep(frameInterval);
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                    if (OnImageUpdated != null)
+                    {
+                        // Logger.Write("Camera: Sending new Frame to listeners!");
+                        OnImageUpdated(this, new EventArgs());
+                    }
                 }
-                
-               
-               
-
-                
-                if (loop_buffer.Count < LOOP_BUFFER_MAX_LENGTH)
-                {
-                   loop_buffer.Enqueue( new BitmapTimestamp(ImageAsBitmap()));
-                }
-                else
-                {
-                   BitmapTimestamp destroyMe = loop_buffer.Dequeue();
-                   destroyMe.Dispose();
-                   loop_buffer.Enqueue( new BitmapTimestamp(ImageAsBitmap()));
-                }
-
-
-              
-
-                if (running)
-                {
-                    Thread.Sleep(frameInterval);
-                }
-                else
-                {
-                    break;
-                }
-
-                if (OnImageUpdated != null)
-                {
-                    // Logger.Write("Camera: Sending new Frame to listeners!");
-                    OnImageUpdated(this, new EventArgs());
-                }
-
-
             }
-            Logger.WriteLine("GrabFrame Thread terminated");
-            running = false;
+            catch (Exception ex)
+            {
+                Logger.WriteLine("GrabFrame Thread Exception:\n" + ex);
+            }
+            finally
+            {
+                Logger.WriteLine("GrabFrame Thread terminated normally");
+                running = false;
+                // signal termination of this thread 
+                grabFramesReset.Set();
+            }
         }
-
-        public void Release()
-        {
-            running = false;
-            OpenCVDLL.OpenCVBindings.StopCamera(this.info.deviceId);
-            is_initialized = false;
-        }
-
 
         public override string ToString()
         {
             return this.info.FriendlyName();
         }
 
-
-        
-
+        #region IBufferingImager Methods
         /// <summary>
         /// IBufferingImager Method -- return index image from end of queue 
         /// </summary>
@@ -370,11 +379,6 @@ namespace MayhemOpenCVWrapper
                 return DateTime.MinValue;
             }
         }
-
-
-
-
     }
-
-    // TODO: Add a dummy camera (in case no real device is attached!) 
+        #endregion
 }

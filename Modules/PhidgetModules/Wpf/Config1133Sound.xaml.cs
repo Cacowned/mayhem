@@ -6,9 +6,6 @@ using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Wpf
 {
-    /// <summary>
-    /// Interaction logic for _1133SoundConfig.xaml
-    /// </summary>
     public partial class Config1133Sound : PhidgetConfigControl
     {
         public double TopValue;
@@ -28,21 +25,6 @@ namespace PhidgetModules.Wpf
             IncreasingRadio.IsChecked = Increasing;
             DecreasingRadio.IsChecked = !Increasing;
         }
-
-        /*
-        public override void OnSave()
-        {
-            if (!double.TryParse(textBoxTopValue.Text, out TopValue) && TopValue >= 0)
-            {
-                MessageBox.Show("You must enter a valid number");
-            }
-            else
-            {
-                Increasing = (bool)IncreasingRadio.IsChecked;
-                Index = SensorDataBox.Index;
-            }
-        }
-        */
 
         public override string Title
         {

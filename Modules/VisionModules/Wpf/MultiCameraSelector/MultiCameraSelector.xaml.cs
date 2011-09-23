@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ *  MultiCameraSelector.xaml.cs
+ * 
+ *  Code-Behind for the multi-camera selector. 
+ *  
+ *  (c) 2011, Microsoft Applied Sciences Group
+ * 
+ *  Author: Sven Kratz
+ * 
+ */ 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +28,7 @@ using System.Drawing;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using MayhemCore;
+using System.Threading;
 
 namespace VisionModules.Wpf
 {
@@ -27,7 +38,6 @@ namespace VisionModules.Wpf
     public partial class MultiCameraSelector : UserControl
     {
         public Camera selected_camera = null;
-
         private CameraDriver i = null; //CameraDriver.Instance;
         protected List<Camera> cams = new List<Camera>();
 
@@ -45,20 +55,16 @@ namespace VisionModules.Wpf
         private Border selected_preview_img = null;
 
         public delegate void CameraSelectedHandler(Camera c);
-        public event CameraSelectedHandler OnCameraSelected; 
+        public event CameraSelectedHandler OnCameraSelected;
 
+        public int index = 0; 
 
         public MultiCameraSelector()
         {
             InitializeComponent();
-            // avoid nasty errors in the designer due to not finding the OpenCVDLL
-            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            {
-                Init();
-            }
         }
 
-        private void Init()
+        internal void Init()
         {
             i = CameraDriver.Instance;
 
@@ -72,22 +78,19 @@ namespace VisionModules.Wpf
 
             if (i.DeviceCount > 0)
             {
-                // start the camera 0 if it isn't already running
-
-
                 // attach canvases with camera images to camera_preview_panel
                 foreach (Camera c in i.cameras_available)
                 {
-
                     cams.Add(c);
-
-                    if (!c.running)
+                    c.OnImageUpdated -= i_OnImageUpdated;
+                    c.OnImageUpdated += i_OnImageUpdated;
+                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
                     {
-                        c.OnImageUpdated += i_OnImageUpdated;
                         c.StartFrameGrabbing();
-                        Logger.WriteLine("using " + c.Info.ToString());
-                        Logger.WriteLine("Camera IDX " + c.index);
-                    }
+                    }));
+                    Logger.WriteLine("using " + c.Info.ToString());
+                    Logger.WriteLine("Camera IDX " + c.index);
+                    
 
                     Logger.WriteLine("Adding...");
 
@@ -98,13 +101,10 @@ namespace VisionModules.Wpf
                     preview_width = width;
                     preview_height = height;
 
-
                     // the camera previews are drawn onto an ImageBrush, which is shown in the 
                     // background of the DataTemplate
 
                     camera_previews.Add(new ImageBrush());
-
-
                 }
 
                 camera_preview_panel.ItemsSource = camera_previews;
@@ -120,7 +120,6 @@ namespace VisionModules.Wpf
         {
             //cam.OnImageUpdated -= i_OnImageUpdated;
             //cam.TryStopFrameGrabbing();
-
             foreach (Camera c in cams)
             {
                 c.OnImageUpdated -= i_OnImageUpdated;
@@ -135,7 +134,6 @@ namespace VisionModules.Wpf
         ///
         public void i_OnImageUpdated(object sender, EventArgs e)
         {
-
             Dispatcher.Invoke(new ImageUpdateHandler(SetCameraImageSource), sender);
             //SetCameraImageSource();
         }
@@ -148,9 +146,7 @@ namespace VisionModules.Wpf
             Logger.WriteLine("New Image on Camera " + cam.index + " : " + cam.Info);
 
             Bitmap bm = cam.ImageAsBitmap();
-
             Bitmap shrink = ImageProcessing.ScaleWithFixedSize(bm, preview_width, preview_height);
-
 
             // convert bitmap to an hBitmap pointer and apply it as imagebrush imagesource
             IntPtr hBmp = shrink.GetHbitmap();
@@ -158,7 +154,6 @@ namespace VisionModules.Wpf
             s.Freeze();
 
             camera_previews[cam.index].ImageSource = s;
-
 
             // dispose of all the unneeded data
             VisionModulesWPFCommon.DeleteObject(hBmp);
@@ -174,35 +169,6 @@ namespace VisionModules.Wpf
             else
             {
                 // Logger.WriteLine("NULL!");
-            }
-
-        }
-
-        /// <summary>
-        ///  Register / De-Register the image update handler if the window is visible / invisible
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void VisibilityChanged(bool visibility)
-        {
-            Logger.WriteLine("IsVisibleChanged");
-            if (visibility)
-            {
-
-                foreach (Camera c in cams)
-                {
-                    if (!c.running) c.StartFrameGrabbing();
-                    c.OnImageUpdated += i_OnImageUpdated;
-                }
-
-            }
-            else
-            {
-                foreach (Camera c in cams)
-                {
-                    c.OnImageUpdated -= i_OnImageUpdated;
-                    c.TryStopFrameGrabbing();
-                }
             }
         }
 
@@ -223,8 +189,6 @@ namespace VisionModules.Wpf
             // see which item we have selected
             ImageBrush brush = b.Background as ImageBrush;
 
-
-
             int item_index = camera_previews.IndexOf(brush);
 
             if (item_index >= 0)
@@ -244,13 +208,13 @@ namespace VisionModules.Wpf
         }
 
 
-        private void deviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void deviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (selected_preview_img != null)
             {
                 selected_preview_img.BorderBrush = Brushes.Transparent;
                 int selected_index = deviceList.SelectedIndex;
-                // selected_preview_img = camera_preview_panel.Items[selected_index] as Border;
+                selected_preview_img = camera_preview_panel.Items[selected_index] as Border;
 
                 selected_preview_img = borders[selected_index];
                 selected_preview_img.BorderBrush = Brushes.Red;
@@ -259,6 +223,30 @@ namespace VisionModules.Wpf
                 if (OnCameraSelected != null)
                 {
                     OnCameraSelected(this.selected_camera);
+                }
+            }
+            else
+            {
+                PresenceConfig c = sender as PresenceConfig;
+
+                int selected_index = 0;
+                if (c != null)
+                {
+                    selected_index = c.selectedIndex;        
+                }
+
+
+
+                // select a new preview image, if it is a sane alternative
+                if (selected_index < borders.Count)
+                {
+                    selected_preview_img = borders[selected_index];
+                    selected_preview_img.BorderBrush = Brushes.Red;
+                    this.selected_camera = cams[selected_index];
+                    if (OnCameraSelected != null)
+                    {
+                        OnCameraSelected(this.selected_camera);
+                    }
                 }
             }
         }
@@ -272,7 +260,7 @@ namespace VisionModules.Wpf
         private void bborder_Unloaded(object sender, RoutedEventArgs e)
         {
             Border b = sender as Border;
-            borders.Remove(b);
+            borders.Remove(b);          
         }
 
         #endregion

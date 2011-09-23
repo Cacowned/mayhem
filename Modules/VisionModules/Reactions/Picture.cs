@@ -109,24 +109,26 @@ namespace VisionModules.Reactions
         public override void Enable()
         {
             // TODO: Improve this code
-            if (selected_device_idx < i.DeviceCount)
+            if (!IsConfiguring && selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
+                cam.OnImageUpdated -= imageUpdateHandler;
                 cam.OnImageUpdated += imageUpdateHandler;
-                Thread.Sleep(350);
+                //Thread.Sleep(350);
                 cam.StartFrameGrabbing();
-
             }
-
             base.Enable();
         }
 
         public override void Disable()
         {
             base.Disable();
-            cam.OnImageUpdated -= imageUpdateHandler;
-            cam.TryStopFrameGrabbing();
-            Thread.Sleep(350); 
+            if (!IsConfiguring && cam != null)
+            {
+                cam.OnImageUpdated -= imageUpdateHandler;
+                cam.TryStopFrameGrabbing();
+            }
+            //Thread.Sleep(350); 
         }
 
         public override void Perform()

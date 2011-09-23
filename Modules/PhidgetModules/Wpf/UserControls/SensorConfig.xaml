@@ -6,11 +6,11 @@
              Width="400">
     
     <StackPanel>
-        <common:SensorData x:Name="SensorDataBox" />
+        <common:SensorData x:Name="SensorDataBox" Margin="0,0,0,20" />
 
         <ContentControl Name="sensorControl" Width="400" />
-        
-        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1" Visibility="Visible">Plug in a phidget interface kit.</TextBlock>
+
+        <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1" Visibility="Visible">Plug in a phidget interface kit.</TextBlock>
     </StackPanel>
     
 </src:IWpfConfiguration>

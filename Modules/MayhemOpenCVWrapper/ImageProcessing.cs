@@ -1,8 +1,7 @@
 ﻿/*
  * ImageProcessing.cs
  * 
- * 
- * Collect static image processing routines used by vision modules / config screens here
+ * Collect static image processing routines in managed code used by vision modules / config screens here
  * 
  * (c) 2011, Microsoft Applied Sciences Group
  * 

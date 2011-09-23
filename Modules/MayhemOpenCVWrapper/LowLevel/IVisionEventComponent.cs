@@ -1,7 +1,7 @@
 ﻿/*
  *   IVisionEventComponent
  * 
- *   Method contract for Event components that use vision. 
+ *   Abstract base class for Event components that use vision. 
  *   (c) Microsoft Applied Sciences Group, 2011
  *   
  *   Author: Sven Kratz
@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemOpenCVWrapper;
+using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
@@ -21,19 +22,26 @@ namespace MayhemOpenCVWrapper.LowLevel
 
         protected Camera.ImageUpdateHandler imageUpdateHandler;
 
+        public IVisionEventComponent()
+        {
+            imageUpdateHandler = new Camera.ImageUpdateHandler(update_frame);
+        }
+
         /// <summary>
         /// Register and unregister for image callbacks
         /// </summary> 
         public virtual void RegisterForImages(ImagerBase c)
         {
+            Logger.WriteLine("");
             if (c != null)
             {
-                imageUpdateHandler = new Camera.ImageUpdateHandler(update_frame);
+                c.OnImageUpdated -= imageUpdateHandler;
                 c.OnImageUpdated += imageUpdateHandler;
             }
         }
         public virtual void UnregisterForImages(ImagerBase c)
         {
+            Logger.WriteLine("");
             if (c != null)
                 c.OnImageUpdated -= imageUpdateHandler;
         }

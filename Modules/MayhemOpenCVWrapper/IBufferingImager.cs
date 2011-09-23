@@ -1,7 +1,7 @@
 ﻿/*
  * IBufferingImager.cs
  * 
- * Ongoing work to abstract away from the camera as only imaging source, and to unify image providers within Mayhem. 
+ * Ongoing work to abstract away from the camera as only available imaging source, and to unify image providers within Mayhem. 
  * 
  * (c) 2011, Microsoft Applied Sciences Group
  * 

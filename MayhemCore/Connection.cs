@@ -30,7 +30,7 @@ namespace MayhemCore
         public ReactionBase Reaction { get; private set; }
 
         private bool isConfiguring;
-        public bool IsConfiguring 
+        public bool IsConfiguring
         {
             get
             {
@@ -106,45 +106,31 @@ namespace MayhemCore
             if (!Event.Enabled)
             {
                 // Enable the event
-                Event.Enable();
-                // If the event didn't enable
-                if (!Event.Enabled)
-                {
-                    Enabled = false;
-                    // Return out and don't try to 
-                    // enable the reaction
-                    return;
-                }
+                Event.Enable_();
             }
-            if (!Reaction.Enabled)
+            // If the event is not enabled we don't try to enable the reaction
+            if (Event.Enabled && !Reaction.Enabled)
             {
-                Reaction.Enable();
+                try
+                {
+                    Reaction.Enable_();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error enabling " + Reaction.Name);
+                }
                 if (!Reaction.Enabled)
                 {
-                    /* If we got here, then it means
-                     * the event is enabled
-                     * and the reaction won't enable
-                     * 
-                     * we need to disable the event
-                     * and then return out
-                     */
+                    // If we got here, then it means the event is enabled and the reaction won't enable.
+                    // We need to disable the event and then return out
                     Event.Disable();
-
-                    Enabled = false;
-                    // Now return out
-                    return;
                 }
             }
-            /* Double check that both are enabled
-             * We shouldn't be able to get here if they aren't
-             */
-            if (Event.Enabled && Reaction.Enabled)
+            // Double check that both are enabled. We shouldn't be able to get here if they aren't.
+            Enabled = Event.Enabled && Reaction.Enabled;
+            if (actionOnComplete != null)
             {
-                Enabled = true;
-                if (actionOnComplete != null)
-                {
-                    actionOnComplete();
-                }
+                actionOnComplete();
             }
         }
 
@@ -160,18 +146,32 @@ namespace MayhemCore
                 return;
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DisableOnThread(actionOnComplete)));            
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DisableOnThread(actionOnComplete)));
         }
 
         private void DisableOnThread(Action actionOnComplete)
         {
             if (Event.Enabled)
             {
-                Event.Disable();
+                try
+                {
+                    Event.Disable();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error disabling " + Event.Name);
+                }
             }
             if (Reaction.Enabled)
             {
-                Reaction.Disable();
+                try
+                {
+                    Reaction.Disable();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error enabling " + Reaction.Name);
+                }
             }
 
             /* This might need to be changed to be more like
