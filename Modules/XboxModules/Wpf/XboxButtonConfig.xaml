@@ -7,7 +7,7 @@
 	<Grid>
         <StackPanel>
             <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Please enter a combination of buttons which will activate this event.</TextBlock>
-            <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding ButtonsDown}" />
+            <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding ButtonsDownText}" />
             <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Text="Key combination is invalid" HorizontalAlignment="Center" />
         </StackPanel>
 	</Grid>
