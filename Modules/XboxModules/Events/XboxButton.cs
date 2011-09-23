@@ -74,7 +74,7 @@ namespace XboxModules.Events
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
             var state = GamePad.GetState(Player);
             if (!state.IsConnected)
@@ -84,9 +84,10 @@ namespace XboxModules.Events
             else
             {
                 // If it is connected, lets enable
-                base.Enable();
                 buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);
             }
+
+            return state.IsConnected;
         }
 
         public override void Disable()

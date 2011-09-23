@@ -56,8 +56,7 @@ namespace MayhemCore
         {
             try
             {
-                Enable();
-                Enabled = true;
+                Enabled = Enable();
             }
             catch
             {
@@ -65,8 +64,9 @@ namespace MayhemCore
             }
         }
 
-        public virtual void Enable()
+        public virtual bool Enable()
         {
+            return true;
         }
 
         internal void Disable_()

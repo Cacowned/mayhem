@@ -77,7 +77,7 @@ namespace PhoneModules
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
             if (!IsConfiguring && !Enabled)
             {
@@ -91,7 +91,7 @@ namespace PhoneModules
                 phoneConnector.EventCalled += phoneConnector_EventCalled;
             }
 
-            base.Enable();
+            return true;
         }
 
         public override void Disable()

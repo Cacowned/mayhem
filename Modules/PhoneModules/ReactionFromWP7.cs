@@ -31,12 +31,12 @@ namespace PhoneModules
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
             phoneConnector.Enable();
             phoneConnector.EventCalled += phoneConnector_EventCalled;
 
-            base.Enable();
+            return true;
         }
 
         public override void Disable()

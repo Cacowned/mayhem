@@ -97,10 +97,11 @@ namespace PhidgetModules.Events
         }
 
 
-        public override void Enable()
+        public override bool Enable()
         {
-            base.Enable();
             ifKit.InputChange += inputChangeHandler;
+
+            return true;
         }
 
         public override void Disable()

@@ -135,7 +135,7 @@ namespace VisionModules.Reactions
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
             Logger.WriteLine("");
             if (selected_device_idx < i.DeviceCount)
@@ -146,7 +146,8 @@ namespace VisionModules.Reactions
                     cam.StartFrameGrabbing();
 
             }
-            base.Enable();
+
+            return true;
         }
 
         public override void Disable()
