@@ -66,11 +66,12 @@ namespace PhidgetModules.Events
             rfid.LED = false;
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
-            base.Enable();
             rfid.Tag += RfidTag;
             rfid.TagLost += LostRfidTag;
+
+            return true;
         }
 
         public override void Disable()

@@ -140,10 +140,9 @@ namespace VisionModules.Events
                 this.Enable();
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
             Logger.WriteLine("Enable");
-            base.Enable();
 
             if (cam != null && !IsConfiguring)
             {
@@ -153,6 +152,8 @@ namespace VisionModules.Events
                 pd.OnPresenceUpdate -= presenceHandler;
                 pd.OnPresenceUpdate += presenceHandler;               
             }
+
+            return true;
         }
 
         public override void Disable()

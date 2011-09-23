@@ -64,9 +64,9 @@ namespace PhidgetModules.Reaction
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
-            base.Enable();
+            return true;
         }
 
         public override void Disable()

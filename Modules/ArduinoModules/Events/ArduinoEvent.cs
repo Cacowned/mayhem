@@ -80,10 +80,8 @@ namespace ArduinoModules.Events
         }
 
 
-        public override void Enable()
+        public override bool Enable()
         {
-            base.Enable();
-
             if (OnAnalogPinChanged != null && OnDigitalPinChanged != null && arduino != null)
             {
 
@@ -94,7 +92,7 @@ namespace ArduinoModules.Events
                 arduino.OnDigitalPinChanged += OnDigitalPinChanged;
             }
 
-
+            return true;
         }
 
         public override void Disable()
