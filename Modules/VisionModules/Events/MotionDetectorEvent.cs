@@ -144,11 +144,8 @@ namespace VisionModules.Events
                 this.Enable();
         }
 
-    
-
-        public override void Enable()
+        public override bool Enable()
         {
-            base.Enable();
             Logger.WriteLine("Enable");
 
             // TODO: Improve this code
@@ -161,7 +158,9 @@ namespace VisionModules.Events
                 m.RegisterForImages(cam);
                 m.OnMotionUpdate -= motionUpdateHandler;
                 m.OnMotionUpdate += motionUpdateHandler;
-            }      
+            }
+
+            return true;
         }
 
         public override void Disable()

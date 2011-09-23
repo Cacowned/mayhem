@@ -52,13 +52,37 @@ namespace MayhemCore
             }
         }
 
-        public virtual void Enable()
+        internal void Enable_()
         {
-            this.Enabled = true;
+            try
+            {
+                Enabled = Enable();
+            }
+            catch
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Error enabling " + Name);
+            }
+        }
+
+        public virtual bool Enable()
+        {
+            return true;
+        }
+
+        internal void Disable_()
+        {
+            try
+            {
+                Disable();
+                Enabled = false;
+            }
+            catch
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Error disabling " + Name);
+            }
         }
         public virtual void Disable()
         {
-            this.Enabled = false;
         }
 
         public virtual void Delete()
@@ -89,14 +113,28 @@ namespace MayhemCore
         protected ModuleBase()
         {
             _Initialize();
-            Initialize();
+            try
+            {
+                Initialize();
+            }
+            catch
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
+            }
         }
 
         [OnDeserializing]
         private void OnDeserializing(StreamingContext sc)
         {
             _Initialize();
-            Initialize();
+            try
+            {
+                Initialize();
+            }
+            catch
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
+            }
         }
 
         [OnDeserialized]

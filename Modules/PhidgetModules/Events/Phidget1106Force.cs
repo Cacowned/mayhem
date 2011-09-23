@@ -39,13 +39,13 @@ namespace PhidgetModules.Events
 
         public override void SetConfigString()
         {
-            string overUnder = "above";
+            string overUnder = "goes above";
             if (!Increasing)
             {
-                overUnder = "below";
+                overUnder = "drops below";
             }
 
-            ConfigString = String.Format("Index {0} goes {1} {2}", Index, overUnder, TopValue.ToString("0.###"));
+            ConfigString = String.Format("Index {0} {1} {2}", Index, overUnder, TopValue.ToString("0.###"));
         }
     }
 }

@@ -9,9 +9,6 @@ using System.Windows.Controls;
 
 namespace PhidgetModules.Wpf
 {
-    /// <summary>
-    /// Interaction logic for Phidget1129TouchConfig.xaml
-    /// </summary>
     public partial class Config1129Touch : PhidgetConfigControl
     {
         public bool OnTurnOn { get; private set; }
@@ -19,7 +16,14 @@ namespace PhidgetModules.Wpf
         public Config1129Touch(bool onTurnOn)
         {
             this.OnTurnOn = onTurnOn;
+
             InitializeComponent();
+        }
+
+        public override void OnLoad()
+        {
+            OnWhenOn.IsChecked = OnTurnOn;
+            OnWhenOff.IsChecked = !OnTurnOn;
         }
 
         public override string Title
@@ -29,13 +33,7 @@ namespace PhidgetModules.Wpf
                 return "Phidget - Touch";
             }
         }
-
-        public override void OnLoad()
-        {
-            OnWhenOn.IsChecked = OnTurnOn;
-            OnWhenOff.IsChecked = !OnTurnOn;
-        }
-
+        
         public override void OnSave()
         {
             OnTurnOn = (bool)OnWhenOn.IsChecked;

@@ -139,9 +139,8 @@ namespace VisionModules.Events
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
-            base.Enable();
             Logger.WriteLine("Enable");
 
             // TODO: Improve this code
@@ -155,9 +154,9 @@ namespace VisionModules.Events
                 od.OnObjectDetected += objectDetectHandler;
                 od.OnObjectDetected -= objectDetectHandler;
             }
-           
-        }
 
+            return true;
+        }
 
         /** <summary>
          *  Passed from configuration dialog 
@@ -173,7 +172,7 @@ namespace VisionModules.Events
         {
             base.Disable();
             Logger.WriteLine("Disable");
-      
+
             od.OnObjectDetected -= objectDetectHandler;
             if (cam != null)
                 od.UnregisterForImages(cam);

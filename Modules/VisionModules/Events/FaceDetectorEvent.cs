@@ -83,7 +83,7 @@ namespace VisionModules.Events
         {
             get
             {
-                Logger.WriteLine(" get ConfigurationControl!");
+                Logger.WriteLine("get ConfigurationControl!");
 
                 FaceDetectConfig config = new FaceDetectConfig(this.cam);
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
@@ -97,12 +97,8 @@ namespace VisionModules.Events
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
-            Logger.WriteLine("");
-            base.Enable();
-            
-
             // TODO: Improve this code
             if (!IsConfiguring && selected_device_idx < i.DeviceCount)
             {
@@ -114,7 +110,8 @@ namespace VisionModules.Events
                 fd.RegisterForImages(cam);
                 fd.OnFaceDetected -= m_onFaceDetected;
                 fd.OnFaceDetected += m_onFaceDetected;
-            }        
+            }
+            return true;
         }
 
         public override void Disable()

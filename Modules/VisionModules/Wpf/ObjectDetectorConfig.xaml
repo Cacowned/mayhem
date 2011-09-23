@@ -9,7 +9,7 @@
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Vertical">
-                <Canvas Width="320" Height="240" IsVisibleChanged="Control_IsVisibleChanged">
+                <Canvas Width="320" Height="240">
                     <Image Canvas.Left="0" Canvas.Top="0" Height="240" Name="camera_image" Stretch="Fill" Width="320"  />
                     <visionmods:ROISelector Canvas.Left="0" Canvas.Top="0" Height="240" Width="320" x:Name="overlay" Background= "Transparent"/>
                 </Canvas>

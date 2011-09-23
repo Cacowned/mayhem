@@ -91,19 +91,18 @@ namespace DefaultModules.Events
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
-            base.Enable();
             Dispatcher.FromThread(mainThread).Invoke((Action)delegate
             {
                 interceptKeys.AddCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
             });
+
+            return true;
         }
 
         public override void Disable()
         {
-            base.Disable();
-
             interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
         }
     }
