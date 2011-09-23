@@ -8,6 +8,12 @@ using XboxModules.Resources;
 
 namespace XboxModules
 {
+    enum ControllerStatus
+    {
+        Attached,
+        Detached
+    }
+
     class ButtonEvents : IDisposable
     {
         public delegate void ButtonDownHandler(Buttons button);
@@ -16,7 +22,8 @@ namespace XboxModules
         public delegate void ButtonUpHandler(Buttons button);
         public event ButtonUpHandler OnButtonUp;
 
-        //public Buttons DownButtons { get; private set; }
+        public delegate void ControllerStatusChanged(ControllerStatus status);
+        public event ControllerStatusChanged OnStatusChanged;
 
         protected BackgroundWorker bw;
 
@@ -63,7 +70,29 @@ namespace XboxModules
 
         #endregion
 
-        void StartWatching()
+        private ControllerStatus status;
+        public ControllerStatus Status
+        {
+            get
+            {
+                return status;
+            }
+            set
+            {
+                // Only do this if the flag is being switched
+                if (value != status)
+                {
+                    status = value;
+
+                    if (OnStatusChanged != null)
+                    {
+                        OnStatusChanged(status);
+                    }
+                }
+            }
+        }
+
+        private void StartWatching()
         {
             bw = new BackgroundWorker();
 
@@ -74,7 +103,7 @@ namespace XboxModules
             bw.RunWorkerAsync();
         }
 
-        void StopWatching()
+        private void StopWatching()
         {
             bw.CancelAsync();
         }
@@ -100,9 +129,10 @@ namespace XboxModules
                 var controller = GamePad.GetState(PlayerIndex.One);
                 GamePadButtons current_state = controller.Buttons;
 
+                Status = controller.IsConnected ? ControllerStatus.Attached : ControllerStatus.Detached;
+
                 if (!controller.IsConnected)
                 {
-                    ErrorLog.AddError(ErrorType.Warning, Strings.XboxButton_NotPluggedIn);
                     // It's not plugged in, we might as well wait a full second
                     // before checking again
                     Thread.Sleep(1000);
