@@ -49,6 +49,7 @@ namespace XboxModules.Wpf
             buttons.AddRef();
             buttons.OnButtonDown += Instance_OnButtonDown;
             buttons.OnButtonUp += Instance_OnButtonUp;
+            buttons.OnStatusChanged += Instance_OnStatusChanged;
 
             UpdateButtonsDown();
 
@@ -106,6 +107,26 @@ namespace XboxModules.Wpf
             buttons.OnButtonUp -= Instance_OnButtonUp;
 
             XboxButton.IsConfigOpen = false;
+        }
+
+        private void Instance_OnStatusChanged(ControllerStatus status)
+        {
+            Dispatcher.Invoke((Action)delegate
+            {
+                if (status == ControllerStatus.Detached)
+                {
+                    //CanSave = false;
+
+                    textInvalid.Visibility = Visibility.Visible;
+                }
+                if (status == ControllerStatus.Attached)
+                {
+                    //CanSave = true;
+                    textInvalid.Visibility = Visibility.Collapsed;
+                }
+            });
+
+            //textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

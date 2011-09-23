@@ -8,7 +8,7 @@
         <StackPanel>
             <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Please enter a combination of buttons which will activate this event.</TextBlock>
             <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding ButtonsDownText}" />
-            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Text="Key combination is invalid" HorizontalAlignment="Center" />
+            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Text="Plug in an Xbox Controller" HorizontalAlignment="Center" />
         </StackPanel>
 	</Grid>
 </src:IWpfConfiguration>
