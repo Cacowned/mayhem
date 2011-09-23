@@ -21,12 +21,12 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
-using Brush = System.Windows.Media.Brush; 
+using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using System.Windows.Data;
 using System.Windows.Controls.Primitives;
 using MayhemCore;
-using System.Threading; 
+using System.Threading;
 namespace VisionModules.Wpf
 {
 
@@ -43,7 +43,7 @@ namespace VisionModules.Wpf
         private CameraDriver i = CameraDriver.Instance;
         protected List<Camera> cams = new List<Camera>();
 
-        public ObservableCollection<ImageBrush> camera_previews = new ObservableCollection<ImageBrush>(); 
+        public ObservableCollection<ImageBrush> camera_previews = new ObservableCollection<ImageBrush>();
 
         // list of borders
 
@@ -66,19 +66,18 @@ namespace VisionModules.Wpf
         {
             this.location = location;
             slider_value = capture_offset_time;
-            this.DataContext = this; 
+            this.DataContext = this;
 
             InitializeComponent();
-            Init();
         }
 
-        public  void Init()
+        public override void OnLoad()
         {
             // TODO: Enumerate devices
 
             // populate device list
 
-            lbl_current_loc.Content = location; 
+            lbl_current_loc.Content = location;
 
             Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
 
@@ -89,15 +88,15 @@ namespace VisionModules.Wpf
 
             deviceList.SelectedIndex = 0;
 
-            
+
 
             if (i.DeviceCount > 0)
             {
                 // Response timeout for the camera
                 Thread.Sleep(350);
                 // start the camera 0 if it isn't already running
-           
- 
+
+
                 // attach canvases with camera images to camera_preview_panel
                 foreach (Camera c in i.cameras_available)
                 {
@@ -112,26 +111,26 @@ namespace VisionModules.Wpf
                         Logger.WriteLine("Camera IDX " + c.index);
                     }
 
-                    Logger.WriteLine("Adding...");                  
-                    
+                    Logger.WriteLine("Adding...");
+
                     //camera_preview_panel.Children.Add(canv);
-                    int width = (int) ( camera_preview_panel.Width / 3);    
-                    int height = (int)( width * 3 / 4);                     // 4:3 aspect ratio
+                    int width = (int)(camera_preview_panel.Width / 3);
+                    int height = (int)(width * 3 / 4);                     // 4:3 aspect ratio
 
                     preview_width = width;
-                    preview_height = height; 
+                    preview_height = height;
 
-                 
+
                     // the camera previews are drawn onto an ImageBrush, which is shown in the 
                     // background of the DataTemplate
-                    
+
                     camera_previews.Add(new ImageBrush());
-                    
+
 
                 }
-                
+
                 camera_preview_panel.ItemsSource = camera_previews;
-                
+
             }
             else
             {
@@ -139,7 +138,7 @@ namespace VisionModules.Wpf
             }
 
 
-            
+
 
             // capture offset slider
             int capture_size_s = Camera.LOOP_DURATION / 1000;
@@ -176,12 +175,9 @@ namespace VisionModules.Wpf
             slider_tickbar.Minimum = -capture_size_s;
             slider_tickbar.Maximum = capture_size_s;*/
 
-           
-
-            CanSave = true; 
 
 
-
+            CanSave = true;
         }
 
         public override void OnClosing()
@@ -203,8 +199,8 @@ namespace VisionModules.Wpf
         ///
         public void i_OnImageUpdated(object sender, EventArgs e)
         {
-          
-           Dispatcher.Invoke(new ImageUpdateHandler(SetCameraImageSource), sender);
+
+            Dispatcher.Invoke(new ImageUpdateHandler(SetCameraImageSource), sender);
             //SetCameraImageSource();
         }
 
@@ -213,26 +209,24 @@ namespace VisionModules.Wpf
         ///</summary>       
         protected virtual void SetCameraImageSource(Camera cam)
         {
-            Logger.WriteLine("New Image on Camera " + cam.index +" : " + cam.Info);
+            Logger.WriteLine("New Image on Camera " + cam.index + " : " + cam.Info);
 
             Bitmap bm = cam.ImageAsBitmap();
 
             Bitmap shrink = ImageProcessing.ScaleWithFixedSize(bm, preview_width, preview_height);
 
-  
             // convert bitmap to an hBitmap pointer and apply it as imagebrush imagesource
             IntPtr hBmp = shrink.GetHbitmap();
             BitmapSource s = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBmp, IntPtr.Zero, Int32Rect.Empty, System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
             s.Freeze();
-          
+
             camera_previews[cam.index].ImageSource = s;
-          
 
             // dispose of all the unneeded data
             VisionModulesWPFCommon.DeleteObject(hBmp);
             shrink.Dispose();
             bm.Dispose();
-            
+
             // update data binding
             BindingExpression bindingExpr = BindingOperations.GetBindingExpression(camera_preview_panel, ItemsControl.ItemsSourceProperty);
             if (bindingExpr != null)
@@ -241,9 +235,8 @@ namespace VisionModules.Wpf
             }
             else
             {
-               // Logger.WriteLine("NULL!");
+                // Logger.WriteLine("NULL!");
             }
-
         }
 
         /// <summary>
@@ -256,12 +249,10 @@ namespace VisionModules.Wpf
             FolderBrowserDialog dlg = new FolderBrowserDialog();
             dlg.RootFolder = Environment.SpecialFolder.MyComputer;
 
-            
-
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 location = dlg.SelectedPath;
-                lbl_current_loc.Content = location; 
+                lbl_current_loc.Content = location;
             }
         }
 
@@ -273,11 +264,9 @@ namespace VisionModules.Wpf
         public override void OnSave()
         {
             selected_camera = deviceList.SelectedItem as Camera;
-            
+
             OnClosing();
         }
-
-  
 
         public override string Title
         {
@@ -287,36 +276,7 @@ namespace VisionModules.Wpf
             }
         }
 
-        /// <summary>
-        ///  Register / De-Register the image update handler if the window is visible / invisible
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void root_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            /*
-            Logger.WriteLine("IsVisibleChanged");
-            if (this.IsVisible)
-            {
-          
-                foreach (Camera c in cams)
-                {
-                    if (!c.running) c.StartFrameGrabbing();
-                    c.OnImageUpdated += i_OnImageUpdated;
-                }
-
-            }
-            else
-            {
-                foreach (Camera c in cams)
-                {
-                    c.OnImageUpdated -= i_OnImageUpdated;
-                    c.TryStopFrameGrabbing();
-                }
-            }*/
-        }
-
-        #region Highlighting the camera preview selection 
+        #region Highlighting the camera preview selection
 
         private void bborder_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -328,12 +288,12 @@ namespace VisionModules.Wpf
 
             Border b = sender as Border;
             b.BorderBrush = Brushes.Red;
-            selected_preview_img = b; 
+            selected_preview_img = b;
 
             // see which item we have selected
             ImageBrush brush = b.Background as ImageBrush;
 
-            
+
 
             int item_index = camera_previews.IndexOf(brush);
 
@@ -345,7 +305,7 @@ namespace VisionModules.Wpf
 
 
         }
-       
+
 
         private void deviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -353,17 +313,17 @@ namespace VisionModules.Wpf
             {
                 selected_preview_img.BorderBrush = Brushes.Transparent;
                 int selected_index = deviceList.SelectedIndex;
-               // selected_preview_img = camera_preview_panel.Items[selected_index] as Border;
+                // selected_preview_img = camera_preview_panel.Items[selected_index] as Border;
 
                 selected_preview_img = borders[selected_index];
-                selected_preview_img.BorderBrush = Brushes.Red; 
+                selected_preview_img.BorderBrush = Brushes.Red;
             }
         }
 
         private void bborder_Loaded(object sender, RoutedEventArgs e)
         {
             Border b = sender as Border;
-            borders.Add(b); 
+            borders.Add(b);
         }
 
         private void bborder_Unloaded(object sender, RoutedEventArgs e)

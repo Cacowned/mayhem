@@ -105,7 +105,6 @@ namespace VisionModules.Events
             presenceHandler = new PresenceDetectorComponent.DetectionHandler(m_OnPresenceUpdate);
         }
 
-
         public IWpfConfiguration ConfigurationControl
         {
             get
@@ -165,8 +164,8 @@ namespace VisionModules.Events
                 pd.UnregisterForImages(cam);
             // only disable the camera if the event is not configuring
             if (!IsConfiguring && cam != null)
-            {          
-                    cam.TryStopFrameGrabbing();
+            {
+                cam.TryStopFrameGrabbing();
             }
         }
 
