@@ -155,7 +155,7 @@ namespace MayhemCore
             {
                 try
                 {
-                    Event.Disable();
+                    Event.Disable_();
                 }
                 catch
                 {
@@ -166,7 +166,7 @@ namespace MayhemCore
             {
                 try
                 {
-                    Reaction.Disable();
+                    Reaction.Disable_();
                 }
                 catch
                 {
