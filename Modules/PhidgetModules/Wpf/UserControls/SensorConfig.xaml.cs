@@ -29,6 +29,8 @@ namespace PhidgetModules.Wpf.UserControls
 
         public PhidgetConfigControl Sensor { get; private set; }
 
+        private bool shouldCheckValidity = false;
+
         public SensorConfig(InterfaceKit ifKit, int index, Func<int, string> conversion, PhidgetConfigControl control)
         {
             this.Index = index;
@@ -54,6 +56,9 @@ namespace PhidgetModules.Wpf.UserControls
             SensorDataBox.IfKit = IfKit;
             SensorDataBox.convertor = Convertor;
 
+            Sensor.OnLoad();
+            Sensor.OnRevalidate += Revalidate;
+
             sensorControl.Content = Sensor;
 
             IfKit.Attach += ifKit_Attach;
@@ -63,11 +68,15 @@ namespace PhidgetModules.Wpf.UserControls
             // If we have detected sensors already, then enable the save button
             if (IfKit.sensors.Count > 0)
                 CanSave = true;
+
+
+            shouldCheckValidity = true;
         }
 
         public override void OnSave()
         {
             Index = SensorDataBox.Index;
+            Sensor.OnSave();
         }
 
         public override void OnClosing()
@@ -84,13 +93,23 @@ namespace PhidgetModules.Wpf.UserControls
 
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
-                this.textInvalid.Visibility = visible;
+                this.phidgetAttached.Visibility = visible;
             }));
         }
 
         private void ifKit_Attach(object sender, AttachEventArgs e)
         {
             CanSave = true;
+        }
+
+        private void Revalidate()
+        {
+            if (shouldCheckValidity)
+            {
+                string text = Sensor.CheckValidity();
+                textInvalid.Text = text;
+                textInvalid.Visibility = text.Length == 0 ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
     }
 }
