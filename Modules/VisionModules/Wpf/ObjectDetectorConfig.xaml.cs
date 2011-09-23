@@ -7,7 +7,7 @@
  * 
  *  Author: Sven Kratz
  * 
- */  
+ */
 
 using System;
 using System.Collections.Generic;
@@ -28,11 +28,12 @@ using System.Diagnostics;
 using System.Drawing;
 using VisionModules.Events;
 using System.IO;
-using Image=System.Drawing.Image;
+using Image = System.Drawing.Image;
 using Point = System.Drawing.Point;
 using System.Drawing.Drawing2D;
 using MayhemOpenCVWrapper.LowLevel;
 using MayhemCore;
+using System.Threading;
 
 
 namespace VisionModules.Wpf
@@ -60,7 +61,7 @@ namespace VisionModules.Wpf
         private ObjectDetectorComponent od;
 
         public Bitmap templateImg = null;
-        public Bitmap templatePreview = null ;
+        public Bitmap templatePreview = null;
 
         private double template_scale_f = 1.0;
 
@@ -80,7 +81,10 @@ namespace VisionModules.Wpf
         {
             objectDetectorEvent = objDetector;
             InitializeComponent();
+        }
 
+        public override void OnLoad()
+        {
             // TODO: camera resolution
             od = new ObjectDetectorComponent(320, 240);
 
@@ -88,10 +92,7 @@ namespace VisionModules.Wpf
             {
                 od.set_template(templateImg);
             }
-        }
 
-        public override void OnLoad()
-        {
             foreach (Camera c in i.cameras_available)
             {
                 DeviceList.Items.Add(c);
@@ -106,7 +107,10 @@ namespace VisionModules.Wpf
                 if (!cam.running)
                 {
                     cam.OnImageUpdated += i_OnImageUpdated;
-                    cam.StartFrameGrabbing();
+                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+                    {
+                        cam.StartFrameGrabbing();
+                    }));
                 }
                 Logger.WriteLine("using " + cam.Info.ToString());
             }
@@ -114,8 +118,6 @@ namespace VisionModules.Wpf
             {
                 Logger.WriteLine("No camera available");
             }
-
-
         }
 
         public override void OnClosing()
@@ -168,14 +170,14 @@ namespace VisionModules.Wpf
 
 
             // if a template preview is available, overlay with camera image
-            if (templatePreview != null )
+            if (templatePreview != null)
             {
                 // do some actual object detection 
-                
+
                 // Bitmap cameraImage = new Bitmap(BackBuffer);
 
                 od.update_frame(cam, null);
-                
+
 
                 List<Point> matches = od.lastImageMatchingPoints;
                 List<Point> tKeyPts = od.templateKeyPoints;
@@ -187,7 +189,7 @@ namespace VisionModules.Wpf
                 if (templatePreview != null)
                     g.DrawImage(templatePreview, 0, 0);
 
-                if (matches != null )
+                if (matches != null)
                 {
                     Logger.WriteLine("Matching Points:");
                     foreach (Point p in matches)
@@ -220,7 +222,7 @@ namespace VisionModules.Wpf
                             g.DrawRectangle(Pens.Red, x, y, r, r);
                         }
                     }
-                  
+
                 }
 
                 // draw matches in camera image (if present) and line do correspondences in 
@@ -271,7 +273,7 @@ namespace VisionModules.Wpf
                 }
 
                 // draw rectangle of object bounding corner
-                
+
                 if (corners != null)
                 {
                     g.DrawLine(Pens.LightBlue, corners[0], corners[1]);
@@ -283,7 +285,7 @@ namespace VisionModules.Wpf
                 g.Dispose();
 
             }
-            
+
             IntPtr hBmp;
 
             //Convert the bitmap to BitmapSource for use with WPF controls
@@ -300,7 +302,7 @@ namespace VisionModules.Wpf
         /**<summary>
          * Method gets called when the save button is clicked
          * </summary> */
-         public override void OnSave()
+        public override void OnSave()
         {
             Logger.WriteLine("OnSave!!!!!!!!");
             selected_camera = DeviceList.SelectedItem as Camera;
@@ -318,34 +320,6 @@ namespace VisionModules.Wpf
             }
         }
 
-           /// <summary>
-           /// Register / De-Register the image update handler if the window is visible / invisible
-           /// </summary>
-            private void Control_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-            {
-                Logger.WriteLine("[MotionDetectorConfig] : IsVibleChanged");
-                if (this.IsVisible)
-                {
-                    if (cam == null)
-                    {
-                        OnLoad();
-                    }
-                    if (cam != null)
-                    {
-                        if (!cam.running) cam.StartFrameGrabbing();
-                        cam.OnImageUpdated += i_OnImageUpdated;
-                    }
-                }
-                else
-                {
-                    if (cam != null)
-                    {
-                        cam.OnImageUpdated -= i_OnImageUpdated;
-                        cam.TryStopFrameGrabbing();
-                    }
-                }
-            }
-
         public override string Title
         {
             get
@@ -353,8 +327,6 @@ namespace VisionModules.Wpf
                 return "Object Detector";
             }
         }
-
-       
 
         private void btn_templateFromFile_Click(object sender, RoutedEventArgs e)
         {
@@ -368,40 +340,40 @@ namespace VisionModules.Wpf
             {
                 string fileName = dlg.FileName;
 
-                Bitmap tImg = null; 
+                Bitmap tImg = null;
                 // TODO: Better Exception Handling --> what if the file isn't an image !?
                 try
                 {
-                     tImg = new Bitmap(fileName);
-                     if (tImg.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
-                     {
-                         this.templateImg = tImg;
-                         // scale down the template image to generate a preview image
-                         int w = templateImg.Width;
-                         int h = templateImg.Height;
-                         this.template_scale_f = 100.0 / w;
-                         Bitmap preview = ImageProcessing.ScaleWithFixedSize(templateImg, 100, (int)( h * template_scale_f));
-                         this.templatePreview = preview;  
-                         od.set_template(templateImg);
-                     }
-                     else
-                     {
-                         System.Windows.Forms.MessageBox.Show("The image color format is not supported. You need to provide an 24bit rgb color image", "Mayhem", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                         return;
-                     }
-                    
+                    tImg = new Bitmap(fileName);
+                    if (tImg.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+                    {
+                        this.templateImg = tImg;
+                        // scale down the template image to generate a preview image
+                        int w = templateImg.Width;
+                        int h = templateImg.Height;
+                        this.template_scale_f = 100.0 / w;
+                        Bitmap preview = ImageProcessing.ScaleWithFixedSize(templateImg, 100, (int)(h * template_scale_f));
+                        this.templatePreview = preview;
+                        od.set_template(templateImg);
+                    }
+                    else
+                    {
+                        System.Windows.Forms.MessageBox.Show("The image color format is not supported. You need to provide an 24bit rgb color image", "Mayhem", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        return;
+                    }
+
 
                 }
                 catch (FileNotFoundException)
                 {
                     System.Windows.Forms.MessageBox.Show("The image file you specified could not be found", "Mayhem", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                    return; 
+                    return;
                 }
 
                 // pass template bitmap to objectDetectorEvent
                 if (tImg != null)
                 {
-                   
+
                 }
 
                 Logger.WriteLine("Image Loaded Successfully");
@@ -409,23 +381,23 @@ namespace VisionModules.Wpf
                 // update helper text
                 helperText.Content = "image set (event is now ready to work)";
                 helperText.Foreground = System.Windows.Media.Brushes.DarkGreen;
-             
+
             }
             else
             {
-               // System.Windows.Forms.MessageBox.Show("File Selection Error", "Mayhem", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                // System.Windows.Forms.MessageBox.Show("File Selection Error", "Mayhem", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                 Logger.WriteLine("user clicked cancel");
                 return;
-            }         
+            }
         }
 
-        
+
 
         private void btn_templateFromRegion_Click(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-    
+
     }
 }

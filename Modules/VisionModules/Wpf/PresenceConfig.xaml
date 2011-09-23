@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              xmlns:visionmods="clr-namespace:VisionModules.Wpf"
-             Width="400"
-             IsVisibleChanged="Control_IsVisibleChanged">
+             Width="400" >
     <Grid >
         <StackPanel>
             <visionmods:MultiCameraSelector x:Name="camera_selector"></visionmods:MultiCameraSelector>
