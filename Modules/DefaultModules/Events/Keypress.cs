@@ -103,8 +103,6 @@ namespace DefaultModules.Events
 
         public override void Disable()
         {
-            base.Disable();
-
             interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
         }
     }
