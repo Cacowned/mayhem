@@ -65,8 +65,6 @@ namespace VisionModules.Wpf
                      break;                  
             }
 
-           
-
             // evil hack to get the camera selector to actually show the selection!
             System.Timers.Timer tt = new System.Timers.Timer(250);
             tt.AutoReset = false; 
@@ -75,8 +73,7 @@ namespace VisionModules.Wpf
                 Dispatcher.Invoke((Action)(() => { 
                     camera_selector.deviceList.SelectedIndex = this.selectedIndex;
                     camera_selector.deviceList_SelectionChanged(this, null); 
-                }) ); 
-                
+                }) );          
             });
             tt.Enabled = true;
 
@@ -97,7 +94,6 @@ namespace VisionModules.Wpf
         }
 
         
-
         private void Control_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             Logger.WriteLine("IsVisibleChanged");
