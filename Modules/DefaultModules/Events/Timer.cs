@@ -114,7 +114,6 @@ namespace DefaultModules.Events
             }
             catch (Exception e)
             {
-                // we should never get here
                 Logger.WriteLine(Strings.Timer_CantSetInterval, e.Message);
             }
         }
