@@ -24,7 +24,7 @@ namespace OfficeModules.Events
             Trigger();
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
             // When enabled, try and get the outlook instance
             try
@@ -32,12 +32,14 @@ namespace OfficeModules.Events
                 outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
                 outlook.Reminder += reminderEvent;
 
-                base.Enable();
+                return true;
             }
             catch
             {
                 ErrorLog.AddError(ErrorType.Warning, Strings.Outlook_ApplicationNotFound);
             }
+
+            return false;
         }
 
         public override void Disable()

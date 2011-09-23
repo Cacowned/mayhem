@@ -7,7 +7,7 @@
              Name="root"
              Width="400">
 
-    <Grid  IsVisibleChanged="root_IsVisibleChanged">
+    <Grid>
         <StackPanel>       
             <ItemsControl  BorderThickness="0" Name="camera_preview_panel" Width="400" Height="200" ItemsSource="{Binding ElementName=root, Path=camera_previews}">
                 <ItemsControl.ItemsPanel>

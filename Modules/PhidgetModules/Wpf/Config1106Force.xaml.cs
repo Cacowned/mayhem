@@ -3,6 +3,7 @@ using System.Windows;
 using Phidgets;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf.UserControls;
+using System.Windows.Controls;
 
 namespace PhidgetModules.Wpf
 {
@@ -14,6 +15,7 @@ namespace PhidgetModules.Wpf
         public Config1106Force(double topValue, bool increasing)
         {
             this.TopValue = topValue;
+            this.Increasing = increasing;
 
             InitializeComponent();
         }
@@ -26,27 +28,31 @@ namespace PhidgetModules.Wpf
             DecreasingRadio.IsChecked = !Increasing;
         }
 
-        /*
-        public override void OnSave()
-        {
-            if (!double.TryParse(textBoxTopValue.Text, out TopValue) && TopValue >= 0)
-            {
-                MessageBox.Show("You must enter a valid number");
-            }
-            else
-            {
-                Increasing = (bool)IncreasingRadio.IsChecked;
-                Index = SensorDataBox.Index;
-            }
-        }
-         */
-
         public override string Title
         {
             get
             {
                 return "Phidget - Force";
             }
+        }
+
+        public override string CheckValidity()
+        {
+            if (!(double.TryParse(textBoxTopValue.Text, out TopValue) && (TopValue >= 0 && TopValue <= 1000)))
+            {
+                return "Invalid Top Value";
+            }
+            return "";
+        }
+
+        public override void OnSave()
+        {
+            Increasing = (bool)IncreasingRadio.IsChecked;
+        }
+
+        private void TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Validate();
         }
     }
 }

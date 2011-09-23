@@ -114,18 +114,18 @@ namespace DefaultModules.Events
             }
             catch (Exception e)
             {
-                // we should never get here
                 Logger.WriteLine(Strings.Timer_CantSetInterval, e.Message);
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
             // Update our interval with the current values
             SetInterval();
 
-            base.Enable();
             myTimer.Start();
+
+            return true;
         }
 
         public override void Disable()

@@ -3,6 +3,7 @@ using System.Windows;
 using Phidgets;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf.UserControls;
+using System.Windows.Controls;
 
 namespace PhidgetModules.Wpf
 {
@@ -14,6 +15,7 @@ namespace PhidgetModules.Wpf
         public Config1133Sound(double topValue, bool increasing)
         {
             this.TopValue = topValue;
+            this.Increasing = increasing;
 
             InitializeComponent();
         }
@@ -32,6 +34,25 @@ namespace PhidgetModules.Wpf
             {
                 return "Phidget - Sound";
             }
+        }
+
+        public override string CheckValidity()
+        {
+            if (!(double.TryParse(textBoxTopValue.Text, out TopValue) && (TopValue >= 0 && TopValue <= 1000)))
+            {
+                return "Invalid Top Value";
+            }
+            return "";
+        }
+
+        public override void OnSave()
+        {
+            Increasing = (bool)IncreasingRadio.IsChecked;
+        }
+
+        private void TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Validate();
         }
     }
 }

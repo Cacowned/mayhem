@@ -106,7 +106,7 @@ namespace VisionModules.Reactions
         }
 
 
-        public override void Enable()
+        public override bool Enable()
         {
             // TODO: Improve this code
             if (!IsConfiguring && selected_device_idx < i.DeviceCount)
@@ -117,7 +117,8 @@ namespace VisionModules.Reactions
                 //Thread.Sleep(350);
                 cam.StartFrameGrabbing();
             }
-            base.Enable();
+
+            return true;
         }
 
         public override void Disable()

@@ -15,9 +15,9 @@
         </Grid.RowDefinitions>
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Top Value:</TextBlock>
-        <TextBox Name="textBoxTopValue" Grid.Column="1" Grid.Row="0" />
+        <TextBox Name="textBoxTopValue" Grid.Column="1" Grid.Row="0" TextChanged="TextChanged" />
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Bottom Value:</TextBlock>
-        <TextBox Name="textBoxBottomValue" Grid.Column="1" Grid.Row="1" />
+        <TextBox Name="textBoxBottomValue" Grid.Column="1" Grid.Row="1" TextChanged="TextChanged" />
     </Grid>
 </common:PhidgetConfigControl>

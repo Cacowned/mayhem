@@ -6,7 +6,7 @@
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              xmlns:visionmods="clr-namespace:VisionModules.Wpf"
              mc:Ignorable="d" 
-             Width="400" Loaded="UserControl_Loaded">
+             Width="400">
     <Grid>
         <StackPanel>
             <ItemsControl  BorderThickness="0" Name="camera_preview_panel" Width="400" MaxHeight="200" ItemsSource="{Binding ElementName=root, Path=camera_previews}">

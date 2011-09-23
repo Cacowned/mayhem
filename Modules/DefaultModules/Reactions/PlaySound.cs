@@ -37,17 +37,19 @@ namespace DefaultModules.Reactions
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
             m = new MPlayer();
             if (File.Exists(SoundPath))
             {
-                base.Enable();
+                return true;
             }
             else
             {
                 ErrorLog.AddError(ErrorType.Warning, Strings.PlaySound_FileNotFound);
             }
+
+            return false;
         }
 
         public override void Disable()

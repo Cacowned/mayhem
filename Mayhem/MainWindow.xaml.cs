@@ -85,7 +85,6 @@ namespace Mayhem
             {
                 using (FileStream stream = new FileStream(filename, FileMode.Open))
                 {
-
                     try
                     {
                         // Empty the connection list (should be empty already)
@@ -101,6 +100,7 @@ namespace Mayhem
                     }
                     catch (SerializationException e)
                     {
+                        ErrorLog.AddError(ErrorType.Failure, "Error loading saved data");
                         Logger.WriteLine("(De-)SerializationException " + e);
                     }
                 }
@@ -113,11 +113,18 @@ namespace Mayhem
 
         private void Save_()
         {
-            using (FileStream stream = new FileStream(filename, FileMode.Create))
+            try
             {
-                MayhemEntry.Instance.ConnectionList.Serialize(stream);
+                using (FileStream stream = new FileStream(filename, FileMode.Create))
+                {
+                    MayhemEntry.Instance.ConnectionList.Serialize(stream);
+                }
+                waitForSave.Set();
             }
-            waitForSave.Set();
+            catch
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Error saving data");
+            }
         }
 
         public void Save()
@@ -129,11 +136,15 @@ namespace Mayhem
         {
             Save();
             waitForSave.WaitOne();
-            mayhem.Shutdown();
-            foreach (Connection connection in mayhem.ConnectionList)
+            try
             {
-                connection.Disable(null);
+                mayhem.Shutdown();
+                foreach (Connection connection in mayhem.ConnectionList)
+                {
+                    connection.Disable(null);
+                }
             }
+            catch { }
         }
 
         private void EventListClick(object sender, RoutedEventArgs e)
@@ -204,28 +215,34 @@ namespace Mayhem
             {
                 EventBase ev;
                 ReactionBase reaction;
-                if (_eventInstance != null)
-                    ev = _eventInstance;
-                else
+                try
                 {
-                    Type t = _event.Type;
-                    ev = (EventBase)Activator.CreateInstance(t);
-                }
+                    if (_eventInstance != null)
+                        ev = _eventInstance;
+                    else
+                    {
+                        Type t = _event.Type;
+                        ev = (EventBase)Activator.CreateInstance(t);
+                    }
 
-                if (_reactionInstance != null)
-                    reaction = _reactionInstance;
-                else
-                {
-                    Type t = _reaction.Type;
-                    reaction = (ReactionBase)Activator.CreateInstance(t);
+                    if (_reactionInstance != null)
+                        reaction = _reactionInstance;
+                    else
+                    {
+                        Type t = _reaction.Type;
+                        reaction = (ReactionBase)Activator.CreateInstance(t);
+                    }
+                    MayhemEntry.Instance.ConnectionList.Add(new Connection(ev, reaction));
                 }
-                MayhemEntry.Instance.ConnectionList.Add(new Connection(ev, reaction));
+                catch 
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error creating connection between " + _event.Type.Name + " and " + _reaction.Type.Name);
+                }
 
                 buttonEmptyReaction.Style = (Style)FindResource("EmptyReactionButton");
                 buttonEmptyEvent.Style = (Style)FindResource("EmptyEventButton");
                 buttonEmptyReaction.Content = "Create Reaction";
                 buttonEmptyEvent.Content = "Create Event";
-
 
                 _event = null;
                 _reaction = null;

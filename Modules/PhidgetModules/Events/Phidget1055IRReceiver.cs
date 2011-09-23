@@ -72,10 +72,11 @@ namespace PhidgetModules.Events
             }
         }
 
-        public override void Enable()
+        public override bool Enable()
         {
-            base.Enable();
             ir.Code += gotCode;
+
+            return true;
         }
 
         public override void Disable()

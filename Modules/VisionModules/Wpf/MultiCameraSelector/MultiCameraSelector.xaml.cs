@@ -28,6 +28,7 @@ using System.Drawing;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using MayhemCore;
+using System.Threading;
 
 namespace VisionModules.Wpf
 {
@@ -58,18 +59,12 @@ namespace VisionModules.Wpf
 
         public int index = 0; 
 
-
         public MultiCameraSelector()
         {
             InitializeComponent();
-            // avoid nasty errors in the designer due to not finding the OpenCVDLL
-            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            {
-                Init();
-            }
         }
 
-        private void Init()
+        internal void Init()
         {
             i = CameraDriver.Instance;
 
@@ -89,8 +84,10 @@ namespace VisionModules.Wpf
                     cams.Add(c);
                     c.OnImageUpdated -= i_OnImageUpdated;
                     c.OnImageUpdated += i_OnImageUpdated;
-                    
-                    c.StartFrameGrabbing();
+                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+                    {
+                        c.StartFrameGrabbing();
+                    }));
                     Logger.WriteLine("using " + c.Info.ToString());
                     Logger.WriteLine("Camera IDX " + c.index);
                     
@@ -172,34 +169,6 @@ namespace VisionModules.Wpf
             else
             {
                 // Logger.WriteLine("NULL!");
-            }
-        }
-
-        /// <summary>
-        ///  Register / De-Register the image update handler if the window is visible / invisible
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void VisibilityChanged(bool visibility)
-        {
-            Logger.WriteLine("IsVisibleChanged");
-            if (visibility)
-            {
-
-                foreach (Camera c in cams)
-                {
-                    if (!c.running) c.StartFrameGrabbing();
-                    c.OnImageUpdated += i_OnImageUpdated;
-                }
-
-            }
-            else
-            {
-                foreach (Camera c in cams)
-                {
-                    c.OnImageUpdated -= i_OnImageUpdated;
-                    c.TryStopFrameGrabbing();
-                }
             }
         }
 
@@ -295,10 +264,5 @@ namespace VisionModules.Wpf
         }
 
         #endregion
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
