@@ -34,8 +34,6 @@ namespace DefaultModules.Events
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             interceptKeys = InterceptKeys.Instance;
             mainThread = Thread.CurrentThread;
 

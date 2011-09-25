@@ -27,8 +27,6 @@ namespace DefaultModules.Reactions
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             voice = new SpVoice();
         }
 
