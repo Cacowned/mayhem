@@ -35,7 +35,7 @@ namespace MayhemSerial
     }
 
     /// <summary>
-    /// Arduino running Firmate Firmware
+    /// Arduino running Firmata Firmware
     /// </summary>
     public class ARDUINO_FIRMATA_SETTINGS : SERIAL_SETTINGS
     {

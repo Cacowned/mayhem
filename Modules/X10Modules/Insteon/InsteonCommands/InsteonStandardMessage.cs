@@ -74,27 +74,48 @@ namespace X10Modules.Insteon
         /// Is this a toggle command? 
         /// </summary>
         /// <returns></returns>
-        public bool IsToggleCommand()
+        public bool IsToggleCommand
         {
-            return commandByte1 == InsteonCommandBytes._toggle;
+            get
+            {
+                return commandByte1 == InsteonCommandBytes._toggle;
+            }
         }
 
         /// <summary>
         /// Is this an on command?
         /// </summary>
         /// <returns></returns>
-        public bool IsOnCommand()
-        {
-            return commandByte1 == InsteonCommandBytes.light_on_fast;
+        public bool IsOnCommand
+        { 
+            get 
+            {
+               return commandByte1 == InsteonCommandBytes.light_on_fast;
+            }
         }
 
         /// <summary>
         /// Is this an off command?
         /// </summary>
         /// <returns></returns>
-        public bool IsOffCommand()
+        public bool IsOffCommand
         {
-            return commandByte1 == InsteonCommandBytes.light_off_fast; 
+            get
+            {
+                return commandByte1 == InsteonCommandBytes.light_off_fast;
+            }
+        }
+
+        public override string ToString()
+        {
+            if (IsToggleCommand)
+                return "TOGGLE";
+            else if (IsOnCommand)
+                return "ON";
+            else if (IsOffCommand)
+                return "OFF";
+            else
+                return string.Format("{0:X}-{1:X}", commandByte1, commandByte2);
         }
 
 
