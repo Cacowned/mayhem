@@ -1,4 +1,4 @@
-﻿<src:IWpfConfiguration x:Class="DefaultModules.Wpf.KeypressConfig"
+﻿<src:WpfConfiguration x:Class="DefaultModules.Wpf.KeypressConfig"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
@@ -10,4 +10,4 @@
             <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Text="At lease one button must be pushed." HorizontalAlignment="Center" />
         </StackPanel>
     </Grid>
-</src:IWpfConfiguration>
+</src:WpfConfiguration>

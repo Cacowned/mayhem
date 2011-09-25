@@ -11,11 +11,7 @@ namespace PhidgetModules
         #region Configuration
         // Which index do we want to be looking at?
         [DataMember]
-        protected int Index
-        {
-            get;
-            set;
-        }
+        protected int Index;
 
         #endregion
 
@@ -26,8 +22,6 @@ namespace PhidgetModules
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             // If we don't have an IfKit yet, create one
             if (IfKit == null)
             {
@@ -51,8 +45,6 @@ namespace PhidgetModules
 
         public override void Disable()
         {
-            base.Disable();
-
             if (IfKit != null)
             {
                 IfKit.SensorChange -= handler;

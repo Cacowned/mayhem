@@ -12,12 +12,12 @@ namespace PhidgetModules.Events
     [MayhemModule("Phidget: Force Sensor", "Triggers at a certain force level")]
     public class Phidget1106Force : ValueSensorEventBase, IWpfConfigurable
     {
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1106Force(TopValue, Increasing)); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             SensorConfig sensor = configurationControl as SensorConfig;
             Config1106Force config = sensor.Sensor as Config1106Force;

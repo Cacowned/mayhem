@@ -19,7 +19,7 @@ namespace WindowModules
     {
         static readonly ulong TARGETWINDOW = Native.WS_BORDER | Native.WS_VISIBLE;
 
-        WindowActionInfo actionInfo;
+        private WindowActionInfo actionInfo;
 
         [DataMember]
         public WindowActionInfo ActionInfo
@@ -34,19 +34,19 @@ namespace WindowModules
             }
         }
 
-        static HashSet<int> processBlackList = new HashSet<int>();
+        private static HashSet<int> processBlackList = new HashSet<int>();
 
         public WindowSequence()
         {
             actionInfo = new WindowActionInfo();
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new WindowSequenceConfig(actionInfo); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             WindowSequenceConfig config = (WindowSequenceConfig)configurationControl;
             actionInfo = config.ActionInfo;

@@ -4,9 +4,23 @@ using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
-    public partial class TimerConfig : IWpfConfiguration
+    public partial class TimerConfig : WpfConfiguration
     {
-        public int Hours, Minutes, Seconds;
+        public int Hours
+        {
+            get;
+            private set;
+        }
+        public int Minutes
+        {
+            get;
+            private set;
+        }
+        public int Seconds
+        {
+            get;
+            private set;
+        }
 
         private bool shouldCheckValidity = false;
 
@@ -37,11 +51,13 @@ namespace DefaultModules.Wpf
         {
             bool badsec, badmin, badhour, badtotal;
 
-            badsec = !(Int32.TryParse(SecondsBox.Text, out Seconds) && (Seconds >= 0 && Seconds < 60));
+            int sec, min, hour;
 
-            badmin = !(Int32.TryParse(MinutesBox.Text, out Minutes) && (Minutes >= 0 && Minutes < 60));
+            badsec = !(Int32.TryParse(SecondsBox.Text, out sec) && (Seconds >= 0 && Seconds < 60));
 
-            badhour = !(Int32.TryParse(HoursBox.Text, out Hours) && (Hours >= 0));
+            badmin = !(Int32.TryParse(MinutesBox.Text, out min) && (Minutes >= 0 && Minutes < 60));
+
+            badhour = !(Int32.TryParse(HoursBox.Text, out hour) && (Hours >= 0));
 
             badtotal = Seconds == 0 && Minutes == 0 && Hours == 0;
 
@@ -69,6 +85,10 @@ namespace DefaultModules.Wpf
             }
             else
             {
+                Seconds = sec;
+                Minutes = min;
+                Hours = hour;
+
                 CanSave = true;
                 return string.Empty;
             }

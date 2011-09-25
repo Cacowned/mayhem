@@ -10,16 +10,15 @@ using PhoneModules.Controls;
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
 using System.IO;
+using PhoneModules.Wpf;
 
-namespace PhoneModules
+namespace PhoneModules.Events
 {
     [DataContract]
     [MayhemModule("Phone Remote", "Triggers from phone")]
     public class PhoneEvent : EventBase, IWpfConfigurable
     {
-        PhoneLayout phoneLayout = PhoneLayout.Instance;
-        PhoneConnector phoneConnector = PhoneConnector.Instance;
-
+        #region Configuration Properties
         [DataMember]
         private string id = "";
 
@@ -32,8 +31,6 @@ namespace PhoneModules
             }
             set
             {
-
-
                 phoneLayout = PhoneLayout.Instance;
                 phoneConnector = PhoneConnector.Instance;
                 if (!phoneConnector.HasBeenDeserialized)
@@ -47,8 +44,12 @@ namespace PhoneModules
                 }
             }
         }
+        #endregion
 
-        bool isCreatingForFirstTime = false;
+        private PhoneLayout phoneLayout = PhoneLayout.Instance;
+        private PhoneConnector phoneConnector = PhoneConnector.Instance;
+
+        private bool isCreatingForFirstTime = false;
 
         public PhoneEvent()
         {
@@ -66,10 +67,12 @@ namespace PhoneModules
                 ConfigString = fi.Name;
             }
             else
+            {
                 ConfigString = button.Text;
+            }
         }
 
-        void phoneConnector_EventCalled(string eventText)
+        private void phoneConnector_EventCalled(string eventText)
         {
             if (eventText == id)
             {
@@ -104,7 +107,6 @@ namespace PhoneModules
                 string formData = phoneLayout.Serialize();
                 phoneConnector.FormData = formData;
             }
-            base.Disable();
         }
 
         public override void Delete()
@@ -112,7 +114,8 @@ namespace PhoneModules
             phoneLayout.RemoveButton(id);
         }
 
-        IWpfConfiguration IWpfConfigurable.ConfigurationControl
+        #region Configuration Views
+        public WpfConfiguration ConfigurationControl
         {
             get
             {
@@ -123,7 +126,7 @@ namespace PhoneModules
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             if (!isCreatingForFirstTime)
             {
@@ -136,5 +139,6 @@ namespace PhoneModules
                 id = button.LayoutInfo.ID;
             }
         }
+        #endregion
     }
 }

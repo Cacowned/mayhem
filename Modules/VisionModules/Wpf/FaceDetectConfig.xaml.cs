@@ -2,7 +2,7 @@
  *   Dialog window for the Face Detector
  *   Re-Uses CamSnaphostConfig, removing the save location dialog
  *   adding feedback of the face detector output 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ using MayhemOpenCVWrapper;
 
 namespace VisionModules.Wpf
 {
-    public  class FaceDetectConfig : MotionDetectorConfig
+    public class FaceDetectConfig : MotionDetectorConfig
     {
         // use custom face detector to give feedback in the config window
         private FaceDetectorComponent fd;
@@ -29,10 +29,10 @@ namespace VisionModules.Wpf
         private CameraDriver i = CameraDriver.Instance;
 
 
-        public FaceDetectConfig(Camera c) : base(c)
-           
+        public FaceDetectConfig(Camera c)
+            : base(c)
         {
-            
+
 
             // set up the face detector
             fd = new FaceDetectorComponent();
@@ -87,7 +87,7 @@ namespace VisionModules.Wpf
             // mark face points if face has been detected
             if (faceDetectorPoints.Count > 0)
             {
-                Logger.WriteLine("Drawing Face Detector Points..."); 
+                Logger.WriteLine("Drawing Face Detector Points...");
 
                 // make a local copy of the detector points
                 List<System.Drawing.Point> points = new List<System.Drawing.Point>();
@@ -107,23 +107,23 @@ namespace VisionModules.Wpf
 
                 // mark the detected rectangles in the image
 
-                for (int k = 0; k < points.Count; k+=2)
+                for (int k = 0; k < points.Count; k += 2)
                 {
                     Logger.Write("Drawing --- " + k);
                     int x = points[k].X;
                     int y = points[k].Y;
-                    int w = points[k + 1].X-x;
-                    int h = points[k+1].Y-y;
-                    Logger.Write(x + " " + y + " w " + w + " h " + h + " " );
+                    int w = points[k + 1].X - x;
+                    int h = points[k + 1].Y - y;
+                    Logger.Write(x + " " + y + " w " + w + " h " + h + " ");
                     g.DrawRectangle(pen, x, y, w, h);
                 }
-            
+
 
                 Logger.WriteLine("Done");
 
 
             }
-            
+
 
             //Convert the bitmap to BitmapSource for use with WPF controls
             hBmp = BackBuffer.GetHbitmap();
@@ -141,7 +141,7 @@ namespace VisionModules.Wpf
         /**<summary>
          * Callback from the face detector
          * </summary>
-         */ 
+         */
         void m_onFaceDetected(object sender, List<System.Drawing.Point> points)
         {
             Logger.WriteLine("Got Points from Face Detector!");

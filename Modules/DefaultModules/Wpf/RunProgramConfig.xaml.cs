@@ -6,9 +6,18 @@ using Microsoft.Win32;
 
 namespace DefaultModules.Wpf
 {
-    public partial class RunProgramConfig : IWpfConfiguration
+    public partial class RunProgramConfig : WpfConfiguration
     {
-        public string Filename, Arguments;
+        public string Filename
+        {
+            get;
+            private set;
+        }
+        public string Arguments
+        {
+            get;
+            private set;
+        }
 
         private bool shouldCheckValidity = false;
 

@@ -12,12 +12,12 @@ namespace PhidgetModules.Events
     [MayhemModule("Phidget: Light Sensor", "Triggers at a certain light level")]
     public class Phidget1127Light : ValueSensorEventBase, IWpfConfigurable
     {
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1127Light(TopValue, Increasing)); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             SensorConfig sensor = configurationControl as SensorConfig;
             Config1127Light config = sensor.Sensor as Config1127Light;

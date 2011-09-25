@@ -9,7 +9,7 @@ namespace PhidgetModules.Reaction
     /// <summary>
     /// Interaction logic for Phidget1055IRTransmit.xaml
     /// </summary>
-    public partial class Phidget1055IRTransmitConfig : IWpfConfiguration
+    public partial class Phidget1055IRTransmitConfig : WpfConfiguration
     {
         protected IR ir;
 

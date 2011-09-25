@@ -124,7 +124,7 @@ namespace ArduinoModules.Reactions
             }           
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get 
             {
@@ -132,7 +132,7 @@ namespace ArduinoModules.Reactions
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
            // throw new NotImplementedException();
             ArduinoDigitalWriteConfig config = configurationControl as ArduinoDigitalWriteConfig;

@@ -27,8 +27,6 @@ namespace DefaultModules.Reactions
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             voice = new SpVoice();
         }
 
@@ -37,12 +35,12 @@ namespace DefaultModules.Reactions
             voice.Speak(Message, SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new TextToSpeechConfig(Message); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             Message = ((TextToSpeechConfig)configurationControl).Message;
         }

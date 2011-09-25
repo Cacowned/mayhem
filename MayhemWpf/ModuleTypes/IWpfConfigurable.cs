@@ -10,7 +10,7 @@ namespace MayhemCore.ModuleTypes
 	/// </summary>
 	public interface IWpfConfigurable
 	{
-        IWpfConfiguration ConfigurationControl { get; }
-        void OnSaved(IWpfConfiguration configurationControl);
+        WpfConfiguration ConfigurationControl { get; }
+        void OnSaved(WpfConfiguration configurationControl);
 	}
 }

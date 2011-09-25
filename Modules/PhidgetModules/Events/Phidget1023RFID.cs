@@ -17,11 +17,7 @@ namespace PhidgetModules.Events
         #region Configuration
         // This is the tag we are watching for
         [DataMember]
-        private string Tag
-        {
-            get;
-            set;
-        }
+        private string Tag;
 
         #endregion
 
@@ -29,17 +25,15 @@ namespace PhidgetModules.Events
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             rfid = InterfaceFactory.Rfid;
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new Phidget1023RFIDConfig(Tag); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             Tag = ((Phidget1023RFIDConfig)configurationControl).TagID;
         }
@@ -48,7 +42,6 @@ namespace PhidgetModules.Events
         {
             ConfigString = String.Format("Rfid Tag ID {0}", Tag);
         }
-
 
         //Tag event handler...we'll display the tag code in the field on the GUI
         private void RfidTag(object sender, TagEventArgs e)
@@ -76,8 +69,6 @@ namespace PhidgetModules.Events
 
         public override void Disable()
         {
-            base.Disable();
-
             if (rfid != null)
             {
                 rfid.Tag -= RfidTag;

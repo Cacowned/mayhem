@@ -3,9 +3,13 @@ using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
-    public partial class TextToSpeechConfig : IWpfConfiguration
+    public partial class TextToSpeechConfig : WpfConfiguration
     {
-        public string Message;
+        public string Message
+        {
+            get;
+            private set;
+        }
 
         private bool shouldCheckValidity = false;
 

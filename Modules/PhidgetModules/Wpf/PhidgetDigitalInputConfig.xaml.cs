@@ -10,7 +10,7 @@ namespace PhidgetModules.Wpf
     /// <summary>
     /// Interaction logic for PhidgetDigitalInputConfig.xaml
     /// </summary>
-    public partial class PhidgetDigitalInputConfig : IWpfConfiguration
+    public partial class PhidgetDigitalInputConfig : WpfConfiguration
     {
         public int Index { get; set; }
 

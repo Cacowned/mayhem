@@ -28,18 +28,12 @@ namespace DefaultModules.Events
         #region Configuration
 
         [DataMember]
-        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown
-        {
-            get;
-            set;
-        }
+        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown;
 
         #endregion
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             interceptKeys = InterceptKeys.Instance;
             mainThread = Thread.CurrentThread;
 
@@ -66,12 +60,12 @@ namespace DefaultModules.Events
         }
 
         #region Configuration Views
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new KeypressConfig(MonitorKeysDown); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
             MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;

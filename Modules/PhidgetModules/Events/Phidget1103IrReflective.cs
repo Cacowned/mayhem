@@ -14,18 +14,16 @@ namespace PhidgetModules.Events
     {
         protected override void Initialize()
         {
-            base.Initialize();
-
             BottomThreshold = 0;
             TopThreshold = 100;
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1103IRReflective(OnTurnOn)); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             SensorConfig sensor = configurationControl as SensorConfig;
             Config1103IRReflective config = sensor.Sensor as Config1103IRReflective;

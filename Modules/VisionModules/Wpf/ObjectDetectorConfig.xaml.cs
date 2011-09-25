@@ -42,7 +42,7 @@ namespace VisionModules.Wpf
     /// Interaction logic for ObjectDetectorConfig.xaml
     /// </summary>
     /// 
-    public partial class ObjectDetectorConfig : IWpfConfiguration
+    public partial class ObjectDetectorConfig : WpfConfiguration
     {
         public string location;
 

@@ -17,11 +17,7 @@ namespace PhidgetModules.Events
         #region Configuration
 
         [DataMember]
-        private IRCode Code
-        {
-            get;
-            set;
-        }
+        private IRCode Code;
         #endregion
 
         private IR ir;
@@ -30,19 +26,17 @@ namespace PhidgetModules.Events
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             ir = InterfaceFactory.IR;
 
             gotCode = new IRCodeEventHandler(ir_Code);
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new Phidget1055IRReceiveConfig(Code); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             Code = ((Phidget1055IRReceiveConfig)configurationControl).Code;
         }
@@ -81,8 +75,6 @@ namespace PhidgetModules.Events
 
         public override void Disable()
         {
-            base.Disable();
-
             if (ir != null)
             {
                 ir.Code -= gotCode;

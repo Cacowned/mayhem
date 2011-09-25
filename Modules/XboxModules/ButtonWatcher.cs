@@ -6,7 +6,7 @@ namespace XboxModules
     class ButtonWatcher
     {
         public delegate void KeyCombinationHandler();
-        Dictionary<Buttons, List<KeyCombinationHandler>> keyCombinationHandlerMap;
+        private Dictionary<Buttons, List<KeyCombinationHandler>> keyCombinationHandlerMap;
 
         private Buttons buttons_down;
 
@@ -75,7 +75,7 @@ namespace XboxModules
             events.RemoveRef();
         }
 
-        void CheckCombinations()
+        private void CheckCombinations()
         {
             foreach (Buttons b in keyCombinationHandlerMap.Keys)
             {
@@ -91,7 +91,7 @@ namespace XboxModules
             }
         }
 
-        void events_OnButtonDown(Buttons button)
+        private void events_OnButtonDown(Buttons button)
         {
             if (!buttons_down.HasFlag(button))
             {
@@ -100,7 +100,7 @@ namespace XboxModules
             }
         }
 
-        void events_OnButtonUp(Buttons button)
+        private void events_OnButtonUp(Buttons button)
         {
             // remove button from buttons_down
             buttons_down &= ~button;            
