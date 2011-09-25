@@ -84,7 +84,6 @@ namespace X10Modules.Reactions
             }
             x10Controller = new X10Controller(serialPortName);
             SetConfigString();
-
         }
 
         public override void Perform()
