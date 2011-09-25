@@ -91,7 +91,7 @@
     <EmbeddedResource Include="css-wp7.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="css-ios.html" />
+    <EmbeddedResource Include="css-iphone.html" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="css-android.html" />
@@ -118,6 +118,9 @@
       <Name>MayhemWpf</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="css-ipad.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
