@@ -55,7 +55,6 @@ namespace DefaultModules.Reactions
         public override void Disable()
         {
             m.Stop();
-            base.Disable();
         }
 
         #region Configuration Views

@@ -49,9 +49,6 @@ namespace VisionModules.Events
          * </summary> */
         protected override void Initialize()
         {
-            Logger.WriteLine("Initialize");
-            base.Initialize();
-
             Logger.WriteLine("Enumerating Devices");
 
             if (i == null)

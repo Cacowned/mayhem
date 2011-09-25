@@ -69,13 +69,6 @@ namespace VisionModules.Events
         [DataMember]
         private PresenceTriggerMode selected_trigger_mode = PresenceTriggerMode.TOGGLE;
 
-        public PresenceEvent()
-        {
-            base.Initialize();
-            Initialize();
-        }
-
-
         protected override void Initialize()
         {
             Initialize(new StreamingContext());
@@ -84,9 +77,6 @@ namespace VisionModules.Events
         [OnDeserialized]
         protected void Initialize(StreamingContext  s)
         {
-            Logger.WriteLine("Initialize");
-            base.Initialize();
-
             Logger.WriteLine("Enumerating Devices");
 
             if (i == null)

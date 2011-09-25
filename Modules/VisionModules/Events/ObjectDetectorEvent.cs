@@ -87,7 +87,6 @@ namespace VisionModules.Events
             if (i == null)
                 i = CameraDriver.Instance;
 
-            base.Initialize();
             if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
