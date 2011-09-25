@@ -173,6 +173,8 @@ namespace WindowModules.Wpf
                 newControl = new WindowRestore((WindowActionRestore)action);
             else if (action is WindowActionSendKeys)
                 newControl = new WindowSendKeys((WindowActionSendKeys)action);
+            else if (action is WindowActionWait)
+                newControl = new WindowWait((WindowActionWait)action);
 
             WindowActionControl wac = new WindowActionControl(newControl);
             wac.Deleted += new EventHandler(wac_Deleted);
@@ -218,6 +220,9 @@ namespace WindowModules.Wpf
                     break;
                 case "Send keys":
                     action = new WindowActionSendKeys();
+                    break;
+                case "Wait":
+                    action = new WindowActionWait();
                     break;
                 default:
                     return;

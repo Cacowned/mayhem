@@ -34,6 +34,7 @@
                     <ComboBoxItem Content="Resize" />
                     <ComboBoxItem Content="Restore" />
                     <ComboBoxItem Content="Send keys" />
+                    <ComboBoxItem Content="Wait" />
                 </ComboBox>
                 <Button Content="Add" Width="50" Click="ButtonAdd_Click" />
             </StackPanel>
