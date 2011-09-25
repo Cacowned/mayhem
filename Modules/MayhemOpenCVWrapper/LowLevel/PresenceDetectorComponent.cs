@@ -20,12 +20,47 @@ namespace MayhemOpenCVWrapper.LowLevel
 {
     public class PresenceDetectorComponent : IVisionEventComponent
     {
+        public static double DEFAULT_SENSITIVITY
+        {
+            get
+            {
+                return OpenCVDLL.PresenceDetector.DEFAULT_SENSITIVITY; 
+            }
+        }
+
         private OpenCVDLL.PresenceDetector pd;
 
         public delegate void DetectionHandler(object sender, Point[] points);
         public event DetectionHandler OnPresenceUpdate;
 
         private bool presence_ = false;
+
+        /// <summary>
+        /// Sets the decay sensitivity of the presence detector
+        /// Basically this determines how long the presence is still valid when no movement has
+        /// been detected. 
+        /// </summary>
+        public double Sensitivity
+        {
+            get
+            {
+                if (pd != null)
+                {
+                    return pd.Sensitivity;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            set
+            {
+                if (pd != null)
+                {
+                    pd.Sensitivity = value; 
+                }
+            }
+        }
 
         public bool presence
         {
