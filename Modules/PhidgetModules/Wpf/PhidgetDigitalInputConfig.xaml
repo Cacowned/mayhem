@@ -1,4 +1,4 @@
-﻿<src:IWpfConfiguration x:Class="PhidgetModules.Wpf.PhidgetDigitalInputConfig"
+﻿<src:WpfConfiguration x:Class="PhidgetModules.Wpf.PhidgetDigitalInputConfig"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
@@ -22,4 +22,4 @@
             <RadioButton Name="TurnsOffRadio" GroupName="TriggerOn" Content="Turns Off" />
         </StackPanel>
     </Grid>
-</src:IWpfConfiguration>
+</src:WpfConfiguration>

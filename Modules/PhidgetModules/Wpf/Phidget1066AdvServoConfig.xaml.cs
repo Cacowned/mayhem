@@ -26,7 +26,7 @@ namespace PhidgetModules.Wpf
     /// <summary>
     /// Interaction logic for Phidget1066AdvServoConfig.xaml
     /// </summary>
-    public partial class Phidget1066AdvServoConfig : IWpfConfiguration
+    public partial class Phidget1066AdvServoConfig : WpfConfiguration
     {
         public int Index { get; private set; }
 

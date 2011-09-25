@@ -36,7 +36,7 @@ namespace X10Modules.Wpf
     /// <summary>
     /// Interaction logic for InsteonReactionConfig.xaml
     /// </summary>
-    public partial class InsteonReactionConfig : IWpfConfiguration
+    public partial class InsteonReactionConfig : WpfConfiguration
     {
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
         private InsteonController insteonController = null;

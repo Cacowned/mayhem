@@ -1,34 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using System.Runtime.Serialization;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Description;
-using System.Diagnostics;
-using System.Threading;
-using System.Xml;
 using System.ServiceModel.Web;
-using System.IO;
-using NetFwTypeLib;
+using System.Threading;
 using System.Windows;
-using System.Reflection;
+using MayhemCore;
+using NetFwTypeLib;
 
 namespace PhoneModules
 {
     public class PhoneConnector
     {
-        const int PortNumber = 19283;
-        bool isServiceRunning = false;
-        int refCount = 0;
-        WebServiceHost host;
-        IMayhemService service = null;
+        private const int PortNumber = 19283;
+        private bool isServiceRunning = false;
+        private int refCount = 0;
+        private WebServiceHost host;
+        private IMayhemService service = null;
 
         public delegate void EventCalledHandler(string eventText);
         public event EventCalledHandler EventCalled;
 
-        string formData = null;
+        private string formData = null;
         public string FormData
         {
             get
@@ -127,7 +122,7 @@ namespace PhoneModules
 
         private bool StartService()
         {
-            Uri address = new Uri("http://localhost:"+PortNumber+"/Mayhem");
+            Uri address = new Uri("http://localhost:" + PortNumber + "/Mayhem");
 
             MayhemService svc = new MayhemService();
             svc.EventCalled += new MayhemService.EventCalledHandler(service_EventCalled);
@@ -147,7 +142,7 @@ namespace PhoneModules
             host.Description.Behaviors.Add(smb);
 
             WebHttpBinding binding = new WebHttpBinding();
-		    binding.ReaderQuotas.MaxArrayLength = 2147483647;
+            binding.ReaderQuotas.MaxArrayLength = 2147483647;
 
             host.AddServiceEndpoint(typeof(IMayhemService), binding, "");
 
@@ -181,7 +176,7 @@ namespace PhoneModules
                 {
                     host.Open();
                 }
-                catch 
+                catch
                 {
                     isServiceRunning = false;
                     return false;
@@ -200,7 +195,7 @@ namespace PhoneModules
             return true;
         }
 
-        void OpenServerHelper()
+        private void OpenServerHelper()
         {
             FileInfo fi = new FileInfo(Assembly.GetCallingAssembly().Location);
             string pathOfHelper = Path.Combine(fi.DirectoryName, "PhoneServerHelper.exe");
@@ -213,7 +208,7 @@ namespace PhoneModules
             }
         }
 
-        void service_EventCalled(string eventText)
+        private void service_EventCalled(string eventText)
         {
             Logger.WriteLine("Event called: " + eventText);
             if (EventCalled != null)

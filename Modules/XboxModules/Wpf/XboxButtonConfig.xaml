@@ -1,4 +1,4 @@
-﻿<src:IWpfConfiguration x:Class="XboxModules.Wpf.XboxButtonConfig"
+﻿<src:WpfConfiguration x:Class="XboxModules.Wpf.XboxButtonConfig"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
@@ -11,4 +11,4 @@
             <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Text="Plug in an Xbox Controller" HorizontalAlignment="Center" />
         </StackPanel>
 	</Grid>
-</src:IWpfConfiguration>
+</src:WpfConfiguration>

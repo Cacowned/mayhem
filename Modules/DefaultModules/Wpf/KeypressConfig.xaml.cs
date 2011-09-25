@@ -8,7 +8,7 @@ using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
-    public partial class KeypressConfig : IWpfConfiguration
+    public partial class KeypressConfig : WpfConfiguration
     {
         // This is the public field Keypress uses to get which keys to use
         public HashSet<Keys> KeysToSave;
@@ -111,7 +111,7 @@ namespace DefaultModules.Wpf
             KeyPress.IsConfigOpen = false;
         }
 
-        private void IWpfConfiguration_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void WpfConfiguration_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {

@@ -50,12 +50,12 @@ namespace PhidgetModules.Events
             OnWhenOn = true;
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new PhidgetDigitalInputConfig(ifKit, Index, OnWhenOn); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             Index = ((PhidgetDigitalInputConfig)configurationControl).Index;
             OnWhenOn = ((PhidgetDigitalInputConfig)configurationControl).OnWhenOn;

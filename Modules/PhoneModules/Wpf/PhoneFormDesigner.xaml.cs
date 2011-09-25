@@ -1,35 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Net;
 using System.Windows;
-using System.Diagnostics;
-using System.Windows.Input;
-using PhoneModules.Controls;
 using System.Windows.Controls;
-using Microsoft.Win32;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using MayhemCore;
 using MayhemWpf.UserControls;
 using MessagingToolkit.QRCode.Codec;
-using System.Net;
-using System.IO;
-using System.Windows.Media.Imaging;
-using System.Drawing.Imaging;
-using MayhemCore;
+using PhoneModules.Controls;
 
-namespace PhoneModules
+namespace PhoneModules.Wpf
 {
-    public partial class PhoneFormDesigner : IWpfConfiguration
+    public partial class PhoneFormDesigner : WpfConfiguration
     {
-        PhoneLayout phoneLayout = PhoneLayout.Instance;
-
         public PhoneUIElement SelectedElement
         {
             get;
             private set;
         }
 
-        string selectedID;
-        bool isCreatingForFirstTime;
+        private PhoneLayout phoneLayout = PhoneLayout.Instance;
+
+        private string selectedID;
+        private bool isCreatingForFirstTime;
 
         public PhoneFormDesigner(bool isCreatingForFirstTime)
         {
@@ -113,7 +108,6 @@ namespace PhoneModules
                 }
             }
         }
-
 
         private void canvas1_MouseDown(object sender, MouseButtonEventArgs e)
         {

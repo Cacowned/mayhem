@@ -36,7 +36,7 @@ namespace Mayhem
             get;
             private set;
         }
-        IWpfConfiguration iWpfConfig;
+        WpfConfiguration iWpfConfig;
 
         // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TextProperty =
@@ -96,12 +96,12 @@ namespace Mayhem
                     try
                     {
                         SelectedModuleInstance = (IWpfConfigurable)Activator.CreateInstance(SelectedModule.Type);
-                        iWpfConfig = (IWpfConfiguration)SelectedModuleInstance.ConfigurationControl;
+                        iWpfConfig = (WpfConfiguration)SelectedModuleInstance.ConfigurationControl;
                         ConfigContent.Content = iWpfConfig;
                         buttonSave.IsEnabled = iWpfConfig.CanSave;
                         windowHeaderConfig.Text = "Config: " + iWpfConfig.Title;
                         iWpfConfig.Loaded += new RoutedEventHandler(iWpfConfig_Loaded);
-                        iWpfConfig.CanSavedChanged += new IWpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
+                        iWpfConfig.CanSavedChanged += new WpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
                         iWpfConfig.OnLoad();
                     }
                     catch (Exception erf)
@@ -158,7 +158,7 @@ namespace Mayhem
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-            IWpfConfiguration config = ConfigContent.Content as IWpfConfiguration;
+            WpfConfiguration config = ConfigContent.Content as WpfConfiguration;
             try
             {
                 iWpfConfig.OnSave();

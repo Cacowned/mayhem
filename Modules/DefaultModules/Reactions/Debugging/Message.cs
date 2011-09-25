@@ -20,7 +20,7 @@ namespace DefaultModules.Reactions
             Logger.WriteLine(String.Format(CultureInfo.CurrentCulture, "{0}: {1}", DateTime.Now.ToLongTimeString(), MessageText));
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             MessageText = ((DebugMessageConfig)configurationControl).Message;
         }
@@ -30,7 +30,7 @@ namespace DefaultModules.Reactions
             ConfigString = MessageText;
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new DebugMessageConfig(MessageText); }
         }

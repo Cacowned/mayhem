@@ -159,14 +159,14 @@ namespace VisionModules.Reactions
             }
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get {
                     return new VideoConfig(folderLocation, capture_offset_time);
                 }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
 
             bool wasEnabled = this.Enabled;

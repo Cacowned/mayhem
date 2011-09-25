@@ -33,7 +33,7 @@ namespace VisionModules.Wpf
     /// <summary>
     /// Interaction logic for WebcamSnapshotConfig.xaml
     /// </summary>
-    public partial class PictureConfig : IWpfConfiguration
+    public partial class PictureConfig : WpfConfiguration
     {
         public string location;
         // public Device captureDevice;

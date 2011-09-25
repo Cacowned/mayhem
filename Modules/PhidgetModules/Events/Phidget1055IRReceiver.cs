@@ -37,12 +37,12 @@ namespace PhidgetModules.Events
             gotCode = new IRCodeEventHandler(ir_Code);
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new Phidget1055IRReceiveConfig(Code); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             Code = ((Phidget1055IRReceiveConfig)configurationControl).Code;
         }

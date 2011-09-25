@@ -1,4 +1,4 @@
-﻿<src:IWpfConfiguration x:Class="PhidgetModules.Reaction.Phidget1055IRTransmitConfig"
+﻿<src:WpfConfiguration x:Class="PhidgetModules.Reaction.Phidget1055IRTransmitConfig"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
@@ -10,4 +10,4 @@
             <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReciever" Text="Can't find the IR Transceiver" HorizontalAlignment="Center" Visibility="Visible"  />
         </StackPanel>
     </Grid>
-</src:IWpfConfiguration>
+</src:WpfConfiguration>

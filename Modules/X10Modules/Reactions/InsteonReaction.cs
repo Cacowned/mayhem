@@ -61,7 +61,7 @@ namespace X10Modules.Reactions
             insteonController.SendStandardMsg(command);
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get 
             {
@@ -71,7 +71,7 @@ namespace X10Modules.Reactions
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             InsteonReactionConfig c = configurationControl as InsteonReactionConfig;
             device_address = c.selected_device_address;

@@ -3,7 +3,7 @@ using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
-    public partial class TextToSpeechConfig : IWpfConfiguration
+    public partial class TextToSpeechConfig : WpfConfiguration
     {
         public string Message;
 

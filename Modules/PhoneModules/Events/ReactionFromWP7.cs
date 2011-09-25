@@ -1,29 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
+using PhoneModules.Wpf;
 
-namespace PhoneModules
+namespace PhoneModules.Events
 {
     [DataContract]
     //[MayhemModule("WP7 Reaction", "Triggers from WP7 Mayhem")]
     public class ReactionFromWP7 : EventBase, IWpfConfigurable
     {
-        PhoneConnector phoneConnector = PhoneConnector.Instance;
-
+        #region Configuration Properties
         [DataMember]
         private string id = "";
+        #endregion
+
+        private PhoneConnector phoneConnector = PhoneConnector.Instance;
 
         protected override void Initialize()
         {
             id = Guid.NewGuid().ToString();
         }
 
-        void phoneConnector_EventCalled(string eventText)
+        private void phoneConnector_EventCalled(string eventText)
         {
             if (eventText == id)
             {
@@ -46,7 +46,8 @@ namespace PhoneModules
             base.Disable();
         }
 
-        IWpfConfiguration IWpfConfigurable.ConfigurationControl
+        #region Configuration Views
+        public WpfConfiguration ConfigurationControl
         {
             get
             {
@@ -54,9 +55,9 @@ namespace PhoneModules
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
-            
         }
+        #endregion
     }
 }

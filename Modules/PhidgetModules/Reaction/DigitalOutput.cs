@@ -43,12 +43,12 @@ namespace PhidgetModules.Reaction
             OutputType = DigitalOutputType.Toggle;
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new PhidgetDigitalOutputConfig(ifKit, Index, OutputType); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             Index = ((PhidgetDigitalOutputConfig)configurationControl).Index;
             OutputType = ((PhidgetDigitalOutputConfig)configurationControl).OutputType;

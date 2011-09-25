@@ -189,7 +189,7 @@ namespace VisionModules.Events
             ConfigString = String.Format("Configuration Message");
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             // TODO
             //get { throw new NotImplementedException(); }
@@ -218,7 +218,7 @@ namespace VisionModules.Events
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             bool wasEnabled = this.Enabled;
 

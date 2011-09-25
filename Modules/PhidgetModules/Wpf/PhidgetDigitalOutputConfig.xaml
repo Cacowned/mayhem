@@ -1,4 +1,4 @@
-﻿<src:IWpfConfiguration x:Class="PhidgetModules.Wpf.PhidgetDigitalOutputConfig"
+﻿<src:WpfConfiguration x:Class="PhidgetModules.Wpf.PhidgetDigitalOutputConfig"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
@@ -23,4 +23,4 @@
             <ComboBoxItem>Turn Off</ComboBoxItem>
         </ComboBox>
     </Grid>
-</src:IWpfConfiguration>
+</src:WpfConfiguration>

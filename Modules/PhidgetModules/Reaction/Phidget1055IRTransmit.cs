@@ -39,12 +39,12 @@ namespace PhidgetModules.Reaction
             ir = InterfaceFactory.IR;
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new Phidget1055IRTransmitConfig(Code, CodeInfo); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             Code = ((Phidget1055IRTransmitConfig)configurationControl).Code;
             CodeInfo = ((Phidget1055IRTransmitConfig)configurationControl).CodeInfo;

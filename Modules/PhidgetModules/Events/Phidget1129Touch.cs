@@ -12,12 +12,12 @@ namespace PhidgetModules.Events
     [MayhemModule("Phidget: Touch Sensor", "Triggers based on touching the sensor")]
     public class Phidget1129Touch : OnOffSensorEventBase, IWpfConfigurable
     {
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1129Touch(OnTurnOn)); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             SensorConfig sensor = configurationControl as SensorConfig;
             Config1129Touch config = sensor.Sensor as Config1129Touch;

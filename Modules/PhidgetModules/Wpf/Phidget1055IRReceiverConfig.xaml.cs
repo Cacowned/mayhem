@@ -6,7 +6,7 @@ using Phidgets.Events;
 
 namespace PhidgetModules.Wpf
 {
-    public partial class Phidget1055IRReceiveConfig : IWpfConfiguration
+    public partial class Phidget1055IRReceiveConfig : WpfConfiguration
     {
         protected IR ir;
 

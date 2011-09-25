@@ -34,12 +34,12 @@ namespace PhidgetModules.Events
             rfid = InterfaceFactory.Rfid;
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new Phidget1023RFIDConfig(Tag); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             Tag = ((Phidget1023RFIDConfig)configurationControl).TagID;
         }

@@ -66,12 +66,12 @@ namespace DefaultModules.Events
         }
 
         #region Configuration Views
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new KeypressConfig(MonitorKeysDown); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
             MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;

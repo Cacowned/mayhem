@@ -6,7 +6,7 @@ using Microsoft.Win32;
 
 namespace DefaultModules.Wpf
 {
-    public partial class PlaySoundConfig : IWpfConfiguration
+    public partial class PlaySoundConfig : WpfConfiguration
     {
         public string FileName { get; private set; }
 

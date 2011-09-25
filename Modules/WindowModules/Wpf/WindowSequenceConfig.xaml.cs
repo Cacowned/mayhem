@@ -23,7 +23,7 @@ namespace WindowModules.Wpf
     /// <summary>
     /// Interaction logic for MoveWindowConfig.xaml
     /// </summary>
-    public partial class WindowSequenceConfig : IWpfConfiguration
+    public partial class WindowSequenceConfig : WpfConfiguration
     {
         Timer timer;
         Process thisProcess;

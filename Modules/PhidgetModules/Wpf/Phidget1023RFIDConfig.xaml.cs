@@ -9,7 +9,7 @@ namespace PhidgetModules.Wpf
     /// <summary>
     /// Interaction logic for Phidget1023RFIDConfig.xaml
     /// </summary>
-    public partial class Phidget1023RFIDConfig : IWpfConfiguration
+    public partial class Phidget1023RFIDConfig : WpfConfiguration
     {
         protected RFID rfid;
 
