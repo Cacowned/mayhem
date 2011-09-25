@@ -28,11 +28,7 @@ namespace DefaultModules.Events
         #region Configuration
 
         [DataMember]
-        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown
-        {
-            get;
-            set;
-        }
+        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown;
 
         #endregion
 

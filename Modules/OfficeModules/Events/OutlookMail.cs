@@ -44,8 +44,6 @@ namespace OfficeModules.Events
 
         public override void Disable()
         {
-            base.Disable();
-
             if (outlook != null)
             {
                 outlook.NewMail -= mailEvent;

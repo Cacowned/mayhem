@@ -9,7 +9,11 @@ namespace DefaultModules.Wpf
     /// </summary>
     public partial class DebugMessageConfig : WpfConfiguration
     {
-        public string Message;
+        public string Message
+        { 
+            get; 
+            private set;
+        }
 
         private bool shouldCheckValidity = false;
 

@@ -16,18 +16,10 @@ namespace PhidgetModules.Reaction
         #region Configuration
         // Which index do we want to be looking at?
         [DataMember]
-        protected int Index
-        {
-            get;
-            set;
-        }
+        private int Index;
 
         [DataMember]
-        protected DigitalOutputType OutputType
-        {
-            get;
-            set;
-        }
+        private DigitalOutputType OutputType;
         #endregion
 
         // The interface kit we are using for the sensors
@@ -35,8 +27,6 @@ namespace PhidgetModules.Reaction
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             this.ifKit = InterfaceFactory.Interface;
 
             Index = 0;
@@ -73,7 +63,6 @@ namespace PhidgetModules.Reaction
 
         public override void Perform()
         {
-
             switch (OutputType)
             {
                 case DigitalOutputType.Toggle:
@@ -86,14 +75,7 @@ namespace PhidgetModules.Reaction
                     ifKit.outputs[Index] = false;
                     break;
             }
-
-            /*
-            this.IfKit.outputs[index] = flag;
-            flag = !flag;
-             */
         }
-
-
     }
 
     // What action we should take on the digital output

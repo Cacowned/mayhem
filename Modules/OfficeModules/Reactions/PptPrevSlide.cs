@@ -29,8 +29,6 @@ namespace OfficeModules.Reactions
 
         public override void Disable()
         {
-            base.Disable();
-
             oApp = null;
         }
 
