@@ -46,7 +46,8 @@ namespace PhoneModules
     {
         string html = null;
         string htmlWP7 = null;
-        string htmlIOS = null;
+        string htmlIPhone = null;
+        string htmlIPad = null;
         string htmlAndroid = null;
         string insideDiv = null;
         object locker = new object();
@@ -95,8 +96,10 @@ namespace PhoneModules
                 resetEvents[key].Reset();
 
                 string userAgent = WebOperationContext.Current.IncomingRequest.UserAgent;
-                if(userAgent.IndexOf("iPhone") >= 0 || userAgent.IndexOf("iPad") >= 0)
-                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIOS));
+                if(userAgent.IndexOf("iPhone") >= 0)
+                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIPhone));
+                else if(userAgent.IndexOf("iPad") >= 0)
+                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIPad));
                 else if (userAgent.IndexOf("Android") >= 0)
                     return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlAndroid));
                 else if (userAgent.IndexOf("Windows Phone") >= 0)
@@ -140,7 +143,8 @@ namespace PhoneModules
             this.html = html;
 
             htmlWP7 = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("wp7"));
-            htmlIOS = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("ios"));
+            htmlIPhone = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("iphone"));
+            htmlIPad = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("ipad"));
             htmlAndroid = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("android"));
         }
 
