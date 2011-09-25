@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ServiceModel;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
-using System.ServiceModel.Web;
-using System.ServiceModel.Channels;
 using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Web;
+using System.Text;
+using System.Threading;
 using MayhemCore;
 
 namespace PhoneModules
@@ -17,7 +16,7 @@ namespace PhoneModules
     public interface IMayhemService
     {
         [OperationContract]
-        [WebGet(UriTemplate = "Event/{text}", BodyStyle=WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "Event/{text}", BodyStyle = WebMessageBodyStyle.Bare)]
         void Event(string text);
 
         [OperationContract]
@@ -44,19 +43,20 @@ namespace PhoneModules
     [ServiceBehavior(Name = "MayhemService", InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class MayhemService : IMayhemService
     {
-        string html = null;
-        string htmlWP7 = null;
-        string htmlIOS = null;
-        string htmlAndroid = null;
-        string insideDiv = null;
-        object locker = new object();
-        bool isShuttingDown = false;
+        private string html = null;
+        private string htmlWP7 = null;
+        private string htmlIPhone = null;
+        private string htmlIPad = null;
+        private string htmlAndroid = null;
+        private string insideDiv = null;
+        private object locker = new object();
+        private bool isShuttingDown = false;
 
         private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(30);
-        ManualResetEvent killResetEvent = new ManualResetEvent(false);
-        int numToKill = 0;
+        private ManualResetEvent killResetEvent = new ManualResetEvent(false);
+        private int numToKill = 0;
 
-        Dictionary<string, AutoResetEvent> resetEvents = new Dictionary<string, AutoResetEvent>();
+        private Dictionary<string, AutoResetEvent> resetEvents = new Dictionary<string, AutoResetEvent>();
 
         public Stream Images(string id)
         {
@@ -67,7 +67,7 @@ namespace PhoneModules
 
         public Stream Html(bool update)
         {
-            if(isShuttingDown)
+            if (isShuttingDown)
                 return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));
             else if (html == null)
                 return null;
@@ -95,8 +95,10 @@ namespace PhoneModules
                 resetEvents[key].Reset();
 
                 string userAgent = WebOperationContext.Current.IncomingRequest.UserAgent;
-                if(userAgent.IndexOf("iPhone") >= 0 || userAgent.IndexOf("iPad") >= 0)
-                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIOS));
+                if (userAgent.IndexOf("iPhone") >= 0)
+                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIPhone));
+                else if (userAgent.IndexOf("iPad") >= 0)
+                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIPad));
                 else if (userAgent.IndexOf("Android") >= 0)
                     return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlAndroid));
                 else if (userAgent.IndexOf("Windows Phone") >= 0)
@@ -104,7 +106,7 @@ namespace PhoneModules
                 else
                     return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlWP7));
             }
-            else 
+            else
             {
                 Interlocked.Increment(ref numToKill);
                 if (resetEvents[key].WaitOne(10000))
@@ -140,11 +142,12 @@ namespace PhoneModules
             this.html = html;
 
             htmlWP7 = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("wp7"));
-            htmlIOS = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("ios"));
+            htmlIPhone = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("iphone"));
+            htmlIPad = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("ipad"));
             htmlAndroid = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("android"));
         }
 
-        string GetCSSForDevice(string device)
+        private string GetCSSForDevice(string device)
         {
             string css = "";
             try

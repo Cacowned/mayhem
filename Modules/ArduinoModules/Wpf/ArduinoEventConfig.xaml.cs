@@ -43,7 +43,7 @@ namespace ArduinoModules.Wpf
     /// <summary>
     /// Interaction logic for ArduinoEventConfig.xaml
     /// </summary>
-    public partial class ArduinoEventConfig : IWpfConfiguration, IArduinoEventListener
+    public partial class ArduinoEventConfig : WpfConfiguration, IArduinoEventListener
     {     
         
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;

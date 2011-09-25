@@ -33,7 +33,7 @@ namespace VisionModules.Events
         private MotionDetectorComponent m;
         
         [DataMember]
-        Rect boundingRect = new Rect(0,0,0,0);
+        private Rect boundingRect = new Rect(0,0,0,0);
 
         private MotionDetectorComponent.DetectionHandler motionUpdateHandler;
 
@@ -44,21 +44,11 @@ namespace VisionModules.Events
         [DataMember]
         private int selected_device_idx = 0;
 
-        public MotionDetector()
-        {       
-            Initialize();
-        }
-
-       
-
         /** <summary>
          * Called when deserialized / on instantiation
          * </summary> */
         protected override void Initialize()
         {
-            Logger.WriteLine("Initialize");
-            base.Initialize();
-
             Logger.WriteLine("Enumerating Devices");
 
             if (i == null)
@@ -79,13 +69,10 @@ namespace VisionModules.Events
             if (boundingRect.Width > 0 && boundingRect.Height > 0)
             {
                 m.SetMotionBoundaryRect(boundingRect);
-            }
-
-           
-              
+            }  
         }
 
-        void m_OnMotionUpdate(object sender, List<System.Drawing.Point> points)
+        private void m_OnMotionUpdate(object sender, List<System.Drawing.Point> points)
         {
             TimeSpan ts = DateTime.Now - lastMotionDetected;
 
@@ -101,13 +88,12 @@ namespace VisionModules.Events
             }
         }
 
-
         protected new void SetConfigString()
         {
             ConfigString = String.Format("Configuration Message");
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get
             {
@@ -121,7 +107,7 @@ namespace VisionModules.Events
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             // Grab data from the window variable and store
             // it in this class
@@ -178,6 +164,5 @@ namespace VisionModules.Events
             }
             //Thread.Sleep(350);
         }
-       
     }
 }

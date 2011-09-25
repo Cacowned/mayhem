@@ -50,12 +50,12 @@ namespace DefaultModules.Reactions
             }
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new RunProgramConfig(FileName, Arguments); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             RunProgramConfig rpc = configurationControl as RunProgramConfig;
             FileName = rpc.Filename;

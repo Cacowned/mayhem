@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace MayhemWpf.UserControls
 {
-    public class IWpfConfiguration : UserControl
+    public class WpfConfiguration : UserControl
     {
         public virtual string Title { get { return "Title"; } }
         public virtual void OnSave() { }

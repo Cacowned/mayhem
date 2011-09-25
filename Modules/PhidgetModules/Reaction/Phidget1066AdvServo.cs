@@ -16,18 +16,17 @@ namespace PhidgetModules.Reaction
         #region Configuration
 
         // Motor Type
-        private ServoServo.ServoType ServoType { get; set; }
+        [DataMember]
+        private ServoServo.ServoType ServoType;
 
         // The servo index we are talking to
-        private int Index { get; set; }
+        [DataMember]
+        private int Index;
 
         // This is the position that this reaction instance wants to 
         // move the servo to
-        private double Position
-        {
-            get;
-            set;
-        }
+        [DataMember]
+        private double Position;
 
         #endregion;
         // Instance of the servo class
@@ -35,8 +34,6 @@ namespace PhidgetModules.Reaction
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             // Only maintain one instance of the servo 
             // for all the AdvServo classes
             if (advServo == null)
@@ -69,15 +66,14 @@ namespace PhidgetModules.Reaction
             {
                 advServo.servos[0].Position = Position;
             }
-
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new Phidget1066AdvServoConfig(advServo, Index, ServoType, Position); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             ServoType = (configurationControl as Phidget1066AdvServoConfig).ServoType;
             Position = (configurationControl as Phidget1066AdvServoConfig).Position;

@@ -69,13 +69,6 @@ namespace VisionModules.Events
         [DataMember]
         private PresenceTriggerMode selected_trigger_mode = PresenceTriggerMode.TOGGLE;
 
-        public PresenceEvent()
-        {
-            base.Initialize();
-            Initialize();
-        }
-
-
         protected override void Initialize()
         {
             Initialize(new StreamingContext());
@@ -84,9 +77,6 @@ namespace VisionModules.Events
         [OnDeserialized]
         protected void Initialize(StreamingContext  s)
         {
-            Logger.WriteLine("Initialize");
-            base.Initialize();
-
             Logger.WriteLine("Enumerating Devices");
 
             if (i == null)
@@ -105,7 +95,7 @@ namespace VisionModules.Events
             presenceHandler = new PresenceDetectorComponent.DetectionHandler(m_OnPresenceUpdate);
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get
             {
@@ -118,7 +108,7 @@ namespace VisionModules.Events
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             PresenceConfig config = configurationControl as PresenceConfig;
             bool wasEnabled = this.Enabled;
@@ -159,7 +149,6 @@ namespace VisionModules.Events
         public override void Disable()
         {
             Logger.WriteLine("Disable");
-            base.Disable();
             pd.OnPresenceUpdate -= presenceHandler;
             if (cam != null)
                 pd.UnregisterForImages(cam);

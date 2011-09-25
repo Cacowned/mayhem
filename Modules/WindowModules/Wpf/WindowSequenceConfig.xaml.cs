@@ -23,24 +23,25 @@ namespace WindowModules.Wpf
     /// <summary>
     /// Interaction logic for MoveWindowConfig.xaml
     /// </summary>
-    public partial class WindowSequenceConfig : IWpfConfiguration
+    public partial class WindowSequenceConfig : WpfConfiguration
     {
-        Timer timer;
-        Process thisProcess;
-        IntPtr thisWindowHandle;
         public WindowInfo SelectedWindow
         {
             get;
             private set;
         }
-        
+
         public WindowActionInfo ActionInfo
         {
             get;
             private set;
         }
 
-        Dictionary<UserControl, WindowAction> controlMap = new Dictionary<UserControl, WindowAction>();
+        private Timer timer;
+        private Process thisProcess;
+        private IntPtr thisWindowHandle;
+
+        private Dictionary<UserControl, WindowAction> controlMap = new Dictionary<UserControl, WindowAction>();
 
         public WindowSequenceConfig(WindowActionInfo windowActionInfo)
         {
@@ -173,6 +174,8 @@ namespace WindowModules.Wpf
                 newControl = new WindowRestore((WindowActionRestore)action);
             else if (action is WindowActionSendKeys)
                 newControl = new WindowSendKeys((WindowActionSendKeys)action);
+            else if (action is WindowActionWait)
+                newControl = new WindowWait((WindowActionWait)action);
 
             WindowActionControl wac = new WindowActionControl(newControl);
             wac.Deleted += new EventHandler(wac_Deleted);
@@ -218,6 +221,9 @@ namespace WindowModules.Wpf
                     break;
                 case "Send keys":
                     action = new WindowActionSendKeys();
+                    break;
+                case "Wait":
+                    action = new WindowActionWait();
                     break;
                 default:
                     return;

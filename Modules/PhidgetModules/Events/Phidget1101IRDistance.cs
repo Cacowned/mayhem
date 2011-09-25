@@ -12,12 +12,12 @@ namespace PhidgetModules.Events
     [MayhemModule("Phidget: IR Distance", "Triggers at a certain distance")]
     public class Phidget1101IRDistance : RangeSensorEventBase, IWpfConfigurable
     {
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1101IRDistance(TopValue, BottomValue)); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             SensorConfig sensor = configurationControl as SensorConfig;
             Config1101IRDistance config = sensor.Sensor as Config1101IRDistance;

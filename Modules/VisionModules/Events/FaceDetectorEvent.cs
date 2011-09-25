@@ -33,7 +33,7 @@ namespace VisionModules.Events
         private int selected_device_idx = 0;
 
         [DataMember]
-        Rect boundingRect; 
+        private Rect boundingRect; 
 
         public FaceDetectorEvent()
         {
@@ -79,7 +79,7 @@ namespace VisionModules.Events
             ConfigString = String.Format("Configuration Message");
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get
             {
@@ -117,7 +117,6 @@ namespace VisionModules.Events
         public override void Disable()
         {
             Logger.WriteLine("");
-            base.Disable();
             fd.OnFaceDetected -= m_onFaceDetected;
             if (cam != null)
                 fd.UnregisterForImages(cam); 
@@ -129,7 +128,7 @@ namespace VisionModules.Events
             }
         }
 
-        public  void OnSaved(IWpfConfiguration configurationControl)
+        public  void OnSaved(WpfConfiguration configurationControl)
         {
             Logger.WriteLine("OnSaved!");
       

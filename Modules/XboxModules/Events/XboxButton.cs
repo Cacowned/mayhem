@@ -19,26 +19,15 @@ namespace XboxModules.Events
 
         #region Configuration
         [DataMember]
-        private Buttons XboxButtons
-        {
-            get;
-            set;
-        }
-        
-        [DataMember]
-        private PlayerIndex Player
-        {
-            get;
-            set;
-        }
-        
+        private Buttons XboxButtons;
 
+        [DataMember]
+        private PlayerIndex Player;
+       
         #endregion
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             Player = PlayerIndex.One;
 
             buttonWatcher = ButtonWatcher.Instance;
@@ -50,14 +39,14 @@ namespace XboxModules.Events
         }
 
         #region Configuration Views
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
             XboxButtons = ((XboxButtonConfig)configurationControl).ButtonsToSave;
             buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new XboxButtonConfig(XboxButtons); }
         }
@@ -92,8 +81,6 @@ namespace XboxModules.Events
 
         public override void Disable()
         {
-            base.Disable();
-
             buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
         }
     }

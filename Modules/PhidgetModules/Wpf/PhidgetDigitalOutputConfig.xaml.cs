@@ -11,7 +11,7 @@ namespace PhidgetModules.Wpf
     /// <summary>
     /// Interaction logic for PhidgetDigitalOutputConfig.xaml
     /// </summary>
-    public partial class PhidgetDigitalOutputConfig : IWpfConfiguration
+    public partial class PhidgetDigitalOutputConfig : WpfConfiguration
     {
         public int Index { get; set; }
 

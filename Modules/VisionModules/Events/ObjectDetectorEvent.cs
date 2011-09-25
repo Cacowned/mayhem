@@ -45,14 +45,14 @@ namespace VisionModules.Events
 
         // for some reason normal arrays are not serializable!
         [DataMember]
-        Byte[] templateImage_bytes;
+        private Byte[] templateImage_bytes;
 
         // preview image for template --> shown in config dialog
         [DataMember]
-        Byte[] templatePreview_bytes;
+        private Byte[] templatePreview_bytes;
 
         [DataMember]
-        string testString = "orig";
+        private string testString = "orig";
 
         public Bitmap templateImage;
 
@@ -61,7 +61,7 @@ namespace VisionModules.Events
         public double preview_scale_f = 1;
 
         [DataMember]
-        Rect boundingRect = new Rect(0, 0, 0, 0);
+        private Rect boundingRect = new Rect(0, 0, 0, 0);
 
         // the cam we have selected
         private int selected_device_idx = 0;
@@ -77,12 +77,6 @@ namespace VisionModules.Events
             InitMe(new StreamingContext());
         }
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            //InitMe();
-        }
-
         /// <summary>
         /// Called before (!!)  Deserialization / Instantiation
         /// </summary>
@@ -93,7 +87,6 @@ namespace VisionModules.Events
             if (i == null)
                 i = CameraDriver.Instance;
 
-            base.Initialize();
             if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
@@ -170,7 +163,6 @@ namespace VisionModules.Events
 
         public override void Disable()
         {
-            base.Disable();
             Logger.WriteLine("Disable");
 
             od.OnObjectDetected -= objectDetectHandler;
@@ -189,7 +181,7 @@ namespace VisionModules.Events
             ConfigString = String.Format("Configuration Message");
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             // TODO
             //get { throw new NotImplementedException(); }
@@ -218,7 +210,7 @@ namespace VisionModules.Events
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             bool wasEnabled = this.Enabled;
 

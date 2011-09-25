@@ -18,31 +18,17 @@ namespace DefaultModules.Events
 
         #region Configuration Properties
         [DataMember]
-        private int Hours
-        {
-            get;
-            set;
-        }
+        private int Hours;
 
         [DataMember]
-        private int Minutes
-        {
-            get;
-            set;
-        }
+        private int Minutes;
 
         [DataMember]
-        private int Seconds
-        {
-            get;
-            set;
-        }
+        private int Seconds;
         #endregion
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             myTimer = new DispatcherTimer();
             myTimer.Tick += new EventHandler(myTimer_Tick);
         }
@@ -92,12 +78,12 @@ namespace DefaultModules.Events
             Seconds = seconds;
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new TimerConfig(Hours, Minutes, Seconds); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             TimerConfig config = (TimerConfig)configurationControl;
             Hours = config.Hours;
@@ -130,7 +116,6 @@ namespace DefaultModules.Events
 
         public override void Disable()
         {
-            base.Disable();
             myTimer.Stop();
         }
     }

@@ -59,14 +59,14 @@
     <Compile Include="FileDictionary.cs" />
     <Compile Include="PhoneLayout.cs" />
     <Compile Include="MayhemService.cs" />
-    <Compile Include="PhoneEvent.cs" />
+    <Compile Include="Events\PhoneEvent.cs" />
     <Compile Include="PhoneConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PhoneFormDesigner.xaml.cs">
+    <Compile Include="Wpf\PhoneFormDesigner.xaml.cs">
       <DependentUpon>PhoneFormDesigner.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReactionFromWP7.cs" />
-    <Compile Include="ReactionFromWP7Config.xaml.cs">
+    <Compile Include="Events\ReactionFromWP7.cs" />
+    <Compile Include="Wpf\ReactionFromWP7Config.xaml.cs">
       <DependentUpon>ReactionFromWP7Config.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -75,11 +75,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PhoneFormDesigner.xaml">
+    <Page Include="Wpf\PhoneFormDesigner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReactionFromWP7Config.xaml">
+    <Page Include="Wpf\ReactionFromWP7Config.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -91,7 +91,7 @@
     <EmbeddedResource Include="css-wp7.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="css-ios.html" />
+    <EmbeddedResource Include="css-iphone.html" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="css-android.html" />
@@ -119,6 +119,10 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="css-ipad.html" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
