@@ -24,6 +24,7 @@ namespace X10Modules.Insteon
         public static Dictionary<int, InsteonDevice>  devices = new Dictionary<int,InsteonDevice>(); 
 
         public string name = string.Empty;
+
         private byte[] deviceID_ = new byte[3];
         public byte[] deviceID
         {
@@ -39,17 +40,12 @@ namespace X10Modules.Insteon
                 {
                     deviceID_ = value;
                 }
-            }
-
-            // TODO: add furth
+            }        
         }
 
         public bool powerState = false; 
-
         public byte ALRecordFlags = 0;
         public byte ALGroup = 0;
-
-      
 
         private byte[] linkData_ = new byte[3];
         public byte[] linkData
@@ -69,7 +65,6 @@ namespace X10Modules.Insteon
             }
         }
 
-
         /// <summary>
         /// Gets power state for a given device address
         /// </summary>
@@ -79,12 +74,10 @@ namespace X10Modules.Insteon
         {
             if (address.Length != 3)
             {
-                throw new NotSupportedException(); 
-                
+                throw new NotSupportedException();          
             }
-
-            // build a "hash" by summing the device address values in a clever way
-            int dev_hash = address[0] + (address[1] << 8) + (address[2] << 16);
+            
+            int dev_hash = DeviceHash(address);
 
             if (devices.Keys.Count > 0 && devices.Keys.Contains(dev_hash))
             {
@@ -94,6 +87,23 @@ namespace X10Modules.Insteon
             else
             {             
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// build a "hash" of an insteon device address by summing the device address values in a clever way
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        private static int DeviceHash(byte[] address)
+        {
+            if (address.Length == 3)
+            {
+                return address[0] + (address[1] << 8) + (address[2] << 16);
+            }
+            else
+            {
+                throw new NotSupportedException();
             }
         }
 
@@ -109,7 +119,7 @@ namespace X10Modules.Insteon
                 throw new NotSupportedException(); 
             }
 
-            int dev_hash = address[0] + (address[1] << 8) + (address[2] << 16);
+            int dev_hash = DeviceHash(address);
 
             if (devices.Keys.Count > 0 && devices.Keys.Contains(dev_hash))
             {
@@ -133,18 +143,13 @@ namespace X10Modules.Insteon
         }
 
         public override string ToString()
-        {
-            
-
+        {            
             string str = String.Format("deviceID {0:x2}:{1:x2}:{2:x2} linkdata {3:x4}:{4:x4}:{5:x4} ALrFlags {6:x4} ALGroup {7:x4}",
                                            deviceID[0], deviceID[1], deviceID[2],
                                            linkData[0], linkData[1], linkData[2],
                                            ALRecordFlags,
                                            ALGroup);
             return str;
-
         }
     }
-
-
 }

@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ *  InsteonX10Controller.cs
+ * 
+ *  This class handles communication with an Insteon Modem in X10 Mode
+ * 
+ *  (c) 2011, Microsoft Applied Sciences Group
+ *  
+ *  Author: Sven Kratz
+ *  
+ */ 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,7 +46,6 @@ namespace X10Modules.Insteon
             }
         }
       
-
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool X10SendHouseCommand(X10HouseCode houseCode, X10CommandCode command)
         {
@@ -63,13 +72,8 @@ namespace X10Modules.Insteon
                 Logger.WriteLine("\n=======================\nX10-ACK -- Command Successful\n====================");
                 return true;
             }
-
-
             return false;
-
-
         }
-
 
         /// <summary>
         /// Chain unit and house command
@@ -160,8 +164,6 @@ namespace X10Modules.Insteon
             {
                 return false;
             }
-
-
         }
 
         public override void port_DataReceived(string portName, byte[] buffer, int nBytes)
@@ -179,10 +181,7 @@ namespace X10Modules.Insteon
                         waitAck.Set();
                     }
                 }
-
-
             }
-
         }
     }
 }

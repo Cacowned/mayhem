@@ -1,5 +1,5 @@
 ﻿/*
- * InsteonController.cs
+ * InsteonControllerBase.cs
  * 
  * This class manages the communication with the serial port for the Insteon Modules.
  * It also ensures that Mayhem Modules get synchronized access to serial port messages. 
@@ -45,7 +45,6 @@ namespace X10Modules
             {
                 portName = ""+serialPortname;
                 InitializeX10();
-
                 this.initialized = true;
             }
         }
@@ -58,8 +57,6 @@ namespace X10Modules
         public virtual void Dispose()
          {
              this.initialized = false; 
-             // throw new NotImplementedException();
-            // mSerial.DisconnectListener(portName, this);
          }
 
         public virtual void port_DataReceived(string portName, byte[] buffer, int nBytes)

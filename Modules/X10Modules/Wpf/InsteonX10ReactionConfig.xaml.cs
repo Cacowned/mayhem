@@ -109,6 +109,8 @@ namespace X10Modules.Wpf
             houseID.SelectedIndex = 0;
             unitID.SelectedIndex = 0;
             commandID.SelectedIndex = 0;
+
+            CanSave = true; 
         }
 
         /// <summary>
@@ -153,6 +155,14 @@ namespace X10Modules.Wpf
             if (x10 != null)
                 x10.Dispose();
             Logger.WriteLine("OnSave");
+        }
+
+        public override string Title
+        {
+            get
+            {
+                return "X10 Reaction";
+            }
         }
     }
 }
