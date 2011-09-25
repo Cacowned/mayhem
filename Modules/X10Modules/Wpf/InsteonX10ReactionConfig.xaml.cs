@@ -130,20 +130,14 @@ namespace X10Modules.Wpf
                 // send a test command
                 // x10.X10SendCommand(0x6, 0x6, 0x2);
                 // start the sending thread explicitly
-                // todo:: factory pattern etc. 
 
                 // start threaded as x10 might require some send repeats, etc.. 
                 // TODO: delegate to handle the send result
                 X10HouseCode houseC = selected_housecode;
                 X10UnitCode unitC = selected_unitcode;
                 X10CommandCode commandC = selected_commandcode;
-
                 new Thread(new System.Threading.ThreadStart(() => x10.X10SendCommand(houseC, unitC, commandC))).Start();
-
-
-                //x10.X10SendHouseCommand(X10HouseCode.A, X10CommandCode.ALL_UNITS_OFF); 
             }
-
         }
 
         /// <summary>

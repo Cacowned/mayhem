@@ -65,6 +65,7 @@ namespace X10Modules.Reactions
             {
                 x10Controller = new X10Controller(serialPortName);
             }
+            SetConfigString();
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
@@ -82,7 +83,7 @@ namespace X10Modules.Reactions
                 x10Controller.Dispose();
             }
             x10Controller = new X10Controller(serialPortName);
-
+            SetConfigString();
 
         }
 
@@ -91,5 +92,12 @@ namespace X10Modules.Reactions
             Logger.WriteLine("Perform()");
             x10Controller.X10SendCommand(houseCode, unitCode, commandCode);
         }
+
+        public override void SetConfigString()
+        {
+            string config = "House: " + houseCode.ToString() + ", Unit: " + unitCode.ToString() + ", Command: " + commandCode.ToString();
+            ConfigString = config; 
+        }
+
     }
 }
