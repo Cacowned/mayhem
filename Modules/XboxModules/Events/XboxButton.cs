@@ -50,14 +50,14 @@ namespace XboxModules.Events
         }
 
         #region Configuration Views
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
             XboxButtons = ((XboxButtonConfig)configurationControl).ButtonsToSave;
             buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new XboxButtonConfig(XboxButtons); }
         }

@@ -46,7 +46,7 @@ namespace X10Modules.Reactions
 
         private X10Controller x10Controller = null;
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get
             {
@@ -67,7 +67,7 @@ namespace X10Modules.Reactions
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             Logger.WriteLine("OnSaved");
             // TODO

@@ -41,8 +41,6 @@ namespace DefaultModules.Events
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             myTimer = new DispatcherTimer();
             myTimer.Tick += new EventHandler(myTimer_Tick);
         }
@@ -92,12 +90,12 @@ namespace DefaultModules.Events
             Seconds = seconds;
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new TimerConfig(Hours, Minutes, Seconds); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             TimerConfig config = (TimerConfig)configurationControl;
             Hours = config.Hours;

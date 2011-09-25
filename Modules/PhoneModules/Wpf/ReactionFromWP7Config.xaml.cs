@@ -1,33 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Net;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using MayhemCore;
 using MayhemWpf.UserControls;
 using MessagingToolkit.QRCode.Codec;
-using System.Net;
-using System.Drawing;
-using System.Diagnostics;
-using System.IO;
-using System.Drawing.Imaging;
-using MayhemCore;
 
-namespace PhoneModules
+namespace PhoneModules.Wpf
 {
     /// <summary>
     /// Interaction logic for ReactionFromWP7Config.xaml
     /// </summary>
-    public partial class ReactionFromWP7Config : IWpfConfiguration
+    public partial class ReactionFromWP7Config : WpfConfiguration
     {
-        string id;
+        private string id;
+
         public ReactionFromWP7Config(string id)
         {
             InitializeComponent();
@@ -79,10 +68,6 @@ namespace PhoneModules
         public override string Title
         {
             get { return "Reaction From WP7"; }
-        }
-
-        public override void OnCancel()
-        {
         }
     }
 }

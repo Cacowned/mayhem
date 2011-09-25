@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
 using System.Windows.Media.Animation;
-using System.Diagnostics;
+using System.Windows.Media.Imaging;
 using Microsoft.Win32;
-using MayhemCore;
-using System.Globalization;
 
 namespace PhoneModules.Controls
 {
@@ -73,7 +63,7 @@ namespace PhoneModules.Controls
                 if (imageFile != null && imageFile.Length > 0)
                 {
                     FileDictionary.Add(imageFile);
-                    
+
                     BitmapImage bi = new BitmapImage();
                     bi.BeginInit();
                     bi.UriSource = new Uri(value);
@@ -133,7 +123,7 @@ namespace PhoneModules.Controls
                 double y = startCanvasLoc.Y + point.Y - startPoint.Y;
                 x = Math.Min(Math.Max(0, x), 320 - borderSelected.ActualWidth);
                 y = Math.Min(Math.Max(0, y), 450 - borderSelected.ActualHeight);
-                
+
                 if (x + ActualWidth > 320)
                 {
                     if (isGridOnRight)
@@ -202,7 +192,7 @@ namespace PhoneModules.Controls
             textBox1.CaretBrush = new SolidColorBrush(Colors.Transparent);
             buttonText.Background = defaultButtonBrush;
             buttonText.UpdateLayout();
-            
+
             textBox1.UpdateLayout();
             textBox1.IsHitTestVisible = false;
             textBox1.BorderThickness = new Thickness(0);

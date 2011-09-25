@@ -194,7 +194,7 @@ namespace VisionModules.Reactions
             return time.ToString("yyyyMMddHHmmssffff");
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get
             {
@@ -206,7 +206,7 @@ namespace VisionModules.Reactions
 
         
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             PictureConfig config = configurationControl as PictureConfig;
             folderLocation = config.location;

@@ -23,7 +23,7 @@ namespace VisionModules.Wpf
     /// <summary>
     /// Interaction logic for PresenceConfig.xaml
     /// </summary>
-    public partial class PresenceConfig : IWpfConfiguration
+    public partial class PresenceConfig : WpfConfiguration
     {
         public int selectedIndex = 0; 
         // the selected camera

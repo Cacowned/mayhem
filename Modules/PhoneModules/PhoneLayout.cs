@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Xml.Serialization;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
 using System.Reflection;
-using System.Diagnostics;
+using System.Text;
+using System.Xml.Serialization;
 using MayhemCore;
 
 namespace PhoneModules
@@ -144,7 +139,7 @@ namespace PhoneModules
                     }
                 }
             }
-            catch(Exception erf)
+            catch (Exception erf)
             {
                 Logger.WriteLine(erf);
             }

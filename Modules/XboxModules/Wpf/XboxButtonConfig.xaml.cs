@@ -9,7 +9,7 @@ namespace XboxModules.Wpf
     /// <summary>
     /// Interaction logic for XboxButtonConfig.xaml
     /// </summary>
-    public partial class XboxButtonConfig : IWpfConfiguration
+    public partial class XboxButtonConfig : WpfConfiguration
     {
         public Buttons ButtonsToSave;
 

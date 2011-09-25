@@ -76,12 +76,12 @@ namespace DefaultModules.Reactions
             SoundPath = path;
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new PlaySoundConfig(SoundPath); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             PlaySoundConfig rpc = configurationControl as PlaySoundConfig;
             SoundPath = rpc.FileName;

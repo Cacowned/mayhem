@@ -23,7 +23,7 @@ namespace VisionModules.Wpf
     /// <summary>
     /// Interaction logic for MotionDetectorConfig.xaml
     /// </summary>
-    public partial class MotionDetectorConfig : IWpfConfiguration
+    public partial class MotionDetectorConfig : WpfConfiguration
     {
         private CameraDriver i = CameraDriver.Instance;
         protected Camera cam = null;

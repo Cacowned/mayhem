@@ -105,7 +105,7 @@ namespace VisionModules.Events
             presenceHandler = new PresenceDetectorComponent.DetectionHandler(m_OnPresenceUpdate);
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get
             {
@@ -118,7 +118,7 @@ namespace VisionModules.Events
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             PresenceConfig config = configurationControl as PresenceConfig;
             bool wasEnabled = this.Enabled;

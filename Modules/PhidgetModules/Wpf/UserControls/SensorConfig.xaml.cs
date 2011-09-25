@@ -21,7 +21,7 @@ namespace PhidgetModules.Wpf.UserControls
     /// <summary>
     /// Interaction logic for SensorConfig.xaml
     /// </summary>
-    public partial class SensorConfig : IWpfConfiguration
+    public partial class SensorConfig : WpfConfiguration
     {
         public int Index { get; private set; }
         public InterfaceKit IfKit { get; private set; }

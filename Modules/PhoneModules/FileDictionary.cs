@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace PhoneModules
 {
     public static class FileDictionary
     {
-        static Dictionary<string, byte[]> dict = new Dictionary<string, byte[]>();
+        private static Dictionary<string, byte[]> dict = new Dictionary<string, byte[]>();
 
         public static void Add(string str)
         {

@@ -72,12 +72,12 @@ namespace PhidgetModules.Reaction
 
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get { return new Phidget1066AdvServoConfig(advServo, Index, ServoType, Position); }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
             ServoType = (configurationControl as Phidget1066AdvServoConfig).ServoType;
             Position = (configurationControl as Phidget1066AdvServoConfig).Position;

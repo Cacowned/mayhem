@@ -66,7 +66,7 @@ namespace ArduinoModules.Events
 
         }
 
-        public IWpfConfiguration ConfigurationControl
+        public WpfConfiguration ConfigurationControl
         {
             get
             {
@@ -105,7 +105,7 @@ namespace ArduinoModules.Events
             }
         }
 
-        public void OnSaved(IWpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
            
             ArduinoEventConfig config = configurationControl as ArduinoEventConfig;

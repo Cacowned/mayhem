@@ -1,4 +1,4 @@
-﻿<src:IWpfConfiguration x:Class="PhidgetModules.Wpf.UserControls.SensorConfig"
+﻿<src:WpfConfiguration x:Class="PhidgetModules.Wpf.UserControls.SensorConfig"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
@@ -14,4 +14,4 @@
         <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" Style="{StaticResource ConfigErrorMessage}" Name="phidgetAttached" Grid.Column="1" Grid.Row="1" Visibility="Visible">Plug in a phidget interface kit.</TextBlock>
     </StackPanel>
     
-</src:IWpfConfiguration>
+</src:WpfConfiguration>
