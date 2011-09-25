@@ -159,7 +159,6 @@ namespace VisionModules.Events
         public override void Disable()
         {
             Logger.WriteLine("Disable");
-            base.Disable();
             pd.OnPresenceUpdate -= presenceHandler;
             if (cam != null)
                 pd.UnregisterForImages(cam);

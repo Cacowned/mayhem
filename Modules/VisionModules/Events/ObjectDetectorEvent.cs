@@ -45,14 +45,14 @@ namespace VisionModules.Events
 
         // for some reason normal arrays are not serializable!
         [DataMember]
-        Byte[] templateImage_bytes;
+        private Byte[] templateImage_bytes;
 
         // preview image for template --> shown in config dialog
         [DataMember]
-        Byte[] templatePreview_bytes;
+        private Byte[] templatePreview_bytes;
 
         [DataMember]
-        string testString = "orig";
+        private string testString = "orig";
 
         public Bitmap templateImage;
 
@@ -61,7 +61,7 @@ namespace VisionModules.Events
         public double preview_scale_f = 1;
 
         [DataMember]
-        Rect boundingRect = new Rect(0, 0, 0, 0);
+        private Rect boundingRect = new Rect(0, 0, 0, 0);
 
         // the cam we have selected
         private int selected_device_idx = 0;
@@ -75,12 +75,6 @@ namespace VisionModules.Events
         public ObjectDetectorEvent()
         {
             InitMe(new StreamingContext());
-        }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-            //InitMe();
         }
 
         /// <summary>
@@ -170,7 +164,6 @@ namespace VisionModules.Events
 
         public override void Disable()
         {
-            base.Disable();
             Logger.WriteLine("Disable");
 
             od.OnObjectDetected -= objectDetectHandler;

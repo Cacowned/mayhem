@@ -28,13 +28,6 @@ namespace PhidgetModules.Wpf
             OnWhenOff.IsChecked = !OnTurnOn;
         }
 
-        /*
-        public override void OnSave()
-        {
-            OnTurnOn = (bool)OnWhenOn.IsChecked;
-        }
-         */
-
         public override string Title
         {
             get

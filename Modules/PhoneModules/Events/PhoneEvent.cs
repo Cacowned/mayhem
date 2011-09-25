@@ -107,7 +107,6 @@ namespace PhoneModules.Events
                 string formData = phoneLayout.Serialize();
                 phoneConnector.FormData = formData;
             }
-            base.Disable();
         }
 
         public override void Delete()

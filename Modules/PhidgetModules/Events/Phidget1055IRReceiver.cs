@@ -17,11 +17,7 @@ namespace PhidgetModules.Events
         #region Configuration
 
         [DataMember]
-        private IRCode Code
-        {
-            get;
-            set;
-        }
+        private IRCode Code;
         #endregion
 
         private IR ir;
@@ -30,8 +26,6 @@ namespace PhidgetModules.Events
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             ir = InterfaceFactory.IR;
 
             gotCode = new IRCodeEventHandler(ir_Code);
@@ -81,8 +75,6 @@ namespace PhidgetModules.Events
 
         public override void Disable()
         {
-            base.Disable();
-
             if (ir != null)
             {
                 ir.Code -= gotCode;

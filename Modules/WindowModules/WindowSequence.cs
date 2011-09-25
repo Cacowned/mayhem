@@ -19,7 +19,7 @@ namespace WindowModules
     {
         static readonly ulong TARGETWINDOW = Native.WS_BORDER | Native.WS_VISIBLE;
 
-        WindowActionInfo actionInfo;
+        private WindowActionInfo actionInfo;
 
         [DataMember]
         public WindowActionInfo ActionInfo
@@ -34,7 +34,7 @@ namespace WindowModules
             }
         }
 
-        static HashSet<int> processBlackList = new HashSet<int>();
+        private static HashSet<int> processBlackList = new HashSet<int>();
 
         public WindowSequence()
         {

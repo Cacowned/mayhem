@@ -14,8 +14,6 @@ namespace PhidgetModules.Events
     {
         protected override void Initialize()
         {
-            base.Initialize();
-
             BottomThreshold = 0;
             TopThreshold = 100;
         }

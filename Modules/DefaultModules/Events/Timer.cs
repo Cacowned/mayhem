@@ -18,25 +18,13 @@ namespace DefaultModules.Events
 
         #region Configuration Properties
         [DataMember]
-        private int Hours
-        {
-            get;
-            set;
-        }
+        private int Hours;
 
         [DataMember]
-        private int Minutes
-        {
-            get;
-            set;
-        }
+        private int Minutes;
 
         [DataMember]
-        private int Seconds
-        {
-            get;
-            set;
-        }
+        private int Seconds;
         #endregion
 
         protected override void Initialize()
@@ -128,7 +116,6 @@ namespace DefaultModules.Events
 
         public override void Disable()
         {
-            base.Disable();
             myTimer.Stop();
         }
     }
