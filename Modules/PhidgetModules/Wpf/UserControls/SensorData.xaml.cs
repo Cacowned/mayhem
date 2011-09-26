@@ -23,7 +23,7 @@ namespace PhidgetModules.Wpf.UserControls
             InitializeComponent();
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        public void Setup()
         {
             IfKit.Attach += IfKit_Attach;
             IfKit.SensorChange += SensorChange;

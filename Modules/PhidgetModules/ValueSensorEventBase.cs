@@ -34,6 +34,8 @@ namespace PhidgetModules
 
         protected override void Initialize()
         {
+            base.Initialize();
+
             Increasing = true;
             TopValue = 85;
 

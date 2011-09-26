@@ -55,6 +55,7 @@ namespace PhidgetModules.Wpf.UserControls
             SensorDataBox.Index = Index;
             SensorDataBox.IfKit = IfKit;
             SensorDataBox.convertor = Convertor;
+            SensorDataBox.Setup();
 
             Sensor.OnLoad();
             Sensor.OnRevalidate += Revalidate;
