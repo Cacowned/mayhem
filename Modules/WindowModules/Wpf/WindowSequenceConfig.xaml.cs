@@ -25,22 +25,23 @@ namespace WindowModules.Wpf
     /// </summary>
     public partial class WindowSequenceConfig : WpfConfiguration
     {
-        Timer timer;
-        Process thisProcess;
-        IntPtr thisWindowHandle;
         public WindowInfo SelectedWindow
         {
             get;
             private set;
         }
-        
+
         public WindowActionInfo ActionInfo
         {
             get;
             private set;
         }
 
-        Dictionary<UserControl, WindowAction> controlMap = new Dictionary<UserControl, WindowAction>();
+        private Timer timer;
+        private Process thisProcess;
+        private IntPtr thisWindowHandle;
+
+        private Dictionary<UserControl, WindowAction> controlMap = new Dictionary<UserControl, WindowAction>();
 
         public WindowSequenceConfig(WindowActionInfo windowActionInfo)
         {

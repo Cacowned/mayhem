@@ -69,12 +69,19 @@ namespace VisionModules.Events
         [DataMember]
         private PresenceTriggerMode selected_trigger_mode = PresenceTriggerMode.TOGGLE;
 
-        public PresenceEvent()
-        {
-            base.Initialize();
-            Initialize();
-        }
+        [DataMember]
+        private double sensitivity = PresenceDetectorComponent.DEFAULT_SENSITIVITY; 
 
+        /// <summary>
+        /// Percent value of sensitivity 
+        /// </summary>
+        private int sensitivity_percent
+        {
+            get
+            {
+                return (int)((sensitivity - 0.005) * (100 / 0.0095));
+            }
+        }
 
         protected override void Initialize()
         {
@@ -84,9 +91,6 @@ namespace VisionModules.Events
         [OnDeserialized]
         protected void Initialize(StreamingContext  s)
         {
-            Logger.WriteLine("Initialize");
-            base.Initialize();
-
             Logger.WriteLine("Enumerating Devices");
 
             if (i == null)
@@ -123,6 +127,8 @@ namespace VisionModules.Events
             PresenceConfig config = configurationControl as PresenceConfig;
             bool wasEnabled = this.Enabled;
 
+            sensitivity = config.SelectedSensitivity;
+
             if (this.Enabled)
                 this.Disable();
 
@@ -149,6 +155,7 @@ namespace VisionModules.Events
                 if (!cam.running)
                     cam.StartFrameGrabbing();
                 pd.RegisterForImages(cam);
+                pd.Sensitivity = sensitivity;
                 pd.OnPresenceUpdate -= presenceHandler;
                 pd.OnPresenceUpdate += presenceHandler;               
             }
@@ -159,7 +166,6 @@ namespace VisionModules.Events
         public override void Disable()
         {
             Logger.WriteLine("Disable");
-            base.Disable();
             pd.OnPresenceUpdate -= presenceHandler;
             if (cam != null)
                 pd.UnregisterForImages(cam);
@@ -221,6 +227,14 @@ namespace VisionModules.Events
             {
                 lastPresenceStatus = PresenceStatus.NO_PRESENCE;
             }
+        }
+
+        public override void SetConfigString()
+        {
+            string config = "Sensitivity: " + sensitivity_percent;
+            if (cam != null)
+                config += ", Cam Nr: " + cam.Info.deviceId;
+            ConfigString = config; 
         }
     }
 }

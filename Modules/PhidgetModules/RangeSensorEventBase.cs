@@ -10,18 +10,10 @@ namespace PhidgetModules
         #region Configuration
         // Define the range we care about
         [DataMember]
-        protected double TopValue
-        {
-            get;
-            set;
-        }
+        protected double TopValue;
 
         [DataMember]
-        protected double BottomValue
-        {
-            get;
-            set;
-        }
+        protected double BottomValue;
 
         #endregion
 
@@ -30,8 +22,6 @@ namespace PhidgetModules
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             // put it somewhere in the middle
             CurrentValue = LastValue = TopValue - BottomValue;
 

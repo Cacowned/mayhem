@@ -17,6 +17,7 @@ using MayhemOpenCVWrapper;
 using VisionModules.Events;
 using MayhemCore;
 using System.Threading;
+using System.Windows.Controls.Primitives;
 
 namespace VisionModules.Wpf
 {
@@ -25,7 +26,22 @@ namespace VisionModules.Wpf
     /// </summary>
     public partial class PresenceConfig : WpfConfiguration
     {
-        public int selectedIndex = 0; 
+        public int selectedIndex = 0;
+
+
+        /// <summary>
+        /// Sensitivity Slider 
+        /// </summary>
+        private int slider_value = 20;
+        public double SelectedSensitivity
+        {
+            get
+            {
+                // map slider (0..100) to a (0.005 -- 0.1) range
+                return (double) slider_value * (0.0095) / 100 + 0.005; 
+            }
+        }
+
         // the selected camera
         private Camera camera_selected_ = null;  
         public Camera camera_selected
@@ -67,7 +83,6 @@ namespace VisionModules.Wpf
         public override void OnLoad()
         {
             Init();
-
             // evil hack to get the camera selector to actually show the selection!
             System.Timers.Timer tt = new System.Timers.Timer(250);
             tt.AutoReset = false;
@@ -84,6 +99,22 @@ namespace VisionModules.Wpf
             tt.Enabled = true;
 
             camera_selector.deviceList.SelectedIndex = selectedIndex;
+
+            sdr_sensitivity.Minimum = 0;
+            sdr_sensitivity.Maximum = 100;
+            sdr_sensitivity.IsDirectionReversed = false;
+            sdr_sensitivity.IsMoveToPointEnabled = true;
+            sdr_sensitivity.AutoToolTipPrecision = 2;
+            sdr_sensitivity.AutoToolTipPlacement =
+              AutoToolTipPlacement.BottomRight;
+            sdr_sensitivity.TickPlacement = TickPlacement.TopLeft;
+            sdr_sensitivity.TickFrequency = 5;
+            sdr_sensitivity.IsSelectionRangeEnabled = true;
+            sdr_sensitivity.SelectionStart = 0;
+            sdr_sensitivity.SelectionEnd = 100;
+            sdr_sensitivity.SmallChange = 1;
+            sdr_sensitivity.LargeChange = 5;
+            sdr_sensitivity.Value = slider_value;
         }
 
         private void Init()
@@ -138,6 +169,11 @@ namespace VisionModules.Wpf
             {
                 selected_triggerMode_ = PresenceTriggerMode.ON_OFF;
             }
+        }
+
+        private void sdr_sensitivity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            slider_value = (int) sdr_sensitivity.Value;
         }
         
     }

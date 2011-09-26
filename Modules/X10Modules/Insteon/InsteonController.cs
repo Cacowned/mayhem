@@ -23,14 +23,10 @@ namespace X10Modules.Insteon
 
     public class InsteonController : InsteonControllerBase
     {
-        public InsteonController(string portName) : base(portName)
-        {
-        }
+        public InsteonController(string portName) : base(portName){}
         private bool linking = false;
 
         public InsteonCommandBase lastCommand = null;
-
-       // public Action<List<InsteonDevice>> OnDevicesLinkComplete;
 
         public override void port_DataReceived(string portName, byte[] buffer, int nBytes)
         {
@@ -59,9 +55,7 @@ namespace X10Modules.Insteon
                         parse_buf[i + parse_count] = buffer[i];
                       
                     }
-                    parse_count += nBytes;
-                    
-
+                    parse_count += nBytes;                   
                     InsteonResponseCommand c = lastCommand as InsteonResponseCommand;
                     Logger.WriteLine("Listing for Response Command Response");
                     // check if an ack has arrived for the last command
@@ -88,8 +82,7 @@ namespace X10Modules.Insteon
                             ResetRxBuffer();
                             return;
                         }
-                    }
-                    
+                    }              
                 }
                 else
                 {
@@ -97,9 +90,7 @@ namespace X10Modules.Insteon
                     throw new NotSupportedException();
                 }
             }
-
         }
-
 
         public override void Dispose()
         {
@@ -107,8 +98,7 @@ namespace X10Modules.Insteon
             base.Dispose();
         }
         
-
-        #region Insteon Commands
+        #region Sending Insteon Commands
  
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool SendStandardMsg(InsteonStandardMessage c)
@@ -116,7 +106,7 @@ namespace X10Modules.Insteon
             lastCommand = c;
 
             ////////// logic for toggle support
-            if (c.IsToggleCommand())
+            if (c.IsToggleCommand)
             {
                 bool device_state = InsteonDevice.GetPowerStateForDeviceAddress(c.device_address);
                 if (device_state == true)
@@ -128,11 +118,11 @@ namespace X10Modules.Insteon
                     return SendStandardMsg(new InsteonStandardMessage(c.device_address, InsteonCommandBytes.light_on_fast, 0, 11));
                 }
             }
-            else if (c.IsOnCommand())
+            else if (c.IsOnCommand)
             {
                 InsteonDevice.SetPowerStateForDeviceAddress(c.device_address, true);
             }
-            else if (c.IsOffCommand())
+            else if (c.IsOffCommand)
             {
                 InsteonDevice.SetPowerStateForDeviceAddress(c.device_address, false);
             }
@@ -154,10 +144,13 @@ namespace X10Modules.Insteon
                 ResetRxBuffer();
                 return false;
             }
-
         }
 
-
+        /// <summary>
+        /// Turn device off
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool SendOff(InsteonDevice d)
         {
@@ -165,6 +158,11 @@ namespace X10Modules.Insteon
             return SendStandardMsg(c); 
         }
 
+        /// <summary>
+        /// Turn device on
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool SendOn(InsteonDevice d)
         {
@@ -172,6 +170,10 @@ namespace X10Modules.Insteon
             return SendStandardMsg(c);   
         }
 
+        /// <summary>
+        /// Enumerate devices on Insteon bus
+        /// </summary>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public List<InsteonDevice> EnumerateLinkedDevices()
         {
@@ -256,7 +258,6 @@ namespace X10Modules.Insteon
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool startAllLinking()
         {
-
             if (!linking)
             {
                 InsteonBasicCommand c = new InsteonBasicCommand(InsteonCommandBytes.start_all_linking);
@@ -280,13 +281,12 @@ namespace X10Modules.Insteon
         }
 
         /// <summary>
-        /// Stops all linking mode (TODO)
-        /// </summary>
-        
+        /// Stops all linking mode (++++++++TODO++++++++++)
+        /// </summary>    
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void stopAllLinking()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
             /*
             if (!linking)
             {

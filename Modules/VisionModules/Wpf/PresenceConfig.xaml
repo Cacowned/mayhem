@@ -13,6 +13,12 @@
                 <RadioButton Name="rb_triggerMode_offOn" GroupName="triggerMode" Checked="rb_triggerMode_toggle_Checked">Presence switches from not detected to detected. </RadioButton>
                 <RadioButton Name="rb_triggerMode_onOff" GroupName="triggerMode" Checked="rb_triggerMode_toggle_Checked">Presence switches from detected to not detected.</RadioButton>
             </StackPanel>
+            <Label> Movement Sensitivity (Default: 20) </Label>
+            <StackPanel Orientation="Horizontal">
+                <Label>0</Label>
+                <Slider Name="sdr_sensitivity" Width="250" ValueChanged="sdr_sensitivity_ValueChanged"></Slider>
+                <Label>100</Label>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </src:WpfConfiguration>

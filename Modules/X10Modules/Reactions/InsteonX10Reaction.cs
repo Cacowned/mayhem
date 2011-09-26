@@ -27,7 +27,7 @@ using System.Threading;
 namespace X10Modules.Reactions
 {
     [DataContract]
-    [MayhemModule("X10Reaction", "**Testing** Triggers X10 Commands")]
+    [MayhemModule("X10Reaction", "Triggers X10 Commands")]
     public class InsteonX10Reaction : ReactionBase, IWpfConfigurable
     {
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
@@ -65,6 +65,7 @@ namespace X10Modules.Reactions
             {
                 x10Controller = new X10Controller(serialPortName);
             }
+            SetConfigString();
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
@@ -82,15 +83,20 @@ namespace X10Modules.Reactions
                 x10Controller.Dispose();
             }
             x10Controller = new X10Controller(serialPortName);
-
-
+            SetConfigString();
         }
 
         public override void Perform()
         {
             Logger.WriteLine("Perform()");
-            // TODO: evaluate if starting a new thread each time is a good idea
-            new Thread(new System.Threading.ThreadStart(() => x10Controller.X10SendCommand(houseCode, unitCode, commandCode))).Start();
+            x10Controller.X10SendCommand(houseCode, unitCode, commandCode);
         }
+
+        public override void SetConfigString()
+        {
+            string config = "House: " + houseCode.ToString() + ", Unit: " + unitCode.ToString() + ", Command: " + commandCode.ToString();
+            ConfigString = config; 
+        }
+
     }
 }

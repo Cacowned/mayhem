@@ -18,19 +18,11 @@ namespace PhidgetModules.Events
         #region Configuration
         // Which index do we want to be looking at?
         [DataMember]
-        private int Index
-        {
-            get;
-            set;
-        }
+        private int Index;
 
         // Toggle when it goes on, or when it goes off?
         [DataMember]
-        private bool OnWhenOn
-        {
-            get;
-            set;
-        }
+        private bool OnWhenOn;
 
         #endregion
 
@@ -41,8 +33,6 @@ namespace PhidgetModules.Events
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             this.ifKit = InterfaceFactory.Interface;
             inputChangeHandler = new InputChangeEventHandler(InputChanged);
 
@@ -106,8 +96,6 @@ namespace PhidgetModules.Events
 
         public override void Disable()
         {
-            base.Disable();
-
             if (ifKit != null)
             {
                 ifKit.InputChange -= inputChangeHandler;

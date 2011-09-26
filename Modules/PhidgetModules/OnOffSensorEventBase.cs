@@ -9,28 +9,16 @@ namespace PhidgetModules
     {
         #region Configuration
         [DataMember]
-        protected int TopThreshold
-        {
-            get;
-            set;
-        }
+        protected int TopThreshold;
 
         [DataMember]
-        protected int BottomThreshold
-        {
-            get;
-            set;
-        }
+        protected int BottomThreshold;
 
         // If this is true, then we want to trigger
         // when this sensor turns "on" otherwise
         // trigger when this sensor turns "off"
         [DataMember]
-        protected bool OnTurnOn
-        {
-            get;
-            set;
-        }
+        protected bool OnTurnOn;
 
         #endregion
 
@@ -39,8 +27,6 @@ namespace PhidgetModules
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             TopThreshold = 900;
             BottomThreshold = 500;
             OnTurnOn = true;

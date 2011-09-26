@@ -95,14 +95,13 @@ namespace X10Modules.Wpf
         public void Init()
         {
             serial = MayhemSerialPortMgr.instance; 
-
             serial.UpdatePortList();
-            //deviceList.ItemsSource = serial.serialPortNames;
-
+     
             Dictionary<string,string> portList = serial.getInsteonPortNames();
-
+                       
             if (portList.Count > 0)
             {
+
                 deviceList.ItemsSource = portList;
                 deviceList.DisplayMemberPath = "Value";
                 deviceList.SelectedValuePath = "Key";
@@ -125,9 +124,7 @@ namespace X10Modules.Wpf
             }
             commandID.ItemsSource = selectable_commands.Keys;
             commandID.SelectedIndex = 0;
-
-            
-          
+            CanSave = true;
         }
 
         /// <summary>
@@ -192,13 +189,14 @@ namespace X10Modules.Wpf
 
                     if (insteonController.startAllLinking())
                     {
-                        return;
-                    }
-                    else
-                    {
+                        btn_link_devices.IsEnabled = false; 
                         // create a callback that resets the button text
                         TimerCallback cb = (S) => { btn_link_devices.Content = "Link More Devices"; };
                         Timer t = new Timer(cb, null, 2500, 0);
+                    }
+                    else
+                    {
+                        return;
                     }
                 }
             }
@@ -252,6 +250,13 @@ namespace X10Modules.Wpf
             string selected_portname = deviceList.SelectedItem as string; 
         }
 
+        public override string Title
+        {
+            get
+            {
+                return "Insteon Reaction";
+            }
+        }
 
 
     }

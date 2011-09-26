@@ -8,7 +8,7 @@ using XboxModules.Resources;
 
 namespace XboxModules
 {
-    enum ControllerStatus
+    public enum ControllerStatus
     {
         Attached,
         Detached

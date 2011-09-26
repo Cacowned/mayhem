@@ -13,8 +13,6 @@ namespace OfficeModules.Events
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             // Create the event handler delegate to attach
             reminderEvent = new OOutlook.ApplicationEvents_11_ReminderEventHandler(GotReminder);
         }
@@ -44,8 +42,6 @@ namespace OfficeModules.Events
 
         public override void Disable()
         {
-            base.Disable();
-
             if (outlook != null)
             {
                 outlook.Reminder -= reminderEvent;

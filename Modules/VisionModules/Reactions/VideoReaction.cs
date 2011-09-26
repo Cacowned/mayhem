@@ -50,7 +50,7 @@ namespace VisionModules.Reactions
 
         private string last_video_saved = String.Empty;
 
-        private bool video_saving = false; 
+        private bool video_saving = false;
 
         public VideoReaction()
         {
@@ -80,12 +80,12 @@ namespace VisionModules.Reactions
             // TODO think of a better naming convention
             string fileName = "Mayhem-Video_" + now.Year + "_" + now.Month + "_" + now.Day + "-" + now.Hour + "_" + now.Minute + "_" + now.Second + ".avi";
             string path = this.folderLocation + "\\" + fileName;
-            last_video_saved = path; 
+            last_video_saved = path;
             Logger.WriteLine("saving file to " + path);
             //image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
             if (Directory.Exists(folderLocation))
             {
-                video_saving = true; 
+                video_saving = true;
                 Video v = new Video(cam, path, compress);
                 v.OnVideoSaved += new Action<bool>(v_OnVideoSaved);
             }
@@ -152,7 +152,6 @@ namespace VisionModules.Reactions
 
         public override void Disable()
         {
-            base.Disable();
             if (cam != null)
             {
                 cam.TryStopFrameGrabbing();
@@ -161,21 +160,21 @@ namespace VisionModules.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get {
-                    return new VideoConfig(folderLocation, capture_offset_time);
-                }
+            get
+            {
+                return new VideoConfig(folderLocation, capture_offset_time);
+            }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-
             bool wasEnabled = this.Enabled;
             if (this.Enabled)
                 this.Disable();
 
             VideoConfig config = configurationControl as VideoConfig;
             folderLocation = config.location;
-            compress = config.compress_video; 
+            compress = config.compress_video;
 
             if (config.deviceList.HasItems)
             {
@@ -185,7 +184,7 @@ namespace VisionModules.Reactions
             else
             {
                 Logger.WriteLine("No Camera present, setting cam to null");
-                cam = null; 
+                cam = null;
             }
 
             capture_offset_time = config.temporal_offset;

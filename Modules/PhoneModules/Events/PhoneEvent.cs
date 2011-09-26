@@ -105,7 +105,6 @@ namespace PhoneModules.Events
                 phoneConnector.EventCalled -= phoneConnector_EventCalled;
                 phoneConnector.SetNewData();
             }
-            base.Disable();
         }
 
         public override void Delete()

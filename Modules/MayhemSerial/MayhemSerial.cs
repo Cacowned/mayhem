@@ -28,7 +28,7 @@ namespace MayhemSerial
 {
     public class MayhemSerialPortMgr
     {
-        public string[] serialPortNames; 
+        private string[] serialPortNames; 
         private Dictionary<string, SerialPort> connections = new Dictionary<string, SerialPort>();
 
         private byte[] rxBuf = new byte[4096];
@@ -98,7 +98,6 @@ namespace MayhemSerial
                 }
             }
 
-
             // add new names to the list --> add new ports (i.e. plugged-in arduino) 
             foreach (string name in serialPortNames)
             {
@@ -109,7 +108,6 @@ namespace MayhemSerial
                     if (!hFile.IsInvalid)
                     {
                         Logger.WriteLine("UpdatePortList --> adding name: " + name); 
-                        //throw new System.IO.IOException(string.Format("{0} port is already open", portName));
                         connections.Add(name, null);
                     }
                     hFile.Close();
@@ -175,12 +173,6 @@ namespace MayhemSerial
         /// <param name="listener"></param>
         public void DisconnectListener(string portName, ISerialPortDataListener listener)
         {
-           // Logger.WriteLine("DisconnectListener");
-           // if (portName != null && connections.Keys.Contains(portName) && connections[portName] == null)
-           // {
-           //SerialPort port = connections[portName];
-            //    port.DataReceived -= listener.port_DataReceived; 
-           // }
             OnDataReceived -= listener.port_DataReceived;
         }
 
@@ -261,67 +253,7 @@ namespace MayhemSerial
         #endregion
 
         #region Query on special hardware
-
-        /*
-        /// <summary>
-        /// Begins recursive registry enumeration
-        /// </summary>
-        /// <param name="oPortsToMap">array of port names (i.e. COM1, COM2, etc)</param>
-        /// <returns>a hashtable mapping Friendly names to non-friendly port values</returns>
-        Hashtable BuildPortNameHash(string[] oPortsToMap)
-        {
-            Hashtable oReturnTable = new Hashtable();
-            try
-            {
-                MineRegistryForPortName("SYSTEM\\CurrentControlSet\\Enum", oReturnTable, oPortsToMap);
-            }
-            catch (Exception e)
-            {
-                Logger.WriteLine(e);
-                return oReturnTable;
-            }
-            return oReturnTable;
-        }
-        /// <summary>
-        /// Recursively enumerates registry subkeys starting with strStartKey looking for 
-        /// "Device Parameters" subkey. If key is present, friendly port name is extracted.
-        /// </summary>
-        /// <param name="strStartKey">the start key from which to begin the enumeration</param>
-        /// <param name="oTargetMap">hashtable that will get populated with 
-        /// friendly-to-nonfriendly port names</param>
-        /// <param name="oPortNamesToMatch">array of port names (i.e. COM1, COM2, etc)</param>
-        void MineRegistryForPortName(string strStartKey, Hashtable oTargetMap, string[] oPortNamesToMatch)
-        {
-            if (oTargetMap.Count >= oPortNamesToMatch.Length)
-                return;
-            RegistryKey oCurrentKey = Registry.LocalMachine;
-            oCurrentKey = oCurrentKey.OpenSubKey(strStartKey);
-            string[] oSubKeyNames = oCurrentKey.GetSubKeyNames();
-            if (oSubKeyNames.Contains("Device Parameters") && strStartKey != "SYSTEM\\CurrentControlSet\\Enum")
-            {
-                object oPortNameValue = Registry.GetValue("HKEY_LOCAL_MACHINE\\" +
-                    strStartKey + "\\Device Parameters", "PortName", null);
-                if (oPortNameValue == null ||
-                    oPortNamesToMatch.Contains(oPortNameValue.ToString()) == false)
-                    return;
-                object oFriendlyName = Registry.GetValue("HKEY_LOCAL_MACHINE\\" +
-                    strStartKey, "FriendlyName", null);
-                string strFriendlyName = "N/A";
-                if (oFriendlyName != null)
-                    strFriendlyName = oFriendlyName.ToString();
-                if (strFriendlyName.Contains(oPortNameValue.ToString()) == false)
-                    strFriendlyName = string.Format("{0} ({1})", strFriendlyName, oPortNameValue);
-                oTargetMap[strFriendlyName] = oPortNameValue;
-            }
-            else
-            {
-                foreach (string strSubKey in oSubKeyNames)
-                    MineRegistryForPortName(strStartKey + "\\" + strSubKey, oTargetMap, oPortNamesToMatch);
-            }
-        }
-        */
-
-
+   
         /// <summary>
         /// Looks at the attached serial hardware and returns only those portnames that have an Insteon Module attached
         /// </summary>
@@ -406,7 +338,7 @@ namespace MayhemSerial
                             byte[] dummy = new byte[1024];
                             port.Read(dummy, 0, port.BytesToRead);
                         }
-                        // now queey
+                        // now query
                         port.Write(new byte[] { (byte)0x02, (byte)0x69 }, 0, 2);
                         Thread.Sleep(30);
                         if (port.BytesToRead > 2)
@@ -420,7 +352,6 @@ namespace MayhemSerial
                         }
 
                         // ============== reenable receive envents and sending =============
-                        //port.DataReceived += this.port_DataReceived;
                         allowWrite = true;
                         // ============================================
                     }
@@ -431,33 +362,20 @@ namespace MayhemSerial
                  }
 
                } // --------------- foreach
-
-
             allowRX = true; 
-
             return pNames;
-
-
         }
-
-
-      
-
+   
         /// <summary>
         /// Looks at the attached serial hardware and returns only those portnames that have an Arduiono attached
+        /// Works by executing a wmi query
         /// </summary>
         /// <returns>List of port name strings that correspond to an Arduino COM port</returns>
         public Dictionary<string,string> getArduinoPortNames()
         {
             UpdatePortList();
             Dictionary<string,string> arduinoNames = new Dictionary<string,string>();
-
-            /* ------ WMI Method MS_SerialPort doesn't work with my MS //REDMOND/ account :( */
-            string sInstanceName = string.Empty;
-
-           
-
-           
+            string sInstanceName = string.Empty;                 
             try
             {
                
@@ -489,33 +407,26 @@ namespace MayhemSerial
                     arduinoNames.Add(key, key); 
                 }
             }
-            
-          
-
-            //Hashtable m_oFriendlyNameMap = BuildPortNameHash(System.IO.Ports.SerialPort.GetPortNames());
-
-            //arduinoNames;
-            return arduinoNames;
-            
-
+            return arduinoNames;          
         }
-
-
         #endregion
 
         //--------------------------------
         #region data received and other callbacks
+        /// <summary>
+        /// Main Callback when new data has been received by a serial port
+        /// Notifies any attached delegates of then new data in the receive buffer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            //Logger.WriteLine("----> port_DataReceived <----");
-
+        {           
+            Logger.WriteLineIf(VERBOSITY_LEVEL > 0, "----> port_DataReceived <----");
             if (allowRX)
             {
-
                 SerialPort p = sender as SerialPort;
-                // new buffer 
+                // new receive buffer 
                 byte[] rx = new byte[32000];
-
                 int nBytes = p.BytesToRead;
                 if (nBytes > 0 && nBytes <= rx.Length)
                 {
@@ -533,9 +444,7 @@ namespace MayhemSerial
                     // overflow
                     p.DiscardInBuffer();
                 }
-
-
-
+                // notify any attached delegates of the received data
                 if (OnDataReceived != null)
                 {
                     try
@@ -552,7 +461,7 @@ namespace MayhemSerial
             }
             else
             {
-                Logger.WriteLine("ignoring!");
+                Logger.WriteLine("ignoring! allowRX == false");
             }
         }
 
@@ -567,24 +476,8 @@ namespace MayhemSerial
             //throw new NotImplementedException();
             Logger.WriteLine("port Disposed: " + e.ToString());
             SerialPort disposedPort = sender as SerialPort;
-
-            connections.Remove(disposedPort.PortName);
-
-           
-
+            connections.Remove(disposedPort.PortName);       
         }
         #endregion
-
-
-
-
-
-
-
-
-
-
-
-      
     }
 }

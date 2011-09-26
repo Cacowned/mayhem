@@ -47,7 +47,5 @@ namespace PhidgetModules.Events
 
             ConfigString = String.Format("Index {0} goes {1} {2} dB", Index, overUnder, TopValue.ToString("0.###"));
         }
-
-
     }
 }

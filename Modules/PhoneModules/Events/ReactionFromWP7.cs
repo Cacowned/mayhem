@@ -27,7 +27,7 @@ namespace PhoneModules.Events
         {
             if (eventText == id)
             {
-                base.Trigger();
+                Trigger();
             }
         }
 
@@ -43,7 +43,6 @@ namespace PhoneModules.Events
         {
             phoneConnector.Disable();
             phoneConnector.EventCalled -= phoneConnector_EventCalled;
-            base.Disable();
         }
 
         #region Configuration Views
