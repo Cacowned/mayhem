@@ -66,14 +66,14 @@
                 </StackPanel.Effect>
                 <Button Name="buttonTrigger" Style="{StaticResource TriggerButton}" Width="250" Height="40" Margin="0,0,0,0" Focusable="False" Click="ConfigureTrigger_Click">
                     <Grid Width="220" Margin="0,0,0,-2" >
-                        <TextBlock Style="{StaticResource DisplayNameStyle}" Margin="5,-2,14,6" Text="{Binding Connection.Event.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        <TextBlock Name="textBlockEventName" Style="{StaticResource DisplayNameStyle}" Margin="5,-2,14,6" Text="{Binding Connection.Event.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                         <Image x:Name="ImageSettingsEvent" Width="15" Height="16" Margin="6,20,200,-1" Source="/Mayhem;component/Images/Settings16.png" />
                         <TextBlock Style="{StaticResource ConfigurationStringStyle}" Margin="25,18,0,-2" Text="{Binding Connection.Event.ConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                     </Grid>
                 </Button>
                 <Button Name="buttonReaction" Style="{StaticResource ReactionButton}" Width="250" Height="40" Margin="-33,0,0,0" Focusable="False" Click="ConfigureReaction_Click">
                     <Grid Width="220" Margin="35,0,0,-2" >
-                        <TextBlock Style="{StaticResource DisplayNameStyle}" Margin="7,-2,14,6" Text="{Binding Connection.Reaction.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        <TextBlock Name="textBlockReactionName" Style="{StaticResource DisplayNameStyle}" Margin="7,-2,14,6" Text="{Binding Connection.Reaction.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                         <Image x:Name="ImageSettingsReaction" Width="15" Height="16" Margin="6,20,200,-1" Source="/Mayhem;component/Images/Settings16.png" />
                         <TextBlock Style="{StaticResource ConfigurationStringStyle}" Margin="25,18,0,-10" Text="{Binding Connection.Reaction.ConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                     </Grid>
