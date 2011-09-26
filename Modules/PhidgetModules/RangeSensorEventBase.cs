@@ -22,6 +22,8 @@ namespace PhidgetModules
 
         protected override void Initialize()
         {
+            base.Initialize();
+
             // put it somewhere in the middle
             CurrentValue = LastValue = TopValue - BottomValue;
 
