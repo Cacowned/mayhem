@@ -51,15 +51,15 @@ namespace DefaultModules.Wpf
         {
             bool badsec, badmin, badhour, badtotal;
 
-            int sec, min, hour;
+            int seconds, minutes, hours;
 
-            badsec = !(Int32.TryParse(SecondsBox.Text, out sec) && (Seconds >= 0 && Seconds < 60));
+            badsec = !(Int32.TryParse(SecondsBox.Text, out seconds) && (seconds >= 0 && seconds < 60));
 
-            badmin = !(Int32.TryParse(MinutesBox.Text, out min) && (Minutes >= 0 && Minutes < 60));
+            badmin = !(Int32.TryParse(MinutesBox.Text, out minutes) && (minutes >= 0 && minutes < 60));
 
-            badhour = !(Int32.TryParse(HoursBox.Text, out hour) && (Hours >= 0));
+            badhour = !(Int32.TryParse(HoursBox.Text, out hours) && (hours >= 0));
 
-            badtotal = Seconds == 0 && Minutes == 0 && Hours == 0;
+            badtotal = seconds == 0 && minutes == 0 && hours == 0;
 
             string s = "Invalid";
 
@@ -85,9 +85,9 @@ namespace DefaultModules.Wpf
             }
             else
             {
-                Seconds = sec;
-                Minutes = min;
-                Hours = hour;
+                Seconds = seconds;
+                Minutes = minutes;
+                Hours = hours;
 
                 CanSave = true;
                 return string.Empty;
