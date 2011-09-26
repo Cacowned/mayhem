@@ -43,6 +43,7 @@ namespace PhoneModules
     [ServiceBehavior(Name = "MayhemService", InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class MayhemService : IMayhemService
     {
+        private Dictionary<string,string> cssDict = new Dictionary<string,string>();
         private string html = null;
         private string htmlWP7 = null;
         private string htmlIPhone = null;
@@ -75,7 +76,7 @@ namespace PhoneModules
             OperationContext context = OperationContext.Current;
             MessageProperties messageProperties = context.IncomingMessageProperties;
             RemoteEndpointMessageProperty endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
-            string key = endpointProperty.Address + ":" + endpointProperty.Port;
+            string key = endpointProperty.Address;
 
             Logger.WriteLine(update + " " + key + " " + WebOperationContext.Current.IncomingRequest.UserAgent);
             WebOperationContext.Current.OutgoingResponse.ContentType = "text/html";
@@ -149,23 +150,28 @@ namespace PhoneModules
 
         private string GetCSSForDevice(string device)
         {
-            string css = "";
-            try
+            if (!cssDict.ContainsKey(device))
             {
-                Assembly _assembly = this.GetType().Assembly;
-                using (Stream stream = _assembly.GetManifestResourceStream("PhoneModules.css-" + device + ".html"))
+                string css = "";
+                try
                 {
-                    using (StreamReader _textStreamReader = new StreamReader(stream))
+                    Assembly _assembly = this.GetType().Assembly;
+                    using (Stream stream = _assembly.GetManifestResourceStream("PhoneModules.css-" + device + ".html"))
                     {
-                        css = _textStreamReader.ReadToEnd();
+                        using (StreamReader _textStreamReader = new StreamReader(stream))
+                        {
+                            css = _textStreamReader.ReadToEnd();
+                        }
                     }
+                    cssDict[device] = css;
+                    return css;
+                }
+                catch (Exception erf)
+                {
+                    Logger.WriteLine(erf);
                 }
             }
-            catch (Exception erf)
-            {
-                Logger.WriteLine(erf);
-            }
-            return css;
+            return cssDict[device];
         }
 
         public void SetInsideDiv(string insideDiv)
@@ -206,8 +212,7 @@ namespace PhoneModules
                 }
 
                 killResetEvent.WaitOne(5000);
-
-                Thread.Sleep(100);
+                Thread.Sleep(500);
             }
         }
 
