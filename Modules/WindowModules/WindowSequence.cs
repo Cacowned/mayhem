@@ -53,75 +53,60 @@ namespace WindowModules
             ConfigString = "";
         }
 
-        private static bool IsTaskbarWindow(int hWnd)
-        {
-            int lExStyle;
-            int hParent;
-            lExStyle = Native.GetWindowLongPtr(hWnd, Native.GWL_EXSTYLE);
-            hParent = Native.GetParent(hWnd);
-            bool fTaskbarWindow = ((Native.IsWindowVisible(hWnd) != 0) & (Native.GetWindow(hWnd, Native.GW_OWNER) == 0) & (hParent == 0 | hParent == Native.GetDesktopWindow().ToInt32()));
-            if ((lExStyle & Native.WS_EX_TOOLWINDOW) == Native.WS_EX_TOOLWINDOW)
-            {
-                fTaskbarWindow = false;
-            }
-            if ((lExStyle & Native.WS_EX_APPWINDOW) == Native.WS_EX_APPWINDOW)
-            {
-                fTaskbarWindow = true;
-            }
-            return fTaskbarWindow;
-        }
 
-        bool Report(IntPtr hwnd, int lParam)
-        {
-            if (IsTaskbarWindow(hwnd.ToInt32()))
-            {
-                int procid = 0;
-                int threadid = Native.GetWindowThreadProcessId(hwnd, ref procid);
-                try
-                {
-                    Process p = Process.GetProcessById(procid);
-                    bool isMatch = true;
-                    string filename;
-                    try
-                    {
-                        filename = p.MainModule.FileName;
-                    }
-                    catch
-                    {
-                        filename = WMIProcess.GetFilename(procid);
-                    }
-                    if (filename != null)
-                    {
-                        FileInfo fi = new FileInfo(filename);
-                        filename = fi.Name;
-                    }
-                    if (actionInfo.WindowInfo.CheckFileName && !filename.ToLower().EndsWith(actionInfo.WindowInfo.FileName.ToLower()))
-                        isMatch = false;
-                    if (isMatch)
-                    {
-                        if (actionInfo.WindowInfo.CheckTitle)
-                        {
-                            StringBuilder sb = new StringBuilder(200);
-                            Native.GetWindowText(hwnd, sb, sb.Capacity);
-                            string title = sb.ToString();
-                            if (title != actionInfo.WindowInfo.Title)
-                                isMatch = false;
-                        }
-                        if (isMatch)
-                        {
-                            Logger.WriteLine("Found: " + hwnd);
-                            foreach (WindowAction action in actionInfo.WindowActions)
-                            {
-                                action.Perform(hwnd);
-                                Thread.Sleep(50);
-                            }
-                        }
-                    }
-                }
-                catch { }
-            }
-            return true;
-        }
+
+        //bool Report(IntPtr hwnd, int lParam)
+        //{
+        //    if (IsTaskbarWindow(hwnd.ToInt32()))
+        //    {
+        //        int procid = 0;
+        //        int threadid = Native.GetWindowThreadProcessId(hwnd, ref procid);
+        //        try
+        //        {
+        //            Process p = Process.GetProcessById(procid);
+        //            bool isMatch = true;
+        //            string filename;
+        //            try
+        //            {
+        //                filename = p.MainModule.FileName;
+        //            }
+        //            catch
+        //            {
+        //                filename = WMIProcess.GetFilename(procid);
+        //            }
+        //            if (filename != null)
+        //            {
+        //                FileInfo fi = new FileInfo(filename);
+        //                filename = fi.Name;
+        //            }
+        //            if (actionInfo.WindowInfo.CheckFileName && !filename.ToLower().EndsWith(actionInfo.WindowInfo.FileName.ToLower()))
+        //                isMatch = false;
+        //            if (isMatch)
+        //            {
+        //                if (actionInfo.WindowInfo.CheckTitle)
+        //                {
+        //                    StringBuilder sb = new StringBuilder(200);
+        //                    Native.GetWindowText(hwnd, sb, sb.Capacity);
+        //                    string title = sb.ToString();
+        //                    if (title != actionInfo.WindowInfo.Title)
+        //                        isMatch = false;
+        //                }
+        //                if (isMatch)
+        //                {
+        //                    Logger.WriteLine("Found: " + hwnd);
+        //                    foreach (WindowAction action in actionInfo.WindowActions)
+        //                    {
+        //                        action.Perform(hwnd);
+        //                        Thread.Sleep(50);
+        //                    }
+        //                    return false;
+        //                }
+        //            }
+        //        }
+        //        catch { }
+        //    }
+        //    return true;
+        //}
 
         //void FindWindowAndPerform(string className, IntPtr prevWindow)
         //{
@@ -137,8 +122,16 @@ namespace WindowModules
             //}
             //else
             //{
-                Native.EnumWindows(new Native.EnumWindowsCallback(Report), 0);
+                //Native.EnumWindows(new Native.EnumWindowsCallback(Report), 0);
             //}
+                WindowFinder.Find(actionInfo, new WindowFinder.WindowActionResult((hwnd) =>
+                    {
+                        foreach (WindowAction action in actionInfo.WindowActions)
+                        {
+                            action.Perform(hwnd);
+                            Thread.Sleep(50);
+                        }
+                    }));
         }
     }
 }

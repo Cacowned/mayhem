@@ -9,6 +9,6 @@
         <TextBox Name="textBoxMoveX" Margin="100,0,0,0" FontSize="14" Width="50" HorizontalAlignment="Left" />
         <TextBlock FontSize="14" VerticalAlignment="Center" Margin="160,0,0,0">Y:</TextBlock>
         <TextBox Name="textBoxMoveY" Margin="180,0,0,0" FontSize="14" Width="50" HorizontalAlignment="Left" />
-        <Button Name="buttonSet" Margin="250,0,0,0" Click="buttonSet_Click">Use current location</Button>
+        <Button Name="buttonSet" Width="120" Margin="250,0,0,0" Click="buttonSet_Click">Use current location</Button>
     </Grid>
 </UserControl>

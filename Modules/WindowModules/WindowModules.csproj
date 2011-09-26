@@ -60,6 +60,7 @@
     <Compile Include="InterceptKeys.cs" />
     <Compile Include="WindowAction.cs" />
     <Compile Include="WindowActionConfigControl.cs" />
+    <Compile Include="WindowFinder.cs" />
     <Compile Include="WindowSequence.cs" />
     <Compile Include="Native.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

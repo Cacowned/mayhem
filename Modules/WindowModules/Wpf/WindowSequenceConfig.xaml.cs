@@ -74,6 +74,14 @@ namespace WindowModules.Wpf
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.Start();
             CheckCanSave();
+
+            if(textBoxApplication.Text != null || textBoxWindowTitle.Text != null)
+            {
+                WindowFinder.Find(ActionInfo, new WindowFinder.WindowActionResult((hwnd) =>
+                    {
+                        CurrentlySelectedWindow = hwnd;
+                    }));
+            }
         }
 
         public static int GetProcessThreadFromWindow(IntPtr hwnd)
