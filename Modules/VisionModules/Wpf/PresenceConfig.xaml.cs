@@ -28,6 +28,8 @@ namespace VisionModules.Wpf
     {
         public int selectedIndex = 0;
 
+        
+
 
         /// <summary>
         /// Sensitivity Slider 
@@ -57,9 +59,11 @@ namespace VisionModules.Wpf
         }
 
 
-        public PresenceConfig(int selectedCameraIndex, PresenceTriggerMode selectedTriggerMode)
+        public PresenceConfig(int selectedCameraIndex, PresenceTriggerMode selectedTriggerMode, int aSlidervalue)
         {
-            this.selectedIndex = selectedCameraIndex; 
+            this.selectedIndex = selectedCameraIndex;
+
+            slider_value = aSlidervalue;
            
             InitializeComponent();
 

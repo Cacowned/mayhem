@@ -13,6 +13,7 @@
                     <visionmods:ROISelector Canvas.Left="0" Canvas.Top="0" Height="240" Width="320" x:Name="overlay" Background= "Transparent"/>
                 </Canvas>
             </StackPanel>
+            <Label>Click on the camera preview above to select a region of interest. </Label>
             <Label>Click drop down list below to select a camera:</Label>
             <ComboBox Name="DeviceList" SelectionChanged="DeviceList_SelectionChanged" />
         </StackPanel>

@@ -31,6 +31,7 @@ namespace VisionModules.Events
         private const int detectionInterval = 5000; //ms
 
         private MotionDetectorComponent m;
+        private bool firstFrame = true; 
         
         [DataMember]
         private Rect boundingRect = new Rect(0,0,0,0);
@@ -69,7 +70,9 @@ namespace VisionModules.Events
             if (boundingRect.Width > 0 && boundingRect.Height > 0)
             {
                 m.SetMotionBoundaryRect(boundingRect);
-            }  
+            }
+
+            SetConfigString();
         }
 
         private void m_OnMotionUpdate(object sender, List<System.Drawing.Point> points)
@@ -82,7 +85,10 @@ namespace VisionModules.Events
                 Logger.WriteLine("m_OnMotionUpdate");
 
                 // trigger the reaction
-                base.Trigger();
+                if (!firstFrame)
+                    base.Trigger();
+                else
+                    firstFrame = false;
 
                 lastMotionDetected = DateTime.Now;
             }
@@ -90,7 +96,12 @@ namespace VisionModules.Events
 
         protected new void SetConfigString()
         {
-            ConfigString = String.Format("Configuration Message");
+            string conf = ""; 
+            if (cam != null)
+            {
+                conf += "Camera: " + cam.Info.deviceId;
+            }
+            ConfigString = conf; 
         }
 
         public WpfConfiguration ConfigurationControl
@@ -128,6 +139,8 @@ namespace VisionModules.Events
 
             if (wasEnabled)
                 this.Enable();
+
+            SetConfigString();
         }
 
         public override bool Enable()
@@ -140,10 +153,11 @@ namespace VisionModules.Events
                 cam = i.cameras_available[selected_device_idx];
                 if (!cam.running)
                     cam.StartFrameGrabbing();
+                firstFrame = true; 
                 // register the trigger's motion update handler
                 m.RegisterForImages(cam);
                 m.OnMotionUpdate -= motionUpdateHandler;
-                m.OnMotionUpdate += motionUpdateHandler;
+                m.OnMotionUpdate += motionUpdateHandler;             
             }
 
             return true;
@@ -152,17 +166,17 @@ namespace VisionModules.Events
         public override void Disable()
         {
             base.Disable();
-            Logger.WriteLine("Disable");
-            // de-register the trigger's motion update handler
-            m.OnMotionUpdate -= motionUpdateHandler;
-            if (cam != null )
-                m.UnregisterForImages(cam); 
+            Logger.WriteLine("Disable");   
             if (cam != null && !IsConfiguring)
-            {            
+            {
+                firstFrame = true; 
+                // de-register the trigger's motion update handler
+                m.UnregisterForImages(cam); 
+                m.OnMotionUpdate -= motionUpdateHandler;
                 // try to shut down the camera
                 cam.TryStopFrameGrabbing();
             }
-            //Thread.Sleep(350);
         }
+
     }
 }
