@@ -99,12 +99,12 @@ namespace Mayhem
                         iWpfConfig = (WpfConfiguration)SelectedModuleInstance.ConfigurationControl;
                         ConfigContent.Content = iWpfConfig;
                         buttonSave.IsEnabled = iWpfConfig.CanSave;
-                        windowHeaderConfig.Text = "Config: " + iWpfConfig.Title;
+                        windowHeaderConfig.Text = iWpfConfig.Title;
                         iWpfConfig.Loaded += new RoutedEventHandler(iWpfConfig_Loaded);
                         iWpfConfig.CanSavedChanged += new WpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
                         iWpfConfig.OnLoad();
                     }
-                    catch (Exception erf)
+                    catch
                     {
                         MessageBox.Show("Error creating " + SelectedModule.Name, "Mayhem: Error", MessageBoxButton.OK);
                     }

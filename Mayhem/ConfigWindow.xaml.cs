@@ -25,7 +25,7 @@ namespace Mayhem
 
             buttonSave.IsEnabled = iWpfConfig.CanSave;
 
-            windowHeader.Text = "Config: " + iWpfConfig.Title;
+            windowHeader.Text = iWpfConfig.Title;
             iWpfConfig.CanSavedChanged += new WpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
         }
 

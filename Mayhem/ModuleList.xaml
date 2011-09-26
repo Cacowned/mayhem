@@ -30,8 +30,8 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,5" >
-                        <Button Name="buttonChoose" Margin="0,0,10,0" Click="ChooseButtonClick" Height="30" Width="60">Choose</Button>
-                        <Button Name="buttonCancel" Click="buttonCancel_Click" Height="30" Width="60">Cancel</Button>
+                        <Button Name="buttonChoose" Margin="0,0,10,0" Click="ChooseButtonClick" Height="30" Width="60" IsDefault="True">Choose</Button>
+                        <Button Name="buttonCancel" Click="buttonCancel_Click" Height="30" Width="60" IsCancel="True">Cancel</Button>
                     </StackPanel>
                 </StackPanel>
             </common:Borders>
