@@ -1,0 +1,20 @@
+﻿<src:WpfConfiguration x:Class="VisionModules.Wpf.MotionDetectorConfig"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             xmlns:visionmods="clr-namespace:VisionModules.Wpf"
+             Width="400">
+
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Vertical">
+                <Canvas Width="320" Height="240" >
+                    <Image Canvas.Left="0" Canvas.Top="0" Height="240" Name="camera_image" Stretch="Fill" Width="320"  />
+                    <visionmods:ROISelector Canvas.Left="0" Canvas.Top="0" Height="240" Width="320" x:Name="overlay" Background= "Transparent"/>
+                </Canvas>
+            </StackPanel>
+            <Label>Click drop down list below to select a camera:</Label>
+            <ComboBox Name="DeviceList" SelectionChanged="DeviceList_SelectionChanged" />
+        </StackPanel>
+    </Grid>
+</src:WpfConfiguration>
