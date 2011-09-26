@@ -17,8 +17,8 @@ namespace Mayhem
     {
         public IPackage Package
         {
-            get { return (IPackage)GetValue(MyPropertyProperty); }
-            set { SetValue(MyPropertyProperty, value); }
+            get;
+            set;
         }
 
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
@@ -31,7 +31,7 @@ namespace Mayhem
                 UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
 
             ResourceDictionary dict = new ResourceDictionary();
-            Uri uri = new Uri("/Mayhem;component/Styles.xaml", UriKind.Relative);
+            Uri uri = new Uri("/MayhemWpf;component/Styles.xaml", UriKind.Relative);
             dict.Source = uri;
             Application.Current.Resources.MergedDictionaries.Add(dict);
 
@@ -75,19 +75,25 @@ namespace Mayhem
                 // Create a package manager to install and resolve dependencies
                 var packageManager = new PackageManager(repository, installPath);
 
-                packageManager.Logger = new Logger();
+                packageManager.Logger = new Logger(this);
 
                 // Install the package
-                packageManager.InstallPackage(Package, ignoreDependencies: false);
+                ThreadPool.QueueUserWorkItem(new WaitCallback(o =>
+                    {
+                        packageManager.InstallPackage(Package, ignoreDependencies: false);
+                        Dispatcher.Invoke((Action)delegate
+                        {
+                            stackPanelDefaultButtons.Visibility = Visibility.Hidden;
+                            buttonClose.Visibility = System.Windows.Visibility.Visible;
 
-                Progress.Value = 100;
-                Progress.Dispatcher.Invoke(EmptyDelagate, DispatcherPriority.Render);
-                Thread.Sleep(200);
-                DialogResult = true;
+                            Progress.Value = 100;
+                            Progress.Dispatcher.Invoke(EmptyDelegate, DispatcherPriority.Render);
+                        });
+                    }));
             }
             catch (Exception ex)
             {
-                // Fail
+                // TODO: This should be a better message
                 MessageBox.Show(ex.Message);
                 Debug.WriteLine(ex.Message);
 
@@ -100,22 +106,38 @@ namespace Mayhem
             DialogResult = false;
         }
 
-        private Action EmptyDelagate = delegate() {};
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+        }
+
+        private Action EmptyDelegate = delegate() {};
 
         private void repository_ProgressAvailable(object sender, ProgressEventArgs e)
         {
-            Progress.Value = e.PercentComplete;
-            Progress.Dispatcher.Invoke(EmptyDelagate, DispatcherPriority.Render);
+            Dispatcher.Invoke((Action)delegate
+                {
+                    Progress.Value = e.PercentComplete;
+                });
+            Dispatcher.Invoke(EmptyDelegate, DispatcherPriority.Render);
         }
 
         public class Logger : ILogger
         {
+            InstallModule parent;
+            public Logger(InstallModule parent)
+            {
+                this.parent = parent;
+            }
             public void Log(MessageLevel level, string message, params object[] args)
             {
-                if (level == MessageLevel.Info)
-                {
-                    Debug.WriteLine(message, args);
-                }
+                Debug.WriteLine(message, args);
+                parent.Dispatcher.Invoke((Action)delegate
+                    {
+                        parent.listBox1.Items.Add(string.Format(message, args));
+                        parent.listBox1.SelectedItem = parent.listBox1.Items.GetItemAt(parent.listBox1.Items.Count - 1);
+                        parent.listBox1.ScrollIntoView(parent.listBox1.SelectedItem);
+                    });
             }
         }
     }
