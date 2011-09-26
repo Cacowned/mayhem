@@ -172,7 +172,6 @@ namespace DefaultModules.KeypressHelpers
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Keys key = (Keys)vkCode;
-                Logger.WriteLine("Add: " + key + " " + wParam + " " + lParam + " " + vkCode);
                 if (!keys_down.Contains(key))
                 {
                     keys_down.Add(key);
@@ -188,7 +187,6 @@ namespace DefaultModules.KeypressHelpers
                 int vkCode = Marshal.ReadInt32(lParam);
                 Keys key = (Keys)vkCode;
                 keys_down.Remove(key);
-                Logger.WriteLine("Remove: " + key);
                 if (OnKeyUp != null)
                 {
                     OnKeyUp(key);

@@ -37,5 +37,16 @@ namespace WindowModules.Wpf
             action.Width = int.Parse(textBoxWidth.Text);
             action.Height = int.Parse(textBoxHeight.Text);
         }
+
+        private void buttonSet_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowSequenceConfig.CurrentlySelectedWindow != IntPtr.Zero)
+            {
+                Native.RECT rect = new Native.RECT();
+                Native.GetWindowRect(WindowSequenceConfig.CurrentlySelectedWindow, ref rect);
+                textBoxWidth.Text = (rect.right - rect.left).ToString();
+                textBoxHeight.Text = (rect.bottom - rect.top).ToString();
+            }
+        }
     }
 }
