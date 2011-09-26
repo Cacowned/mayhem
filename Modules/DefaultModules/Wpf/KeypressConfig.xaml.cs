@@ -11,7 +11,11 @@ namespace DefaultModules.Wpf
     public partial class KeypressConfig : WpfConfiguration
     {
         // This is the public field Keypress uses to get which keys to use
-        public HashSet<Keys> KeysToSave;
+        public HashSet<Keys> KeysToSave
+        {
+            get;
+            private set;
+        }
         
         private HashSet<Keys> keys_down = new HashSet<Keys>();
 

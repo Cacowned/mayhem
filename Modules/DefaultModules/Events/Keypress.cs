@@ -28,18 +28,12 @@ namespace DefaultModules.Events
         #region Configuration
 
         [DataMember]
-        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown
-        {
-            get;
-            set;
-        }
+        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown;
 
         #endregion
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             interceptKeys = InterceptKeys.Instance;
             mainThread = Thread.CurrentThread;
 

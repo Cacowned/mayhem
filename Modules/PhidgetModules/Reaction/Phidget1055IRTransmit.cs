@@ -17,25 +17,16 @@ namespace PhidgetModules.Reaction
         // This is the code and code information that we will
         // transmit
         [DataMember]
-        private IRCode Code
-        {
-            get;
-            set;
-        }
+        private IRCode Code;
+
         [DataMember]
-        private IRCodeInfo CodeInfo
-        {
-            get;
-            set;
-        }
+        private IRCodeInfo CodeInfo;
         #endregion
 
         private IR ir;
 
         protected override void Initialize()
         {
-            base.Initialize();
-
             ir = InterfaceFactory.IR;
         }
 
@@ -63,17 +54,5 @@ namespace PhidgetModules.Reaction
                 ir.transmitRepeat();
             }
         }
-
-        public override bool Enable()
-        {
-            return true;
-        }
-
-        public override void Disable()
-        {
-            base.Disable();
-        }
-
-
     }
 }
