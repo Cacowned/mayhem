@@ -42,9 +42,6 @@ namespace VisionModules.Wpf
             fd.OnFaceDetected += m_onFaceDetected;
             if (i.DeviceCount > 0)
                 CanSave = true;
-
-
-
         }
 
         /**<summary>

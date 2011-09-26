@@ -104,7 +104,7 @@ namespace VisionModules.Events
             {
                 cam = i.cameras_available[selected_device_idx];
                 //if (cam.running == false)
-                Thread.Sleep(350);
+                //Thread.Sleep(350);
                 cam.StartFrameGrabbing();
                 // register the trigger's faceDetection update handler
                 fd.RegisterForImages(cam);

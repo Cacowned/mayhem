@@ -43,18 +43,26 @@ namespace VisionModules.Events
 
         // which cam have we selected
         [DataMember]
-        private int selected_device_idx = 0;
+        private int selected_device_idx;
 
-        /** <summary>
-         * Called when deserialized / on instantiation
-         * </summary> */
-        protected override void Initialize()
+
+        public MotionDetector()
+        {
+            Init(new StreamingContext());
+        }
+
+        /// <summary>
+        /// Called on instantiation / deserialized
+        /// </summary>
+        /// <param name="s"></param>
+        [OnDeserialized]
+        protected void Init(StreamingContext s)
         {
             Logger.WriteLine("Enumerating Devices");
 
             if (i == null)
-                i = CameraDriver.Instance; 
-            
+                i = CameraDriver.Instance;
+
             if (selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
@@ -136,6 +144,8 @@ namespace VisionModules.Events
 
             // assign selected cam
             cam = ((MotionDetectorConfig)configurationControl).selected_camera;
+
+            selected_device_idx = cam.Info.deviceId;
 
             if (wasEnabled)
                 this.Enable();

@@ -17,6 +17,7 @@ using System.Drawing;
 using MayhemWpf.UserControls;
 using MayhemCore;
 using System.Threading;
+using System.Runtime.Serialization;
 
 namespace VisionModules.Wpf
 {
@@ -51,9 +52,11 @@ namespace VisionModules.Wpf
         {
             cam = c;
             InitializeComponent();
+            DeviceList.SelectedIndex = c.Info.deviceId;
+            Init();
         }
 
-        public override void OnLoad()
+        public void Init()
         {
             // populate device list
             Logger.WriteLine("OnLoad");
@@ -70,15 +73,19 @@ namespace VisionModules.Wpf
 
             if (i.DeviceCount > 0)
             {
-                int camera_index = (cam != null && cam.Info.deviceId < i.DeviceCount) ? cam.Info.deviceId : 0;
+                int camera_index = (selected_camera != null && selected_camera.Info.deviceId < i.DeviceCount) ? selected_camera.Info.deviceId : 0;
 
                 // start the camera 0 if it isn't already running
                 cam = i.cameras_available[camera_index];
+               
                 DeviceList.SelectedIndex = camera_index;
+                Logger.WriteLine("Selected Index " + DeviceList.SelectedIndex);
 
                 ///TODO: SVEN: Is it ok to comment out cam.running?
-                //if (!cam.running)
-                //{
+                /// NO, not ok at the moment!
+                /// TODO: Move the check into Camera
+                if (!cam.running)
+                {
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.OnImageUpdated += i_OnImageUpdated;
                 ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
@@ -87,7 +94,7 @@ namespace VisionModules.Wpf
                         Thread.Sleep(250);
                         cam.StartFrameGrabbing();
                     }));
-                //}
+                }
 
                 Logger.WriteLine("using " + cam.Info.ToString());
 
@@ -152,7 +159,7 @@ namespace VisionModules.Wpf
         private void DeviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Logger.WriteLine("");
-            Camera selected_cam = DeviceList.SelectedItem as Camera;
+            Camera selected_cam = i.cameras_available[DeviceList.SelectedIndex];
 
             if (selected_cam != cam)
             {

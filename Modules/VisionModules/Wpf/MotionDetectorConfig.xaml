@@ -14,6 +14,8 @@
                 </Canvas>
             </StackPanel>
             <Label>Click on the camera preview above to select a region of interest. </Label>
+            <StackPanel Name="pnl_add"> <!-- panel where user can -->
+            </StackPanel>
             <Label>Click drop down list below to select a camera:</Label>
             <ComboBox Name="DeviceList" SelectionChanged="DeviceList_SelectionChanged" />
         </StackPanel>
