@@ -298,10 +298,11 @@ namespace Mayhem
         }
         #endregion
 
-        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-
-        }
         #endregion
+
+        private void ModulesList_LayoutUpdated(object sender, EventArgs e)
+        {
+            Height = 155 + ModulesList.ActualHeight;
+        }
     }
 }
