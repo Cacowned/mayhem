@@ -47,6 +47,7 @@ namespace Mayhem
         RectAnimation animSize;
 
         bool isCheckingSizeChanged = false;
+        bool isFirstLoad = true;
 
         const double AnimationTime = 0.2;
 
@@ -302,7 +303,11 @@ namespace Mayhem
 
         private void ModulesList_LayoutUpdated(object sender, EventArgs e)
         {
-            Height = 155 + ModulesList.ActualHeight;
+            if (isFirstLoad)
+            {
+                isFirstLoad = false;
+                Height = 155 + ModulesList.ActualHeight;
+            }
         }
     }
 }
