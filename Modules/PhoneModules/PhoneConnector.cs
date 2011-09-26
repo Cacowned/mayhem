@@ -16,39 +16,17 @@ namespace PhoneModules
     {
         private const int PortNumber = 19283;
         private bool isServiceRunning = false;
-        private int refCount = 0;
+
+        public bool IsServiceRunning
+        {
+            get { return isServiceRunning; }
+        }
+        //private int refCount = 0;
         private WebServiceHost host;
         private IMayhemService service = null;
 
         public delegate void EventCalledHandler(string eventText);
         public event EventCalledHandler EventCalled;
-
-        private string formData = null;
-        public string FormData
-        {
-            get
-            {
-                return formData;
-            }
-            set
-            {
-                formData = value;
-                if (service != null)
-                {
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(o =>
-                        {
-                            if (service != null)
-                            {
-                                string insideDiv;
-                                string html = PhoneLayout.Instance.SerializeToHtml(out insideDiv);
-                                service.SetHtml(html);
-                                service.SetInsideDiv(insideDiv);
-                                //service.SetFormData(formData);
-                            }
-                        }));
-                }
-            }
-        }
 
         public bool HasBeenSerialized
         {
@@ -90,13 +68,30 @@ namespace PhoneModules
         }
         #endregion
 
-        public bool Enable()
+        public void SetNewData()
         {
-            refCount++;
+            if (service != null)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(o =>
+                {
+                    if (service != null)
+                    {
+                        string insideDiv;
+                        string html = PhoneLayout.Instance.SerializeToHtml(true, out insideDiv);
+                        service.SetHtml(html);
+                        service.SetInsideDiv(insideDiv);
+                    }
+                }));
+            }
+        }
+
+        public bool Enable(bool includeButtons)
+        {
+            //refCount++;
             if (!isServiceRunning)
             {
                 isServiceRunning = true;
-                return StartService();
+                return StartService(includeButtons);
             }
             return true;
         }
@@ -120,16 +115,16 @@ namespace PhoneModules
             //}
         }
 
-        private bool StartService()
+        private bool StartService(bool includeButtons)
         {
             Uri address = new Uri("http://localhost:" + PortNumber + "/Mayhem");
 
             MayhemService svc = new MayhemService();
             svc.EventCalled += new MayhemService.EventCalledHandler(service_EventCalled);
-            if (formData != null)
+            if (true)
             {
                 string insideDiv;
-                string html = PhoneLayout.Instance.SerializeToHtml(out insideDiv);
+                string html = PhoneLayout.Instance.SerializeToHtml(includeButtons, out insideDiv);
                 svc.SetHtml(html);
                 svc.SetInsideDiv(insideDiv);
             }

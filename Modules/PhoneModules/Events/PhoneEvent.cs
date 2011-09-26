@@ -39,7 +39,7 @@ namespace PhoneModules.Events
                     if (value != null)
                     {
                         phoneLayout.Deserialize(value);
-                        phoneConnector.FormData = value;
+                        phoneConnector.SetNewData();
                     }
                 }
             }
@@ -87,10 +87,9 @@ namespace PhoneModules.Events
                 phoneLayout.EnableButton(id);
 
                 isCreatingForFirstTime = false;
-                string formData = phoneLayout.Serialize();
-                phoneConnector.FormData = formData;
+                phoneConnector.SetNewData();
 
-                phoneConnector.Enable();
+                phoneConnector.Enable(true);
                 phoneConnector.EventCalled += phoneConnector_EventCalled;
             }
 
@@ -104,8 +103,7 @@ namespace PhoneModules.Events
                 phoneLayout.DisableButton(id);
                 phoneConnector.Disable();
                 phoneConnector.EventCalled -= phoneConnector_EventCalled;
-                string formData = phoneLayout.Serialize();
-                phoneConnector.FormData = formData;
+                phoneConnector.SetNewData();
             }
             base.Disable();
         }
@@ -131,8 +129,7 @@ namespace PhoneModules.Events
         {
             if (!isCreatingForFirstTime)
             {
-                string formData = phoneLayout.Serialize();
-                phoneConnector.FormData = formData;
+                phoneConnector.SetNewData();
             }
             if (((PhoneFormDesigner)configurationControl).SelectedElement is PhoneUIElementButton)
             {

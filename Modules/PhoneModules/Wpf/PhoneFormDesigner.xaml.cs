@@ -10,6 +10,7 @@ using MayhemCore;
 using MayhemWpf.UserControls;
 using MessagingToolkit.QRCode.Codec;
 using PhoneModules.Controls;
+using System.Threading;
 
 namespace PhoneModules.Wpf
 {
@@ -77,6 +78,13 @@ namespace PhoneModules.Wpf
             bi.StreamSource = ms;
             bi.EndInit();
             imageQR.Source = bi;
+            if (!PhoneConnector.Instance.IsServiceRunning)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(o => 
+                    {
+                        PhoneConnector.Instance.Enable(false);
+                    }));
+            }
         }
 
         public void LoadFromData(string selectedID)

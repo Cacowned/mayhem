@@ -124,7 +124,7 @@ namespace PhoneModules
             return null;
         }
 
-        public string SerializeToHtml(out string insideDiv)
+        public string SerializeToHtml(bool includeButtons, out string insideDiv)
         {
             string html = "";
 
@@ -147,7 +147,7 @@ namespace PhoneModules
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine("<div class=\"buttons\">");
-            if (Buttons.Count > 0)
+            if (Buttons.Count > 0 && includeButtons)
             {
                 foreach (PhoneLayoutButton button in Buttons)
                 {

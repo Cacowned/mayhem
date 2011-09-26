@@ -33,7 +33,7 @@ namespace PhoneModules.Events
 
         public override bool Enable()
         {
-            phoneConnector.Enable();
+            phoneConnector.Enable(true);
             phoneConnector.EventCalled += phoneConnector_EventCalled;
 
             return true;
