@@ -22,12 +22,35 @@ namespace X10Modules.Insteon
     public class X10Controller : InsteonControllerBase
     {
         public static Dictionary<X10HouseCode, Dictionary<X10UnitCode, bool>> deviceStates = null ;
+
+
+        private static Dictionary<string, X10Controller> instances = new Dictionary<string, X10Controller>();
+
+        /// <summary>
+        /// Factory method for insteon controllers, so multiple events can share a controller
+        /// </summary>
+        /// <param name="pName"></param>
+        /// <returns></returns>
+        public static X10Controller ControllerForPortName(string pName)
+        {
+            if (!instances.Keys.Contains(pName))
+            {
+                Logger.WriteLine("Creating new X10Controller for PortName: " + pName);
+                instances[pName] = new X10Controller(pName);
+            }
+            else
+            {
+                Logger.WriteLine("Returning Existing Controller");
+            }
+            return instances[pName];
+        }
+
      
         /// <summary>
         /// Just use base constructor
         /// </summary>
         /// <param name="portname"></param>
-        public X10Controller(string portname) : base(portname)
+        private X10Controller(string portname) : base(portname)
         {
             // initialize device states
 

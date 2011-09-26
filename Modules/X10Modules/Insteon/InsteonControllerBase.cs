@@ -22,7 +22,7 @@ using X10Modules.Insteon;
 
 namespace X10Modules
 {
-    public class InsteonControllerBase : ISerialPortDataListener, IDisposable
+    public  class InsteonControllerBase : ISerialPortDataListener, IDisposable
     {
         public class NotInitializedException : Exception{}
 
@@ -39,7 +39,11 @@ namespace X10Modules
         //public bool lastCommandSuccess = false
         protected AutoResetEvent waitAck = new AutoResetEvent(false);
 
-        public InsteonControllerBase(string serialPortname) 
+
+        
+
+
+        protected InsteonControllerBase(string serialPortname) 
         {
             if (mSerial.ConnectPort(serialPortname, this, new INSTEON_USB_MODEM_SETTINGS()))
             {

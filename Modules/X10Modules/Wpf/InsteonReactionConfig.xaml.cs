@@ -30,6 +30,7 @@ using X10Modules.Insteon;
 using System.Diagnostics;
 using System.Threading;
 using MayhemCore;
+using System.Timers;
 
 namespace X10Modules.Wpf
 {
@@ -109,9 +110,13 @@ namespace X10Modules.Wpf
 
                 // if the device list has more than one entry, also enumerate the detected devices on that port
 
-                insteonController = new InsteonController((string) deviceList.SelectedValue);
+               insteonController = InsteonController.ControllerForPortName((string) deviceList.SelectedValue);
+                
                 if (insteonController.initialized)
                 {
+                    insteonController.startAllLinking();
+                    Thread.Sleep(100);
+                    insteonController.stopAllLinking();
                     // retrieve device lists from controller
                     List<InsteonDevice> devices = insteonController.EnumerateLinkedDevices();
 
@@ -138,7 +143,7 @@ namespace X10Modules.Wpf
             string portname = (string) deviceList.SelectedValue;
             if (insteonController == null)
             {
-                insteonController = new InsteonController(portname);
+                insteonController = InsteonController.ControllerForPortName(portname);
             }
             if (insteonController.initialized)
             {
@@ -167,12 +172,33 @@ namespace X10Modules.Wpf
         /// <param name="e"></param>
         private void btn_link_devices_Click(object sender, RoutedEventArgs e)
         {
+            // cancel the linking process
+            Action cancel_all_link =
+                            () =>
+                            {
+                                linking = false; 
+                                btn_link_devices.Content = "Link Devices";
+                                if (insteonController.initialized)
+                                {
+                                    // stop all linking
+                                    insteonController.stopAllLinking();
+
+                                    // retrieve device lists from controller
+                                    List<InsteonDevice> devices = insteonController.EnumerateLinkedDevices();
+
+                                    cbox_link_devices.ItemsSource = devices;
+                                    cbox_link_devices.DisplayMemberPath = "ListName";
+                                    cbox_link_devices.SelectedValuePath = "deviceID";
+                                    cbox_link_devices.SelectedIndex = 0;
+                                }
+                            };
+
             Logger.WriteLine("btn_link_devices_Click");
             string portname = (string)deviceList.SelectedValue;
-            btn_link_devices.Content = "Stop Linking";
+            btn_link_devices.Content = "Cancel Linking";
             if (insteonController == null)
             {
-                insteonController = new InsteonController(portname);
+                insteonController = InsteonController.ControllerForPortName(portname);
             }
 
             if (insteonController.initialized)
@@ -186,13 +212,20 @@ namespace X10Modules.Wpf
                 {
                     linking = true; 
                     // send start linking command
-
                     if (insteonController.startAllLinking())
                     {
-                        btn_link_devices.IsEnabled = false; 
-                        // create a callback that resets the button text
-                        TimerCallback cb = (S) => { btn_link_devices.Content = "Link More Devices"; };
-                        Timer t = new Timer(cb, null, 2500, 0);
+                        // create a callback that resets the and cancels the linking process                  
+                        System.Timers.Timer t = new System.Timers.Timer(10000);
+                        t.AutoReset = false;
+                        t.Elapsed += new System.Timers.ElapsedEventHandler
+                            (
+                                 (object o, ElapsedEventArgs ea) =>
+                                 {
+                                     Dispatcher.Invoke(cancel_all_link);
+                                 }
+                              );
+                        t.Enabled = true; 
+
                     }
                     else
                     {
@@ -202,22 +235,7 @@ namespace X10Modules.Wpf
             }
             else
             {
-                linking = false;
-                btn_link_devices.Content = "Link Devices";
-
-                if (insteonController.initialized)
-                {
-                    // stop all linking
-                    insteonController.stopAllLinking(); 
-
-                    // retrieve device lists from controller
-                    List<InsteonDevice> devices = insteonController.EnumerateLinkedDevices();
-
-                    cbox_link_devices.ItemsSource = devices;
-                    cbox_link_devices.DisplayMemberPath = "ListName";
-                    cbox_link_devices.SelectedValuePath = "deviceID";
-                    cbox_link_devices.SelectedIndex = 0;
-                }
+                cancel_all_link();
             }
         }
      
@@ -230,14 +248,17 @@ namespace X10Modules.Wpf
         /// <param name="e"></param>
         private void cbox_link_devices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-         
-            byte[] selection = cbox_link_devices.SelectedValue as byte[];
-            Logger.WriteLine("cbox_link_devices_selectionChanged " +
-             String.Format("{0:x2}:{1:x2}:{2:x2}", selection[0], selection[1], selection[2]));
 
-            devAddr0.Text = String.Format("{0:x2}", selection[0]);
-            devAddr1.Text = String.Format("{0:x2}", selection[1]);
-            devAddr2.Text = String.Format("{0:x2}", selection[2]);
+            if (cbox_link_devices.SelectedValue != null)
+            {
+                byte[] selection = cbox_link_devices.SelectedValue as byte[];
+                Logger.WriteLine("cbox_link_devices_selectionChanged " +
+                 String.Format("{0:x2}:{1:x2}:{2:x2}", selection[0], selection[1], selection[2]));
+
+                devAddr0.Text = String.Format("{0:x2}", selection[0]);
+                devAddr1.Text = String.Format("{0:x2}", selection[1]);
+                devAddr2.Text = String.Format("{0:x2}", selection[2]);
+            }
         }
 
         /// <summary>

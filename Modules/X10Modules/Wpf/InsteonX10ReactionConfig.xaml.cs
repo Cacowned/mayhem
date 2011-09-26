@@ -123,7 +123,7 @@ namespace X10Modules.Wpf
             // test x10 module
             string portname = (string)deviceList.SelectedValue;
             if (x10 == null)
-                x10 = new X10Controller(portname);
+                x10 =  X10Controller.ControllerForPortName(portname);
             if (x10.initialized)
             {
                 Logger.WriteLine("initialized");

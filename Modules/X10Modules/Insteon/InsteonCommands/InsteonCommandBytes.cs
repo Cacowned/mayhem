@@ -36,6 +36,13 @@ namespace X10Modules.Insteon
         public static byte light_off_fast = (byte) 0x14;        // turns light off
         // ----------------------------------
 
+        // ------------------------- Command codes RXed by host device
+
+        public static byte all_linking_completed = (byte)0x53;          // all-linking was successful
+
+        //---------------------------------------------
+
+
         // ------------------------ Special "Byte" used by Mayhem 
         public static byte _toggle = (byte)0xf0; 
 

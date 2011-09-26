@@ -11,7 +11,7 @@
                     <Label>Com port</Label>
                     <ComboBox Name="deviceList" Width="180" SelectionChanged="deviceList_SelectionChanged"></ComboBox>                
                 </StackPanel>
-                <TextBlock Margin="5 5 5 5" TextWrapping="Wrap" Height="56" Width="404">To link devices, press "Link More Devices". To finish the linking process click on "Stop Linking". You can select a detected device from the drop-down box.</TextBlock>
+                <TextBlock Margin="5 5 5 5" TextWrapping="Wrap" Height="56" Width="404">To link devices, press "Link More Devices". Linking takes about 10s. To cancel the linking process, click on "Cancel Linking". You can select a detected device from the drop-down box.</TextBlock>
                 <StackPanel Margin="5 5 0 5" Orientation="Horizontal">
                     <ComboBox Name="cbox_link_devices"  Width="150" Margin="0 0 5 0" SelectionChanged="cbox_link_devices_SelectionChanged"></ComboBox>
                     <Button Name="btn_link_devices" Width="115" Click="btn_link_devices_Click">Link More Devices</Button>

@@ -63,7 +63,7 @@ namespace X10Modules.Reactions
             serial = MayhemSerialPortMgr.instance;
             if (serial.PortExists(this.serialPortName))
             {
-                x10Controller = new X10Controller(serialPortName);
+                x10Controller =  X10Controller.ControllerForPortName(serialPortName);
             }
             SetConfigString();
         }
@@ -82,7 +82,7 @@ namespace X10Modules.Reactions
             {
                 x10Controller.Dispose();
             }
-            x10Controller = new X10Controller(serialPortName);
+            x10Controller =  X10Controller.ControllerForPortName(serialPortName);
             SetConfigString();
         }
 

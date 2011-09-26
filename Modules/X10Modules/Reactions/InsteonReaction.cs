@@ -53,7 +53,7 @@ namespace X10Modules.Reactions
             // TODO evaluate is Serial.findInsteonDevices may be 
             if (serial.getInsteonPortNames().Keys.Contains(portName))
             {
-                insteonController = new InsteonController(portName);
+                insteonController = InsteonController.ControllerForPortName(portName); //new InsteonController(portName);
             }
             SetConfigString();
         }
@@ -81,7 +81,7 @@ namespace X10Modules.Reactions
             portName = c.selected_portname;
             byte command_byte = c.selected_command;
             command = new InsteonStandardMessage(device_address, command_byte);
-            insteonController = new InsteonController(portName);
+            insteonController = InsteonController.ControllerForPortName(portName);
             SetConfigString();
         }
 

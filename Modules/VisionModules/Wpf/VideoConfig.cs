@@ -74,7 +74,7 @@ namespace VisionModules.Wpf
         /// <summary>
         /// Hide the old Init() method. It should get called during construction, though. 
         /// </summary>
-        public new void Init()
+        public  void Init()
         {
             cbx_time_offset = new ComboBox();
 
