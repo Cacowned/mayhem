@@ -27,6 +27,8 @@ namespace PhidgetModules
 
         protected override void Initialize()
         {
+            base.Initialize();
+
             TopThreshold = 900;
             BottomThreshold = 500;
             OnTurnOn = true;
