@@ -43,6 +43,8 @@ namespace WindowModules.Wpf
 
         private Dictionary<UserControl, WindowAction> controlMap = new Dictionary<UserControl, WindowAction>();
 
+        public static IntPtr CurrentlySelectedWindow = IntPtr.Zero;
+
         public WindowSequenceConfig(WindowActionInfo windowActionInfo)
         {
             InitializeComponent();
@@ -95,6 +97,8 @@ namespace WindowModules.Wpf
                 return;
 
             string filename;
+
+            CurrentlySelectedWindow = handle;
 
             try
             {
