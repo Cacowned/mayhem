@@ -118,7 +118,7 @@ namespace VisionModules.Events
                 {
                     cam_index = cam.Info.deviceId;
                 }
-                return new PresenceConfig(cam_index, selected_trigger_mode);
+                return new PresenceConfig(cam_index, selected_trigger_mode, sensitivity_percent);
             }
         }
 
@@ -166,12 +166,11 @@ namespace VisionModules.Events
         public override void Disable()
         {
             Logger.WriteLine("Disable");
-            pd.OnPresenceUpdate -= presenceHandler;
-            if (cam != null)
-                pd.UnregisterForImages(cam);
             // only disable the camera if the event is not configuring
             if (!IsConfiguring && cam != null)
             {
+                pd.OnPresenceUpdate -= presenceHandler;
+                pd.UnregisterForImages(cam);
                 cam.TryStopFrameGrabbing();
             }
         }

@@ -116,12 +116,11 @@ namespace VisionModules.Events
 
         public override void Disable()
         {
-            Logger.WriteLine("");
-            fd.OnFaceDetected -= m_onFaceDetected;
-            if (cam != null)
-                fd.UnregisterForImages(cam); 
+            Logger.WriteLine("");       
             if (!IsConfiguring && cam != null)
             {
+                fd.OnFaceDetected -= m_onFaceDetected;
+                fd.UnregisterForImages(cam); 
                 // de-register the trigger's faceDetection update handler                
                 // try to shut down the camera           
                 cam.TryStopFrameGrabbing();              
