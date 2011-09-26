@@ -45,6 +45,8 @@ namespace PhoneModules
     {
         public List<PhoneLayoutButton> Buttons = new List<PhoneLayoutButton>();
 
+        string htmlTemplate = null;
+
         #region Singleton
         static readonly PhoneLayout instance = new PhoneLayout();
 
@@ -126,22 +128,26 @@ namespace PhoneModules
 
         public string SerializeToHtml(bool includeButtons, out string insideDiv)
         {
-            string html = "";
+            string html = htmlTemplate;
 
-            try
+            if (htmlTemplate == null)
             {
-                Assembly assembly = this.GetType().Assembly;
-                using (Stream stream = assembly.GetManifestResourceStream("PhoneModules.HtmlTemplate.html"))
+                try
                 {
-                    using (StreamReader _textStreamReader = new StreamReader(stream))
+                    Assembly assembly = this.GetType().Assembly;
+                    using (Stream stream = assembly.GetManifestResourceStream("PhoneModules.HtmlTemplate.html"))
                     {
-                        html = _textStreamReader.ReadToEnd();
+                        using (StreamReader _textStreamReader = new StreamReader(stream))
+                        {
+                            htmlTemplate = _textStreamReader.ReadToEnd();
+                        }
                     }
+                    html = htmlTemplate;
                 }
-            }
-            catch (Exception erf)
-            {
-                Logger.WriteLine(erf);
+                catch (Exception erf)
+                {
+                    Logger.WriteLine(erf);
+                }
             }
 
             StringBuilder sb = new StringBuilder();
