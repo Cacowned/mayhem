@@ -53,11 +53,13 @@ namespace Mayhem.UserControls
             if (!Connection.Event.HasConfig)
             {
                 ImageSettingsEvent.Visibility = System.Windows.Visibility.Hidden;
+                textBlockEventName.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                 buttonTrigger.Cursor = null;
             }
             if (!Connection.Reaction.HasConfig)
             {
                 ImageSettingsReaction.Visibility = System.Windows.Visibility.Hidden;
+                textBlockReactionName.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                 buttonReaction.Cursor = null;
             }
 
