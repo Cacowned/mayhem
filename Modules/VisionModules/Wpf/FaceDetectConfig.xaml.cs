@@ -14,6 +14,9 @@ using System.Windows;
 using MayhemOpenCVWrapper.LowLevel;
 using MayhemCore;
 using MayhemOpenCVWrapper;
+using System.Windows.Controls;
+
+
 
 
 namespace VisionModules.Wpf
@@ -23,25 +26,53 @@ namespace VisionModules.Wpf
         // use custom face detector to give feedback in the config window
         private FaceDetectorComponent fd;
         private FaceDetectorComponent.DetectionHandler faceDetectUpdateHandler;
-
         List<System.Drawing.Point> faceDetectorPoints = new List<System.Drawing.Point>();
-
         private CameraDriver i = CameraDriver.Instance;
+        private List<int> amount_of_faces_items = new List<int>();
+        private ComboBox cbx_nr_faces_select = null; 
 
+        public int  NumberOfFacesSelected
+        {
+            get
+            {
+                return (int) cbx_nr_faces_select.SelectedValue; 
+            }
+        }
 
         public FaceDetectConfig(Camera c)
             : base(c)
         {
-
-
             // set up the face detector
             fd = new FaceDetectorComponent();
             faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetected);
             faceDetectorPoints = new List<System.Drawing.Point>();
-
             fd.OnFaceDetected += m_onFaceDetected;
             if (i.DeviceCount > 0)
                 CanSave = true;
+           
+            // populate drop down list for amount of faces choice
+            for (int k = 1; k <= 6; k++)
+            {
+                amount_of_faces_items.Add(k); 
+            }
+
+            Label ddText = new Label();
+            ddText.Content = "Reaction activates when the following number of faces is detected:";
+
+            StackPanel sp = new StackPanel();
+            sp.Orientation = Orientation.Horizontal; 
+
+            System.Windows.Controls.ComboBox nFacesBox = new System.Windows.Controls.ComboBox();
+            nFacesBox.ItemsSource = amount_of_faces_items;
+            nFacesBox.SelectedIndex = 0; 
+
+            sp.Children.Add(ddText);
+            sp.Children.Add(nFacesBox);
+
+            pnl_additonal_widgets.Children.Add(sp);
+
+            // retain the reference to the combobox
+            cbx_nr_faces_select = nFacesBox;
         }
 
         /**<summary>
@@ -65,12 +96,9 @@ namespace VisionModules.Wpf
                 BackBuffer.PixelFormat);
 
             int bufSize = cam.bufSize;
-
             IntPtr ImgPtr = bmpData.Scan0;
 
             // grab the image
-
-
             lock (cam.thread_locker)
             {
                 // Copy the RGB values back to the bitmap
@@ -114,13 +142,8 @@ namespace VisionModules.Wpf
                     Logger.Write(x + " " + y + " w " + w + " h " + h + " ");
                     g.DrawRectangle(pen, x, y, w, h);
                 }
-
-
                 Logger.WriteLine("Done");
-
-
             }
-
 
             //Convert the bitmap to BitmapSource for use with WPF controls
             hBmp = BackBuffer.GetHbitmap();
@@ -131,8 +154,6 @@ namespace VisionModules.Wpf
 
             BackBuffer.Dispose();
             VisionModulesWPFCommon.DeleteObject(hBmp);
-
-
         }
 
         /**<summary>

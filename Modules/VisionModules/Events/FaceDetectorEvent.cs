@@ -23,9 +23,7 @@ namespace VisionModules.Events
         private DateTime lastFacesDetected = DateTime.Now;
         private FaceDetectorComponent fd;
         private FaceDetectorComponent.DetectionHandler faceDetectUpdateHandler;
-
         private CameraDriver i = CameraDriver.Instance;
-
         private Camera cam = null;
 
         // the cam we have selected
@@ -33,17 +31,21 @@ namespace VisionModules.Events
         private int selected_device_idx = 0;
 
         [DataMember]
-        private Rect boundingRect; 
+        private Rect boundingRect;
+
+        [DataMember]
+        private int triggerOnNrOfFaces = 1;
 
         public FaceDetectorEvent()
         {
-            Initialize();
+            Init(new StreamingContext());
         }
       
          /** <summary>
          * Called when deserialized / on instantiation
          * </summary> */
-        protected override void Initialize()
+        [OnDeserialized]
+        protected void Init(StreamingContext sc)
         {
             if (i == null)
                 i = CameraDriver.Instance;
@@ -59,6 +61,7 @@ namespace VisionModules.Events
 
             fd = new FaceDetectorComponent();
             faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetected);
+            SetConfigString();
         }
 
         void m_onFaceDetected(object sender, List<System.Drawing.Point> points)
@@ -74,9 +77,20 @@ namespace VisionModules.Events
             }
         }
 
-        protected new void SetConfigString()
+        public override void SetConfigString()
         {
-            ConfigString = String.Format("Configuration Message");
+            string config = "";
+            if (cam != null)
+            {
+                config += "Camera: " + cam.Info.deviceId + ", ";
+            }
+           
+            config += "Detect " + triggerOnNrOfFaces;
+            if (triggerOnNrOfFaces == 1)
+                config += " face";
+            else
+                config += " faces";
+            ConfigString = config; 
         }
 
         public WpfConfiguration ConfigurationControl
@@ -84,7 +98,6 @@ namespace VisionModules.Events
             get
             {
                 Logger.WriteLine("get ConfigurationControl!");
-
                 FaceDetectConfig config = new FaceDetectConfig(this.cam);
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {            
@@ -92,14 +105,12 @@ namespace VisionModules.Events
                 }
 
                 config.DeviceList.SelectedIndex = selected_device_idx;
-
                 return config;
             }
         }
 
         public override bool Enable()
         {
-            // TODO: Improve this code
             if (!IsConfiguring && selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
@@ -128,13 +139,10 @@ namespace VisionModules.Events
         }
 
         public  void OnSaved(WpfConfiguration configurationControl)
-        {
-            Logger.WriteLine("OnSaved!");
-      
+        {            
+            Logger.WriteLine("OnSaved!");    
             //   folderLocation = ((FaceDetectConfig)configurationControl).location;
-
             bool wasEnabled = this.Enabled;
-
             if (this.Enabled)
                 this.Disable();
             // assign selected cam
@@ -142,11 +150,8 @@ namespace VisionModules.Events
 
             // set the selected bounding rectangle
             boundingRect = ((MotionDetectorConfig)configurationControl).overlay.GetBoundingRect();
-
-            Logger.WriteLine("BOUNDING RECT : " + boundingRect); 
-            
-            // TODO: m.SetMotionBoundaryRect(boundingRect); 
-
+            Logger.WriteLine("BOUNDING RECT : " + boundingRect);
+            triggerOnNrOfFaces = ((FaceDetectConfig)configurationControl).NumberOfFacesSelected;                      
             if (wasEnabled)
                 this.Enable();
         }

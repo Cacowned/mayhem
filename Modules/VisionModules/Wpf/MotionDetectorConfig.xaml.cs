@@ -97,10 +97,8 @@ namespace VisionModules.Wpf
                 }
 
                 Logger.WriteLine("using " + cam.Info.ToString());
-
                 // alow saving in this state
                 this.CanSave = true;
-
             }
             else
             {
