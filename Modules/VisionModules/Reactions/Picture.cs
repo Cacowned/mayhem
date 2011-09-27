@@ -163,7 +163,7 @@ namespace VisionModules.Reactions
             else if ((capture_offset_time > 0 && Math.Abs(capture_offset_time) <= Camera.LOOP_DURATION))
             {
                 // schedule future retrieval of image
-                int time_ms = (int)capture_offset_time * 1000;
+                double time_ms = capture_offset_time * 1000;
                 System.Timers.Timer t = new System.Timers.Timer(time_ms);
                 t.Elapsed += new ElapsedEventHandler(SaveFutureImage);
                 t.AutoReset = false; 
