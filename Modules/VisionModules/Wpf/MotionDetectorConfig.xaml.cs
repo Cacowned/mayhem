@@ -53,10 +53,9 @@ namespace VisionModules.Wpf
             cam = c;
             InitializeComponent();
             DeviceList.SelectedIndex = c.Info.deviceId;
-            Init();
         }
 
-        public void Init()
+        public override void OnLoad()
         {
             // populate device list
             Logger.WriteLine("OnLoad");
