@@ -1,0 +1,27 @@
+﻿<src:WpfConfiguration x:Class="VisionModules.Wpf.ObjectDetectorConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"  
+              xmlns:visionmods="clr-namespace:VisionModules.Wpf"
+             Width="400">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Vertical">
+                <Canvas Width="320" Height="240">
+                    <Image Canvas.Left="0" Canvas.Top="0" Height="240" Name="camera_image" Stretch="Fill" Width="320"  />
+                    <visionmods:ROISelector Canvas.Left="0" Canvas.Top="0" Height="240" Width="320" x:Name="overlay" Background= "Transparent"/>
+                </Canvas>
+            </StackPanel>
+            <Label>Click drop down list below to select a camera:</Label>
+            <ComboBox Name="DeviceList" />
+            <TextBlock Width="320" TextWrapping="WrapWithOverflow" Margin="0 5 0 0">This module requires you to define a template image for the the object recognition. This can either be an image taken with a webcam or an image loaded from a file.</TextBlock>
+            <StackPanel  Margin="0 5 0 0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Name="btn_templateFromFile" Width="180" Click="btn_templateFromFile_Click">Load Template Image from File</Button>
+                <Button Name="btn_templateFromRegion" Width="180" Margin="10 0 0 0" Click="btn_templateFromRegion_Click">Use Camera Image region </Button>
+            </StackPanel>
+            <Label Name="helperText" HorizontalContentAlignment="Center" Background="DarkGray" Foreground="OrangeRed" Margin="0 5 0 0" FontStyle="Italic">Select template image.</Label>
+        </StackPanel>
+    </Grid>
+</src:WpfConfiguration>
