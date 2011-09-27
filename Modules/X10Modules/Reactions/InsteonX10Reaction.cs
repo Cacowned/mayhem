@@ -16,7 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using MayhemSerial;
 using System.Diagnostics;
@@ -30,7 +30,7 @@ namespace X10Modules.Reactions
     [MayhemModule("X10Reaction", "Triggers X10 Commands")]
     public class InsteonX10Reaction : ReactionBase, IWpfConfigurable
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
+        private MayhemSerialPortMgr serial;
 
         [DataMember]
         private X10HouseCode houseCode = X10HouseCode.A;
@@ -56,10 +56,8 @@ namespace X10Modules.Reactions
             }
         }
 
-        [OnDeserialized]
-        public void OnLoad(StreamingContext s)
+        protected override void  Initialize()
         {
-            // basically reintialize the serial connection
             serial = MayhemSerialPortMgr.instance;
             if (serial.PortExists(this.serialPortName))
             {
@@ -92,10 +90,9 @@ namespace X10Modules.Reactions
             x10Controller.X10SendCommand(houseCode, unitCode, commandCode);
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            string config = "House: " + houseCode.ToString() + ", Unit: " + unitCode.ToString() + ", Command: " + commandCode.ToString();
-            ConfigString = config; 
+            return "House: " + houseCode.ToString() + ", Unit: " + unitCode.ToString() + ", Command: " + commandCode.ToString();
         }
 
     }

@@ -31,11 +31,6 @@ namespace WindowModules.Reactions
         [DataMember]
         private string text;
 
-        public SystemTrayMenu()
-        {
-            
-        }
-
         protected override void Initialize()
         {
             context = SynchronizationContext.Current;

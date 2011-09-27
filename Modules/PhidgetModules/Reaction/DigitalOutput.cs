@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Windows;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using PhidgetModules.Wpf;
 using Phidgets;
 using MayhemWpf.UserControls;
@@ -44,7 +44,7 @@ namespace PhidgetModules.Reaction
             OutputType = ((PhidgetDigitalOutputConfig)configurationControl).OutputType;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             string type = "";
 
@@ -58,7 +58,7 @@ namespace PhidgetModules.Reaction
                     break;
             }
 
-            ConfigString = type + " output #" + Index;
+            return type + " output #" + Index;
         }
 
         public override void Perform()

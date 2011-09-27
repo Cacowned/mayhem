@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Windows.Controls;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using Phidgets;
@@ -38,9 +38,9 @@ namespace PhidgetModules.Events
             Tag = ((Phidget1023RFIDConfig)configurationControl).TagID;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format("Rfid Tag ID {0}", Tag);
+            return String.Format("Rfid Tag ID {0}", Tag);
         }
 
         //Tag event handler...we'll display the tag code in the field on the GUI

@@ -21,10 +21,6 @@ namespace DefaultModules.Reactions
         [DllImport("user32.dll")]
         public static extern void LockWorkStation();
 
-        public LockMachine()
-        {
-        }
-
         public override void Perform()
         {
             LockWorkStation();

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using PhidgetModules.Wpf.UserControls;
@@ -34,7 +34,7 @@ namespace PhidgetModules.Events
                 return "No Touch Detected";
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             string message = "turns on";
             if (!OnTurnOn)
@@ -42,7 +42,7 @@ namespace PhidgetModules.Events
                 message = "turns off";
             }
 
-            ConfigString = String.Format("Index {0} {1}", Index, message);
+            return String.Format("Index {0} {1}", Index, message);
         }
     }
 }

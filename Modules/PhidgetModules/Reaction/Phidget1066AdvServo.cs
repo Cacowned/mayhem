@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using PhidgetModules.Wpf;
 using System.Windows;
 using System;
@@ -79,9 +79,9 @@ namespace PhidgetModules.Reaction
             Position = (configurationControl as Phidget1066AdvServoConfig).Position;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format("Move to {0}", Position.ToString("0.##"));
+            return String.Format("Move to {0}", Position.ToString("0.##"));
         }
     }
 }
