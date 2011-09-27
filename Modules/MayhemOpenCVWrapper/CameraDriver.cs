@@ -44,24 +44,31 @@ namespace MayhemOpenCVWrapper
         {
             // just initialize the capture library
             // to get the camera running, InitCaptureDevice must be called!
-            OpenCVDLL.OpenCVBindings.Initialize();
-            devices_available = EnumerateDevices();
-
-            // instantiate all cameras found
-            if (devices_available.Count > 0)
+            try
             {
+                OpenCVDLL.OpenCVBindings.Initialize();
+                devices_available = EnumerateDevices();
 
-                foreach (CameraInfo c in devices_available)
+                // instantiate all cameras found
+                if (devices_available.Count > 0)
                 {
-                    Camera cam = new Camera(c, CameraSettings.DEFAULTS());
-                    cameras_available_.Add(cam);
-                }
 
-                Logger.WriteLine(devices_available.Count + " devices available");
+                    foreach (CameraInfo c in devices_available)
+                    {
+                        Camera cam = new Camera(c, CameraSettings.DEFAULTS());
+                        cameras_available_.Add(cam);
+                    }
+
+                    Logger.WriteLine(devices_available.Count + " devices available");
+                }
+                else
+                {
+                    Logger.WriteLine("NO CAMERAS PRESENT");
+                }
             }
-            else
+            catch (AccessViolationException accesV)
             {
-                Logger.WriteLine("NO CAMERAS PRESENT");
+                Logger.WriteLine("AccessViolationException when Initializing Camera: \n" + accesV);
             }
         }
 
