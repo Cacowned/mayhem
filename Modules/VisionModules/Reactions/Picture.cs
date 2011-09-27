@@ -97,7 +97,13 @@ namespace VisionModules.Reactions
             Logger.WriteLine("SaveImage");
             DateTime now = DateTime.Now;
             // TODO think of a better naming convention
-            string filename = "Mayhem-Snapshot_" + this.Name + "_" + now.Year + "_" + now.Month + "_" + now.Month + "_" + now.Day + "-" + now.Hour + "_" + now.Minute + "_" + now.Second + ".jpg";
+            string filename = "Mayhem-Snapshot_" + this.Name + "_" +
+                                now.Year.ToString("D2") + "-" +
+                                now.Month.ToString("D2") + "-" +
+                                now.Day.ToString("D2") + "_" +
+                                now.Hour.ToString("D2") + "-" +
+                                now.Minute.ToString("D2") + "-" +
+                                now.Second.ToString("D2") + ".jpg";
             string path = this.folderLocation + "\\" + filename;
             Logger.WriteLine("saving file to " + path);
             image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
