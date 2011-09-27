@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using PhidgetModules.Wpf.UserControls;
@@ -32,7 +32,7 @@ namespace PhidgetModules.Events
             OnTurnOn = config.OnTurnOn;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             string message = "recognizes an object";
             if (!OnTurnOn)
@@ -40,7 +40,7 @@ namespace PhidgetModules.Events
                 message = "stops recognizing an object";
             }
 
-            ConfigString = String.Format("Index {0} {1}", Index, message);
+            return String.Format("Index {0} {1}", Index, message);
         }
 
         protected string ConvertToString(int value)

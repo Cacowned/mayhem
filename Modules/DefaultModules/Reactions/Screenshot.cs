@@ -19,18 +19,12 @@ namespace DefaultModules.Reactions
     public class Screenshot : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string saveLocation;
+        private string saveLocation = AppDomain.CurrentDomain.BaseDirectory;
 
         [DataMember]
-        private string filenamePrefix;
+        private string filenamePrefix = "Mayhem";
 
         int startIndex;
-
-        public Screenshot()
-        {
-            saveLocation = AppDomain.CurrentDomain.BaseDirectory;
-            filenamePrefix = "Mayhem";
-        }
 
         protected override void Initialize()
         {

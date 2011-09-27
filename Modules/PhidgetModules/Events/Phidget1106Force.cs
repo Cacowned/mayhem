@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using PhidgetModules.Wpf.UserControls;
@@ -37,7 +37,7 @@ namespace PhidgetModules.Events
             return value.ToString("0.###");
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             string overUnder = "goes above";
             if (!Increasing)
@@ -45,7 +45,7 @@ namespace PhidgetModules.Events
                 overUnder = "drops below";
             }
 
-            ConfigString = String.Format("Index {0} {1} {2}", Index, overUnder, TopValue.ToString("0.###"));
+            return String.Format("Index {0} {1} {2}", Index, overUnder, TopValue.ToString("0.###"));
         }
     }
 }

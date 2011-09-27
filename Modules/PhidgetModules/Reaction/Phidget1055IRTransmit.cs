@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Windows;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using Phidgets;
 using MayhemWpf.UserControls;
 
@@ -41,9 +41,9 @@ namespace PhidgetModules.Reaction
             CodeInfo = ((Phidget1055IRTransmitConfig)configurationControl).CodeInfo;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format("IR Code 0x{0}", Code);
+            return String.Format("IR Code 0x{0}", Code);
         }
 
         public override void Perform()
