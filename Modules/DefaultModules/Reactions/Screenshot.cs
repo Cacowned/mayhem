@@ -19,17 +19,10 @@ namespace DefaultModules.Reactions
     public class Screenshot : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string saveLocation = AppDomain.CurrentDomain.BaseDirectory;
+        private string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
         [DataMember]
         private string filenamePrefix = "Mayhem";
-
-        int startIndex;
-
-        protected override void Initialize()
-        {
-            startIndex = 1;
-        }
 
         public override void Perform()
         {
@@ -58,25 +51,24 @@ namespace DefaultModules.Reactions
             gfx.CopyFromScreen(minX, minY, 0, 0, new Size(screenWidth, screenHeight));
 
             DateTime now = DateTime.Now;
-            string filename = filenamePrefix + "_" + 
+            string filename = filenamePrefix + "_" +
                                 now.Year.ToString("D2") + "-" +
-                                now.Month.ToString("D2") + "-" + 
-                                now.Day.ToString("D2") + "_" + 
+                                now.Month.ToString("D2") + "-" +
+                                now.Day.ToString("D2") + "_" +
                                 now.Hour.ToString("D2") + "-" +
                                 now.Minute.ToString("D2") + "-" +
                                 now.Second.ToString("D2") + ".jpg";
-            
+
             filename = Path.Combine(saveLocation, filename);
             bmpScreenShot.Save(filename, ImageFormat.Jpeg);
             bmpScreenShot.Dispose();
-            startIndex++;
         }
 
         public string GetConfigString()
         {
-            return Path.Combine(saveLocation, filenamePrefix+"*.jpg");
+            return Path.Combine(saveLocation, filenamePrefix + "*.jpg");
         }
-        
+
         #region Configuration Views
 
         public WpfConfiguration ConfigurationControl

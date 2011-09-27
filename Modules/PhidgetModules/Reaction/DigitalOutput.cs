@@ -25,12 +25,15 @@ namespace PhidgetModules.Reaction
         // The interface kit we are using for the sensors
         private InterfaceKit ifKit;
 
+        public DigitalOutput()
+        {
+            Index = 0;
+            OutputType = DigitalOutputType.Toggle;
+        }
+
         protected override void Initialize()
         {
             this.ifKit = InterfaceFactory.Interface;
-
-            Index = 0;
-            OutputType = DigitalOutputType.Toggle;
         }
 
         public WpfConfiguration ConfigurationControl

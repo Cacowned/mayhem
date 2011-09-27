@@ -46,13 +46,13 @@ namespace DefaultModules.Wpf
 
             if (dlg.ShowDialog() == true)
             {
-                LocationBox.Text = FileName;
+                LocationBox.Text = dlg.FileName;
             }
         }
 
         private void CheckValidity()
         {
-            CanSave = File.Exists(FileName);
+            CanSave = File.Exists(LocationBox.Text);
         }
 
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)

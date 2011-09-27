@@ -72,9 +72,9 @@ namespace DefaultModules.Wpf
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
-            dlg.RootFolder = Environment.SpecialFolder.MyComputer;
+            dlg.RootFolder = Environment.SpecialFolder.MyPictures;
             dlg.ShowNewFolderButton = true;
-            dlg.SelectedPath = AppDomain.CurrentDomain.BaseDirectory;
+            dlg.SelectedPath = SaveLocation;
 
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {

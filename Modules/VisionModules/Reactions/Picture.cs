@@ -34,7 +34,7 @@ namespace VisionModules.Reactions
     {
         // default to "My Documents" folder
         [DataMember]
-        private string folderLocation = AppDomain.CurrentDomain.BaseDirectory;
+        private string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
         [DataMember]
         private int selected_device_idx = 0;
