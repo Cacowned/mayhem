@@ -49,16 +49,7 @@ namespace VisionModules.Events
         [DataMember]
         private int triggerOnNrOfFaces = 1;
 
-        public FaceDetectorEvent()
-        {
-            Init(new StreamingContext());
-        }
-      
-         /** <summary>
-         * Called when deserialized / on instantiation
-         * </summary> */
-        [OnDeserialized]
-        protected void Init(StreamingContext sc)
+        protected override void Initialize()
         {
             if (i == null)
                 i = CameraDriver.Instance;

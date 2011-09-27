@@ -51,13 +51,7 @@ namespace VisionModules.Reactions
 
         private bool video_saving = false;
 
-        public VideoReaction()
-        {
-            Setup(new StreamingContext());
-        }
-
-        [OnDeserialized]
-        public void Setup(StreamingContext s)
+        protected override void Initialize()
         {
             Logger.WriteLine("");
             if (i == null)
