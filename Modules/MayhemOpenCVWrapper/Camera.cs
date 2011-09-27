@@ -174,26 +174,37 @@ namespace MayhemOpenCVWrapper
         {
             if (!is_initialized)
             {
-                InitializeCaptureDevice(info, settings);
+                try
+                {
+                    InitializeCaptureDevice(info, settings);
+                }
+                catch (AccessViolationException avEx)
+                {
+                    Logger.WriteLine("Access Violation Exception when initializing camera: " + info + "\n" + avEx);
+                }
             }
 
             if (!this.running)
-            {        
+            {
                 //grabFrm = new Thread(GrabFrames);
                 try
                 {
                     Logger.WriteLine("Starting Frame Grabber");
                     //grabFrm.Start();
                     // TODO: run this code in the ThreadPool
-                    grabFramesReset = new ManualResetEvent(false); 
+                    grabFramesReset = new ManualResetEvent(false);
                     ThreadPool.QueueUserWorkItem((object o) => { GrabFrames_Thread(); });
-                    Thread.Sleep(200);
+                    Thread.Sleep(250);
                 }
                 catch (Exception e)
                 {
                     Logger.WriteLine("Exception while trying to start Framegrab");
                     Logger.WriteLine(e.ToString());
                 }
+            }
+            else
+            {
+                Logger.WriteLine("StartFrameGrabbing(): Camera Running -- ignore");
             }
         }
 
