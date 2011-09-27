@@ -1,4 +1,16 @@
-﻿using System;
+﻿/*
+ * FaceDetectorEvent.cs
+ * 
+ * A basic Face Detector Event:
+ * face detector now only triggers when the amount of faces surpasses a threshold value, and only once then. 
+ * When the amount of faces goes below the threshold and then above it again, the reaction triggers again, and so forth. 
+ * 
+ * (c) 2011, Microsoft Applied Sciences Group
+ * 
+ * Author: Sven Kratz
+ * 
+ */ 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
