@@ -117,25 +117,18 @@ namespace VisionModules.Wpf
                     preview_width = width;
                     preview_height = height;
 
-
                     // the camera previews are drawn onto an ImageBrush, which is shown in the 
                     // background of the DataTemplate
 
                     camera_previews.Add(new ImageBrush());
-
-
                 }
 
                 camera_preview_panel.ItemsSource = camera_previews;
-
             }
             else
             {
                 Logger.WriteLine("No camera available");
             }
-
-
-
 
             // capture offset slider
             int capture_size_s = Camera.LOOP_DURATION / 1000;
@@ -167,13 +160,6 @@ namespace VisionModules.Wpf
 
             slider_capture_offset.Value = slider_value;
 
-            /*
-            slider_tickbar.Ticks = tickMarks;
-            slider_tickbar.Minimum = -capture_size_s;
-            slider_tickbar.Maximum = capture_size_s;*/
-
-
-
             CanSave = true;
         }
 
@@ -187,7 +173,6 @@ namespace VisionModules.Wpf
                 c.OnImageUpdated -= i_OnImageUpdated;
                 c.TryStopFrameGrabbing();
             }
-
         }
 
         ///<summary>
@@ -196,9 +181,7 @@ namespace VisionModules.Wpf
         ///
         public void i_OnImageUpdated(object sender, EventArgs e)
         {
-
             Dispatcher.Invoke(new ImageUpdateHandler(SetCameraImageSource), sender);
-            //SetCameraImageSource();
         }
 
         ///<summary>
@@ -253,16 +236,9 @@ namespace VisionModules.Wpf
             }
         }
 
-        public override void OnCancel()
-        {
-            OnClosing();
-        }
-
         public override void OnSave()
         {
             selected_camera = deviceList.SelectedItem as Camera;
-
-            OnClosing();
         }
 
         public override string Title
