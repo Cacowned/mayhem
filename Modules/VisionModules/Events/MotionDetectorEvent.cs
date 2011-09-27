@@ -34,7 +34,7 @@ namespace VisionModules.Events
         private bool firstFrame = true; 
         
         [DataMember]
-        private Rect boundingRect = new Rect(0,0,0,0);
+        private Rect boundingRect;
 
         private MotionDetectorComponent.DetectionHandler motionUpdateHandler;
 
@@ -43,7 +43,7 @@ namespace VisionModules.Events
 
         // which cam have we selected
         [DataMember]
-        private int selected_device_idx = 0;
+        private int selected_device_idx;
 
         /** <summary>
          * Called when deserialized / on instantiation
