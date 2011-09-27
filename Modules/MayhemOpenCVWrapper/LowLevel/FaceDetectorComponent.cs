@@ -45,32 +45,28 @@ namespace MayhemOpenCVWrapper.LowLevel
             fd.Dispose();
         }
        
-
-        /* <summary>
-          Processes a new frame from the camera and decides if event should be triggered
-          </summary>
-         */ 
+        /// <summary>
+        ///  Processes a new frame from the camera and decides if event should be triggered
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public override void update_frame(object sender, EventArgs e)
         {
             Logger.WriteLine("frame nr "+frameCount);
             frameCount++;
             Camera camera = sender as Camera;
-
             int[] faceCoords = new int[1024];
             int numFacesCoords = 0;
 
             lock (camera.thread_locker)
             {
-
                 unsafe
                 {
                     fixed (byte* ptr = camera.imageBuffer)
                     {
                         fixed (int* buf = faceCoords)
                         {
-
                             fd.ProcessFrame(ptr, buf, &numFacesCoords);
-
                         }
                     }
                 }
@@ -78,12 +74,17 @@ namespace MayhemOpenCVWrapper.LowLevel
 
             Logger.WriteLineIf(VERBOSE_DEBUG, ">>>>> Got " + numFacesCoords+ " face coords ");
 
-            if (numFacesCoords == 0) return;
-
+            // no need to do further work if no faces have been detected
+            // update listeners with an empty list to inform them that nothing has been detected
+            if (numFacesCoords == 0)
+            {
+                if (OnFaceDetected != null)
+                    OnFaceDetected(this, new List<Point>());
+                return;
+            }
+                
             int cpIdx = 0;
-
             List<Point> points = new List<Point>();
-
 
             // copy the coordinates to a list
             for (cpIdx = 0; cpIdx < numFacesCoords; )
@@ -96,14 +97,13 @@ namespace MayhemOpenCVWrapper.LowLevel
                 points.Add(p2);
             }
 
-
-
-            if (OnFaceDetected != null && points.Count() > 0 && frameCount > 20)
+            if (OnFaceDetected != null && /* points.Count() > 0 &&*/ frameCount > 20)
             {
                 // fire immediately on empty bounding rect
                 if (detectionBoundary.Width == 0 && detectionBoundary.Height == 0)
                 {
-                    OnFaceDetected(this, points);
+                    if (OnFaceDetected != null)
+                         OnFaceDetected(this, points);
                 }
                 else
                 {
@@ -116,7 +116,6 @@ namespace MayhemOpenCVWrapper.LowLevel
                     {
                         if (p.X == 0 && p.Y == 0)
                             continue;
-
                         pMin.X = Math.Min(pMin.X, p.X);
                         pMax.X = Math.Max(pMax.X, p.X);
                         pMin.Y = Math.Min(pMin.Y, p.Y);
@@ -127,16 +126,11 @@ namespace MayhemOpenCVWrapper.LowLevel
 
                     if (dataBounds.IntersectsWith(detectionBoundary))
                     {
-                        OnFaceDetected(this, points);
+                        if (OnFaceDetected != null)
+                            OnFaceDetected(this, points);
                     }
-
-                }
-
-               
+                }             
             }
-
-
-
         }
 
         /*
