@@ -94,7 +94,7 @@ namespace MayhemOpenCVWrapper
                 List<BitmapTimestamp> buffer_items;
 
                 // critical section: don't let the read thread dispose of bitmaps before we copy them first
-                lock (this)
+                lock (thread_locker)
                 {
                     buffer_items = loop_buffer.ToList<BitmapTimestamp>();
 
@@ -257,7 +257,7 @@ namespace MayhemOpenCVWrapper
             {
                 Logger.WriteLine(index + " GrabFrames");
 
-                lock (this)
+                lock (thread_locker)
                 {
                     foreach (BitmapTimestamp b in loop_buffer)
                     {
@@ -267,7 +267,7 @@ namespace MayhemOpenCVWrapper
 
                 // purge the video buffer when starting frame grabbing
                 // we don't need the previously recorded and potentially very old bitmaps in the buffer
-                lock (this)
+                lock (thread_locker)
                 {
                     loop_buffer.Clear();
                 }
@@ -295,7 +295,7 @@ namespace MayhemOpenCVWrapper
                         }
                     }
 
-                    lock (this)
+                    lock (thread_locker)
                     {
                         if (loop_buffer.Count < LOOP_BUFFER_MAX_LENGTH)
                         {
