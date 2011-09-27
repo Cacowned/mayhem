@@ -29,6 +29,7 @@ namespace DefaultModules.Reactions
         public Screenshot()
         {
             saveLocation = AppDomain.CurrentDomain.BaseDirectory;
+            filenamePrefix = "Mayhem";
         }
 
         protected override void Initialize()
