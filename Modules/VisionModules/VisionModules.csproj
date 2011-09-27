@@ -69,7 +69,7 @@
     <Compile Include="Wpf\MotionDetectorConfig.xaml.cs">
       <DependentUpon>MotionDetectorConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\MultiCameraSelector\MultiCameraSelector.xaml.cs">
+    <Compile Include="Wpf\Helper Controls\MultiCameraSelector.xaml.cs">
       <DependentUpon>MultiCameraSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\PictureConfig.xaml.cs">
@@ -81,7 +81,7 @@
     <Compile Include="Wpf\PresenceConfig.xaml.cs">
       <DependentUpon>PresenceConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\ROISelector.xaml.cs">
+    <Compile Include="Wpf\Helper Controls\ROISelector.xaml.cs">
       <DependentUpon>ROISelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\VideoConfig.cs" />
@@ -115,7 +115,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\MultiCameraSelector\MultiCameraSelector.xaml">
+    <Page Include="Wpf\Helper Controls\MultiCameraSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -131,7 +131,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\ROISelector.xaml">
+    <Page Include="Wpf\Helper Controls\ROISelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

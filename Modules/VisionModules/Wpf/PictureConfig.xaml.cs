@@ -27,6 +27,7 @@ using System.Windows.Data;
 using System.Windows.Controls.Primitives;
 using MayhemCore;
 using System.Threading;
+using System.IO;
 namespace VisionModules.Wpf
 {
 
@@ -35,8 +36,17 @@ namespace VisionModules.Wpf
     /// </summary>
     public partial class PictureConfig : WpfConfiguration
     {
-        public string location;
-        // public Device captureDevice;
+        public string SaveLocation
+        {
+            get;
+            private set; 
+        }
+
+        public string FilenamePrefix
+        {
+            get;
+            private set;
+        }
 
         public Camera selected_camera = null;
 
@@ -62,21 +72,20 @@ namespace VisionModules.Wpf
         // handle on brush (camera preview) that is currently selected
         private Border selected_preview_img = null;
 
-        public PictureConfig(string location, double capture_offset_time)
+        public PictureConfig(string location, string prefix,  double capture_offset_time)
         {
-            this.location = location;
+            this.SaveLocation = location;
             slider_value = capture_offset_time;
+            FilenamePrefix = prefix; 
 
             InitializeComponent();
         }
 
         public override void OnLoad()
         {
-            // TODO: Enumerate devices
-
             // populate device list
 
-            lbl_current_loc.Content = location;
+            box_current_loc.Text = SaveLocation;
 
             Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
 
@@ -141,53 +150,41 @@ namespace VisionModules.Wpf
             int capture_size_s = Camera.LOOP_DURATION / 1000;
             slider_capture_offset.Minimum = -capture_size_s;
             slider_capture_offset.Maximum = capture_size_s;
-
             slider_capture_offset.IsDirectionReversed = false;
             slider_capture_offset.IsMoveToPointEnabled = true;
             slider_capture_offset.AutoToolTipPrecision = 2;
             slider_capture_offset.AutoToolTipPlacement =
               AutoToolTipPlacement.BottomRight;
             slider_capture_offset.TickPlacement = TickPlacement.TopLeft;
-
             slider_capture_offset.TickFrequency = 0.5;
             DoubleCollection tickMarks = new DoubleCollection();
             for (int k = -capture_size_s; k <= capture_size_s; k++)
             {
                 tickMarks.Add(k);
             }
-
             slider_capture_offset.Ticks = tickMarks;
-
             slider_capture_offset.IsSelectionRangeEnabled = true;
             slider_capture_offset.SelectionStart = -capture_size_s;
             slider_capture_offset.SelectionEnd = capture_size_s;
-
             slider_capture_offset.SmallChange = 0.5;
             slider_capture_offset.LargeChange = 1.0;
-
             slider_capture_offset.Value = slider_value;
+            //
 
-            /*
-            slider_tickbar.Ticks = tickMarks;
-            slider_tickbar.Minimum = -capture_size_s;
-            slider_tickbar.Maximum = capture_size_s;*/
-
-
-
+            // directory and prefix boxes
+            box_current_loc.Text = SaveLocation;
+            box_filename_prefix.Text = FilenamePrefix; 
+           
             CanSave = true;
         }
 
         public override void OnClosing()
         {
-            //cam.OnImageUpdated -= i_OnImageUpdated;
-            //cam.TryStopFrameGrabbing();
-
             foreach (Camera c in cams)
             {
                 c.OnImageUpdated -= i_OnImageUpdated;
                 c.TryStopFrameGrabbing();
             }
-
         }
 
         ///<summary>
@@ -248,8 +245,8 @@ namespace VisionModules.Wpf
 
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                location = dlg.SelectedPath;
-                lbl_current_loc.Content = location;
+                SaveLocation = dlg.SelectedPath;
+                box_current_loc.Text = SaveLocation;
             }
         }
 
@@ -271,6 +268,33 @@ namespace VisionModules.Wpf
             {
                 return "Picture";
             }
+        }
+
+        private void CheckValidity()
+        {
+            CanSave = true;
+            if (!(box_current_loc.Text.Length > 0 && Directory.Exists(box_current_loc.Text)))
+            {
+                textInvalid.Text = "Invalid save location";
+                CanSave = false;
+            }
+            else if (box_current_loc.Text.Length == 0)
+            {
+                textInvalid.Text = "You must enter a filename prefix";
+                CanSave = false;
+            }
+            else if (box_current_loc.Text.Length > 20)
+            {
+                textInvalid.Text = "Filename prefix is too long";
+                CanSave = false;
+            }
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public override void OnSave()
+        {
+            SaveLocation = box_current_loc.Text;
+            FilenamePrefix = box_filename_prefix.Text;
         }
 
         #region Highlighting the camera preview selection
@@ -334,6 +358,18 @@ namespace VisionModules.Wpf
         private void slider_capture_offset_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             slider_value = slider_capture_offset.Value;
+        }
+
+        private void lbl_current_loc_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckValidity();
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void box_filename_prefix_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckValidity();
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

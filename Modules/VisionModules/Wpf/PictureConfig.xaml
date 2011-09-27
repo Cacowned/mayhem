@@ -30,12 +30,19 @@
             <StackPanel Name="slider_panel" Orientation="Vertical">
                 <Slider Name="slider_capture_offset" Height="23"  Width="220" Value="{Binding ElementName=root, Path=slider_value}" ValueChanged="slider_capture_offset_ValueChanged" />
             </StackPanel>
-            <Label Name="lbl_img_save">Click the button below to choose location of saved images:</Label>
-            <Button Name="img_save_button" Click="Button_Click_1">Image Save Location</Button>
+            <!-- TODO: Grid Layout-->
+            <Label Name="lbl_img_save"></Label>     
             <StackPanel Orientation="Horizontal">
-                <Label>Current Location: </Label>
-                <Label Margin="5 0 0 0" Name="lbl_current_loc" Content="{Binding location}"></Label>
+                <Label>Save to Location: </Label>
+                <TextBox Margin="5 0 0 0" Name="box_current_loc" Text="{Binding location}" MinWidth="240" TextChanged="lbl_current_loc_TextChanged"></TextBox>
+                <Button Name="img_save_button" Click="Button_Click_1" Margin="5 0 0 0">Browse</Button>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label>File Name Prefix:</Label>
+                <TextBox Margin="6 0 0 0" Name="box_filename_prefix" MinWidth="240" TextChanged="box_filename_prefix_TextChanged">Mayhem</TextBox>
+            </StackPanel>
+            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="2">File location is invalid</TextBlock>
+            
         </StackPanel>
     </Grid>
 </src:WpfConfiguration>

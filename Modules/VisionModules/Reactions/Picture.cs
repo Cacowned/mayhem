@@ -24,6 +24,7 @@ using System.Diagnostics;
 using MayhemWpf.UserControls;
 using System.Timers;
 using System.Threading;
+using System.Drawing.Imaging;
 
 namespace VisionModules.Reactions
 {
@@ -33,7 +34,13 @@ namespace VisionModules.Reactions
     {
         // default to "My Documents" folder
         [DataMember]
-        public string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        private string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+
+        [DataMember]
+        private int selected_device_idx = 0;
+
+        [DataMember]
+        private string fileNamePrefix; 
 
         // The device we are recording from
         private CameraDriver i = CameraDriver.Instance;
@@ -41,8 +48,7 @@ namespace VisionModules.Reactions
 
         public Camera.ImageUpdateHandler imageUpdateHandler;
 
-        [DataMember]
-        private int selected_device_idx = 0;
+       
 
         // the temporal offset of the picture to be saved
         [DataMember]
@@ -59,11 +65,7 @@ namespace VisionModules.Reactions
             Setup();
         }
 
-        [OnSerializing]
-        public void Serializing(StreamingContext s)
-        {
-            //Disable();
-        }
+        
 
         public void camera_update(object sender, EventArgs e)
         {
@@ -90,14 +92,11 @@ namespace VisionModules.Reactions
         /// <summary>
         /// gets called when a new image is acquired by the camera
         /// </summary>
-
-        /// TODO: handle this callback in Camera.cs and encapsulate the pixel copying
         public void SaveImage(Bitmap image)
         {
             Logger.WriteLine("SaveImage");
             DateTime now = DateTime.Now;
-            // TODO think of a better naming convention
-            string filename = "Mayhem-Snapshot_" + this.Name + "_" +
+            string filename = fileNamePrefix + "_" +
                                 now.Year.ToString("D2") + "-" +
                                 now.Month.ToString("D2") + "-" +
                                 now.Day.ToString("D2") + "_" +
@@ -106,11 +105,11 @@ namespace VisionModules.Reactions
                                 now.Second.ToString("D2") + ".jpg";
             string path = this.folderLocation + "\\" + filename;
             Logger.WriteLine("saving file to " + path);
-            image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
+            image.Save(path, ImageFormat.Jpeg);
+            
             // VERY important! 
             image.Dispose();
         }
-
 
         public override bool Enable()
         {
@@ -204,7 +203,7 @@ namespace VisionModules.Reactions
         {
             get
             {
-                PictureConfig config = new PictureConfig(folderLocation, capture_offset_time);
+                PictureConfig config = new PictureConfig(folderLocation, fileNamePrefix, capture_offset_time);
                 config.deviceList.SelectedIndex = selected_device_idx;
                 return config;
             }
@@ -215,7 +214,8 @@ namespace VisionModules.Reactions
         public void OnSaved(WpfConfiguration configurationControl)
         {
             PictureConfig config = configurationControl as PictureConfig;
-            folderLocation = config.location;
+            folderLocation = config.SaveLocation;
+            fileNamePrefix = config.FilenamePrefix;
 
             bool wasEnabled = this.Enabled;
 

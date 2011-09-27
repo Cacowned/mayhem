@@ -74,6 +74,7 @@ namespace DefaultModules.Reactions
             
             filename = Path.Combine(saveLocation, filename);
             bmpScreenShot.Save(filename, ImageFormat.Jpeg);
+            bmpScreenShot.Dispose();
             startIndex++;
         }
         

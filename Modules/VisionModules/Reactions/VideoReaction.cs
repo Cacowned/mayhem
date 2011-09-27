@@ -173,7 +173,7 @@ namespace VisionModules.Reactions
                 this.Disable();
 
             VideoConfig config = configurationControl as VideoConfig;
-            folderLocation = config.location;
+            folderLocation = config.SaveLocation;
             compress = config.compress_video;
 
             if (config.deviceList.HasItems)
