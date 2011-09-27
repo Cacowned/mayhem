@@ -45,18 +45,7 @@ namespace VisionModules.Events
         [DataMember]
         private int selected_device_idx;
 
-
-        public MotionDetector()
-        {
-            Init(new StreamingContext());
-        }
-
-        /// <summary>
-        /// Called on instantiation / deserialized
-        /// </summary>
-        /// <param name="s"></param>
-        [OnDeserialized]
-        protected void Init(StreamingContext s)
+        protected override void Initialize()
         {
             Logger.WriteLine("Enumerating Devices");
 

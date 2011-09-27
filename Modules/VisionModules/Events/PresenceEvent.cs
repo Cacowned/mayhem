@@ -85,12 +85,6 @@ namespace VisionModules.Events
 
         protected override void Initialize()
         {
-            Initialize(new StreamingContext());
-        }
-
-        [OnDeserialized]
-        protected void Initialize(StreamingContext  s)
-        {
             Logger.WriteLine("Enumerating Devices");
 
             if (i == null)

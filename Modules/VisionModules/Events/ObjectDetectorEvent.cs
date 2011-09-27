@@ -72,17 +72,7 @@ namespace VisionModules.Events
             set { }
         }
 
-        public ObjectDetectorEvent()
-        {
-            InitMe(new StreamingContext());
-        }
-
-        /// <summary>
-        /// Called before (!!)  Deserialization / Instantiation
-        /// </summary>
-        /// 
-        [OnDeserialized]
-        public void InitMe(StreamingContext s)
+        protected override void  Initialize()
         {
             if (i == null)
                 i = CameraDriver.Instance;
