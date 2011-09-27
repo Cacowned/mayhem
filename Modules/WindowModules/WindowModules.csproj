@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D62B7AA2-1D1C-4C37-B45E-E762A7AF0E90}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WindowModules</RootNamespace>
+    <AssemblyName>WindowModules</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\Packages\WindowModules\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Packages\WindowModules\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\WindowActionWait.cs" />
+    <Compile Include="Actions\WindowActionSendKeys.cs" />
+    <Compile Include="Actions\WindowActionResize.cs" />
+    <Compile Include="Actions\WindowActionClose.cs" />
+    <Compile Include="Actions\WindowActionBringToFront.cs" />
+    <Compile Include="Actions\WindowActionRestore.cs" />
+    <Compile Include="Actions\WindowActionMaximize.cs" />
+    <Compile Include="Actions\WindowActionMinimize.cs" />
+    <Compile Include="Actions\WindowActionMove.cs" />
+    <Compile Include="InterceptKeys.cs" />
+    <Compile Include="Reactions\SystemTrayMenu.cs" />
+    <Compile Include="WindowAction.cs" />
+    <Compile Include="WindowActionConfigControl.cs" />
+    <Compile Include="WindowFinder.cs" />
+    <Compile Include="WindowSequence.cs" />
+    <Compile Include="Native.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WindowInfo.cs" />
+    <Compile Include="WMIProcess.cs" />
+    <Compile Include="Wpf\SystemTrayMenuConfig.xaml.cs">
+      <DependentUpon>SystemTrayMenuConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowWait.xaml.cs">
+      <DependentUpon>WindowWait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowClose.xaml.cs">
+      <DependentUpon>WindowClose.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowResize.xaml.cs">
+      <DependentUpon>WindowResize.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowRestore.xaml.cs">
+      <DependentUpon>WindowRestore.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowSendKeys.xaml.cs">
+      <DependentUpon>WindowSendKeys.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowBringToFront.xaml.cs">
+      <DependentUpon>WindowBringToFront.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowMaximize.xaml.cs">
+      <DependentUpon>WindowMaximize.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowMinimize.xaml.cs">
+      <DependentUpon>WindowMinimize.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowActionControl.xaml.cs">
+      <DependentUpon>WindowActionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowSequenceConfig.xaml.cs">
+      <DependentUpon>WindowSequenceConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WindowMove.xaml.cs">
+      <DependentUpon>WindowMove.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Wpf\SystemTrayMenuConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\WindowWait.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\WindowClose.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\WindowResize.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\WindowRestore.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\WindowSendKeys.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\WindowBringToFront.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\WindowMaximize.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\WindowMinimize.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\WindowActionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\WindowSequenceConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\WindowMove.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
+      <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
+      <Name>MayhemCore</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
+      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
+      <Name>MayhemWpf</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
