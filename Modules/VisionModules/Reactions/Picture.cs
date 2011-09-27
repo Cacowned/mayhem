@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using System.Runtime.Serialization;
 using System.Windows;
 using VisionModules.Wpf;
@@ -239,9 +239,9 @@ namespace VisionModules.Reactions
             SetConfigString();
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format("Save Location: \"{0}\"", folderLocation);
+            return String.Format("Save Location: \"{0}\"", folderLocation);
         }
 
     }

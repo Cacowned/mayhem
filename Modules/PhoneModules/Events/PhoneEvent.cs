@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using System.Windows;
 using PhoneModules.Controls;
 using System.Windows.Controls;
@@ -58,17 +58,17 @@ namespace PhoneModules.Events
             phoneLayout.AddButton(id);
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             PhoneLayoutButton button = phoneLayout.GetByID(id);
             if (button.ImageFile != null && button.ImageFile.Length > 0)
             {
                 FileInfo fi = new FileInfo(button.ImageFile);
-                ConfigString = fi.Name;
+                return fi.Name;
             }
             else
             {
-                ConfigString = button.Text;
+                return button.Text;
             }
         }
 

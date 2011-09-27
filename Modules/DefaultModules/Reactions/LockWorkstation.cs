@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using DefaultModules.Wpf;
 using System.IO;

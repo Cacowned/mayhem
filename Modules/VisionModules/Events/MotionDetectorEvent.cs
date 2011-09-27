@@ -12,7 +12,7 @@ using System;
 using System.Runtime.Serialization;
 using System.Windows;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
 using System.Collections.Generic;
@@ -102,14 +102,14 @@ namespace VisionModules.Events
             }
         }
 
-        protected new void SetConfigString()
+        public string GetConfigString()
         {
             string conf = ""; 
             if (cam != null)
             {
                 conf += "Camera: " + cam.Info.deviceId;
             }
-            ConfigString = conf; 
+            return conf; 
         }
 
         public WpfConfiguration ConfigurationControl

@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using System.Diagnostics;
 

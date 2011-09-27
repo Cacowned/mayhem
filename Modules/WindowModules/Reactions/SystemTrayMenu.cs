@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using System.IO;
 using WindowModules.Wpf;
@@ -99,9 +99,9 @@ namespace WindowModules.Reactions
             }
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = text;
+            return text;
         }
         
         #region Configuration Views

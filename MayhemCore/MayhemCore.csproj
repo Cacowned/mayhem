@@ -55,6 +55,7 @@
     <Compile Include="ModuleType.cs" />
     <Compile Include="ModuleTypeResolver.cs" />
     <Compile Include="ModuleTypes\ICli.cs" />
+    <Compile Include="ModuleTypes\IConfigurable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactionBase.cs" />
     <Compile Include="ReactionList.cs" />

@@ -17,7 +17,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Windows;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
 using System.Diagnostics;
@@ -97,7 +97,7 @@ namespace VisionModules.Events
             lastFacesDetectedAmount = nrFacesDetected;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             string config = "";
             if (cam != null)
@@ -110,7 +110,7 @@ namespace VisionModules.Events
                 config += " face";
             else
                 config += " faces";
-            ConfigString = config; 
+            return config; 
         }
 
         public WpfConfiguration ConfigurationControl
