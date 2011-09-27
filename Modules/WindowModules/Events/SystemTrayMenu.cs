@@ -15,7 +15,7 @@ using System.Reflection;
 using System.Windows.Threading;
 using System.Threading;
 
-namespace WindowModules.Reactions
+namespace WindowModules.Events
 {
     [DataContract]
     [MayhemModule("System Tray Menu", "Add a menu into the system tray")]

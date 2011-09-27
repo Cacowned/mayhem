@@ -124,8 +124,8 @@ namespace MayhemCore
             }
         }
 
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext sc)
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
         {
             _Initialize();
             try
@@ -136,11 +136,6 @@ namespace MayhemCore
             {
                 ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
             }
-        }
-
-        [OnDeserialized]
-        private void OnDeserialized(StreamingContext context)
-        {
             SetConfigString();
         }
 
