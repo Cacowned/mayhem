@@ -87,13 +87,8 @@ namespace VisionModules.Wpf
 
             deviceList.SelectedIndex = 0;
 
-
-
             if (i.DeviceCount > 0)
             {
-                // start the camera 0 if it isn't already running
-
-
                 // attach canvases with camera images to camera_preview_panel
                 foreach (Camera c in i.cameras_available)
                 {
