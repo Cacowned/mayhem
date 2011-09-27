@@ -46,22 +46,12 @@ namespace X10Modules.Reactions
 
         private X10Controller x10Controller = null;
 
-        public WpfConfiguration ConfigurationControl
-        {
-            get
-            {
-                Logger.WriteLine("ConfigurationControl");
-                InsteonX10ReactionConfig config = new InsteonX10ReactionConfig();
-                return config;
-            }
-        }
-
-        protected override void  Initialize()
+        protected override void Initialize()
         {
             serial = MayhemSerialPortMgr.instance;
             if (serial.PortExists(this.serialPortName))
             {
-                x10Controller =  X10Controller.ControllerForPortName(serialPortName);
+                x10Controller = X10Controller.ControllerForPortName(serialPortName);
             }
         }
 
@@ -79,7 +69,7 @@ namespace X10Modules.Reactions
             {
                 x10Controller.Dispose();
             }
-            x10Controller =  X10Controller.ControllerForPortName(serialPortName);
+            x10Controller = X10Controller.ControllerForPortName(serialPortName);
         }
 
         public override void Perform()
@@ -88,10 +78,19 @@ namespace X10Modules.Reactions
             x10Controller.X10SendCommand(houseCode, unitCode, commandCode);
         }
 
+        public WpfConfiguration ConfigurationControl
+        {
+            get
+            {
+                Logger.WriteLine("ConfigurationControl");
+                InsteonX10ReactionConfig config = new InsteonX10ReactionConfig();
+                return config;
+            }
+        }
+
         public string GetConfigString()
         {
             return "House: " + houseCode.ToString() + ", Unit: " + unitCode.ToString() + ", Command: " + commandCode.ToString();
         }
-
     }
 }

@@ -69,10 +69,9 @@ namespace VisionModules.Events
         public bool templateConfigured
         {
             get { return od.templateIsSet; }
-            set { }
         }
 
-        protected override void  Initialize()
+        protected override void Initialize()
         {
             if (i == null)
                 i = CameraDriver.Instance;

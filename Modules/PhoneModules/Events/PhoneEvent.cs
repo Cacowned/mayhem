@@ -20,7 +20,7 @@ namespace PhoneModules.Events
     {
         #region Configuration Properties
         [DataMember]
-        private string id = "";
+        private string id = Guid.NewGuid().ToString();
 
         [DataMember]
         private string FormDataForSerialization
@@ -53,7 +53,6 @@ namespace PhoneModules.Events
 
         public PhoneEvent()
         {
-            id = Guid.NewGuid().ToString();
             isCreatingForFirstTime = true;
             phoneLayout.AddButton(id);
         }
