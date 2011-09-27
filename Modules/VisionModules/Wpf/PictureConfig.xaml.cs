@@ -247,7 +247,6 @@ namespace VisionModules.Wpf
             }
         }
 
-        }     
         public override string Title
         {
             get
