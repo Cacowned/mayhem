@@ -34,12 +34,12 @@
             <Label Name="lbl_img_save"></Label>     
             <StackPanel Orientation="Horizontal">
                 <Label>Save to Location: </Label>
-                <TextBox Margin="5 0 0 0" Name="box_current_loc" Text="{Binding location}" MinWidth="240" TextChanged="lbl_current_loc_TextChanged"></TextBox>
+                <TextBox Margin="5 0 0 0" Name="box_current_loc" Text="{Binding location}" MinWidth="240" MaxWidth="240" TextChanged="lbl_current_loc_TextChanged"></TextBox>
                 <Button Name="img_save_button" Click="Button_Click_1" Margin="5 0 0 0">Browse</Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label>File Name Prefix:</Label>
-                <TextBox Margin="6 0 0 0" Name="box_filename_prefix" MinWidth="240" TextChanged="box_filename_prefix_TextChanged">Mayhem</TextBox>
+                <TextBox Margin="6 0 0 0" Name="box_filename_prefix" MinWidth="240" MaxWidth="240" TextChanged="box_filename_prefix_TextChanged">Mayhem</TextBox>
             </StackPanel>
             <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="2">File location is invalid</TextBlock>
             
