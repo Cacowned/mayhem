@@ -33,7 +33,7 @@ namespace VisionModules.Reactions
     {
 
         [DataMember]
-        private string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        private string folderLocation = AppDomain.CurrentDomain.BaseDirectory;
 
         [DataMember]
         private string fileNamePrefix = "Mayhem";
@@ -81,7 +81,13 @@ namespace VisionModules.Reactions
             Logger.WriteLine("SaveImage");
             DateTime now = DateTime.Now;
             // TODO think of a better naming convention
-            string fileName = "Mayhem-Video_" + now.Year + "_" + now.Month + "_" + now.Day + "-" + now.Hour + "_" + now.Minute + "_" + now.Second + ".avi";
+            string fileName = fileNamePrefix  + "_" + 
+                now.Year.ToString("D2") + "_" +
+                now.Month.ToString("D2") + "_" +
+                now.Day.ToString("D2") + "-" +
+                now.Hour.ToString("D2") + "_" +
+                now.Minute.ToString("D2") + "_" +
+                now.Second.ToString("D2") + ".avi";
             string path = this.folderLocation + "\\" + fileName;
             last_video_saved = path;
             Logger.WriteLine("saving file to " + path);
@@ -105,9 +111,8 @@ namespace VisionModules.Reactions
         /// <param name="obj"></param>
         private void v_OnVideoSaved(bool obj)
         {
-            Logger.WriteLine("");
             video_saving = false;
-            MessageBox.Show("Video Saved to: " + last_video_saved);
+            Logger.WriteLine("Video saved successfully to: " + last_video_saved);
         }
 
         /// <summary>
@@ -129,7 +134,6 @@ namespace VisionModules.Reactions
                 {
                     Logger.WriteLine("Recording Video with offset: " + capture_offset_time + "s");
                     Timer t = new Timer(new TimerCallback((object state) => { SaveVideo(); }), this, (int)(capture_offset_time * 1000), Timeout.Infinite);
-
                 }
             }
             else
@@ -147,7 +151,6 @@ namespace VisionModules.Reactions
                 //cam.OnImageUpdated += imageUpdateHandler;
                 if (cam.running == false)
                     cam.StartFrameGrabbing();
-
             }
 
             return true;
