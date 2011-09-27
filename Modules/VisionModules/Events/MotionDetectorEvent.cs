@@ -34,7 +34,7 @@ namespace VisionModules.Events
         private bool firstFrame = true; 
         
         [DataMember]
-        private Rect boundingRect = new Rect(0,0,0,0);
+        private Rect boundingRect;
 
         private MotionDetectorComponent.DetectionHandler motionUpdateHandler;
 
