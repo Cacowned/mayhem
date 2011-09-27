@@ -57,7 +57,9 @@ namespace VisionModules.Wpf
         public delegate void CameraSelectedHandler(Camera c);
         public event CameraSelectedHandler OnCameraSelected;
 
-        public int index = 0; 
+        public int index = 0;
+
+        private static readonly int DEBUG_LEVEL = 0; 
 
         public MultiCameraSelector()
         {
@@ -135,7 +137,6 @@ namespace VisionModules.Wpf
         public void i_OnImageUpdated(object sender, EventArgs e)
         {
             Dispatcher.Invoke(new ImageUpdateHandler(SetCameraImageSource), sender);
-            //SetCameraImageSource();
         }
 
         ///<summary>
@@ -143,7 +144,7 @@ namespace VisionModules.Wpf
         ///</summary>       
         protected virtual void SetCameraImageSource(Camera cam)
         {
-            Logger.WriteLine("New Image on Camera " + cam.index + " : " + cam.Info);
+            Logger.WriteLineIf(DEBUG_LEVEL > 0,"New Image on Camera " + cam.index + " : " + cam.Info);
 
             Bitmap bm = cam.ImageAsBitmap();
             Bitmap shrink = ImageProcessing.ScaleWithFixedSize(bm, preview_width, preview_height);
