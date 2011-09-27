@@ -46,8 +46,14 @@ namespace MayhemOpenCVWrapper.LowLevel
         private int[] contourPoints = new int[1200];
         private List<Point> points = new List<Point>();
 
+        private int width;
+        private int height;
+
         public MotionDetectorComponent(int width, int height)
         {
+            this.width = width;
+            this.height = height;
+
             m = new OpenCVDLL.MotionDetector(width, height);
         }
 
@@ -57,7 +63,62 @@ namespace MayhemOpenCVWrapper.LowLevel
             m.Dispose();
         }
 
+        double? oldAverage = null;
+        double numberOfMotionFrames = 0;
+        double threshold = 0.5;
+
         public override void update_frame(object sender, EventArgs e)
+        {
+            Camera camera = sender as Camera;
+
+            int stride = camera.imageBuffer.Length / height;
+            int bpp = stride / width;
+
+            lock (camera.thread_locker)
+            {
+                double average = 0;
+
+                for (int x = (int)motionBoundaryRect.Left; x < (int)motionBoundaryRect.Right; x++)
+                {
+                    for (int y = (int)motionBoundaryRect.Top; y < (int)motionBoundaryRect.Bottom; y++)
+                    {
+                        average += camera.imageBuffer[x + y * stride];
+                    }
+                }
+
+                average /= camera.imageBuffer.Length;
+
+                double difference = 0;
+
+                if (oldAverage.HasValue)
+                {
+                    difference = Math.Abs(oldAverage.Value - average);
+
+                    if (difference > threshold)
+                    {
+                        if (numberOfMotionFrames == 0)
+                        {
+                            if (OnMotionUpdate != null)
+                                OnMotionUpdate(this, points);
+                        }
+
+                        if(numberOfMotionFrames < 5)
+                            numberOfMotionFrames++;
+                    }
+                    else
+                    {
+                        if(numberOfMotionFrames > 0)
+                            numberOfMotionFrames--;
+                    }
+                }
+
+                oldAverage = average;
+
+                Debug.WriteLine("Average: {0}, Difference: {1}, #Frames: {2}", average, difference, numberOfMotionFrames);
+			}
+        }
+
+       /* public override void update_frame(object sender, EventArgs e)
         {
             Camera camera = sender as Camera;
 
@@ -103,9 +164,9 @@ namespace MayhemOpenCVWrapper.LowLevel
                 points.Add(p2);
             }
 
-            /*
-            if (OnMotionUpdate != null && points.Count() > 0 && frameCount >40)
-                OnMotionUpdate(this, points); */
+            
+            //if (OnMotionUpdate != null && points.Count() > 0 && frameCount >40)
+            //    OnMotionUpdate(this, points); 
 
             // intelligently decide where the motion is
 
@@ -151,7 +212,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 }
             }
             frameCount++;
-        }
+        }*/
 
         /*
          * <summary>
