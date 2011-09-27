@@ -12,7 +12,7 @@ namespace PhidgetModules.Events
     [MayhemModule("Phidget: Proximity Sensor", "Triggers based on object detection")]
     public class Phidget1103IRReflective : OnOffSensorEventBase, IWpfConfigurable
     {
-        protected override void Initialize()
+        public Phidget1103IRReflective()
         {
             BottomThreshold = 0;
             TopThreshold = 100;

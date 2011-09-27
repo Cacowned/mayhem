@@ -25,13 +25,16 @@ namespace PhidgetModules
         protected double CurrentValue { get; set; }
         protected double LastValue { get; set; }
 
-        protected override void Initialize()
+        public OnOffSensorEventBase()
         {
-            base.Initialize();
-
             TopThreshold = 900;
             BottomThreshold = 500;
             OnTurnOn = true;
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
         }
 
         protected override void SensorChange(object sender, SensorChangeEventArgs ex)

@@ -19,49 +19,41 @@ namespace WindowModules
     {
         static readonly ulong TARGETWINDOW = Native.WS_BORDER | Native.WS_VISIBLE;
 
-        private WindowActionInfo actionInfo;
-
         [DataMember]
         public WindowActionInfo ActionInfo
         {
-            get
-            {
-                return actionInfo;
-            }
-            set
-            {
-                actionInfo = value;
-            }
+            get;
+            private set;
         }
 
         private static HashSet<int> processBlackList = new HashSet<int>();
 
         public WindowSequence()
         {
-            actionInfo = new WindowActionInfo();
+            ActionInfo = new WindowActionInfo();
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new WindowSequenceConfig(actionInfo); }
+            get { return new WindowSequenceConfig(ActionInfo); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
             WindowSequenceConfig config = (WindowSequenceConfig)configurationControl;
-            actionInfo = config.ActionInfo;
+            ActionInfo = config.ActionInfo;
         }
 
         public string GetConfigString()
         {
-            return actionInfo.WindowInfo.Title;
+            return ActionInfo.WindowInfo.Title;
         }
 
         public override void Perform()
         {
-            WindowFinder.Find(actionInfo, new WindowFinder.WindowActionResult((hwnd) =>
+            WindowFinder.Find(ActionInfo, new WindowFinder.WindowActionResult((hwnd) =>
                 {
-                    foreach (WindowAction action in actionInfo.WindowActions)
+                    foreach (WindowAction action in ActionInfo.WindowActions)
                     {
                         action.Perform(hwnd);
                         Thread.Sleep(50);

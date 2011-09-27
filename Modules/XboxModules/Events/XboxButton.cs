@@ -19,36 +19,39 @@ namespace XboxModules.Events
 
         #region Configuration
         [DataMember]
-        private Buttons XboxButtons;
+        private Buttons xboxButtons;
 
         [DataMember]
-        private PlayerIndex Player;
+        private PlayerIndex player;
        
         #endregion
 
+        public XboxButton()
+        {
+            player = PlayerIndex.One;
+        }
+
         protected override void Initialize()
         {
-            Player = PlayerIndex.One;
-
             buttonWatcher = ButtonWatcher.Instance;
         }
 
         public string GetConfigString()
         {
-            return XboxButtons.ButtonString();
+            return xboxButtons.ButtonString();
         }
 
         #region Configuration Views
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
-            XboxButtons = ((XboxButtonConfig)configurationControl).ButtonsToSave;
-            buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);
+            buttonWatcher.RemoveCombinationHandler(xboxButtons, OnKeyCombinationActivated);
+            xboxButtons = ((XboxButtonConfig)configurationControl).ButtonsToSave;
+            buttonWatcher.AddCombinationHandler(xboxButtons, OnKeyCombinationActivated);
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new XboxButtonConfig(XboxButtons); }
+            get { return new XboxButtonConfig(xboxButtons); }
         }
         #endregion
 
@@ -65,7 +68,7 @@ namespace XboxModules.Events
 
         public override bool Enable()
         {
-            var state = GamePad.GetState(Player);
+            var state = GamePad.GetState(player);
             if (!state.IsConnected)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.XboxButton_CantEnable);
@@ -73,7 +76,7 @@ namespace XboxModules.Events
             else
             {
                 // If it is connected, lets enable
-                buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);
+                buttonWatcher.AddCombinationHandler(xboxButtons, OnKeyCombinationActivated);
             }
 
             return state.IsConnected;
@@ -81,7 +84,7 @@ namespace XboxModules.Events
 
         public override void Disable()
         {
-            buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
+            buttonWatcher.RemoveCombinationHandler(xboxButtons, OnKeyCombinationActivated);
         }
     }
 }

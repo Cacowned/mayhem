@@ -32,6 +32,15 @@ namespace PhidgetModules.Reaction
         // Instance of the servo class
         private static AdvancedServo advServo;
 
+        public Phidget1066AdvServo()
+        {
+            Position = 50;
+            Index = 0;
+
+            // This is the one we have, so we are just defaulting to it
+            ServoType = ServoServo.ServoType.HITEC_HS322HD;
+        }
+
         protected override void Initialize()
         {
             // Only maintain one instance of the servo 
@@ -46,14 +55,7 @@ namespace PhidgetModules.Reaction
                     servo.Engaged = true;
                     servo.SpeedRamping = false;
                 }
-
             }
-
-            Position = 50;
-            Index = 0;
-
-            // This is the one we have, so we are just defaulting to it
-            ServoType = ServoServo.ServoType.HITEC_HS322HD;
         }
 
         public override void Perform()

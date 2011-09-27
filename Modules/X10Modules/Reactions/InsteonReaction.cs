@@ -9,10 +9,6 @@
  * 
  */
 
-
-// TODO: SERIALIZATION 
-
-
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -45,7 +41,6 @@ namespace X10Modules.Reactions
 
         protected override void Initialize()
         {
-            // basically reintialize the serial connection
             serial = MayhemSerialPortMgr.instance;
             // TODO evaluate is Serial.findInsteonDevices may be 
             if (serial.getInsteonPortNames().Keys.Contains(portName))
@@ -56,7 +51,6 @@ namespace X10Modules.Reactions
 
         public override void Perform()
         {
-            //throw new NotImplementedException();
             insteonController.SendStandardMsg(command);
         }
 
@@ -64,7 +58,6 @@ namespace X10Modules.Reactions
         {
             get 
             {
-                //throw new NotImplementedException();
                 Logger.WriteLine("ConfigurationControl");
                 return new InsteonReactionConfig();
             }

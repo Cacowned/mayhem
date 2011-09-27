@@ -32,12 +32,15 @@ namespace DefaultModules.Events
 
         #endregion
 
+        public KeyPress()
+        {
+            MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
+        }
+
         protected override void Initialize()
         {
             interceptKeys = InterceptKeys.Instance;
             mainThread = Thread.CurrentThread;
-
-            MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
         }
 
         public string GetConfigString()
