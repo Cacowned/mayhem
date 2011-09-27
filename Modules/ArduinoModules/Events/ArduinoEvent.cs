@@ -7,14 +7,14 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using System.Diagnostics;
 using ArduinoModules.Wpf;
@@ -23,16 +23,15 @@ using MayhemSerial;
 using ArduinoModules.Firmata;
 
 namespace ArduinoModules.Events
-{ 
+{
     [DataContract]
     [MayhemModule("Arduino Event", "**Testing** Detects Pin Changes in Arduino")]
     public class ArduinoEvent : EventBase, IWpfConfigurable
     {
-       
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
-       
-        private ArduinoFirmata arduino = null; 
-   
+
+        private ArduinoFirmata arduino = null;
+
         private Action<Pin> OnDigitalPinChanged; // = new Action<Pin>(arduino_OnDigitalPinChanged);
         private Action<Pin> OnAnalogPinChanged; // = new Action<Pin>(arduino_OnAnalogPinChanged);
 
@@ -48,22 +47,15 @@ namespace ArduinoModules.Events
         [DataMember]
         private List<AnalogPinItem> monitorAnalogPins = new List<AnalogPinItem>();
 
-        public ArduinoEvent()
-        {
-            Init(new StreamingContext());
-        }
-
-        [OnDeserialized]
-        private void Init(StreamingContext s)
+        protected override void Initialize()
         {
             if (arduinoPortName != String.Empty)
             {
                 arduino = ArduinoFirmata.InstanceForPortname(arduinoPortName);
             }
-            
-            OnDigitalPinChanged = new Action<Pin>(arduino_OnDigitalPinChanged);
-             OnAnalogPinChanged  = new Action<Pin>(arduino_OnAnalogPinChanged);
 
+            OnDigitalPinChanged = new Action<Pin>(arduino_OnDigitalPinChanged);
+            OnAnalogPinChanged = new Action<Pin>(arduino_OnAnalogPinChanged);
         }
 
         public WpfConfiguration ConfigurationControl
@@ -73,8 +65,8 @@ namespace ArduinoModules.Events
                 Logger.WriteLine("ConfigurationControl");
 
                 // TODO
-  
-                ArduinoEventConfig config = new ArduinoEventConfig(monitorDigitalPins, monitorAnalogPins);           
+
+                ArduinoEventConfig config = new ArduinoEventConfig(monitorDigitalPins, monitorAnalogPins);
                 return config;
             }
         }
@@ -97,7 +89,6 @@ namespace ArduinoModules.Events
 
         public override void Disable()
         {
-            base.Disable();
             if (arduino != null)
             {
                 arduino.OnAnalogPinChanged -= OnAnalogPinChanged;
@@ -107,9 +98,9 @@ namespace ArduinoModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-           
+
             ArduinoEventConfig config = configurationControl as ArduinoEventConfig;
-            arduinoPortName = config.arduinoPortName; 
+            arduinoPortName = config.arduinoPortName;
             arduino = ArduinoFirmata.InstanceForPortname(arduinoPortName);
             List<DigitalPinItem> digitalPinsMonitor = new List<DigitalPinItem>();
             List<AnalogPinItem> analogPinsMonitor = new List<AnalogPinItem>();
@@ -126,9 +117,9 @@ namespace ArduinoModules.Events
                 foreach (DigitalPinItem p in config.digital_pin_items)
                 {
                     if (p.Selected)
-                    {     
+                    {
                         // TODO: arduino.FlagPin(p)
-                        digitalPinsMonitor.Add(p);                       
+                        digitalPinsMonitor.Add(p);
                     }
                 }
 
@@ -140,18 +131,14 @@ namespace ArduinoModules.Events
                 }
 
                 monitorAnalogPins = analogPinsMonitor;
-                monitorDigitalPins = digitalPinsMonitor; 
-             
+                monitorDigitalPins = digitalPinsMonitor;
+
                 if (enabled)
                 {
                     arduino.OnAnalogPinChanged += OnAnalogPinChanged;
-                    arduino.OnDigitalPinChanged += OnDigitalPinChanged; 
+                    arduino.OnDigitalPinChanged += OnDigitalPinChanged;
                 }
-
             }
-
-
-
         }
 
         /// <summary>
@@ -169,12 +156,11 @@ namespace ArduinoModules.Events
                 base.Trigger();
                 lastActivated = DateTime.Now;
             }
-            
         }
 
         public void arduino_OnDigitalPinChanged(Pin p)
         {
-            if (this.Enabled)
+            if (Enabled)
             {
                 foreach (DigitalPinItem d in monitorDigitalPins)
                 {
@@ -253,6 +239,12 @@ namespace ArduinoModules.Events
                     }
                 }
             }
+        }
+
+        public string GetConfigString()
+        {
+            ///TODO: Sven: Put the right thing here
+            throw new Exception("Sven: fill this in");
         }
     }
 }

@@ -23,7 +23,6 @@ namespace OfficeModules.Reactions
                 ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
                 Logger.Write(e);
             }
-
             return false;
         }
 

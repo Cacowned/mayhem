@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using System.Runtime.Serialization;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
@@ -84,12 +84,6 @@ namespace VisionModules.Events
         }
 
         protected override void Initialize()
-        {
-            Initialize(new StreamingContext());
-        }
-
-        [OnDeserialized]
-        protected void Initialize(StreamingContext  s)
         {
             Logger.WriteLine("Enumerating Devices");
 
@@ -228,12 +222,12 @@ namespace VisionModules.Events
             }
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             string config = "Sensitivity: " + sensitivity_percent;
             if (cam != null)
                 config += ", Cam Nr: " + cam.Info.deviceId;
-            ConfigString = config; 
+            return config; 
         }
     }
 }

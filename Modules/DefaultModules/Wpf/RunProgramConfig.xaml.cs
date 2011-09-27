@@ -19,8 +19,6 @@ namespace DefaultModules.Wpf
             private set;
         }
 
-        private bool shouldCheckValidity = false;
-
         public RunProgramConfig(string filename, string arguments)
         {
             this.Filename = filename;
@@ -38,16 +36,17 @@ namespace DefaultModules.Wpf
         {
             LocationBox.Text = Filename;
             ArgumentsBox.Text = Arguments;
+        }
 
-            shouldCheckValidity = true;
+        public override void OnSave()
+        {
+            Filename = LocationBox.Text;
+            Arguments = ArgumentsBox.Text;
         }
 
         private void CheckValidity()
         {
-            Filename = LocationBox.Text;
-            Arguments = ArgumentsBox.Text;
-
-            CanSave = Filename.Length > 0 && File.Exists(Filename);
+            CanSave = LocationBox.Text.Length > 0 && File.Exists(LocationBox.Text);
         }
 
         // Browse for file
@@ -66,12 +65,9 @@ namespace DefaultModules.Wpf
 
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (shouldCheckValidity)
-            {
-                CheckValidity();
+            CheckValidity();
 
-                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-            }
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

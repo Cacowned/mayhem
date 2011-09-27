@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Linq;
 using System.Text;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using WindowModules.Wpf;
 using System.Diagnostics;
@@ -52,9 +52,9 @@ namespace WindowModules
             actionInfo = config.ActionInfo;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = actionInfo.WindowInfo.Title;
+            return actionInfo.WindowInfo.Title;
         }
 
         public override void Perform()

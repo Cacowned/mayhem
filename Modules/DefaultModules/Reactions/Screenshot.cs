@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using DefaultModules.Wpf;
 using System.IO;
@@ -19,18 +19,12 @@ namespace DefaultModules.Reactions
     public class Screenshot : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string saveLocation;
+        private string saveLocation = AppDomain.CurrentDomain.BaseDirectory;
 
         [DataMember]
-        private string filenamePrefix;
+        private string filenamePrefix = "Mayhem";
 
         int startIndex;
-
-        public Screenshot()
-        {
-            saveLocation = AppDomain.CurrentDomain.BaseDirectory;
-            filenamePrefix = "Mayhem";
-        }
 
         protected override void Initialize()
         {
@@ -76,6 +70,11 @@ namespace DefaultModules.Reactions
             bmpScreenShot.Save(filename, ImageFormat.Jpeg);
             bmpScreenShot.Dispose();
             startIndex++;
+        }
+
+        public string GetConfigString()
+        {
+            return Path.Combine(saveLocation, filenamePrefix+"*.jpg");
         }
         
         #region Configuration Views

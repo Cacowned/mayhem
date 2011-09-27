@@ -17,7 +17,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using MayhemSerial;
 using X10Modules.Insteon;
@@ -30,7 +30,7 @@ namespace X10Modules.Reactions
     [MayhemModule("InsteonReaction", "Triggers Insteon Commands")]
     public class InsteonReaction : ReactionBase, IWpfConfigurable
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
+        private MayhemSerialPortMgr serial;
 
         [DataMember]
         private byte[] device_address = new byte[3];
@@ -40,13 +40,10 @@ namespace X10Modules.Reactions
 
         [DataMember]
         private string portName = string.Empty;
-
         
         private InsteonController insteonController = null;
 
-
-        [OnDeserialized]
-        public void OnLoad(StreamingContext s)
+        protected override void Initialize()
         {
             // basically reintialize the serial connection
             serial = MayhemSerialPortMgr.instance;
@@ -55,7 +52,6 @@ namespace X10Modules.Reactions
             {
                 insteonController = InsteonController.ControllerForPortName(portName); //new InsteonController(portName);
             }
-            SetConfigString();
         }
 
         public override void Perform()
@@ -82,16 +78,15 @@ namespace X10Modules.Reactions
             byte command_byte = c.selected_command;
             command = new InsteonStandardMessage(device_address, command_byte);
             insteonController = InsteonController.ControllerForPortName(portName);
-            SetConfigString();
         }
 
         
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             string config = String.Format("Device: {0:x2}:{1:x2}:{2:x2}", device_address[0], device_address[1], device_address[2]);
             if (command != null)
                 config += ", Command: " + command.ToString();
-            ConfigString = config;
+            return config;
         }
     }
 }

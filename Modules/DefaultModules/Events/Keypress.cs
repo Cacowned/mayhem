@@ -7,7 +7,7 @@ using System.Windows.Threading;
 using DefaultModules.KeypressHelpers;
 using DefaultModules.Wpf;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 
 namespace DefaultModules.Events
@@ -40,7 +40,7 @@ namespace DefaultModules.Events
             MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             StringBuilder b = new StringBuilder();
 
@@ -56,7 +56,7 @@ namespace DefaultModules.Events
                 }
             }
 
-            ConfigString = "Keys: " + b.ToString();
+            return "Keys: " + b.ToString();
         }
 
         #region Configuration Views

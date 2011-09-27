@@ -137,17 +137,13 @@ namespace VisionModules.Wpf
                     preview_width = width;
                     preview_height = height;
 
-
                     // the camera previews are drawn onto an ImageBrush, which is shown in the 
                     // background of the DataTemplate
 
                     camera_previews.Add(new ImageBrush());
-
-
                 }
 
                 camera_preview_panel.ItemsSource = camera_previews;
-
             }
             else
             {
@@ -196,9 +192,7 @@ namespace VisionModules.Wpf
         ///
         public void i_OnImageUpdated(object sender, EventArgs e)
         {
-
             Dispatcher.Invoke(new ImageUpdateHandler(SetCameraImageSource), sender);
-            //SetCameraImageSource();
         }
 
         ///<summary>
@@ -253,11 +247,7 @@ namespace VisionModules.Wpf
             }
         }
 
-        public override void OnCancel()
-        {
-            OnClosing();
         }     
-
         public override string Title
         {
             get

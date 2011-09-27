@@ -5,8 +5,9 @@ using System.Runtime.Serialization;
 using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using MayhemCore.ModuleTypes;
 
 namespace DefaultModules.Reactions
 {
@@ -88,9 +89,9 @@ namespace DefaultModules.Reactions
 
         #endregion
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format(CultureInfo.CurrentCulture, "{0}", SoundPath);
+            return String.Format(CultureInfo.CurrentCulture, "{0}", SoundPath);
         }
     }
 }

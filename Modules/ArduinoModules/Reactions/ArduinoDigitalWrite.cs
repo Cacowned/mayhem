@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using System.Runtime.Serialization;
 using ArduinoModules.Wpf;
@@ -27,7 +27,6 @@ namespace ArduinoModules.Reactions
     [MayhemModule("Arduino Digital Write", "Writes logic values to a set of digital pins on the Arduino.")]
     public class ArduinoDigitalWrite : ReactionBase, IWpfConfigurable
     {
-
         [DataMember]
         private List<DigitalPinWriteItem> writePins = new List<DigitalPinWriteItem>();
         [DataMember]
@@ -37,6 +36,13 @@ namespace ArduinoModules.Reactions
         private const int pulse_time = 20;                          // ms pulse time. 
                                                                     // TODO: evaluate if this may be required to
                                                                     // be set by the user
+        protected override void Initialize()
+        {
+            if (arduinoPortName != String.Empty)
+            {
+                arduino = ArduinoFirmata.InstanceForPortname(arduinoPortName);
+            }
+        }
 
         public override void Perform()
         {
@@ -66,15 +72,6 @@ namespace ArduinoModules.Reactions
                         TogglePin(p);
                     }
                 }
-            }
-        }
-
-        [OnDeserialized]
-        private void Init(StreamingContext s)
-        {
-            if (arduinoPortName != String.Empty)
-            {
-                arduino = ArduinoFirmata.InstanceForPortname(arduinoPortName);
             }
         }
 
@@ -172,6 +169,10 @@ namespace ArduinoModules.Reactions
             }
         }
 
-        public ArduinoDigitalWrite() { }
+        public string GetConfigString()
+        {
+            ///TODO: Sven: Put the right thing here
+            throw new Exception("Sven: fill this in");
+        }
     }
 }

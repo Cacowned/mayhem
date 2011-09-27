@@ -137,13 +137,11 @@ namespace VisionModules.Wpf
 
         public override void OnClosing()
         {
-            base.OnClosing();
             camera_selector.OnClosing();
         }
 
         public override void OnSave()
         {
-            base.OnSave();
             camera_selected_ = camera_selector.selected_camera; 
         }
 

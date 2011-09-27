@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using Phidgets;
 using PhidgetModules.Wpf;
 using System.Windows;
@@ -51,7 +51,7 @@ namespace PhidgetModules.Events
             OnWhenOn = ((PhidgetDigitalInputConfig)configurationControl).OnWhenOn;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             string type = "turns on";
             if (!OnWhenOn)
@@ -59,7 +59,7 @@ namespace PhidgetModules.Events
                 type = "turns off";
             }
 
-            ConfigString = String.Format("Triggers when input #{0} {1}", Index, type);
+            return String.Format("Triggers when input #{0} {1}", Index, type);
         }
 
         // The input has changed, do the work here
@@ -100,7 +100,6 @@ namespace PhidgetModules.Events
             {
                 ifKit.InputChange -= inputChangeHandler;
             }
-
         }
     }
 }

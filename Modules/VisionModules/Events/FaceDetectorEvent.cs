@@ -17,7 +17,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Windows;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
 using System.Diagnostics;
@@ -49,16 +49,7 @@ namespace VisionModules.Events
         [DataMember]
         private int triggerOnNrOfFaces = 1;
 
-        public FaceDetectorEvent()
-        {
-            Init(new StreamingContext());
-        }
-      
-         /** <summary>
-         * Called when deserialized / on instantiation
-         * </summary> */
-        [OnDeserialized]
-        protected void Init(StreamingContext sc)
+        protected override void Initialize()
         {
             if (i == null)
                 i = CameraDriver.Instance;
@@ -74,7 +65,6 @@ namespace VisionModules.Events
 
             fd = new FaceDetectorComponent();
             faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetectUpdate);
-            SetConfigString();
         }
 
         void m_onFaceDetectUpdate(object sender, List<System.Drawing.Point> points)
@@ -97,7 +87,7 @@ namespace VisionModules.Events
             lastFacesDetectedAmount = nrFacesDetected;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
             string config = "";
             if (cam != null)
@@ -110,7 +100,7 @@ namespace VisionModules.Events
                 config += " face";
             else
                 config += " faces";
-            ConfigString = config; 
+            return config; 
         }
 
         public WpfConfiguration ConfigurationControl

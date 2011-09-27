@@ -5,8 +5,9 @@ using System.Windows.Threading;
 using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using MayhemCore.ModuleTypes;
 
 namespace DefaultModules.Events
 {
@@ -38,9 +39,9 @@ namespace DefaultModules.Events
             Trigger();
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format(CultureInfo.CurrentCulture, Strings.Timer_ConfigString, Hours, Minutes, Seconds);
+            return String.Format(CultureInfo.CurrentCulture, Strings.Timer_ConfigString, Hours, Minutes, Seconds);
         }
 
         #region Configuration Views
