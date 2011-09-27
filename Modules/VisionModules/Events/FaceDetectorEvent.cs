@@ -20,11 +20,12 @@ namespace VisionModules.Events
     public class FaceDetectorEvent : EventBase, IWpfConfigurable
     {
         private const int detectionInterval = 2500; //ms
-        private DateTime lastFacesDetected = DateTime.Now;
+        private DateTime lastFacesDetectedTime = DateTime.Now;
         private FaceDetectorComponent fd;
         private FaceDetectorComponent.DetectionHandler faceDetectUpdateHandler;
         private CameraDriver i = CameraDriver.Instance;
         private Camera cam = null;
+        private int lastFacesDetectedAmount = 0; 
 
         // the cam we have selected
         [DataMember]
@@ -60,21 +61,28 @@ namespace VisionModules.Events
             }
 
             fd = new FaceDetectorComponent();
-            faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetected);
+            faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetectUpdate);
             SetConfigString();
         }
 
-        void m_onFaceDetected(object sender, List<System.Drawing.Point> points)
+        void m_onFaceDetectUpdate(object sender, List<System.Drawing.Point> points)
         {
             // number of faces is points.Size() / 4
-            TimeSpan ts = DateTime.Now - lastFacesDetected;
+            // as each faces is returned with its own bounding box
+            int nrFacesDetected = points.Count / 2;
+            Logger.WriteLine("m_onFaceDetected: count " + nrFacesDetected);   
+            TimeSpan ts = DateTime.Now - lastFacesDetectedTime;
             if (points.Count > 0 && ts.TotalMilliseconds > detectionInterval)
             {
-                Logger.WriteLine("m_onFaceDetected");
-                base.Trigger();
-
-                lastFacesDetected = DateTime.Now;
+                // only trigger if the lastFacesDetectedAmount was smaller than the trigger threshold
+                // and only if the number of faces detected this time is greater or equal then the trigger threshold
+                if (lastFacesDetectedAmount < triggerOnNrOfFaces && nrFacesDetected >= triggerOnNrOfFaces)
+                {                
+                    base.Trigger();
+                }
+                lastFacesDetectedTime = DateTime.Now;             
             }
+            lastFacesDetectedAmount = nrFacesDetected;
         }
 
         public override void SetConfigString()
@@ -119,8 +127,8 @@ namespace VisionModules.Events
                 cam.StartFrameGrabbing();
                 // register the trigger's faceDetection update handler
                 fd.RegisterForImages(cam);
-                fd.OnFaceDetected -= m_onFaceDetected;
-                fd.OnFaceDetected += m_onFaceDetected;
+                fd.OnFaceDetected -= m_onFaceDetectUpdate;
+                fd.OnFaceDetected += m_onFaceDetectUpdate;
             }
             return true;
         }
@@ -130,7 +138,7 @@ namespace VisionModules.Events
             Logger.WriteLine("");       
             if (!IsConfiguring && cam != null)
             {
-                fd.OnFaceDetected -= m_onFaceDetected;
+                fd.OnFaceDetected -= m_onFaceDetectUpdate;
                 fd.UnregisterForImages(cam); 
                 // de-register the trigger's faceDetection update handler                
                 // try to shut down the camera           
