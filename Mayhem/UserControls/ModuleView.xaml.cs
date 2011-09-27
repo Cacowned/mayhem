@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using System.Diagnostics;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;

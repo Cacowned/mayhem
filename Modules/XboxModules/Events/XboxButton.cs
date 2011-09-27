@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -33,9 +33,9 @@ namespace XboxModules.Events
             buttonWatcher = ButtonWatcher.Instance;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = XboxButtons.ButtonString();
+            return XboxButtons.ButtonString();
         }
 
         #region Configuration Views

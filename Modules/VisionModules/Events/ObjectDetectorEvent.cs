@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using Point = System.Drawing.Point;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
@@ -176,9 +176,9 @@ namespace VisionModules.Events
             }
         }
 
-        protected new void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format("Configuration Message");
+            return "Configuration Message";
         }
 
         public WpfConfiguration ConfigurationControl

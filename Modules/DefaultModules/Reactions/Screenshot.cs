@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using DefaultModules.Wpf;
 using System.IO;
@@ -75,6 +75,11 @@ namespace DefaultModules.Reactions
             filename = Path.Combine(saveLocation, filename);
             bmpScreenShot.Save(filename, ImageFormat.Jpeg);
             startIndex++;
+        }
+
+        public string GetConfigString()
+        {
+            return Path.Combine(saveLocation, filenamePrefix+"*.jpg");
         }
         
         #region Configuration Views

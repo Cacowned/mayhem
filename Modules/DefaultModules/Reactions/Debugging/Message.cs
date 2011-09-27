@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Runtime.Serialization;
 using DefaultModules.Wpf;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 
 namespace DefaultModules.Reactions
@@ -25,9 +25,9 @@ namespace DefaultModules.Reactions
             MessageText = ((DebugMessageConfig)configurationControl).Message;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = MessageText;
+            return MessageText;
         }
 
         public WpfConfiguration ConfigurationControl
