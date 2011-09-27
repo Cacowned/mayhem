@@ -11,8 +11,6 @@ namespace DefaultModules.Wpf
             private set;
         }
 
-        private bool shouldCheckValidity = false;
-
         public TextToSpeechConfig(string message)
         {
             this.Message = message;
@@ -28,25 +26,23 @@ namespace DefaultModules.Wpf
         public override void OnLoad()
         {
             MessageBox.Text = this.Message;
+        }
 
-            shouldCheckValidity = true;
+        public override void OnSave()
+        {
+            Message = MessageBox.Text.Trim();
         }
 
         private void CheckValidity()
         {
-            Message = MessageBox.Text.Trim();
-
-            CanSave = Message.Length > 0;
+            CanSave = MessageBox.Text.Trim().Length > 0;
         }
 
         private void MessageText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (shouldCheckValidity)
-            {
-                CheckValidity();
+            CheckValidity();
 
-                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-            }
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

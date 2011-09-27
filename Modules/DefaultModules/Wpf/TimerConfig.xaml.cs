@@ -22,8 +22,6 @@ namespace DefaultModules.Wpf
             private set;
         }
 
-        private bool shouldCheckValidity = false;
-
         public TimerConfig(int hours, int minutes, int seconds)
         {
             this.Hours = hours;
@@ -43,8 +41,13 @@ namespace DefaultModules.Wpf
             HoursBox.Text = Hours.ToString();
             MinutesBox.Text = Minutes.ToString();
             SecondsBox.Text = Seconds.ToString();
+        }
 
-            shouldCheckValidity = true;
+        public override void OnSave()
+        {
+            Seconds = int.Parse(SecondsBox.Text);
+            Minutes = int.Parse(MinutesBox.Text);
+            Hours = int.Parse(HoursBox.Text);
         }
 
         private string CheckValidity()
@@ -78,29 +81,14 @@ namespace DefaultModules.Wpf
             if (badtotal && !(badsec || badmin || badhour))
                 s = "Timer length must be greater than 0.";
 
-            if (badsec || badmin || badhour || badtotal)
-            {
-                CanSave = false;
-                return s;
-            }
-            else
-            {
-                Seconds = seconds;
-                Minutes = minutes;
-                Hours = hours;
-
-                CanSave = true;
-                return string.Empty;
-            }
+            CanSave = !(badsec || badmin || badhour || badtotal);
+            return CanSave ? "" : s;
         }
 
         private void TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (shouldCheckValidity)
-            {
-                textInvalid.Text = CheckValidity();
-                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-            }
+            textInvalid.Text = CheckValidity();
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

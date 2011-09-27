@@ -99,6 +99,10 @@ namespace WindowModules.Reactions
             }
         }
 
+        public override void SetConfigString()
+        {
+            ConfigString = text;
+        }
         
         #region Configuration Views
 
