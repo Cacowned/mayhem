@@ -73,7 +73,7 @@ namespace X10Modules.Insteon
         public bool X10SendHouseCommand(X10HouseCode houseCode, X10CommandCode command)
         {
             // throw exception if not initialized
-            if (this.initialized == false) throw new NotInitializedException();
+            //if (this.initialized == false) throw new NotInitializedException();
 
             byte[] buf = new byte[4];
             // preamble for insteon modules and tail
@@ -108,7 +108,7 @@ namespace X10Modules.Insteon
         public bool X10SendCommand(X10HouseCode houseCode, X10UnitCode unitCode, X10CommandCode command)
         {
             // throw exception if not intialized
-            if (this.initialized == false) throw new NotInitializedException();
+            //if (this.initialized == false) throw new NotInitializedException();
 
             // set house/unit, then house/command
             byte[] buf1 = new byte[4];
