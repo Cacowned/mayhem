@@ -66,7 +66,6 @@ namespace VisionModules.Wpf
         {
             this.location = location;
             slider_value = capture_offset_time;
-            this.DataContext = this;
 
             InitializeComponent();
         }
@@ -92,8 +91,6 @@ namespace VisionModules.Wpf
 
             if (i.DeviceCount > 0)
             {
-                // Response timeout for the camera
-                Thread.Sleep(350);
                 // start the camera 0 if it isn't already running
 
 
@@ -106,7 +103,12 @@ namespace VisionModules.Wpf
                     if (!c.running)
                     {
                         c.OnImageUpdated += i_OnImageUpdated;
-                        c.StartFrameGrabbing();
+                        ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+                        {
+                            // Response timeout for the camera
+                            //Thread.Sleep(350);
+                            c.StartFrameGrabbing();
+                        }));
                         Logger.WriteLine("using " + c.Info.ToString());
                         Logger.WriteLine("Camera IDX " + c.index);
                     }
