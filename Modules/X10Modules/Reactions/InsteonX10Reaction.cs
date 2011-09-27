@@ -63,7 +63,6 @@ namespace X10Modules.Reactions
             {
                 x10Controller =  X10Controller.ControllerForPortName(serialPortName);
             }
-            SetConfigString();
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
@@ -81,7 +80,6 @@ namespace X10Modules.Reactions
                 x10Controller.Dispose();
             }
             x10Controller =  X10Controller.ControllerForPortName(serialPortName);
-            SetConfigString();
         }
 
         public override void Perform()

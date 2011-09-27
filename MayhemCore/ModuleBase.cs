@@ -159,6 +159,7 @@ namespace MayhemCore
                 handler(this, new PropertyChangedEventArgs(name));
             }
         }
+
         public void SetConfigString() 
         {
             if (this is IConfigurable)
