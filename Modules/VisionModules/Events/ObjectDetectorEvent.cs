@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using Point = System.Drawing.Point;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
@@ -69,20 +69,9 @@ namespace VisionModules.Events
         public bool templateConfigured
         {
             get { return od.templateIsSet; }
-            set { }
         }
 
-        public ObjectDetectorEvent()
-        {
-            InitMe(new StreamingContext());
-        }
-
-        /// <summary>
-        /// Called before (!!)  Deserialization / Instantiation
-        /// </summary>
-        /// 
-        [OnDeserialized]
-        public void InitMe(StreamingContext s)
+        protected override void Initialize()
         {
             if (i == null)
                 i = CameraDriver.Instance;
@@ -176,9 +165,9 @@ namespace VisionModules.Events
             }
         }
 
-        protected new void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format("Configuration Message");
+            return "Configuration Message";
         }
 
         public WpfConfiguration ConfigurationControl

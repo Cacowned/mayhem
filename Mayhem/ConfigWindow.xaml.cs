@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Windows;
-using MayhemCore;
-using MayhemCore.ModuleTypes;
-using MayhemWpf.UserControls;
 using System.Windows.Threading;
+using MayhemCore;
+using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
 
 namespace Mayhem
 {

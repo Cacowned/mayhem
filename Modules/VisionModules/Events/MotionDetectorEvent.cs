@@ -12,7 +12,7 @@ using System;
 using System.Runtime.Serialization;
 using System.Windows;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
 using System.Collections.Generic;
@@ -45,18 +45,7 @@ namespace VisionModules.Events
         [DataMember]
         private int selected_device_idx;
 
-
-        public MotionDetector()
-        {
-            Init(new StreamingContext());
-        }
-
-        /// <summary>
-        /// Called on instantiation / deserialized
-        /// </summary>
-        /// <param name="s"></param>
-        [OnDeserialized]
-        protected void Init(StreamingContext s)
+        protected override void Initialize()
         {
             Logger.WriteLine("Enumerating Devices");
 
@@ -79,8 +68,6 @@ namespace VisionModules.Events
             {
                 m.SetMotionBoundaryRect(boundingRect);
             }
-
-            SetConfigString();
         }
 
         private void m_OnMotionUpdate(object sender, List<System.Drawing.Point> points)
@@ -102,14 +89,14 @@ namespace VisionModules.Events
             }
         }
 
-        protected new void SetConfigString()
+        public string GetConfigString()
         {
             string conf = ""; 
             if (cam != null)
             {
                 conf += "Camera: " + cam.Info.deviceId;
             }
-            ConfigString = conf; 
+            return conf; 
         }
 
         public WpfConfiguration ConfigurationControl
@@ -149,8 +136,6 @@ namespace VisionModules.Events
 
             if (wasEnabled)
                 this.Enable();
-
-            SetConfigString();
         }
 
         public override bool Enable()

@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using System.Runtime.Serialization;
 using System.Windows;
 using VisionModules.Wpf;
@@ -46,36 +46,15 @@ namespace VisionModules.Reactions
         private CameraDriver i = CameraDriver.Instance;
         private ImagerBase cam;
 
-        public Camera.ImageUpdateHandler imageUpdateHandler;
-
        
 
         // the temporal offset of the picture to be saved
         [DataMember]
         private double capture_offset_time = 0.0;
 
-        public Picture()
+        protected override void  Initialize()
         {
-            Setup();
-        }
-
-        [OnDeserialized]
-        public void Deserialize(StreamingContext s)
-        {
-            Setup();
-        }
-
         
-
-        public void camera_update(object sender, EventArgs e)
-        {
-
-        }
-
-        public void Setup()
-        {
-            imageUpdateHandler = new Camera.ImageUpdateHandler(camera_update);
-
             if (i == null)
             {
                 i = CameraDriver.Instance;
@@ -85,8 +64,6 @@ namespace VisionModules.Reactions
             {
                 cam = i.cameras_available[selected_device_idx];
             }
-
-            SetConfigString();
         }
 
         /// <summary>
@@ -117,8 +94,6 @@ namespace VisionModules.Reactions
             if (!IsConfiguring && selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
-                cam.OnImageUpdated -= imageUpdateHandler;
-                cam.OnImageUpdated += imageUpdateHandler;
                 //Thread.Sleep(350);
                 cam.StartFrameGrabbing();
             }
@@ -131,7 +106,6 @@ namespace VisionModules.Reactions
             base.Disable();
             if (!IsConfiguring && cam != null)
             {
-                cam.OnImageUpdated -= imageUpdateHandler;
                 cam.TryStopFrameGrabbing();
             }
             //Thread.Sleep(350); 
@@ -209,8 +183,6 @@ namespace VisionModules.Reactions
             }
         }
 
-        
-
         public void OnSaved(WpfConfiguration configurationControl)
         {
             PictureConfig config = configurationControl as PictureConfig;
@@ -219,16 +191,11 @@ namespace VisionModules.Reactions
 
             bool wasEnabled = this.Enabled;
 
-            //if (this.Enabled)
-            //    this.Disable();
             if (config.deviceList.HasItems)
             {
                 // assign selected cam
                 cam = config.deviceList.SelectedItem as Camera;
                 selected_device_idx = config.deviceList.SelectedIndex;
-
-                //   if (wasEnabled)
-                //       this.Enable();
             }
             else
             {
@@ -236,13 +203,11 @@ namespace VisionModules.Reactions
                 cam = new DummyCamera();
             }
             capture_offset_time = config.slider_value;
-            SetConfigString();
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format("Save Location: \"{0}\"", folderLocation);
+            return String.Format("Save Location: \"{0}\"", folderLocation);
         }
-
     }
 }

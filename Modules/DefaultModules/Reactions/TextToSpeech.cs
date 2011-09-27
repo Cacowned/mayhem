@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using SpeechLib;
 
@@ -45,9 +45,9 @@ namespace DefaultModules.Reactions
             Message = ((TextToSpeechConfig)configurationControl).Message;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format(CultureInfo.CurrentCulture, Strings.TextToSpeech_ConfigString, Message);
+            return String.Format(CultureInfo.CurrentCulture, Strings.TextToSpeech_ConfigString, Message);
         }
     }
 }

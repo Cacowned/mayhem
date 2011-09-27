@@ -1,36 +1,39 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using MayhemWpf.UserControls;
 
-namespace DefaultModules.Wpf
+namespace WindowModules.Wpf
 {
-    public partial class TextToSpeechConfig : WpfConfiguration
+    /// <summary>
+    /// Interaction logic for DebugMessageConfig.xaml
+    /// </summary>
+    public partial class SystemTrayMenuConfig : WpfConfiguration
     {
-        public string Message
-        {
-            get;
+        public string Text
+        { 
+            get; 
             private set;
         }
 
-        public TextToSpeechConfig(string message)
+        public SystemTrayMenuConfig(string message)
         {
-            this.Message = message;
-
+            this.Text = message;
             InitializeComponent();
         }
 
         public override string Title
         {
-            get { return "Text To Speech"; }
+            get { return "System Tray Menu"; }
         }
 
         public override void OnLoad()
         {
-            MessageBox.Text = this.Message;
+            MessageBox.Text = this.Text;
         }
 
         public override void OnSave()
         {
-            Message = MessageBox.Text.Trim();
+            Text = MessageBox.Text.Trim();
         }
 
         private void CheckValidity()
@@ -38,7 +41,7 @@ namespace DefaultModules.Wpf
             CanSave = MessageBox.Text.Trim().Length > 0;
         }
 
-        private void MessageText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void MessageText_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
 

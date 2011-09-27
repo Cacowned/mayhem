@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using PhidgetModules.Wpf.UserControls;
@@ -50,9 +50,9 @@ namespace PhidgetModules.Events
             }
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format("Index {0}, between {1} and {2} cm", Index, TopValue.ToString("0.##"), BottomValue.ToString("0.##"));
+            return String.Format("Index {0}, between {1} and {2} cm", Index, TopValue.ToString("0.##"), BottomValue.ToString("0.##"));
         }
     }
 }

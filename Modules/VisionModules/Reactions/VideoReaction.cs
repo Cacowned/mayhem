@@ -17,7 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemOpenCVWrapper;
 using System.IO;
 using System.Windows;
@@ -31,7 +31,6 @@ namespace VisionModules.Reactions
     [MayhemModule("Video", "Records an avi video of the camera scene before or after an event has fired")]
     public class VideoReaction : ReactionBase, IWpfConfigurable
     {
-
         [DataMember]
         private string folderLocation = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -55,13 +54,7 @@ namespace VisionModules.Reactions
 
         private bool video_saving = false;
 
-        public VideoReaction()
-        {
-            Setup(new StreamingContext());
-        }
-
-        [OnDeserialized]
-        public void Setup(StreamingContext s)
+        protected override void Initialize()
         {
             Logger.WriteLine("");
             if (i == null)
@@ -74,6 +67,11 @@ namespace VisionModules.Reactions
                 Logger.WriteLine("Startup with camera " + selected_device_idx);
                 cam = i.cameras_available[selected_device_idx];
             }
+        }
+
+        public string GetConfigString()
+        {
+            return folderLocation;
         }
 
         public void SaveVideo()

@@ -14,8 +14,6 @@ namespace DefaultModules.Wpf
             private set;
         }
 
-        private bool shouldCheckValidity = false;
-
         public PlaySoundConfig(string filename)
         {
             this.FileName = filename;
@@ -30,8 +28,11 @@ namespace DefaultModules.Wpf
         public override void OnLoad()
         {
             LocationBox.Text = FileName;
+        }
 
-            shouldCheckValidity = true;
+        public override void OnSave()
+        {
+            FileName = LocationBox.Text;
         }
 
         // Browse for file
@@ -45,26 +46,20 @@ namespace DefaultModules.Wpf
 
             if (dlg.ShowDialog() == true)
             {
-                FileName = dlg.FileName;
                 LocationBox.Text = FileName;
             }
         }
 
-        private bool CheckValidity()
+        private void CheckValidity()
         {
             CanSave = File.Exists(FileName);
-
-            return CanSave;
         }
 
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (shouldCheckValidity)
-            {
-                CheckValidity();
+            CheckValidity();
 
-                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-            }
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

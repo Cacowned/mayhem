@@ -16,7 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using MayhemSerial;
 using System.Diagnostics;
@@ -30,7 +30,7 @@ namespace X10Modules.Reactions
     [MayhemModule("X10Reaction", "Triggers X10 Commands")]
     public class InsteonX10Reaction : ReactionBase, IWpfConfigurable
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
+        private MayhemSerialPortMgr serial;
 
         [DataMember]
         private X10HouseCode houseCode = X10HouseCode.A;
@@ -46,26 +46,13 @@ namespace X10Modules.Reactions
 
         private X10Controller x10Controller = null;
 
-        public WpfConfiguration ConfigurationControl
+        protected override void Initialize()
         {
-            get
-            {
-                Logger.WriteLine("ConfigurationControl");
-                InsteonX10ReactionConfig config = new InsteonX10ReactionConfig();
-                return config;
-            }
-        }
-
-        [OnDeserialized]
-        public void OnLoad(StreamingContext s)
-        {
-            // basically reintialize the serial connection
             serial = MayhemSerialPortMgr.instance;
             if (serial.PortExists(this.serialPortName))
             {
-                x10Controller =  X10Controller.ControllerForPortName(serialPortName);
+                x10Controller = X10Controller.ControllerForPortName(serialPortName);
             }
-            SetConfigString();
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
@@ -82,8 +69,7 @@ namespace X10Modules.Reactions
             {
                 x10Controller.Dispose();
             }
-            x10Controller =  X10Controller.ControllerForPortName(serialPortName);
-            SetConfigString();
+            x10Controller = X10Controller.ControllerForPortName(serialPortName);
         }
 
         public override void Perform()
@@ -92,11 +78,19 @@ namespace X10Modules.Reactions
             x10Controller.X10SendCommand(houseCode, unitCode, commandCode);
         }
 
-        public override void SetConfigString()
+        public WpfConfiguration ConfigurationControl
         {
-            string config = "House: " + houseCode.ToString() + ", Unit: " + unitCode.ToString() + ", Command: " + commandCode.ToString();
-            ConfigString = config; 
+            get
+            {
+                Logger.WriteLine("ConfigurationControl");
+                InsteonX10ReactionConfig config = new InsteonX10ReactionConfig();
+                return config;
+            }
         }
 
+        public string GetConfigString()
+        {
+            return "House: " + houseCode.ToString() + ", Unit: " + unitCode.ToString() + ", Command: " + commandCode.ToString();
+        }
     }
 }

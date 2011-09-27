@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using MayhemCore.ModuleTypes;
 
 namespace MayhemCore
 {
@@ -45,7 +46,7 @@ namespace MayhemCore
             {
                 return _configString;
             }
-            set
+            private set
             {
                 _configString = value;
                 OnPropertyChanged("ConfigString");
@@ -159,6 +160,12 @@ namespace MayhemCore
             }
         }
 
-        public virtual void SetConfigString() { }
+        public void SetConfigString() 
+        {
+            if (this is IConfigurable)
+            {
+                ConfigString = ((IConfigurable)this).GetConfigString();
+            }
+        }
     }
 }

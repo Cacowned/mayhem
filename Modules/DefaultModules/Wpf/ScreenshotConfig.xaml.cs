@@ -41,6 +41,12 @@ namespace DefaultModules.Wpf
             textBoxPrefix.Text = FilenamePrefix;
         }
 
+        public override void OnSave()
+        {
+            SaveLocation = textBoxDirectory.Text;
+            FilenamePrefix = textBoxPrefix.Text;
+        }
+
         private void CheckValidity()
         {
             CanSave = true;
@@ -60,12 +66,6 @@ namespace DefaultModules.Wpf
                 CanSave = false;
             }
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        public override void OnSave()
-        {
-            SaveLocation = textBoxDirectory.Text;
-            FilenamePrefix = textBoxPrefix.Text;
         }
 
         // Browse for file

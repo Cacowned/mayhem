@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 
 namespace DefaultModules.Reactions
@@ -75,9 +75,9 @@ namespace DefaultModules.Reactions
             return false;
         }
 
-        public override void SetConfigString()
+        public string GetConfigString()
         {
-            ConfigString = String.Format(CultureInfo.CurrentCulture, Strings.RunProgram_ConfigString, Path.GetFileName(FileName), Arguments);
+            return String.Format(CultureInfo.CurrentCulture, Strings.RunProgram_ConfigString, Path.GetFileName(FileName), Arguments);
         }
     }
 }
