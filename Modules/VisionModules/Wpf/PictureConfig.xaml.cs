@@ -75,17 +75,28 @@ namespace VisionModules.Wpf
         public PictureConfig(string location, string prefix,  double capture_offset_time)
         {
             this.SaveLocation = location;
+            FilenamePrefix = prefix;
+            // directory and prefix boxes
+           
             slider_value = capture_offset_time;
-            FilenamePrefix = prefix; 
-
+            
             InitializeComponent();
+            
+            
         }
 
         public override void OnLoad()
         {
-            // populate device list
+            Init();
+        }
 
-            box_current_loc.Text = SaveLocation;
+        public  void Init()
+        {
+            // populate device list
+            this.box_current_loc.Text = SaveLocation;
+            this.box_filename_prefix.Text = FilenamePrefix;
+
+            CheckValidity();
 
             Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
 
@@ -143,9 +154,6 @@ namespace VisionModules.Wpf
                 Logger.WriteLine("No camera available");
             }
 
-
-
-
             // capture offset slider
             int capture_size_s = Camera.LOOP_DURATION / 1000;
             slider_capture_offset.Minimum = -capture_size_s;
@@ -169,12 +177,7 @@ namespace VisionModules.Wpf
             slider_capture_offset.SmallChange = 0.5;
             slider_capture_offset.LargeChange = 1.0;
             slider_capture_offset.Value = slider_value;
-            //
-
-            // directory and prefix boxes
-            box_current_loc.Text = SaveLocation;
-            box_filename_prefix.Text = FilenamePrefix; 
-           
+            //          
             CanSave = true;
         }
 
@@ -253,14 +256,7 @@ namespace VisionModules.Wpf
         public override void OnCancel()
         {
             OnClosing();
-        }
-
-        public override void OnSave()
-        {
-            selected_camera = deviceList.SelectedItem as Camera;
-
-            OnClosing();
-        }
+        }     
 
         public override string Title
         {
@@ -275,20 +271,24 @@ namespace VisionModules.Wpf
             CanSave = true;
             if (!(box_current_loc.Text.Length > 0 && Directory.Exists(box_current_loc.Text)))
             {
-                textInvalid.Text = "Invalid save location";
+                if (textInvalid != null)
+                    textInvalid.Text = "Invalid save location";
                 CanSave = false;
             }
             else if (box_current_loc.Text.Length == 0)
             {
-                textInvalid.Text = "You must enter a filename prefix";
+                if (textInvalid != null)
+                    textInvalid.Text = "You must enter a filename prefix";
                 CanSave = false;
             }
-            else if (box_current_loc.Text.Length > 20)
+            else if (box_current_loc.Text.Length > 100)
             {
-                textInvalid.Text = "Filename prefix is too long";
+                if (textInvalid != null)
+                    textInvalid.Text = "Filename prefix is too long";
                 CanSave = false;
             }
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            if (textInvalid != null)
+                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public override void OnSave()
@@ -363,13 +363,15 @@ namespace VisionModules.Wpf
         private void lbl_current_loc_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            if (textInvalid != null)
+                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void box_filename_prefix_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            if (textInvalid != null)
+                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

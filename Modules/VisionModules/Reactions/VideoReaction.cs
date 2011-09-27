@@ -36,6 +36,9 @@ namespace VisionModules.Reactions
         private string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 
         [DataMember]
+        private string fileNamePrefix = "Mayhem";
+
+        [DataMember]
         private int selected_device_idx = 0;
 
         [DataMember]
@@ -162,7 +165,7 @@ namespace VisionModules.Reactions
         {
             get
             {
-                return new VideoConfig(folderLocation, capture_offset_time);
+                return new VideoConfig(folderLocation, fileNamePrefix, capture_offset_time);
             }
         }
 
@@ -175,6 +178,7 @@ namespace VisionModules.Reactions
             VideoConfig config = configurationControl as VideoConfig;
             folderLocation = config.SaveLocation;
             compress = config.compress_video;
+            fileNamePrefix = config.FilenamePrefix; 
 
             if (config.deviceList.HasItems)
             {

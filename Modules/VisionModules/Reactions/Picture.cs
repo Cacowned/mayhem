@@ -34,13 +34,13 @@ namespace VisionModules.Reactions
     {
         // default to "My Documents" folder
         [DataMember]
-        private string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        private string folderLocation = AppDomain.CurrentDomain.BaseDirectory;
 
         [DataMember]
         private int selected_device_idx = 0;
 
         [DataMember]
-        private string fileNamePrefix; 
+        private string fileNamePrefix = "Mayhem"; 
 
         // The device we are recording from
         private CameraDriver i = CameraDriver.Instance;
