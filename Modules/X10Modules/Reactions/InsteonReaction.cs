@@ -52,7 +52,6 @@ namespace X10Modules.Reactions
             {
                 insteonController = InsteonController.ControllerForPortName(portName); //new InsteonController(portName);
             }
-            SetConfigString();
         }
 
         public override void Perform()
@@ -79,7 +78,6 @@ namespace X10Modules.Reactions
             byte command_byte = c.selected_command;
             command = new InsteonStandardMessage(device_address, command_byte);
             insteonController = InsteonController.ControllerForPortName(portName);
-            SetConfigString();
         }
 
         

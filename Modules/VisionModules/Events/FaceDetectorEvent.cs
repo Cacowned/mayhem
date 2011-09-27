@@ -65,7 +65,6 @@ namespace VisionModules.Events
 
             fd = new FaceDetectorComponent();
             faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetectUpdate);
-            SetConfigString();
         }
 
         void m_onFaceDetectUpdate(object sender, List<System.Drawing.Point> points)

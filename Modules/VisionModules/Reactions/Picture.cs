@@ -197,7 +197,6 @@ namespace VisionModules.Reactions
                 cam = new DummyCamera();
             }
             capture_offset_time = config.slider_value;
-            SetConfigString();
         }
 
         public string GetConfigString()
