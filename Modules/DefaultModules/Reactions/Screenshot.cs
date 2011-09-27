@@ -19,7 +19,7 @@ namespace DefaultModules.Reactions
     public class Screenshot : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string saveLocation = AppDomain.CurrentDomain.BaseDirectory;
+        private string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
         [DataMember]
         private string filenamePrefix = "Mayhem";

@@ -32,7 +32,7 @@ namespace VisionModules.Reactions
     public class VideoReaction : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string folderLocation = AppDomain.CurrentDomain.BaseDirectory;
+        private string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
         [DataMember]
         private string fileNamePrefix = "Mayhem";

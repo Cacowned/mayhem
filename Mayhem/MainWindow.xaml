@@ -172,8 +172,8 @@
                                 </TextBlock.Effect>
                             </TextBlock>
                             <StackPanel Orientation="Horizontal">
-                                <Button Name="buttonEmptyEvent" Content="Create Event" Foreground="#DDDDDD" FontWeight="DemiBold" FontSize="18" Style="{StaticResource EmptyEventButton}" Width="178" Height="46" Click="EventListClick" Margin="0,0,0,0" Focusable="False" Cursor="Hand" />
-                            <Button Name="buttonEmptyReaction" Content="Create Reaction" FontFamily="Segoe UI" Foreground="#DDDDDD" FontWeight="DemiBold"  FontSize="18" Style="{StaticResource EmptyReactionButton}" Width="178" Height="46" Click="ReactionListClick" Margin="10,0,0,0" Focusable="False" Cursor="Hand" />
+                                <Button Name="buttonEmptyEvent" Content="Create Event" FontFamily="Segoe UI" Foreground="#DDDDDD" FontWeight="DemiBold" FontSize="18" Style="{StaticResource EmptyEventButton}" Width="178" Height="46" Click="EventListClick" Margin="0,0,0,0" Focusable="False" Cursor="Hand" />
+                                <Button Name="buttonEmptyReaction" Content="Create Reaction" FontFamily="Segoe UI" Foreground="#DDDDDD" FontWeight="DemiBold"  FontSize="18" Style="{StaticResource EmptyReactionButton}" Width="178" Height="46" Click="ReactionListClick" Margin="10,0,0,0" Focusable="False" Cursor="Hand" />
                             </StackPanel>
                         </StackPanel>
 
