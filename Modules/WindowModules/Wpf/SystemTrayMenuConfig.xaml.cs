@@ -31,14 +31,14 @@ namespace WindowModules.Wpf
             MessageBox.Text = this.Text;
         }
 
-        private void CheckValidity()
-        {
-            CanSave = MessageBox.Text.Trim().Length > 0;
-        }
-
         public override void OnSave()
         {
             Text = MessageBox.Text.Trim();
+        }
+
+        private void CheckValidity()
+        {
+            CanSave = MessageBox.Text.Trim().Length > 0;
         }
 
         private void MessageText_TextChanged(object sender, TextChangedEventArgs e)
