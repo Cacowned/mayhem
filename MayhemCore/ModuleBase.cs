@@ -53,7 +53,7 @@ namespace MayhemCore
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string _configString;
-        public string ConfigString
+        internal string ConfigString
         {
             get
             {
