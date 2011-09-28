@@ -5,9 +5,9 @@ using System.Windows.Threading;
 using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
+using MayhemCore.ModuleTypes;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using MayhemCore.ModuleTypes;
 
 namespace DefaultModules.Events
 {

@@ -7,17 +7,12 @@
  *  
  *  Author: Sven Kratz
  * 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using System.Threading;
-using System.Runtime.InteropServices;
-using MayhemCore;
 using System.Collections.ObjectModel;
+using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {

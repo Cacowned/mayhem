@@ -7,19 +7,18 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Windows;
 using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
-using System.Collections.Generic;
-using System.Diagnostics;
-using MayhemWpf.UserControls;
 using MayhemOpenCVWrapper.LowLevel;
-using System.Threading;
+using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
+using VisionModules.Wpf;
 
 namespace VisionModules.Events
 {

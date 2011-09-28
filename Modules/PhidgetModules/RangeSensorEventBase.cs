@@ -1,6 +1,5 @@
 ﻿using System.Runtime.Serialization;
 using Phidgets.Events;
-using System;
 
 namespace PhidgetModules
 {

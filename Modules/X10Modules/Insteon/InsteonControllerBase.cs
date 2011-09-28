@@ -8,17 +8,10 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemSerial;
 using System.Threading;
-using System.Diagnostics;
-using System.IO.Ports;
-using System.Runtime.CompilerServices;
-using X10Modules.Insteon;
+using MayhemSerial;
 
 namespace X10Modules
 {

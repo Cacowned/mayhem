@@ -11,16 +11,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
+using ArduinoModules.Firmata;
+using ArduinoModules.Wpf;
 using MayhemCore;
+using MayhemSerial;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Diagnostics;
-using ArduinoModules.Wpf;
-using System.Runtime.Serialization;
-using MayhemSerial;
-using ArduinoModules.Firmata;
 
 namespace ArduinoModules.Events
 {

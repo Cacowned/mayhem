@@ -7,28 +7,20 @@
  * 
  *  Author: Sven Kratz
  * 
- */ 
+ */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemOpenCVWrapper;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Drawing;
-using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
 using MayhemCore;
-using System.Threading;
+using MayhemOpenCVWrapper;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace VisionModules.Wpf
 {

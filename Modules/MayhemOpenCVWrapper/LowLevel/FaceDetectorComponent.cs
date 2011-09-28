@@ -8,19 +8,14 @@
  *  
  *  Author: Sven Kratz
  *  
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Point = System.Drawing.Point;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-using MayhemOpenCVWrapper;
-using OpenCVDLL;
 using System.Windows;
 using MayhemCore;
+using OpenCVDLL;
+using Point = System.Drawing.Point;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {

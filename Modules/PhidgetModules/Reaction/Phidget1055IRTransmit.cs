@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Windows;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using Phidgets;
 using MayhemWpf.UserControls;
+using Phidgets;
 
 namespace PhidgetModules.Reaction
 {

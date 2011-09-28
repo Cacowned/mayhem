@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +11,6 @@ using MayhemCore;
 using MayhemWpf.UserControls;
 using MessagingToolkit.QRCode.Codec;
 using PhoneModules.Controls;
-using System.Threading;
 
 namespace PhoneModules.Wpf
 {

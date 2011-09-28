@@ -12,18 +12,14 @@
  * 
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
-using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using MayhemOpenCVWrapper;
 using System.IO;
-using System.Windows;
-using VisionModules.Wpf;
-using MayhemWpf.UserControls;
+using System.Runtime.Serialization;
 using System.Threading;
+using MayhemCore;
+using MayhemOpenCVWrapper;
+using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
+using VisionModules.Wpf;
 
 namespace VisionModules.Reactions
 {

@@ -9,28 +9,19 @@
  * Author: Sven Kratz
  * 
  * 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemWpf.UserControls;
-using MayhemSerial;
-using X10Modules.Insteon;
-using System.Diagnostics;
-using System.Threading;
 using MayhemCore;
-using System.Timers;
+using MayhemSerial;
+using MayhemWpf.UserControls;
+using X10Modules.Insteon;
 
 namespace X10Modules.Wpf
 {

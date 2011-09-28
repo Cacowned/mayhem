@@ -13,20 +13,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using Point = System.Drawing.Point;
-using VisionModules.Wpf;
-using MayhemOpenCVWrapper;
-using MayhemOpenCVWrapper.LowLevel;
-using MayhemWpf.UserControls;
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Windows;
-using System.Collections;
+using MayhemCore;
+using MayhemOpenCVWrapper;
+using MayhemOpenCVWrapper.LowLevel;
+using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
+using VisionModules.Wpf;
+using Point = System.Drawing.Point;
 
 namespace VisionModules.Events
 {

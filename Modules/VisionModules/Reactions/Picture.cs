@@ -10,21 +10,15 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using System.Runtime.Serialization;
-using System.Windows;
-using VisionModules.Wpf;
-using MayhemOpenCVWrapper;
 using System.Drawing;
-using System.Diagnostics;
-using MayhemWpf.UserControls;
-using System.Timers;
-using System.Threading;
 using System.Drawing.Imaging;
+using System.Runtime.Serialization;
+using System.Timers;
+using MayhemCore;
+using MayhemOpenCVWrapper;
+using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
+using VisionModules.Wpf;
 
 namespace VisionModules.Reactions
 {

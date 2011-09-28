@@ -1,12 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
-using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using System.Diagnostics;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
-using System;
 using System.Windows.Media.Effects;
+using MayhemCore;
+using MayhemWpf.ModuleTypes;
 
 namespace Mayhem.UserControls
 {

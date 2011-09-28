@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
-using MayhemCore;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using XboxModules.Resources;
 
 namespace XboxModules
 {

@@ -8,26 +8,23 @@
  * 
  */
 
-using System.Windows;
-using System.Windows.Forms;
-using MayhemOpenCVWrapper;
-using System.Diagnostics;
-using System.Drawing;
 using System;
-using MayhemWpf.UserControls;
-using System.Runtime.InteropServices;
-using System.Windows.Media.Imaging;
 using System.Collections.Generic;
-using System.Windows.Controls;
 using System.Collections.ObjectModel;
-using System.Windows.Media;
-using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
-using System.Windows.Data;
-using System.Windows.Controls.Primitives;
-using MayhemCore;
-using System.Threading;
+using System.Drawing;
 using System.IO;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using MayhemCore;
+using MayhemOpenCVWrapper;
+using MayhemWpf.UserControls;
+using Brushes = System.Windows.Media.Brushes;
 namespace VisionModules.Wpf
 {
 
