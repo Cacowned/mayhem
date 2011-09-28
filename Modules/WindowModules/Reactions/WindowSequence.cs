@@ -12,8 +12,6 @@ namespace WindowModules
     [MayhemModule("Window Sequence", "Window Sequence")]
     public class WindowSequence : ReactionBase, IWpfConfigurable
     {
-        static readonly ulong TARGETWINDOW = Native.WS_BORDER | Native.WS_VISIBLE;
-
         [DataMember]
         public WindowActionInfo ActionInfo
         {
