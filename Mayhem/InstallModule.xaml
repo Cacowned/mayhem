@@ -1,0 +1,31 @@
+﻿<Window x:Class="Mayhem.InstallModule"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:src="clr-namespace:Mayhem.UserControls"
+		xmlns:common="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+        Title="InstallModule" Width="500" Height="380">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+    </Window.Resources>
+    <StackPanel Style="{StaticResource BackgroundGradient}">
+        <src:MayhemHeader />
+        <common:Borders Margin="0,5,0,0">
+            <StackPanel>
+                <TextBlock>Install <Run Name="ModuleName" />?</TextBlock>
+                <ProgressBar Height="10" Name="Progress" Margin="10" Minimum="0" Maximum="100" />
+                <ListBox Margin="5,10,5,10" Height="100" Name="listBox1" />
+                <Grid HorizontalAlignment="Center" Margin="0 0 0 20">
+                    <StackPanel Name="stackPanelDefaultButtons" Orientation="Horizontal" >
+                        <Button Name="buttonInstall" Width="50" Height="30" Click="Install_Click">Install</Button>
+                        <Button Name="buttonCancel" Margin="10,0,0,0" Width="50" Height="30" Click="Cancel_Click">Cancel</Button>
+                    </StackPanel>
+                    <Button Name="buttonClose" Width="50" Height="30" Click="Close_Click" Visibility="Hidden">Close</Button>
+                </Grid>
+            </StackPanel>
+        </common:Borders>
+    </StackPanel>
+</Window>

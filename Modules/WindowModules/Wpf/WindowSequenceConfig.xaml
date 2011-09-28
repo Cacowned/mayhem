@@ -1,0 +1,43 @@
+﻿<src:WpfConfiguration x:Class="WindowModules.Wpf.WindowSequenceConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             xmlns:my="clr-namespace:WindowModules.Wpf"
+             Width="500" >
+
+    <Grid>
+        <StackPanel>
+            <TextBlock TextAlignment="Center">Select the window you want to control</TextBlock>
+            <Grid>
+                <CheckBox Name="checkBoxApplication" VerticalAlignment="Center" IsChecked="True" />
+                <TextBlock FontSize="14" VerticalAlignment="Center" Margin="20,0,0,0">Application:</TextBlock>
+                <TextBox Name="textBoxApplication" Margin="110,0,0,0" FontSize="14" TextChanged="textBox_TextChanged" />
+            </Grid>
+            <Grid Margin="0,5,0,0">
+                <CheckBox Name="checkBoxTitle" VerticalAlignment="Center" IsChecked="True" />
+                <TextBlock FontSize="14" VerticalAlignment="Center" Margin="20,0,0,0">Window Title:</TextBlock>
+                <TextBox Name="textBoxWindowTitle" Margin="110,0,0,0" FontSize="14" TextChanged="textBox_TextChanged" />
+            </Grid>
+            <Separator></Separator>
+            <TextBlock TextAlignment="Center">Select the actions to take</TextBlock>
+            <StackPanel Name="stackPanelActions">
+                
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <ComboBox Name="comboBoxActions" Width="150" Margin="0,0,20,0" SelectedIndex="0">
+                    <ComboBoxItem Content="---" />
+                    <ComboBoxItem Content="Bring to front" />
+                    <ComboBoxItem Content="Close" />
+                    <ComboBoxItem Content="Maximize" />
+                    <ComboBoxItem Content="Minimize" />
+                    <ComboBoxItem Content="Move" />
+                    <ComboBoxItem Content="Resize" />
+                    <ComboBoxItem Content="Restore" />
+                    <ComboBoxItem Content="Send keys" />
+                    <ComboBoxItem Content="Wait" />
+                </ComboBox>
+                <Button Content="Add" Width="50" Click="ButtonAdd_Click" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</src:WpfConfiguration>
