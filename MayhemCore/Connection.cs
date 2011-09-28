@@ -25,7 +25,7 @@ namespace MayhemCore
         /// The event that this connection is using
         /// </summary>
         [DataMember]
-        internal EventBase Event
+        public EventBase Event
         {
             get;
             private set; 
@@ -35,7 +35,7 @@ namespace MayhemCore
         /// The reaction that this connection is using
         /// </summary>
         [DataMember]
-        internal ReactionBase Reaction
+        public ReactionBase Reaction
         {
             get;
             private set;
