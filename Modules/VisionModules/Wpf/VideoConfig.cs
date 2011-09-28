@@ -11,21 +11,21 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 using MayhemOpenCVWrapper;
+using VisionModules.Reactions;
+using System;
 
 namespace VisionModules.Wpf
 {
     public class VideoConfig : PictureConfig
     {
-
-       
-        private enum VIDEO_RECORDING_MODE
-        {
-            PRE_EVENT = 0,                                        // record 30s prior to the event
-            POST_EVENT = Camera.LOOP_DURATION / 1000,             // record 30s after event
-            MID_EVENT = (Camera.LOOP_DURATION / 1000) / 2         // record 15s before and 15s after the event
-        }
-
+    
         private CheckBox compress;
+
+        public VIDEO_RECORDING_MODE RecordingMode
+        {
+            get;
+            private set;
+        }
 
         private const int video_duration_s = Camera.LOOP_DURATION / 1000; 
 
@@ -39,13 +39,7 @@ namespace VisionModules.Wpf
         private ComboBox cbx_time_offset;
 
 
-        public int temporal_offset
-        {
-            get
-            {
-                return (int) cbx_time_offset.SelectedValue;
-            }
-        }
+        
 
         public bool compress_video
         {
@@ -62,10 +56,31 @@ namespace VisionModules.Wpf
             }
         }
 
-        public  VideoConfig(string location, string prefix,  double capture_offset_time, int deviceIdx) : base(location, prefix,  capture_offset_time, deviceIdx)
+        public VideoConfig(string location, string prefix, VIDEO_RECORDING_MODE recordingMode, int deviceIdx)
+            : base(location, prefix, 0, deviceIdx)
             
-        {      
+        {
+            RecordingMode = recordingMode; 
             Init();
+        }
+
+
+        public override void OnLoad()
+        {
+            base.OnLoad();
+
+            switch (RecordingMode)
+            {
+                case VIDEO_RECORDING_MODE.MID_EVENT:
+                    cbx_time_offset.SelectedIndex = 0;
+                    break;
+                case VIDEO_RECORDING_MODE.PRE_EVENT:
+                    cbx_time_offset.SelectedIndex = 1;
+                    break;
+                case VIDEO_RECORDING_MODE.POST_EVENT:
+                    cbx_time_offset.SelectedIndex = 2;
+                    break;
+            }
         }
 
         /// <summary>
@@ -74,17 +89,15 @@ namespace VisionModules.Wpf
         public new void Init()
         {
             cbx_time_offset = new ComboBox();
-
             slider_panel.Children.Remove(slider_capture_offset);
-
-            
-
+         
             cbx_time_offset.ItemsSource = checkbox_items;
             cbx_time_offset.SelectedValuePath = "Value";
             cbx_time_offset.DisplayMemberPath = "Key";
             cbx_time_offset.Width = 300;
             cbx_time_offset.SelectedIndex = 0;
             slider_panel.Children.Add(cbx_time_offset);
+            cbx_time_offset.SelectionChanged += new SelectionChangedEventHandler(cbx_time_offset_SelectionChanged);
             
             /**** old code using the slider (may be revived at some point) 
             slider_capture_offset.Minimum = 0;
@@ -102,6 +115,12 @@ namespace VisionModules.Wpf
             compress.Margin = new System.Windows.Thickness(5, 0, 0, 0);
 
             slider_panel.Children.Add(compress);
+        }
+
+        void cbx_time_offset_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //throw new System.NotImplementedException();
+            RecordingMode = (VIDEO_RECORDING_MODE) cbx_time_offset.SelectedValue;
         }
 
         public override string Title
