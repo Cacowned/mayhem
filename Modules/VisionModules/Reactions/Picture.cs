@@ -28,7 +28,7 @@ namespace VisionModules.Reactions
     {
         // default to "My Documents" folder
         [DataMember]
-        private string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+        private string folderLocation = AppDomain.CurrentDomain.BaseDirectory;
 
         [DataMember]
         private int selected_device_idx = 0;
@@ -171,8 +171,7 @@ namespace VisionModules.Reactions
         {
             get
             {
-                PictureConfig config = new PictureConfig(folderLocation, fileNamePrefix, capture_offset_time);
-                config.deviceList.SelectedIndex = selected_device_idx;
+                PictureConfig config = new PictureConfig(folderLocation, fileNamePrefix, capture_offset_time, selected_device_idx);
                 return config;
             }
         }
@@ -185,11 +184,13 @@ namespace VisionModules.Reactions
 
             bool wasEnabled = this.IsEnabled;
 
-            if (config.deviceList.HasItems)
+            int camera_index = config.SelectedDeviceIdx; 
+
+            if (i.cameras_available.Count > camera_index)
             {
                 // assign selected cam
-                cam = config.deviceList.SelectedItem as Camera;
-                selected_device_idx = config.deviceList.SelectedIndex;
+                cam = i.cameras_available[camera_index];
+                selected_device_idx = camera_index;
             }
             else
             {
