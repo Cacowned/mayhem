@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
+using MayhemWpf.UserControls;
 using Phidgets;
 using Phidgets.Events;
-using MayhemWpf.UserControls;
 
 namespace PhidgetModules.Reaction
 {

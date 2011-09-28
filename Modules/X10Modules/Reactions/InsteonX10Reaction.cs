@@ -10,19 +10,13 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 using MayhemCore;
+using MayhemSerial;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using MayhemSerial;
-using System.Diagnostics;
-using X10Modules.Wpf;
 using X10Modules.Insteon;
-using System.Threading;
+using X10Modules.Wpf;
 
 namespace X10Modules.Reactions
 {

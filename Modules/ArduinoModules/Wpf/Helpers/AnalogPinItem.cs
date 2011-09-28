@@ -13,12 +13,8 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ArduinoModules.Firmata;
 using System.Runtime.Serialization;
+using ArduinoModules.Firmata;
 
 namespace ArduinoModules.Wpf
 {

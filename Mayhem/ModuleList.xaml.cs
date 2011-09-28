@@ -10,7 +10,6 @@ using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Diagnostics;
 
 namespace Mayhem
 {

@@ -2,12 +2,10 @@
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using Phidgets;
-using PhidgetModules.Wpf;
-using System.Windows;
-using Phidgets.Events;
-using System.Windows.Controls;
 using MayhemWpf.UserControls;
+using PhidgetModules.Wpf;
+using Phidgets;
+using Phidgets.Events;
 
 namespace PhidgetModules.Events
 {

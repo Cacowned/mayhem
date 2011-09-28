@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Deployment.Application;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Deployment.Application;
-using System.Threading;
 
 namespace Mayhem
 {

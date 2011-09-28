@@ -10,16 +10,14 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
+using System.Timers;
+using ArduinoModules.Firmata;
+using ArduinoModules.Wpf;
+using ArduinoModules.Wpf.Helpers;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Runtime.Serialization;
-using ArduinoModules.Wpf;
-using ArduinoModules.Wpf.Helpers;
-using ArduinoModules.Firmata;
-using System.Timers;
 
 namespace ArduinoModules.Reactions
 {

@@ -13,15 +13,11 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemSerial;
-using System.IO.Ports;
-using System.Diagnostics;
-using System.Threading;
 using System.ComponentModel;
-using Timer = System.Timers.Timer;
+using System.Linq;
 using MayhemCore;
+using MayhemSerial;
+using Timer = System.Timers.Timer;
 
 
 namespace ArduinoModules.Firmata

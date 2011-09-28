@@ -1,8 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using MayhemWpf.UserControls;
 using Microsoft.Xna.Framework.Input;
 using XboxModules.Events;
-using System;
 
 namespace XboxModules.Wpf
 {

@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using System.Windows;
-using PhoneModules.Controls;
-using System.Windows.Controls;
 using MayhemWpf.UserControls;
-using System.IO;
+using PhoneModules.Controls;
 using PhoneModules.Wpf;
 
 namespace PhoneModules.Events

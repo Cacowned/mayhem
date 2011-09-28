@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization;
+using System.Threading;
+using System.Windows.Forms;
+using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.IO;
 using WindowModules.Wpf;
-using System.Reflection;
-using System.Windows.Threading;
-using System.Threading;
 
 namespace WindowModules.Events
 {

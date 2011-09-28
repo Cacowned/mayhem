@@ -7,13 +7,10 @@
  * Derives from PictureConfig.cs, so check out the xaml there 
  * 
  * 
- */ 
-using System;
+ */
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemOpenCVWrapper;
 using System.Windows.Controls;
+using MayhemOpenCVWrapper;
 
 namespace VisionModules.Wpf
 {
