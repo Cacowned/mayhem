@@ -28,7 +28,7 @@ namespace VisionModules.Reactions
     public class VideoReaction : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+        private string folderLocation = AppDomain.CurrentDomain.BaseDirectory;
 
         [DataMember]
         private string fileNamePrefix = "Mayhem";
@@ -162,7 +162,7 @@ namespace VisionModules.Reactions
         {
             get
             {
-                return new VideoConfig(folderLocation, fileNamePrefix, capture_offset_time);
+                return new VideoConfig(folderLocation, fileNamePrefix, capture_offset_time, selected_device_idx);
             }
         }
 
@@ -174,16 +174,19 @@ namespace VisionModules.Reactions
 
             VideoConfig config = configurationControl as VideoConfig;
             folderLocation = config.SaveLocation;
-            compress = config.compress_video;
-            fileNamePrefix = config.FilenamePrefix; 
+            compress = config.compress_video;       
+            fileNamePrefix = config.FilenamePrefix;
 
-            if (config.deviceList.HasItems)
+            int camera_index = config.SelectedDeviceIdx;
+
+            if (i.cameras_available.Count > camera_index)
             {
-                cam = config.deviceList.SelectedItem as Camera;
-                selected_device_idx = config.deviceList.SelectedIndex;
+                cam = i.cameras_available[camera_index];
+                selected_device_idx = camera_index;
             }
             else
             {
+                // TODO: Dummy Camera? 
                 Logger.WriteLine("No Camera present, setting cam to null");
                 cam = null;
             }

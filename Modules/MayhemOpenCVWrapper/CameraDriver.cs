@@ -18,8 +18,7 @@ namespace MayhemOpenCVWrapper
 {
     public class CameraDriver
     {
-        public static CameraDriver Instance = new CameraDriver();
-    
+        public static CameraDriver Instance = new CameraDriver(); 
         public int cWidth;
         public int cHeight;
         private List<CameraInfo> devices_available = new List<CameraInfo>();
