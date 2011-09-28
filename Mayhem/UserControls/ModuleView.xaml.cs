@@ -14,15 +14,48 @@ namespace Mayhem.UserControls
     /// </summary>
     public partial class ModuleView : UserControl
     {
+        public string EventName
+        {
+            get { return (string)GetValue(EventNameProperty); }
+            set { SetValue(EventNameProperty, value); }
+        }
+        public string ReactionName
+        {
+            get { return (string)GetValue(ReactionNameProperty); }
+            set { SetValue(ReactionNameProperty, value); }
+        }
+        public string EventConfigString
+        {
+            get { return (string)GetValue(EventConfigStringProperty); }
+            set { SetValue(EventConfigStringProperty, value); }
+        }
+        public string ReactionConfigString
+        {
+            get { return (string)GetValue(ReactionConfigStringProperty); }
+            set { SetValue(ReactionConfigStringProperty, value); }
+        }
         public Connection Connection
         {
-            get { return (Connection)GetValue(ConnectionProperty); }
-            set { SetValue(ConnectionProperty, value); }
+            get
+            {
+                return (Connection)GetValue(ConnectionProperty);
+            }
+            set
+            {
+                SetValue(ConnectionProperty, value);
+            }
         }
 
-        // Using a DependencyProperty as the backing store for Module.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ConnectionProperty =
             DependencyProperty.Register("Connection", typeof(Connection), typeof(ModuleView), new UIPropertyMetadata(null));
+        public static readonly DependencyProperty EventNameProperty =
+            DependencyProperty.Register("EventName", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
+        public static readonly DependencyProperty ReactionNameProperty =
+            DependencyProperty.Register("ReactionName", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
+        public static readonly DependencyProperty EventConfigStringProperty =
+            DependencyProperty.Register("EventConfigString", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
+        public static readonly DependencyProperty ReactionConfigStringProperty =
+            DependencyProperty.Register("ReactionConfigString", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
 
         DoubleAnimation animOut;
         DoubleAnimation animIn;
@@ -49,6 +82,11 @@ namespace Mayhem.UserControls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            Connection connection = Connection;
+            EventName = connection.Event.Name;
+            ReactionName = connection.Reaction.Name;
+            EventConfigString = connection.Event.ConfigString;
+            ReactionConfigString = connection.Reaction.ConfigString;
             if (!Connection.Event.HasConfig)
             {
                 ImageSettingsEvent.Visibility = System.Windows.Visibility.Hidden;

@@ -200,7 +200,6 @@
                                             <StackPanel Orientation="Horizontal">
                                             <src:ModuleView Connection="{Binding}" Margin="0,0,0,10" >
                                             </src:ModuleView>
-                                            <!--<src:ModuleView Module="{Binding Reaction}" />-->
 
                                             </StackPanel>
                                         <!--</Border>-->
