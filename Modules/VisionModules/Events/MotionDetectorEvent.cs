@@ -117,15 +117,15 @@ namespace VisionModules.Events
         {
             // Grab data from the window variable and store
             // it in this class
-            bool wasEnabled = this.Enabled;
+            bool wasEnabled = this.IsEnabled;
 
             // set the selected bounding rectangle
             boundingRect = ((MotionDetectorConfig)configurationControl).selectedBoundingRect;
             m.SetMotionBoundaryRect(boundingRect);
 
-            if (this.Enabled)
+            if (this.IsEnabled)
             {
-                this.Disable();
+                this.OnDisable();
                 Thread.Sleep(350);
             }
 
@@ -135,10 +135,10 @@ namespace VisionModules.Events
             selected_device_idx = cam.Info.deviceId;
 
             if (wasEnabled)
-                this.Enable();
+                this.OnEnable();
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             Logger.WriteLine("Enable");
 
@@ -158,9 +158,9 @@ namespace VisionModules.Events
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
-            base.Disable();
+            base.OnDisable();
             Logger.WriteLine("Disable");   
             if (cam != null && !IsConfiguring)
             {

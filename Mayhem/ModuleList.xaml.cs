@@ -19,7 +19,7 @@ namespace Mayhem
     /// </summary>
     public partial class ModuleList : Window
     {
-        public ModuleType SelectedModule
+        internal ModuleType SelectedModule
         {
             get;
             private set;

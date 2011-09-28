@@ -22,7 +22,7 @@ namespace OfficeModules.Events
             Trigger();
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             // When enabled, try and get the outlook instance
             try
@@ -40,7 +40,7 @@ namespace OfficeModules.Events
             return false;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             if (outlook != null)
             {

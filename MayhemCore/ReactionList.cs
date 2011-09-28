@@ -6,7 +6,7 @@ namespace MayhemCore
 	/// <summary>
 	/// A list of all the available reactions
 	/// </summary>
-	public class ReactionList : ModuleList<ReactionBase>
+	internal class ReactionList : ModuleList<ReactionBase>
 	{
 	}
 }

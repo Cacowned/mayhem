@@ -38,7 +38,7 @@ namespace DefaultModules.Reactions
             }
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             m = new MPlayer();
             if (File.Exists(SoundPath))
@@ -53,7 +53,7 @@ namespace DefaultModules.Reactions
             return false;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             m.Stop();
         }

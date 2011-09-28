@@ -11,7 +11,7 @@ namespace OfficeModules.Reactions
     {
         private OPowerPoint.Application oApp;
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             try
             {
@@ -26,7 +26,7 @@ namespace OfficeModules.Reactions
             return false;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             oApp = null;
         }

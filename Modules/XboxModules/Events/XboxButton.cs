@@ -59,14 +59,14 @@ namespace XboxModules.Events
         {
             if (!IsConfigOpen)
             {
-                if (Enabled)
+                if (IsEnabled)
                 {
                     Trigger();
                 }
             }
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             var state = GamePad.GetState(player);
             if (!state.IsConnected)
@@ -82,7 +82,7 @@ namespace XboxModules.Events
             return state.IsConnected;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             buttonWatcher.RemoveCombinationHandler(xboxButtons, OnKeyCombinationActivated);
         }

@@ -119,7 +119,7 @@ namespace VisionModules.Events
             }
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             if (!IsConfiguring && selected_device_idx < i.DeviceCount)
             {
@@ -135,7 +135,7 @@ namespace VisionModules.Events
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             Logger.WriteLine("");       
             if (!IsConfiguring && cam != null)
@@ -148,13 +148,13 @@ namespace VisionModules.Events
             }
         }
 
-        public  void OnSaved(WpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {            
             Logger.WriteLine("OnSaved!");    
             //   folderLocation = ((FaceDetectConfig)configurationControl).location;
-            bool wasEnabled = this.Enabled;
-            if (this.Enabled)
-                this.Disable();
+            bool wasEnabled = this.IsEnabled;
+            if (this.IsEnabled)
+                this.OnDisable();
             // assign selected cam
             cam = ((FaceDetectConfig)configurationControl).DeviceList.SelectedItem as Camera;
 
@@ -163,7 +163,7 @@ namespace VisionModules.Events
             Logger.WriteLine("BOUNDING RECT : " + boundingRect);
             triggerOnNrOfFaces = ((FaceDetectConfig)configurationControl).NumberOfFacesSelected;                      
             if (wasEnabled)
-                this.Enable();
+                this.OnEnable();
         }
     }
 }

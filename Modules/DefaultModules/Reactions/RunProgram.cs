@@ -62,7 +62,7 @@ namespace DefaultModules.Reactions
             Arguments = rpc.Arguments;
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             if (File.Exists(FileName))
             {

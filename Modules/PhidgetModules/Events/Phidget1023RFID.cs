@@ -59,7 +59,7 @@ namespace PhidgetModules.Events
             rfid.LED = false;
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             rfid.Tag += RfidTag;
             rfid.TagLost += LostRfidTag;
@@ -67,7 +67,7 @@ namespace PhidgetModules.Events
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             if (rfid != null)
             {

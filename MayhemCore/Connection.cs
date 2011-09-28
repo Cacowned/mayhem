@@ -15,19 +15,31 @@ namespace MayhemCore
         /// false if disabled.
         /// </summary>
         [DataMember]
-        public bool Enabled { get; private set; }
+        public bool IsEnabled
+        {
+            get;
+            private set; 
+        }
 
         /// <summary>
         /// The event that this connection is using
         /// </summary>
         [DataMember]
-        public EventBase Event { get; private set; }
+        internal EventBase Event
+        {
+            get;
+            private set; 
+        }
 
         /// <summary>
         /// The reaction that this connection is using
         /// </summary>
         [DataMember]
-        public ReactionBase Reaction { get; private set; }
+        internal ReactionBase Reaction
+        {
+            get;
+            private set;
+        }
 
         private bool isConfiguring;
         public bool IsConfiguring
@@ -36,7 +48,7 @@ namespace MayhemCore
             {
                 return isConfiguring;
             }
-            set
+            internal set
             {
                 isConfiguring = value;
                 Event.IsConfiguring = value;
@@ -44,14 +56,12 @@ namespace MayhemCore
             }
         }
 
-        public Connection() { }
-
         /// <summary>
         /// Create a new connection
         /// </summary>
         /// <param name="e">The event to trigger on</param>
         /// <param name="reaction">The reaction to perform</param>
-        public Connection(EventBase e, ReactionBase reaction)
+        internal Connection(EventBase e, ReactionBase reaction)
         {
             // Set our event and reactions 
             this.Event = e;
@@ -72,20 +82,19 @@ namespace MayhemCore
         {
             // If we got into this method call, we probably don't need
             // to check if we are enabled.
-            if (Enabled)
+            if (IsEnabled)
             {
                 ThreadPool.QueueUserWorkItem(new WaitCallback((o) => Reaction.Perform()));
             }
         }
 
         /// <summary>
-        /// Enable this connection's
-        /// event and reaction
+        /// Enable this connection's event and reaction
         /// </summary>
         public void Enable(Action actionOnComplete)
         {
             // if we are already enabled, just stop
-            if (Enabled)
+            if (IsEnabled)
             {
                 if (actionOnComplete != null)
                 {
@@ -93,33 +102,33 @@ namespace MayhemCore
                 }
                 return;
             }
-            _Enable(actionOnComplete);
+            Enable_(actionOnComplete);
         }
 
-        private void _Enable(Action actionOnComplete)
+        private void Enable_(Action actionOnComplete)
         {
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) => EnableOnThread(actionOnComplete)));
         }
 
         private void EnableOnThread(Action actionOnComplete)
         {
-            if (!Event.Enabled)
+            if (!Event.IsEnabled)
             {
                 // Enable the event
-                Event.Enable_();
+                Event.Enable();
             }
             // If the event is not enabled we don't try to enable the reaction
-            if (Event.Enabled && !Reaction.Enabled)
+            if (Event.IsEnabled && !Reaction.IsEnabled)
             {
                 try
                 {
-                    Reaction.Enable_();
+                    Reaction.Enable();
                 }
                 catch
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error enabling " + Reaction.Name);
                 }
-                if (!Reaction.Enabled)
+                if (!Reaction.IsEnabled)
                 {
                     // If we got here, then it means the event is enabled and the reaction won't enable.
                     // We need to disable the event and then return out
@@ -127,7 +136,7 @@ namespace MayhemCore
                 }
             }
             // Double check that both are enabled. We shouldn't be able to get here if they aren't.
-            Enabled = Event.Enabled && Reaction.Enabled;
+            IsEnabled = Event.IsEnabled && Reaction.IsEnabled;
             if (actionOnComplete != null)
             {
                 actionOnComplete();
@@ -137,7 +146,7 @@ namespace MayhemCore
         public void Disable(Action actionOnComplete)
         {
             // if we aren't already enabled, just stop
-            if (!Enabled)
+            if (!IsEnabled)
             {
                 if (actionOnComplete != null)
                 {
@@ -151,22 +160,22 @@ namespace MayhemCore
 
         private void DisableOnThread(Action actionOnComplete)
         {
-            if (Event.Enabled)
+            if (Event.IsEnabled)
             {
                 try
                 {
-                    Event.Disable_();
+                    Event.Disable();
                 }
                 catch
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error disabling " + Event.Name);
                 }
             }
-            if (Reaction.Enabled)
+            if (Reaction.IsEnabled)
             {
                 try
                 {
-                    Reaction.Disable_();
+                    Reaction.Disable();
                 }
                 catch
                 {
@@ -180,16 +189,16 @@ namespace MayhemCore
              * seem like a reasonable option though, so for
              * now, this will stay as it is
              */
-            Enabled = false;
+            IsEnabled = false;
             if (actionOnComplete != null)
             {
                 actionOnComplete();
             }
         }
 
-        public void Delete()
+        internal void Delete()
         {
-            if (Enabled)
+            if (IsEnabled)
             {
                 Disable(null);
             }
@@ -209,8 +218,8 @@ namespace MayhemCore
 
             // If we have started up and are enabled, then we need to
             // actually enable our events and reactions
-            if (Enabled)
-                _Enable(null);
+            if (IsEnabled)
+                Enable_(null);
         }
     }
 }

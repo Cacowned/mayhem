@@ -36,14 +36,14 @@ namespace PhidgetModules
 
         protected abstract void SensorChange(object sender, SensorChangeEventArgs ex);
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             IfKit.SensorChange += handler;
 
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             if (IfKit != null)
             {

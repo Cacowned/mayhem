@@ -3,9 +3,11 @@ using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using MayhemCore.ModuleTypes;
+using System.Runtime.CompilerServices;
 
 namespace MayhemCore
 {
+
     /// <summary>
     /// This class is extended by EventBase and ReactionBase
     /// </summary>
@@ -13,25 +15,37 @@ namespace MayhemCore
     public abstract class ModuleBase : INotifyPropertyChanged
     {
         // A reference to the connection that holds this module.
-        public Connection Connection { get; set; }
+        public Connection Connection 
+        {
+            get;
+            internal set; 
+        }
 
-        public bool Enabled { get; private set; }
+        public bool IsEnabled 
+        {
+            get;
+            private set; 
+        }
 
-        public bool IsConfiguring { get; set; }
+        public bool IsConfiguring 
+        {
+            get;
+            internal set;
+        }
 
         public string Name
         {
             get;
-            protected set;
+            internal set;
         }
 
         public string Description
         {
             get;
-            protected set;
+            internal set;
         }
 
-        public bool HasConfig
+        internal bool HasConfig
         {
             get;
             private set;
@@ -40,7 +54,7 @@ namespace MayhemCore
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string _configString;
-        public string ConfigString
+        internal string ConfigString
         {
             get
             {
@@ -53,11 +67,11 @@ namespace MayhemCore
             }
         }
 
-        internal void Enable_()
+        internal void Enable()
         {
             try
             {
-                Enabled = Enable();
+                IsEnabled = OnEnable();
             }
             catch
             {
@@ -65,32 +79,38 @@ namespace MayhemCore
             }
         }
 
-        public virtual bool Enable()
+        protected virtual bool OnEnable()
         {
             return true;
         }
 
-        internal void Disable_()
+        internal void Disable()
         {
             try
             {
-                Disable();
-                Enabled = false;
+                OnDisable();
+                IsEnabled = false;
             }
             catch
             {
                 ErrorLog.AddError(ErrorType.Failure, "Error disabling " + Name);
             }
         }
-        public virtual void Disable()
+
+        protected virtual void OnDisable()
         {
         }
 
-        public virtual void Delete()
+        internal void Delete()
+        {
+            OnDelete();
+        }
+
+        protected virtual void OnDelete()
         {
         }
 
-        private void _Initialize()
+        private void Initialize_()
         {
             Type configurableType = MayhemEntry.Instance.ConfigurableType;
             Type[] interfaceTypes = GetType().GetInterfaces();
@@ -113,7 +133,7 @@ namespace MayhemCore
 
         protected ModuleBase()
         {
-            _Initialize();
+            Initialize_();
             try
             {
                 Initialize();
@@ -127,7 +147,7 @@ namespace MayhemCore
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            _Initialize();
+            Initialize_();
             try
             {
                 Initialize();
@@ -155,7 +175,7 @@ namespace MayhemCore
             }
         }
 
-        public void SetConfigString() 
+        internal void SetConfigString() 
         {
             if (this is IConfigurable)
             {

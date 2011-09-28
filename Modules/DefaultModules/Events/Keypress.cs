@@ -81,14 +81,14 @@ namespace DefaultModules.Events
         {
             if (!IsConfigOpen)
             {
-                if (Enabled)
+                if (IsEnabled)
                 {
                     Trigger();
                 }
             }
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             Dispatcher.FromThread(mainThread).Invoke((Action)delegate
             {
@@ -98,7 +98,7 @@ namespace DefaultModules.Events
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
         }

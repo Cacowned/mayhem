@@ -140,7 +140,7 @@ namespace VisionModules.Reactions
             }
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             Logger.WriteLine("");
             if (selected_device_idx < i.DeviceCount)
@@ -154,7 +154,7 @@ namespace VisionModules.Reactions
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             if (cam != null)
             {
@@ -172,9 +172,9 @@ namespace VisionModules.Reactions
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            bool wasEnabled = this.Enabled;
-            if (this.Enabled)
-                this.Disable();
+            bool wasEnabled = this.IsEnabled;
+            if (this.IsEnabled)
+                this.OnDisable();
 
             VideoConfig config = configurationControl as VideoConfig;
             folderLocation = config.SaveLocation;
@@ -195,7 +195,7 @@ namespace VisionModules.Reactions
             capture_offset_time = config.temporal_offset;
 
             if (wasEnabled)
-                this.Enable();
+                this.OnEnable();
         }
     }
 }

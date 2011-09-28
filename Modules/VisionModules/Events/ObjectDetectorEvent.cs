@@ -121,7 +121,7 @@ namespace VisionModules.Events
             }
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             Logger.WriteLine("Enable");
 
@@ -150,7 +150,7 @@ namespace VisionModules.Events
             templateImage = tImage;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             Logger.WriteLine("Disable");
 
@@ -201,15 +201,15 @@ namespace VisionModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            bool wasEnabled = this.Enabled;
+            bool wasEnabled = this.IsEnabled;
 
-            if (this.Enabled)
-                this.Disable();
+            if (this.IsEnabled)
+                this.OnDisable();
             // assign selected cam
             // cam = ((CamSnapshotConfig)configurationControl).DeviceList.SelectedItem as Camera;
 
             if (wasEnabled)
-                this.Enable();
+                this.OnEnable();
 
             ObjectDetectorConfig config = configurationControl as ObjectDetectorConfig;
 

@@ -105,7 +105,7 @@ namespace DefaultModules.Events
             }
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             // Update our interval with the current values
             SetInterval();
@@ -115,7 +115,7 @@ namespace DefaultModules.Events
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             myTimer.Stop();
         }

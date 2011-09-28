@@ -68,14 +68,14 @@ namespace WindowModules.Events
             }
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             context.Post(SetNotifyIconStuff, null);
         
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             context.Post(RemoveFromContextMenu, null);
         }

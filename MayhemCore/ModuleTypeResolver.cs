@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace MayhemCore
 {
-    public class ModuleTypeResolver : DataContractResolver
+    internal class ModuleTypeResolver : DataContractResolver
     {
         ICollection<Type> types;
 

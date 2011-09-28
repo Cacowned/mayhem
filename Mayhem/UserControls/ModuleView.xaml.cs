@@ -65,10 +65,10 @@ namespace Mayhem.UserControls
                 buttonReaction.Cursor = null;
             }
 
-            connectionButtons.Opacity = Connection.Enabled ? 1 : 0.5;
-            dropShadow.BlurRadius = Connection.Enabled ? 16 : 4;
-            dropShadow.Opacity = Connection.Enabled ? 0.9 : 0.5;
-            dropShadow.ShadowDepth = Connection.Enabled ? 5 : 2;
+            connectionButtons.Opacity = Connection.IsEnabled ? 1 : 0.5;
+            dropShadow.BlurRadius = Connection.IsEnabled ? 16 : 4;
+            dropShadow.Opacity = Connection.IsEnabled ? 0.9 : 0.5;
+            dropShadow.ShadowDepth = Connection.IsEnabled ? 5 : 2;
         }
 
         void ShowConfig(ModuleBase configurable)
@@ -80,7 +80,7 @@ namespace Mayhem.UserControls
 
             Connection.IsConfiguring = true;
 
-            bool wasEnabled = Connection.Enabled;
+            bool wasEnabled = Connection.IsEnabled;
             if (wasEnabled)
             {
                 Connection.Disable(null);
@@ -130,7 +130,7 @@ namespace Mayhem.UserControls
                 {
                     Dispatcher.Invoke((Action)delegate
                     {
-                        if (!Connection.Enabled)
+                        if (!Connection.IsEnabled)
                         {
                             //Logger.WriteLine("Connection didn't enable.");
 
@@ -139,8 +139,8 @@ namespace Mayhem.UserControls
                             // flip the button
                             button.IsChecked = false;
                         }
-                        button.IsChecked = Connection.Enabled;
-                        if (Connection.Enabled)
+                        button.IsChecked = Connection.IsEnabled;
+                        if (Connection.IsEnabled)
                         {
                             connectionButtons.BeginAnimation(StackPanel.OpacityProperty, animIn);
                             dropShadow.BeginAnimation(DropShadowEffect.BlurRadiusProperty, animBlurIn);
@@ -158,7 +158,7 @@ namespace Mayhem.UserControls
                     });
                 });
 
-            if (!Connection.Enabled)
+            if (!Connection.IsEnabled)
             {
                 Connection.Enable(action);
             }

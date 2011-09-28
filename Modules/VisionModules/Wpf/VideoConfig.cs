@@ -65,16 +65,16 @@ namespace VisionModules.Wpf
             }
         }
 
-        public  VideoConfig(string location, string prefix,  double capture_offset_time) : base(location, prefix,  capture_offset_time)
+        public VideoConfig(string location, string prefix, double capture_offset_time)
+            : base(location, prefix, capture_offset_time)
         {
             Init();
         }
 
-
         /// <summary>
         /// Hide the old Init() method. It should get called during construction, though. 
         /// </summary>
-        public  void Init()
+        public new void Init()
         {
             cbx_time_offset = new ComboBox();
 

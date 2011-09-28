@@ -88,7 +88,7 @@ namespace VisionModules.Reactions
             image.Dispose();
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             // TODO: Improve this code
             if (!IsConfiguring && selected_device_idx < i.DeviceCount)
@@ -101,9 +101,9 @@ namespace VisionModules.Reactions
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
-            base.Disable();
+            base.OnDisable();
             if (!IsConfiguring && cam != null)
             {
                 cam.TryStopFrameGrabbing();
@@ -164,7 +164,7 @@ namespace VisionModules.Reactions
         private void SaveFutureImage(object sender, ElapsedEventArgs e)
         {
             Logger.WriteLine("SaveFutureImage");
-            if (this.Enabled && cam.running)
+            if (this.IsEnabled && cam.running)
                 SaveImage(cam.ImageAsBitmap());
         }
 
@@ -189,7 +189,7 @@ namespace VisionModules.Reactions
             folderLocation = config.SaveLocation;
             fileNamePrefix = config.FilenamePrefix;
 
-            bool wasEnabled = this.Enabled;
+            bool wasEnabled = this.IsEnabled;
 
             if (config.deviceList.HasItems)
             {

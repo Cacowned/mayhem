@@ -119,12 +119,12 @@ namespace VisionModules.Events
         public void OnSaved(WpfConfiguration configurationControl)
         {
             PresenceConfig config = configurationControl as PresenceConfig;
-            bool wasEnabled = this.Enabled;
+            bool wasEnabled = this.IsEnabled;
 
             sensitivity = config.SelectedSensitivity;
 
-            if (this.Enabled)
-                this.Disable();
+            if (this.IsEnabled)
+                this.OnDisable();
 
             if (cam != null)
             {
@@ -137,10 +137,10 @@ namespace VisionModules.Events
                 cam = new DummyCamera();
             }
             if (wasEnabled)
-                this.Enable();
+                this.OnEnable();
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             Logger.WriteLine("Enable");
 
@@ -157,7 +157,7 @@ namespace VisionModules.Events
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             Logger.WriteLine("Disable");
             // only disable the camera if the event is not configuring

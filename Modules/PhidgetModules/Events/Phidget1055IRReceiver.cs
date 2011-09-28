@@ -66,14 +66,14 @@ namespace PhidgetModules.Events
             }
         }
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             ir.Code += gotCode;
 
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             if (ir != null)
             {

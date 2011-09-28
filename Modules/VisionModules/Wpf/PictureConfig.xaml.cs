@@ -90,7 +90,7 @@ namespace VisionModules.Wpf
             Init();
         }
 
-        public  void Init()
+        public void Init()
         {
             // populate device list
             this.box_current_loc.Text = SaveLocation;

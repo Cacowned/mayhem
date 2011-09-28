@@ -72,7 +72,7 @@ namespace ArduinoModules.Events
         }
 
 
-        public override bool Enable()
+        protected override bool OnEnable()
         {
             if (OnAnalogPinChanged != null && OnDigitalPinChanged != null && arduino != null)
             {
@@ -87,7 +87,7 @@ namespace ArduinoModules.Events
             return true;
         }
 
-        public override void Disable()
+        protected override void OnDisable()
         {
             if (arduino != null)
             {
@@ -105,7 +105,7 @@ namespace ArduinoModules.Events
             List<DigitalPinItem> digitalPinsMonitor = new List<DigitalPinItem>();
             List<AnalogPinItem> analogPinsMonitor = new List<AnalogPinItem>();
 
-            bool enabled = this.Enabled;
+            bool enabled = this.IsEnabled;
 
             // save references to pins to monitor
             // attach callbacks to arduino events
@@ -160,7 +160,7 @@ namespace ArduinoModules.Events
 
         public void arduino_OnDigitalPinChanged(Pin p)
         {
-            if (Enabled)
+            if (IsEnabled)
             {
                 foreach (DigitalPinItem d in monitorDigitalPins)
                 {
@@ -208,7 +208,7 @@ namespace ArduinoModules.Events
 
         public void arduino_OnAnalogPinChanged(Pin p)
         {
-            if (this.Enabled)
+            if (this.IsEnabled)
             {
                 foreach (AnalogPinItem a in monitorAnalogPins)
                 {
