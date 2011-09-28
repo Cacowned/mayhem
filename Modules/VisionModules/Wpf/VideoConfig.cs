@@ -63,7 +63,7 @@ namespace VisionModules.Wpf
         }
 
         public  VideoConfig(string location, string prefix,  double capture_offset_time, int deviceIdx) : base(location, prefix,  capture_offset_time, deviceIdx)
-            : base(location, prefix, capture_offset_time)
+            
         {      
             Init();
         }
