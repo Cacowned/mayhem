@@ -236,6 +236,9 @@
   <ItemGroup>
     <Resource Include="Game.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\banner.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
