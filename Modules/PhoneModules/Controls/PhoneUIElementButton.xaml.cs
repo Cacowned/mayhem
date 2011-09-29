@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace PhoneModules.Controls
 {
@@ -212,6 +213,13 @@ namespace PhoneModules.Controls
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
             ResizeTextBox(true);
+            double left = Canvas.GetLeft(this);
+            double right = left + this.ActualWidth;
+            if (right > 320)
+            {
+                Canvas.SetLeft(this, left + 320 - right);
+            }
+            Debug.WriteLine(right);
         }
     }
 }
