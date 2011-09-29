@@ -6,6 +6,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
+using System.ComponentModel;
 
 namespace Mayhem.UserControls
 {
@@ -87,6 +88,16 @@ namespace Mayhem.UserControls
             ReactionName = connection.Reaction.Name;
             EventConfigString = connection.Event.ConfigString;
             ReactionConfigString = connection.Reaction.ConfigString;
+            connection.Event.PropertyChanged += delegate(object s, PropertyChangedEventArgs args)
+            {
+                if (args.PropertyName == "ConfigString")
+                    EventConfigString = Connection.Event.ConfigString;
+            };
+            connection.Reaction.PropertyChanged += delegate(object s, PropertyChangedEventArgs args)
+            {
+                if (args.PropertyName == "ConfigString")
+                    ReactionConfigString = Connection.Reaction.ConfigString;
+            };
             if (!Connection.Event.HasConfig)
             {
                 ImageSettingsEvent.Visibility = System.Windows.Visibility.Hidden;
