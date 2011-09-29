@@ -40,7 +40,6 @@ namespace PhoneModules
         public bool IsEnabled = true;
     }
 
-    [Serializable()]
     public class PhoneLayout
     {
         public List<PhoneLayoutButton> Buttons = new List<PhoneLayoutButton>();
@@ -60,13 +59,13 @@ namespace PhoneModules
         }
         #endregion
 
-        public void AddButton(string id)
+        public PhoneLayoutButton AddButton(string id)
         {
             for (int i = 0; i < Buttons.Count; i++)
             {
                 if (Buttons[i].ID == id)
                 {
-                    return;
+                    throw new Exception();
                 }
             }
             PhoneLayoutButton button = new PhoneLayoutButton();
@@ -75,6 +74,12 @@ namespace PhoneModules
             button.ID = id;
             button.X = 110;
             button.Y = 200;
+            AddButton(button);
+            return button;
+        }
+
+        public void AddButton(PhoneLayoutButton button)
+        {
             Buttons.Add(button);
         }
 
@@ -192,30 +197,6 @@ namespace PhoneModules
             html = html.Replace("%%INSERTBODYHERE%%", insideDiv);
 
             return html;
-        }
-
-        public string Serialize()
-        {
-            string str = "";
-            XmlSerializer serializer = new XmlSerializer(this.GetType());
-
-            using (StringWriter sw = new StringWriter())
-            {
-                serializer.Serialize(sw, this);
-                str = sw.ToString();
-            }
-            return str;
-        }
-
-        public void Deserialize(string data)
-        {
-            XmlSerializer serializer = new XmlSerializer(this.GetType());
-
-            using (StringReader sr = new StringReader(data))
-            {
-                PhoneLayout layout = serializer.Deserialize(sr) as PhoneLayout;
-                this.Buttons = layout.Buttons;
-            }
         }
     }
 }

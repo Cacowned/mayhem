@@ -35,7 +35,6 @@ namespace PhoneModules.Wpf
 
         public void LoadFromData(string data, string selectedId)
         {
-            phoneLayout.Deserialize(data);
             LoadFromData(selectedId);
         }
 
