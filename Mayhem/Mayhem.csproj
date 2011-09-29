@@ -56,14 +56,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>Mayhem.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <ApplicationIcon>Mayhem.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NuGet.Core, Version=1.0.11220.104, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -234,10 +234,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Game.ico" />
+    <Resource Include="Images\banner.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\banner.png" />
+    <Resource Include="Mayhem.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
