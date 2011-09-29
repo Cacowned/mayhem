@@ -125,22 +125,24 @@ namespace Mayhem.UserControls
                 return;
 
             MainWindow.DimMainWindow(true);
+            Connection connection = Connection;
 
-            Connection.IsConfiguring = true;
+            connection.IsConfiguring = true;
 
-            bool wasEnabled = Connection.IsEnabled;
+            bool wasEnabled = connection.IsEnabled;
             if (wasEnabled)
             {
-                Connection.Disable(null);
+                connection.Disable(null);
             }
             ConfigWindow config = new ConfigWindow((IWpfConfigurable)configurable);
             config.ShowDialog();
 
             if (wasEnabled)
             {
-                Connection.Enable(new Action(() => Dispatcher.Invoke((Action)delegate { Connection.IsConfiguring = false; })));
+                Connection.Enable(new Action(() => connection.IsConfiguring = false));
             }
-            //Connection.IsConfiguring = false;
+            else
+                Connection.IsConfiguring = false;
 
             MainWindow.DimMainWindow(false);
         }

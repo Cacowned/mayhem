@@ -15,46 +15,33 @@ namespace PhoneModules.Events
     {
         #region Configuration Properties
         [DataMember]
-        private string id = Guid.NewGuid().ToString();
+        private PhoneLayoutButton button;
 
-        [DataMember]
-        private string FormDataForSerialization
-        {
-            get
-            {
-                return phoneLayout.Serialize();
-            }
-            set
-            {
-                phoneLayout = PhoneLayout.Instance;
-                phoneConnector = PhoneConnector.Instance;
-                if (!phoneConnector.HasBeenDeserialized)
-                {
-                    phoneConnector.HasBeenDeserialized = true;
-                    if (value != null)
-                    {
-                        phoneLayout.Deserialize(value);
-                        phoneConnector.SetNewData();
-                    }
-                }
-            }
-        }
         #endregion
 
-        private PhoneLayout phoneLayout = PhoneLayout.Instance;
-        private PhoneConnector phoneConnector = PhoneConnector.Instance;
+        private PhoneLayout phoneLayout;
+        private PhoneConnector phoneConnector;
 
         private bool isCreatingForFirstTime = false;
 
-        public PhoneEvent()
+        protected override void Initialize()
         {
-            isCreatingForFirstTime = true;
-            phoneLayout.AddButton(id);
+            phoneLayout = PhoneLayout.Instance;
+            phoneConnector = PhoneConnector.Instance;
+            if (button == null)
+            {
+                isCreatingForFirstTime = true;
+                string id = Guid.NewGuid().ToString();
+                button = phoneLayout.AddButton(id);
+            }
+            else
+            {
+                phoneLayout.AddButton(button);
+            }
         }
 
         public string GetConfigString()
         {
-            PhoneLayoutButton button = phoneLayout.GetByID(id);
             if (button.ImageFile != null && button.ImageFile.Length > 0)
             {
                 FileInfo fi = new FileInfo(button.ImageFile);
@@ -68,7 +55,7 @@ namespace PhoneModules.Events
 
         private void phoneConnector_EventCalled(string eventText)
         {
-            if (eventText == id)
+            if (eventText == button.ID)
             {
                 base.Trigger();
             }
@@ -78,7 +65,7 @@ namespace PhoneModules.Events
         {
             if (!IsConfiguring && !IsEnabled)
             {
-                phoneLayout.EnableButton(id);
+                phoneLayout.EnableButton(button.ID);
 
                 isCreatingForFirstTime = false;
                 phoneConnector.SetNewData();
@@ -94,7 +81,7 @@ namespace PhoneModules.Events
         {
             if (!IsConfiguring && IsEnabled)
             {
-                phoneLayout.DisableButton(id);
+                phoneLayout.DisableButton(button.ID);
                 phoneConnector.Disable();
                 phoneConnector.EventCalled -= phoneConnector_EventCalled;
                 phoneConnector.SetNewData();
@@ -103,7 +90,7 @@ namespace PhoneModules.Events
 
         protected override void OnDelete()
         {
-            phoneLayout.RemoveButton(id);
+            phoneLayout.RemoveButton(button.ID);
         }
 
         #region Configuration Views
@@ -112,7 +99,7 @@ namespace PhoneModules.Events
             get
             {
                 PhoneFormDesigner config = new PhoneFormDesigner(isCreatingForFirstTime);
-                config.LoadFromData(id);
+                config.LoadFromData(button.ID);
                 //config.SetSelected(id);
                 return config;
             }
@@ -123,11 +110,6 @@ namespace PhoneModules.Events
             if (!isCreatingForFirstTime)
             {
                 phoneConnector.SetNewData();
-            }
-            if (((PhoneFormDesigner)configurationControl).SelectedElement is PhoneUIElementButton)
-            {
-                PhoneUIElementButton button = ((PhoneFormDesigner)configurationControl).SelectedElement as PhoneUIElementButton;
-                id = button.LayoutInfo.ID;
             }
         }
         #endregion
