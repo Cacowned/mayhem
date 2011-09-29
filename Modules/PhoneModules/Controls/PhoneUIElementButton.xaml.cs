@@ -205,7 +205,7 @@ namespace PhoneModules.Controls
             Typeface myTypeface = new Typeface(textBox1.FontFamily, textBox1.FontStyle, textBox1.FontWeight, textBox1.FontStretch);
             FormattedText ft = new FormattedText(textBox1.Text, CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight, myTypeface, textBox1.FontSize, Brushes.Black);
-            textBox1.Width = ft.WidthIncludingTrailingWhitespace + (editing ? 10 : 5);
+            textBox1.Width = ft.WidthIncludingTrailingWhitespace + (editing ? 15 : 10);
             border1.Width = textBox1.Width + 15;
         }
 
