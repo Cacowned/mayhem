@@ -166,10 +166,6 @@ namespace Mayhem
                     buttonEmptyEvent.Style = (Style)FindResource("EventButton");
                     buttonEmptyEvent.Content = _event.Name;
 
-                    // Take this item, remove it and add it to the front (MoveToFrontList)
-//                    Mayhem.EventList.Remove(Event);
-//                    Mayhem.EventList.Insert(0, Event);
-
                     CheckEnableBuild();
                 }
             }
