@@ -23,6 +23,14 @@ using VisionModules.Wpf;
 
 namespace VisionModules.Reactions
 {
+
+    public enum VIDEO_RECORDING_MODE
+    {
+        PRE_EVENT = 0,                                        // record 30s prior to the event
+        POST_EVENT = Camera.LOOP_DURATION / 1000,             // record 30s after event
+        MID_EVENT = (Camera.LOOP_DURATION / 1000) / 2         // record 15s before and 15s after the event
+    }
+
     [DataContract]
     [MayhemModule("Video", "Records an avi video of the camera scene before or after an event has fired")]
     public class VideoReaction : ReactionBase, IWpfConfigurable
@@ -37,7 +45,7 @@ namespace VisionModules.Reactions
         private int selected_device_idx = 0;
 
         [DataMember]
-        private double capture_offset_time = 0;
+        private VIDEO_RECORDING_MODE videoRecordingMode = VIDEO_RECORDING_MODE.MID_EVENT;
 
         [DataMember]
         private bool compress = false;
@@ -116,7 +124,8 @@ namespace VisionModules.Reactions
         /// </summary>
         public override void Perform()
         {
-            Logger.WriteLine("");
+            int capture_offset_time = (int) videoRecordingMode;
+            Logger.WriteLine("Capturing with offset " + capture_offset_time);
             if (!video_saving && cam != null)
             {
                 video_saving = true;
@@ -127,7 +136,7 @@ namespace VisionModules.Reactions
                 else
                 {
                     Logger.WriteLine("Recording Video with offset: " + capture_offset_time + "s");
-                    Timer t = new Timer(new TimerCallback((object state) => { SaveVideo(); }), this, (int)(capture_offset_time * 1000), Timeout.Infinite);
+                    Timer t = new Timer(new TimerCallback((object state) => { SaveVideo(); }), this, capture_offset_time * 1000, Timeout.Infinite);
                 }
             }
             else
@@ -162,7 +171,7 @@ namespace VisionModules.Reactions
         {
             get
             {
-                return new VideoConfig(folderLocation, fileNamePrefix, capture_offset_time, selected_device_idx);
+                return new VideoConfig(folderLocation, fileNamePrefix, videoRecordingMode, selected_device_idx);
             }
         }
 
@@ -191,7 +200,7 @@ namespace VisionModules.Reactions
                 cam = null;
             }
 
-            capture_offset_time = config.temporal_offset;
+            videoRecordingMode = config.RecordingMode;
 
             if (wasEnabled)
                 this.OnEnable();
