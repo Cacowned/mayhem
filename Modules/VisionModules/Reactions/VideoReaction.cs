@@ -145,7 +145,7 @@ namespace VisionModules.Reactions
             }
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             Logger.WriteLine("");
             if (selected_device_idx < i.DeviceCount)
@@ -155,11 +155,9 @@ namespace VisionModules.Reactions
                 if (cam.running == false)
                     cam.StartFrameGrabbing();
             }
-
-            return true;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (cam != null)
             {
@@ -178,8 +176,6 @@ namespace VisionModules.Reactions
         public void OnSaved(WpfConfiguration configurationControl)
         {
             bool wasEnabled = this.IsEnabled;
-            if (this.IsEnabled)
-                this.OnDisable();
 
             VideoConfig config = configurationControl as VideoConfig;
             folderLocation = config.SaveLocation;
@@ -201,9 +197,6 @@ namespace VisionModules.Reactions
             }
 
             videoRecordingMode = config.RecordingMode;
-
-            if (wasEnabled)
-                this.OnEnable();
         }
     }
 }

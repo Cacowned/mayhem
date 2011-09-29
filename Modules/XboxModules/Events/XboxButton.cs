@@ -66,23 +66,22 @@ namespace XboxModules.Events
             }
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             var state = GamePad.GetState(player);
             if (!state.IsConnected)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.XboxButton_CantEnable);
+                e.Cancel = true;
             }
             else
             {
                 // If it is connected, lets enable
                 buttonWatcher.AddCombinationHandler(xboxButtons, OnKeyCombinationActivated);
             }
-
-            return state.IsConnected;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             buttonWatcher.RemoveCombinationHandler(xboxButtons, OnKeyCombinationActivated);
         }

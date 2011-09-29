@@ -115,9 +115,9 @@ namespace VisionModules.Events
             }
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (!IsConfiguring && selected_device_idx < i.DeviceCount)
+            if (!e.IsConfiguring && selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
                 //if (cam.running == false)
@@ -128,13 +128,12 @@ namespace VisionModules.Events
                 fd.OnFaceDetected -= m_onFaceDetectUpdate;
                 fd.OnFaceDetected += m_onFaceDetectUpdate;
             }
-            return true;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             Logger.WriteLine("");       
-            if (!IsConfiguring && cam != null)
+            if (!e.IsConfiguring && cam != null)
             {
                 fd.OnFaceDetected -= m_onFaceDetectUpdate;
                 fd.UnregisterForImages(cam); 
@@ -148,9 +147,6 @@ namespace VisionModules.Events
         {            
             Logger.WriteLine("OnSaved!");    
             //   folderLocation = ((FaceDetectConfig)configurationControl).location;
-            bool wasEnabled = this.IsEnabled;
-            if (this.IsEnabled)
-                this.OnDisable();
             // assign selected cam
             cam = ((FaceDetectConfig)configurationControl).DeviceList.SelectedItem as Camera;
 
@@ -158,8 +154,6 @@ namespace VisionModules.Events
             boundingRect = ((MotionDetectorConfig)configurationControl).overlay.GetBoundingRect();
             Logger.WriteLine("BOUNDING RECT : " + boundingRect);
             triggerOnNrOfFaces = ((FaceDetectConfig)configurationControl).NumberOfFacesSelected;                      
-            if (wasEnabled)
-                this.OnEnable();
         }
     }
 }

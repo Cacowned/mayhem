@@ -26,12 +26,6 @@ namespace MayhemCore
             private set; 
         }
 
-        public bool IsConfiguring 
-        {
-            get;
-            internal set;
-        }
-
         public string Name
         {
             get;
@@ -66,11 +60,13 @@ namespace MayhemCore
             }
         }
 
-        internal void Enable()
+        internal void Enable(EnablingEventArgs e)
         {
             try
             {
-                IsEnabled = OnEnable();
+                OnEnabling(e);
+                if (!e.Cancel)
+                    IsEnabled = true;
             }
             catch
             {
@@ -78,16 +74,15 @@ namespace MayhemCore
             }
         }
 
-        protected virtual bool OnEnable()
+        protected virtual void OnEnabling(EnablingEventArgs e)
         {
-            return true;
         }
 
-        internal void Disable()
+        internal void Disable(DisabledEventArgs e)
         {
             try
             {
-                OnDisable();
+                OnDisabled(e);
                 IsEnabled = false;
             }
             catch
@@ -96,7 +91,7 @@ namespace MayhemCore
             }
         }
 
-        protected virtual void OnDisable()
+        protected virtual void OnDisabled(DisabledEventArgs e)
         {
         }
 

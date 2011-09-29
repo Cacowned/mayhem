@@ -41,21 +41,6 @@ namespace MayhemCore
             private set;
         }
 
-        private bool isConfiguring;
-        public bool IsConfiguring
-        {
-            get
-            {
-                return isConfiguring;
-            }
-            internal set
-            {
-                isConfiguring = value;
-                Event.IsConfiguring = value;
-                Reaction.IsConfiguring = value;
-            }
-        }
-
         /// <summary>
         /// Create a new connection
         /// </summary>
@@ -91,7 +76,7 @@ namespace MayhemCore
         /// <summary>
         /// Enable this connection's event and reaction
         /// </summary>
-        public void Enable(Action actionOnComplete)
+        public void Enable(EnablingEventArgs e, Action actionOnComplete)
         {
             // if we are already enabled, just stop
             if (IsEnabled)
@@ -102,27 +87,27 @@ namespace MayhemCore
                 }
                 return;
             }
-            Enable_(actionOnComplete);
+            Enable_(e, actionOnComplete);
         }
 
-        private void Enable_(Action actionOnComplete)
+        private void Enable_(EnablingEventArgs e, Action actionOnComplete)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => EnableOnThread(actionOnComplete)));
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => EnableOnThread(e, actionOnComplete)));
         }
 
-        private void EnableOnThread(Action actionOnComplete)
+        private void EnableOnThread(EnablingEventArgs e, Action actionOnComplete)
         {
             if (!Event.IsEnabled)
             {
                 // Enable the event
-                Event.Enable();
+                Event.Enable(e);
             }
             // If the event is not enabled we don't try to enable the reaction
             if (Event.IsEnabled && !Reaction.IsEnabled)
             {
                 try
                 {
-                    Reaction.Enable();
+                    Reaction.Enable(e);
                 }
                 catch
                 {
@@ -132,7 +117,7 @@ namespace MayhemCore
                 {
                     // If we got here, then it means the event is enabled and the reaction won't enable.
                     // We need to disable the event and then return out
-                    Event.Disable();
+                    Event.Disable(new DisabledEventArgs(e.IsConfiguring));
                 }
             }
             // Double check that both are enabled. We shouldn't be able to get here if they aren't.
@@ -143,7 +128,7 @@ namespace MayhemCore
             }
         }
 
-        public void Disable(Action actionOnComplete)
+        public void Disable(DisabledEventArgs e, Action actionOnComplete)
         {
             // if we aren't already enabled, just stop
             if (!IsEnabled)
@@ -155,16 +140,16 @@ namespace MayhemCore
                 return;
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DisableOnThread(actionOnComplete)));
+            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DisableOnThread(e, actionOnComplete)));
         }
 
-        private void DisableOnThread(Action actionOnComplete)
+        private void DisableOnThread(DisabledEventArgs e, Action actionOnComplete)
         {
             if (Event.IsEnabled)
             {
                 try
                 {
-                    Event.Disable();
+                    Event.Disable(e);
                 }
                 catch
                 {
@@ -175,7 +160,7 @@ namespace MayhemCore
             {
                 try
                 {
-                    Reaction.Disable();
+                    Reaction.Disable(e);
                 }
                 catch
                 {
@@ -200,7 +185,7 @@ namespace MayhemCore
         {
             if (IsEnabled)
             {
-                Disable(null);
+                Disable(new DisabledEventArgs(false), null);
             }
 
             Event.Delete();
@@ -219,7 +204,7 @@ namespace MayhemCore
             // If we have started up and are enabled, then we need to
             // actually enable our events and reactions
             if (IsEnabled)
-                Enable_(null);
+                Enable_(new EnablingEventArgs(false), null);
         }
     }
 }

@@ -117,12 +117,12 @@ namespace VisionModules.Events
             }
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             Logger.WriteLine("Enable");
 
             // TODO: Improve this code
-            if (!IsConfiguring && selected_device_idx < i.DeviceCount)
+            if (!e.IsConfiguring && selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
                 if (cam.running == false)
@@ -132,8 +132,6 @@ namespace VisionModules.Events
                 od.OnObjectDetected += objectDetectHandler;
                 od.OnObjectDetected -= objectDetectHandler;
             }
-
-            return true;
         }
 
         /** <summary>
@@ -146,7 +144,7 @@ namespace VisionModules.Events
             templateImage = tImage;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             Logger.WriteLine("Disable");
 
@@ -154,7 +152,7 @@ namespace VisionModules.Events
             if (cam != null)
                 od.UnregisterForImages(cam);
 
-            if (cam != null && !IsConfiguring)
+            if (cam != null && !e.IsConfiguring)
             {
                 // correct module disabling procedure               
                 cam.TryStopFrameGrabbing();
@@ -199,13 +197,8 @@ namespace VisionModules.Events
         {
             bool wasEnabled = this.IsEnabled;
 
-            if (this.IsEnabled)
-                this.OnDisable();
             // assign selected cam
             // cam = ((CamSnapshotConfig)configurationControl).DeviceList.SelectedItem as Camera;
-
-            if (wasEnabled)
-                this.OnEnable();
 
             ObjectDetectorConfig config = configurationControl as ObjectDetectorConfig;
 

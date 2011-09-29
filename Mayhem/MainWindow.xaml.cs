@@ -138,7 +138,7 @@ namespace Mayhem
                 mayhem.Shutdown();
                 foreach (Connection connection in mayhem.ConnectionList)
                 {
-                    connection.Disable(null);
+                    connection.Disable(new DisabledEventArgs(false), null);
                 }
             }
             catch { }

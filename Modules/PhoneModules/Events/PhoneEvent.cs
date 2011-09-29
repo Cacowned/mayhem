@@ -61,9 +61,9 @@ namespace PhoneModules.Events
             }
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (!IsConfiguring && !IsEnabled)
+            if (!e.IsConfiguring && !IsEnabled)
             {
                 phoneLayout.EnableButton(button.ID);
 
@@ -73,13 +73,11 @@ namespace PhoneModules.Events
                 phoneConnector.Enable(true);
                 phoneConnector.EventCalled += phoneConnector_EventCalled;
             }
-
-            return true;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
-            if (!IsConfiguring && IsEnabled)
+            if (!e.IsConfiguring && IsEnabled)
             {
                 phoneLayout.DisableButton(button.ID);
                 phoneConnector.Disable();

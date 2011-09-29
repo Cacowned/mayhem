@@ -38,22 +38,17 @@ namespace DefaultModules.Reactions
             }
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             m = new MPlayer();
-            if (File.Exists(SoundPath))
-            {
-                return true;
-            }
-            else
+            if (!File.Exists(SoundPath))
             {
                 ErrorLog.AddError(ErrorType.Warning, Strings.PlaySound_FileNotFound);
+                e.Cancel = true;
             }
-
-            return false;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             m.Stop();
         }

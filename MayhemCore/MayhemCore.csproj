@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingCollection.cs" />
+    <Compile Include="DisabledEventArgs.cs" />
+    <Compile Include="EnablingEventArgs.cs" />
     <Compile Include="EventBase.cs" />
     <Compile Include="EventList.cs" />
     <Compile Include="Connection.cs" />
