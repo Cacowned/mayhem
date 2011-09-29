@@ -114,35 +114,26 @@ namespace VisionModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            // Grab data from the window variable and store
-            // it in this class
-            bool wasEnabled = this.IsEnabled;
+            // Grab data from the window variable and store it in this class
 
             // set the selected bounding rectangle
             boundingRect = ((MotionDetectorConfig)configurationControl).selectedBoundingRect;
             m.SetMotionBoundaryRect(boundingRect);
 
-            if (this.IsEnabled)
-            {
-                this.OnDisable();
-                Thread.Sleep(350);
-            }
 
             // assign selected cam
             cam = ((MotionDetectorConfig)configurationControl).selected_camera;
 
             selected_device_idx = cam.Info.deviceId;
 
-            if (wasEnabled)
-                this.OnEnable();
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             Logger.WriteLine("Enable");
 
             // TODO: Improve this code
-            if (!IsConfiguring && selected_device_idx < i.DeviceCount)
+            if (!e.IsConfiguring && selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
                 if (!cam.running)
@@ -153,15 +144,12 @@ namespace VisionModules.Events
                 m.OnMotionUpdate -= motionUpdateHandler;
                 m.OnMotionUpdate += motionUpdateHandler;             
             }
-
-            return true;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
-            base.OnDisable();
             Logger.WriteLine("Disable");   
-            if (cam != null && !IsConfiguring)
+            if (cam != null && !e.IsConfiguring)
             {
                 firstFrame = true; 
                 // de-register the trigger's motion update handler

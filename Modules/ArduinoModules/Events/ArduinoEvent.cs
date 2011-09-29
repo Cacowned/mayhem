@@ -69,22 +69,19 @@ namespace ArduinoModules.Events
         }
 
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             if (OnAnalogPinChanged != null && OnDigitalPinChanged != null && arduino != null)
             {
-
                 arduino.OnAnalogPinChanged -= OnAnalogPinChanged;
                 arduino.OnDigitalPinChanged -= OnDigitalPinChanged;
 
                 arduino.OnAnalogPinChanged += OnAnalogPinChanged;
                 arduino.OnDigitalPinChanged += OnDigitalPinChanged;
             }
-
-            return true;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (arduino != null)
             {

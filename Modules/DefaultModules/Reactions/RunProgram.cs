@@ -62,17 +62,13 @@ namespace DefaultModules.Reactions
             Arguments = rpc.Arguments;
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (File.Exists(FileName))
-            {
-                return true;
-            }
-            else
+            if (!File.Exists(FileName))
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.RunProgram_FileNotFound);
+                e.Cancel = true;
             }
-            return false;
         }
 
         public string GetConfigString()

@@ -127,22 +127,20 @@ namespace Mayhem.UserControls
             MainWindow.DimMainWindow(true);
             Connection connection = Connection;
 
-            connection.IsConfiguring = true;
+            DisabledEventArgs args = new DisabledEventArgs(true);
 
             bool wasEnabled = connection.IsEnabled;
             if (wasEnabled)
             {
-                connection.Disable(null);
+                connection.Disable(args, null);
             }
             ConfigWindow config = new ConfigWindow((IWpfConfigurable)configurable);
             config.ShowDialog();
 
             if (wasEnabled)
             {
-                Connection.Enable(new Action(() => connection.IsConfiguring = false));
+                Connection.Enable(new EnablingEventArgs(true), null);
             }
-            else
-                Connection.IsConfiguring = false;
 
             MainWindow.DimMainWindow(false);
         }
@@ -160,7 +158,7 @@ namespace Mayhem.UserControls
         private void DeleteConnectionClick(object sender, RoutedEventArgs e)
         {
             Connection c = ((Button)sender).Tag as Connection;
-            c.Disable(new Action(() =>
+            c.Disable(new DisabledEventArgs(false), new Action(() =>
                 {
                     Dispatcher.Invoke((Action)delegate
                     {
@@ -210,11 +208,11 @@ namespace Mayhem.UserControls
 
             if (!Connection.IsEnabled)
             {
-                Connection.Enable(action);
+                Connection.Enable(new EnablingEventArgs(false), action);
             }
             else
             {
-                Connection.Disable(action);
+                Connection.Disable(new DisabledEventArgs(false), action);
             }
         }
     }

@@ -11,22 +11,21 @@ namespace OfficeModules.Reactions
     {
         private OPowerPoint.Application oApp;
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             try
             {
                 oApp = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");
-                return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
-                Logger.Write(e);
+                Logger.Write(ex);
+                e.Cancel = true;
             }
-            return false;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             oApp = null;
         }

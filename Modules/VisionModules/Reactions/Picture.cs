@@ -82,23 +82,20 @@ namespace VisionModules.Reactions
             image.Dispose();
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             // TODO: Improve this code
-            if (!IsConfiguring && selected_device_idx < i.DeviceCount)
+            if (!e.IsConfiguring && selected_device_idx < i.DeviceCount)
             {
                 cam = i.cameras_available[selected_device_idx];
                 //Thread.Sleep(350);
                 cam.StartFrameGrabbing();
             }
-
-            return true;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
-            base.OnDisable();
-            if (!IsConfiguring && cam != null)
+            if (!e.IsConfiguring && cam != null)
             {
                 cam.TryStopFrameGrabbing();
             }

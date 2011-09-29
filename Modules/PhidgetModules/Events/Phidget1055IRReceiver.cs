@@ -66,14 +66,12 @@ namespace PhidgetModules.Events
             }
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             ir.Code += gotCode;
-
-            return true;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (ir != null)
             {

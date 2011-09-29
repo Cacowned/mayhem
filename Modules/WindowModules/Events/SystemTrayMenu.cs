@@ -62,14 +62,12 @@ namespace WindowModules.Events
             }
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             context.Post(SetNotifyIconStuff, null);
-        
-            return true;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             context.Post(RemoveFromContextMenu, null);
         }

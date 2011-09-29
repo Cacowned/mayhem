@@ -119,9 +119,6 @@ namespace VisionModules.Events
 
             sensitivity = config.SelectedSensitivity;
 
-            if (this.IsEnabled)
-                this.OnDisable();
-
             if (cam != null)
             {
                 cam = config.camera_selected;
@@ -132,15 +129,13 @@ namespace VisionModules.Events
             {
                 cam = new DummyCamera();
             }
-            if (wasEnabled)
-                this.OnEnable();
         }
 
-        protected override bool OnEnable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             Logger.WriteLine("Enable");
 
-            if (cam != null && !IsConfiguring)
+            if (cam != null && !e.IsConfiguring)
             {
                 if (!cam.running)
                     cam.StartFrameGrabbing();
@@ -149,15 +144,13 @@ namespace VisionModules.Events
                 pd.OnPresenceUpdate -= presenceHandler;
                 pd.OnPresenceUpdate += presenceHandler;               
             }
-
-            return true;
         }
 
-        protected override void OnDisable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             Logger.WriteLine("Disable");
             // only disable the camera if the event is not configuring
-            if (!IsConfiguring && cam != null)
+            if (!e.IsConfiguring && cam != null)
             {
                 pd.OnPresenceUpdate -= presenceHandler;
                 pd.UnregisterForImages(cam);
