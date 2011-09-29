@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Windows.Media;
 
 namespace Mayhem
 {
@@ -41,8 +42,6 @@ namespace Mayhem
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(ModuleList), new UIPropertyMetadata(string.Empty));
 
-        ThicknessAnimation animSlideOut;
-        ThicknessAnimation animSlideIn;
         RectAnimation animSize;
 
         bool isCheckingSizeChanged = false;
@@ -50,16 +49,19 @@ namespace Mayhem
 
         const double AnimationTime = 0.2;
 
+        int heightBasedOnModules;
+
         public ModuleList(IEnumerable list, string headerText)
         {
             Text = headerText;
             InitializeComponent();
 
-            animSlideOut = new ThicknessAnimation(new Thickness(0), new Duration(TimeSpan.FromSeconds(AnimationTime)));
-            animSlideIn = new ThicknessAnimation(new Thickness(0), new Duration(TimeSpan.FromSeconds(AnimationTime)));
             animSize = new RectAnimation(new Rect(), new Duration(TimeSpan.FromSeconds(AnimationTime)));
 
             ModulesList.ItemsSource = list;
+
+            heightBasedOnModules = (int)Math.Min(155 + 43 * ModulesList.Items.Count, Height);
+            Height = heightBasedOnModules;
 
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ModuleList));
@@ -74,13 +76,13 @@ namespace Mayhem
 
         private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double targetWidth = iWpfConfig.Width + 40;
-            double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
+            //double targetWidth = iWpfConfig.Width + 40;
+            //double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
 
-            Rect target = new Rect(Left - (targetWidth - ActualWidth) / 2, Top - (targetHeight - ActualHeight) / 2,
-                                   targetWidth, targetHeight);
+            //Rect target = new Rect(Left - (targetWidth - ActualWidth) / 2, Top - (targetHeight - ActualHeight) / 2,
+            //                       targetWidth, targetHeight);
 
-            StartStoryBoard(WindowRect, target, AnimationTime, false);
+            //StartStoryBoard(WindowRect, target, AnimationTime, false);
         }
 
         private void ChooseButtonClick(object sender, RoutedEventArgs e)
@@ -132,13 +134,23 @@ namespace Mayhem
             WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
             double targetWidth = iWpfConfig.Width + 40;
             double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
+            stackPanelConfig.Width = targetWidth;
 
-            animSlideOut.To = new Thickness(-targetWidth, 0, targetWidth, 0);
-            stackPanelList.BeginAnimation(StackPanel.MarginProperty, animSlideOut);
+            DoubleAnimation animSlideOut = new DoubleAnimation();
+            animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
+            animSlideOut.To = -300;
+            animSlideOut.Completed += delegate(object s, EventArgs args)
+            {
+                stackPanelList.Visibility = System.Windows.Visibility.Hidden;
+            };
+            ((TranslateTransform)gridControls.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
-            animSlideIn.To = new Thickness(0);
-            animSlideIn.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime * 0.95));
-            stackPanelConfig.BeginAnimation(StackPanel.MarginProperty, animSlideIn);
+            ((TranslateTransform)stackPanelConfig.RenderTransform).X = 280;
+            stackPanelConfig.Visibility = System.Windows.Visibility.Visible;
+            animSlideOut = new DoubleAnimation();
+            animSlideOut.To = 300;
+            animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
+            ((TranslateTransform)stackPanelConfig.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
             Rect target = new Rect(Left - (targetWidth - ActualWidth) / 2, Top - (targetHeight - ActualHeight) / 2,
                                    targetWidth, targetHeight);
@@ -205,15 +217,33 @@ namespace Mayhem
                     }
                 }));
 
-            animSlideOut.To = new Thickness(0);
-            stackPanelList.BeginAnimation(StackPanel.MarginProperty, animSlideOut);
+            DoubleAnimation animSlideOut = new DoubleAnimation();
+            animSlideOut.To = 0;
+            animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
+            animSlideOut.Completed += delegate(object s, EventArgs args)
+            {
+                stackPanelConfig.Visibility = System.Windows.Visibility.Hidden;
+            };
+            ((TranslateTransform)gridControls.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
-            animSlideIn.To = new Thickness(300,0,-300,0);
-            animSlideIn.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime * 1.1));
-            stackPanelConfig.BeginAnimation(StackPanel.MarginProperty, animSlideIn);
+            ((TranslateTransform)stackPanelList.RenderTransform).X = 20;
+            stackPanelList.Visibility = System.Windows.Visibility.Visible;
+            animSlideOut = new DoubleAnimation();
+            animSlideOut.To = 0;
+            animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
+            ((TranslateTransform)stackPanelList.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
-            Rect target = new Rect(Left - (300 - ActualWidth) / 2, Top - (550 - ActualHeight) / 2,
-                                   300, 550);
+            //animSlideOut.To = new Thickness(0);
+            //stackPanelList.BeginAnimation(StackPanel.MarginProperty, animSlideOut);
+
+            //animSlideIn.From = new Thickness(0);
+            //animSlideIn.To = new Thickness(290, 0, -300, 0);
+            //animSlideIn.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
+            //animSlideIn.Completed += new EventHandler(animSlideIn_Completed);
+            //stackPanelConfig.BeginAnimation(StackPanel.MarginProperty, animSlideIn);
+
+            Rect target = new Rect(Left - (300 - ActualWidth) / 2, Top - (heightBasedOnModules - ActualHeight) / 2,
+                                   300, heightBasedOnModules);
 
             StartStoryBoard(WindowRect, target, AnimationTime, false);
 
@@ -221,6 +251,11 @@ namespace Mayhem
             buttonCancel.IsEnabled = true;
             buttonSave.IsEnabled = false;
             buttonConfigCancel.IsEnabled = false;
+        }
+
+        void animSlideIn_Completed(object sender, EventArgs e)
+        {
+            stackPanelConfig.Margin = new Thickness(300, 0, -300, 0);
         }
 
         void ListBoxItem_MouseDoubleClick(object sender, RoutedEventArgs e)
@@ -299,14 +334,5 @@ namespace Mayhem
         #endregion
 
         #endregion
-
-        private void ModulesList_LayoutUpdated(object sender, EventArgs e)
-        {
-            if (isFirstLoad)
-            {
-                isFirstLoad = false;
-                Height = 155 + ModulesList.ActualHeight;
-            }
-        }
     }
 }
