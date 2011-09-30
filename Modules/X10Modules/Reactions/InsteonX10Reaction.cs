@@ -24,23 +24,31 @@ namespace X10Modules.Reactions
     [MayhemModule("X10Reaction", "Triggers X10 Commands")]
     public class InsteonX10Reaction : ReactionBase, IWpfConfigurable
     {
+        [DataMember]
+        private X10HouseCode houseCode;
+
+        [DataMember]
+        private X10UnitCode unitCode;
+
+        [DataMember]
+        private X10CommandCode commandCode;
+
+        [DataMember]
+        private string serialPortName;
+
         private MayhemSerialPortMgr serial;
-
-        [DataMember]
-        private X10HouseCode houseCode = X10HouseCode.A;
-
-        [DataMember]
-        private X10UnitCode unitCode = X10UnitCode.U1;
-
-        [DataMember]
-        private X10CommandCode commandCode = X10CommandCode.ON;
-
-        [DataMember]
-        private string serialPortName = string.Empty;
 
         private X10Controller x10Controller = null;
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
+        {
+            houseCode = X10HouseCode.A;
+            unitCode = X10UnitCode.U1;
+            commandCode = X10CommandCode.ON;
+            serialPortName = string.Empty;
+        }
+
+        protected override void OnAfterLoad()
         {
             serial = MayhemSerialPortMgr.instance;
             if (serial.PortExists(this.serialPortName))

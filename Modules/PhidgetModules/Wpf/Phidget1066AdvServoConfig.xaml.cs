@@ -66,18 +66,21 @@ namespace PhidgetModules.Wpf
 
         private void TypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
+            if (AdvServo.servos.Count > 0)
             {
-                AdvServo.servos[Index].Type = (ServoServo.ServoType)Enum.Parse(typeof(ServoServo.ServoType), TypeComboBox.SelectedItem.ToString());
-            }
-            catch (Exception erf)
-            {
-                Logger.WriteLine("Phidget1066AdvServoConfig: " + erf);
-            }
-            PositionSlider.Maximum = AdvServo.servos[Index].PositionMax;
-            PositionSlider.Minimum = AdvServo.servos[Index].PositionMin;
+                try
+                {
+                    AdvServo.servos[Index].Type = (ServoServo.ServoType)Enum.Parse(typeof(ServoServo.ServoType), TypeComboBox.SelectedItem.ToString());
+                }
+                catch (Exception erf)
+                {
+                    Logger.WriteLine("Phidget1066AdvServoConfig: " + erf);
+                }
+                PositionSlider.Maximum = AdvServo.servos[Index].PositionMax;
+                PositionSlider.Minimum = AdvServo.servos[Index].PositionMin;
 
-            PositionSlider.Value = Position;
+                PositionSlider.Value = Position;
+            }
         }
 
         private void PositionSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

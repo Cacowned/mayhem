@@ -3,6 +3,8 @@ using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using MayhemCore.ModuleTypes;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace MayhemCore
 {
@@ -14,16 +16,16 @@ namespace MayhemCore
     public abstract class ModuleBase : INotifyPropertyChanged
     {
         // A reference to the connection that holds this module.
-        public Connection Connection 
+        public Connection Connection
         {
             get;
-            internal set; 
+            internal set;
         }
 
-        public bool IsEnabled 
+        public bool IsEnabled
         {
             get;
-            private set; 
+            private set;
         }
 
         public string Name
@@ -57,6 +59,85 @@ namespace MayhemCore
             {
                 _configString = value;
                 OnPropertyChanged("ConfigString");
+            }
+        }
+
+        protected ModuleBase()
+        {
+            try
+            {
+                Initialize_();
+                OnBeforeLoad();
+                OnLoadDefaults();
+                OnAfterLoad();
+            }
+            catch
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
+            }
+        }
+
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context)
+        {
+            object[] attList = this.GetType().GetCustomAttributes(typeof(DataContractAttribute), true);
+            if (attList.Length > 0)
+            {
+                Debug.WriteLine(context.State);
+                Initialize_();
+                try
+                {
+                    OnBeforeLoad();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
+                }
+            }
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            object[] attList = this.GetType().GetCustomAttributes(typeof(DataContractAttribute), true);
+            if (attList.Length > 0)
+            {
+                try
+                {
+                    OnLoadFromSaved();
+                    OnAfterLoad();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
+                }
+                SetConfigString();
+            }
+        }
+
+        protected virtual void OnBeforeLoad() { }
+        protected virtual void OnLoadDefaults() { }
+        protected virtual void OnLoadFromSaved() { }
+        protected virtual void OnAfterLoad() { }
+
+        private void Initialize_()
+        {
+            Type configurableType = MayhemEntry.Instance.ConfigurableType;
+            Type[] interfaceTypes = GetType().GetInterfaces();
+            foreach (Type interfaceType in interfaceTypes)
+            {
+                if (interfaceType.Equals(configurableType))
+                {
+                    HasConfig = true;
+                    break;
+                }
+            }
+            object[] attList = GetType().GetCustomAttributes(typeof(MayhemModuleAttribute), true);
+            if (attList.Length > 0)
+            {
+                MayhemModuleAttribute att = attList[0] as MayhemModuleAttribute;
+                this.Name = att.Name;
+                this.Description = att.Name;
             }
         }
 
@@ -104,57 +185,6 @@ namespace MayhemCore
         {
         }
 
-        private void Initialize_()
-        {
-            Type configurableType = MayhemEntry.Instance.ConfigurableType;
-            Type[] interfaceTypes = GetType().GetInterfaces();
-            foreach (Type interfaceType in interfaceTypes)
-            {
-                if (interfaceType.Equals(configurableType))
-                {
-                    HasConfig = true;
-                    break;
-                }
-            }
-            object[] attList = GetType().GetCustomAttributes(typeof(MayhemModuleAttribute), true);
-            if (attList.Length > 0)
-            {
-                MayhemModuleAttribute att = attList[0] as MayhemModuleAttribute;
-                this.Name = att.Name;
-                this.Description = att.Name;
-            }
-        }
-
-        protected ModuleBase()
-        {
-            Initialize_();
-            try
-            {
-                Initialize();
-            }
-            catch
-            {
-                ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
-            }
-        }
-
-        [OnDeserialized]
-        private void OnDeserialized(StreamingContext context)
-        {
-            Initialize_();
-            try
-            {
-                Initialize();
-            }
-            catch
-            {
-                ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
-            }
-            SetConfigString();
-        }
-
-        protected virtual void Initialize() { }
-
         public override string ToString()
         {
             return Name;
@@ -169,7 +199,7 @@ namespace MayhemCore
             }
         }
 
-        internal void SetConfigString() 
+        internal void SetConfigString()
         {
             if (this is IConfigurable)
             {

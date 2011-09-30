@@ -13,16 +13,13 @@ namespace PhidgetModules.Events
     [MayhemModule("Phidget: Rfid", "Triggers with a certain Rfid Tag")]
     public class Phidget1023Rfid : EventBase, IWpfConfigurable
     {
-        #region Configuration
         // This is the tag we are watching for
         [DataMember]
         private string Tag;
 
-        #endregion
-
         private RFID rfid;
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             rfid = InterfaceFactory.Rfid;
         }

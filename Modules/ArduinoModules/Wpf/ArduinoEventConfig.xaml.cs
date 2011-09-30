@@ -74,17 +74,21 @@ namespace ArduinoModules.Wpf
             preset_analog_pins = reaction_analog_pins;
 
             InitializeComponent();
+        }
+
+        public override void OnLoad()
+        {
             digitalPins.ItemsSource = digital_pin_items;
             analogPins.ItemsSource = analog_pin_items;
             serial.UpdatePortList();
             deviceNamesIds = serial.getArduinoPortNames();
-  
+
             if (deviceNamesIds.Count > 0)
             {
                 deviceList.ItemsSource = deviceNamesIds;
                 deviceList.DisplayMemberPath = "Value";
                 deviceList.SelectedValuePath = "Key";
-                deviceList.SelectedIndex = 0; 
+                deviceList.SelectedIndex = 0;
             }
 
             // connect to board if there is only one arduino present
@@ -93,11 +97,10 @@ namespace ArduinoModules.Wpf
                 Button_Click(this, null);
             }
 
-            bg_pinUpdate.DoWork += new DoWorkEventHandler((object o, DoWorkEventArgs e) => 
-            
+            bg_pinUpdate.DoWork += new DoWorkEventHandler((object o, DoWorkEventArgs e) =>
             {
-                Dispatcher.BeginInvoke(new Action(() => {digitalPins.Items.Refresh();}),  DispatcherPriority.Render);
-                Dispatcher.BeginInvoke(new Action(() => {analogPins.Items.Refresh(); }), DispatcherPriority.Render);
+                Dispatcher.BeginInvoke(new Action(() => { digitalPins.Items.Refresh(); }), DispatcherPriority.Render);
+                Dispatcher.BeginInvoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.Render);
             });
 
             bg_pinUpdate.WorkerSupportsCancellation = true;
@@ -105,8 +108,6 @@ namespace ArduinoModules.Wpf
             t.AutoReset = true;
             t.Elapsed += new ElapsedEventHandler(t_Elapsed);
             t.Enabled = true;
-
-
         }
 
         void t_Elapsed(object sender, ElapsedEventArgs e)
@@ -115,11 +116,6 @@ namespace ArduinoModules.Wpf
             if (!bg_pinUpdate.IsBusy)
                 bg_pinUpdate.RunWorkerAsync();
         }
-
-       
-        
-
-       
 
         #region WPF Events
        
@@ -181,11 +177,13 @@ namespace ArduinoModules.Wpf
         #region IWpfConfigurable overrides
         public override void OnClosing()
         {
-            arduino.DeregisterListener(this);
+            if (arduino != null)
+            {
+                arduino.DeregisterListener(this);
+            }
             t.Enabled = false;
             bg_pinUpdate.CancelAsync();
             bg_pinUpdate.Dispose();
-            base.OnClosing();
         }
      
 

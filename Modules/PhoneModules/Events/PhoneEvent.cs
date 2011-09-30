@@ -13,31 +13,30 @@ namespace PhoneModules.Events
     [MayhemModule("Phone Remote", "Triggers from phone")]
     public class PhoneEvent : EventBase, IWpfConfigurable
     {
-        #region Configuration Properties
         [DataMember]
         private PhoneLayoutButton button;
-
-        #endregion
 
         private PhoneLayout phoneLayout;
         private PhoneConnector phoneConnector;
 
         private bool isCreatingForFirstTime = false;
 
-        protected override void Initialize()
+        protected override void OnBeforeLoad()
         {
             phoneLayout = PhoneLayout.Instance;
             phoneConnector = PhoneConnector.Instance;
-            if (button == null)
-            {
-                isCreatingForFirstTime = true;
-                string id = Guid.NewGuid().ToString();
-                button = phoneLayout.AddButton(id);
-            }
-            else
-            {
-                phoneLayout.AddButton(button);
-            }
+        }
+
+        protected override void OnLoadDefaults()
+        {
+            isCreatingForFirstTime = true;
+            string id = Guid.NewGuid().ToString();
+            button = phoneLayout.AddButton(id);
+        }
+
+        protected override void OnLoadFromSaved()
+        {
+            phoneLayout.AddButton(button);
         }
 
         public string GetConfigString()

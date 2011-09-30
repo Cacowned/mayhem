@@ -15,9 +15,6 @@ namespace DefaultModules.Events
     [MayhemModule("Timer", "Triggers after a certain amount of time")]
     public class Timer : EventBase, ICli, IWpfConfigurable
     {
-        private DispatcherTimer myTimer;
-
-        #region Configuration Properties
         [DataMember]
         private int Hours;
 
@@ -26,9 +23,10 @@ namespace DefaultModules.Events
 
         [DataMember]
         private int Seconds;
-        #endregion
 
-        protected override void Initialize()
+        private DispatcherTimer myTimer;
+
+        protected override void OnAfterLoad()
         {
             myTimer = new DispatcherTimer();
             myTimer.Tick += new EventHandler(myTimer_Tick);

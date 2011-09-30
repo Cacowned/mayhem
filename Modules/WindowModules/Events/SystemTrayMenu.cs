@@ -15,6 +15,9 @@ namespace WindowModules.Events
     [MayhemModule("System Tray Menu", "Add a menu into the system tray")]
     public class SystemTrayMenu : EventBase, IWpfConfigurable
     {
+        [DataMember]
+        private string text;
+
         static object locker = new object();
         static NotifyIcon notifyIcon = null;
 
@@ -22,10 +25,7 @@ namespace WindowModules.Events
 
         MenuItem menuItem;
 
-        [DataMember]
-        private string text;
-
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             context = SynchronizationContext.Current;
         }
@@ -45,7 +45,7 @@ namespace WindowModules.Events
                 notifyIcon.Text = "Mayhem";
                 notifyIcon.MouseUp += new MouseEventHandler(notifyIcon_MouseUp);
             }
-            if(!notifyIcon.Visible)
+            if (!notifyIcon.Visible)
                 notifyIcon.Visible = true;
 
             menuItem = new MenuItem(text, OnClick);
@@ -90,7 +90,7 @@ namespace WindowModules.Events
         {
             return text;
         }
-        
+
         #region Configuration Views
 
         public WpfConfiguration ConfigurationControl

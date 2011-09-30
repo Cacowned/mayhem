@@ -25,26 +25,33 @@ namespace ArduinoModules.Events
     [MayhemModule("Arduino Event", "**Testing** Detects Pin Changes in Arduino")]
     public class ArduinoEvent : EventBase, IWpfConfigurable
     {
+        [DataMember]
+        public string arduinoPortName;
+
+        [DataMember]
+        private List<DigitalPinItem> monitorDigitalPins;
+
+        [DataMember]
+        private List<AnalogPinItem> monitorAnalogPins;
+
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
 
         private ArduinoFirmata arduino = null;
 
-        private Action<Pin> OnDigitalPinChanged; // = new Action<Pin>(arduino_OnDigitalPinChanged);
-        private Action<Pin> OnAnalogPinChanged; // = new Action<Pin>(arduino_OnAnalogPinChanged);
+        private Action<Pin> OnDigitalPinChanged;
+        private Action<Pin> OnAnalogPinChanged;
 
         private const int ACTIVATE_MIN_DELAY = 50;  //minimum activation interval
         DateTime lastActivated = DateTime.MinValue;
 
-        [DataMember]
-        public string arduinoPortName = String.Empty;
+        protected override void OnLoadDefaults()
+        {
+            monitorDigitalPins = new List<DigitalPinItem>();
+            monitorAnalogPins = new List<AnalogPinItem>();
+            arduinoPortName = String.Empty;
+        }
 
-        [DataMember]
-        private List<DigitalPinItem> monitorDigitalPins = new List<DigitalPinItem>();
-
-        [DataMember]
-        private List<AnalogPinItem> monitorAnalogPins = new List<AnalogPinItem>();
-
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             if (arduinoPortName != String.Empty)
             {

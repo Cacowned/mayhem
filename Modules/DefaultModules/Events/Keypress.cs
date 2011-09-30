@@ -17,6 +17,9 @@ namespace DefaultModules.Events
     [MayhemModule("Key Press", "This event fires on a predefined key press")]
     public class KeyPress : EventBase, IWpfConfigurable
     {
+        [DataMember]
+        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown;
+
         private InterceptKeys interceptKeys;
 
         // If there are multiple keypress events, we want to disable their activation 
@@ -25,19 +28,12 @@ namespace DefaultModules.Events
 
         private Thread mainThread;
 
-        #region Configuration
-
-        [DataMember]
-        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown;
-
-        #endregion
-
-        public KeyPress()
+        protected override void OnLoadDefaults()
         {
             MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
         }
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             interceptKeys = InterceptKeys.Instance;
             mainThread = Thread.CurrentThread;

@@ -12,8 +12,6 @@ namespace PhidgetModules.Reaction
     [MayhemModule("Phidget: Adv. Servo", "Controls a servo")]
     public class Phidget1066AdvServo : ReactionBase, IWpfConfigurable
     {
-        #region Configuration
-
         // Motor Type
         [DataMember]
         private ServoServo.ServoType ServoType;
@@ -27,11 +25,10 @@ namespace PhidgetModules.Reaction
         [DataMember]
         private double Position;
 
-        #endregion;
         // Instance of the servo class
         private static AdvancedServo advServo;
 
-        public Phidget1066AdvServo()
+        protected override void OnLoadDefaults()
         {
             Position = 50;
             Index = 0;
@@ -40,7 +37,7 @@ namespace PhidgetModules.Reaction
             ServoType = ServoServo.ServoType.HITEC_HS322HD;
         }
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             // Only maintain one instance of the servo 
             // for all the AdvServo classes

@@ -19,11 +19,16 @@ namespace WindowModules
             private set;
         }
 
-        private static HashSet<int> processBlackList = new HashSet<int>();
+        private static HashSet<int> processBlackList;
 
-        public WindowSequence()
+        protected override void OnLoadDefaults()
         {
             ActionInfo = new WindowActionInfo();
+        }
+
+        protected override void OnAfterLoad()
+        {
+            processBlackList = new HashSet<int>();
         }
 
         public WpfConfiguration ConfigurationControl
