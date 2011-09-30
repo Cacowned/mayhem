@@ -245,7 +245,28 @@ namespace ArduinoModules.Events
         public string GetConfigString()
         {
             ///TODO: Sven: Put the right thing here
-            throw new Exception("Sven: fill this in");
+            // throw new Exception("Sven: fill this in");
+
+            string cs = string.Empty;
+            cs += arduinoPortName+" ";
+            for (int i = 0; i < monitorDigitalPins.Count; i++)
+            {
+                if (i < monitorDigitalPins.Count - 1)
+                    cs += monitorDigitalPins[i].PinName + ",";                
+                else
+                    cs += monitorDigitalPins[i].PinName ;
+            }
+            if (monitorAnalogPins.Count > 0)
+                cs += ",";
+            for (int i = 0; i < monitorAnalogPins.Count; i++)
+            {
+                if (i < monitorAnalogPins.Count - 1)
+                    cs += monitorAnalogPins[i].PinName + ",";
+                else
+                    cs += monitorAnalogPins[i].PinName ;
+            }
+
+            return cs;
         }
     }
 }

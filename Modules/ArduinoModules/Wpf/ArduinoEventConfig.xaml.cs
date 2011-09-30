@@ -108,6 +108,8 @@ namespace ArduinoModules.Wpf
             t.AutoReset = true;
             t.Elapsed += new ElapsedEventHandler(t_Elapsed);
             t.Enabled = true;
+
+            CanSave = true; 
         }
 
         void t_Elapsed(object sender, ElapsedEventArgs e)

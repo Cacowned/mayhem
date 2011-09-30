@@ -80,6 +80,7 @@ namespace ArduinoModules.Wpf
             {
                 connectButton_Click(this, null);
             }
+            CanSave = true;
         }
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
