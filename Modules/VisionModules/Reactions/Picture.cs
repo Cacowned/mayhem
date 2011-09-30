@@ -19,6 +19,7 @@ using MayhemOpenCVWrapper;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
+using MayhemOpenCVWrapper.LowLevel;
 
 namespace VisionModules.Reactions
 {
@@ -42,9 +43,12 @@ namespace VisionModules.Reactions
         // The device we are recording from
         private CameraDriver cameraDriver;
         private ImagerBase camera;
+        private DummyCameraImageListener dummyListener;
 
         protected override void OnLoadDefaults()
         {
+            cameraDriver = CameraDriver.Instance;
+            dummyListener = new DummyCameraImageListener();
             captureOffsetTime = 0.0;
             folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
             fileNamePrefix = "Mayhem";
@@ -53,6 +57,7 @@ namespace VisionModules.Reactions
 
         protected override void OnAfterLoad()
         {
+            dummyListener = new DummyCameraImageListener();
             cameraDriver = CameraDriver.Instance;
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
@@ -84,13 +89,14 @@ namespace VisionModules.Reactions
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
+            cameraDriver = CameraDriver.Instance;
             // TODO: Improve this code
             if (!e.IsConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
                 camera = cameraDriver.cameras_available[selectedDeviceIndex];
-                //Thread.Sleep(350);
-             
+                //Thread.Sleep(350);            
                 camera.StartFrameGrabbing();
+                dummyListener.RegisterForImages(camera);
             }
         }
 
@@ -98,6 +104,7 @@ namespace VisionModules.Reactions
         {
             if (!e.IsConfiguring && camera != null)
             {
+                dummyListener.UnregisterForImages(camera); 
                 camera.TryStopFrameGrabbing();
             }
             //Thread.Sleep(350); 
