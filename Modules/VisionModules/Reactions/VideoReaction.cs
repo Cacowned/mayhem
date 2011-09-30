@@ -20,6 +20,7 @@ using MayhemOpenCVWrapper;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
+using MayhemOpenCVWrapper.LowLevel;
 
 namespace VisionModules.Reactions
 {
@@ -53,6 +54,7 @@ namespace VisionModules.Reactions
         // The device we are recording from
         private CameraDriver cameraDriver = CameraDriver.Instance;
         private Camera camera = null;
+        private DummyCameraImageListener dummyCameraListener = new DummyCameraImageListener();
 
         private string lastVideoSaved = String.Empty;
 
@@ -60,6 +62,8 @@ namespace VisionModules.Reactions
 
         protected override void OnLoadDefaults()
         {
+            cameraDriver = CameraDriver.Instance;
+            dummyCameraListener = new DummyCameraImageListener();
             folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
             fileNamePrefix = "Mayhem";
             selectedDeviceIndex = 0;
@@ -70,6 +74,7 @@ namespace VisionModules.Reactions
         protected override void OnAfterLoad()
         {
             cameraDriver = CameraDriver.Instance;
+            dummyCameraListener = new DummyCameraImageListener();
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
                 Logger.WriteLine("Startup with camera " + selectedDeviceIndex);
@@ -151,10 +156,12 @@ namespace VisionModules.Reactions
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
+            cameraDriver = CameraDriver.Instance;
             Logger.WriteLine("");
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
                 camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                dummyCameraListener.RegisterForImages(camera);
                 //cam.OnImageUpdated += imageUpdateHandler;
                 if (camera.running == false)
                     camera.StartFrameGrabbing();
@@ -165,6 +172,7 @@ namespace VisionModules.Reactions
         {
             if (camera != null)
             {
+                dummyCameraListener.UnregisterForImages(camera);
                 camera.TryStopFrameGrabbing();
             }
         }

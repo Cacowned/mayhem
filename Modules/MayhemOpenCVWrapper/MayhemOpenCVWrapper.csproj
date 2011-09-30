@@ -58,8 +58,9 @@
     <Compile Include="ImagerBase.cs" />
     <Compile Include="CameraInfo.cs" />
     <Compile Include="ImageProcessing.cs" />
+    <Compile Include="LowLevel\DummyCameraImageListener.cs" />
     <Compile Include="LowLevel\FaceDetectorComponent.cs" />
-    <Compile Include="LowLevel\IVisionEventComponent.cs" />
+    <Compile Include="LowLevel\ICameraImageListener.cs" />
     <Compile Include="LowLevel\MotionDetectorComponent.cs" />
     <Compile Include="LowLevel\ObjectDetectorComponent.cs" />
     <Compile Include="CameraDriver.cs" />
