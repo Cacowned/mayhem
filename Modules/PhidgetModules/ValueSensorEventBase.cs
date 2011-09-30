@@ -6,7 +6,6 @@ namespace PhidgetModules
     [DataContract]
     abstract public class ValueSensorEventBase : SensorEventBase
     {
-        #region Configuration
         /// <summary>
         /// If this is true, then we want to trigger when
         /// the CurrentValue goes from below the topValue to above the
@@ -27,18 +26,17 @@ namespace PhidgetModules
             set;
         }
 
-        #endregion
-
         protected double CurrentValue { get; set; }
         protected double LastValue { get; set; }
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
         {
-            base.Initialize();
-
             Increasing = true;
             TopValue = 85;
+        }
 
+        protected override void OnAfterLoad()
+        {
             CurrentValue = LastValue = TopValue;
         }
 

@@ -11,25 +11,23 @@ namespace PhidgetModules.Reaction
     [MayhemModule("Phidget: Digital Output", "Triggers a digital output")]
     public class DigitalOutput : ReactionBase, IWpfConfigurable
     {
-        #region Configuration
         // Which index do we want to be looking at?
         [DataMember]
         private int Index;
 
         [DataMember]
         private DigitalOutputType OutputType;
-        #endregion
 
         // The interface kit we are using for the sensors
         private InterfaceKit ifKit;
 
-        public DigitalOutput()
+        protected override void OnLoadDefaults()
         {
             Index = 0;
             OutputType = DigitalOutputType.Toggle;
         }
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             this.ifKit = InterfaceFactory.Interface;
         }

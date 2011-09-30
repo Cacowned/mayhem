@@ -14,17 +14,14 @@ namespace PhidgetModules.Events
     [MayhemModule("Phidget: IR Receiver", "Triggers when it sees a certain IR code")]
     public class Phidget1055IRReceiver : EventBase, IWpfConfigurable
     {
-        #region Configuration
-
         [DataMember]
         private IRCode Code;
-        #endregion
 
         private IR ir;
         private IRCodeEventHandler gotCode;
         private DateTime lastSignal;
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             ir = InterfaceFactory.IR;
 

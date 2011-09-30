@@ -6,7 +6,6 @@ namespace PhidgetModules
     [DataContract]
     abstract public class OnOffSensorEventBase : SensorEventBase
     {
-        #region Configuration
         [DataMember]
         protected int TopThreshold;
 
@@ -19,21 +18,14 @@ namespace PhidgetModules
         [DataMember]
         protected bool OnTurnOn;
 
-        #endregion
-
         protected double CurrentValue { get; set; }
         protected double LastValue { get; set; }
 
-        public OnOffSensorEventBase()
+        protected override void OnLoadDefaults()
         {
             TopThreshold = 900;
             BottomThreshold = 500;
             OnTurnOn = true;
-        }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
         }
 
         protected override void SensorChange(object sender, SensorChangeEventArgs ex)

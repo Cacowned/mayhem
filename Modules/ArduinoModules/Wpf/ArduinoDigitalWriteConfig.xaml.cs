@@ -59,10 +59,9 @@ namespace ArduinoModules.Wpf
         {
             reaction_set_pins = set_pins;
             InitializeComponent();
-            Init();
         }
 
-        private void Init()
+        public override void OnLoad()
         {
             digitalPins.ItemsSource = pin_items;
             serial.UpdatePortList();
@@ -81,8 +80,6 @@ namespace ArduinoModules.Wpf
             {
                 connectButton_Click(this, null);
             }
-
-       
         }
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
@@ -121,7 +118,10 @@ namespace ArduinoModules.Wpf
 
         public override void OnClosing()
         {
-            arduino.DeregisterListener(this);
+            if (arduino != null)
+            {
+                arduino.DeregisterListener(this);
+            }
             base.OnClosing();
         }
 

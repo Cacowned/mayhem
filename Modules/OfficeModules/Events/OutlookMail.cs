@@ -11,7 +11,7 @@ namespace OfficeModules.Events
         private OOutlook.Application outlook;
         private OOutlook.ApplicationEvents_11_NewMailEventHandler mailEvent;
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             // Create the event handler delegate to attach
             mailEvent = new OOutlook.ApplicationEvents_11_NewMailEventHandler(GotMail);

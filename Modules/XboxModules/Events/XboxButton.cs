@@ -13,25 +13,22 @@ namespace XboxModules.Events
     [MayhemModule("Xbox Controller: Button", "Triggers when buttons on an Xbox 360 controller are pushed")]
     public class XboxButton : EventBase, IWpfConfigurable
     {
-        private ButtonWatcher buttonWatcher;
-
-        public static bool IsConfigOpen { get; set; }
-
-        #region Configuration
         [DataMember]
         private Buttons xboxButtons;
 
         [DataMember]
-        private PlayerIndex player;
-       
-        #endregion
 
-        public XboxButton()
+        private PlayerIndex player;
+        private ButtonWatcher buttonWatcher;
+
+        public static bool IsConfigOpen { get; set; }
+
+        protected override void OnLoadDefaults()
         {
             player = PlayerIndex.One;
         }
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             buttonWatcher = ButtonWatcher.Instance;
         }

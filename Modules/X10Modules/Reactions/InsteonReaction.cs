@@ -25,20 +25,27 @@ namespace X10Modules.Reactions
     [MayhemModule("InsteonReaction", "Triggers Insteon Commands")]
     public class InsteonReaction : ReactionBase, IWpfConfigurable
     {
+        [DataMember]
+        private byte[] device_address;
+
+        [DataMember]
+        private InsteonStandardMessage command;
+
+        [DataMember]
+        private string portName;
+
         private MayhemSerialPortMgr serial;
 
-        [DataMember]
-        private byte[] device_address = new byte[3];
-
-        [DataMember]
-        private InsteonStandardMessage command = null;
-
-        [DataMember]
-        private string portName = string.Empty;
-        
         private InsteonController insteonController = null;
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
+        {
+            device_address = new byte[3];
+            command = null;
+            portName = string.Empty;
+        }
+
+        protected override void OnAfterLoad()
         {
             serial = MayhemSerialPortMgr.instance;
             // TODO evaluate is Serial.findInsteonDevices may be 
@@ -55,7 +62,7 @@ namespace X10Modules.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get 
+            get
             {
                 Logger.WriteLine("ConfigurationControl");
                 return new InsteonReactionConfig();
@@ -72,7 +79,7 @@ namespace X10Modules.Reactions
             insteonController = InsteonController.ControllerForPortName(portName);
         }
 
-        
+
         public string GetConfigString()
         {
             string config = String.Format("Device: {0:x2}:{1:x2}:{2:x2}", device_address[0], device_address[1], device_address[2]);

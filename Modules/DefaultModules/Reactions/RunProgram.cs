@@ -14,7 +14,6 @@ namespace DefaultModules.Reactions
     [MayhemModule("Run Program", "Runs a given program")]
     public class RunProgram : ReactionBase, IWpfConfigurable
     {
-        #region Configuration Properties
         [DataMember]
         private string FileName
         {
@@ -28,9 +27,7 @@ namespace DefaultModules.Reactions
             get;
             set;
         }
-        #endregion
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public override void Perform()
         {
             if (File.Exists(FileName))

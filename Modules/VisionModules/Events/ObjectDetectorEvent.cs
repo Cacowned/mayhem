@@ -30,16 +30,6 @@ namespace VisionModules.Events
     [MayhemModule("Object Detector", "Detects objects in scene matching a template image")]
     public class ObjectDetectorEvent : EventBase, IWpfConfigurable
     {
-        private const int detectionInterval = 2500; //ms
-        private DateTime lastObjectsDetected = DateTime.Now;
-        private ObjectDetectorComponent od;
-        private ObjectDetectorComponent.DetectionHandler objectDetectHandler;
-
-        private CameraDriver i = CameraDriver.Instance;
-
-        private Camera cam;
-
-        // for some reason normal arrays are not serializable!
         [DataMember]
         private Byte[] templateImage_bytes;
 
@@ -48,33 +38,43 @@ namespace VisionModules.Events
         private Byte[] templatePreview_bytes;
 
         [DataMember]
-        private string testString = "orig";
+        private Rect boundingRect;
+
+        private const int detectionInterval = 2500; //ms
+        private DateTime lastObjectsDetected = DateTime.Now;
+        private ObjectDetectorComponent od;
+        private ObjectDetectorComponent.DetectionHandler objectDetectHandler;
+
+        private CameraDriver cameraDriver = CameraDriver.Instance;
+
+        private Camera camera;
 
         public Bitmap templateImage;
 
         public Bitmap templatePreview;
 
-        public double preview_scale_f = 1;
-
-        [DataMember]
-        private Rect boundingRect = new Rect(0, 0, 0, 0);
+        public double previewScaleF = 1;
 
         // the cam we have selected
-        private int selected_device_idx = 0;
+        private int selectedDeviceIndex = 0;
 
         public bool templateConfigured
         {
             get { return od.templateIsSet; }
         }
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
         {
-            if (i == null)
-                i = CameraDriver.Instance;
+            boundingRect = new Rect(0, 0, 0, 0);
+        }
 
-            if (selected_device_idx < i.DeviceCount)
+        protected override void OnAfterLoad()
+        {
+            cameraDriver = CameraDriver.Instance;
+
+            if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = i.cameras_available[selected_device_idx];
+                camera = cameraDriver.cameras_available[selectedDeviceIndex];
             }
             else
             {
@@ -95,9 +95,6 @@ namespace VisionModules.Events
             {
                 templatePreview = VisionModulesWPFCommon.ArrayToBitmap(templatePreview_bytes);
             }
-            // -----------
-
-            Logger.WriteLine(testString);
         }
 
         void m_onObjectDetected(object sender, List<Point> matchingKeyPoints)
@@ -122,13 +119,13 @@ namespace VisionModules.Events
             Logger.WriteLine("Enable");
 
             // TODO: Improve this code
-            if (!e.IsConfiguring && selected_device_idx < i.DeviceCount)
+            if (!e.IsConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = i.cameras_available[selected_device_idx];
-                if (cam.running == false)
-                    cam.StartFrameGrabbing();
+                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                if (camera.running == false)
+                    camera.StartFrameGrabbing();
                 // register the trigger's motion update handler
-                od.RegisterForImages(cam);
+                od.RegisterForImages(camera);
                 od.OnObjectDetected += objectDetectHandler;
                 od.OnObjectDetected -= objectDetectHandler;
             }
@@ -149,13 +146,13 @@ namespace VisionModules.Events
             Logger.WriteLine("Disable");
 
             od.OnObjectDetected -= objectDetectHandler;
-            if (cam != null)
-                od.UnregisterForImages(cam);
+            if (camera != null)
+                od.UnregisterForImages(camera);
 
-            if (cam != null && !e.IsConfiguring)
+            if (camera != null && !e.IsConfiguring)
             {
                 // correct module disabling procedure               
-                cam.TryStopFrameGrabbing();
+                camera.TryStopFrameGrabbing();
             }
         }
 
@@ -188,7 +185,7 @@ namespace VisionModules.Events
                 if (templatePreview != null)
                     config.templatePreview = templatePreview;
 
-                config.DeviceList.SelectedIndex = selected_device_idx;
+                config.DeviceList.SelectedIndex = selectedDeviceIndex;
                 return config;
             }
         }
@@ -202,7 +199,7 @@ namespace VisionModules.Events
 
             ObjectDetectorConfig config = configurationControl as ObjectDetectorConfig;
 
-            cam = config.selected_camera;
+            camera = config.selected_camera;
             boundingRect = config.selectedBoundingRect;
             templateImage = config.templateImg;
             templatePreview = config.templatePreview;
@@ -213,8 +210,6 @@ namespace VisionModules.Events
             templatePreview_bytes = VisionModulesWPFCommon.BitmapToArray(templatePreview);
 
             // TODO: od.SetDetectionBoundaryRect(boundingRect) 
-
-            testString = "FOOBAR";
         }
     }
 }

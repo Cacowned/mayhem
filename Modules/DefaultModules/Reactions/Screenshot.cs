@@ -16,10 +16,16 @@ namespace DefaultModules.Reactions
     public class Screenshot : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+        private string saveLocation;
 
         [DataMember]
-        private string filenamePrefix = "Mayhem";
+        private string filenamePrefix;
+
+        protected override void OnLoadDefaults()
+        {
+            saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            filenamePrefix = "Mayhem";
+        }
 
         public override void Perform()
         {

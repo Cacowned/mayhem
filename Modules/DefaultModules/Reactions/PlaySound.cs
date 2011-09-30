@@ -15,16 +15,14 @@ namespace DefaultModules.Reactions
     [MayhemModule("Play Sound", "Plays an audio file when triggered")]
     public class PlaySound : ReactionBase, ICli, IWpfConfigurable
     {
-        MPlayer m;
-
-        #region Configuration Properties
         [DataMember]
         private string SoundPath
         {
             get;
             set;
         }
-        #endregion
+
+        MPlayer m;
 
         public override void Perform()
         {
