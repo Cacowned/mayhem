@@ -271,7 +271,7 @@ namespace ArduinoModules.Firmata
         }
 
         /// <summary>
-        /// Sends initial Firmata message and initailized the mcu state
+        /// Sends initial Firmata message and initialize the mcu state
         /// </summary>
         private void InitializeFirmata()
         {
@@ -314,8 +314,6 @@ namespace ArduinoModules.Firmata
 
             byte[] message = new byte[5] { FIRMATA_MSG.START_SYSEX, FIRMATA_MSG.SAMPLING_INTERVAL, ms[0], ms[1], FIRMATA_MSG.END_SYSEX };
             mSerial.WriteToPort(portName_, message, message.Length);
-
-
         }
 
         #region Outgoing commands
@@ -490,11 +488,8 @@ namespace ArduinoModules.Firmata
                             parse_count = 0;
                             parse_command_len = 0;
                         }
-
                     }
-
-            }
-          
+            }         
         }
 
         private void ProcessMessage()
@@ -518,8 +513,7 @@ namespace ArduinoModules.Firmata
 
 				        return;
                 }
-		      }
-		    
+		      }		    
 	        }
 	        if (cmd == FIRMATA_MSG.DIGITAL_IO_MESSAGE /*&& parse_count == 3*/) {
 		        int port_num = (parse_buf[0] & (byte) 0x0F);
@@ -651,7 +645,6 @@ namespace ArduinoModules.Firmata
 
                         //tx_count += len;
                     }
-
                 }
                 else if (parse_buf[1] == FIRMATA_MSG.ANALOG_MAPPING_RESPONSE)
                 {
@@ -670,27 +663,11 @@ namespace ArduinoModules.Firmata
                     pin_info[pin].value = parse_buf[4];
                     if (parse_count > 6) pin_info[pin].value |= (byte)(parse_buf[5] << 7);
                     if (parse_count > 7) pin_info[pin].value |= (byte)(parse_buf[6] << 14);
-                    //add_pin(pin);
-
                     Logger.WriteLine("Added Pin! " + pin + " " + pin_info[pin].mode + " " + pin_info[pin].value);
 
                     /////////////////////// post asynchronous event on main thread
                     if (this.OnPinAdded != null)
                     {
-                        // this.OnPinAdded(pin_info[pin]);
-                        //OnPinAdded.BeginInvoke(pin_info[pin], null, null);
-                        /*
-                        operation.Post(new SendOrPostCallback(delegate(object state)
-                          {
-                              Action<Pin> handler = OnPinAdded;
-                              if (handler != null)
-                              {
-                                  handler(pin_info[pin]);
-                              }
-                          }
-                         ), null);*/
-
-                        //OnPinAdded.Raise(this, EventArgs.Empty);
                         OnPinAdded(pin_info[pin]);
                     }
                     //////////////////////
@@ -699,9 +676,5 @@ namespace ArduinoModules.Firmata
                 return;
             }
         }
-
-
-
-        
     }
 }
