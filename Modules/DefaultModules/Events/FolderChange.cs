@@ -25,21 +25,15 @@ namespace DefaultModules.Events
         private bool monitorName;
 
         private FileSystemWatcher fsWatcher;
-
-        // pick the one that we don't check for
         private NotifyFilters defaultFilter = NotifyFilters.DirectoryName ;
 
         protected override void OnLoadDefaults()
         {
             folderToMonitor = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             monitorWrite = true;
-            base.OnLoadDefaults();
         }
 
-        protected override void OnLoadFromSaved()
-        {
-            base.OnLoadFromSaved();
-        }
+       
 
         protected override void OnAfterLoad()
         {
@@ -52,6 +46,7 @@ namespace DefaultModules.Events
             {
                 Logger.WriteLine("Exc: Folder doesn't seem to exist or be accesible");
                 fsWatcher = new FileSystemWatcher();
+                folderToMonitor = "Reconfigure!";
             }
             SetFlags();
             fsWatcher.Changed += new FileSystemEventHandler(OnChanged);
