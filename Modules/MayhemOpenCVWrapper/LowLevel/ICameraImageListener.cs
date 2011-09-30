@@ -12,12 +12,12 @@ using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public abstract class IVisionEventComponent
+    public abstract class ICameraImageListener
     {
 
         protected Camera.ImageUpdateHandler imageUpdateHandler;
 
-        public IVisionEventComponent()
+        public ICameraImageListener()
         {
             imageUpdateHandler = new Camera.ImageUpdateHandler(update_frame);
         }

@@ -19,7 +19,7 @@ using Point = System.Drawing.Point;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public class FaceDetectorComponent : IVisionEventComponent
+    public class FaceDetectorComponent : ICameraImageListener
     {
         private FaceDetector fd; 
         public delegate void DetectionHandler(object sender, List<Point> points);

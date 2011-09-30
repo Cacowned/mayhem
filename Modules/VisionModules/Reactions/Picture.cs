@@ -89,6 +89,7 @@ namespace VisionModules.Reactions
             {
                 camera = cameraDriver.cameras_available[selectedDeviceIndex];
                 //Thread.Sleep(350);
+             
                 camera.StartFrameGrabbing();
             }
         }

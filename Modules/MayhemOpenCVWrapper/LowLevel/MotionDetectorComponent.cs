@@ -23,7 +23,7 @@ namespace MayhemOpenCVWrapper.LowLevel
      *  TODO: Make the detector classes more generic
      * <summary>
      * */
-    public class MotionDetectorComponent : IVisionEventComponent
+    public class MotionDetectorComponent : ICameraImageListener
     {
         private bool VERBOSE_DEBUG = false;
         private OpenCVDLL.MotionDetector m;
