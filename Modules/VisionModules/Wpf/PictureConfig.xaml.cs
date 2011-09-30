@@ -72,15 +72,11 @@ namespace VisionModules.Wpf
 
         private delegate void ImageUpdateHandler(Camera c);
 
-        //widths of the preview images
-        private int preview_width = 0;
-        private int preview_height = 0;
 
         // binding to the slider value 
         public double slider_value;
 
-        // handle on brush (camera preview) that is currently selected
-        private Border selected_preview_img = null;
+       
 
         public PictureConfig(string location, string prefix,  double capture_offset_time, int deviceIdx)
         {
