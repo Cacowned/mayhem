@@ -30,7 +30,6 @@ namespace DefaultModules.Wpf
             {
                 return (bool)chk_write.IsChecked;
             }
-            //private set;
         }
 
         public bool MonitorName
@@ -39,7 +38,6 @@ namespace DefaultModules.Wpf
             {
                 return (bool)chk_name.IsChecked;
             }
-           // private set; 
         }
 
         public string FolderToMonitor
@@ -48,7 +46,7 @@ namespace DefaultModules.Wpf
             private set; 
         }
 
-        private bool monitorWrite, monitorAccess, monitorName; 
+        private bool monitorWrite, monitorName; 
 
         public FolderChangeConfig(string path, bool mWrite, bool mName)
         {
@@ -63,10 +61,8 @@ namespace DefaultModules.Wpf
         /// </summary>
         public override void OnLoad()
         {
-            // set the checkbox to be checked by default
             chk_write.IsChecked = monitorWrite;
             chk_name.IsChecked = monitorName;
-
             textBoxDirectory.Text = FolderToMonitor;
         }
 
