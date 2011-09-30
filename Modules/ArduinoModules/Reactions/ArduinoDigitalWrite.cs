@@ -174,9 +174,16 @@ namespace ArduinoModules.Reactions
         }
 
         public string GetConfigString()
-        {
-            ///TODO: Sven: Put the right thing here
-            throw new Exception("Sven: fill this in");
+        {      
+            string cs = arduinoPortName+" ";
+            for (int i = 0; i < writePins.Count; i++)
+            {
+                if (i < writePins.Count - 1)
+                    cs += writePins[i].PinName + ",";
+                else
+                    cs += writePins[i].PinName;
+            }
+            return cs;
         }
     }
 }
