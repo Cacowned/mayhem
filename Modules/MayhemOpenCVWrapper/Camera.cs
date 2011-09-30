@@ -65,7 +65,7 @@ namespace MayhemOpenCVWrapper
         private ManualResetEvent grabFramesReset;
         #endregion
 
-        #region Contstructor / Destructor
+        #region Constructor / Destructor
         public Camera(CameraInfo info, CameraSettings settings)
         {
             this.info = info;
@@ -149,10 +149,14 @@ namespace MayhemOpenCVWrapper
         /// </summary>
         private void InitializeCaptureDevice(CameraInfo info, CameraSettings settings)
         {
-            is_initialized = false;
+            Logger.WriteLine("========= CAM: " + info.deviceId+ " ======================");
             try
             {
-                OpenCVDLL.OpenCVBindings.InitCapture(info.deviceId, settings.resX, settings.resY);
+                // lock on the CameraDriver to prevent multiple simultaneous calls to InitCapture
+                lock (CameraDriver.Instance)
+                {
+                    OpenCVDLL.OpenCVBindings.InitCapture(info.deviceId, settings.resX, settings.resY);
+                }
                 bufSize = OpenCVDLL.OpenCVBindings.GetImageSize();
                 imageBuffer = new byte[bufSize];
                 frameInterval = CameraSettings.DEFAULTS().updateRate_ms;

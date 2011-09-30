@@ -18,7 +18,7 @@ using Point = System.Drawing.Point;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public class ObjectDetectorComponent : IVisionEventComponent
+    public class ObjectDetectorComponent : ICameraImageListener
     {
         public delegate void DetectionHandler(object sender, List<Point> points);
         public event DetectionHandler OnObjectDetected;

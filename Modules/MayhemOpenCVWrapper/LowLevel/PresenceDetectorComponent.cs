@@ -15,7 +15,7 @@ using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public class PresenceDetectorComponent : IVisionEventComponent
+    public class PresenceDetectorComponent : ICameraImageListener
     {
         public static double DEFAULT_SENSITIVITY
         {
