@@ -7,19 +7,13 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows;
-
-using Point = System.Drawing.Point;
-using MayhemOpenCVWrapper;
 using MayhemCore;
+using Point = System.Drawing.Point;
 
 
 namespace MayhemOpenCVWrapper.LowLevel
@@ -29,7 +23,7 @@ namespace MayhemOpenCVWrapper.LowLevel
      *  TODO: Make the detector classes more generic
      * <summary>
      * */
-    public class MotionDetectorComponent : IVisionEventComponent
+    public class MotionDetectorComponent : ICameraImageListener
     {
         private bool VERBOSE_DEBUG = false;
         private OpenCVDLL.MotionDetector m;

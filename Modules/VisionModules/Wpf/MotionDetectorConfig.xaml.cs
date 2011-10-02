@@ -1,23 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Drawing;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemOpenCVWrapper;
-using System.Diagnostics;
-using System.Drawing;
-using MayhemWpf.UserControls;
 using MayhemCore;
-using System.Threading;
-using System.Runtime.Serialization;
+using MayhemOpenCVWrapper;
+using MayhemWpf.UserControls;
 
 namespace VisionModules.Wpf
 {
@@ -53,10 +41,9 @@ namespace VisionModules.Wpf
             cam = c;
             InitializeComponent();
             DeviceList.SelectedIndex = c.Info.deviceId;
-            Init();
         }
 
-        public void Init()
+        public override void OnLoad()
         {
             // populate device list
             Logger.WriteLine("OnLoad");
@@ -84,18 +71,16 @@ namespace VisionModules.Wpf
                 ///TODO: SVEN: Is it ok to comment out cam.running?
                 /// NO, not ok at the moment!
                 /// TODO: Move the check into Camera
-                if (!cam.running)
-                {
+
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.OnImageUpdated += i_OnImageUpdated;
+                if (!cam.running)
+                {             
                 ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
-                    {
-                        // Thread sleep to wait for the camera to revive itself from recent shutdown. Todo: Fix this 
-                        Thread.Sleep(250);
+                    {                   
                         cam.StartFrameGrabbing();
                     }));
                 }
-
                 Logger.WriteLine("using " + cam.Info.ToString());
                 // alow saving in this state
                 this.CanSave = true;
@@ -104,7 +89,6 @@ namespace VisionModules.Wpf
             {
                 Logger.WriteLine("No camera available");
             }
-
         }
 
         /**<summary>

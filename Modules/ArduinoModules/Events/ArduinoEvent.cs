@@ -11,16 +11,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
+using ArduinoModules.Firmata;
+using ArduinoModules.Wpf;
 using MayhemCore;
+using MayhemSerial;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Diagnostics;
-using ArduinoModules.Wpf;
-using System.Runtime.Serialization;
-using MayhemSerial;
-using ArduinoModules.Firmata;
 
 namespace ArduinoModules.Events
 {
@@ -28,26 +25,33 @@ namespace ArduinoModules.Events
     [MayhemModule("Arduino Event", "**Testing** Detects Pin Changes in Arduino")]
     public class ArduinoEvent : EventBase, IWpfConfigurable
     {
+        [DataMember]
+        public string arduinoPortName;
+
+        [DataMember]
+        private List<DigitalPinItem> monitorDigitalPins;
+
+        [DataMember]
+        private List<AnalogPinItem> monitorAnalogPins;
+
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
 
         private ArduinoFirmata arduino = null;
 
-        private Action<Pin> OnDigitalPinChanged; // = new Action<Pin>(arduino_OnDigitalPinChanged);
-        private Action<Pin> OnAnalogPinChanged; // = new Action<Pin>(arduino_OnAnalogPinChanged);
+        private Action<Pin> OnDigitalPinChanged;
+        private Action<Pin> OnAnalogPinChanged;
 
         private const int ACTIVATE_MIN_DELAY = 50;  //minimum activation interval
         DateTime lastActivated = DateTime.MinValue;
 
-        [DataMember]
-        public string arduinoPortName = String.Empty;
+        protected override void OnLoadDefaults()
+        {
+            monitorDigitalPins = new List<DigitalPinItem>();
+            monitorAnalogPins = new List<AnalogPinItem>();
+            arduinoPortName = String.Empty;
+        }
 
-        [DataMember]
-        private List<DigitalPinItem> monitorDigitalPins = new List<DigitalPinItem>();
-
-        [DataMember]
-        private List<AnalogPinItem> monitorAnalogPins = new List<AnalogPinItem>();
-
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             if (arduinoPortName != String.Empty)
             {
@@ -72,22 +76,19 @@ namespace ArduinoModules.Events
         }
 
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             if (OnAnalogPinChanged != null && OnDigitalPinChanged != null && arduino != null)
             {
-
                 arduino.OnAnalogPinChanged -= OnAnalogPinChanged;
                 arduino.OnDigitalPinChanged -= OnDigitalPinChanged;
 
                 arduino.OnAnalogPinChanged += OnAnalogPinChanged;
                 arduino.OnDigitalPinChanged += OnDigitalPinChanged;
             }
-
-            return true;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (arduino != null)
             {
@@ -105,7 +106,7 @@ namespace ArduinoModules.Events
             List<DigitalPinItem> digitalPinsMonitor = new List<DigitalPinItem>();
             List<AnalogPinItem> analogPinsMonitor = new List<AnalogPinItem>();
 
-            bool enabled = this.Enabled;
+            bool enabled = this.IsEnabled;
 
             // save references to pins to monitor
             // attach callbacks to arduino events
@@ -160,7 +161,7 @@ namespace ArduinoModules.Events
 
         public void arduino_OnDigitalPinChanged(Pin p)
         {
-            if (Enabled)
+            if (IsEnabled)
             {
                 foreach (DigitalPinItem d in monitorDigitalPins)
                 {
@@ -208,7 +209,7 @@ namespace ArduinoModules.Events
 
         public void arduino_OnAnalogPinChanged(Pin p)
         {
-            if (this.Enabled)
+            if (this.IsEnabled)
             {
                 foreach (AnalogPinItem a in monitorAnalogPins)
                 {
@@ -244,7 +245,28 @@ namespace ArduinoModules.Events
         public string GetConfigString()
         {
             ///TODO: Sven: Put the right thing here
-            throw new Exception("Sven: fill this in");
+            // throw new Exception("Sven: fill this in");
+
+            string cs = string.Empty;
+            cs += arduinoPortName+" ";
+            for (int i = 0; i < monitorDigitalPins.Count; i++)
+            {
+                if (i < monitorDigitalPins.Count - 1)
+                    cs += monitorDigitalPins[i].PinName + ",";                
+                else
+                    cs += monitorDigitalPins[i].PinName ;
+            }
+            if (monitorAnalogPins.Count > 0)
+                cs += ",";
+            for (int i = 0; i < monitorAnalogPins.Count; i++)
+            {
+                if (i < monitorAnalogPins.Count - 1)
+                    cs += monitorAnalogPins[i].PinName + ",";
+                else
+                    cs += monitorAnalogPins[i].PinName ;
+            }
+
+            return cs;
         }
     }
 }

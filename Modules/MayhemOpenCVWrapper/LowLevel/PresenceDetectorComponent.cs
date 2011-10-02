@@ -10,15 +10,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public class PresenceDetectorComponent : IVisionEventComponent
+    public class PresenceDetectorComponent : ICameraImageListener
     {
         public static double DEFAULT_SENSITIVITY
         {

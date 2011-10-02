@@ -8,15 +8,13 @@
  *  
  *  Author: Sven Kratz
  * 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using System.Threading;
 using System.Drawing;
+using System.Linq;
+using System.Threading;
 using MayhemCore;
 
 namespace MayhemOpenCVWrapper
@@ -67,7 +65,7 @@ namespace MayhemOpenCVWrapper
         private ManualResetEvent grabFramesReset;
         #endregion
 
-        #region Contstructor / Destructor
+        #region Constructor / Destructor
         public Camera(CameraInfo info, CameraSettings settings)
         {
             this.info = info;
@@ -94,7 +92,7 @@ namespace MayhemOpenCVWrapper
                 List<BitmapTimestamp> buffer_items;
 
                 // critical section: don't let the read thread dispose of bitmaps before we copy them first
-                lock (this)
+                lock (thread_locker)
                 {
                     buffer_items = loop_buffer.ToList<BitmapTimestamp>();
 
@@ -151,10 +149,14 @@ namespace MayhemOpenCVWrapper
         /// </summary>
         private void InitializeCaptureDevice(CameraInfo info, CameraSettings settings)
         {
-            is_initialized = false;
+            Logger.WriteLine("========= CAM: " + info.deviceId+ " ======================");
             try
             {
-                OpenCVDLL.OpenCVBindings.InitCapture(info.deviceId, settings.resX, settings.resY);
+                // lock on the CameraDriver to prevent multiple simultaneous calls to InitCapture
+                lock (CameraDriver.Instance)
+                {
+                    OpenCVDLL.OpenCVBindings.InitCapture(info.deviceId, settings.resX, settings.resY);
+                }
                 bufSize = OpenCVDLL.OpenCVBindings.GetImageSize();
                 imageBuffer = new byte[bufSize];
                 frameInterval = CameraSettings.DEFAULTS().updateRate_ms;
@@ -174,26 +176,37 @@ namespace MayhemOpenCVWrapper
         {
             if (!is_initialized)
             {
-                InitializeCaptureDevice(info, settings);
+                try
+                {
+                    InitializeCaptureDevice(info, settings);
+                }
+                catch (AccessViolationException avEx)
+                {
+                    Logger.WriteLine("Access Violation Exception when initializing camera: " + info + "\n" + avEx);
+                }
             }
 
             if (!this.running)
-            {        
+            {
                 //grabFrm = new Thread(GrabFrames);
                 try
                 {
                     Logger.WriteLine("Starting Frame Grabber");
                     //grabFrm.Start();
                     // TODO: run this code in the ThreadPool
-                    grabFramesReset = new ManualResetEvent(false); 
+                    grabFramesReset = new ManualResetEvent(false);
                     ThreadPool.QueueUserWorkItem((object o) => { GrabFrames_Thread(); });
-                    Thread.Sleep(200);
+                    Thread.Sleep(250);
                 }
                 catch (Exception e)
                 {
                     Logger.WriteLine("Exception while trying to start Framegrab");
                     Logger.WriteLine(e.ToString());
                 }
+            }
+            else
+            {
+                Logger.WriteLine("StartFrameGrabbing(): Camera Running -- ignore");
             }
         }
 
@@ -257,7 +270,7 @@ namespace MayhemOpenCVWrapper
             {
                 Logger.WriteLine(index + " GrabFrames");
 
-                lock (this)
+                lock (thread_locker)
                 {
                     foreach (BitmapTimestamp b in loop_buffer)
                     {
@@ -267,7 +280,7 @@ namespace MayhemOpenCVWrapper
 
                 // purge the video buffer when starting frame grabbing
                 // we don't need the previously recorded and potentially very old bitmaps in the buffer
-                lock (this)
+                lock (thread_locker)
                 {
                     loop_buffer.Clear();
                 }
@@ -295,7 +308,7 @@ namespace MayhemOpenCVWrapper
                         }
                     }
 
-                    lock (this)
+                    lock (thread_locker)
                     {
                         if (loop_buffer.Count < LOOP_BUFFER_MAX_LENGTH)
                         {

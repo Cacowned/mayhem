@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemWpf.UserControls;
-using System.Collections.ObjectModel;
-using ArduinoModules.Wpf.Helpers;
 using ArduinoModules.Firmata;
-using MayhemSerial;
+using ArduinoModules.Wpf.Helpers;
 using MayhemCore;
+using MayhemSerial;
+using MayhemWpf.UserControls;
 
 namespace ArduinoModules.Wpf
 {
@@ -67,10 +59,9 @@ namespace ArduinoModules.Wpf
         {
             reaction_set_pins = set_pins;
             InitializeComponent();
-            Init();
         }
 
-        private void Init()
+        public override void OnLoad()
         {
             digitalPins.ItemsSource = pin_items;
             serial.UpdatePortList();
@@ -89,8 +80,7 @@ namespace ArduinoModules.Wpf
             {
                 connectButton_Click(this, null);
             }
-
-       
+            CanSave = true;
         }
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
@@ -129,7 +119,10 @@ namespace ArduinoModules.Wpf
 
         public override void OnClosing()
         {
-            arduino.DeregisterListener(this);
+            if (arduino != null)
+            {
+                arduino.DeregisterListener(this);
+            }
             base.OnClosing();
         }
 

@@ -8,20 +8,16 @@
  *   
  */ 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemOpenCVWrapper;
 using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public abstract class IVisionEventComponent
+    public abstract class ICameraImageListener
     {
 
         protected Camera.ImageUpdateHandler imageUpdateHandler;
 
-        public IVisionEventComponent()
+        public ICameraImageListener()
         {
             imageUpdateHandler = new Camera.ImageUpdateHandler(update_frame);
         }

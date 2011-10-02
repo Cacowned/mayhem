@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Windows;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using Phidgets;
 using MayhemWpf.UserControls;
+using Phidgets;
 
 namespace PhidgetModules.Reaction
 {
@@ -12,20 +11,16 @@ namespace PhidgetModules.Reaction
     [MayhemModule("Phidget: IR Transmit", "Sends an IR code")]
     public class Phidget1055IRTransmit : ReactionBase, IWpfConfigurable
     {
-        #region Configuration
-
-        // This is the code and code information that we will
-        // transmit
+        // This is the code and code information that we will transmit
         [DataMember]
         private IRCode Code;
 
         [DataMember]
         private IRCodeInfo CodeInfo;
-        #endregion
 
         private IR ir;
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             ir = InterfaceFactory.IR;
         }

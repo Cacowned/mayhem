@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using System.Windows;
-using PhoneModules.Controls;
-using System.Windows.Controls;
 using MayhemWpf.UserControls;
-using System.IO;
+using PhoneModules.Controls;
 using PhoneModules.Wpf;
 
 namespace PhoneModules.Events
@@ -18,48 +13,34 @@ namespace PhoneModules.Events
     [MayhemModule("Phone Remote", "Triggers from phone")]
     public class PhoneEvent : EventBase, IWpfConfigurable
     {
-        #region Configuration Properties
         [DataMember]
-        private string id = Guid.NewGuid().ToString();
+        private PhoneLayoutButton button;
 
-        [DataMember]
-        private string FormDataForSerialization
-        {
-            get
-            {
-                return phoneLayout.Serialize();
-            }
-            set
-            {
-                phoneLayout = PhoneLayout.Instance;
-                phoneConnector = PhoneConnector.Instance;
-                if (!phoneConnector.HasBeenDeserialized)
-                {
-                    phoneConnector.HasBeenDeserialized = true;
-                    if (value != null)
-                    {
-                        phoneLayout.Deserialize(value);
-                        phoneConnector.SetNewData();
-                    }
-                }
-            }
-        }
-        #endregion
-
-        private PhoneLayout phoneLayout = PhoneLayout.Instance;
-        private PhoneConnector phoneConnector = PhoneConnector.Instance;
+        private PhoneLayout phoneLayout;
+        private PhoneConnector phoneConnector;
 
         private bool isCreatingForFirstTime = false;
 
-        public PhoneEvent()
+        protected override void OnBeforeLoad()
+        {
+            phoneLayout = PhoneLayout.Instance;
+            phoneConnector = PhoneConnector.Instance;
+        }
+
+        protected override void OnLoadDefaults()
         {
             isCreatingForFirstTime = true;
-            phoneLayout.AddButton(id);
+            string id = Guid.NewGuid().ToString();
+            button = phoneLayout.AddButton(id);
+        }
+
+        protected override void OnLoadFromSaved()
+        {
+            phoneLayout.AddButton(button);
         }
 
         public string GetConfigString()
         {
-            PhoneLayoutButton button = phoneLayout.GetByID(id);
             if (button.ImageFile != null && button.ImageFile.Length > 0)
             {
                 FileInfo fi = new FileInfo(button.ImageFile);
@@ -73,17 +54,17 @@ namespace PhoneModules.Events
 
         private void phoneConnector_EventCalled(string eventText)
         {
-            if (eventText == id)
+            if (eventText == button.ID)
             {
                 base.Trigger();
             }
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (!IsConfiguring && !Enabled)
+            if (!e.WasConfiguring && !IsEnabled)
             {
-                phoneLayout.EnableButton(id);
+                phoneLayout.EnableButton(button.ID);
 
                 isCreatingForFirstTime = false;
                 phoneConnector.SetNewData();
@@ -91,24 +72,22 @@ namespace PhoneModules.Events
                 phoneConnector.Enable(true);
                 phoneConnector.EventCalled += phoneConnector_EventCalled;
             }
-
-            return true;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
-            if (!IsConfiguring && Enabled)
+            if (!e.IsConfiguring && IsEnabled)
             {
-                phoneLayout.DisableButton(id);
+                phoneLayout.DisableButton(button.ID);
                 phoneConnector.Disable();
                 phoneConnector.EventCalled -= phoneConnector_EventCalled;
                 phoneConnector.SetNewData();
             }
         }
 
-        public override void Delete()
+        protected override void OnDeleted()
         {
-            phoneLayout.RemoveButton(id);
+            phoneLayout.RemoveButton(button.ID);
         }
 
         #region Configuration Views
@@ -117,7 +96,7 @@ namespace PhoneModules.Events
             get
             {
                 PhoneFormDesigner config = new PhoneFormDesigner(isCreatingForFirstTime);
-                config.LoadFromData(id);
+                config.LoadFromData(button.ID);
                 //config.SetSelected(id);
                 return config;
             }
@@ -128,11 +107,6 @@ namespace PhoneModules.Events
             if (!isCreatingForFirstTime)
             {
                 phoneConnector.SetNewData();
-            }
-            if (((PhoneFormDesigner)configurationControl).SelectedElement is PhoneUIElementButton)
-            {
-                PhoneUIElementButton button = ((PhoneFormDesigner)configurationControl).SelectedElement as PhoneUIElementButton;
-                id = button.LayoutInfo.ID;
             }
         }
         #endregion

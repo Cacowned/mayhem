@@ -3,9 +3,12 @@ using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using MayhemCore.ModuleTypes;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace MayhemCore
 {
+
     /// <summary>
     /// This class is extended by EventBase and ReactionBase
     /// </summary>
@@ -13,25 +16,31 @@ namespace MayhemCore
     public abstract class ModuleBase : INotifyPropertyChanged
     {
         // A reference to the connection that holds this module.
-        public Connection Connection { get; set; }
+        internal Connection Connection
+        {
+            get;
+            set;
+        }
 
-        public bool Enabled { get; private set; }
-
-        public bool IsConfiguring { get; set; }
+        public bool IsEnabled
+        {
+            get;
+            private set;
+        }
 
         public string Name
         {
             get;
-            protected set;
+            internal set;
         }
 
         public string Description
         {
             get;
-            protected set;
+            internal set;
         }
 
-        public bool HasConfig
+        internal bool HasConfig
         {
             get;
             private set;
@@ -40,7 +49,7 @@ namespace MayhemCore
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string _configString;
-        public string ConfigString
+        internal string ConfigString
         {
             get
             {
@@ -53,44 +62,65 @@ namespace MayhemCore
             }
         }
 
-        internal void Enable_()
+        protected ModuleBase()
         {
             try
             {
-                Enabled = Enable();
+                Initialize_();
+                OnBeforeLoad();
+                OnLoadDefaults();
+                OnAfterLoad();
             }
             catch
             {
-                ErrorLog.AddError(ErrorType.Failure, "Error enabling " + Name);
+                ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
             }
         }
 
-        public virtual bool Enable()
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext context)
         {
-            return true;
-        }
-
-        internal void Disable_()
-        {
-            try
+            object[] attList = this.GetType().GetCustomAttributes(typeof(DataContractAttribute), true);
+            if (attList.Length > 0)
             {
-                Disable();
-                Enabled = false;
+                Debug.WriteLine(context.State);
+                Initialize_();
+                try
+                {
+                    OnBeforeLoad();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
+                }
             }
-            catch
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            object[] attList = this.GetType().GetCustomAttributes(typeof(DataContractAttribute), true);
+            if (attList.Length > 0)
             {
-                ErrorLog.AddError(ErrorType.Failure, "Error disabling " + Name);
+                try
+                {
+                    OnLoadFromSaved();
+                    OnAfterLoad();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
+                }
+                SetConfigString();
             }
         }
-        public virtual void Disable()
-        {
-        }
 
-        public virtual void Delete()
-        {
-        }
+        protected virtual void OnBeforeLoad() { }
+        protected virtual void OnLoadDefaults() { }
+        protected virtual void OnLoadFromSaved() { }
+        protected virtual void OnAfterLoad() { }
 
-        private void _Initialize()
+        private void Initialize_()
         {
             Type configurableType = MayhemEntry.Instance.ConfigurableType;
             Type[] interfaceTypes = GetType().GetInterfaces();
@@ -111,40 +141,49 @@ namespace MayhemCore
             }
         }
 
-        protected ModuleBase()
+        internal void Enable(EnablingEventArgs e)
         {
-            _Initialize();
             try
             {
-                Initialize();
+                OnEnabling(e);
+                if (!e.Cancel)
+                    IsEnabled = true;
             }
             catch
             {
-                ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
+                ErrorLog.AddError(ErrorType.Failure, "Error enabling " + Name);
             }
         }
 
-        [OnDeserializing]
-        private void OnDeserializing(StreamingContext sc)
+        protected virtual void OnEnabling(EnablingEventArgs e)
         {
-            _Initialize();
+        }
+
+        internal void Disable(DisabledEventArgs e)
+        {
             try
             {
-                Initialize();
+                OnDisabled(e);
+                IsEnabled = false;
             }
             catch
             {
-                ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
+                ErrorLog.AddError(ErrorType.Failure, "Error disabling " + Name);
             }
         }
 
-        [OnDeserialized]
-        private void OnDeserialized(StreamingContext context)
+        protected virtual void OnDisabled(DisabledEventArgs e)
         {
-            SetConfigString();
         }
 
-        protected virtual void Initialize() { }
+        internal void Delete()
+        {
+            OnDeleted();
+        }
+
+        protected virtual void OnDeleted()
+        {
+        }
 
         public override string ToString()
         {
@@ -160,7 +199,7 @@ namespace MayhemCore
             }
         }
 
-        public void SetConfigString() 
+        internal void SetConfigString()
         {
             if (this is IConfigurable)
             {

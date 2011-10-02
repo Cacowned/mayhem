@@ -76,21 +76,19 @@ namespace PhoneModules
             OperationContext context = OperationContext.Current;
             MessageProperties messageProperties = context.IncomingMessageProperties;
             RemoteEndpointMessageProperty endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
-            string key = endpointProperty.Address;
+            string key = endpointProperty.Address + WebOperationContext.Current.IncomingRequest.UserAgent;
 
             Logger.WriteLine(update + " " + key + " " + WebOperationContext.Current.IncomingRequest.UserAgent);
             WebOperationContext.Current.OutgoingResponse.ContentType = "text/html";
 
-            if (!resetEvents.ContainsKey(key))
+            lock (resetEvents)
             {
-                AutoResetEvent a = new AutoResetEvent(false);
-                resetEvents[key] = a;
+                if (!resetEvents.ContainsKey(key))
+                {
+                    AutoResetEvent a = new AutoResetEvent(false);
+                    resetEvents[key] = a;
+                }
             }
-            //else
-            //{
-            //    resetEvents[key].Set();
-            //}
-            Debug.WriteLine(resetEvents.Count);
             if (!update)
             {
                 resetEvents[key].Reset();

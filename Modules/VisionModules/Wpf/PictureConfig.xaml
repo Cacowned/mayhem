@@ -4,11 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"  
+             xmlns:visionmods="clr-namespace:VisionModules.Wpf"
              Name="root"
              Width="400">
 
     <Grid>
-        <StackPanel>       
+        <StackPanel>   
+            <!--
             <ItemsControl  BorderThickness="0" Name="camera_preview_panel" Width="400" Height="200" ItemsSource="{Binding ElementName=root, Path=camera_previews}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -25,7 +27,8 @@
           
 
             <TextBlock Margin="5 0 5 0" TextWrapping="Wrap"  Height="47" Width="390">Click drop down list below to select a camera or click one of the preview images above.</TextBlock>
-            <ComboBox Name="deviceList" SelectionChanged="deviceList_SelectionChanged" />
+            <ComboBox Name="deviceList" SelectionChanged="deviceList_SelectionChanged" />-->
+            <visionmods:MultiCameraSelector x:Name="camera_selector"></visionmods:MultiCameraSelector>
             <Label Name="lbl_slider_title">Select the time offset in seconds of the image to be taken:</Label>
             <StackPanel Name="slider_panel" Orientation="Vertical">
                 <Slider Name="slider_capture_offset" Height="23"  Width="220" Value="{Binding ElementName=root, Path=slider_value}" ValueChanged="slider_capture_offset_ValueChanged" />
@@ -34,12 +37,12 @@
             <Label Name="lbl_img_save"></Label>     
             <StackPanel Orientation="Horizontal">
                 <Label>Save to Location: </Label>
-                <TextBox Margin="5 0 0 0" Name="box_current_loc" Text="{Binding location}" MinWidth="240" TextChanged="lbl_current_loc_TextChanged"></TextBox>
+                <TextBox Margin="5 0 0 0" Name="box_current_loc" Text="{Binding location}" MinWidth="240" MaxWidth="240" TextChanged="lbl_current_loc_TextChanged"></TextBox>
                 <Button Name="img_save_button" Click="Button_Click_1" Margin="5 0 0 0">Browse</Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label>File Name Prefix:</Label>
-                <TextBox Margin="6 0 0 0" Name="box_filename_prefix" MinWidth="240" TextChanged="box_filename_prefix_TextChanged">Mayhem</TextBox>
+                <TextBox Margin="6 0 0 0" Name="box_filename_prefix" MinWidth="240" MaxWidth="240" TextChanged="box_filename_prefix_TextChanged">Mayhem</TextBox>
             </StackPanel>
             <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="2">File location is invalid</TextBlock>
             

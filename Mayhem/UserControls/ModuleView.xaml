@@ -66,30 +66,20 @@
                 </StackPanel.Effect>
                 <Button Name="buttonTrigger" Style="{StaticResource TriggerButton}" Width="250" Height="40" Margin="0,0,0,0" Focusable="False" Click="ConfigureTrigger_Click">
                     <Grid Width="220" Margin="0,0,0,-2" >
-                        <TextBlock Name="textBlockEventName" Style="{StaticResource DisplayNameStyle}" Margin="5,-2,14,6" Text="{Binding Connection.Event.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        <TextBlock Name="textBlockEventName" Style="{StaticResource DisplayNameStyle}" Margin="5,-2,14,6" Text="{Binding EventName, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                         <Image x:Name="ImageSettingsEvent" Width="15" Height="16" Margin="6,20,200,-1" Source="/Mayhem;component/Images/Settings16.png" />
-                        <TextBlock Style="{StaticResource ConfigurationStringStyle}" Margin="25,18,0,-2" Text="{Binding Connection.Event.ConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        <TextBlock Style="{StaticResource ConfigurationStringStyle}" Margin="25,18,0,-2" Text="{Binding EventConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                     </Grid>
                 </Button>
                 <Button Name="buttonReaction" Style="{StaticResource ReactionButton}" Width="250" Height="40" Margin="-33,0,0,0" Focusable="False" Click="ConfigureReaction_Click">
                     <Grid Width="220" Margin="35,0,0,-2" >
-                        <TextBlock Name="textBlockReactionName" Style="{StaticResource DisplayNameStyle}" Margin="7,-2,14,6" Text="{Binding Connection.Reaction.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        <TextBlock Name="textBlockReactionName" Style="{StaticResource DisplayNameStyle}" Margin="7,-2,14,6" Text="{Binding ReactionName, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                         <Image x:Name="ImageSettingsReaction" Width="15" Height="16" Margin="6,20,200,-1" Source="/Mayhem;component/Images/Settings16.png" />
-                        <TextBlock Style="{StaticResource ConfigurationStringStyle}" Margin="25,18,0,-2" Text="{Binding Connection.Reaction.ConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                        <TextBlock Style="{StaticResource ConfigurationStringStyle}" Margin="25,18,0,-2" Text="{Binding ReactionConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                     </Grid>
                 </Button>
-                <!--<Button Name="buttonReaction" Style="{StaticResource EventButton}" Width="178" Height="59" Margin="0,0,0,0" />-->
-                <!--<Image Source="/Mayhem;component/Images/redbluebutton.png" Width="400" Height="40" Stretch="Fill" MouseLeftButtonDown="ConfigureButton_Click" />-->
-                <!--<TextBlock Margin="15,0,0,5" VerticalAlignment="Center" Style="{DynamicResource StyleModuleName}" Text="{Binding Connection.Event.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />-->
-                <!--<TextBlock Margin="0,0,15,5" VerticalAlignment="Center" HorizontalAlignment="Right"  Style="{DynamicResource StyleModuleName}" Text="{Binding Connection.Reaction.Name, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />-->
-                <!--<StackPanel Orientation="Horizontal" Visibility="{Binding Module.HasConfig, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Converter={StaticResource vizConverter}}" >
-                    <Button Width="15" x:Name="ConfigureButton" Style="{DynamicResource ConfigureButton}" Click="ConfigureButton_Click" />
-                    <TextBlock Width="210" TextWrapping="WrapWithOverflow" Margin="10,0,0,0" Style="{DynamicResource ConfigurationStringStyle}" Text="{Binding Module.ConfigString, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
-                </StackPanel>-->
-                <!--<Button Canvas.Right="40" Tag="{Binding}" Click="DeleteConnectionClick">Delete</Button>-->
-                <!--<ToggleButton x:Name="OnOffButton" Canvas.Right="0" Tag="{Binding}" IsChecked="{Binding Path=Enabled, Mode=OneWay}" Click="OnOffClick" />-->
             </StackPanel>
-            <ToggleButton Width="65" Height="35" Margin="5,0,0,0" Cursor="Hand" x:Name="OnOffButton" IsChecked="{Binding Path=Enabled, Mode=OneWay}" Click="OnOffClick" Focusable="False">
+            <ToggleButton Width="65" Height="35" Margin="5,0,0,0" Cursor="Hand" x:Name="OnOffButton" IsChecked="{Binding Path=IsEnabled, Mode=OneWay}" Click="OnOffClick" Focusable="False">
                 <ToggleButton.Style>
                     <Style TargetType="{x:Type ToggleButton}">
                         <Setter Property="Template">

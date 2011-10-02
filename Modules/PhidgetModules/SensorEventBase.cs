@@ -8,42 +8,40 @@ namespace PhidgetModules
     [DataContract]
     abstract public class SensorEventBase : EventBase
     {
-        #region Configuration
         // Which index do we want to be looking at?
         [DataMember]
         protected int Index;
-
-        #endregion
 
         // The interface kit we are using for the sensors
         protected static InterfaceKit IfKit { get; private set; }
 
         private SensorChangeEventHandler handler;
 
-        protected override void Initialize()
+        protected override void OnBeforeLoad()
         {
-            // If we don't have an IfKit yet, create one
-            if (IfKit == null)
-            {
-                IfKit = InterfaceFactory.Interface;
-            }
+            IfKit = InterfaceFactory.Interface;
+            base.OnBeforeLoad();
+        }
 
-            handler = new SensorChangeEventHandler(SensorChange);
-
+        protected override void OnLoadDefaults()
+        {
             // Default to first index
             Index = 0;
         }
 
-        protected abstract void SensorChange(object sender, SensorChangeEventArgs ex);
-
-        public override bool Enable()
+        protected override void OnAfterLoad()
         {
-            IfKit.SensorChange += handler;
-
-            return true;
+            handler = new SensorChangeEventHandler(SensorChange);
         }
 
-        public override void Disable()
+        protected abstract void SensorChange(object sender, SensorChangeEventArgs ex);
+
+        protected override void OnEnabling(EnablingEventArgs e)
+        {
+            IfKit.SensorChange += handler;
+        }
+
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (IfKit != null)
             {

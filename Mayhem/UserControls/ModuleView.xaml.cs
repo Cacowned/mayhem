@@ -1,12 +1,12 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
-using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using System.Diagnostics;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
-using System;
 using System.Windows.Media.Effects;
+using MayhemCore;
+using MayhemWpf.ModuleTypes;
+using System.ComponentModel;
 
 namespace Mayhem.UserControls
 {
@@ -15,15 +15,48 @@ namespace Mayhem.UserControls
     /// </summary>
     public partial class ModuleView : UserControl
     {
+        public string EventName
+        {
+            get { return (string)GetValue(EventNameProperty); }
+            set { SetValue(EventNameProperty, value); }
+        }
+        public string ReactionName
+        {
+            get { return (string)GetValue(ReactionNameProperty); }
+            set { SetValue(ReactionNameProperty, value); }
+        }
+        public string EventConfigString
+        {
+            get { return (string)GetValue(EventConfigStringProperty); }
+            set { SetValue(EventConfigStringProperty, value); }
+        }
+        public string ReactionConfigString
+        {
+            get { return (string)GetValue(ReactionConfigStringProperty); }
+            set { SetValue(ReactionConfigStringProperty, value); }
+        }
         public Connection Connection
         {
-            get { return (Connection)GetValue(ConnectionProperty); }
-            set { SetValue(ConnectionProperty, value); }
+            get
+            {
+                return (Connection)GetValue(ConnectionProperty);
+            }
+            set
+            {
+                SetValue(ConnectionProperty, value);
+            }
         }
 
-        // Using a DependencyProperty as the backing store for Module.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ConnectionProperty =
             DependencyProperty.Register("Connection", typeof(Connection), typeof(ModuleView), new UIPropertyMetadata(null));
+        public static readonly DependencyProperty EventNameProperty =
+            DependencyProperty.Register("EventName", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
+        public static readonly DependencyProperty ReactionNameProperty =
+            DependencyProperty.Register("ReactionName", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
+        public static readonly DependencyProperty EventConfigStringProperty =
+            DependencyProperty.Register("EventConfigString", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
+        public static readonly DependencyProperty ReactionConfigStringProperty =
+            DependencyProperty.Register("ReactionConfigString", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
 
         DoubleAnimation animOut;
         DoubleAnimation animIn;
@@ -50,6 +83,21 @@ namespace Mayhem.UserControls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            Connection connection = Connection;
+            EventName = connection.Event.Name;
+            ReactionName = connection.Reaction.Name;
+            EventConfigString = connection.Event.ConfigString;
+            ReactionConfigString = connection.Reaction.ConfigString;
+            connection.Event.PropertyChanged += delegate(object s, PropertyChangedEventArgs args)
+            {
+                if (args.PropertyName == "ConfigString")
+                    EventConfigString = Connection.Event.ConfigString;
+            };
+            connection.Reaction.PropertyChanged += delegate(object s, PropertyChangedEventArgs args)
+            {
+                if (args.PropertyName == "ConfigString")
+                    ReactionConfigString = Connection.Reaction.ConfigString;
+            };
             if (!Connection.Event.HasConfig)
             {
                 ImageSettingsEvent.Visibility = System.Windows.Visibility.Hidden;
@@ -65,10 +113,10 @@ namespace Mayhem.UserControls
                 buttonReaction.Cursor = null;
             }
 
-            connectionButtons.Opacity = Connection.Enabled ? 1 : 0.5;
-            dropShadow.BlurRadius = Connection.Enabled ? 16 : 4;
-            dropShadow.Opacity = Connection.Enabled ? 0.9 : 0.5;
-            dropShadow.ShadowDepth = Connection.Enabled ? 5 : 2;
+            connectionButtons.Opacity = Connection.IsEnabled ? 1 : 0.5;
+            dropShadow.BlurRadius = Connection.IsEnabled ? 16 : 4;
+            dropShadow.Opacity = Connection.IsEnabled ? 0.9 : 0.5;
+            dropShadow.ShadowDepth = Connection.IsEnabled ? 5 : 2;
         }
 
         void ShowConfig(ModuleBase configurable)
@@ -77,22 +125,22 @@ namespace Mayhem.UserControls
                 return;
 
             MainWindow.DimMainWindow(true);
+            Connection connection = Connection;
 
-            Connection.IsConfiguring = true;
+            DisabledEventArgs args = new DisabledEventArgs(true);
 
-            bool wasEnabled = Connection.Enabled;
+            bool wasEnabled = connection.IsEnabled;
             if (wasEnabled)
             {
-                Connection.Disable(null);
+                connection.Disable(args, null);
             }
             ConfigWindow config = new ConfigWindow((IWpfConfigurable)configurable);
             config.ShowDialog();
 
             if (wasEnabled)
             {
-                Connection.Enable(new Action(() => Dispatcher.Invoke((Action)delegate { Connection.IsConfiguring = false; })));
+                Connection.Enable(new EnablingEventArgs(true), null);
             }
-            //Connection.IsConfiguring = false;
 
             MainWindow.DimMainWindow(false);
         }
@@ -110,7 +158,7 @@ namespace Mayhem.UserControls
         private void DeleteConnectionClick(object sender, RoutedEventArgs e)
         {
             Connection c = ((Button)sender).Tag as Connection;
-            c.Disable(new Action(() =>
+            c.Disable(new DisabledEventArgs(false), new Action(() =>
                 {
                     Dispatcher.Invoke((Action)delegate
                     {
@@ -130,7 +178,7 @@ namespace Mayhem.UserControls
                 {
                     Dispatcher.Invoke((Action)delegate
                     {
-                        if (!Connection.Enabled)
+                        if (!Connection.IsEnabled)
                         {
                             //Logger.WriteLine("Connection didn't enable.");
 
@@ -139,8 +187,8 @@ namespace Mayhem.UserControls
                             // flip the button
                             button.IsChecked = false;
                         }
-                        button.IsChecked = Connection.Enabled;
-                        if (Connection.Enabled)
+                        button.IsChecked = Connection.IsEnabled;
+                        if (Connection.IsEnabled)
                         {
                             connectionButtons.BeginAnimation(StackPanel.OpacityProperty, animIn);
                             dropShadow.BeginAnimation(DropShadowEffect.BlurRadiusProperty, animBlurIn);
@@ -158,13 +206,13 @@ namespace Mayhem.UserControls
                     });
                 });
 
-            if (!Connection.Enabled)
+            if (!Connection.IsEnabled)
             {
-                Connection.Enable(action);
+                Connection.Enable(new EnablingEventArgs(false), action);
             }
             else
             {
-                Connection.Disable(action);
+                Connection.Disable(new DisabledEventArgs(false), action);
             }
         }
     }

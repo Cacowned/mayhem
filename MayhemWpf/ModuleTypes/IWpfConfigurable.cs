@@ -1,6 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using MayhemCore.ModuleTypes;
 using MayhemWpf.UserControls;
-using MayhemCore.ModuleTypes;
 
 namespace MayhemWpf.ModuleTypes
 {

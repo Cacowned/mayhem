@@ -1,11 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using PhidgetModules.Wpf;
-using System.Windows;
-using System;
-using Phidgets;
 using MayhemWpf.UserControls;
+using PhidgetModules.Wpf;
+using Phidgets;
 
 namespace PhidgetModules.Reaction
 {
@@ -13,8 +12,6 @@ namespace PhidgetModules.Reaction
     [MayhemModule("Phidget: Adv. Servo", "Controls a servo")]
     public class Phidget1066AdvServo : ReactionBase, IWpfConfigurable
     {
-        #region Configuration
-
         // Motor Type
         [DataMember]
         private ServoServo.ServoType ServoType;
@@ -28,11 +25,19 @@ namespace PhidgetModules.Reaction
         [DataMember]
         private double Position;
 
-        #endregion;
         // Instance of the servo class
         private static AdvancedServo advServo;
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
+        {
+            Position = 50;
+            Index = 0;
+
+            // This is the one we have, so we are just defaulting to it
+            ServoType = ServoServo.ServoType.HITEC_HS322HD;
+        }
+
+        protected override void OnAfterLoad()
         {
             // Only maintain one instance of the servo 
             // for all the AdvServo classes
@@ -46,14 +51,7 @@ namespace PhidgetModules.Reaction
                     servo.Engaged = true;
                     servo.SpeedRamping = false;
                 }
-
             }
-
-            Position = 50;
-            Index = 0;
-
-            // This is the one we have, so we are just defaulting to it
-            ServoType = ServoServo.ServoType.HITEC_HS322HD;
         }
 
         public override void Perform()

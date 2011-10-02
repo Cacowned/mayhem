@@ -10,19 +10,15 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Point = System.Drawing.Point;
-using MayhemOpenCVWrapper;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Drawing;
-using OpenCVDLL;
+using System.Runtime.InteropServices;
 using MayhemCore;
+using OpenCVDLL;
+using Point = System.Drawing.Point;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public class ObjectDetectorComponent : IVisionEventComponent
+    public class ObjectDetectorComponent : ICameraImageListener
     {
         public delegate void DetectionHandler(object sender, List<Point> points);
         public event DetectionHandler OnObjectDetected;

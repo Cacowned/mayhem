@@ -13,23 +13,23 @@ namespace MayhemCore
     /// </typeparam>
     public class MayhemEntry
     {
-        public ConnectionList ConnectionList
+        internal ConnectionList ConnectionList
         {
             get;
             private set;
         }
-        public EventList EventList
+        internal EventList EventList
         {
             get;
             private set;
         }
-        public ReactionList ReactionList
+        internal ReactionList ReactionList
         {
             get;
             private set;
         }
 
-        public Type ConfigurableType
+        internal Type ConfigurableType
         {
             get;
             private set;
@@ -65,7 +65,7 @@ namespace MayhemCore
         /// module lists
         /// </summary>
         /// <param name="configType"></param>
-        public void SetConfigurationType(Type configType)
+        internal void SetConfigurationType(Type configType)
         {
             if (this.ConfigurableType != null) {
                 throw new InvalidOperationException("Configuration type has already been set");
@@ -80,7 +80,7 @@ namespace MayhemCore
         /// into this instance's connectionList
         /// </summary>
         /// <param name="connections"></param>
-        public void LoadConnections(ConnectionList connections)
+        internal void LoadConnections(ConnectionList connections)
         {
             if (connections == null)
             {
@@ -93,7 +93,7 @@ namespace MayhemCore
             }
         }
 
-        public void Shutdown()
+        internal void Shutdown()
         {
             if (ShuttingDown != null)
             {

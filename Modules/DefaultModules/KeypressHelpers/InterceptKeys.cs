@@ -140,6 +140,7 @@ namespace DefaultModules.KeypressHelpers
 
         public void SetHook()
         {
+            keys_down.Clear();
             if (_hookID == IntPtr.Zero)
             {
                 using (Process curProcess = Process.GetCurrentProcess())
@@ -155,6 +156,7 @@ namespace DefaultModules.KeypressHelpers
 
         public void RemoveHook()
         {
+            keys_down.Clear();
             if (_hookID != IntPtr.Zero)
             {
                 Logger.WriteLine("Removing hook");

@@ -12,60 +12,73 @@
  * 
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
-using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using MayhemOpenCVWrapper;
 using System.IO;
-using System.Windows;
-using VisionModules.Wpf;
-using MayhemWpf.UserControls;
+using System.Runtime.Serialization;
 using System.Threading;
+using MayhemCore;
+using MayhemOpenCVWrapper;
+using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
+using VisionModules.Wpf;
+using MayhemOpenCVWrapper.LowLevel;
 
 namespace VisionModules.Reactions
 {
+
+    public enum VIDEO_RECORDING_MODE
+    {
+        PRE_EVENT = 0,                                        // record 30s prior to the event
+        POST_EVENT = Camera.LOOP_DURATION / 1000,             // record 30s after event
+        MID_EVENT = (Camera.LOOP_DURATION / 1000) / 2         // record 15s before and 15s after the event
+    }
+
     [DataContract]
     [MayhemModule("Video", "Records an avi video of the camera scene before or after an event has fired")]
     public class VideoReaction : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string folderLocation = AppDomain.CurrentDomain.BaseDirectory;
+        private string folderLocation;
 
         [DataMember]
-        private string fileNamePrefix = "Mayhem";
+        private string fileNamePrefix;
 
         [DataMember]
-        private int selected_device_idx = 0;
+        private int selectedDeviceIndex;
 
         [DataMember]
-        private double capture_offset_time = 0;
+        private VIDEO_RECORDING_MODE videoRecordingMode;
 
         [DataMember]
-        private bool compress = false;
+        private bool shouldCompress;
 
         // The device we are recording from
-        private CameraDriver i = CameraDriver.Instance;
-        private Camera cam = null;
+        private CameraDriver cameraDriver = CameraDriver.Instance;
+        private Camera camera = null;
+        private DummyCameraImageListener dummyCameraListener = new DummyCameraImageListener();
 
-        private string last_video_saved = String.Empty;
+        private string lastVideoSaved = String.Empty;
 
-        private bool video_saving = false;
+        private bool videoSaving = false;
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
         {
-            Logger.WriteLine("");
-            if (i == null)
-            {
-                i = CameraDriver.Instance;
-            }
+            cameraDriver = CameraDriver.Instance;
+            dummyCameraListener = new DummyCameraImageListener();
+            folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            fileNamePrefix = "Mayhem";
+            selectedDeviceIndex = 0;
+            videoRecordingMode = VIDEO_RECORDING_MODE.MID_EVENT;
+            shouldCompress = false;
+        }
 
-            if (selected_device_idx < i.DeviceCount)
+        protected override void OnAfterLoad()
+        {
+            cameraDriver = CameraDriver.Instance;
+            dummyCameraListener = new DummyCameraImageListener();
+            if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                Logger.WriteLine("Startup with camera " + selected_device_idx);
-                cam = i.cameras_available[selected_device_idx];
+                Logger.WriteLine("Startup with camera " + selectedDeviceIndex);
+                camera = cameraDriver.cameras_available[selectedDeviceIndex];
             }
         }
 
@@ -79,7 +92,7 @@ namespace VisionModules.Reactions
             Logger.WriteLine("SaveImage");
             DateTime now = DateTime.Now;
             // TODO think of a better naming convention
-            string fileName = fileNamePrefix  + "_" + 
+            string fileName = fileNamePrefix + "_" +
                 now.Year.ToString("D2") + "_" +
                 now.Month.ToString("D2") + "_" +
                 now.Day.ToString("D2") + "-" +
@@ -87,13 +100,13 @@ namespace VisionModules.Reactions
                 now.Minute.ToString("D2") + "_" +
                 now.Second.ToString("D2") + ".avi";
             string path = this.folderLocation + "\\" + fileName;
-            last_video_saved = path;
+            lastVideoSaved = path;
             Logger.WriteLine("saving file to " + path);
             //image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
             if (Directory.Exists(folderLocation))
             {
-                video_saving = true;
-                Video v = new Video(cam, path, compress);
+                videoSaving = true;
+                Video v = new Video(camera, path, shouldCompress);
                 v.OnVideoSaved += new Action<bool>(v_OnVideoSaved);
             }
             else
@@ -109,8 +122,8 @@ namespace VisionModules.Reactions
         /// <param name="obj"></param>
         private void v_OnVideoSaved(bool obj)
         {
-            video_saving = false;
-            Logger.WriteLine("Video saved successfully to: " + last_video_saved);
+            videoSaving = false;
+            Logger.WriteLine("Video saved successfully to: " + lastVideoSaved);
         }
 
         /// <summary>
@@ -120,10 +133,11 @@ namespace VisionModules.Reactions
         /// </summary>
         public override void Perform()
         {
-            Logger.WriteLine("");
-            if (!video_saving && cam != null)
+            int capture_offset_time = (int)videoRecordingMode;
+            Logger.WriteLine("Capturing with offset " + capture_offset_time);
+            if (!videoSaving && camera != null)
             {
-                video_saving = true;
+                videoSaving = true;
                 if (capture_offset_time == 0)
                 {
                     SaveVideo();
@@ -131,7 +145,7 @@ namespace VisionModules.Reactions
                 else
                 {
                     Logger.WriteLine("Recording Video with offset: " + capture_offset_time + "s");
-                    Timer t = new Timer(new TimerCallback((object state) => { SaveVideo(); }), this, (int)(capture_offset_time * 1000), Timeout.Infinite);
+                    Timer t = new Timer(new TimerCallback((object state) => { SaveVideo(); }), this, capture_offset_time * 1000, Timeout.Infinite);
                 }
             }
             else
@@ -140,25 +154,26 @@ namespace VisionModules.Reactions
             }
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
+            cameraDriver = CameraDriver.Instance;
             Logger.WriteLine("");
-            if (selected_device_idx < i.DeviceCount)
+            if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = i.cameras_available[selected_device_idx];
+                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                dummyCameraListener.RegisterForImages(camera);
                 //cam.OnImageUpdated += imageUpdateHandler;
-                if (cam.running == false)
-                    cam.StartFrameGrabbing();
+                if (camera.running == false)
+                    camera.StartFrameGrabbing();
             }
-
-            return true;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
-            if (cam != null)
+            if (camera != null)
             {
-                cam.TryStopFrameGrabbing();
+                dummyCameraListener.UnregisterForImages(camera);
+                camera.TryStopFrameGrabbing();
             }
         }
 
@@ -166,36 +181,34 @@ namespace VisionModules.Reactions
         {
             get
             {
-                return new VideoConfig(folderLocation, fileNamePrefix, capture_offset_time);
+                return new VideoConfig(folderLocation, fileNamePrefix, videoRecordingMode, selectedDeviceIndex);
             }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            bool wasEnabled = this.Enabled;
-            if (this.Enabled)
-                this.Disable();
+            bool wasEnabled = this.IsEnabled;
 
             VideoConfig config = configurationControl as VideoConfig;
             folderLocation = config.SaveLocation;
-            compress = config.compress_video;
-            fileNamePrefix = config.FilenamePrefix; 
+            shouldCompress = config.compress_video;
+            fileNamePrefix = config.FilenamePrefix;
 
-            if (config.deviceList.HasItems)
+            int camera_index = config.SelectedDeviceIdx;
+
+            if (cameraDriver.cameras_available.Count > camera_index)
             {
-                cam = config.deviceList.SelectedItem as Camera;
-                selected_device_idx = config.deviceList.SelectedIndex;
+                camera = cameraDriver.cameras_available[camera_index];
+                selectedDeviceIndex = camera_index;
             }
             else
             {
+                // TODO: Dummy Camera? 
                 Logger.WriteLine("No Camera present, setting cam to null");
-                cam = null;
+                camera = null;
             }
 
-            capture_offset_time = config.temporal_offset;
-
-            if (wasEnabled)
-                this.Enable();
+            videoRecordingMode = config.RecordingMode;
         }
     }
 }

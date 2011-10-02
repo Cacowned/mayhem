@@ -13,20 +13,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using Point = System.Drawing.Point;
-using VisionModules.Wpf;
-using MayhemOpenCVWrapper;
-using MayhemOpenCVWrapper.LowLevel;
-using MayhemWpf.UserControls;
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Windows;
-using System.Collections;
+using MayhemCore;
+using MayhemOpenCVWrapper;
+using MayhemOpenCVWrapper.LowLevel;
+using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
+using VisionModules.Wpf;
+using Point = System.Drawing.Point;
 
 namespace VisionModules.Events
 {
@@ -34,16 +30,6 @@ namespace VisionModules.Events
     [MayhemModule("Object Detector", "Detects objects in scene matching a template image")]
     public class ObjectDetectorEvent : EventBase, IWpfConfigurable
     {
-        private const int detectionInterval = 2500; //ms
-        private DateTime lastObjectsDetected = DateTime.Now;
-        private ObjectDetectorComponent od;
-        private ObjectDetectorComponent.DetectionHandler objectDetectHandler;
-
-        private CameraDriver i = CameraDriver.Instance;
-
-        private Camera cam;
-
-        // for some reason normal arrays are not serializable!
         [DataMember]
         private Byte[] templateImage_bytes;
 
@@ -52,33 +38,43 @@ namespace VisionModules.Events
         private Byte[] templatePreview_bytes;
 
         [DataMember]
-        private string testString = "orig";
+        private Rect boundingRect;
+
+        private const int detectionInterval = 2500; //ms
+        private DateTime lastObjectsDetected = DateTime.Now;
+        private ObjectDetectorComponent od;
+        private ObjectDetectorComponent.DetectionHandler objectDetectHandler;
+
+        private CameraDriver cameraDriver = CameraDriver.Instance;
+
+        private Camera camera;
 
         public Bitmap templateImage;
 
         public Bitmap templatePreview;
 
-        public double preview_scale_f = 1;
-
-        [DataMember]
-        private Rect boundingRect = new Rect(0, 0, 0, 0);
+        public double previewScaleF = 1;
 
         // the cam we have selected
-        private int selected_device_idx = 0;
+        private int selectedDeviceIndex = 0;
 
         public bool templateConfigured
         {
             get { return od.templateIsSet; }
         }
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
         {
-            if (i == null)
-                i = CameraDriver.Instance;
+            boundingRect = new Rect(0, 0, 0, 0);
+        }
 
-            if (selected_device_idx < i.DeviceCount)
+        protected override void OnAfterLoad()
+        {
+            cameraDriver = CameraDriver.Instance;
+
+            if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = i.cameras_available[selected_device_idx];
+                camera = cameraDriver.cameras_available[selectedDeviceIndex];
             }
             else
             {
@@ -99,9 +95,6 @@ namespace VisionModules.Events
             {
                 templatePreview = VisionModulesWPFCommon.ArrayToBitmap(templatePreview_bytes);
             }
-            // -----------
-
-            Logger.WriteLine(testString);
         }
 
         void m_onObjectDetected(object sender, List<Point> matchingKeyPoints)
@@ -121,23 +114,21 @@ namespace VisionModules.Events
             }
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             Logger.WriteLine("Enable");
 
             // TODO: Improve this code
-            if (!IsConfiguring && selected_device_idx < i.DeviceCount)
+            if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = i.cameras_available[selected_device_idx];
-                if (cam.running == false)
-                    cam.StartFrameGrabbing();
+                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                if (camera.running == false)
+                    camera.StartFrameGrabbing();
                 // register the trigger's motion update handler
-                od.RegisterForImages(cam);
+                od.RegisterForImages(camera);
                 od.OnObjectDetected += objectDetectHandler;
                 od.OnObjectDetected -= objectDetectHandler;
             }
-
-            return true;
         }
 
         /** <summary>
@@ -150,18 +141,18 @@ namespace VisionModules.Events
             templateImage = tImage;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             Logger.WriteLine("Disable");
 
             od.OnObjectDetected -= objectDetectHandler;
-            if (cam != null)
-                od.UnregisterForImages(cam);
+            if (camera != null)
+                od.UnregisterForImages(camera);
 
-            if (cam != null && !IsConfiguring)
+            if (camera != null && !e.IsConfiguring)
             {
                 // correct module disabling procedure               
-                cam.TryStopFrameGrabbing();
+                camera.TryStopFrameGrabbing();
             }
         }
 
@@ -194,26 +185,21 @@ namespace VisionModules.Events
                 if (templatePreview != null)
                     config.templatePreview = templatePreview;
 
-                config.DeviceList.SelectedIndex = selected_device_idx;
+                config.DeviceList.SelectedIndex = selectedDeviceIndex;
                 return config;
             }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            bool wasEnabled = this.Enabled;
+            bool wasEnabled = this.IsEnabled;
 
-            if (this.Enabled)
-                this.Disable();
             // assign selected cam
             // cam = ((CamSnapshotConfig)configurationControl).DeviceList.SelectedItem as Camera;
 
-            if (wasEnabled)
-                this.Enable();
-
             ObjectDetectorConfig config = configurationControl as ObjectDetectorConfig;
 
-            cam = config.selected_camera;
+            camera = config.selected_camera;
             boundingRect = config.selectedBoundingRect;
             templateImage = config.templateImg;
             templatePreview = config.templatePreview;
@@ -224,8 +210,6 @@ namespace VisionModules.Events
             templatePreview_bytes = VisionModulesWPFCommon.BitmapToArray(templatePreview);
 
             // TODO: od.SetDetectionBoundaryRect(boundingRect) 
-
-            testString = "FOOBAR";
         }
     }
 }

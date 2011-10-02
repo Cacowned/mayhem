@@ -1,4 +1,5 @@
-﻿/*
+﻿using System.Runtime.Serialization;
+/*
  * DitialPinItem.cs
  * 
  * 
@@ -10,13 +11,8 @@
  * Author: Sven Kratz
  * 
  * 
- */ 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+ */
 using ArduinoModules.Firmata;
-using System.Runtime.Serialization;
 
 
 namespace ArduinoModules.Wpf.Helpers

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace MayhemCore
@@ -21,25 +18,13 @@ namespace MayhemCore
 
         public static void AddError(ErrorType error, string message)
         {
-            /*
-            if (!Dispatcher.CheckAccess())
-            {
-                Dispatcher.Invoke(DispatcherPriority.Send, new AddHandler(Add), item);
-            }
-            else
-            {
-                _underlyingCollection.Add(item);
-            }
-            */
-
             MayhemError err = new MayhemError(error, message);
 
-            errors.Insert(0,err);
+            errors.Insert(0, err);
 
             // For the time being, write the error to Debug as well
             Logger.WriteLine(message);
         }
-
 
         public static BindingCollection<MayhemError> Errors
         {
@@ -49,42 +34,14 @@ namespace MayhemCore
             }
         }
 
-        // Get all of the errors in the collection
-        // with an error type of at least
-        // minimum type
+        /// <summary>
+        /// Get all of the errors in the collection with an error type with a given minimum type
+        /// </summary>
+        /// <param name="minimumType">The minimum type of error to retrieve.</param>
+        /// <returns>An enumeration of the errors that fit the criteria</returns>
         public static IEnumerable<MayhemError> GetErrorsAtLevel(ErrorType minimumType)
         {
             return errors.Where(x => x.Type > minimumType);
         }
-    }
-
-    public class MayhemError
-    {
-        public DateTime Time { get; private set; }
-        public string TimeString
-        {
-            get
-            {
-                return Time.ToShortTimeString();
-            }
-        }
-        public ErrorType Type { get; private set; }
-        public string Message { get; private set; }
-
-        public MayhemError(ErrorType type, string message)
-        {
-            this.Type = type;
-            this.Message = message;
-
-            this.Time = DateTime.Now;
-        }
-    }
-
-    // The different types of errors we can have
-    public enum ErrorType
-    {
-        Message = 0,
-        Warning = 1,
-        Failure = 2
     }
 }

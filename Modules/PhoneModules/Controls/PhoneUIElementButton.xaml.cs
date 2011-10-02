@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace PhoneModules.Controls
 {
@@ -205,13 +206,20 @@ namespace PhoneModules.Controls
             Typeface myTypeface = new Typeface(textBox1.FontFamily, textBox1.FontStyle, textBox1.FontWeight, textBox1.FontStretch);
             FormattedText ft = new FormattedText(textBox1.Text, CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight, myTypeface, textBox1.FontSize, Brushes.Black);
-            textBox1.Width = ft.WidthIncludingTrailingWhitespace + (editing ? 10 : 5);
+            textBox1.Width = ft.WidthIncludingTrailingWhitespace + (editing ? 15 : 10);
             border1.Width = textBox1.Width + 15;
         }
 
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
             ResizeTextBox(true);
+            double left = Canvas.GetLeft(this);
+            double right = left + this.ActualWidth;
+            if (right > 320)
+            {
+                Canvas.SetLeft(this, left + 320 - right);
+            }
+            Debug.WriteLine(right);
         }
     }
 }

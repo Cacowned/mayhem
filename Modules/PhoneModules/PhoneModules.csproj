@@ -52,6 +52,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ACLHelper.cs" />
     <Compile Include="Controls\PhoneUIElement.cs" />
     <Compile Include="Controls\PhoneUIElementButton.xaml.cs">
       <DependentUpon>PhoneUIElementButton.xaml</DependentUpon>

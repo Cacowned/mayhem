@@ -11,29 +11,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemWpf.UserControls;
-using MayhemOpenCVWrapper;
-using System.Diagnostics;
 using System.Drawing;
-using VisionModules.Events;
 using System.IO;
-using Image = System.Drawing.Image;
-using Point = System.Drawing.Point;
-using System.Drawing.Drawing2D;
-using MayhemOpenCVWrapper.LowLevel;
-using MayhemCore;
 using System.Threading;
+using System.Windows;
+using System.Windows.Documents;
+using MayhemCore;
+using MayhemOpenCVWrapper;
+using MayhemOpenCVWrapper.LowLevel;
+using MayhemWpf.UserControls;
+using VisionModules.Events;
+using Point = System.Drawing.Point;
 
 
 namespace VisionModules.Wpf

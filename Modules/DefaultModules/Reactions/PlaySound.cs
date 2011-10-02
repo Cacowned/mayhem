@@ -5,9 +5,9 @@ using System.Runtime.Serialization;
 using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
+using MayhemCore.ModuleTypes;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using MayhemCore.ModuleTypes;
 
 namespace DefaultModules.Reactions
 {
@@ -15,16 +15,14 @@ namespace DefaultModules.Reactions
     [MayhemModule("Play Sound", "Plays an audio file when triggered")]
     public class PlaySound : ReactionBase, ICli, IWpfConfigurable
     {
-        MPlayer m;
-
-        #region Configuration Properties
         [DataMember]
         private string SoundPath
         {
             get;
             set;
         }
-        #endregion
+
+        MPlayer m;
 
         public override void Perform()
         {
@@ -38,22 +36,17 @@ namespace DefaultModules.Reactions
             }
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             m = new MPlayer();
-            if (File.Exists(SoundPath))
-            {
-                return true;
-            }
-            else
+            if (!File.Exists(SoundPath))
             {
                 ErrorLog.AddError(ErrorType.Warning, Strings.PlaySound_FileNotFound);
+                e.Cancel = true;
             }
-
-            return false;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             m.Stop();
         }
