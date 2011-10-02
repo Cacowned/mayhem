@@ -2,12 +2,10 @@
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using Phidgets;
-using PhidgetModules.Wpf;
-using System.Windows;
-using Phidgets.Events;
-using System.Windows.Controls;
 using MayhemWpf.UserControls;
+using PhidgetModules.Wpf;
+using Phidgets;
+using Phidgets.Events;
 
 namespace PhidgetModules.Events
 {
@@ -15,7 +13,6 @@ namespace PhidgetModules.Events
     //[MayhemModule("Phidget: Digital Input", "Triggers on a digital input")]
     public class DigitalInput : EventBase, IWpfConfigurable
     {
-        #region Configuration
         // Which index do we want to be looking at?
         [DataMember]
         private int Index;
@@ -24,20 +21,21 @@ namespace PhidgetModules.Events
         [DataMember]
         private bool OnWhenOn;
 
-        #endregion
-
         // The interface kit we are using for the sensors
         private InterfaceKit ifKit;
 
         private InputChangeEventHandler inputChangeHandler;
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
+        {
+            Index = 0;
+            OnWhenOn = true;
+        }
+
+        protected override void OnAfterLoad()
         {
             this.ifKit = InterfaceFactory.Interface;
             inputChangeHandler = new InputChangeEventHandler(InputChanged);
-
-            Index = 0;
-            OnWhenOn = true;
         }
 
         public WpfConfiguration ConfigurationControl
@@ -87,14 +85,12 @@ namespace PhidgetModules.Events
         }
 
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             ifKit.InputChange += inputChangeHandler;
-
-            return true;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (ifKit != null)
             {

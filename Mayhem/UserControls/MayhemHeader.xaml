@@ -11,7 +11,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Image Source="../Images/LogoAppWhiteDropShadowSmaller.png" Width="300" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" />
+                <Image Source="../Images/banner.png" Width="645" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" />
             </Grid>
         </Border>
     </Border>

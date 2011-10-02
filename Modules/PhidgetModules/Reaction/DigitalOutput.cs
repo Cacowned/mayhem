@@ -1,11 +1,9 @@
-﻿using System;
-using System.Runtime.Serialization;
-using System.Windows;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using Phidgets;
-using MayhemWpf.UserControls;
 
 namespace PhidgetModules.Reaction
 {
@@ -13,24 +11,25 @@ namespace PhidgetModules.Reaction
     [MayhemModule("Phidget: Digital Output", "Triggers a digital output")]
     public class DigitalOutput : ReactionBase, IWpfConfigurable
     {
-        #region Configuration
         // Which index do we want to be looking at?
         [DataMember]
         private int Index;
 
         [DataMember]
         private DigitalOutputType OutputType;
-        #endregion
 
         // The interface kit we are using for the sensors
         private InterfaceKit ifKit;
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
         {
-            this.ifKit = InterfaceFactory.Interface;
-
             Index = 0;
             OutputType = DigitalOutputType.Toggle;
+        }
+
+        protected override void OnAfterLoad()
+        {
+            this.ifKit = InterfaceFactory.Interface;
         }
 
         public WpfConfiguration ConfigurationControl

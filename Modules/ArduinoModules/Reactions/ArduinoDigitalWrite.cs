@@ -10,16 +10,14 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
+using System.Timers;
+using ArduinoModules.Firmata;
+using ArduinoModules.Wpf;
+using ArduinoModules.Wpf.Helpers;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Runtime.Serialization;
-using ArduinoModules.Wpf;
-using ArduinoModules.Wpf.Helpers;
-using ArduinoModules.Firmata;
-using System.Timers;
 
 namespace ArduinoModules.Reactions
 {
@@ -28,15 +26,23 @@ namespace ArduinoModules.Reactions
     public class ArduinoDigitalWrite : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private List<DigitalPinWriteItem> writePins = new List<DigitalPinWriteItem>();
+        private List<DigitalPinWriteItem> writePins;
         [DataMember]
-        private string arduinoPortName = String.Empty;
+        private string arduinoPortName;
+
         private ArduinoFirmata arduino = null;
 
-        private const int pulse_time = 20;                          // ms pulse time. 
-                                                                    // TODO: evaluate if this may be required to
-                                                                    // be set by the user
-        protected override void Initialize()
+        private const int pulse_time = 20;          // ms pulse time. 
+                                                    // TODO: evaluate if this may be required to
+                                                    // be set by the user
+
+        protected override void OnLoadDefaults()
+        {
+            writePins = new List<DigitalPinWriteItem>();
+            arduinoPortName = String.Empty;
+        }
+
+        protected override void OnAfterLoad()
         {
             if (arduinoPortName != String.Empty)
             {
@@ -51,11 +57,11 @@ namespace ArduinoModules.Reactions
                 foreach (DigitalPinWriteItem p in writePins)
                 {
                     if (p.WriteMode == DIGITAL_WRITE_MODE.HIGH)             // pin will be set to HIGH
-                    {                      
+                    {
                         arduino.DigitalWrite(p.GetPinID(), p.SetPinState(1));
                     }
                     else if (p.WriteMode == DIGITAL_WRITE_MODE.LOW)         // pin will be set to LOW
-                    {                      
+                    {
                         arduino.DigitalWrite(p.GetPinID(), p.SetPinState(0));
                     }
                     else if (p.WriteMode == DIGITAL_WRITE_MODE.PULSE_OFF) // pin will be set to OFF for a short period
@@ -68,7 +74,6 @@ namespace ArduinoModules.Reactions
                     }
                     else if (p.WriteMode == DIGITAL_WRITE_MODE.TOGGLE)     // pin is initially set to  0 and toggles from there
                     {
-                        //throw new NotImplementedException();
                         TogglePin(p);
                     }
                 }
@@ -109,8 +114,8 @@ namespace ArduinoModules.Reactions
         /// "Toggle" Activation mode
         /// </summary>
         private void TogglePin(DigitalPinWriteItem p)
-        {                  
-            Logger.WriteLine("Pin " + p.GetPinID() + " "+ p.GetPinState());
+        {
+            Logger.WriteLine("Pin " + p.GetPinID() + " " + p.GetPinState());
             if (p.GetPinState() > 0)
             {
                 arduino.DigitalWrite(p.GetPinID(), p.SetPinState(0));
@@ -118,12 +123,12 @@ namespace ArduinoModules.Reactions
             else
             {
                 arduino.DigitalWrite(p.GetPinID(), p.SetPinState(1));
-            }           
+            }
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get 
+            get
             {
                 return new ArduinoDigitalWriteConfig(this.writePins);
             }
@@ -131,7 +136,6 @@ namespace ArduinoModules.Reactions
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-           // throw new NotImplementedException();
             ArduinoDigitalWriteConfig config = configurationControl as ArduinoDigitalWriteConfig;
             writePins.Clear();
 
@@ -170,9 +174,16 @@ namespace ArduinoModules.Reactions
         }
 
         public string GetConfigString()
-        {
-            ///TODO: Sven: Put the right thing here
-            throw new Exception("Sven: fill this in");
+        {      
+            string cs = arduinoPortName+" ";
+            for (int i = 0; i < writePins.Count; i++)
+            {
+                if (i < writePins.Count - 1)
+                    cs += writePins[i].PinName + ",";
+                else
+                    cs += writePins[i].PinName;
+            }
+            return cs;
         }
     }
 }

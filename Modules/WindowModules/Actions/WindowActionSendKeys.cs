@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Threading;
 
 namespace WindowModules.Actions
 {
@@ -147,8 +143,6 @@ namespace WindowModules.Actions
         {
             KeyList = new List<System.Windows.Forms.Keys>();
         }
-
-        Keys keySpace;
 
         const uint WM_KEYDOWN = 0x100;
 

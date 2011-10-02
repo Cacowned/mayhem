@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.Serialization;
+using System.Windows.Forms;
+using DefaultModules.Wpf;
+using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using DefaultModules.Wpf;
-using System.IO;
 
 namespace DefaultModules.Reactions
 {
@@ -19,16 +16,15 @@ namespace DefaultModules.Reactions
     public class Screenshot : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string saveLocation = AppDomain.CurrentDomain.BaseDirectory;
+        private string saveLocation;
 
         [DataMember]
-        private string filenamePrefix = "Mayhem";
+        private string filenamePrefix;
 
-        int startIndex;
-
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
         {
-            startIndex = 1;
+            saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            filenamePrefix = "Mayhem";
         }
 
         public override void Perform()
@@ -58,25 +54,24 @@ namespace DefaultModules.Reactions
             gfx.CopyFromScreen(minX, minY, 0, 0, new Size(screenWidth, screenHeight));
 
             DateTime now = DateTime.Now;
-            string filename = filenamePrefix + "_" + 
+            string filename = filenamePrefix + "_" +
                                 now.Year.ToString("D2") + "-" +
-                                now.Month.ToString("D2") + "-" + 
-                                now.Day.ToString("D2") + "_" + 
+                                now.Month.ToString("D2") + "-" +
+                                now.Day.ToString("D2") + "_" +
                                 now.Hour.ToString("D2") + "-" +
                                 now.Minute.ToString("D2") + "-" +
                                 now.Second.ToString("D2") + ".jpg";
-            
+
             filename = Path.Combine(saveLocation, filename);
             bmpScreenShot.Save(filename, ImageFormat.Jpeg);
             bmpScreenShot.Dispose();
-            startIndex++;
         }
 
         public string GetConfigString()
         {
-            return Path.Combine(saveLocation, filenamePrefix+"*.jpg");
+            return Path.Combine(saveLocation, filenamePrefix + "*.jpg");
         }
-        
+
         #region Configuration Views
 
         public WpfConfiguration ConfigurationControl

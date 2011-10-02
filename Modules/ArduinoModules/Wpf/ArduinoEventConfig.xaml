@@ -4,6 +4,7 @@
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              xmlns:ext="clr-namespace:ArduinoModules.Wpf"
              Width="400" 
+             MinHeight="550"
              Name="root">
     <Grid>
         <StackPanel>

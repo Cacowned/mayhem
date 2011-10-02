@@ -7,28 +7,20 @@
  * 
  *  Author: Sven Kratz
  * 
- */ 
+ */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemOpenCVWrapper;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Drawing;
-using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
 using MayhemCore;
-using System.Threading;
+using MayhemOpenCVWrapper;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace VisionModules.Wpf
 {
@@ -57,7 +49,9 @@ namespace VisionModules.Wpf
         public delegate void CameraSelectedHandler(Camera c);
         public event CameraSelectedHandler OnCameraSelected;
 
-        public int index = 0; 
+        public int index = 0;
+
+        private static readonly int DEBUG_LEVEL = 0; 
 
         public MultiCameraSelector()
         {
@@ -135,7 +129,6 @@ namespace VisionModules.Wpf
         public void i_OnImageUpdated(object sender, EventArgs e)
         {
             Dispatcher.Invoke(new ImageUpdateHandler(SetCameraImageSource), sender);
-            //SetCameraImageSource();
         }
 
         ///<summary>
@@ -143,7 +136,7 @@ namespace VisionModules.Wpf
         ///</summary>       
         protected virtual void SetCameraImageSource(Camera cam)
         {
-            Logger.WriteLine("New Image on Camera " + cam.index + " : " + cam.Info);
+            Logger.WriteLineIf(DEBUG_LEVEL > 0,"New Image on Camera " + cam.index + " : " + cam.Info);
 
             Bitmap bm = cam.ImageAsBitmap();
             Bitmap shrink = ImageProcessing.ScaleWithFixedSize(bm, preview_width, preview_height);

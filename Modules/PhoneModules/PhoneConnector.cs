@@ -76,10 +76,17 @@ namespace PhoneModules
                 {
                     if (service != null)
                     {
-                        string insideDiv;
-                        string html = PhoneLayout.Instance.SerializeToHtml(true, out insideDiv);
-                        service.SetHtml(html);
-                        service.SetInsideDiv(insideDiv);
+                        try
+                        {
+                            string insideDiv;
+                            string html = PhoneLayout.Instance.SerializeToHtml(true, out insideDiv);
+                            service.SetHtml(html);
+                            service.SetInsideDiv(insideDiv);
+                        }
+                        catch
+                        {
+                            ErrorLog.AddError(ErrorType.Failure, "Phone Remote: Could not communicate with server"); 
+                        }
                     }
                 }));
             }
@@ -155,7 +162,7 @@ namespace PhoneModules
                 if (port.Port == PortNumber)
                     portFound = true;
             }
-            if (!portFound)
+            if (!portFound || !ACLHelper.FindUrlPrefix("http://+:" + PortNumber + "/"))
             {
                 OpenServerHelper();
             }
@@ -164,28 +171,19 @@ namespace PhoneModules
             {
                 host.Open();
             }
-            catch (System.ServiceModel.AddressAccessDeniedException)
-            {
-                OpenServerHelper();
-                try
-                {
-                    host.Open();
-                }
-                catch
-                {
-                    isServiceRunning = false;
-                    return false;
-                }
-            }
             catch (Exception e)
             {
+                isServiceRunning = false;
                 Logger.WriteLine(e);
+                ErrorLog.AddError(ErrorType.Failure, "Error starting Phone Remote service");
+                return false;
             }
             isServiceRunning = true;
             Logger.WriteLine("Phone service started");
 
             WebChannelFactory<IMayhemService> myChannelFactory = new WebChannelFactory<IMayhemService>(new Uri(address.ToString()));
             service = myChannelFactory.CreateChannel();
+            service.Html(true);
 
             return true;
         }

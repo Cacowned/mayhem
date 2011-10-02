@@ -6,15 +6,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows;
-using MayhemOpenCVWrapper.LowLevel;
+using System.Windows.Controls;
 using MayhemCore;
 using MayhemOpenCVWrapper;
-using System.Windows.Controls;
+using MayhemOpenCVWrapper.LowLevel;
 
 
 

@@ -11,7 +11,7 @@ namespace OfficeModules.Events
         private OOutlook.Application outlook;
         private OOutlook.ApplicationEvents_11_NewMailEventHandler mailEvent;
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             // Create the event handler delegate to attach
             mailEvent = new OOutlook.ApplicationEvents_11_NewMailEventHandler(GotMail);
@@ -22,25 +22,22 @@ namespace OfficeModules.Events
             Trigger();
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             // When enabled, try and get the outlook instance            
             try
             {
                 outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");
                 outlook.NewMail += mailEvent;
-
-                return true;
             }
             catch
             {
                 ErrorLog.AddError(ErrorType.Warning, Strings.Outlook_ApplicationNotFound);
+                e.Cancel = true;
             }
-
-            return false;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (outlook != null)
             {

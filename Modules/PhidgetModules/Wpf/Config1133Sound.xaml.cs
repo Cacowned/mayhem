@@ -1,9 +1,5 @@
-﻿using System;
-using System.Windows;
-using Phidgets;
-using MayhemWpf.UserControls;
+﻿using System.Windows.Controls;
 using PhidgetModules.Wpf.UserControls;
-using System.Windows.Controls;
 
 namespace PhidgetModules.Wpf
 {

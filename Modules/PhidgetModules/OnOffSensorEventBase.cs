@@ -1,13 +1,11 @@
 ﻿using System.Runtime.Serialization;
 using Phidgets.Events;
-using System;
 
 namespace PhidgetModules
 {
     [DataContract]
     abstract public class OnOffSensorEventBase : SensorEventBase
     {
-        #region Configuration
         [DataMember]
         protected int TopThreshold;
 
@@ -20,15 +18,11 @@ namespace PhidgetModules
         [DataMember]
         protected bool OnTurnOn;
 
-        #endregion
-
         protected double CurrentValue { get; set; }
         protected double LastValue { get; set; }
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
         {
-            base.Initialize();
-
             TopThreshold = 900;
             BottomThreshold = 500;
             OnTurnOn = true;

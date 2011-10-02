@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization;
+using System.Threading;
+using System.Windows.Forms;
+using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.IO;
 using WindowModules.Wpf;
-using System.Reflection;
-using System.Windows.Threading;
-using System.Threading;
 
-namespace WindowModules.Reactions
+namespace WindowModules.Events
 {
     [DataContract]
     [MayhemModule("System Tray Menu", "Add a menu into the system tray")]
     public class SystemTrayMenu : EventBase, IWpfConfigurable
     {
+        [DataMember]
+        private string text;
+
         static object locker = new object();
         static NotifyIcon notifyIcon = null;
 
@@ -28,10 +25,7 @@ namespace WindowModules.Reactions
 
         MenuItem menuItem;
 
-        [DataMember]
-        private string text;
-
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             context = SynchronizationContext.Current;
         }
@@ -51,7 +45,7 @@ namespace WindowModules.Reactions
                 notifyIcon.Text = "Mayhem";
                 notifyIcon.MouseUp += new MouseEventHandler(notifyIcon_MouseUp);
             }
-            if(!notifyIcon.Visible)
+            if (!notifyIcon.Visible)
                 notifyIcon.Visible = true;
 
             menuItem = new MenuItem(text, OnClick);
@@ -68,14 +62,12 @@ namespace WindowModules.Reactions
             }
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             context.Post(SetNotifyIconStuff, null);
-        
-            return true;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             context.Post(RemoveFromContextMenu, null);
         }
@@ -98,7 +90,7 @@ namespace WindowModules.Reactions
         {
             return text;
         }
-        
+
         #region Configuration Views
 
         public WpfConfiguration ConfigurationControl

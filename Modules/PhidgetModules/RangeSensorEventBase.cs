@@ -1,13 +1,11 @@
 ﻿using System.Runtime.Serialization;
 using Phidgets.Events;
-using System;
 
 namespace PhidgetModules
 {
     [DataContract]
     abstract public class RangeSensorEventBase : SensorEventBase
     {
-        #region Configuration
         // Define the range we care about
         [DataMember]
         protected double TopValue;
@@ -15,20 +13,19 @@ namespace PhidgetModules
         [DataMember]
         protected double BottomValue;
 
-        #endregion
-
         protected double CurrentValue { get; set; }
         protected double LastValue { get; set; }
 
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
         {
-            base.Initialize();
-
-            // put it somewhere in the middle
-            CurrentValue = LastValue = TopValue - BottomValue;
-
             TopValue = 85;
             BottomValue = 20;
+        }
+
+        protected override void OnAfterLoad()
+        {
+            // put it somewhere in the middle
+            CurrentValue = LastValue = TopValue - BottomValue;
         }
 
         public abstract double Convert(int value);

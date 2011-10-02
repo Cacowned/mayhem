@@ -7,22 +7,18 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO.Ports;
-using System.Runtime.CompilerServices;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
+using System.Linq;
 using System.Management;
-using System.Collections;
-using Microsoft.Win32;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using MayhemCore;
+using Microsoft.Win32.SafeHandles;
 
 namespace MayhemSerial
 {

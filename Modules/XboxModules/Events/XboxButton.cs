@@ -13,42 +13,42 @@ namespace XboxModules.Events
     [MayhemModule("Xbox Controller: Button", "Triggers when buttons on an Xbox 360 controller are pushed")]
     public class XboxButton : EventBase, IWpfConfigurable
     {
+        [DataMember]
+        private Buttons xboxButtons;
+
+        [DataMember]
+
+        private PlayerIndex player;
         private ButtonWatcher buttonWatcher;
 
         public static bool IsConfigOpen { get; set; }
 
-        #region Configuration
-        [DataMember]
-        private Buttons XboxButtons;
-
-        [DataMember]
-        private PlayerIndex Player;
-       
-        #endregion
-
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
         {
-            Player = PlayerIndex.One;
+            player = PlayerIndex.One;
+        }
 
+        protected override void OnAfterLoad()
+        {
             buttonWatcher = ButtonWatcher.Instance;
         }
 
         public string GetConfigString()
         {
-            return XboxButtons.ButtonString();
+            return xboxButtons.ButtonString();
         }
 
         #region Configuration Views
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
-            XboxButtons = ((XboxButtonConfig)configurationControl).ButtonsToSave;
-            buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);
+            buttonWatcher.RemoveCombinationHandler(xboxButtons, OnKeyCombinationActivated);
+            xboxButtons = ((XboxButtonConfig)configurationControl).ButtonsToSave;
+            buttonWatcher.AddCombinationHandler(xboxButtons, OnKeyCombinationActivated);
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new XboxButtonConfig(XboxButtons); }
+            get { return new XboxButtonConfig(xboxButtons); }
         }
         #endregion
 
@@ -56,32 +56,31 @@ namespace XboxModules.Events
         {
             if (!IsConfigOpen)
             {
-                if (Enabled)
+                if (IsEnabled)
                 {
                     Trigger();
                 }
             }
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
-            var state = GamePad.GetState(Player);
+            var state = GamePad.GetState(player);
             if (!state.IsConnected)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.XboxButton_CantEnable);
+                e.Cancel = true;
             }
             else
             {
                 // If it is connected, lets enable
-                buttonWatcher.AddCombinationHandler(XboxButtons, OnKeyCombinationActivated);
+                buttonWatcher.AddCombinationHandler(xboxButtons, OnKeyCombinationActivated);
             }
-
-            return state.IsConnected;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
-            buttonWatcher.RemoveCombinationHandler(XboxButtons, OnKeyCombinationActivated);
+            buttonWatcher.RemoveCombinationHandler(xboxButtons, OnKeyCombinationActivated);
         }
     }
 }

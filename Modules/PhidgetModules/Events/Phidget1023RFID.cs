@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Windows.Controls;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -14,16 +13,13 @@ namespace PhidgetModules.Events
     [MayhemModule("Phidget: Rfid", "Triggers with a certain Rfid Tag")]
     public class Phidget1023Rfid : EventBase, IWpfConfigurable
     {
-        #region Configuration
         // This is the tag we are watching for
         [DataMember]
         private string Tag;
 
-        #endregion
-
         private RFID rfid;
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             rfid = InterfaceFactory.Rfid;
         }
@@ -59,15 +55,13 @@ namespace PhidgetModules.Events
             rfid.LED = false;
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             rfid.Tag += RfidTag;
             rfid.TagLost += LostRfidTag;
-
-            return true;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (rfid != null)
             {
