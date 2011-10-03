@@ -83,7 +83,6 @@ namespace MayhemCore
             object[] attList = this.GetType().GetCustomAttributes(typeof(DataContractAttribute), true);
             if (attList.Length > 0)
             {
-                Debug.WriteLine(context.State);
                 Initialize_();
                 try
                 {
