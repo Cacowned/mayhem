@@ -48,7 +48,7 @@ namespace VisionModules.Wpf
             // populate device list
             Logger.WriteLine("OnLoad");
 
-            foreach (Camera c in i.cameras_available)
+            foreach (Camera c in i.CamerasAvailable)
             {
                 DeviceList.Items.Add(c);
             }
@@ -63,7 +63,7 @@ namespace VisionModules.Wpf
                 int camera_index = (selected_camera != null && selected_camera.Info.deviceId < i.DeviceCount) ? selected_camera.Info.deviceId : 0;
 
                 // start the camera 0 if it isn't already running
-                cam = i.cameras_available[camera_index];
+                cam = i.CamerasAvailable[camera_index];
                
                 DeviceList.SelectedIndex = camera_index;
                 Logger.WriteLine("Selected Index " + DeviceList.SelectedIndex);
@@ -123,7 +123,7 @@ namespace VisionModules.Wpf
         public override void OnClosing()
         {
             Logger.WriteLine("OnClosing");
-            foreach (Camera c in i.cameras_available)
+            foreach (Camera c in i.CamerasAvailable)
             {
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.TryStopFrameGrabbing();
@@ -141,7 +141,7 @@ namespace VisionModules.Wpf
         private void DeviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Logger.WriteLine("");
-            Camera selected_cam = i.cameras_available[DeviceList.SelectedIndex];
+            Camera selected_cam = i.CamerasAvailable[DeviceList.SelectedIndex];
 
             if (selected_cam != cam)
             {

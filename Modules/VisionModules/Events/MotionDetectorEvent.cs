@@ -57,7 +57,7 @@ namespace VisionModules.Events
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
             else
             {
@@ -140,7 +140,7 @@ namespace VisionModules.Events
             // TODO: Improve this code
             if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 if (!camera.running)
                     camera.StartFrameGrabbing();
                 firstFrame = true;

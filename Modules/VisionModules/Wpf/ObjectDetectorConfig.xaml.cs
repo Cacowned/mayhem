@@ -81,7 +81,7 @@ namespace VisionModules.Wpf
                 od.set_template(templateImg);
             }
 
-            foreach (Camera c in i.cameras_available)
+            foreach (Camera c in i.CamerasAvailable)
             {
                 DeviceList.Items.Add(c);
             }
@@ -91,7 +91,7 @@ namespace VisionModules.Wpf
             if (i.DeviceCount > 0)
             {
                 // start the camera 0 if it isn't already running
-                cam = i.cameras_available[0];
+                cam = i.CamerasAvailable[0];
                 if (!cam.running)
                 {
                     cam.OnImageUpdated += i_OnImageUpdated;
