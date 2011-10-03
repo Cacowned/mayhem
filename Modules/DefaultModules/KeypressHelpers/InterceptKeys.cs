@@ -29,7 +29,8 @@ namespace DefaultModules.KeypressHelpers
         public delegate void KeyUpHandler(Keys key);
         public event KeyUpHandler OnKeyUp;
 
-        private HashSet<Keys> keys_down = new HashSet<Keys>();
+        private HashSet<Keys> keysDown = new HashSet<Keys>();
+        Dictionary<Keys, DateTime> keysDownTimes = new Dictionary<Keys, DateTime>();
 
         Dictionary<HashSet<Keys>, List<KeyCombinationHandler>> keyCombinationHandlerMap;
 
@@ -116,9 +117,29 @@ namespace DefaultModules.KeypressHelpers
 
         void CheckCombinations()
         {
+            List<Keys> removeList = null;
+            DateTime now = DateTime.Now;
+            foreach (Keys key in keysDown)
+            {
+                if (now.Subtract(keysDownTimes[key]).TotalSeconds > 2)
+                {
+                    Logger.WriteLine("Removing a key: " + key);
+                    if (removeList == null)
+                        removeList = new List<Keys>();
+                    removeList.Add(key);
+                }
+            }
+            if (removeList != null)
+            {
+                foreach (Keys key in removeList)
+                {
+                    keysDownTimes.Remove(key);
+                    keysDown.Remove(key);
+                }
+            }
             foreach (HashSet<Keys> k in keyCombinationHandlerMap.Keys)
             {
-                if (AreKeysetsEqual(k, keys_down))
+                if (AreKeysetsEqual(k, keysDown))
                 {
                     List<KeyCombinationHandler> listHandlers = keyCombinationHandlerMap[k];
                     for (int i = 0; i < listHandlers.Count; i++)
@@ -140,7 +161,7 @@ namespace DefaultModules.KeypressHelpers
 
         public void SetHook()
         {
-            keys_down.Clear();
+            keysDown.Clear();
             if (_hookID == IntPtr.Zero)
             {
                 using (Process curProcess = Process.GetCurrentProcess())
@@ -156,7 +177,7 @@ namespace DefaultModules.KeypressHelpers
 
         public void RemoveHook()
         {
-            keys_down.Clear();
+            keysDown.Clear();
             if (_hookID != IntPtr.Zero)
             {
                 Logger.WriteLine("Removing hook");
@@ -173,9 +194,10 @@ namespace DefaultModules.KeypressHelpers
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Keys key = (Keys)vkCode;
-                if (!keys_down.Contains(key))
+                keysDownTimes[key] = DateTime.Now;
+                if (!keysDown.Contains(key))
                 {
-                    keys_down.Add(key);
+                    keysDown.Add(key);
                     CheckCombinations();
                     if (OnKeyDown != null)
                     {
@@ -187,7 +209,7 @@ namespace DefaultModules.KeypressHelpers
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Keys key = (Keys)vkCode;
-                keys_down.Remove(key);
+                keysDown.Remove(key);
                 if (OnKeyUp != null)
                 {
                     OnKeyUp(key);
