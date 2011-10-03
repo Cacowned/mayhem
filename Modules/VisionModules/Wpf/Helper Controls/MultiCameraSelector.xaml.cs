@@ -83,10 +83,9 @@ namespace VisionModules.Wpf
                     cams.Add(c);
                     c.OnImageUpdated -= i_OnImageUpdated;
                     c.OnImageUpdated += i_OnImageUpdated;
-                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
-                    {
-                        c.StartFrameGrabbing();
-                    }));
+                    
+                    c.StartFrameGrabbing();
+                  
                     Logger.WriteLine("using " + c.Info.ToString());
                     Logger.WriteLine("Camera IDX " + c.index);
                     
