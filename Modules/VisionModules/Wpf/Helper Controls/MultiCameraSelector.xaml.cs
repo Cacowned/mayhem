@@ -51,7 +51,12 @@ namespace VisionModules.Wpf
 
         public int index = 0;
 
-        private static readonly int DEBUG_LEVEL = 0; 
+        private static readonly int DEBUG_LEVEL = 0;
+
+        public int SelectedIndex
+        {
+            get {return deviceList.SelectedIndex;}
+        }
 
         public MultiCameraSelector()
         {
@@ -63,7 +68,7 @@ namespace VisionModules.Wpf
             i = CameraDriver.Instance;
 
             Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
-            foreach (Camera c in i.cameras_available)
+            foreach (Camera c in i.CamerasAvailable)
             {
                 deviceList.Items.Add(c);
             }
@@ -73,15 +78,14 @@ namespace VisionModules.Wpf
             if (i.DeviceCount > 0)
             {
                 // attach canvases with camera images to camera_preview_panel
-                foreach (Camera c in i.cameras_available)
+                foreach (Camera c in i.CamerasAvailable)
                 {
                     cams.Add(c);
                     c.OnImageUpdated -= i_OnImageUpdated;
                     c.OnImageUpdated += i_OnImageUpdated;
-                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
-                    {
-                        c.StartFrameGrabbing();
-                    }));
+                    
+                    c.StartFrameGrabbing();
+                  
                     Logger.WriteLine("using " + c.Info.ToString());
                     Logger.WriteLine("Camera IDX " + c.index);
                     

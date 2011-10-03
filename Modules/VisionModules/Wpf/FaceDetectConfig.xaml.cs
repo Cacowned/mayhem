@@ -40,7 +40,7 @@ namespace VisionModules.Wpf
             : base(c)
         {
             // set up the face detector
-            fd = new FaceDetectorComponent();
+            fd = new FaceDetectorComponent(c);
             faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetected);
             faceDetectorPoints = new List<System.Drawing.Point>();
             fd.OnFaceDetected += m_onFaceDetected;
@@ -82,9 +82,14 @@ namespace VisionModules.Wpf
             Logger.WriteLine("Updating Face Detector Points");
             fd.update_frame(cam, null);
 
-            //int stride = 320 * 3;
-            Bitmap BackBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Bitmap BackBuffer = cam.ImageAsBitmap();
 
+            //int stride = 320 * 3;
+            //Bitmap BackBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+
+
+            /*
             System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, 320, 240);
 
             // get at the bitmap data in a nicer way
@@ -104,7 +109,7 @@ namespace VisionModules.Wpf
             // Unlock the bits.
             BackBuffer.UnlockBits(bmpData);
 
-            IntPtr hBmp;
+            IntPtr hBmp; */
 
             // mark face points if face has been detected
             if (faceDetectorPoints.Count > 0)
@@ -143,6 +148,7 @@ namespace VisionModules.Wpf
             }
 
             //Convert the bitmap to BitmapSource for use with WPF controls
+            IntPtr hBmp;
             hBmp = BackBuffer.GetHbitmap();
 
             // Finally display the image

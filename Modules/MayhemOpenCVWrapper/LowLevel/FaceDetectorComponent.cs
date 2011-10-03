@@ -29,9 +29,12 @@ namespace MayhemOpenCVWrapper.LowLevel
         private const bool VERBOSE_DEBUG = true;
         public Rect detectionBoundary = new Rect(0, 0, 0, 0);
 
-        public FaceDetectorComponent()
+        public FaceDetectorComponent(ImagerBase c)
         {
-            fd = new FaceDetector(320, 240);
+            int width = c.Settings.resX;
+            int height = c.Settings.resY;
+            Logger.WriteLine("Face Detector: w {0} h {1}", width, height);
+            fd = new FaceDetector(width, height);
         }
 
         ~FaceDetectorComponent()
