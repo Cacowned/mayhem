@@ -35,18 +35,17 @@ namespace MayhemCore
             private set;
         }
 
-        private static MayhemEntry _instance;
-
+        private static MayhemEntry instance;
         public static MayhemEntry Instance
         {
             get
             {
-                if (_instance == null)
+                if (instance == null)
                 {
-                    _instance = new MayhemEntry();
+                    instance = new MayhemEntry();
                 }
 
-                return _instance;
+                return instance;
             }
         }
 

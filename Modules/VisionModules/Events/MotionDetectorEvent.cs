@@ -98,7 +98,7 @@ namespace VisionModules.Events
             string conf = "";
             if (camera != null)
             {
-                conf += "Camera: " + camera.Info.deviceId;
+                conf += "Camera: " + camera.Info.DeviceId;
             }
             return conf;
         }
@@ -129,7 +129,7 @@ namespace VisionModules.Events
             // assign selected cam
             camera = ((MotionDetectorConfig)configurationControl).selected_camera;
 
-            selectedDeviceIndex = camera.Info.deviceId;
+            selectedDeviceIndex = camera.Info.DeviceId;
 
         }
 
@@ -141,7 +141,7 @@ namespace VisionModules.Events
             if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
-                if (!camera.running)
+                if (!camera.Running)
                     camera.StartFrameGrabbing();
                 firstFrame = true;
                 // register the trigger's motion update handler

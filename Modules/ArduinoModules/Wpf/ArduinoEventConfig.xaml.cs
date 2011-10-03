@@ -25,7 +25,8 @@ using System.Windows.Threading;
 using ArduinoModules.Firmata;
 using MayhemCore;
 using MayhemSerial;
-using MayhemWpf.UserControls; 
+using MayhemWpf.UserControls;
+using ArduinoModules.Wpf.Helpers; 
 
 namespace ArduinoModules.Wpf
 {
@@ -36,14 +37,14 @@ namespace ArduinoModules.Wpf
     public partial class ArduinoEventConfig : WpfConfiguration, IArduinoEventListener
     {     
         
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
+        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
         private int itemSelected = -1;
         private Dictionary<string, string>  deviceNamesIds = null;
         private ArduinoFirmata arduino = null;
 
         // collections driving the itemPanels
-        public ObservableCollection<DigitalPinItem> digital_pin_items = new ObservableCollection<DigitalPinItem>();
-        public ObservableCollection<AnalogPinItem> analog_pin_items = new ObservableCollection<AnalogPinItem>();
+        public ObservableCollection<DigitalPinItem> DigitalPinItems = new ObservableCollection<DigitalPinItem>();
+        public ObservableCollection<AnalogPinItem> AnalogPinItems = new ObservableCollection<AnalogPinItem>();
 
 
         Timer t = new Timer(1000);
@@ -55,7 +56,7 @@ namespace ArduinoModules.Wpf
 
         private BackgroundWorker bg_pinUpdate = new BackgroundWorker();
 
-        public string arduinoPortName
+        public string ArduinoPortName
         {
             get
             {
@@ -68,20 +69,20 @@ namespace ArduinoModules.Wpf
             }
         }
 
-        public ArduinoEventConfig(List<DigitalPinItem> reaction_digital_pins, List<AnalogPinItem> reaction_analog_pins )
+        public ArduinoEventConfig(List<DigitalPinItem> reactionDigitalPins, List<AnalogPinItem> reactionAnalogPins )
         {
-            preset_digital_pins = reaction_digital_pins;
-            preset_analog_pins = reaction_analog_pins;
+            preset_digital_pins = reactionDigitalPins;
+            preset_analog_pins = reactionAnalogPins;
 
             InitializeComponent();
         }
 
         public override void OnLoad()
         {
-            digitalPins.ItemsSource = digital_pin_items;
-            analogPins.ItemsSource = analog_pin_items;
+            digitalPins.ItemsSource = DigitalPinItems;
+            analogPins.ItemsSource = AnalogPinItems;
             serial.UpdatePortList();
-            deviceNamesIds = serial.getArduinoPortNames();
+            deviceNamesIds = serial.GetArduinoPortNames();
 
             if (deviceNamesIds.Count > 0)
             {
@@ -112,7 +113,7 @@ namespace ArduinoModules.Wpf
             CanSave = true; 
         }
 
-        void t_Elapsed(object sender, ElapsedEventArgs e)
+        private void t_Elapsed(object sender, ElapsedEventArgs e)
         {
             //throw new NotImplementedException();
             if (!bg_pinUpdate.IsBusy)
@@ -130,20 +131,20 @@ namespace ArduinoModules.Wpf
         private void Button_Click(object sender, RoutedEventArgs e)
         {    
             string portname = (string)deviceList.SelectedValue;
-            bool update_pins = false; 
+            bool updatePins = false; 
 
             if (arduino != null)
             {
                 // clear pin containers and unhook event ghandlers
-                analog_pin_items.Clear();
-                digital_pin_items.Clear();
+                AnalogPinItems.Clear();
+                DigitalPinItems.Clear();
                 arduino.DeregisterListener(this);
 
             }
             
             // update pins ? 
             if (ArduinoFirmata.InstanceExists(portname))
-                update_pins = true;
+                updatePins = true;
 
             arduino = ArduinoFirmata.InstanceForPortname(portname);       
             arduino.RegisterListener(this);
@@ -151,7 +152,7 @@ namespace ArduinoModules.Wpf
             // update pins if the arduino already exists
             // this makes arduino call the OnPinAdded callbacks, which in turn
             // fill the gridViews with the detected pins 
-            if (update_pins)
+            if (updatePins)
             {
                 // reset analog ids to 0
                 AnalogPinItem.ResetAnalogIDs();
@@ -216,10 +217,10 @@ namespace ArduinoModules.Wpf
         {
             //throw new NotImplementedException();
             //Debug.WriteLine(TAG+ "arduino_OnAnalogPinChanged: " + p.analog_channel + " v:"+p.value );
-            if (p.analog_channel < analog_pin_items.Count)
+            if (p.analog_channel < AnalogPinItems.Count)
             {             
                 // refresh data grid items
-                analog_pin_items[p.analog_channel].SetAnalogValue(p.value);               
+                AnalogPinItems[p.analog_channel].SetAnalogValue(p.value);               
             }
         }
 
@@ -228,12 +229,12 @@ namespace ArduinoModules.Wpf
             //throw new NotImplementedException();
             Logger.WriteLine( "arduino_OnDigitalPinChanged " + p.id + " " + p.value);
 
-            if (p.id < digital_pin_items.Count)
+            if (p.id < DigitalPinItems.Count)
             {
                
-                foreach (DigitalPinItem pin in digital_pin_items)
+                foreach (DigitalPinItem pin in DigitalPinItems)
                 {
-                    if (pin.GetPinID() == p.id)
+                    if (pin.GetPinId() == p.id)
                         pin.SetPinState(p.value);
                 }
                     
@@ -252,13 +253,13 @@ namespace ArduinoModules.Wpf
                 DigitalPinItem pItem = new DigitalPinItem(false, p.id, DIGITAL_PIN_CHANGE.LOW);
                 foreach (DigitalPinItem setPin in preset_digital_pins)
                 {
-                    if (setPin.GetPinID() == p.id)
+                    if (setPin.GetPinId() == p.id)
                     {
                         pItem = setPin;
-                        Logger.WriteLine("Using already configured pin " + setPin.GetPinID());
+                        Logger.WriteLine("Using already configured pin " + setPin.GetPinId());
                     }
                 }
-                Dispatcher.Invoke(new Action(() => { digital_pin_items.Add(pItem); }), null); 
+                Dispatcher.Invoke(new Action(() => { DigitalPinItems.Add(pItem); }), null); 
                 // set digital pin mode to input
                 if (p.mode != PIN_MODE.INPUT && p.flagged == false)
                 {
@@ -271,13 +272,13 @@ namespace ArduinoModules.Wpf
                 AnalogPinItem aItem = new AnalogPinItem(false, p.id, ANALOG_PIN_CHANGE.EQUALS);
                 foreach (AnalogPinItem setPin in preset_analog_pins)
                 {
-                    if (setPin.GetPinID() == p.id)
+                    if (setPin.GetPinId() == p.id)
                     {
                         aItem = setPin;
-                        Logger.WriteLine("Using already configured pin " + setPin.GetPinID());
+                        Logger.WriteLine("Using already configured pin " + setPin.GetPinId());
                     }
                 }
-                Dispatcher.Invoke(new Action(() => { analog_pin_items.Add(aItem);}), null);
+                Dispatcher.Invoke(new Action(() => { AnalogPinItems.Add(aItem);}), null);
             }
 
 

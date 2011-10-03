@@ -17,7 +17,7 @@ namespace MayhemOpenCVWrapper
     {
         public abstract CameraInfo Info { get; protected set; }
         public abstract CameraSettings Settings { get; protected set; }
-        public abstract bool running { get; protected set; }
+        public abstract bool Running { get; protected set; }
         public delegate void ImageUpdateHandler(object sender, EventArgs e);
         public abstract event ImageUpdateHandler OnImageUpdated;
         public abstract Bitmap ImageAsBitmap();

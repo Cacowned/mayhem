@@ -20,13 +20,13 @@ namespace PhidgetModules.Events
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1103IRReflective(OnTurnOn)); }
+            get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1103IrReflective(OnTurnOn)); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
             SensorConfig sensor = configurationControl as SensorConfig;
-            Config1103IRReflective config = sensor.Sensor as Config1103IRReflective;
+            Config1103IrReflective config = sensor.Sensor as Config1103IrReflective;
 
             Index = sensor.Index;
             OnTurnOn = config.OnTurnOn;

@@ -16,7 +16,7 @@
 using System.Runtime.Serialization;
 using ArduinoModules.Firmata;
 
-namespace ArduinoModules.Wpf
+namespace ArduinoModules.Wpf.Helpers
 {
     /// <summary>
     /// Items for Ditial pins ItemsControl 
@@ -31,42 +31,42 @@ namespace ArduinoModules.Wpf
 
         // friendly name
         [DataMember]
-        private string pinName_;
+        private string pinName;
         public string PinName
         {
-            get { return pinName_; }
+            get { return pinName; }
         }
 
         // change type
         [DataMember]
-        private DIGITAL_PIN_CHANGE monitor_pin_change_ { get; set; }
-        public DIGITAL_PIN_CHANGE ChangeType { get { return monitor_pin_change_; } set { monitor_pin_change_ = value; } }
+        private DIGITAL_PIN_CHANGE MonitorPinChange { get; set; }
+        public DIGITAL_PIN_CHANGE ChangeType { get { return MonitorPinChange; } set { MonitorPinChange = value; } }
 
         [DataMember]
-        private int firmata_pin_id_ = 0;
-        public int GetPinID()
+        private int firmataPinId = 0;
+        public int GetPinId()
         {
-            return firmata_pin_id_;
+            return firmataPinId;
         }
         //public int pin_id { get { return pin_id_; } }
 
         // state
         [DataMember]
-        private int  digitalPinState_ = 0;
+        private int digitalPinState = 0;
 
         /// <summary>
         /// Explicit getter/setter implementation to avoid getting columnized
         /// </summary>
         /// <returns></returns>
-        public int GetDigitalPinState(){ return digitalPinState_;}
-       
+        public int GetDigitalPinState() { return digitalPinState; }
+
 
 
         public string CurrentPinState
         {
             get
             {
-                if (digitalPinState_>0)
+                if (digitalPinState > 0)
                     return "HIGH";
                 else
                     return "LOW";
@@ -80,16 +80,16 @@ namespace ArduinoModules.Wpf
         /// <param name="state"></param>
         public void SetPinState(int state)
         {
-            digitalPinState_ = state;
+            digitalPinState = state;
         }
 
 
         public DigitalPinItem(bool check, int id, DIGITAL_PIN_CHANGE change)
         {
             isChecked = check;
-            pinName_ = "D" + id;
-            monitor_pin_change_ = change;
-            firmata_pin_id_ = id;
+            pinName = "D" + id;
+            MonitorPinChange = change;
+            firmataPinId = id;
         }
 
 

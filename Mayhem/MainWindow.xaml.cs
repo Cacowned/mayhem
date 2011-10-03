@@ -20,11 +20,11 @@ namespace Mayhem
     public partial class MainWindow : Window
     {
         private ModuleType _event;
-        private EventBase _eventInstance = null;
-        private ModuleType _reaction;
-        private ReactionBase _reactionInstance = null;
+        private EventBase eventInstance = null;
+        private ModuleType reaction;
+        private ReactionBase reactionInstance = null;
 
-        AutoResetEvent waitForSave = new AutoResetEvent(false);
+        private AutoResetEvent waitForSave = new AutoResetEvent(false);
 
         public ObservableCollection<MayhemError> Errors
         {
@@ -161,7 +161,7 @@ namespace Mayhem
                 if (dlg.SelectedModule != null)
                 {
                     _event = dlg.SelectedModule;
-                    _eventInstance = dlg.SelectedModuleInstance as EventBase;
+                    eventInstance = dlg.SelectedModuleInstance as EventBase;
 
                     buttonEmptyEvent.Style = (Style)FindResource("EventButton");
                     buttonEmptyEvent.Content = _event.Name;
@@ -187,11 +187,11 @@ namespace Mayhem
             {
                 if (dlg.SelectedModule != null)
                 {
-                    _reaction = dlg.SelectedModule;
-                    _reactionInstance = dlg.SelectedModuleInstance as ReactionBase;
+                    reaction = dlg.SelectedModule;
+                    reactionInstance = dlg.SelectedModuleInstance as ReactionBase;
 
                     buttonEmptyReaction.Style = (Style)FindResource("ReactionButton");
-                    buttonEmptyReaction.Content = _reaction.Name;
+                    buttonEmptyReaction.Content = reaction.Name;
 
                     // Take this item, remove it and add it to the front (MoveToFrontList)
 //                    Mayhem.ReactionList.Remove(Reaction);
@@ -204,32 +204,32 @@ namespace Mayhem
 
         private void CheckEnableBuild()
         {
-            if (_event != null && _reaction != null)
+            if (_event != null && reaction != null)
             {
                 EventBase ev;
-                ReactionBase reaction;
+                ReactionBase re;
                 try
                 {
-                    if (_eventInstance != null)
-                        ev = _eventInstance;
+                    if (eventInstance != null)
+                        ev = eventInstance;
                     else
                     {
                         Type t = _event.Type;
                         ev = (EventBase)Activator.CreateInstance(t);
                     }
 
-                    if (_reactionInstance != null)
-                        reaction = _reactionInstance;
+                    if (reactionInstance != null)
+                        re = reactionInstance;
                     else
                     {
-                        Type t = _reaction.Type;
-                        reaction = (ReactionBase)Activator.CreateInstance(t);
+                        Type t = this.reaction.Type;
+                        re = (ReactionBase)Activator.CreateInstance(t);
                     }
-                    MayhemEntry.Instance.ConnectionList.Add(new Connection(ev, reaction));
+                    MayhemEntry.Instance.ConnectionList.Add(new Connection(ev, re));
                 }
                 catch 
                 {
-                    ErrorLog.AddError(ErrorType.Failure, "Error creating connection between " + _event.Type.Name + " and " + _reaction.Type.Name);
+                    ErrorLog.AddError(ErrorType.Failure, "Error creating connection between " + _event.Type.Name + " and " + this.reaction.Type.Name);
                 }
 
                 buttonEmptyReaction.Style = (Style)FindResource("EmptyReactionButton");
@@ -238,7 +238,7 @@ namespace Mayhem
                 buttonEmptyEvent.Content = "Create Event";
 
                 _event = null;
-                _reaction = null;
+                this.reaction = null;
 
                 Save();
             }

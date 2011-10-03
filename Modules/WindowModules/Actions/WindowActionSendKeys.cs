@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace WindowModules.Actions
 {
     [DataContract]
-    public class WindowActionSendKeys : WindowAction
+    public class WindowActionSendKeys : IWindowAction
     {
         internal enum VirtualKeys : uint
         {

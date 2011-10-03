@@ -11,34 +11,34 @@ using System.IO.Ports;
 
 namespace MayhemSerial
 {
-    public abstract  class SERIAL_SETTINGS {
-        public abstract int baudRate { get;  }
-        public abstract Parity parity { get; }
-        public abstract StopBits stopBits { get; }
-        public abstract int dataBits { get;  }
+    public abstract class SerialSettings {
+        public abstract int BaudRate { get;  }
+        public abstract Parity Parity { get; }
+        public abstract StopBits StopBits { get; }
+        public abstract int DataBits { get;  }
     };
 
 
     /// <summary>
     /// Insteon USB Modem 
     /// </summary>
-    public class INSTEON_USB_MODEM_SETTINGS : SERIAL_SETTINGS
+    public class InsteonUsbModemSettings : SerialSettings
     {
-        public override int baudRate { get { return 19200; } }
-        public override Parity parity { get { return Parity.None; } }
-        public override StopBits stopBits { get { return StopBits.One; } }
-        public override int dataBits { get { return 8; } }
+        public override int BaudRate { get { return 19200; } }
+        public override Parity Parity { get { return Parity.None; } }
+        public override StopBits StopBits { get { return StopBits.One; } }
+        public override int DataBits { get { return 8; } }
     }
 
     /// <summary>
     /// Arduino running Firmata Firmware
     /// </summary>
-    public class ARDUINO_FIRMATA_SETTINGS : SERIAL_SETTINGS
+    public class ArduinoFirmataSettings : SerialSettings
     {
-        public override int baudRate { get { return 57600; } }
-        public override Parity parity { get { return Parity.None; } }
-        public override StopBits stopBits { get { return StopBits.One; } }
-        public override int dataBits { get { return 8; } }
+        public override int BaudRate { get { return 57600; } }
+        public override Parity Parity { get { return Parity.None; } }
+        public override StopBits StopBits { get { return StopBits.One; } }
+        public override int DataBits { get { return 8; } }
     }
 
 }

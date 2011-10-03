@@ -8,7 +8,7 @@ namespace WindowModules.Wpf
     /// <summary>
     /// Interaction logic for WindowMove.xaml
     /// </summary>
-    public partial class WindowMove : UserControl, WindowActionConfigControl
+    public partial class WindowMove : UserControl, IWindowActionConfigControl
     {
         WindowActionMove action;
 

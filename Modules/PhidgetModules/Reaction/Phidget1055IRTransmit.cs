@@ -9,43 +9,43 @@ namespace PhidgetModules.Reaction
 {
     [DataContract]
     [MayhemModule("Phidget: IR Transmit", "Sends an IR code")]
-    public class Phidget1055IRTransmit : ReactionBase, IWpfConfigurable
+    public class Phidget1055IrTransmit : ReactionBase, IWpfConfigurable
     {
         // This is the code and code information that we will transmit
         [DataMember]
-        private IRCode Code;
+        private IRCode code;
 
         [DataMember]
-        private IRCodeInfo CodeInfo;
+        private IRCodeInfo codeInfo;
 
         private IR ir;
 
         protected override void OnAfterLoad()
         {
-            ir = InterfaceFactory.IR;
+            ir = InterfaceFactory.Ir;
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1055IRTransmitConfig(Code, CodeInfo); }
+            get { return new Phidget1055IrTransmitConfig(code, codeInfo); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            Code = ((Phidget1055IRTransmitConfig)configurationControl).Code;
-            CodeInfo = ((Phidget1055IRTransmitConfig)configurationControl).CodeInfo;
+            code = ((Phidget1055IrTransmitConfig)configurationControl).Code;
+            codeInfo = ((Phidget1055IrTransmitConfig)configurationControl).CodeInfo;
         }
 
         public string GetConfigString()
         {
-            return String.Format("IR Code 0x{0}", Code);
+            return String.Format("IR Code 0x{0}", code);
         }
 
         public override void Perform()
         {
-            if (Code != null && CodeInfo != null)
+            if (code != null && codeInfo != null)
             {
-                ir.transmit(Code, CodeInfo);
+                ir.transmit(code, codeInfo);
                 ir.transmitRepeat();
             }
         }

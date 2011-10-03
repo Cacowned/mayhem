@@ -147,7 +147,7 @@ namespace ArduinoModules.Firmata
         private string portName_ = null;             // name of the serial port
         public string portName { get { return portName_; } }
 
-        private static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.instance;
+        private static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.Instance;
         public bool initialized = false;
 
         // parsing
@@ -179,7 +179,7 @@ namespace ArduinoModules.Firmata
 
             operation = AsyncOperationManager.CreateOperation(null);
 
-            if (mSerial.ConnectPort(serialPortName, this,  new ARDUINO_FIRMATA_SETTINGS()))
+            if (mSerial.ConnectPort(serialPortName, this,  new ArduinoFirmataSettings()))
             {
                 portName_ = serialPortName;
                 InitializeFirmata(); 
@@ -256,7 +256,7 @@ namespace ArduinoModules.Firmata
                 }
                 else
                 {
-                    Dictionary<string, string> portNames = mSerial.getArduinoPortNames();
+                    Dictionary<string, string> portNames = mSerial.GetArduinoPortNames();
 
                     if (portNames.Keys.Contains(serialPortName))
                     {

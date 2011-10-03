@@ -6,7 +6,7 @@ namespace WindowModules.Wpf
     /// <summary>
     /// Interaction logic for WindowMove.xaml
     /// </summary>
-    public partial class WindowBringToFront : UserControl, WindowActionConfigControl
+    public partial class WindowBringToFront : UserControl, IWindowActionConfigControl
     {
         WindowActionBringToFront action;
 

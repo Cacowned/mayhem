@@ -51,7 +51,7 @@ namespace WindowModules
         {
             WindowFinder.Find(ActionInfo, new WindowFinder.WindowActionResult((hwnd) =>
                 {
-                    foreach (WindowAction action in ActionInfo.WindowActions)
+                    foreach (IWindowAction action in ActionInfo.WindowActions)
                     {
                         action.Perform(hwnd);
                         Thread.Sleep(50);

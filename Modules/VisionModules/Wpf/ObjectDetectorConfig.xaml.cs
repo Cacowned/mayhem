@@ -78,7 +78,7 @@ namespace VisionModules.Wpf
 
             if (templateImg != null)
             {
-                od.set_template(templateImg);
+                od.SetTemplate(templateImg);
             }
 
             foreach (Camera c in i.CamerasAvailable)
@@ -92,7 +92,7 @@ namespace VisionModules.Wpf
             {
                 // start the camera 0 if it isn't already running
                 cam = i.CamerasAvailable[0];
-                if (!cam.running)
+                if (!cam.Running)
                 {
                     cam.OnImageUpdated += i_OnImageUpdated;
                     ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
@@ -141,17 +141,17 @@ namespace VisionModules.Wpf
                 BackBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 BackBuffer.PixelFormat);
 
-            int bufSize = cam.bufSize;
+            int bufSize = cam.BufferSize;
 
             IntPtr ImgPtr = bmpData.Scan0;
 
             // grab the image
 
 
-            lock (cam.thread_locker)
+            lock (cam.ThreadLocker)
             {
                 // Copy the RGB values back to the bitmap
-                System.Runtime.InteropServices.Marshal.Copy(cam.imageBuffer, 0, ImgPtr, bufSize);
+                System.Runtime.InteropServices.Marshal.Copy(cam.ImageBuffer, 0, ImgPtr, bufSize);
             }
             // Unlock the bits.
             BackBuffer.UnlockBits(bmpData);
@@ -164,13 +164,13 @@ namespace VisionModules.Wpf
 
                 // Bitmap cameraImage = new Bitmap(BackBuffer);
 
-                od.update_frame(cam, null);
+                od.UpdateFrame(cam, null);
 
 
-                List<Point> matches = od.lastImageMatchingPoints;
-                List<Point> tKeyPts = od.templateKeyPoints;
-                List<Point> iKeyPts = od.lastImageKeyPoints;
-                Point[] corners = od.lastCornerPoints;
+                List<Point> matches = od.LastImageMatchingPoints;
+                List<Point> tKeyPts = od.TemplateKeyPoints;
+                List<Point> iKeyPts = od.LastImageKeyPoints;
+                Point[] corners = od.LastCornerPoints;
 
                 Logger.WriteLine("SetCameraImageSource --> Drawing Overlay");
                 Graphics g = Graphics.FromImage(BackBuffer);
@@ -342,7 +342,7 @@ namespace VisionModules.Wpf
                         this.template_scale_f = 100.0 / w;
                         Bitmap preview = ImageProcessing.ScaleWithFixedSize(templateImg, 100, (int)(h * template_scale_f));
                         this.templatePreview = preview;
-                        od.set_template(templateImg);
+                        od.SetTemplate(templateImg);
                     }
                     else
                     {
