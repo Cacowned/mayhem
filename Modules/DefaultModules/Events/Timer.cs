@@ -29,7 +29,7 @@ namespace DefaultModules.Events
         protected override void OnAfterLoad()
         {
             myTimer = new DispatcherTimer();
-            myTimer.Tick += new EventHandler(myTimer_Tick);
+            myTimer.Tick += myTimer_Tick;
         }
 
         private void myTimer_Tick(object sender, EventArgs e)

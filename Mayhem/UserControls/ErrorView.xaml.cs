@@ -83,17 +83,17 @@ namespace Mayhem.UserControls
             remove { RemoveHandler(NotifyEvent, value); }
         }
 
-        bool isShowing = false;
+        private bool isShowing = false;
 
         public ErrorView()
         {
             InitializeComponent();
 
             Errors = ErrorLog.Errors;
-            Errors.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Errors_CollectionChanged);
+            Errors.CollectionChanged += Errors_CollectionChanged;
         }
 
-        void Errors_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Errors_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (!isShowing)
             {
@@ -126,8 +126,8 @@ namespace Mayhem.UserControls
         {
             if (leaveTimer != null)
                 leaveTimer.Stop();
-            leaveTimer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 2) };
-            leaveTimer.Tick += new EventHandler(leaveTimer_Tick);
+            leaveTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 2) };
+            leaveTimer.Tick += leaveTimer_Tick;
             leaveTimer.Start();
         }
 

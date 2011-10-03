@@ -55,7 +55,7 @@ namespace DefaultModules.Events
                 }
             }
 
-            return "Keys: " + b.ToString();
+            return "Keys: " + b;
         }
 
         #region Configuration Views
