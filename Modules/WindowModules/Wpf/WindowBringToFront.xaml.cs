@@ -8,13 +8,9 @@ namespace WindowModules.Wpf
     /// </summary>
     public partial class WindowBringToFront : UserControl, IWindowActionConfigControl
     {
-        WindowActionBringToFront action;
-
-        public WindowBringToFront(WindowActionBringToFront action)
+        public WindowBringToFront()
         {
             InitializeComponent();
-
-            this.action = action;
         }
 
         public void Save()

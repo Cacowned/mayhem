@@ -42,8 +42,6 @@ namespace Mayhem
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(ModuleList), new UIPropertyMetadata(string.Empty));
 
-        RectAnimation animSize;
-
         bool isCheckingSizeChanged = false;
         bool isFirstLoad = true;
 
@@ -56,7 +54,7 @@ namespace Mayhem
             Text = headerText;
             InitializeComponent();
 
-            animSize = new RectAnimation(new Rect(), new Duration(TimeSpan.FromSeconds(AnimationTime)));
+            new RectAnimation(new Rect(), new Duration(TimeSpan.FromSeconds(AnimationTime)));
 
             ModulesList.ItemsSource = list;
 

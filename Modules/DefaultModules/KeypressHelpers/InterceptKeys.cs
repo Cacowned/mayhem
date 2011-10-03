@@ -121,9 +121,9 @@ namespace DefaultModules.KeypressHelpers
                 if (AreKeysetsEqual(k, keys_down))
                 {
                     List<KeyCombinationHandler> listHandlers = keyCombinationHandlerMap[k];
-                    for (int i = 0; i < listHandlers.Count; i++)
+                    foreach (KeyCombinationHandler t in listHandlers)
                     {
-                        listHandlers[i]();
+                        t();
                     }
                     break;
                 }

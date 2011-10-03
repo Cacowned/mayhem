@@ -322,7 +322,7 @@ namespace VisionModules.Wpf
             dlg.DefaultExt = ".jpg";
             dlg.Filter = "Image Files (*.bmp, *.gif, *.exif, *.jpg, *.png, *.tiff)|*.bmp;*.gif;*.exif;*.jpg;*.png;*.tiff";
             dlg.Title = "Select Template Image File";
-            Nullable<bool> result = dlg.ShowDialog();
+            bool? result = dlg.ShowDialog();
 
             if (result == true)
             {

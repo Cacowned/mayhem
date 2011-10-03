@@ -19,14 +19,14 @@ namespace Mayhem
         {
             this.Owner = Application.Current.MainWindow;
             this.iWpf = iWpf;
-            this.iWpfConfig = (WpfConfiguration)iWpf.ConfigurationControl;
+            this.iWpfConfig = iWpf.ConfigurationControl;
             InitializeComponent();
             ConfigContent.Content = iWpfConfig;
 
             buttonSave.IsEnabled = iWpfConfig.CanSave;
 
             windowHeader.Text = iWpfConfig.Title;
-            iWpfConfig.CanSavedChanged += new WpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
+            iWpfConfig.CanSavedChanged += iWpfConfig_CanSavedChanged;
         }
 
         void iWpfConfig_CanSavedChanged(bool canSave)

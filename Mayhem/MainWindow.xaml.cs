@@ -69,7 +69,7 @@ namespace Mayhem
             foundModules &= mayhem.ReactionList.ScanModules(directory);
             if (!foundModules)
             {
-                ///TODO: Do something user-friendly here
+                // TODO: Do something user-friendly here
                 throw new Exception("No modules!");
             }
 
@@ -206,10 +206,9 @@ namespace Mayhem
         {
             if (_event != null && reaction != null)
             {
-                EventBase ev;
-                ReactionBase re;
                 try
                 {
+                    EventBase ev;
                     if (eventInstance != null)
                         ev = eventInstance;
                     else
@@ -218,6 +217,7 @@ namespace Mayhem
                         ev = (EventBase)Activator.CreateInstance(t);
                     }
 
+                    ReactionBase re;
                     if (reactionInstance != null)
                         re = reactionInstance;
                     else
@@ -260,8 +260,7 @@ namespace Mayhem
                 {
                     var storyB = (Storyboard)mainW.DimRectangle.FindResource("FadeOut");
 
-                    storyB.Completed += delegate(object sender, EventArgs e)
-                    {
+                    storyB.Completed += delegate {
                         Panel.SetZIndex(mainW.DimRectangle, 0);
                     };
 

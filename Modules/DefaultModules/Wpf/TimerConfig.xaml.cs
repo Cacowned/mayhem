@@ -52,17 +52,14 @@ namespace DefaultModules.Wpf
 
         private string CheckValidity()
         {
-            bool badsec, badmin, badhour, badtotal;
-
             int seconds, minutes, hours;
 
-            badsec = !(Int32.TryParse(SecondsBox.Text, out seconds) && (seconds >= 0 && seconds < 60));
 
-            badmin = !(Int32.TryParse(MinutesBox.Text, out minutes) && (minutes >= 0 && minutes < 60));
+            bool badsec = !(Int32.TryParse(SecondsBox.Text, out seconds) && (seconds >= 0 && seconds < 60));
+            bool badmin = !(Int32.TryParse(MinutesBox.Text, out minutes) && (minutes >= 0 && minutes < 60));
+            bool badhour = !(Int32.TryParse(HoursBox.Text, out hours) && (hours >= 0));
 
-            badhour = !(Int32.TryParse(HoursBox.Text, out hours) && (hours >= 0));
-
-            badtotal = seconds == 0 && minutes == 0 && hours == 0;
+            bool badtotal = seconds == 0 && minutes == 0 && hours == 0;
 
             string s = "Invalid";
 
