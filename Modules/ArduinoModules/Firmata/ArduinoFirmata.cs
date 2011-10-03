@@ -176,15 +176,13 @@ namespace ArduinoModules.Firmata
 
         private ArduinoFirmata(string serialPortName)
         {
-
             operation = AsyncOperationManager.CreateOperation(null);
 
             if (mSerial.ConnectPort(serialPortName, this,  new ArduinoFirmataSettings()))
             {
                 portName_ = serialPortName;
                 InitializeFirmata(); 
-            };
-
+            }
         }
 
         /// <summary>
@@ -210,7 +208,7 @@ namespace ArduinoModules.Firmata
         /// <summary>
         /// Registers an Arduino Event Listener
         /// </summary>
-        /// <param name="?"></param>
+        /// <param name="l"></param>
         public void RegisterListener(IArduinoEventListener l)
         {
             // subtract listeners first to suppress multi-listener registration
@@ -247,7 +245,7 @@ namespace ArduinoModules.Firmata
         public static ArduinoFirmata InstanceForPortname(string serialPortName)
         {
             Logger.WriteLine("InstanceForPortname");
-            if (serialPortName != String.Empty && serialPortName != null)
+            if (!string.IsNullOrEmpty(serialPortName))
             {                        
 
                 if (instances.Keys.Contains(serialPortName) && instances[serialPortName] != null)
@@ -428,8 +426,6 @@ namespace ArduinoModules.Firmata
         /// <summary>
         /// Notfication from the serial port manager when serial data is available
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public void port_DataReceived(string portName, byte[] buffer, int numBytes)
         {
             // Logger.WriteLine("port_DataReceived");

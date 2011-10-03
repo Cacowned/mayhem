@@ -214,7 +214,7 @@ namespace VisionModules.Wpf
         public  void OnMouseLeave(object sender, MouseEventArgs e)
         {
             Logger.WriteLine("onverlay_MouseLeave");
-            if (!(e.LeftButton == MouseButtonState.Pressed))
+            if (e.LeftButton != MouseButtonState.Pressed)
             {
                 startDrag = false;
             }

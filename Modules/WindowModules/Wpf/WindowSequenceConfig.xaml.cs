@@ -162,7 +162,7 @@ namespace WindowModules.Wpf
         {
             UserControl newControl = null;
             if (action is WindowActionBringToFront)
-                newControl = new WindowBringToFront((WindowActionBringToFront)action);
+                newControl = new WindowBringToFront();
             else if (action is WindowActionClose)
                 newControl = new WindowClose((WindowActionClose)action);
             else if (action is WindowActionMaximize)

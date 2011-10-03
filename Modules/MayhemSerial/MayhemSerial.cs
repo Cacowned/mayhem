@@ -165,7 +165,7 @@ namespace MayhemSerial
         /// <summary>
         /// Disconnect a listener from the serial port
         /// </summary>
-        /// <param name="porName"></param>
+        /// <param name="portName"></param>
         /// <param name="listener"></param>
         public void DisconnectListener(string portName, ISerialPortDataListener listener)
         {

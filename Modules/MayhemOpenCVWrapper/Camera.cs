@@ -96,15 +96,14 @@ namespace MayhemOpenCVWrapper
             get
             {
                 List<BitmapTimestamp> itemsOut = new List<BitmapTimestamp>();
-                List<BitmapTimestamp> buffer_items;
 
                 // critical section: don't let the read thread dispose of bitmaps before we copy them first
                 lock (ThreadLocker)
                 {
-                    buffer_items = loopBuffer.ToList<BitmapTimestamp>();
+                    List<BitmapTimestamp> bufferItems = loopBuffer.ToList<BitmapTimestamp>();
 
                     // return ;
-                    foreach (BitmapTimestamp b in buffer_items)
+                    foreach (BitmapTimestamp b in bufferItems)
                     {
                         itemsOut.Add(b.Clone() as BitmapTimestamp);
                     }

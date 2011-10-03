@@ -82,9 +82,9 @@ namespace XboxModules
                 if (b.Equals(buttonsDown))
                 {
                     List<KeyCombinationHandler> listHandlers = keyCombinationHandlerMap[b];
-                    for (int i = 0; i < listHandlers.Count; i++)
+                    foreach (KeyCombinationHandler t in listHandlers)
                     {
-                        listHandlers[i]();
+                        t();
                     }
                     break;
                 }

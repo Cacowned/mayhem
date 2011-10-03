@@ -166,14 +166,14 @@ namespace WindowModules.Actions
 
         public void Perform(IntPtr window)
         {
-            for (int i = 0; i < KeyList.Count; i++)
+            foreach (Keys t in KeyList)
             {
-                if (KeyList[i] == Keys.Control || KeyList[i] == Keys.Shift || KeyList[i] == Keys.Alt)
+                if (t == Keys.Control || t == Keys.Shift || t == Keys.Alt)
                 {
-                    byte vk = GetVK(KeyList[i]);
+                    byte vk = GetVK(t);
                     Native.keybd_event(vk, (byte)Native.MapVirtualKey(vk, 0), 0, UIntPtr.Zero);
                 }
-                uint scan = (uint)KeyList[i];
+                uint scan = (uint)t;
                 Native.PostMessage(window, Native.WM_KEYDOWN, scan, 0);
             }
             for (int i = KeyList.Count - 1; i >= 0; i--)
