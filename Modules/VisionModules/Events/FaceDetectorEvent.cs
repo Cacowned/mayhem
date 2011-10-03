@@ -54,6 +54,7 @@ namespace VisionModules.Events
         protected override void OnAfterLoad()
         {
             cameraDriver = CameraDriver.Instance;
+            faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetectUpdate);
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
@@ -62,10 +63,12 @@ namespace VisionModules.Events
             else
             {
                 Logger.WriteLine("No camera available");
+                faceDetector = new FaceDetectorComponent(new DummyCamera());
+                
             }
 
-            faceDetector = new FaceDetectorComponent();
-            faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetectUpdate);
+            faceDetector = new FaceDetectorComponent(cam);
+            
         }
 
         void m_onFaceDetectUpdate(object sender, List<System.Drawing.Point> points)

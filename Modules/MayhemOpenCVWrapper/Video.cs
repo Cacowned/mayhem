@@ -38,9 +38,9 @@ namespace MayhemOpenCVWrapper
         public Video(Camera c, string fileName, bool compress)
         {
             Camera camera = c;
-            frameRate = 1000 / camera.settings.updateRate_ms;
-            width = c.settings.resX;
-            height = c.settings.resY; 
+            frameRate = 1000 / camera.Settings.updateRate_ms;
+            width = c.Settings.resX;
+            height = c.Settings.resY; 
 
             // preserve reference to the camera frames to be saved later
 

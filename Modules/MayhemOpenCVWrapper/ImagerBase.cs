@@ -14,9 +14,10 @@ using System.Drawing;
 namespace MayhemOpenCVWrapper
 {
     public abstract class ImagerBase
-    {  
-          abstract public CameraInfo Info { get;  }
-          public bool running; 
+    {
+          abstract public CameraInfo Info { get; protected set;  }
+          abstract public CameraSettings Settings { get; protected set; }
+          abstract public bool running{ get; protected set;}
           public delegate void ImageUpdateHandler(object sender, EventArgs e);
           public abstract event ImageUpdateHandler OnImageUpdated;
           public abstract Bitmap ImageAsBitmap();
