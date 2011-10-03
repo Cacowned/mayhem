@@ -54,9 +54,8 @@ namespace MayhemOpenCVWrapper
 
         public static CameraSettings DEFAULTS()
         {
-            return CameraSettings.DEFAULTS_640();
+            return CameraSettings.DEFAULTS_320();
         }
-
 
         /// <summary>
         /// 640x480 resolution, 20 FPS update rate

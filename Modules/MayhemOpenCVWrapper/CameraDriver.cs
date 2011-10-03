@@ -3,6 +3,7 @@
  *  
  *  Manages cameras for Mayhem
  * 
+ * 
  *  (c) 2010/2011, Microsoft Applied Sciences Group
  *  
  *  Author: Sven Kratz
@@ -18,13 +19,13 @@ namespace MayhemOpenCVWrapper
 {
     public class CameraDriver
     {
+        // singleton class ! 
         public static CameraDriver Instance = new CameraDriver(); 
-        public int cWidth;
-        public int cHeight;
+
         private List<CameraInfo> devices_available = new List<CameraInfo>();
         private List<Camera> cameras_available_ = new List<Camera>(); 
 
-        public  ReadOnlyCollection<Camera> cameras_available
+        public  ReadOnlyCollection<Camera> CamerasAvailable
         {
             get { return cameras_available_.AsReadOnly(); }
         }
@@ -34,7 +35,7 @@ namespace MayhemOpenCVWrapper
             get { return cameras_available_.Count; }
         }
       
-        public CameraDriver()
+        protected CameraDriver()
         {
             // just initialize the capture library
             // to get the camera running, InitCaptureDevice must be called!

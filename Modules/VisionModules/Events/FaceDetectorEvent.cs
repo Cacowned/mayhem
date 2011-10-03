@@ -58,7 +58,7 @@ namespace VisionModules.Events
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = cameraDriver.cameras_available[selectedDeviceIndex];
+                cam = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
             else
             {
@@ -126,7 +126,7 @@ namespace VisionModules.Events
         {
             if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = cameraDriver.cameras_available[selectedDeviceIndex];
+                cam = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 //if (cam.running == false)
                 //Thread.Sleep(350);
                 cam.StartFrameGrabbing();

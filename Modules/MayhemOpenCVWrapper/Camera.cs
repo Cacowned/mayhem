@@ -77,6 +77,7 @@ namespace MayhemOpenCVWrapper
         {
             this.Info = info;
             this.Settings = settings;
+            grabFramesReset = new ManualResetEvent(false);
         }
 
         ~Camera()
@@ -201,11 +202,7 @@ namespace MayhemOpenCVWrapper
                 try
                 {
                     Logger.WriteLine("Starting Frame Grabber");
-                    //grabFrm.Start();
-                    // TODO: run this code in the ThreadPool
-                    grabFramesReset = new ManualResetEvent(false);
-                    ThreadPool.QueueUserWorkItem((object o) => { GrabFrames_Thread(); });
-                    Thread.Sleep(250);
+                    ThreadPool.QueueUserWorkItem((object o) => { GrabFrames_Thread(); });           
                 }
                 catch (Exception e)
                 {

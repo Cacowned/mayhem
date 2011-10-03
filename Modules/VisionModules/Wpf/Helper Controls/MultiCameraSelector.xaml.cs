@@ -63,7 +63,7 @@ namespace VisionModules.Wpf
             i = CameraDriver.Instance;
 
             Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
-            foreach (Camera c in i.cameras_available)
+            foreach (Camera c in i.CamerasAvailable)
             {
                 deviceList.Items.Add(c);
             }
@@ -73,7 +73,7 @@ namespace VisionModules.Wpf
             if (i.DeviceCount > 0)
             {
                 // attach canvases with camera images to camera_preview_panel
-                foreach (Camera c in i.cameras_available)
+                foreach (Camera c in i.CamerasAvailable)
                 {
                     cams.Add(c);
                     c.OnImageUpdated -= i_OnImageUpdated;

@@ -78,7 +78,7 @@ namespace VisionModules.Reactions
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
                 Logger.WriteLine("Startup with camera " + selectedDeviceIndex);
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
         }
 
@@ -160,7 +160,7 @@ namespace VisionModules.Reactions
             Logger.WriteLine("");
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 dummyCameraListener.RegisterForImages(camera);
                 //cam.OnImageUpdated += imageUpdateHandler;
                 if (camera.running == false)
@@ -196,9 +196,9 @@ namespace VisionModules.Reactions
 
             int camera_index = config.SelectedDeviceIdx;
 
-            if (cameraDriver.cameras_available.Count > camera_index)
+            if (cameraDriver.CamerasAvailable.Count > camera_index)
             {
-                camera = cameraDriver.cameras_available[camera_index];
+                camera = cameraDriver.CamerasAvailable[camera_index];
                 selectedDeviceIndex = camera_index;
             }
             else
