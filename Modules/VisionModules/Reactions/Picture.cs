@@ -61,7 +61,7 @@ namespace VisionModules.Reactions
             cameraDriver = CameraDriver.Instance;
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
         }
 
@@ -93,8 +93,7 @@ namespace VisionModules.Reactions
             // TODO: Improve this code
             if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
-                //Thread.Sleep(350);            
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];            
                 camera.StartFrameGrabbing();
                 dummyListener.RegisterForImages(camera);
             }
@@ -125,7 +124,6 @@ namespace VisionModules.Reactions
             else if (captureOffsetTime < 0 && Math.Abs(captureOffsetTime) <= Camera.LOOP_DURATION)
             {
                 // retrieve image from camera buffer
-
                 // buffer index = capture offset time / camera fram rate
                 int buff_idx = (int)(-captureOffsetTime * 1000 / (double)CameraSettings.DEFAULTS().updateRate_ms);
 
@@ -191,10 +189,10 @@ namespace VisionModules.Reactions
 
             int camera_index = config.SelectedDeviceIdx;
 
-            if (cameraDriver.cameras_available.Count > camera_index)
+            if (cameraDriver.CamerasAvailable.Count > camera_index)
             {
                 // assign selected cam
-                camera = cameraDriver.cameras_available[camera_index];
+                camera = cameraDriver.CamerasAvailable[camera_index];
                 selectedDeviceIndex = camera_index;
             }
             else

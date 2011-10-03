@@ -93,7 +93,7 @@ namespace VisionModules.Events
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = cameraDriver.cameras_available[selectedDeviceIndex];
+                cam = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
             else
             {
