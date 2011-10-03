@@ -42,7 +42,7 @@ namespace VisionModules.Events
         private FaceDetectorComponent faceDetector;
         private FaceDetectorComponent.DetectionHandler faceDetectUpdateHandler;
         private CameraDriver cameraDriver;
-        private Camera cam = null;
+        private ImagerBase cam = null;
         private int lastFacesDetectedAmount = 0;
 
         protected override void OnLoadDefaults()
@@ -63,8 +63,7 @@ namespace VisionModules.Events
             else
             {
                 Logger.WriteLine("No camera available");
-                faceDetector = new FaceDetectorComponent(new DummyCamera());
-                
+                cam = new DummyCamera();        
             }
 
             faceDetector = new FaceDetectorComponent(cam);
@@ -112,7 +111,7 @@ namespace VisionModules.Events
             get
             {
                 Logger.WriteLine("get ConfigurationControl!");
-                FaceDetectConfig config = new FaceDetectConfig(this.cam);
+                FaceDetectConfig config = new FaceDetectConfig(this.cam as Camera);
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {
                     config.selectedBoundingRect = boundingRect;
