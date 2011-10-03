@@ -51,7 +51,12 @@ namespace VisionModules.Wpf
 
         public int index = 0;
 
-        private static readonly int DEBUG_LEVEL = 0; 
+        private static readonly int DEBUG_LEVEL = 0;
+
+        public int SelectedIndex
+        {
+            get {return deviceList.SelectedIndex;}
+        }
 
         public MultiCameraSelector()
         {
