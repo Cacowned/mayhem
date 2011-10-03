@@ -15,13 +15,13 @@ namespace MayhemOpenCVWrapper
 {
     public abstract class ImagerBase
     {
-          abstract public CameraInfo Info { get; protected set;  }
-          abstract public CameraSettings Settings { get; protected set; }
-          abstract public bool running{ get; protected set;}
-          public delegate void ImageUpdateHandler(object sender, EventArgs e);
-          public abstract event ImageUpdateHandler OnImageUpdated;
-          public abstract Bitmap ImageAsBitmap();
-          public abstract void StartFrameGrabbing();
-          public abstract bool TryStopFrameGrabbing();
+        public abstract CameraInfo Info { get; protected set; }
+        public abstract CameraSettings Settings { get; protected set; }
+        public abstract bool running { get; protected set; }
+        public delegate void ImageUpdateHandler(object sender, EventArgs e);
+        public abstract event ImageUpdateHandler OnImageUpdated;
+        public abstract Bitmap ImageAsBitmap();
+        public abstract void StartFrameGrabbing();
+        public abstract bool TryStopFrameGrabbing();
     }
 }

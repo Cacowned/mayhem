@@ -40,8 +40,10 @@ namespace MayhemOpenCVWrapper.LowLevel
         private int[] contourPoints = new int[1200];
         private List<Point> points = new List<Point>();
 
-        public MotionDetectorComponent(int width, int height)
+        public MotionDetectorComponent(ImagerBase c)
         {
+            int width = c.Settings.resX;
+            int height = c.Settings.resY;
             m = new OpenCVDLL.MotionDetector(width, height);
         }
 
