@@ -30,7 +30,7 @@ namespace X10Modules.Wpf
     /// </summary>
     public partial class InsteonReactionConfig : WpfConfiguration
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
+        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
         private InsteonController insteonController = null;
 
         private bool linking = false;
@@ -70,9 +70,9 @@ namespace X10Modules.Wpf
         // TODO: Evaluate in future if byte array is needed or not
         private Dictionary<string, byte[]> selectable_commands = new Dictionary<string, byte[]>()
         {
-            { "ON",  new byte[]{InsteonCommandBytes.light_on_fast}},
-            { "OFF", new byte[]{InsteonCommandBytes.light_off_fast}},
-            { "TOGGLE", new byte[] {InsteonCommandBytes._toggle}}
+            { "ON",  new byte[]{InsteonCommandBytes.LightOnFast}},
+            { "OFF", new byte[]{InsteonCommandBytes.LightOffFast}},
+            { "TOGGLE", new byte[] {InsteonCommandBytes.Toggle}}
         };
 
         public InsteonReactionConfig()
@@ -86,10 +86,10 @@ namespace X10Modules.Wpf
         /// </summary>
         public void Init()
         {
-            serial = MayhemSerialPortMgr.instance; 
+            serial = MayhemSerialPortMgr.Instance; 
             serial.UpdatePortList();
      
-            Dictionary<string,string> portList = serial.getInsteonPortNames();
+            Dictionary<string,string> portList = serial.GetInsteonPortNames();
                        
             if (portList.Count > 0)
             {

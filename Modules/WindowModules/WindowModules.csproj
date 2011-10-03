@@ -59,8 +59,8 @@
     <Compile Include="Actions\WindowActionMove.cs" />
     <Compile Include="InterceptKeys.cs" />
     <Compile Include="Events\SystemTrayMenu.cs" />
-    <Compile Include="WindowAction.cs" />
-    <Compile Include="WindowActionConfigControl.cs" />
+    <Compile Include="IWindowAction.cs" />
+    <Compile Include="IWindowActionConfigControl.cs" />
     <Compile Include="WindowFinder.cs" />
     <Compile Include="Reactions\WindowSequence.cs" />
     <Compile Include="Native.cs" />

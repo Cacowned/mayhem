@@ -28,8 +28,8 @@ namespace VisionModules.Reactions
     public enum VIDEO_RECORDING_MODE
     {
         PRE_EVENT = 0,                                        // record 30s prior to the event
-        POST_EVENT = Camera.LOOP_DURATION / 1000,             // record 30s after event
-        MID_EVENT = (Camera.LOOP_DURATION / 1000) / 2         // record 15s before and 15s after the event
+        POST_EVENT = Camera.LoopDuration / 1000,             // record 30s after event
+        MID_EVENT = (Camera.LoopDuration / 1000) / 2         // record 15s before and 15s after the event
     }
 
     [DataContract]
@@ -163,7 +163,7 @@ namespace VisionModules.Reactions
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 dummyCameraListener.RegisterForImages(camera);
                 //cam.OnImageUpdated += imageUpdateHandler;
-                if (camera.running == false)
+                if (camera.Running == false)
                     camera.StartFrameGrabbing();
             }
         }

@@ -16,18 +16,18 @@ namespace MayhemOpenCVWrapper
 {
     public class BitmapTimestamp : IDisposable, ICloneable
     {
-        public DateTime timeStamp = DateTime.Now;
-        public Bitmap image;
+        public DateTime TimeStamp = DateTime.Now;
+        public Bitmap Image;
 
         public BitmapTimestamp(Bitmap i)
         {
-            image = i;
+            Image = i;
         }
 
         public BitmapTimestamp(Bitmap i, DateTime ts)
         {
-            image = i;
-            timeStamp = ts; 
+            Image = i;
+            TimeStamp = ts; 
         }
       
         /// <summary>
@@ -35,21 +35,21 @@ namespace MayhemOpenCVWrapper
         /// </summary>
         ~BitmapTimestamp()
         {
-            if (image != null)
-                image.Dispose();
+            if (Image != null)
+                Image.Dispose();
         }
 
         public void Dispose()
         {
-            image.Dispose();
-            image = null; 
+            Image.Dispose();
+            Image = null; 
         }
 
         public object Clone()
         {
-            Bitmap image_copy = new Bitmap(image);
-            BitmapTimestamp obj_clone = new BitmapTimestamp(image_copy, this.timeStamp);
-            return obj_clone; 
+            Bitmap imageCopy = new Bitmap(Image);
+            BitmapTimestamp objClone = new BitmapTimestamp(imageCopy, this.TimeStamp);
+            return objClone; 
         }
     }
 }

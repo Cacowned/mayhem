@@ -16,13 +16,13 @@ namespace DefaultModules.Events
     public class Timer : EventBase, ICli, IWpfConfigurable
     {
         [DataMember]
-        private int Hours;
+        private int hours;
 
         [DataMember]
-        private int Minutes;
+        private int minutes;
 
         [DataMember]
-        private int Seconds;
+        private int seconds;
 
         private DispatcherTimer myTimer;
 
@@ -39,7 +39,7 @@ namespace DefaultModules.Events
 
         public string GetConfigString()
         {
-            return String.Format(CultureInfo.CurrentCulture, Strings.Timer_ConfigString, Hours, Minutes, Seconds);
+            return String.Format(CultureInfo.CurrentCulture, Strings.Timer_ConfigString, hours, minutes, seconds);
         }
 
         #region Configuration Views
@@ -72,22 +72,22 @@ namespace DefaultModules.Events
             while (!Int32.TryParse(input, out seconds) || !(seconds >= 0 && seconds < 60));
 
             // everything checked out, set our variables
-            Hours = hours;
-            Minutes = minutes;
-            Seconds = seconds;
+            this.hours = hours;
+            this.minutes = minutes;
+            this.seconds = seconds;
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new TimerConfig(Hours, Minutes, Seconds); }
+            get { return new TimerConfig(hours, minutes, seconds); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
             TimerConfig config = (TimerConfig)configurationControl;
-            Hours = config.Hours;
-            Minutes = config.Minutes;
-            Seconds = config.Seconds;
+            hours = config.Hours;
+            minutes = config.Minutes;
+            seconds = config.Seconds;
         }
         #endregion
 
@@ -95,7 +95,7 @@ namespace DefaultModules.Events
         {
             try
             {
-                myTimer.Interval = new TimeSpan(Hours, Minutes, Seconds);
+                myTimer.Interval = new TimeSpan(hours, minutes, seconds);
             }
             catch (Exception e)
             {

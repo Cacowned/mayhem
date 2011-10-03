@@ -156,7 +156,7 @@ namespace Mayhem
             }
         }
 
-        System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             if (dependencies.ContainsKey(args.Name))
                 return dependencies[args.Name];

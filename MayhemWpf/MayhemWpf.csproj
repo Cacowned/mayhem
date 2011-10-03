@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModuleTypes\IWpfConfigurable.cs" />
-    <Compile Include="ModuleTypes\WpfConfiguration.cs" />
+    <Compile Include="UserControls\WpfConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\Borders.cs" />
     <Compile Include="UserControls\WindowHeader.xaml.cs">

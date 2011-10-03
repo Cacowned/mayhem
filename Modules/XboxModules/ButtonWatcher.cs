@@ -8,22 +8,22 @@ namespace XboxModules
         public delegate void KeyCombinationHandler();
         private Dictionary<Buttons, List<KeyCombinationHandler>> keyCombinationHandlerMap;
 
-        private Buttons buttons_down;
+        private Buttons buttonsDown;
 
         private ButtonEvents events;
 
         #region Singleton
 
-        private static ButtonWatcher _instance;
+        private static ButtonWatcher instance;
 
         public static ButtonWatcher Instance
         {
             get
             {
-                if (_instance == null)
-                    _instance = new ButtonWatcher();
+                if (instance == null)
+                    instance = new ButtonWatcher();
 
-                return _instance;
+                return instance;
             }
         }
 
@@ -79,7 +79,7 @@ namespace XboxModules
         {
             foreach (Buttons b in keyCombinationHandlerMap.Keys)
             {
-                if (b.Equals(buttons_down))
+                if (b.Equals(buttonsDown))
                 {
                     List<KeyCombinationHandler> listHandlers = keyCombinationHandlerMap[b];
                     for (int i = 0; i < listHandlers.Count; i++)
@@ -93,9 +93,9 @@ namespace XboxModules
 
         private void events_OnButtonDown(Buttons button)
         {
-            if (!buttons_down.HasFlag(button))
+            if (!buttonsDown.HasFlag(button))
             {
-                buttons_down |= button;
+                buttonsDown |= button;
                 CheckCombinations();
             }
         }
@@ -103,7 +103,7 @@ namespace XboxModules
         private void events_OnButtonUp(Buttons button)
         {
             // remove button from buttons_down
-            buttons_down &= ~button;            
+            buttonsDown &= ~button;            
         }
     }
 }

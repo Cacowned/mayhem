@@ -15,7 +15,7 @@ namespace PhidgetModules.Events
     {
         // This is the tag we are watching for
         [DataMember]
-        private string Tag;
+        private string tag;
 
         private RFID rfid;
 
@@ -26,23 +26,23 @@ namespace PhidgetModules.Events
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1023RFIDConfig(Tag); }
+            get { return new Phidget1023RFIDConfig(tag); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            Tag = ((Phidget1023RFIDConfig)configurationControl).TagID;
+            tag = ((Phidget1023RFIDConfig)configurationControl).TagID;
         }
 
         public string GetConfigString()
         {
-            return String.Format("Rfid Tag ID {0}", Tag);
+            return String.Format("Rfid Tag ID {0}", tag);
         }
 
         //Tag event handler...we'll display the tag code in the field on the GUI
         private void RfidTag(object sender, TagEventArgs e)
         {
-            if (e.Tag == Tag)
+            if (e.Tag == tag)
             {
                 Trigger();
                 rfid.LED = true;

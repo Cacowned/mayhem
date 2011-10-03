@@ -48,16 +48,16 @@ namespace MayhemCore
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private string _configString;
+        private string configString;
         internal string ConfigString
         {
             get
             {
-                return _configString;
+                return configString;
             }
             private set
             {
-                _configString = value;
+                configString = value;
                 OnPropertyChanged("ConfigString");
             }
         }

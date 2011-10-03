@@ -69,7 +69,7 @@ namespace Mayhem
                 else
                 {
                     repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
-                    ((DataServicePackageRepository)repository).ProgressAvailable += new EventHandler<ProgressEventArgs>(repository_ProgressAvailable);
+                    ((DataServicePackageRepository)repository).ProgressAvailable += new EventHandler<ProgressEventArgs>(Repository_ProgressAvailable);
                 }
 
                 // Create a package manager to install and resolve dependencies
@@ -113,7 +113,7 @@ namespace Mayhem
 
         private Action EmptyDelegate = delegate() {};
 
-        private void repository_ProgressAvailable(object sender, ProgressEventArgs e)
+        private void Repository_ProgressAvailable(object sender, ProgressEventArgs e)
         {
             Dispatcher.Invoke((Action)delegate
                 {

@@ -107,7 +107,7 @@ namespace VisionModules.Wpf
             Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
         
             // capture offset slider
-            int capture_size_s = Camera.LOOP_DURATION / 1000;
+            int capture_size_s = Camera.LoopDuration / 1000;
             slider_capture_offset.Minimum = -capture_size_s;
             slider_capture_offset.Maximum = capture_size_s;
             slider_capture_offset.IsDirectionReversed = false;

@@ -18,7 +18,7 @@ namespace DefaultModules.Events
     public class KeyPress : EventBase, IWpfConfigurable
     {
         [DataMember]
-        private HashSet<System.Windows.Forms.Keys> MonitorKeysDown;
+        private HashSet<System.Windows.Forms.Keys> monitorKeysDown;
 
         private InterceptKeys interceptKeys;
 
@@ -30,7 +30,7 @@ namespace DefaultModules.Events
 
         protected override void OnLoadDefaults()
         {
-            MonitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
+            monitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
         }
 
         protected override void OnAfterLoad()
@@ -43,7 +43,7 @@ namespace DefaultModules.Events
         {
             StringBuilder b = new StringBuilder();
 
-            foreach (System.Windows.Forms.Keys k in MonitorKeysDown)
+            foreach (System.Windows.Forms.Keys k in monitorKeysDown)
             {
                 if (b.Length == 0)
                 {
@@ -61,14 +61,14 @@ namespace DefaultModules.Events
         #region Configuration Views
         public WpfConfiguration ConfigurationControl
         {
-            get { return new KeypressConfig(MonitorKeysDown); }
+            get { return new KeypressConfig(monitorKeysDown); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
-            MonitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;
-            interceptKeys.AddCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
+            interceptKeys.RemoveCombinationHandler(monitorKeysDown, OnKeyCombinationActivated);
+            monitorKeysDown = (configurationControl as KeypressConfig).KeysToSave;
+            interceptKeys.AddCombinationHandler(monitorKeysDown, OnKeyCombinationActivated);
         }
 
         #endregion
@@ -88,13 +88,13 @@ namespace DefaultModules.Events
         {
             Dispatcher.FromThread(mainThread).Invoke((Action)delegate
             {
-                interceptKeys.AddCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
+                interceptKeys.AddCombinationHandler(monitorKeysDown, OnKeyCombinationActivated);
             });
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            interceptKeys.RemoveCombinationHandler(MonitorKeysDown, OnKeyCombinationActivated);
+            interceptKeys.RemoveCombinationHandler(monitorKeysDown, OnKeyCombinationActivated);
         }
     }
 }
