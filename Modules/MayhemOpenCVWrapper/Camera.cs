@@ -37,17 +37,24 @@ namespace MayhemOpenCVWrapper
             get { return index_;}
         }
 
-        private CameraInfo info;
-        public override CameraInfo Info
+        public override bool running
         {
-            get
-            {
-                //throw new NotImplementedException();
-                return info; 
-            }    
+            get;
+            protected set;
         }
 
-        public CameraSettings settings;
+
+        public override CameraInfo Info
+        {
+            get;
+            protected set;
+        }
+
+        public override CameraSettings Settings
+        {
+            get;
+            protected set; 
+        }
         public bool is_initialized = false;      
         public int bufSize;
         public byte[] imageBuffer;
@@ -68,8 +75,9 @@ namespace MayhemOpenCVWrapper
         #region Constructor / Destructor
         public Camera(CameraInfo info, CameraSettings settings)
         {
-            this.info = info;
-            this.settings = settings;
+            this.Info = info;
+            this.Settings = settings;
+            grabFramesReset = new ManualResetEvent(false);
         }
 
         ~Camera()
@@ -112,10 +120,12 @@ namespace MayhemOpenCVWrapper
         /// <returns>Bitmap containing the image data</returns>
         public override Bitmap ImageAsBitmap()
         {
+            int w = this.Settings.resX;
+            int h = this.Settings.resY; 
             try
             {
-                Bitmap backBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, 320, 240);
+                Bitmap backBuffer = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, w, h);
 
                 // get at the bitmap data in a nicer way
                 System.Drawing.Imaging.BitmapData bmpData =
@@ -138,7 +148,7 @@ namespace MayhemOpenCVWrapper
             catch (ArgumentException ex)
             {
                 Logger.WriteLine("ArgumentException: " + ex);
-                return new Bitmap(320, 240);      
+                return new Bitmap(w, h);      
             }
         }
 
@@ -178,11 +188,11 @@ namespace MayhemOpenCVWrapper
             {
                 try
                 {
-                    InitializeCaptureDevice(info, settings);
+                    InitializeCaptureDevice(Info, Settings);
                 }
                 catch (AccessViolationException avEx)
                 {
-                    Logger.WriteLine("Access Violation Exception when initializing camera: " + info + "\n" + avEx);
+                    Logger.WriteLine("Access Violation Exception when initializing camera: " + Info + "\n" + avEx);
                 }
             }
 
@@ -192,11 +202,7 @@ namespace MayhemOpenCVWrapper
                 try
                 {
                     Logger.WriteLine("Starting Frame Grabber");
-                    //grabFrm.Start();
-                    // TODO: run this code in the ThreadPool
-                    grabFramesReset = new ManualResetEvent(false);
-                    ThreadPool.QueueUserWorkItem((object o) => { GrabFrames_Thread(); });
-                    Thread.Sleep(250);
+                    ThreadPool.QueueUserWorkItem((object o) => { GrabFrames_Thread(); });           
                 }
                 catch (Exception e)
                 {
@@ -249,7 +255,7 @@ namespace MayhemOpenCVWrapper
                 grabFramesReset.WaitOne(500);
                 try
                 {
-                    OpenCVDLL.OpenCVBindings.StopCamera(this.info.deviceId);
+                    OpenCVDLL.OpenCVBindings.StopCamera(this.Info.deviceId);
                 }
                 catch (Exception ex)
                 {
@@ -353,7 +359,7 @@ namespace MayhemOpenCVWrapper
 
         public override string ToString()
         {
-            return this.info.FriendlyName();
+            return this.Info.FriendlyName();
         }
 
         #region IBufferingImager Methods

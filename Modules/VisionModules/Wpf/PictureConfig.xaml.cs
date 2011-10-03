@@ -45,17 +45,22 @@ namespace VisionModules.Wpf
             private set;
         }
 
+        int selectedDeviceIdx_;
         public int SelectedDeviceIdx
         {
-            get;
-            private set; 
+            get {return  camera_selector.SelectedIndex;}
+            set { selectedDeviceIdx_ = value; }
         }
 
         // the selected camera
         private Camera camera_selected_ = null;
         public Camera camera_selected
         {
-            get { return camera_selected_; }
+            get 
+            { 
+                int index = SelectedDeviceIdx;
+                return CameraDriver.Instance.CamerasAvailable[index];
+            }
         }
 
         public Camera selected_camera = null;
@@ -76,8 +81,6 @@ namespace VisionModules.Wpf
         // binding to the slider value 
         public double slider_value;
 
-       
-
         public PictureConfig(string location, string prefix,  double capture_offset_time, int deviceIdx)
         {
             this.SaveLocation = location;
@@ -88,8 +91,7 @@ namespace VisionModules.Wpf
             SelectedDeviceIdx = deviceIdx;
             
             InitializeComponent();
-            
-            
+             
         }
 
         public override void OnLoad()
