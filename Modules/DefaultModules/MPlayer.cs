@@ -69,8 +69,7 @@ namespace DefaultModules
 
             Logger.WriteLine("");
 
-            MediaPlayer.Dispatcher.BeginInvoke(new Action(delegate()
-                {
+            MediaPlayer.Dispatcher.BeginInvoke(new Action(delegate {
                     MediaPlayer.Stop();
                 }),
                 DispatcherPriority.Send

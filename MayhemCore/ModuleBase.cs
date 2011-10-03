@@ -1,10 +1,9 @@
 ﻿
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using MayhemCore.ModuleTypes;
-using System.Reflection;
-using System.Diagnostics;
 
 namespace MayhemCore
 {

@@ -49,7 +49,7 @@ namespace DefaultModules.KeypressHelpers
         InterceptKeys()
         {
             keyCombinationHandlerMap = new Dictionary<HashSet<Keys>, List<KeyCombinationHandler>>();
-            _proc = new LowLevelKeyboardProc(HookCallback);
+            _proc = HookCallback;
         }
 
         ~InterceptKeys()

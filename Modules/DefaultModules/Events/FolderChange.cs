@@ -44,10 +44,10 @@ namespace DefaultModules.Events
                 folderToMonitor = "Reconfigure!";
             }
             SetFlags();
-            fsWatcher.Changed += new FileSystemEventHandler(OnChanged);
-            fsWatcher.Created += new FileSystemEventHandler(OnChanged);
-            fsWatcher.Deleted += new FileSystemEventHandler(OnChanged);
-            fsWatcher.Renamed += new RenamedEventHandler(OnRenamed);
+            fsWatcher.Changed += OnChanged;
+            fsWatcher.Created += OnChanged;
+            fsWatcher.Deleted += OnChanged;
+            fsWatcher.Renamed += OnRenamed;
             base.OnAfterLoad();
         }
 
