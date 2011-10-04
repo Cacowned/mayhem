@@ -104,13 +104,15 @@ namespace MayhemOpenCVWrapper
             Logger.WriteLine("");
             List<Bitmap> bitmaps = new List<Bitmap>();
 
-            for (int blck = 0; blck < currentBlock; blck++)
+            int furthestBlock = currentBlock;
+
+            for (int blck = 0; blck < furthestBlock; blck++)
             {
                 long offset = blck * blockSize;
                 int byteCount = (int) block_bytes[blck];
                 Logger.WriteLine("Deserializing Block " + blck + " offset " + offset + " nr of bytes " + byteCount);
                 byte[] bytes = new byte[byteCount];
-                fs.Seek(0, SeekOrigin.Begin);
+                fs.Seek(offset, SeekOrigin.Begin);
                 fs.Read(bytes, 0,  byteCount);
                 MemoryStream ms = new MemoryStream(bytes);
                 Image img = Image.FromStream(ms);
