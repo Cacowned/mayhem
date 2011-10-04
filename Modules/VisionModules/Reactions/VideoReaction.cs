@@ -28,8 +28,8 @@ namespace VisionModules.Reactions
     public enum VIDEO_RECORDING_MODE
     {
         PRE_EVENT = 0,                                        // record 30s prior to the event
-        POST_EVENT = Camera.LOOP_DURATION / 1000,             // record 30s after event
-        MID_EVENT = (Camera.LOOP_DURATION / 1000) / 2         // record 15s before and 15s after the event
+        POST_EVENT = Camera.LoopDuration / 1000,             // record 30s after event
+        MID_EVENT = (Camera.LoopDuration / 1000) / 2         // record 15s before and 15s after the event
     }
 
     [DataContract]
@@ -91,7 +91,6 @@ namespace VisionModules.Reactions
         {
             Logger.WriteLine("SaveImage");
             DateTime now = DateTime.Now;
-            // TODO think of a better naming convention
             string fileName = fileNamePrefix + "_" +
                 now.Year.ToString("D2") + "_" +
                 now.Month.ToString("D2") + "_" +
@@ -102,7 +101,6 @@ namespace VisionModules.Reactions
             string path = this.folderLocation + "\\" + fileName;
             lastVideoSaved = path;
             Logger.WriteLine("saving file to " + path);
-            //image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
             if (Directory.Exists(folderLocation))
             {
                 videoSaving = true;
@@ -162,8 +160,7 @@ namespace VisionModules.Reactions
             {
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 dummyCameraListener.RegisterForImages(camera);
-                //cam.OnImageUpdated += imageUpdateHandler;
-                if (camera.running == false)
+                if (camera.Running == false)
                     camera.StartFrameGrabbing();
             }
         }
@@ -203,11 +200,9 @@ namespace VisionModules.Reactions
             }
             else
             {
-                // TODO: Dummy Camera? 
                 Logger.WriteLine("No Camera present, setting cam to null");
                 camera = null;
             }
-
             videoRecordingMode = config.RecordingMode;
         }
     }

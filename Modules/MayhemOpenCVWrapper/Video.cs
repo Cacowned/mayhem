@@ -38,13 +38,13 @@ namespace MayhemOpenCVWrapper
         public Video(Camera c, string fileName, bool compress)
         {
             Camera camera = c;
-            frameRate = 1000 / camera.Settings.updateRate_ms;
-            width = c.Settings.resX;
-            height = c.Settings.resY; 
+            frameRate = 1000 / camera.Settings.UpdateRateMs;
+            width = c.Settings.ResX;
+            height = c.Settings.ResY; 
 
             // preserve reference to the camera frames to be saved later
 
-            video_frames = c.buffer_items;
+            video_frames = c.BufferItems;
 
             if (video_frames.Count > 0)
             {
@@ -67,16 +67,16 @@ namespace MayhemOpenCVWrapper
                 if (compress)
                 {
                     Logger.WriteLine("Saving Compressed");
-                    stream = aviManager.AddVideoStream(opts, frameRate, video_frames[0].image);     // add first frame as an example of the video's format
+                    stream = aviManager.AddVideoStream(opts, frameRate, video_frames[0].Image);     // add first frame as an example of the video's format
                 }
                 else
                 {
                     Logger.WriteLine("Saving Uncompressed");
-                    stream = aviManager.AddVideoStream(false, frameRate, video_frames[0].image); 
+                    stream = aviManager.AddVideoStream(false, frameRate, video_frames[0].Image); 
                 }
               
                 // add the frames
-                ThreadPool.QueueUserWorkItem(new WaitCallback(t_add_frames));         
+                ThreadPool.QueueUserWorkItem(TAddFrames);         
             }
         }
 
@@ -84,12 +84,12 @@ namespace MayhemOpenCVWrapper
         /// Write out the video in a background thread
         /// </summary>
         /// <param name="state"></param>
-        private void t_add_frames(Object state)
+        private void TAddFrames(object state)
         {
             Logger.WriteLine("Adding Frames");
             foreach (BitmapTimestamp img in video_frames)
             {
-                stream.AddFrame(img.image);
+                stream.AddFrame(img.Image);
                 frames++;
             }
             aviManager.Close();

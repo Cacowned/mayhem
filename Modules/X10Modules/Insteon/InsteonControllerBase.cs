@@ -19,7 +19,7 @@ namespace X10Modules
     {
         public class NotInitializedException : Exception{}
 
-        protected static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.instance;
+        protected static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.Instance;
         protected string portName = null;
         public bool initialized = false;
         protected bool waitForData = false; 
@@ -38,7 +38,7 @@ namespace X10Modules
 
         protected InsteonControllerBase(string serialPortname) 
         {
-            if (mSerial.ConnectPort(serialPortname, this, new INSTEON_USB_MODEM_SETTINGS()))
+            if (mSerial.ConnectPort(serialPortname, this, new InsteonUsbModemSettings()))
             {
                 portName = ""+serialPortname;
                 InitializeX10();

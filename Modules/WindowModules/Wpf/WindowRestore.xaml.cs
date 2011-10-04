@@ -6,7 +6,7 @@ namespace WindowModules.Wpf
     /// <summary>
     /// Interaction logic for WindowMove.xaml
     /// </summary>
-    public partial class WindowRestore : UserControl, WindowActionConfigControl
+    public partial class WindowRestore : UserControl, IWindowActionConfigControl
     {
         WindowActionRestore action;
 

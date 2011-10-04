@@ -8,7 +8,7 @@ namespace WindowModules.Wpf
     /// <summary>
     /// Interaction logic for WindowMove.xaml
     /// </summary>
-    public partial class WindowResize : UserControl, WindowActionConfigControl
+    public partial class WindowResize : UserControl, IWindowActionConfigControl
     {
         WindowActionResize action;
 

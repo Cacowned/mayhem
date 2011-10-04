@@ -26,9 +26,12 @@ using Point = System.Drawing.Point;
 
 namespace VisionModules.Events
 {
+    /// <summary>
+    /// Still under development! 
+    /// </summary>
     [DataContract]
     [MayhemModule("Object Detector", "Detects objects in scene matching a template image")]
-    public class ObjectDetectorEvent : EventBase, IWpfConfigurable
+    class ObjectDetectorEvent : EventBase, IWpfConfigurable
     {
         [DataMember]
         private Byte[] templateImage_bytes;
@@ -60,7 +63,7 @@ namespace VisionModules.Events
 
         public bool templateConfigured
         {
-            get { return od.templateIsSet; }
+            get { return od.TemplateIsSet; }
         }
 
         protected override void OnLoadDefaults()
@@ -88,7 +91,7 @@ namespace VisionModules.Events
             if (templateImage_bytes != null)
             {
                 templateImage = VisionModulesWPFCommon.ArrayToBitmap(templateImage_bytes);
-                od.set_template(templateImage);
+                od.SetTemplate(templateImage);
             }
 
             if (templatePreview_bytes != null)
@@ -122,7 +125,7 @@ namespace VisionModules.Events
             if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
-                if (camera.running == false)
+                if (camera.Running == false)
                     camera.StartFrameGrabbing();
                 // register the trigger's motion update handler
                 od.RegisterForImages(camera);
@@ -137,7 +140,7 @@ namespace VisionModules.Events
          */
         public void setTemplateImage(Bitmap tImage)
         {
-            od.set_template(tImage);
+            od.SetTemplate(tImage);
             templateImage = tImage;
         }
 
@@ -171,7 +174,7 @@ namespace VisionModules.Events
                 //string folderLocation = "";
 
                 // For now use the FaceDetect Config, and hardcode the template image 
-                ObjectDetectorConfig config = new ObjectDetectorConfig(this, null);
+                ObjectDetectorConfig config = new ObjectDetectorConfig();
 
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {

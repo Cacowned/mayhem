@@ -13,18 +13,18 @@ namespace PhidgetModules.Reaction
     {
         // Which index do we want to be looking at?
         [DataMember]
-        private int Index;
+        private int index;
 
         [DataMember]
-        private DigitalOutputType OutputType;
+        private DigitalOutputType outputType;
 
         // The interface kit we are using for the sensors
         private InterfaceKit ifKit;
 
         protected override void OnLoadDefaults()
         {
-            Index = 0;
-            OutputType = DigitalOutputType.Toggle;
+            index = 0;
+            outputType = DigitalOutputType.Toggle;
         }
 
         protected override void OnAfterLoad()
@@ -34,20 +34,20 @@ namespace PhidgetModules.Reaction
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new PhidgetDigitalOutputConfig(ifKit, Index, OutputType); }
+            get { return new PhidgetDigitalOutputConfig(ifKit, index, outputType); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            Index = ((PhidgetDigitalOutputConfig)configurationControl).Index;
-            OutputType = ((PhidgetDigitalOutputConfig)configurationControl).OutputType;
+            index = ((PhidgetDigitalOutputConfig)configurationControl).Index;
+            outputType = ((PhidgetDigitalOutputConfig)configurationControl).OutputType;
         }
 
         public string GetConfigString()
         {
             string type = "";
 
-            switch (OutputType)
+            switch (outputType)
             {
                 case DigitalOutputType.Toggle: type = "Toggle";
                     break;
@@ -57,21 +57,21 @@ namespace PhidgetModules.Reaction
                     break;
             }
 
-            return type + " output #" + Index;
+            return type + " output #" + index;
         }
 
         public override void Perform()
         {
-            switch (OutputType)
+            switch (outputType)
             {
                 case DigitalOutputType.Toggle:
-                    ifKit.outputs[Index] = !ifKit.outputs[Index];
+                    ifKit.outputs[index] = !ifKit.outputs[index];
                     break;
                 case DigitalOutputType.On:
-                    ifKit.outputs[Index] = true;
+                    ifKit.outputs[index] = true;
                     break;
                 case DigitalOutputType.Off:
-                    ifKit.outputs[Index] = false;
+                    ifKit.outputs[index] = false;
                     break;
             }
         }

@@ -4,16 +4,16 @@ using Phidgets;
 
 namespace PhidgetModules.Wpf
 {
-    public partial class Config1103IRReflective : PhidgetConfigControl
+    public partial class Config1103IrReflective : PhidgetConfigControl
     {
         public int Index;
         public bool OnTurnOn;
 
-        protected Func<int, string> convertor;
+        protected Func<int, string> Convertor;
         public InterfaceKit IfKit;
 
 
-        public Config1103IRReflective(bool onTurnOn)
+        public Config1103IrReflective(bool onTurnOn)
         {
             this.OnTurnOn = onTurnOn;
 
