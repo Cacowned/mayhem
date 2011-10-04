@@ -10,6 +10,8 @@ using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Diagnostics;
+using System.Windows.Navigation;
 
 namespace Mayhem
 {
@@ -57,7 +59,7 @@ namespace Mayhem
 
             ModulesList.ItemsSource = list;
 
-            heightBasedOnModules = (int)Math.Min(155 + 43 * ModulesList.Items.Count, Height);
+            heightBasedOnModules = (int)Math.Min(185 + 43 * ModulesList.Items.Count, Height);
             Height = heightBasedOnModules;
 
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty
@@ -243,6 +245,12 @@ namespace Mayhem
         void ListBoxItem_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             ChooseButtonClick(sender, e);
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
 
 
