@@ -17,22 +17,16 @@ namespace MayhemOpenCVWrapper
     {
         private static int inst_cnt = 0; 
         private readonly string bufferfileName;
-
         private Queue<Bitmap> writeQueue = new Queue<Bitmap>();
-
         private FileStream fs;
-
         private bool running = true;
-
         private int blockSize = 1048576;        // 1MB
-        private int blocks = 512;
-
+        private const int max_blocks = 512;
         private int currentBlock = 0; 
-        private Dictionary<int,long> block_bytes = new Dictionary<int,long>();
-         
+        private long[] block_bytes = new long[max_blocks];        
         private object operation_locker = new object();
-
         private Thread write_thread;
+        private int writtenBlocks = 0; 
 
 
         public VideoDiskBuffer()
@@ -92,8 +86,9 @@ namespace MayhemOpenCVWrapper
                     byte[] memBytes = ms.GetBuffer();
                     fs.Write(memBytes, 0, memBytes.Length);
                     block_bytes[currentBlock] = memBytes.Length;
+                    writtenBlocks++;
                 }
-                currentBlock++;
+                currentBlock = (currentBlock + 1) % max_blocks;
                 //fs.Flush();
                 bitmap.Dispose(); 
             }
@@ -104,10 +99,24 @@ namespace MayhemOpenCVWrapper
             Logger.WriteLine("");
             List<Bitmap> bitmaps = new List<Bitmap>();
 
-            int furthestBlock = currentBlock;
-
-            for (int blck = 0; blck < furthestBlock; blck++)
+            int begin, end; 
+            if (writtenBlocks >= max_blocks)
             {
+                 begin = currentBlock - max_blocks;
+                 end = currentBlock;
+            }
+            else
+            {
+                begin = 0;
+                end = currentBlock;
+            }
+
+            int blck = begin % max_blocks;
+            if (blck < 0)
+                blck += max_blocks;
+
+            for (int i = begin; i < end; i++)
+            {     
                 long offset = blck * blockSize;
                 int byteCount = (int) block_bytes[blck];
                 Logger.WriteLine("Deserializing Block " + blck + " offset " + offset + " nr of bytes " + byteCount);
@@ -117,6 +126,7 @@ namespace MayhemOpenCVWrapper
                 MemoryStream ms = new MemoryStream(bytes);
                 Image img = Image.FromStream(ms);
                 bitmaps.Add(new Bitmap(img));
+                blck = (blck + 1) % max_blocks;
             }
             return bitmaps;
         }
