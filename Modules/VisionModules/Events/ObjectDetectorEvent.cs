@@ -26,9 +26,12 @@ using Point = System.Drawing.Point;
 
 namespace VisionModules.Events
 {
+    /// <summary>
+    /// Still under development! 
+    /// </summary>
     [DataContract]
     [MayhemModule("Object Detector", "Detects objects in scene matching a template image")]
-    public class ObjectDetectorEvent : EventBase, IWpfConfigurable
+    class ObjectDetectorEvent : EventBase, IWpfConfigurable
     {
         [DataMember]
         private Byte[] templateImage_bytes;
@@ -171,7 +174,7 @@ namespace VisionModules.Events
                 //string folderLocation = "";
 
                 // For now use the FaceDetect Config, and hardcode the template image 
-                ObjectDetectorConfig config = new ObjectDetectorConfig(this, null);
+                ObjectDetectorConfig config = new ObjectDetectorConfig();
 
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {

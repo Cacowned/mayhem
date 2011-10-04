@@ -30,7 +30,7 @@ namespace VisionModules.Wpf
     /// Interaction logic for ObjectDetectorConfig.xaml
     /// </summary>
     /// 
-    public partial class ObjectDetectorConfig : WpfConfiguration
+    partial class ObjectDetectorConfig : WpfConfiguration
     {
         public string location;
 
@@ -42,8 +42,6 @@ namespace VisionModules.Wpf
 
         private CameraDriver i = CameraDriver.Instance;
 
-        // handle on the event that will be configured
-        private ObjectDetectorEvent objectDetectorEvent;
 
         // object detector component for visualization use
         private ObjectDetectorComponent od;
@@ -65,9 +63,10 @@ namespace VisionModules.Wpf
                 overlay.DisplayBoundingRect(value);
             }
         }
-        public ObjectDetectorConfig(ObjectDetectorEvent objDetector, object captureDevice)
+
+        public ObjectDetectorConfig()
         {
-            objectDetectorEvent = objDetector;
+            /* objectDetectorEvent = objDetector as ObjectDetector*/;
             InitializeComponent();
         }
 
@@ -301,8 +300,9 @@ namespace VisionModules.Wpf
             {
                 if (this.templateImg.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
                 {
-                    this.objectDetectorEvent.setTemplateImage(this.templateImg);
-                    this.objectDetectorEvent.templatePreview = templatePreview;
+                    // Todo: Change this --> should go into th event OnSave
+                    // this.objectDetectorEvent.setTemplateImage(this.templateImg);
+                    // this.objectDetectorEvent.templatePreview = templatePreview;
                     Logger.WriteLine("OnSave --> successfully assigned template image");
                 }
             }

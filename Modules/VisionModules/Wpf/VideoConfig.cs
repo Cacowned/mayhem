@@ -29,6 +29,9 @@ namespace VisionModules.Wpf
 
         private const int video_duration_s = Camera.LoopDuration / 1000; 
 
+        /// <summary>
+        /// Content of the Checkbox items, for selection of the video recording timing modes. 
+        /// </summary>
         private  Dictionary<string, VIDEO_RECORDING_MODE> checkbox_items =
             new Dictionary<string, VIDEO_RECORDING_MODE>()
             {
@@ -37,9 +40,6 @@ namespace VisionModules.Wpf
                 {"instant of event until " +video_duration_s+"s after the event", VIDEO_RECORDING_MODE.POST_EVENT}
             };
         private ComboBox cbx_time_offset;
-
-
-        
 
         public bool compress_video
         {
@@ -63,7 +63,6 @@ namespace VisionModules.Wpf
             RecordingMode = recordingMode; 
             Init();
         }
-
 
         public override void OnLoad()
         {
@@ -99,13 +98,6 @@ namespace VisionModules.Wpf
             slider_panel.Children.Add(cbx_time_offset);
             cbx_time_offset.SelectionChanged += new SelectionChangedEventHandler(cbx_time_offset_SelectionChanged);
             
-            /**** old code using the slider (may be revived at some point) 
-            slider_capture_offset.Minimum = 0;
-            slider_capture_offset.Maximum = max_duration;
-            // changes to the duration selection
-            slider_capture_offset.SelectionStart = 0;
-            slider_capture_offset.SelectionEnd = max_duration;*/
-
             lbl_slider_title.Content = "Select the time frame of the "+video_duration_s+"s video recording:";
             lbl_img_save.Content = "Click the button below to choose the location of saved videos:";
             img_save_button.Content = "Video Save Location";
@@ -119,7 +111,6 @@ namespace VisionModules.Wpf
 
         void cbx_time_offset_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //throw new System.NotImplementedException();
             RecordingMode = (VIDEO_RECORDING_MODE) cbx_time_offset.SelectedValue;
         }
 
@@ -127,6 +118,5 @@ namespace VisionModules.Wpf
         {
             get { return "Video"; }
         }
-
     }
 }

@@ -18,11 +18,9 @@ using Point = System.Drawing.Point;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    /* <summary>
-     * Wrapper for the C++ Motion Detector
-     *  TODO: Make the detector classes more generic
-     * <summary>
-     * */
+    /// <summary>
+    /// Wrapper for the C++ Motion Detector 
+    /// </summary>
     public class MotionDetectorComponent : CameraImageListener
     {
         private bool VERBOSE_DEBUG = false;
@@ -148,13 +146,10 @@ namespace MayhemOpenCVWrapper.LowLevel
             }
             frameCount++;
         }
-
-        /*
-         * <summary>
-         * Sets the motion boundary rectangle, called by the associated trigger object
-         * </summary>
-         */
-
+    
+        /// <summary>
+        /// Sets the motion boundary rectangle, called by the associated trigger object
+        /// </summary>
         public void SetMotionBoundaryRect(Rect r)
         {
             if (!r.IsEmpty || r.Width != 0 || r.Height != 0)
