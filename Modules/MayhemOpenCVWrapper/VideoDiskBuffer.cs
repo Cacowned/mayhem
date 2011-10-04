@@ -33,15 +33,15 @@ namespace MayhemOpenCVWrapper
         private readonly string BUFFER_FILENAME;
         private Queue<Bitmap> writeQueue = new Queue<Bitmap>();
         private FileStream fs;
-        //private bool running = true;
+        private bool accept_frames = true;                   // buffer can accept new frames
         private int blockSize = 1048576;                     // 1MB
         private const int MAX_BLOCKS = 512;
+        private const int MAX_QUEUED_BITMAPS = 64;          // max bitmaps allowed in the queue
         private int currentBlock = 0;                       // ring buffer index
         private long[] block_bytes = new long[MAX_BLOCKS];        
         private object operation_locker = new object();
         private Thread write_thread;
         private int writtenBlocks = 0; 
-
 
         public VideoDiskBuffer()
         {
@@ -59,39 +59,55 @@ namespace MayhemOpenCVWrapper
         /// </summary>
         public void ClearAndResetBuffer()
         {
-            fs.Close();
-            if (File.Exists(BUFFER_FILENAME))
-                File.Delete(BUFFER_FILENAME);
-            fs = new FileStream(BUFFER_FILENAME, FileMode.OpenOrCreate);
-            fs.Seek(0, SeekOrigin.Begin);
+            accept_frames = false;
+            {
+                lock (operation_locker)
+                {
+                    if (write_thread.ThreadState == ThreadState.Running)
+                    {
+                        write_thread.Join(100);
+                    }
+                    fs.Close();
+                    if (File.Exists(BUFFER_FILENAME))
+                        File.Delete(BUFFER_FILENAME);
+                    fs = new FileStream(BUFFER_FILENAME, FileMode.OpenOrCreate);
+                    fs.Seek(0, SeekOrigin.Begin);
 
-            // reset indices and counters
-            writtenBlocks = 0;
-            currentBlock = 0; 
+                    // reset indices and counters
+                    writtenBlocks = 0;
+                    currentBlock = 0;
+                }
+            }
+            accept_frames = true; 
         }
       
         public void AddBitmap(Bitmap b)
         {
-            writeQueue.Enqueue(b);
-            if (write_thread.ThreadState != ThreadState.Running)
+            if (accept_frames)
             {
-                if (write_thread.ThreadState == ThreadState.Unstarted)
+
+                if (writeQueue.Count < MAX_QUEUED_BITMAPS)
+                    writeQueue.Enqueue(b);
+                if (write_thread.ThreadState != ThreadState.Running)
                 {
-                    if (fs.CanWrite)
+                    if (write_thread.ThreadState == ThreadState.Unstarted)
                     {
-                        write_thread.Start();
+                        if (fs.CanWrite)
+                        {
+                            write_thread.Start();
+                        }
+                    }
+                    else if (write_thread.ThreadState == ThreadState.Stopped)
+                    {
+                        write_thread = new Thread(new ThreadStart(this.BufferWriteThread));
+                        write_thread.Name = "Video_Disk_Writer";
+                        if (fs.CanWrite)
+                        {
+                            write_thread.Start();
+                        }
                     }
                 }
-                else if (write_thread.ThreadState == ThreadState.Stopped)
-                {
-                    write_thread = new Thread(new ThreadStart(this.BufferWriteThread));
-                    write_thread.Name = "Video_Disk_Writer";
-                    if (fs.CanWrite)
-                    {
-                        write_thread.Start();
-                    }
-                }             
-            }         
+            }
         }
        
         /// <summary>
@@ -100,7 +116,7 @@ namespace MayhemOpenCVWrapper
         /// <param name="items"></param>
         public void BufferWriteThread()
         {
-            Logger.WriteLine("");
+          // Logger.WriteLine("");
             
             while (writeQueue.Count> 0)
             {
@@ -109,7 +125,7 @@ namespace MayhemOpenCVWrapper
                 bitmap.Save(ms, ImageFormat.Bmp);
                 
                 long next_offset = currentBlock * blockSize;
-                Logger.WriteLine("Writing to Block " + currentBlock + " Offset " + string.Format("{0:x}", next_offset));
+             //   Logger.WriteLine("Writing to Block " + currentBlock + " Offset " + string.Format("{0:x}", next_offset));
                 // lock access to the file
                 lock (operation_locker)
                 {
@@ -132,6 +148,11 @@ namespace MayhemOpenCVWrapper
         {
             Logger.WriteLine("");
             List<Bitmap> bitmaps = new List<Bitmap>();
+
+            // abort if we're currently not doing stuff
+            if (!accept_frames)
+                return bitmaps;
+
             lock (operation_locker)
             {               
                 int begin, end; 

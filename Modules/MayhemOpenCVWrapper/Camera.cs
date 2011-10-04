@@ -247,7 +247,11 @@ namespace MayhemOpenCVWrapper
                 Logger.WriteLine(" shutting down camera");
                 //  Stop device
                 StopGrabbing();
-                this.Running = false;           
+                this.Running = false;  
+         
+                // clear disk video frame buffer
+                videoDiskBuffer.ClearAndResetBuffer();
+
                 return true;
             }
             else

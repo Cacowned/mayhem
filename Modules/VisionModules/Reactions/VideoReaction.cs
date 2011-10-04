@@ -21,6 +21,7 @@ using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper.LowLevel;
+using System.Timers;
 
 namespace VisionModules.Reactions
 {
@@ -87,9 +88,9 @@ namespace VisionModules.Reactions
             return folderLocation;
         }
 
-        public void SaveVideo()
+        public void SaveVideo(object sender, ElapsedEventArgs e)
         {
-            Logger.WriteLine("SaveImage");
+            Logger.WriteLine("SaveVideo");
             DateTime now = DateTime.Now;
             string fileName = fileNamePrefix + "_" +
                 now.Year.ToString("D2") + "_" +
@@ -138,12 +139,16 @@ namespace VisionModules.Reactions
                 videoSaving = true;
                 if (capture_offset_time == 0)
                 {
-                    SaveVideo();
+                    SaveVideo(this, null);
                 }
                 else
                 {
                     Logger.WriteLine("Recording Video with offset: " + capture_offset_time + "s");
-                    Timer t = new Timer(new TimerCallback((object state) => { SaveVideo(); }), this, capture_offset_time * 1000, Timeout.Infinite);
+                   // Timer t = new Timer(new TimerCallback((object state) => { SaveVideo(); }), this, capture_offset_time * 1000, Timeout.Infinite);
+                    System.Timers.Timer t = new System.Timers.Timer(capture_offset_time * 1000);
+                    t.Elapsed +=new System.Timers.ElapsedEventHandler(this.SaveVideo);
+                    t.AutoReset = false;
+                    t.Start();
                 }
             }
             else
