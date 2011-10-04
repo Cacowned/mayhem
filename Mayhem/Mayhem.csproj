@@ -239,6 +239,21 @@
   <ItemGroup>
     <Resource Include="Mayhem.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\header.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\blue-settings.png" />
+    <Resource Include="Images\bluebutton_off.png" />
+    <Resource Include="Images\off-settings.png" />
+    <Resource Include="Images\off.png" />
+    <Resource Include="Images\on.png" />
+    <Resource Include="Images\red-settings.png" />
+    <Resource Include="Images\redbutton_off.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
