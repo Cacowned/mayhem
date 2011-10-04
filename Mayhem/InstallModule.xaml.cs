@@ -77,7 +77,7 @@ namespace Mayhem
                 packageManager.Logger = new Logger(this);
 
                 // Install the package
-                ThreadPool.QueueUserWorkItem(new WaitCallback(o =>
+                ThreadPool.QueueUserWorkItem(o =>
                     {
                         packageManager.InstallPackage(Package, ignoreDependencies: false);
                         Dispatcher.Invoke((Action)delegate
@@ -88,7 +88,7 @@ namespace Mayhem
                             Progress.Value = 100;
                             Progress.Dispatcher.Invoke(EmptyDelegate, DispatcherPriority.Render);
                         });
-                    }));
+                    });
             }
             catch (Exception ex)
             {

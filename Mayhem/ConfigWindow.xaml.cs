@@ -63,7 +63,7 @@ namespace Mayhem
                 ErrorLog.AddError(ErrorType.Failure, "Error saving " + iWpfConfig.Name);
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+            ThreadPool.QueueUserWorkItem(o =>
             {
                 try
                 {
@@ -73,14 +73,14 @@ namespace Mayhem
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error closing " + iWpfConfig.Name + "'s configuration");
                 }
-            }));
+            });
             ((MainWindow)Application.Current.MainWindow).Save();
             DialogResult = true;
         }
 
         private void Button_Cancel_Click(object sender, RoutedEventArgs e)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+            ThreadPool.QueueUserWorkItem(o =>
             {
                 try
                 {
@@ -91,7 +91,7 @@ namespace Mayhem
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error cancelling " + iWpfConfig.Name + "'s configuration");
                 }
-            }));
+            });
             DialogResult = false;
         }
     }

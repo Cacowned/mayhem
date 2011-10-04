@@ -44,7 +44,6 @@ namespace Mayhem
             DependencyProperty.Register("Text", typeof(string), typeof(ModuleList), new UIPropertyMetadata(string.Empty));
 
         bool isCheckingSizeChanged = false;
-        bool isFirstLoad = true;
 
         const double AnimationTime = 0.2;
 
@@ -173,7 +172,7 @@ namespace Mayhem
                 ErrorLog.AddError(ErrorType.Failure, "Error saving " + SelectedModule.Name);
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+            ThreadPool.QueueUserWorkItem(o =>
             {
                 try
                 {
@@ -183,7 +182,7 @@ namespace Mayhem
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error closing " + SelectedModule.Name + "'s configuration");
                 }
-            }));
+            });
             DialogResult = true;
         }
 
@@ -194,7 +193,7 @@ namespace Mayhem
                 isCheckingSizeChanged = false;
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+            ThreadPool.QueueUserWorkItem(o =>
                 {
                     try
                     {
@@ -205,7 +204,7 @@ namespace Mayhem
                     {
                         ErrorLog.AddError(ErrorType.Failure, "Error cancelling " + SelectedModule.Name + "'s configuration");
                     }
-                }));
+                });
 
             // Animate the render transform of the grid
             DoubleAnimation animSlideOut = new DoubleAnimation();
