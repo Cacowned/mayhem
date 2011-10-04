@@ -68,6 +68,7 @@
     <Compile Include="LowLevel\PresenceDetectorComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Video.cs" />
+    <Compile Include="VideoDiskBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="opencv_calib3d230.dll">
