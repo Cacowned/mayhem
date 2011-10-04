@@ -8,6 +8,8 @@ using System.Collections.Specialized;
 using System.Runtime.Serialization.Formatters.Binary;
 using MayhemCore;
 using System.Threading;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace MayhemOpenCVWrapper
 {
@@ -16,7 +18,7 @@ namespace MayhemOpenCVWrapper
         private static int inst_cnt = 0; 
         private readonly string bufferfileName;
 
-        private ObservableCollection<BitmapTimestamp> writeQueue = new ObservableCollection<BitmapTimestamp>();
+        private Queue<Bitmap> writeQueue = new Queue<Bitmap>();
 
         private FileStream fs;
 
@@ -30,79 +32,89 @@ namespace MayhemOpenCVWrapper
          
         private object operation_locker = new object();
 
+        private Thread write_thread;
+
+
         public VideoDiskBuffer()
         {
             inst_cnt++;
             string bufferfileName_ = "MayhemVideoBuffer" + inst_cnt + ".bin";
             bufferfileName = bufferfileName_;
-            fs = new FileStream(bufferfileName, FileMode.CreateNew);
-            writeQueue.CollectionChanged += new NotifyCollectionChangedEventHandler(writeQueue_CollectionChanged);
-            
+            fs = new FileStream(bufferfileName, FileMode.OpenOrCreate);
+            fs.Seek(0, SeekOrigin.Begin);
+            write_thread = new Thread(new ThreadStart(this.BufferWriteThread));
+            write_thread.Name = "Video_Disk_Writer";
         }
 
-        void writeQueue_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+      
+
+        public void AddBitmap(Bitmap b)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            writeQueue.Enqueue(b);
+            if (write_thread.ThreadState != ThreadState.Running)
             {
-                IList<BitmapTimestamp> newItems = e.NewItems as IList<BitmapTimestamp>;
-                ThreadPool.QueueUserWorkItem(new WaitCallback(this.BufferWriteThread), newItems);
+                if (write_thread.ThreadState == ThreadState.Unstarted)
+                {
+                    write_thread.Start();
+                }
+                else if (write_thread.ThreadState == ThreadState.Stopped)
+                {
+                    write_thread = new Thread(new ThreadStart(this.BufferWriteThread));
+                    write_thread.Name = "Video_Disk_Writer";
+                    write_thread.Start();
+                }
             }
-        }
-
-        public void AddBitmap(BitmapTimestamp b)
-        {
-            writeQueue.Add(b);
+            
         }
        
         /// <summary>
         /// Write to buffer file. 
         /// </summary>
         /// <param name="items"></param>
-        public void BufferWriteThread(object items)
+        public void BufferWriteThread()
         {
             Logger.WriteLine("");
-            IList<BitmapTimestamp> newImages = items as IList<BitmapTimestamp>;
-            while (writeQueue.Count > 0)
+            
+            while (writeQueue.Count> 0)
             {
-                BinaryFormatter bf = new BinaryFormatter();
+                Bitmap bitmap = writeQueue.Dequeue();
                 MemoryStream ms = new MemoryStream();
-                BitmapTimestamp bitmap = writeQueue[0];
-
-                // serialize object in memory
-                bf.Serialize(ms, bitmap);
-                writeQueue.RemoveAt(1);
-                Logger.WriteLine("Writing to Block " + currentBlock);
+                bitmap.Save(ms, ImageFormat.Bmp);
+                
                 long next_offset = currentBlock * blockSize;
+                Logger.WriteLine("Writing to Block " + currentBlock + " Offset " + string.Format("{0:x}", next_offset));
                 // lock access to the file
                 lock (operation_locker)
                 {
                     // seek to correct position
-                    fs.Seek(next_offset, 0);
-                    ms.CopyTo(fs);
-                    block_bytes[currentBlock] = ms.Length;
+                    fs.Seek(next_offset, SeekOrigin.Begin);
+                    // serialize object in memory
+                    byte[] memBytes = ms.GetBuffer();
+                    fs.Write(memBytes, 0, memBytes.Length);
+                    block_bytes[currentBlock] = memBytes.Length;
                 }
                 currentBlock++;
+                //fs.Flush();
+                bitmap.Dispose(); 
             }
         }
 
-        public List<BitmapTimestamp> RetrieveBitmapsFromDisk()
+        public List<Bitmap> RetrieveBitmapsFromDisk()
         {
             Logger.WriteLine("");
-            List<BitmapTimestamp> bitmaps = new List<BitmapTimestamp>();
+            List<Bitmap> bitmaps = new List<Bitmap>();
 
             for (int blck = 0; blck < currentBlock; blck++)
             {
                 long offset = blck * blockSize;
-                long byteCount = block_bytes[blck];
-                Logger.WriteLine("Deserializing Block " + blck + " offset " + offset);
-                BinaryFormatter bf = new BinaryFormatter();
-                fs.Seek(offset, 0);
+                int byteCount = (int) block_bytes[blck];
+                Logger.WriteLine("Deserializing Block " + blck + " offset " + offset + " nr of bytes " + byteCount);
                 byte[] bytes = new byte[byteCount];
-                fs.Read(bytes,0,  (int) byteCount);
-                MemoryStream ms = new MemoryStream();
-                ms.Write(bytes, 0, (int) byteCount);
-                BitmapTimestamp bitmap = (BitmapTimestamp) bf.Deserialize(ms);
-                bitmaps.Add(bitmap);
+                fs.Seek(0, SeekOrigin.Begin);
+                fs.Read(bytes, 0,  byteCount);
+                MemoryStream ms = new MemoryStream(bytes);
+                Image img = Image.FromStream(ms);
+                bitmaps.Add(new Bitmap(img));
             }
             return bitmaps;
         }

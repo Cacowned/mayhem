@@ -34,7 +34,9 @@ namespace MayhemOpenCVWrapper
         private int index = instances++;       // should be incremented on instantiation
 
         public static readonly double LOOP_BUFFER_UPDATE_MS = 250.0;  // update the loop only every quarter second -- this should be sufficient for the Picture Event
-        private DateTime loopBufferLastUpdate = DateTime.Now; 
+        private DateTime loopBufferLastUpdate = DateTime.Now;
+
+        private VideoDiskBuffer videoDiskBuffer = new VideoDiskBuffer(); 
 
         public int Index
         {
@@ -113,6 +115,14 @@ namespace MayhemOpenCVWrapper
                     }
                 }
                 return itemsOut;
+            }
+        }
+
+        public List<Bitmap> videoDiskBufferItems
+        {
+            get
+            {
+                return videoDiskBuffer.RetrieveBitmapsFromDisk();
             }
         }
 
@@ -335,6 +345,10 @@ namespace MayhemOpenCVWrapper
                             }
                         }
                     }
+
+                    //// Experimental
+                    videoDiskBuffer.AddBitmap(ImageAsBitmap());
+                    ////
 
                     if (Running)
                     {
