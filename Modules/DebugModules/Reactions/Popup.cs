@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using DefaultModules.Resources;
+using DebugModules.Resources;
 using MayhemCore;
 
-namespace DefaultModules.Reactions
+namespace DebugModules.Reactions
 {
     [MayhemModule("Debug: Popup", "Generates a small popup window when triggered")]
     public class Popup : ReactionBase

@@ -67,8 +67,6 @@
     <Compile Include="LowLevel\Utilities.cs" />
     <Compile Include="LowLevel\VK.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reactions\Debugging\Message.cs" />
-    <Compile Include="Reactions\Debugging\Popup.cs" />
     <Compile Include="Reactions\Media\NextItem.cs" />
     <Compile Include="Reactions\Media\PlayPause.cs" />
     <Compile Include="Reactions\Media\PreviousItem.cs" />
@@ -80,9 +78,6 @@
     </Compile>
     <Compile Include="Wpf\ScreenshotConfig.xaml.cs">
       <DependentUpon>ScreenshotConfig.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wpf\DebugMessageConfig.xaml.cs">
-      <DependentUpon>DebugMessageConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\KeypressConfig.xaml.cs">
       <DependentUpon>KeypressConfig.xaml</DependentUpon>
@@ -119,10 +114,6 @@
     <Page Include="Wpf\ScreenshotConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Wpf\DebugMessageConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\KeypressConfig.xaml">
       <SubType>Designer</SubType>

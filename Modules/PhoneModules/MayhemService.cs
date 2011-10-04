@@ -96,6 +96,8 @@ namespace PhoneModules
                 resetEvents[key].Reset();
 
                 string userAgent = WebOperationContext.Current.IncomingRequest.UserAgent;
+                if(userAgent == null)
+                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlWP7));
                 if (userAgent.IndexOf("iPhone") >= 0)
                     return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIPhone));
                 else if (userAgent.IndexOf("iPad") >= 0)

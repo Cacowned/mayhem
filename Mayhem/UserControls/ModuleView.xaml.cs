@@ -7,6 +7,7 @@ using System.Windows.Media.Effects;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using System.ComponentModel;
+using System.Windows.Shapes;
 
 namespace Mayhem.UserControls
 {
@@ -60,25 +61,13 @@ namespace Mayhem.UserControls
 
         DoubleAnimation animOut;
         DoubleAnimation animIn;
-        DoubleAnimation animBlurOut;
-        DoubleAnimation animBlurIn;
-        DoubleAnimation animBlurOpacityOut;
-        DoubleAnimation animBlurOpacityIn;
-        DoubleAnimation animBlurDistanceOut;
-        DoubleAnimation animBlurDistanceIn;
 
         public ModuleView()
         {
             InitializeComponent();
 
-            animOut = new DoubleAnimation(0.5, new Duration(TimeSpan.FromSeconds(0.25)));
+            animOut = new DoubleAnimation(0, new Duration(TimeSpan.FromSeconds(0.25)));
             animIn = new DoubleAnimation(1.0, new Duration(TimeSpan.FromSeconds(0.25)));
-            animBlurOut = new DoubleAnimation(4, new Duration(TimeSpan.FromSeconds(0.25)));
-            animBlurIn = new DoubleAnimation(16, new Duration(TimeSpan.FromSeconds(0.25)));
-            animBlurOpacityOut = new DoubleAnimation(0.5, new Duration(TimeSpan.FromSeconds(0.25)));
-            animBlurOpacityIn = new DoubleAnimation(0.9, new Duration(TimeSpan.FromSeconds(0.25)));
-            animBlurDistanceOut = new DoubleAnimation(2, new Duration(TimeSpan.FromSeconds(0.25)));
-            animBlurDistanceIn = new DoubleAnimation(5, new Duration(TimeSpan.FromSeconds(0.25)));
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -100,23 +89,31 @@ namespace Mayhem.UserControls
             };
             if (!Connection.Event.HasConfig)
             {
-                ImageSettingsEvent.Visibility = Visibility.Hidden;
+                ImageSettingsEventOff.Visibility = Visibility.Hidden;
+                ImageSettingsEventRed.Visibility = Visibility.Hidden;
                 textBlockEventName.VerticalAlignment = VerticalAlignment.Center;
-                textBlockEventName.Margin = new Thickness(5, -2, 14, 2);
+                textBlockEventNameDisabled.VerticalAlignment = VerticalAlignment.Center;
+                textBlockEventName.Margin = new Thickness(5, -4, 14, 4);
+                textBlockEventNameDisabled.Margin = new Thickness(5, -4, 14, 4);
                 buttonTrigger.Cursor = null;
             }
             if (!Connection.Reaction.HasConfig)
             {
-                ImageSettingsReaction.Visibility = Visibility.Hidden;
+                ImageSettingsReactionOff.Visibility = Visibility.Hidden;
+                ImageSettingsReactionBlue.Visibility = Visibility.Hidden;
                 textBlockReactionName.VerticalAlignment = VerticalAlignment.Center;
-                textBlockReactionName.Margin = new Thickness(7, -2, 14, 2);
+                textBlockReactionNameDisabled.VerticalAlignment = VerticalAlignment.Center;
+                textBlockReactionName.Margin = new Thickness(7, -4, 14, 4);
+                textBlockReactionNameDisabled.Margin = new Thickness(7, -4, 14, 4);
                 buttonReaction.Cursor = null;
             }
 
-            connectionButtons.Opacity = Connection.IsEnabled ? 1 : 0.5;
-            dropShadow.BlurRadius = Connection.IsEnabled ? 16 : 4;
-            dropShadow.Opacity = Connection.IsEnabled ? 0.9 : 0.5;
-            dropShadow.ShadowDepth = Connection.IsEnabled ? 5 : 2;
+            redButtonImage.Opacity = Connection.IsEnabled ? 1 : 0;
+            blueButtonImage.Opacity = Connection.IsEnabled ? 1 : 0;
+            ImageSettingsEventRed.Opacity = Connection.IsEnabled ? 1 : 0;
+            ImageSettingsReactionBlue.Opacity = Connection.IsEnabled ? 1 : 0;
+            textBlockEventName.Opacity = Connection.IsEnabled ? 1 : 0;
+            textBlockReactionName.Opacity = Connection.IsEnabled ? 1 : 0;
         }
 
         void ShowConfig(ModuleBase configurable)
@@ -190,17 +187,20 @@ namespace Mayhem.UserControls
                         button.IsChecked = Connection.IsEnabled;
                         if (Connection.IsEnabled)
                         {
-                            connectionButtons.BeginAnimation(StackPanel.OpacityProperty, animIn);
-                            dropShadow.BeginAnimation(DropShadowEffect.BlurRadiusProperty, animBlurIn);
-                            dropShadow.BeginAnimation(DropShadowEffect.OpacityProperty, animBlurOpacityIn);
-                            dropShadow.BeginAnimation(DropShadowEffect.ShadowDepthProperty, animBlurDistanceIn);
+                            redButtonImage.BeginAnimation(Rectangle.OpacityProperty, animIn);
+                            blueButtonImage.BeginAnimation(Rectangle.OpacityProperty, animIn);
+                            ImageSettingsEventRed.BeginAnimation(Rectangle.OpacityProperty, animIn);
+                            ImageSettingsReactionBlue.BeginAnimation(Rectangle.OpacityProperty, animIn);
+                            textBlockEventName.BeginAnimation(Rectangle.OpacityProperty, animIn);
+                            textBlockReactionName.BeginAnimation(Rectangle.OpacityProperty, animIn);
                         }
                         else
                         {
-                            connectionButtons.BeginAnimation(StackPanel.OpacityProperty, animOut);
-                            dropShadow.BeginAnimation(DropShadowEffect.BlurRadiusProperty, animBlurOut);
-                            dropShadow.BeginAnimation(DropShadowEffect.OpacityProperty, animBlurOpacityOut);
-                            dropShadow.BeginAnimation(DropShadowEffect.ShadowDepthProperty, animBlurDistanceOut);
+                            redButtonImage.BeginAnimation(Rectangle.OpacityProperty, animOut);
+                            blueButtonImage.BeginAnimation(Rectangle.OpacityProperty, animOut);
+                            ImageSettingsEventRed.BeginAnimation(Rectangle.OpacityProperty, animOut);
+                            ImageSettingsReactionBlue.BeginAnimation(Rectangle.OpacityProperty, animOut);
+                            textBlockReactionName.BeginAnimation(Rectangle.OpacityProperty, animOut);
                         }
                         ((MainWindow)Application.Current.MainWindow).Save();
                     });
