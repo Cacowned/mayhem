@@ -183,7 +183,6 @@ namespace PhoneModules
 
             WebChannelFactory<IMayhemService> myChannelFactory = new WebChannelFactory<IMayhemService>(new Uri(address.ToString()));
             service = myChannelFactory.CreateChannel();
-            service.Html(true);
 
             return true;
         }
