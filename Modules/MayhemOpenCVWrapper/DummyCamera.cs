@@ -28,7 +28,7 @@ namespace MayhemOpenCVWrapper
             protected set;
         }
 
-        public override bool running
+        public override bool Running
         {
             get;
             protected set;

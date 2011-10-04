@@ -32,7 +32,7 @@ namespace WindowModules.Wpf
         private Process thisProcess;
         private IntPtr thisWindowHandle;
 
-        private Dictionary<UserControl, WindowAction> controlMap = new Dictionary<UserControl, WindowAction>();
+        private Dictionary<UserControl, IWindowAction> controlMap = new Dictionary<UserControl, IWindowAction>();
 
         public static IntPtr CurrentlySelectedWindow = IntPtr.Zero;
 
@@ -46,7 +46,7 @@ namespace WindowModules.Wpf
             checkBoxApplication.IsChecked = ActionInfo.WindowInfo.CheckFileName;
             checkBoxTitle.IsChecked = ActionInfo.WindowInfo.CheckTitle;
 
-            foreach (WindowAction action in windowActionInfo.WindowActions)
+            foreach (IWindowAction action in windowActionInfo.WindowActions)
             {
                 Add(action);
             }
@@ -89,8 +89,8 @@ namespace WindowModules.Wpf
             if (handle == IntPtr.Zero || handle == thisWindowHandle)
                 return;
 
-            int procID = GetProcessThreadFromWindow(handle);
-            Process p = Process.GetProcessById(procID);
+            int procId = GetProcessThreadFromWindow(handle);
+            Process p = Process.GetProcessById(procId);
 
             if (p.MainWindowHandle == IntPtr.Zero || p.MainWindowHandle == thisWindowHandle )
                 return;
@@ -105,7 +105,7 @@ namespace WindowModules.Wpf
             }
             catch
             {
-                filename = WMIProcess.GetFilename(procID);
+                filename = WMIProcess.GetFilename(procId);
             }
             if (filename != null)
             {
@@ -142,7 +142,7 @@ namespace WindowModules.Wpf
             ActionInfo.WindowActions.Clear();
             foreach (WindowActionControl wac in stackPanelActions.Children)
             {
-                ((WindowActionConfigControl)wac.Config).Save();
+                ((IWindowActionConfigControl)wac.Config).Save();
                 ActionInfo.WindowActions.Add(controlMap[wac.Config]);
             }
         }
@@ -158,11 +158,11 @@ namespace WindowModules.Wpf
             get { return "Window Sequence"; }
         }
 
-        void Add(WindowAction action)
+        void Add(IWindowAction action)
         {
             UserControl newControl = null;
             if (action is WindowActionBringToFront)
-                newControl = new WindowBringToFront((WindowActionBringToFront)action);
+                newControl = new WindowBringToFront();
             else if (action is WindowActionClose)
                 newControl = new WindowClose((WindowActionClose)action);
             else if (action is WindowActionMaximize)
@@ -197,7 +197,7 @@ namespace WindowModules.Wpf
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            WindowAction action = null;
+            IWindowAction action = null;
             string name = ((ComboBoxItem)comboBoxActions.SelectedItem).Content as string;
             switch (name)
             {

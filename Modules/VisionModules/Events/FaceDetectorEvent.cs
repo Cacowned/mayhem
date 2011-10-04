@@ -95,7 +95,7 @@ namespace VisionModules.Events
             string config = "";
             if (cam != null)
             {
-                config += "Camera: " + cam.Info.deviceId + ", ";
+                config += "Camera: " + cam.Info.DeviceId + ", ";
             }
 
             config += "Detect " + triggerOnNrOfFaces;

@@ -60,7 +60,7 @@
     <Compile Include="ImageProcessing.cs" />
     <Compile Include="LowLevel\DummyCameraImageListener.cs" />
     <Compile Include="LowLevel\FaceDetectorComponent.cs" />
-    <Compile Include="LowLevel\ICameraImageListener.cs" />
+    <Compile Include="LowLevel\CameraImageListener.cs" />
     <Compile Include="LowLevel\MotionDetectorComponent.cs" />
     <Compile Include="LowLevel\ObjectDetectorComponent.cs" />
     <Compile Include="CameraDriver.cs" />

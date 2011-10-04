@@ -11,7 +11,7 @@ namespace PhidgetModules.Wpf
     /// </summary>
     public partial class Phidget1023RFIDConfig : WpfConfiguration
     {
-        protected RFID rfid;
+        protected RFID Rfid;
 
         public string TagID
         {
@@ -25,7 +25,7 @@ namespace PhidgetModules.Wpf
 
         public Phidget1023RFIDConfig(string tagId)
         {
-            this.rfid = InterfaceFactory.Rfid;
+            this.Rfid = InterfaceFactory.Rfid;
             TagID = tagId;
 
             this.DataContext = this;
@@ -42,11 +42,11 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
-            rfid.Tag += RfidTag;
-            rfid.TagLost += LostRfidTag;
+            Rfid.Tag += RfidTag;
+            Rfid.TagLost += LostRfidTag;
 
-            rfid.Attach += RfidAttach;
-            rfid.Detach += RfidDetach;
+            Rfid.Attach += RfidAttach;
+            Rfid.Detach += RfidDetach;
         }
 
         #region Phidget Event Handlers
@@ -57,7 +57,7 @@ namespace PhidgetModules.Wpf
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
                 CanSave = true;
-                rfid.LED = true;
+                Rfid.LED = true;
                 TagID = e.Tag;
             }));
         }
@@ -67,7 +67,7 @@ namespace PhidgetModules.Wpf
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
-                rfid.LED = false;
+                Rfid.LED = false;
             }));
         }
 
@@ -91,11 +91,11 @@ namespace PhidgetModules.Wpf
 
         public override void OnClosing()
         {
-            rfid.Tag -= RfidTag;
-            rfid.TagLost -= LostRfidTag;
+            Rfid.Tag -= RfidTag;
+            Rfid.TagLost -= LostRfidTag;
 
-            rfid.Attach -= RfidAttach;
-            rfid.Detach -= RfidDetach;
+            Rfid.Attach -= RfidAttach;
+            Rfid.Detach -= RfidDetach;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace WindowModules
         }
 
         [DataMember]
-        public List<WindowAction> WindowActions
+        public List<IWindowAction> WindowActions
         {
             get;
             set;
@@ -38,7 +38,7 @@ namespace WindowModules
         public WindowActionInfo()
         {
             WindowInfo = new WindowInfo();
-            WindowActions = new List<WindowAction>();
+            WindowActions = new List<IWindowAction>();
         }
     }
 }

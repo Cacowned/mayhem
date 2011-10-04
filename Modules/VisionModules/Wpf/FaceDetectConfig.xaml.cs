@@ -80,7 +80,7 @@ namespace VisionModules.Wpf
         {
             // send a frame to the detector
             Logger.WriteLine("Updating Face Detector Points");
-            fd.update_frame(cam, null);
+            fd.UpdateFrame(cam, null);
 
             Bitmap BackBuffer = cam.ImageAsBitmap();
 

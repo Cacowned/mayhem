@@ -50,7 +50,7 @@ namespace DefaultModules.KeypressHelpers
         InterceptKeys()
         {
             keyCombinationHandlerMap = new Dictionary<HashSet<Keys>, List<KeyCombinationHandler>>();
-            _proc = new LowLevelKeyboardProc(HookCallback);
+            _proc = HookCallback;
         }
 
         ~InterceptKeys()
@@ -142,9 +142,9 @@ namespace DefaultModules.KeypressHelpers
                 if (AreKeysetsEqual(k, keysDown))
                 {
                     List<KeyCombinationHandler> listHandlers = keyCombinationHandlerMap[k];
-                    for (int i = 0; i < listHandlers.Count; i++)
+                    foreach (KeyCombinationHandler t in listHandlers)
                     {
-                        listHandlers[i]();
+                        t();
                     }
                     break;
                 }

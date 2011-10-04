@@ -6,7 +6,7 @@ namespace WindowModules.Wpf
     /// <summary>
     /// Interaction logic for WindowMove.xaml
     /// </summary>
-    public partial class WindowMaximize : UserControl, WindowActionConfigControl
+    public partial class WindowMaximize : UserControl, IWindowActionConfigControl
     {
         WindowActionMaximize action;
 
