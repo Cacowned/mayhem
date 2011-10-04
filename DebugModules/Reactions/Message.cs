@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using DefaultModules.Wpf;
+using DebugModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 
-namespace DefaultModules.Reactions
+namespace DebugModules.Reactions
 {
     [DataContract]
     [MayhemModule("Debug: Message", "Generates debug output when triggered")]
