@@ -42,9 +42,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemWpf", "MayhemWpf\Mayh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneServerHelper", "Modules\PhoneModules\PhoneServerHelper\PhoneServerHelper.csproj", "{0A8D6298-E5E2-4E78-AFE5-9364C2BF9024}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateModules", "TemplateModules\TemplateModules.csproj", "{B94FDED3-00F2-43F0-9298-111273721BA4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateModules", "Modules\TemplateModules\TemplateModules.csproj", "{B94FDED3-00F2-43F0-9298-111273721BA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugModules", "DebugModules\DebugModules.csproj", "{6F53CF8A-F8FF-418D-AC5B-09786340D4B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugModules", "Modules\DebugModules\DebugModules.csproj", "{6F53CF8A-F8FF-418D-AC5B-09786340D4B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
