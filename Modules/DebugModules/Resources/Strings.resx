@@ -117,37 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PlaySound_CliConfig_AudioPath" xml:space="preserve">
-    <value>{0} Enter the path for the audio file:</value>
-  </data>
-  <data name="PlaySound_FileNotFound" xml:space="preserve">
-    <value>The sound file doesn't exist.</value>
-  </data>
-  <data name="RunProgram_CantStartProgram" xml:space="preserve">
-    <value>Could not start the application</value>
-  </data>
-  <data name="RunProgram_ConfigString" xml:space="preserve">
-    <value>File name: "{0}"</value>
-  </data>
-  <data name="RunProgram_FileNotFound" xml:space="preserve">
-    <value>The application does not exist at the specified location.</value>
-  </data>
-  <data name="TextToSpeech_ConfigString" xml:space="preserve">
-    <value>Message: "{0}"</value>
-  </data>
-  <data name="Timer_CantSetInterval" xml:space="preserve">
-    <value>Can't set timer interval. Exception: {0}</value>
-  </data>
-  <data name="Timer_CliConfig_HoursToWait" xml:space="preserve">
-    <value>{0} Please enter the number of hours to wait:</value>
-  </data>
-  <data name="Timer_CliConfig_MinutesToWait" xml:space="preserve">
-    <value>{0} Please enter the number of minutes to wait:</value>
-  </data>
-  <data name="Timer_CliConfig_SecondsToWait" xml:space="preserve">
-    <value>{0} Please enter the number of seconds to wait:</value>
-  </data>
-  <data name="Timer_ConfigString" xml:space="preserve">
-    <value>{0} hours, {1} minutes, {2} seconds</value>
+  <data name="Popup_MessageText" xml:space="preserve">
+    <value>Triggered!</value>
   </data>
 </root>

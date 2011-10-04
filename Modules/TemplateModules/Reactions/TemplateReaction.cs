@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
@@ -36,18 +33,11 @@ namespace TemplateModules.Reactions
         // This variable is not saved when the application is shut down and started up again.
         private object variableToNotSave;
 
-        // This method gets called when the reaction is triggered.
-        // Implement your reaction functionality in this method. 
-        public override void Perform()
-        {
-            throw new NotImplementedException();
-        }
-
         // The following four methods are the methods you can use to set up and configure your
-        // module. You should never use a constructor in modules. This is because there is no
-        // guarantee as to when the constructor is called when deserializing. There are two ways
-        // your module can be created. The first of which is instantiating a new instance. In that
-        // case the following methods are called in this order: 
+        // module. You should never use a constructor in modules. This is because the constructor 
+        // is not called when deserializing. There are two ways your module can be created,
+        // the first of which is instantiating a new instance. In that case the following methods 
+        // are called in this order: 
         // OnBeforeLoad, OnLoadDefaults, OnAfterLoad
         // Your module can also be created from deserialization (when your object saves state and
         // is recreated with the same state. In that case, the following methods are called in this
@@ -58,10 +48,7 @@ namespace TemplateModules.Reactions
         // needed to load your configuration and setup. For example, if you will need to add saved
         // items to an object, you should instantiate that object in this method so that it will
         // exist in OnLoadDefaults and OnLoadFromSaved.
-        protected override void OnBeforeLoad()
-        {
-            base.OnBeforeLoad();
-        }
+        protected override void OnBeforeLoad() { }
 
         // This method is called after OnBeforeLoad when your module object is created because of
         // standard instantiation. Use this method to set the defaults on your configuration
@@ -90,6 +77,10 @@ namespace TemplateModules.Reactions
 
         // This method is called after the connection containing this module has been deleted.
         protected override void OnDeleted() { }
+
+        // This method gets called when the reaction is triggered. 
+        // Implement your reaction functionality in this method. 
+        public override void Perform() { }
 
         #region IWpfConfigurable Methods
 

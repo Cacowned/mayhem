@@ -11,8 +11,7 @@ namespace MayhemCore
     public class Connection
     {
         /// <summary>
-        /// True if this connection is enabled
-        /// false if disabled.
+        /// True if this connection is enabled. False if disabled.
         /// </summary>
         [DataMember]
         public bool IsEnabled
@@ -55,15 +54,12 @@ namespace MayhemCore
             // Set them to have a reference to this connection
             this.Event.Connection = this;
             this.Reaction.Connection = this;
-
-            // Set up the event handler for when the event triggers
-            this.Event.EventActivated += this.Trigger;
         }
 
         /// <summary>
         /// Calls the Reaction when the event gets triggered.
         /// </summary>
-        private void Trigger(object sender, EventArgs e)
+        internal void Trigger()
         {
             // If we got into this method call, we probably don't need
             // to check if we are enabled.
@@ -197,9 +193,6 @@ namespace MayhemCore
         {
             Event.Connection = this;
             Reaction.Connection = this;
-
-            // Set up the event handler for when the event triggers
-            this.Event.EventActivated += this.Trigger;
 
             // If we have started up and are enabled, then we need to
             // actually enable our events and reactions
