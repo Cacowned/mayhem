@@ -28,8 +28,8 @@ namespace VisionModules.Reactions
     public enum VIDEO_RECORDING_MODE
     {
         PRE_EVENT = 0,                                        // record 30s prior to the event
-        POST_EVENT = Camera.LOOP_DURATION / 1000,             // record 30s after event
-        MID_EVENT = (Camera.LOOP_DURATION / 1000) / 2         // record 15s before and 15s after the event
+        POST_EVENT = Camera.LoopDuration / 1000,             // record 30s after event
+        MID_EVENT = (Camera.LoopDuration / 1000) / 2         // record 15s before and 15s after the event
     }
 
     [DataContract]
@@ -78,7 +78,7 @@ namespace VisionModules.Reactions
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
                 Logger.WriteLine("Startup with camera " + selectedDeviceIndex);
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
         }
 
@@ -160,10 +160,10 @@ namespace VisionModules.Reactions
             Logger.WriteLine("");
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 dummyCameraListener.RegisterForImages(camera);
                 //cam.OnImageUpdated += imageUpdateHandler;
-                if (camera.running == false)
+                if (camera.Running == false)
                     camera.StartFrameGrabbing();
             }
         }
@@ -196,9 +196,9 @@ namespace VisionModules.Reactions
 
             int camera_index = config.SelectedDeviceIdx;
 
-            if (cameraDriver.cameras_available.Count > camera_index)
+            if (cameraDriver.CamerasAvailable.Count > camera_index)
             {
-                camera = cameraDriver.cameras_available[camera_index];
+                camera = cameraDriver.CamerasAvailable[camera_index];
                 selectedDeviceIndex = camera_index;
             }
             else

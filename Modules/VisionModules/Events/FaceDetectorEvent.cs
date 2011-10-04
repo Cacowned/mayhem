@@ -42,7 +42,7 @@ namespace VisionModules.Events
         private FaceDetectorComponent faceDetector;
         private FaceDetectorComponent.DetectionHandler faceDetectUpdateHandler;
         private CameraDriver cameraDriver;
-        private Camera cam = null;
+        private ImagerBase cam = null;
         private int lastFacesDetectedAmount = 0;
 
         protected override void OnLoadDefaults()
@@ -54,18 +54,20 @@ namespace VisionModules.Events
         protected override void OnAfterLoad()
         {
             cameraDriver = CameraDriver.Instance;
+            faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetectUpdate);
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = cameraDriver.cameras_available[selectedDeviceIndex];
+                cam = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
             else
             {
                 Logger.WriteLine("No camera available");
+                cam = new DummyCamera();        
             }
 
-            faceDetector = new FaceDetectorComponent();
-            faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetectUpdate);
+            faceDetector = new FaceDetectorComponent(cam);
+            
         }
 
         void m_onFaceDetectUpdate(object sender, List<System.Drawing.Point> points)
@@ -93,7 +95,7 @@ namespace VisionModules.Events
             string config = "";
             if (cam != null)
             {
-                config += "Camera: " + cam.Info.deviceId + ", ";
+                config += "Camera: " + cam.Info.DeviceId + ", ";
             }
 
             config += "Detect " + triggerOnNrOfFaces;
@@ -109,7 +111,7 @@ namespace VisionModules.Events
             get
             {
                 Logger.WriteLine("get ConfigurationControl!");
-                FaceDetectConfig config = new FaceDetectConfig(this.cam);
+                FaceDetectConfig config = new FaceDetectConfig(this.cam as Camera);
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {
                     config.selectedBoundingRect = boundingRect;
@@ -124,7 +126,7 @@ namespace VisionModules.Events
         {
             if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = cameraDriver.cameras_available[selectedDeviceIndex];
+                cam = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 //if (cam.running == false)
                 //Thread.Sleep(350);
                 cam.StartFrameGrabbing();

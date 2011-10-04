@@ -60,7 +60,7 @@ namespace VisionModules.Events
 
         public bool templateConfigured
         {
-            get { return od.templateIsSet; }
+            get { return od.TemplateIsSet; }
         }
 
         protected override void OnLoadDefaults()
@@ -74,7 +74,7 @@ namespace VisionModules.Events
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
             else
             {
@@ -88,7 +88,7 @@ namespace VisionModules.Events
             if (templateImage_bytes != null)
             {
                 templateImage = VisionModulesWPFCommon.ArrayToBitmap(templateImage_bytes);
-                od.set_template(templateImage);
+                od.SetTemplate(templateImage);
             }
 
             if (templatePreview_bytes != null)
@@ -121,8 +121,8 @@ namespace VisionModules.Events
             // TODO: Improve this code
             if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
-                if (camera.running == false)
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                if (camera.Running == false)
                     camera.StartFrameGrabbing();
                 // register the trigger's motion update handler
                 od.RegisterForImages(camera);
@@ -137,7 +137,7 @@ namespace VisionModules.Events
          */
         public void setTemplateImage(Bitmap tImage)
         {
-            od.set_template(tImage);
+            od.SetTemplate(tImage);
             templateImage = tImage;
         }
 

@@ -42,7 +42,7 @@ namespace VisionModules.Events
         private MotionDetectorComponent.DetectionHandler motionUpdateHandler;
 
         private CameraDriver cameraDriver;
-        private Camera camera = null;
+        private ImagerBase camera = null;
 
         protected override void OnLoadDefaults()
         {
@@ -57,14 +57,15 @@ namespace VisionModules.Events
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
             else
             {
                 Logger.WriteLine("No camera available");
+                camera = new DummyCamera();
             }
 
-            motionDetectorComponent = new MotionDetectorComponent(320, 240);
+            motionDetectorComponent = new MotionDetectorComponent(camera);
             motionUpdateHandler = new MotionDetectorComponent.DetectionHandler(m_OnMotionUpdate);
 
             if (boundingRect.Width > 0 && boundingRect.Height > 0)
@@ -97,7 +98,7 @@ namespace VisionModules.Events
             string conf = "";
             if (camera != null)
             {
-                conf += "Camera: " + camera.Info.deviceId;
+                conf += "Camera: " + camera.Info.DeviceId;
             }
             return conf;
         }
@@ -106,7 +107,7 @@ namespace VisionModules.Events
         {
             get
             {
-                MotionDetectorConfig config = new MotionDetectorConfig(this.camera); // pass the parameters to initially populate the window in the constructor
+                MotionDetectorConfig config = new MotionDetectorConfig(this.camera as Camera); // pass the parameters to initially populate the window in the constructor
                 config.DeviceList.SelectedIndex = selectedDeviceIndex;
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {
@@ -128,7 +129,7 @@ namespace VisionModules.Events
             // assign selected cam
             camera = ((MotionDetectorConfig)configurationControl).selected_camera;
 
-            selectedDeviceIndex = camera.Info.deviceId;
+            selectedDeviceIndex = camera.Info.DeviceId;
 
         }
 
@@ -139,8 +140,8 @@ namespace VisionModules.Events
             // TODO: Improve this code
             if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.cameras_available[selectedDeviceIndex];
-                if (!camera.running)
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                if (!camera.Running)
                     camera.StartFrameGrabbing();
                 firstFrame = true;
                 // register the trigger's motion update handler

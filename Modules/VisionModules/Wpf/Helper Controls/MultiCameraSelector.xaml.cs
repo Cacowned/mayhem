@@ -51,7 +51,12 @@ namespace VisionModules.Wpf
 
         public int index = 0;
 
-        private static readonly int DEBUG_LEVEL = 0; 
+        private static readonly int DEBUG_LEVEL = 0;
+
+        public int SelectedIndex
+        {
+            get {return deviceList.SelectedIndex;}
+        }
 
         public MultiCameraSelector()
         {
@@ -63,7 +68,7 @@ namespace VisionModules.Wpf
             i = CameraDriver.Instance;
 
             Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
-            foreach (Camera c in i.cameras_available)
+            foreach (Camera c in i.CamerasAvailable)
             {
                 deviceList.Items.Add(c);
             }
@@ -73,17 +78,16 @@ namespace VisionModules.Wpf
             if (i.DeviceCount > 0)
             {
                 // attach canvases with camera images to camera_preview_panel
-                foreach (Camera c in i.cameras_available)
+                foreach (Camera c in i.CamerasAvailable)
                 {
                     cams.Add(c);
                     c.OnImageUpdated -= i_OnImageUpdated;
                     c.OnImageUpdated += i_OnImageUpdated;
-                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
-                    {
-                        c.StartFrameGrabbing();
-                    }));
+                    
+                    c.StartFrameGrabbing();
+                  
                     Logger.WriteLine("using " + c.Info.ToString());
-                    Logger.WriteLine("Camera IDX " + c.index);
+                    Logger.WriteLine("Camera IDX " + c.Index);
                     
 
                     Logger.WriteLine("Adding...");
@@ -136,7 +140,7 @@ namespace VisionModules.Wpf
         ///</summary>       
         protected virtual void SetCameraImageSource(Camera cam)
         {
-            Logger.WriteLineIf(DEBUG_LEVEL > 0,"New Image on Camera " + cam.index + " : " + cam.Info);
+            Logger.WriteLineIf(DEBUG_LEVEL > 0,"New Image on Camera " + cam.Index + " : " + cam.Info);
 
             Bitmap bm = cam.ImageAsBitmap();
             Bitmap shrink = ImageProcessing.ScaleWithFixedSize(bm, preview_width, preview_height);
@@ -146,7 +150,7 @@ namespace VisionModules.Wpf
             BitmapSource s = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBmp, IntPtr.Zero, Int32Rect.Empty, System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
             s.Freeze();
 
-            camera_previews[cam.index].ImageSource = s;
+            camera_previews[cam.Index].ImageSource = s;
 
             // dispose of all the unneeded data
             VisionModulesWPFCommon.DeleteObject(hBmp);

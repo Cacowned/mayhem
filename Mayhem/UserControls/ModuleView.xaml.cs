@@ -100,15 +100,15 @@ namespace Mayhem.UserControls
             };
             if (!Connection.Event.HasConfig)
             {
-                ImageSettingsEvent.Visibility = System.Windows.Visibility.Hidden;
-                textBlockEventName.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                ImageSettingsEvent.Visibility = Visibility.Hidden;
+                textBlockEventName.VerticalAlignment = VerticalAlignment.Center;
                 textBlockEventName.Margin = new Thickness(5, -2, 14, 2);
                 buttonTrigger.Cursor = null;
             }
             if (!Connection.Reaction.HasConfig)
             {
-                ImageSettingsReaction.Visibility = System.Windows.Visibility.Hidden;
-                textBlockReactionName.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                ImageSettingsReaction.Visibility = Visibility.Hidden;
+                textBlockReactionName.VerticalAlignment = VerticalAlignment.Center;
                 textBlockReactionName.Margin = new Thickness(7, -2, 14, 2);
                 buttonReaction.Cursor = null;
             }

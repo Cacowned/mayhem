@@ -30,7 +30,7 @@ namespace X10Modules.Wpf
     /// </summary>
     public partial class InsteonX10ReactionConfig : WpfConfiguration
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
+        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
         private X10Controller x10 = null;
 
         public X10HouseCode selected_housecode
@@ -72,7 +72,7 @@ namespace X10Modules.Wpf
             // TODO: make this auto-detect the X10 Module, like for the Arduino Uno
             // deviceList.ItemsSource = serial.serialPortNames;
 
-            Dictionary<string, string> portList = serial.getInsteonPortNames();
+            Dictionary<string, string> portList = serial.GetInsteonPortNames();
 
             if (portList.Count > 0)
             {

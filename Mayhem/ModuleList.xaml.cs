@@ -4,13 +4,14 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Windows.Media;
+using System.Diagnostics;
+using System.Windows.Navigation;
 
 namespace Mayhem
 {
@@ -42,10 +43,7 @@ namespace Mayhem
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(ModuleList), new UIPropertyMetadata(string.Empty));
 
-        RectAnimation animSize;
-
         bool isCheckingSizeChanged = false;
-        bool isFirstLoad = true;
 
         const double AnimationTime = 0.2;
 
@@ -56,11 +54,11 @@ namespace Mayhem
             Text = headerText;
             InitializeComponent();
 
-            animSize = new RectAnimation(new Rect(), new Duration(TimeSpan.FromSeconds(AnimationTime)));
+            new RectAnimation(new Rect(), new Duration(TimeSpan.FromSeconds(AnimationTime)));
 
             ModulesList.ItemsSource = list;
 
-            heightBasedOnModules = (int)Math.Min(155 + 43 * ModulesList.Items.Count, Height);
+            heightBasedOnModules = (int)Math.Min(185 + 43 * ModulesList.Items.Count, Height);
             Height = heightBasedOnModules;
 
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty
@@ -91,8 +89,8 @@ namespace Mayhem
                         ConfigContent.Content = iWpfConfig;
                         buttonSave.IsEnabled = iWpfConfig.CanSave;
                         windowHeaderConfig.Text = iWpfConfig.Title;
-                        iWpfConfig.Loaded += new RoutedEventHandler(iWpfConfig_Loaded);
-                        iWpfConfig.CanSavedChanged += new WpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
+                        iWpfConfig.Loaded += iWpfConfig_Loaded;
+                        iWpfConfig.CanSavedChanged += iWpfConfig_CanSavedChanged;
                         iWpfConfig.OnLoad();
                     }
                     catch
@@ -112,7 +110,7 @@ namespace Mayhem
 
         private void iWpfConfig_CanSavedChanged(bool canSave)
         {
-            Dispatcher.Invoke(new Action(delegate()
+            Dispatcher.Invoke(new Action(delegate
             {
                 buttonSave.IsEnabled = canSave;
             }));
@@ -129,7 +127,7 @@ namespace Mayhem
             DoubleAnimation animSlideOut = new DoubleAnimation();
             animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
             animSlideOut.To = -300;
-            animSlideOut.Completed += delegate(object s, EventArgs args)
+            animSlideOut.Completed += delegate
             {
                 stackPanelList.Visibility = System.Windows.Visibility.Hidden;
             };
@@ -173,8 +171,8 @@ namespace Mayhem
             {
                 ErrorLog.AddError(ErrorType.Failure, "Error saving " + SelectedModule.Name);
             }
-            
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+
+            ThreadPool.QueueUserWorkItem(o =>
             {
                 try
                 {
@@ -184,7 +182,7 @@ namespace Mayhem
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error closing " + SelectedModule.Name + "'s configuration");
                 }
-            }));
+            });
             DialogResult = true;
         }
 
@@ -195,7 +193,7 @@ namespace Mayhem
                 isCheckingSizeChanged = false;
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+            ThreadPool.QueueUserWorkItem(o =>
                 {
                     try
                     {
@@ -206,7 +204,7 @@ namespace Mayhem
                     {
                         ErrorLog.AddError(ErrorType.Failure, "Error cancelling " + SelectedModule.Name + "'s configuration");
                     }
-                }));
+                });
 
             // Animate the render transform of the grid
             DoubleAnimation animSlideOut = new DoubleAnimation();
@@ -248,6 +246,12 @@ namespace Mayhem
             ChooseButtonClick(sender, e);
         }
 
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+
 
         #region Window Resizing
         public Rect WindowRect
@@ -265,10 +269,10 @@ namespace Mayhem
         // Using a DependencyProperty as the backing store for WindowRect.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty WindowRectProperty =
             DependencyProperty.Register("WindowRect", typeof(Rect), typeof(ModuleList), new UIPropertyMetadata(new Rect(0, 0, 0, 0)));
- 
+
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
- 
+
         /// <summary>
         /// Resizes the window to the desired Rect
         /// Called when WindowRect DependencyProperty changes
