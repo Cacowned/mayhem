@@ -125,7 +125,7 @@ namespace VisionModules.Reactions
             {
                 // retrieve image from camera buffer
                 // buffer index = capture offset time / camera fram rate
-                int buff_idx = (int)(-captureOffsetTime * 1000 / (double)CameraSettings.Defaults().UpdateRateMs);
+                int buff_idx = (int)(-captureOffsetTime * 1000.0 / (double) Camera.LOOP_BUFFER_UPDATE_MS);
 
                 if (camera is IBufferingImager)
                 {
@@ -144,7 +144,6 @@ namespace VisionModules.Reactions
                 t.Elapsed += new ElapsedEventHandler(SaveFutureImage);
                 t.AutoReset = false;
                 t.Enabled = true;
-
             }
             else
             {
