@@ -43,7 +43,6 @@
                 }
                 requestUpdateTimer = setTimeout(function () {
                     http_request.abort();
-                    waitForUpdate();
                 }, 15000);
                 var url = 'Html?update=True&t=' + new Date().getTime();
                 http_request.onreadystatechange = updateFromServer;
