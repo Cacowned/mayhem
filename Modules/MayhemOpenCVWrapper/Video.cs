@@ -16,12 +16,13 @@ using System.Collections.Generic;
 using System.Threading;
 using AviFile;
 using MayhemCore;
+using System.Drawing;
 
 namespace MayhemOpenCVWrapper
 {
     public class Video
     {
-        private List<BitmapTimestamp> video_frames = new List<BitmapTimestamp>();
+        private List<Bitmap> video_frames = new List<Bitmap>();
 
         // video stream settings
         private double frameRate;
@@ -44,7 +45,7 @@ namespace MayhemOpenCVWrapper
 
             // preserve reference to the camera frames to be saved later
 
-            video_frames = c.BufferItems;
+            video_frames = c.videoDiskBufferItems;
 
             if (video_frames.Count > 0)
             {
@@ -67,12 +68,12 @@ namespace MayhemOpenCVWrapper
                 if (compress)
                 {
                     Logger.WriteLine("Saving Compressed");
-                    stream = aviManager.AddVideoStream(opts, frameRate, video_frames[0].Image);     // add first frame as an example of the video's format
+                    stream = aviManager.AddVideoStream(opts, frameRate, video_frames[0]);     // add first frame as an example of the video's format
                 }
                 else
                 {
                     Logger.WriteLine("Saving Uncompressed");
-                    stream = aviManager.AddVideoStream(false, frameRate, video_frames[0].Image); 
+                    stream = aviManager.AddVideoStream(false, frameRate, video_frames[0]); 
                 }
               
                 // add the frames
@@ -87,15 +88,15 @@ namespace MayhemOpenCVWrapper
         private void TAddFrames(object state)
         {
             Logger.WriteLine("Adding Frames");
-            foreach (BitmapTimestamp img in video_frames)
+            foreach (Bitmap img in video_frames)
             {
-                stream.AddFrame(img.Image);
+                stream.AddFrame(img);
                 frames++;
             }
             aviManager.Close();
             
 
-            foreach (BitmapTimestamp img in video_frames)
+            foreach (Bitmap img in video_frames)
             {
                 img.Dispose(); 
             }
