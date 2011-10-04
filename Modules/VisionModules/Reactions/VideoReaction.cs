@@ -91,7 +91,6 @@ namespace VisionModules.Reactions
         {
             Logger.WriteLine("SaveImage");
             DateTime now = DateTime.Now;
-            // TODO think of a better naming convention
             string fileName = fileNamePrefix + "_" +
                 now.Year.ToString("D2") + "_" +
                 now.Month.ToString("D2") + "_" +
@@ -102,7 +101,6 @@ namespace VisionModules.Reactions
             string path = this.folderLocation + "\\" + fileName;
             lastVideoSaved = path;
             Logger.WriteLine("saving file to " + path);
-            //image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
             if (Directory.Exists(folderLocation))
             {
                 videoSaving = true;
@@ -162,7 +160,6 @@ namespace VisionModules.Reactions
             {
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 dummyCameraListener.RegisterForImages(camera);
-                //cam.OnImageUpdated += imageUpdateHandler;
                 if (camera.Running == false)
                     camera.StartFrameGrabbing();
             }
@@ -203,11 +200,9 @@ namespace VisionModules.Reactions
             }
             else
             {
-                // TODO: Dummy Camera? 
                 Logger.WriteLine("No Camera present, setting cam to null");
                 camera = null;
             }
-
             videoRecordingMode = config.RecordingMode;
         }
     }

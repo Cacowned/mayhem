@@ -120,17 +120,12 @@ namespace VisionModules.Events
         public void OnSaved(WpfConfiguration configurationControl)
         {
             // Grab data from the window variable and store it in this class
-
             // set the selected bounding rectangle
             boundingRect = ((MotionDetectorConfig)configurationControl).selectedBoundingRect;
             motionDetectorComponent.SetMotionBoundaryRect(boundingRect);
-
-
             // assign selected cam
             camera = ((MotionDetectorConfig)configurationControl).selected_camera;
-
             selectedDeviceIndex = camera.Info.DeviceId;
-
         }
 
         protected override void OnEnabling(EnablingEventArgs e)

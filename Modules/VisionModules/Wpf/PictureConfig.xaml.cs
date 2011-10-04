@@ -64,19 +64,14 @@ namespace VisionModules.Wpf
         }
 
         public Camera selected_camera = null;
-
         private CameraDriver i = CameraDriver.Instance;
         protected List<Camera> cams = new List<Camera>();
-
         public ObservableCollection<ImageBrush> camera_previews = new ObservableCollection<ImageBrush>();
 
         // list of borders
 
         private List<Border> borders = new List<Border>();
-
-
         private delegate void ImageUpdateHandler(Camera c);
-
 
         // binding to the slider value 
         public double slider_value;
@@ -129,7 +124,7 @@ namespace VisionModules.Wpf
             slider_capture_offset.SmallChange = 0.5;
             slider_capture_offset.LargeChange = 1.0;
             slider_capture_offset.Value = slider_value;
-            //          
+            //        
             CanSave = true;
         }
 

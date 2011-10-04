@@ -46,8 +46,6 @@ namespace MayhemOpenCVWrapper.LowLevel
         /// <summary>
         ///  Processes a new frame from the camera and decides if event should be triggered
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public override void UpdateFrame(object sender, EventArgs e)
         {
             Logger.WriteLine("frame nr "+frameCount);
@@ -131,12 +129,11 @@ namespace MayhemOpenCVWrapper.LowLevel
             }
         }
 
-        /*
-        * <summary>
-        * Sets the motion boundary rectangle, called by the associated trigger object
-        * </summary>
-        */
-
+        
+        
+        /// <summary>
+        /// Sets the motion boundary rectangle, called by the associated trigger object
+        /// </summary>
         public void SetDetectoinBoundary(Rect r)
         {
             if (!r.IsEmpty || r.Width != 0 || r.Height != 0)

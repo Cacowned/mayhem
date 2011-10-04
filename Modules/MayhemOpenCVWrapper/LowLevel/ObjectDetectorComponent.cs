@@ -25,45 +25,37 @@ namespace MayhemOpenCVWrapper.LowLevel
 
         //private Camera.ImageUpdateHandler imageUpdateHandler;
         private int frameCount = 0;
-
         private Bitmap templateImg = null; 
-
         private SURFObjectDetector od;
 
         // prerequisite for this module to work is a set image template
         public bool TemplateIsSet = false;
-
-
         
         // detection threshold --> TODO: make changeable by GUI
         public int DetectThresh = 4;
 
-        private Point[] lastCornerPoints = null;
         public Point[] LastCornerPoints
         {
-            get { return lastCornerPoints; }
-            set { }
+            get; 
+            private set ;
         }
 
-        private List<Point> templateKeyPoints = null;
         public List<Point> TemplateKeyPoints
         {
-            get { return templateKeyPoints; }
-            set {}
+            get; 
+            private set;
         }
 
-        private List<Point> lastImageKeyPoints = null;
         public List<Point> LastImageKeyPoints
         {
-            get { return lastImageKeyPoints; }
-            set {}
+            get;
+            private set; 
         }
 
-        private List<Point> lastImageMatchingPoints = null;
         public List<Point> LastImageMatchingPoints 
         {
-            get { return lastImageMatchingPoints;}
-            set {}
+            get;
+            private set; 
         }
 
         public ObjectDetectorComponent(int width, int height)
@@ -172,7 +164,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 {
                     tempKeyPoints.Add(new Point((int) tKeyPoints[i].x, (int) tKeyPoints[i].y));
                 }
-                this.templateKeyPoints = tempKeyPoints;
+                this.TemplateKeyPoints = tempKeyPoints;
 
                 // image key points
                 List<Point> imageKeyPoints = new List<Point>();
@@ -180,7 +172,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 {
                     imageKeyPoints.Add(new Point((int)iKeyPoints[i].x, (int)iKeyPoints[i].y));
                 }
-                this.lastImageKeyPoints = imageKeyPoints;
+                this.LastImageKeyPoints = imageKeyPoints;
 
                 // point correspondences
                 for (int i = 0; i < nMatchingPairs; i+=2)
@@ -208,7 +200,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                     imageMatchingPoints.Add(iPoint);
                 }
 
-                lastImageMatchingPoints = imageMatchingPoints;
+                LastImageMatchingPoints = imageMatchingPoints;
 
                 // planar object correspondence
                 int[] cornerPoints = new int[8];
@@ -224,17 +216,17 @@ namespace MayhemOpenCVWrapper.LowLevel
                 // assign the retrieved cornerpoints 
                 if (res > 0)
                 {
-                    lastCornerPoints = new Point[4];
+                    LastCornerPoints = new Point[4];
                     int j = 0;
                     for (int k = 0; k < 4; k++)
                     {
                         Point cp = new Point(cornerPoints[j++], cornerPoints[j++]);
-                        lastCornerPoints[k] = cp;
+                        LastCornerPoints[k] = cp;
                     }
                 }
                 else
                 {
-                    lastCornerPoints = null; 
+                    LastCornerPoints = null; 
                 }
 
                 // TODO: --------------------- firing mechanism
