@@ -41,7 +41,7 @@ namespace PhoneModules.Events
 
         public string GetConfigString()
         {
-            if (button.ImageFile != null && button.ImageFile.Length > 0)
+            if (!string.IsNullOrEmpty(button.ImageFile))
             {
                 FileInfo fi = new FileInfo(button.ImageFile);
                 return fi.Name;

@@ -9,12 +9,12 @@ namespace WindowModules.Wpf
     /// <summary>
     /// Interaction logic for WindowMove.xaml
     /// </summary>
-    public partial class WindowSendKeys : UserControl, WindowActionConfigControl
+    public partial class WindowSendKeys : UserControl, IWindowActionConfigControl
     {
-        WindowActionSendKeys action;
+        private WindowActionSendKeys action;
         private InterceptKeys interceptKeys;
 
-        List<Key> keys = new List<Key>();
+        private List<Key> keys = new List<Key>();
         private List<System.Windows.Forms.Keys> keys_down = new List<System.Windows.Forms.Keys>();
 
         public WindowSendKeys(WindowActionSendKeys action)

@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ArduinoModules.Wpf
+namespace ArduinoModules.Wpf.Helpers
 {
     /// <summary>
     /// ListViewColumnStretch
@@ -16,7 +16,7 @@ namespace ArduinoModules.Wpf
         /// <summary>
         /// Holds a reference to our parent ListView control
         /// </summary>
-        private DataGrid _parentListView = null;
+        private DataGrid parentListView = null;
 
         #endregion
 

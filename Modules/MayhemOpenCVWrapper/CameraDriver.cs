@@ -3,6 +3,7 @@
  *  
  *  Manages cameras for Mayhem
  * 
+ * 
  *  (c) 2010/2011, Microsoft Applied Sciences Group
  *  
  *  Author: Sven Kratz
@@ -18,13 +19,13 @@ namespace MayhemOpenCVWrapper
 {
     public class CameraDriver
     {
+        // singleton class ! 
         public static CameraDriver Instance = new CameraDriver(); 
-        public int cWidth;
-        public int cHeight;
+
         private List<CameraInfo> devices_available = new List<CameraInfo>();
         private List<Camera> cameras_available_ = new List<Camera>(); 
 
-        public  ReadOnlyCollection<Camera> cameras_available
+        public  ReadOnlyCollection<Camera> CamerasAvailable
         {
             get { return cameras_available_.AsReadOnly(); }
         }
@@ -34,7 +35,7 @@ namespace MayhemOpenCVWrapper
             get { return cameras_available_.Count; }
         }
       
-        public CameraDriver()
+        protected CameraDriver()
         {
             // just initialize the capture library
             // to get the camera running, InitCaptureDevice must be called!
@@ -49,7 +50,7 @@ namespace MayhemOpenCVWrapper
 
                     foreach (CameraInfo c in devices_available)
                     {
-                        Camera cam = new Camera(c, CameraSettings.DEFAULTS());
+                        Camera cam = new Camera(c, CameraSettings.Defaults());
                         cameras_available_.Add(cam);
                     }
 
@@ -91,14 +92,14 @@ namespace MayhemOpenCVWrapper
             }
             if (deviceNames != string.Empty)
             {
-                string[] device_strings = deviceNames.Split(';');
+                string[] deviceStrings = deviceNames.Split(';');
                 //items in device_strings correspond to the actual devices
 
-                if (device_strings.Length > 0)
+                if (deviceStrings.Length > 0)
                 {                  
-                    for (int i = 0; i < device_strings.Length; i++)
+                    for (int i = 0; i < deviceStrings.Length; i++)
                     {
-                        c.Add( new CameraInfo(i, device_strings[i]) ) ;
+                        c.Add( new CameraInfo(i, deviceStrings[i]) ) ;
                     }
                 }
             }

@@ -69,27 +69,26 @@ namespace Mayhem
                 else
                 {
                     repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
-                    ((DataServicePackageRepository)repository).ProgressAvailable += new EventHandler<ProgressEventArgs>(repository_ProgressAvailable);
+                    ((DataServicePackageRepository)repository).ProgressAvailable += Repository_ProgressAvailable;
                 }
 
                 // Create a package manager to install and resolve dependencies
                 var packageManager = new PackageManager(repository, installPath);
-
                 packageManager.Logger = new Logger(this);
 
                 // Install the package
-                ThreadPool.QueueUserWorkItem(new WaitCallback(o =>
+                ThreadPool.QueueUserWorkItem(o =>
                     {
                         packageManager.InstallPackage(Package, ignoreDependencies: false);
                         Dispatcher.Invoke((Action)delegate
                         {
                             stackPanelDefaultButtons.Visibility = Visibility.Hidden;
-                            buttonClose.Visibility = System.Windows.Visibility.Visible;
+                            buttonClose.Visibility = Visibility.Visible;
 
                             Progress.Value = 100;
                             Progress.Dispatcher.Invoke(EmptyDelegate, DispatcherPriority.Render);
                         });
-                    }));
+                    });
             }
             catch (Exception ex)
             {
@@ -111,9 +110,9 @@ namespace Mayhem
             DialogResult = true;
         }
 
-        private Action EmptyDelegate = delegate() {};
+        private Action EmptyDelegate = delegate {};
 
-        private void repository_ProgressAvailable(object sender, ProgressEventArgs e)
+        private void Repository_ProgressAvailable(object sender, ProgressEventArgs e)
         {
             Dispatcher.Invoke((Action)delegate
                 {

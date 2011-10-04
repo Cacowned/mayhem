@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace WindowModules.Actions
 {
     [DataContract]
-    public class WindowActionMinimize : WindowAction
+    public class WindowActionMinimize : IWindowAction
     {
         public void Perform(IntPtr window)
         {

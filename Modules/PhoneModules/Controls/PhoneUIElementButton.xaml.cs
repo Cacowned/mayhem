@@ -61,7 +61,7 @@ namespace PhoneModules.Controls
             set
             {
                 imageFile = value;
-                if (imageFile != null && imageFile.Length > 0)
+                if (!string.IsNullOrEmpty(imageFile))
                 {
                     FileDictionary.Add(imageFile);
 

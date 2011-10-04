@@ -36,7 +36,7 @@ namespace WindowModules.Events
             {
                 notifyIcon = new NotifyIcon();
                 notifyIcon.ContextMenu = new ContextMenu();
-                Uri iconUri = new Uri("pack://application:,,,/Game.ico", UriKind.RelativeOrAbsolute);
+                Uri iconUri = new Uri("pack://application:,,,/Mayhem.ico", UriKind.RelativeOrAbsolute);
                 Stream iconStream = System.Windows.Application.GetResourceStream(iconUri).Stream;
                 if (iconStream != null)
                 {

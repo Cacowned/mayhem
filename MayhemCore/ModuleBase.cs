@@ -1,10 +1,9 @@
 ﻿
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using MayhemCore.ModuleTypes;
-using System.Reflection;
-using System.Diagnostics;
 
 namespace MayhemCore
 {
@@ -48,16 +47,16 @@ namespace MayhemCore
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private string _configString;
+        private string configString;
         internal string ConfigString
         {
             get
             {
-                return _configString;
+                return configString;
             }
             private set
             {
-                _configString = value;
+                configString = value;
                 OnPropertyChanged("ConfigString");
             }
         }
@@ -83,7 +82,6 @@ namespace MayhemCore
             object[] attList = this.GetType().GetCustomAttributes(typeof(DataContractAttribute), true);
             if (attList.Length > 0)
             {
-                Debug.WriteLine(context.State);
                 Initialize_();
                 try
                 {

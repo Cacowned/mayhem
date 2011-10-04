@@ -13,7 +13,7 @@ namespace X10Modules.Insteon
 
         public InsteonBasicCommand(byte[] commandString)
         {
-            commandBytes = commandString;
+            CommandBytes = commandString;
         }
 
 

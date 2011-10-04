@@ -30,7 +30,7 @@ namespace PhoneModules
             set
             {
                 imageFile = value;
-                if (imageFile != null && imageFile.Length > 0)
+                if (!string.IsNullOrEmpty(imageFile))
                 {
                     ImageBytes = FileDictionary.Get(imageFile);
                 }
@@ -85,11 +85,11 @@ namespace PhoneModules
 
         public void EnableButton(string id)
         {
-            for (int i = 0; i < Buttons.Count; i++)
+            foreach (PhoneLayoutButton t in Buttons)
             {
-                if (Buttons[i].ID == id)
+                if (t.ID == id)
                 {
-                    Buttons[i].IsEnabled = true;
+                    t.IsEnabled = true;
                     break;
                 }
             }
@@ -97,11 +97,11 @@ namespace PhoneModules
 
         public void DisableButton(string id)
         {
-            for (int i = 0; i < Buttons.Count; i++)
+            foreach (PhoneLayoutButton t in Buttons)
             {
-                if (Buttons[i].ID == id)
+                if (t.ID == id)
                 {
-                    Buttons[i].IsEnabled = false;
+                    t.IsEnabled = false;
                     break;
                 }
             }
@@ -166,7 +166,7 @@ namespace PhoneModules
                     {
                         int width;
                         int height;
-                        if (button.ImageFile == null || button.ImageFile == "")
+                        if (string.IsNullOrEmpty(button.ImageFile))
                         {
                             sb.AppendLine("<input type=\"button\" value=\"" + button.Text + "\" class=\"button\"");
                             width = (int)button.Width;

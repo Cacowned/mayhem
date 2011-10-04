@@ -2,7 +2,7 @@
 
 namespace WindowModules
 {
-    public interface WindowAction
+    public interface IWindowAction
     {
         void Perform(IntPtr window);
     }

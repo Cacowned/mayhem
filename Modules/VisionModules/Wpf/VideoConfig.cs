@@ -27,7 +27,7 @@ namespace VisionModules.Wpf
             private set;
         }
 
-        private const int video_duration_s = Camera.LOOP_DURATION / 1000; 
+        private const int video_duration_s = Camera.LoopDuration / 1000; 
 
         private  Dictionary<string, VIDEO_RECORDING_MODE> checkbox_items =
             new Dictionary<string, VIDEO_RECORDING_MODE>()

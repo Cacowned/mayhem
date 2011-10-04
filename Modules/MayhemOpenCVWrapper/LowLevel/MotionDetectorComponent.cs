@@ -23,7 +23,7 @@ namespace MayhemOpenCVWrapper.LowLevel
      *  TODO: Make the detector classes more generic
      * <summary>
      * */
-    public class MotionDetectorComponent : ICameraImageListener
+    public class MotionDetectorComponent : CameraImageListener
     {
         private bool VERBOSE_DEBUG = false;
         private OpenCVDLL.MotionDetector m;
@@ -33,15 +33,17 @@ namespace MayhemOpenCVWrapper.LowLevel
 
         //private Camera.ImageUpdateHandler imageUpdateHandler; 
 
-        public Rect motionBoundaryRect = new Rect();
+        public Rect MotionBoundaryRect = new Rect();
 
         private int frameCount = 0;
 
         private int[] contourPoints = new int[1200];
         private List<Point> points = new List<Point>();
 
-        public MotionDetectorComponent(int width, int height)
+        public MotionDetectorComponent(ImagerBase c)
         {
+            int width = c.Settings.ResX;
+            int height = c.Settings.ResY;
             m = new OpenCVDLL.MotionDetector(width, height);
         }
 
@@ -51,7 +53,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             m.Dispose();
         }
 
-        public override void update_frame(object sender, EventArgs e)
+        public override void UpdateFrame(object sender, EventArgs e)
         {
             Camera camera = sender as Camera;
 
@@ -62,11 +64,11 @@ namespace MayhemOpenCVWrapper.LowLevel
                 contourPoints[i] = 0; 
             }
 
-            lock (camera.thread_locker)
+            lock (camera.ThreadLocker)
             {
                 unsafe
                 {
-                    fixed (byte* ptr = camera.imageBuffer)
+                    fixed (byte* ptr = camera.ImageBuffer)
                     {
                         fixed (int* buf = contourPoints)
                         {
@@ -121,20 +123,20 @@ namespace MayhemOpenCVWrapper.LowLevel
 
             // create a copy of the intersection
 
-            if ((motionBoundaryRect.Width == 0 && motionBoundaryRect.Height == 0) || (motionBoundaryRect.Width == 320 && motionBoundaryRect.Height == 240))
+            if ((MotionBoundaryRect.Width == 0 && MotionBoundaryRect.Height == 0) || (MotionBoundaryRect.Width == 320 && MotionBoundaryRect.Height == 240))
             {
                 if (OnMotionUpdate != null && points.Count() > 0 && frameCount > 40)
                     OnMotionUpdate(this, points);
             }
-            else if (boundingRect.IntersectsWith(motionBoundaryRect))
+            else if (boundingRect.IntersectsWith(MotionBoundaryRect))
             {
                 Rect intersection = new Rect(boundingRect.X, boundingRect.Y, boundingRect.Width, boundingRect.Height);
-                intersection.Intersect(motionBoundaryRect);
+                intersection.Intersect(MotionBoundaryRect);
 
                 // compare the respective areas of motionBoundaryRect and the intersection
                 // if the intersection area is > 1/3 then count this as a detected motion
 
-                double motionBoundaryRectArea = motionBoundaryRect.Height * motionBoundaryRect.Width;
+                double motionBoundaryRectArea = MotionBoundaryRect.Height * MotionBoundaryRect.Width;
                 double intersectionArea = intersection.Height * intersection.Width;
 
                 if (intersectionArea / motionBoundaryRectArea > 0.3)
@@ -157,12 +159,12 @@ namespace MayhemOpenCVWrapper.LowLevel
         {
             if (!r.IsEmpty || r.Width != 0 || r.Height != 0)
             {
-                motionBoundaryRect = r;
+                MotionBoundaryRect = r;
             }
             else
             {
                 // default to an "empty" rectangle
-                motionBoundaryRect = new Rect(0, 0, 0, 0);
+                MotionBoundaryRect = new Rect(0, 0, 0, 0);
             }
         }
     }

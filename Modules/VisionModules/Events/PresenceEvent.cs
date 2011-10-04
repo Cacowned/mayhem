@@ -93,7 +93,7 @@ namespace VisionModules.Events
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = cameraDriver.cameras_available[selectedDeviceIndex];
+                cam = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
             else
             {
@@ -111,7 +111,7 @@ namespace VisionModules.Events
                 int cam_index = 0;
                 if (cam != null)
                 {
-                    cam_index = cam.Info.deviceId;
+                    cam_index = cam.Info.DeviceId;
                 }
                 return new PresenceConfig(cam_index, selectedTriggerMode, sensitivityPercent);
             }
@@ -127,7 +127,7 @@ namespace VisionModules.Events
             if (cam != null)
             {
                 cam = config.camera_selected;
-                selectedDeviceIndex = cam.Info.deviceId;
+                selectedDeviceIndex = cam.Info.DeviceId;
                 selectedTriggerMode = config.selected_triggerMode;
             }
             else
@@ -142,7 +142,7 @@ namespace VisionModules.Events
 
             if (cam != null && !e.WasConfiguring)
             {
-                if (!cam.running)
+                if (!cam.Running)
                     cam.StartFrameGrabbing();
                 presenceDetector.RegisterForImages(cam);
                 presenceDetector.Sensitivity = sensitivity;
@@ -220,7 +220,7 @@ namespace VisionModules.Events
         {
             string config = "Sensitivity: " + sensitivityPercent;
             if (cam != null)
-                config += ", Cam Nr: " + cam.Info.deviceId;
+                config += ", Cam Nr: " + cam.Info.DeviceId;
             return config;
         }
     }

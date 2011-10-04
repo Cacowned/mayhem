@@ -34,7 +34,7 @@ namespace DefaultModules.Reactions
             int maxX = 0;
             int maxY = 0;
 
-            foreach (Screen screen in System.Windows.Forms.Screen.AllScreens)
+            foreach (Screen screen in Screen.AllScreens)
             {
                 int x = screen.Bounds.X + screen.Bounds.Width;
                 if (x > maxX)
