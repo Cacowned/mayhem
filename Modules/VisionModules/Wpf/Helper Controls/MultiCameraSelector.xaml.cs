@@ -87,7 +87,7 @@ namespace VisionModules.Wpf
                     c.StartFrameGrabbing();
                   
                     Logger.WriteLine("using " + c.Info.ToString());
-                    Logger.WriteLine("Camera IDX " + c.index);
+                    Logger.WriteLine("Camera IDX " + c.Index);
                     
 
                     Logger.WriteLine("Adding...");
@@ -140,7 +140,7 @@ namespace VisionModules.Wpf
         ///</summary>       
         protected virtual void SetCameraImageSource(Camera cam)
         {
-            Logger.WriteLineIf(DEBUG_LEVEL > 0,"New Image on Camera " + cam.index + " : " + cam.Info);
+            Logger.WriteLineIf(DEBUG_LEVEL > 0,"New Image on Camera " + cam.Index + " : " + cam.Info);
 
             Bitmap bm = cam.ImageAsBitmap();
             Bitmap shrink = ImageProcessing.ScaleWithFixedSize(bm, preview_width, preview_height);
@@ -150,7 +150,7 @@ namespace VisionModules.Wpf
             BitmapSource s = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBmp, IntPtr.Zero, Int32Rect.Empty, System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
             s.Freeze();
 
-            camera_previews[cam.index].ImageSource = s;
+            camera_previews[cam.Index].ImageSource = s;
 
             // dispose of all the unneeded data
             VisionModulesWPFCommon.DeleteObject(hBmp);

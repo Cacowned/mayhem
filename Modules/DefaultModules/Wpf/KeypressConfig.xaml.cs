@@ -32,9 +32,9 @@ namespace DefaultModules.Wpf
 
         private bool shouldCheckValidity = false;
 
-        public KeypressConfig(HashSet<Keys> MonitorKeysDown)
+        public KeypressConfig(HashSet<Keys> monitorKeysDown)
         {
-            KeysToSave = new HashSet<Keys>(MonitorKeysDown);
+            KeysToSave = new HashSet<Keys>(monitorKeysDown);
 
             this.DataContext = this;
             InitializeComponent();

@@ -4,12 +4,12 @@ using PhidgetModules.Wpf.UserControls;
 namespace PhidgetModules.Wpf
 {
 
-    public partial class Config1101IRDistance : PhidgetConfigControl
+    public partial class Config1101IrDistance : PhidgetConfigControl
     {
         public double TopValue;
         public double BottomValue;
 
-        public Config1101IRDistance(double topValue, double bottomValue)
+        public Config1101IrDistance(double topValue, double bottomValue)
         {
             this.TopValue = topValue;
             this.BottomValue = bottomValue;

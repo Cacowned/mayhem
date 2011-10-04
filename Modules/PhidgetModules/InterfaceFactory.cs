@@ -36,7 +36,7 @@ namespace PhidgetModules
             }
         }
 
-        public static IR IR
+        public static IR Ir
         {
             get
             {

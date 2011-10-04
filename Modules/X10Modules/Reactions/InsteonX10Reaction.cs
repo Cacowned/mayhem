@@ -50,7 +50,7 @@ namespace X10Modules.Reactions
 
         protected override void OnAfterLoad()
         {
-            serial = MayhemSerialPortMgr.instance;
+            serial = MayhemSerialPortMgr.Instance;
             if (serial.PortExists(this.serialPortName))
             {
                 x10Controller = X10Controller.ControllerForPortName(serialPortName);

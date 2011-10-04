@@ -17,13 +17,13 @@ namespace MayhemOpenCVWrapper
      * */
     public class CameraInfo
     {
-        public int deviceId;
-        public string description;
+        public int DeviceId;
+        public string Description;
 
         public CameraInfo(int id, string descr)
         {
-            deviceId = id;
-            description = descr;
+            DeviceId = id;
+            Description = descr;
         }
 
         public string FriendlyName()
@@ -33,7 +33,7 @@ namespace MayhemOpenCVWrapper
 
         public override string ToString()
         {
-            return "" + deviceId + " : " + description;
+            return "" + DeviceId + " : " + Description;
         }
 
         public static CameraInfo DummyInfo()

@@ -9,7 +9,6 @@ namespace MayhemCore
 	/// Helper methods for Event and Reaction lists
 	/// </summary>
 	/// <typeparam name="T">EventBase or ReactionBase</typeparam>
-	/// <typeparam name="V">The interface type that modules must implement</typeparam>
     internal abstract class ModuleList<T> : List<ModuleType>
 	{
         private List<Type> allTypes = new List<Type>();
@@ -67,8 +66,8 @@ namespace MayhemCore
                                 }
                                 else
                                 {
-                                    ///TODO: Do something to tell the developer the module has an error
-                                   // throw new Exception("Module does not have MayhemModuleAttribute attribute set:\n" + type.FullName);
+                                    //TODO: Do something to tell the developer the module has an error
+                                    //throw new Exception("Module does not have MayhemModuleAttribute attribute set:\n" + type.FullName);
                                 }
                             }
                             allTypes.Add(type);

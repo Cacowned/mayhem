@@ -40,7 +40,7 @@ namespace VisionModules.Wpf
         {
             cam = c;
             InitializeComponent();
-            DeviceList.SelectedIndex = c.Info.deviceId;
+            DeviceList.SelectedIndex = c.Info.DeviceId;
         }
 
         public override void OnLoad()
@@ -60,7 +60,7 @@ namespace VisionModules.Wpf
 
             if (i.DeviceCount > 0)
             {
-                int camera_index = (selected_camera != null && selected_camera.Info.deviceId < i.DeviceCount) ? selected_camera.Info.deviceId : 0;
+                int camera_index = (selected_camera != null && selected_camera.Info.DeviceId < i.DeviceCount) ? selected_camera.Info.DeviceId : 0;
 
                 // start the camera 0 if it isn't already running
                 cam = i.CamerasAvailable[camera_index];
@@ -74,7 +74,7 @@ namespace VisionModules.Wpf
 
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.OnImageUpdated += i_OnImageUpdated;
-                if (!cam.running)
+                if (!cam.Running)
                 {             
                 ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
                     {                   
@@ -148,14 +148,14 @@ namespace VisionModules.Wpf
                 Logger.WriteLine("Switching Cam to " + selected_cam.Info.FriendlyName());
 
                 cam.OnImageUpdated -= i_OnImageUpdated;
-                if (cam.running)
+                if (cam.Running)
                     cam.TryStopFrameGrabbing();
 
                 // switch the camera display
                 cam = selected_cam;
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.OnImageUpdated += i_OnImageUpdated;
-                if (!cam.running)
+                if (!cam.Running)
                 {
                     ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
                     {

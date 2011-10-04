@@ -19,20 +19,20 @@ using Point = System.Drawing.Point;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public class FaceDetectorComponent : ICameraImageListener
+    public class FaceDetectorComponent : CameraImageListener
     {
         private FaceDetector fd; 
         public delegate void DetectionHandler(object sender, List<Point> points);
         public event DetectionHandler OnFaceDetected;
         
         private int frameCount = 0;
-        private const bool VERBOSE_DEBUG = true;
-        public Rect detectionBoundary = new Rect(0, 0, 0, 0);
+        private const bool VerboseDebug = true;
+        public Rect DetectionBoundary = new Rect(0, 0, 0, 0);
 
         public FaceDetectorComponent(ImagerBase c)
         {
-            int width = c.Settings.resX;
-            int height = c.Settings.resY;
+            int width = c.Settings.ResX;
+            int height = c.Settings.ResY;
             Logger.WriteLine("Face Detector: w {0} h {1}", width, height);
             fd = new FaceDetector(width, height);
         }
@@ -48,7 +48,7 @@ namespace MayhemOpenCVWrapper.LowLevel
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public override void update_frame(object sender, EventArgs e)
+        public override void UpdateFrame(object sender, EventArgs e)
         {
             Logger.WriteLine("frame nr "+frameCount);
             frameCount++;
@@ -56,11 +56,11 @@ namespace MayhemOpenCVWrapper.LowLevel
             int[] faceCoords = new int[1024];
             int numFacesCoords = 0;
 
-            lock (camera.thread_locker)
+            lock (camera.ThreadLocker)
             {
                 unsafe
                 {
-                    fixed (byte* ptr = camera.imageBuffer)
+                    fixed (byte* ptr = camera.ImageBuffer)
                     {
                         fixed (int* buf = faceCoords)
                         {
@@ -70,7 +70,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 }
             }
 
-            Logger.WriteLineIf(VERBOSE_DEBUG, ">>>>> Got " + numFacesCoords+ " face coords ");
+            Logger.WriteLineIf(VerboseDebug, ">>>>> Got " + numFacesCoords+ " face coords ");
 
             // no need to do further work if no faces have been detected
             // update listeners with an empty list to inform them that nothing has been detected
@@ -89,7 +89,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             {
                 Point p1 = new Point(faceCoords[cpIdx++], faceCoords[cpIdx++]);
                 Point p2 = new Point(faceCoords[cpIdx++], faceCoords[cpIdx++]);
-                Logger.WriteLineIf(VERBOSE_DEBUG, "Point 1: " + p1 + " Point 2: " + p2);
+                Logger.WriteLineIf(VerboseDebug, "Point 1: " + p1 + " Point 2: " + p2);
 
                 points.Add(p1);
                 points.Add(p2);
@@ -98,7 +98,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             if (OnFaceDetected != null && /* points.Count() > 0 &&*/ frameCount > 20)
             {
                 // fire immediately on empty bounding rect
-                if (detectionBoundary.Width == 0 && detectionBoundary.Height == 0)
+                if (DetectionBoundary.Width == 0 && DetectionBoundary.Height == 0)
                 {
                     if (OnFaceDetected != null)
                          OnFaceDetected(this, points);
@@ -122,7 +122,7 @@ namespace MayhemOpenCVWrapper.LowLevel
 
                     Rect dataBounds = new Rect(pMin.X, pMin.Y, pMax.X - pMin.X, pMax.Y - pMin.Y);
 
-                    if (dataBounds.IntersectsWith(detectionBoundary))
+                    if (dataBounds.IntersectsWith(DetectionBoundary))
                     {
                         if (OnFaceDetected != null)
                             OnFaceDetected(this, points);
@@ -141,12 +141,12 @@ namespace MayhemOpenCVWrapper.LowLevel
         {
             if (!r.IsEmpty || r.Width != 0 || r.Height != 0)
             {
-                detectionBoundary = r;
+                DetectionBoundary = r;
             }
             else
             {
                 // default to an "empty" rectangle
-                detectionBoundary = new Rect(0, 0, 0, 0);
+                DetectionBoundary = new Rect(0, 0, 0, 0);
             }
         }
 
