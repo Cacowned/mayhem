@@ -177,8 +177,8 @@
                 <Image Source="/Images/header.png" Width="641" Height="137" />
                 <!--<Border BorderThickness="1" CornerRadius="20,20,20,20" BorderBrush="#D7D9DE" Padding="0,0,0,2">-->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="25,10,0,0">
-                    <Button Name="buttonEmptyEvent" Content="Create Event" Style="{StaticResource EmptyEventButton}" Width="243" Height="46" Click="EventListClick" Margin="0,0,0,0" Focusable="False" Cursor="Hand" />
-                    <Button Name="buttonEmptyReaction" Content="Create Reaction" Style="{StaticResource EmptyReactionButton}" Width="243" Height="46" Click="ReactionListClick" Margin="-10,0,0,0" Focusable="False" Cursor="Hand" />
+                    <Button Name="buttonEmptyEvent" Content="Choose Event" Style="{StaticResource EmptyEventButton}" Width="243" Height="46" Click="EventListClick" Margin="0,0,0,0" Focusable="False" Cursor="Hand" />
+                    <Button Name="buttonEmptyReaction" Content="Choose Reaction" Style="{StaticResource EmptyReactionButton}" Width="243" Height="46" Click="ReactionListClick" Margin="-10,0,0,0" Focusable="False" Cursor="Hand" />
                 </StackPanel>
 
                 <Border BorderThickness="1" CornerRadius="10,10,10,10" BorderBrush="#D7D9DE" Background="#A2A6AF" Margin="10,15,10,0" Padding="0.1" >

@@ -234,8 +234,8 @@ namespace Mayhem
 
                 buttonEmptyReaction.Style = (Style)FindResource("EmptyReactionButton");
                 buttonEmptyEvent.Style = (Style)FindResource("EmptyEventButton");
-                buttonEmptyReaction.Content = "Create Reaction";
-                buttonEmptyEvent.Content = "Create Event";
+                buttonEmptyReaction.Content = "Choose Reaction";
+                buttonEmptyEvent.Content = "Choose Event";
 
                 _event = null;
                 this.reaction = null;
