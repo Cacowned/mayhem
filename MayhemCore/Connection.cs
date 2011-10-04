@@ -69,7 +69,7 @@ namespace MayhemCore
             // to check if we are enabled.
             if (IsEnabled)
             {
-                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => Reaction.Perform()));
+                ThreadPool.QueueUserWorkItem(o => Reaction.Perform());
             }
         }
 
@@ -92,7 +92,7 @@ namespace MayhemCore
 
         private void Enable_(EnablingEventArgs e, Action actionOnComplete)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => EnableOnThread(e, actionOnComplete)));
+            ThreadPool.QueueUserWorkItem(o => EnableOnThread(e, actionOnComplete));
         }
 
         private void EnableOnThread(EnablingEventArgs e, Action actionOnComplete)
@@ -140,7 +140,7 @@ namespace MayhemCore
                 return;
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DisableOnThread(e, actionOnComplete)));
+            ThreadPool.QueueUserWorkItem(o => DisableOnThread(e, actionOnComplete));
         }
 
         private void DisableOnThread(DisabledEventArgs e, Action actionOnComplete)

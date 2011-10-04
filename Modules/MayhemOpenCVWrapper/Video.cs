@@ -76,7 +76,7 @@ namespace MayhemOpenCVWrapper
                 }
               
                 // add the frames
-                ThreadPool.QueueUserWorkItem(new WaitCallback(TAddFrames));         
+                ThreadPool.QueueUserWorkItem(TAddFrames);         
             }
         }
 
@@ -84,7 +84,7 @@ namespace MayhemOpenCVWrapper
         /// Write out the video in a background thread
         /// </summary>
         /// <param name="state"></param>
-        private void TAddFrames(Object state)
+        private void TAddFrames(object state)
         {
             Logger.WriteLine("Adding Frames");
             foreach (BitmapTimestamp img in video_frames)
