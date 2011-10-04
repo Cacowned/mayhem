@@ -32,6 +32,12 @@ namespace MayhemOpenCVWrapper
         private static int instances = 0;       // static counter of camera instances intialized
         
         private int index = instances++;       // should be incremented on instantiation
+
+        public static readonly double LOOP_BUFFER_UPDATE_MS = 250.0;  // update the loop only every quarter second -- this should be sufficient for the Picture Event
+        private DateTime loopBufferLastUpdate = DateTime.Now;
+
+        private VideoDiskBuffer videoDiskBuffer = new VideoDiskBuffer(); 
+
         public int Index
         {
             get { return index;}
@@ -109,6 +115,14 @@ namespace MayhemOpenCVWrapper
                     }
                 }
                 return itemsOut;
+            }
+        }
+
+        public List<Bitmap> videoDiskBufferItems
+        {
+            get
+            {
+                return videoDiskBuffer.RetrieveBitmapsFromDisk();
             }
         }
 
@@ -233,7 +247,11 @@ namespace MayhemOpenCVWrapper
                 Logger.WriteLine(" shutting down camera");
                 //  Stop device
                 StopGrabbing();
-                this.Running = false;           
+                this.Running = false;  
+         
+                // clear disk video frame buffer
+                videoDiskBuffer.ClearAndResetBuffer();
+
                 return true;
             }
             else
@@ -314,17 +332,27 @@ namespace MayhemOpenCVWrapper
 
                     lock (ThreadLocker)
                     {
-                        if (loopBuffer.Count < loopBufferMaxLength)
+                        DateTime now = DateTime.Now; 
+                        TimeSpan last_update  = now - this.loopBufferLastUpdate;                   
+                        if ( last_update.TotalMilliseconds >= LOOP_BUFFER_UPDATE_MS)
                         {
-                            loopBuffer.Enqueue(new BitmapTimestamp(ImageAsBitmap()));
-                        }
-                        else
-                        {
-                            BitmapTimestamp destroyMe = loopBuffer.Dequeue();
-                            destroyMe.Dispose();
-                            loopBuffer.Enqueue(new BitmapTimestamp(ImageAsBitmap()));
+                            this.loopBufferLastUpdate = DateTime.Now;
+                            if (loopBuffer.Count < loopBufferMaxLength)
+                            {
+                                loopBuffer.Enqueue(new BitmapTimestamp(ImageAsBitmap()));
+                            }
+                            else
+                            {
+                                BitmapTimestamp destroyMe = loopBuffer.Dequeue();
+                                destroyMe.Dispose();
+                                loopBuffer.Enqueue(new BitmapTimestamp(ImageAsBitmap()));
+                            }
                         }
                     }
+
+                    //// Experimental
+                    videoDiskBuffer.AddBitmap(ImageAsBitmap());
+                    ////
 
                     if (Running)
                     {

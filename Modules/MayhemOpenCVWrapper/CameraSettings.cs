@@ -54,7 +54,7 @@ namespace MayhemOpenCVWrapper
 
         public static CameraSettings Defaults()
         {
-            return CameraSettings.Defaults320();
+            return CameraSettings.Defaults640();
         }
 
         /// <summary>
