@@ -1,7 +1,7 @@
 ﻿
 namespace WindowModules
 {
-    public interface WindowActionConfigControl
+    public interface IWindowActionConfigControl
     {
         void Save();
     }

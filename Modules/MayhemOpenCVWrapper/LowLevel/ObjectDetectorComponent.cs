@@ -18,52 +18,44 @@ using Point = System.Drawing.Point;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public class ObjectDetectorComponent : ICameraImageListener
+    public class ObjectDetectorComponent : CameraImageListener
     {
         public delegate void DetectionHandler(object sender, List<Point> points);
         public event DetectionHandler OnObjectDetected;
 
         //private Camera.ImageUpdateHandler imageUpdateHandler;
         private int frameCount = 0;
-
         private Bitmap templateImg = null; 
-
         private SURFObjectDetector od;
 
         // prerequisite for this module to work is a set image template
-        public bool templateIsSet = false;
-
-
+        public bool TemplateIsSet = false;
         
         // detection threshold --> TODO: make changeable by GUI
-        public int DETECT_THRESH = 4;
+        public int DetectThresh = 4;
 
-        private Point[] lastCornerPoints_ = null;
-        public Point[] lastCornerPoints
+        public Point[] LastCornerPoints
         {
-            get { return lastCornerPoints_; }
-            set { }
+            get; 
+            private set ;
         }
 
-        private List<Point> templateKeyPoints_ = null;
-        public List<Point> templateKeyPoints
+        public List<Point> TemplateKeyPoints
         {
-            get { return templateKeyPoints_; }
-            set {}
+            get; 
+            private set;
         }
 
-        private List<Point> lastImageKeyPoints_ = null;
-        public List<Point> lastImageKeyPoints
+        public List<Point> LastImageKeyPoints
         {
-            get { return lastImageKeyPoints_; }
-            set {}
+            get;
+            private set; 
         }
 
-        private List<Point> lastImageMatchingPoints_ = null;
-        public List<Point> lastImageMatchingPoints 
+        public List<Point> LastImageMatchingPoints 
         {
-            get { return lastImageMatchingPoints_;}
-            set {}
+            get;
+            private set; 
         }
 
         public ObjectDetectorComponent(int width, int height)
@@ -75,7 +67,7 @@ namespace MayhemOpenCVWrapper.LowLevel
         *  Method to set the template image for the object detector
         * </summary>
         */
-        public void set_template(Bitmap templateImage)
+        public void SetTemplate(Bitmap templateImage)
         {
            
             templateImg = templateImage;
@@ -85,51 +77,51 @@ namespace MayhemOpenCVWrapper.LowLevel
 
             if (templateImage.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
             {
-                int buf_size = w * h * 3;
-                byte[] img_buf = new byte[buf_size];
+                int bufSize = w * h * 3;
+                byte[] imgBuf = new byte[bufSize];
                 Rectangle rect  = new Rectangle(0,0, w,h);
                 System.Drawing.Imaging.BitmapData bmpData =
                     templateImage.LockBits( rect, 
                                             System.Drawing.Imaging.ImageLockMode.ReadOnly, 
                                             templateImage.PixelFormat);
 
-                IntPtr data_ptr = bmpData.Scan0;
+                IntPtr dataPtr = bmpData.Scan0;
 
                 // copy image data to buffer
-                Marshal.Copy(data_ptr, img_buf, 0, buf_size);
+                Marshal.Copy(dataPtr, imgBuf, 0, bufSize);
                 templateImage.UnlockBits(bmpData);
 
                 // call c++ code
                 unsafe
                 {
-                    fixed (byte* ptr = img_buf)
+                    fixed (byte* ptr = imgBuf)
                     {
                         od.AddTemplate(w, h, ptr);
                     }
                 }
-                templateIsSet = true;
+                TemplateIsSet = true;
             }
             else
             {
                 Logger.WriteLine("Pixel Format not supported yet!");
-                templateIsSet = false;
+                TemplateIsSet = false;
                 throw(new NotImplementedException());
             }
         }
 
-        public override void update_frame(object sender, EventArgs e)
+        public override void UpdateFrame(object sender, EventArgs e)
         {
             Logger.WriteLine("frame nr " + frameCount++);
             Camera camera = sender as Camera;
 
-            if (templateIsSet)
+            if (TemplateIsSet)
             {
                 // transmit frame
-                lock (camera.thread_locker)
+                lock (camera.ThreadLocker)
                 {
                     unsafe
                     {
-                        fixed (byte* ptr = camera.imageBuffer)
+                        fixed (byte* ptr = camera.ImageBuffer)
                         {
                             od.ProcessFrame(ptr);
                         }
@@ -150,13 +142,13 @@ namespace MayhemOpenCVWrapper.LowLevel
 
                 unsafe
                 {
-                    fixed (OpenCVDLL.SURFKeyPoint* tk_ptr = tKeyPoints)
+                    fixed (OpenCVDLL.SURFKeyPoint* tkPtr = tKeyPoints)
                     {
-                        fixed (OpenCVDLL.SURFKeyPoint* ik_ptr = iKeyPoints)
+                        fixed (OpenCVDLL.SURFKeyPoint* ikPtr = iKeyPoints)
                         {
-                            fixed (int* pair_ptr = matchPairIndices)
+                            fixed (int* pairPtr = matchPairIndices)
                             {
-                                od.getKeypointsAndMatches(tk_ptr, &nTKeyPts, ik_ptr, &nIKeyPts, pair_ptr, &nMatchingPairs);
+                                od.getKeypointsAndMatches(tkPtr, &nTKeyPts, ikPtr, &nIKeyPts, pairPtr, &nMatchingPairs);
                             }
                         }
                     }
@@ -172,7 +164,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 {
                     tempKeyPoints.Add(new Point((int) tKeyPoints[i].x, (int) tKeyPoints[i].y));
                 }
-                this.templateKeyPoints_ = tempKeyPoints;
+                this.TemplateKeyPoints = tempKeyPoints;
 
                 // image key points
                 List<Point> imageKeyPoints = new List<Point>();
@@ -180,7 +172,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 {
                     imageKeyPoints.Add(new Point((int)iKeyPoints[i].x, (int)iKeyPoints[i].y));
                 }
-                this.lastImageKeyPoints_ = imageKeyPoints;
+                this.LastImageKeyPoints = imageKeyPoints;
 
                 // point correspondences
                 for (int i = 0; i < nMatchingPairs; i+=2)
@@ -195,11 +187,11 @@ namespace MayhemOpenCVWrapper.LowLevel
 
                 for (int i = 0; i < nMatchingPairs; i+=2)
                 {
-                    int t_idx = matchPairIndices[i];
-                    int i_idx = matchPairIndices[i+1];
+                    int tIdx = matchPairIndices[i];
+                    int iIdx = matchPairIndices[i+1];
 
-                    OpenCVDLL.SURFKeyPoint tPpt = tKeyPoints[t_idx];
-                    OpenCVDLL.SURFKeyPoint iPpt = iKeyPoints[i_idx];
+                    OpenCVDLL.SURFKeyPoint tPpt = tKeyPoints[tIdx];
+                    OpenCVDLL.SURFKeyPoint iPpt = iKeyPoints[iIdx];
 
                     Point tPoint = new Point((int)tPpt.x, (int)tPpt.y);
                     Point iPoint = new Point((int)iPpt.x, (int)iPpt.y);
@@ -208,7 +200,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                     imageMatchingPoints.Add(iPoint);
                 }
 
-                lastImageMatchingPoints_ = imageMatchingPoints;
+                LastImageMatchingPoints = imageMatchingPoints;
 
                 // planar object correspondence
                 int[] cornerPoints = new int[8];
@@ -224,21 +216,21 @@ namespace MayhemOpenCVWrapper.LowLevel
                 // assign the retrieved cornerpoints 
                 if (res > 0)
                 {
-                    lastCornerPoints_ = new Point[4];
+                    LastCornerPoints = new Point[4];
                     int j = 0;
                     for (int k = 0; k < 4; k++)
                     {
                         Point cp = new Point(cornerPoints[j++], cornerPoints[j++]);
-                        lastCornerPoints_[k] = cp;
+                        LastCornerPoints[k] = cp;
                     }
                 }
                 else
                 {
-                    lastCornerPoints_ = null; 
+                    LastCornerPoints = null; 
                 }
 
                 // TODO: --------------------- firing mechanism
-                if (OnObjectDetected != null && imageMatchingPoints.Count>= DETECT_THRESH && frameCount > 20)
+                if (OnObjectDetected != null && imageMatchingPoints.Count>= DetectThresh && frameCount > 20)
                 {
                     OnObjectDetected(this, imageMatchingPoints);
                 }

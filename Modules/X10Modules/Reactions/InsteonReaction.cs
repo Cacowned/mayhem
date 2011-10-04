@@ -47,9 +47,9 @@ namespace X10Modules.Reactions
 
         protected override void OnAfterLoad()
         {
-            serial = MayhemSerialPortMgr.instance;
+            serial = MayhemSerialPortMgr.Instance;
             // TODO evaluate is Serial.findInsteonDevices may be 
-            if (serial.getInsteonPortNames().Keys.Contains(portName))
+            if (serial.GetInsteonPortNames().Keys.Contains(portName))
             {
                 insteonController = InsteonController.ControllerForPortName(portName); //new InsteonController(portName);
             }

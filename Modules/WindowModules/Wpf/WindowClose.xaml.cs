@@ -6,7 +6,7 @@ namespace WindowModules.Wpf
     /// <summary>
     /// Interaction logic for WindowMove.xaml
     /// </summary>
-    public partial class WindowClose : UserControl, WindowActionConfigControl
+    public partial class WindowClose : UserControl, IWindowActionConfigControl
     {
         WindowActionClose action;
 

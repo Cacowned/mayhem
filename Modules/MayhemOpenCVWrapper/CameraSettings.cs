@@ -18,18 +18,18 @@ namespace MayhemOpenCVWrapper
     /// </summary>
     public class CameraSettings
     {
-        public int resX
+        public int ResX
         {
             get;
             private set;
         }
-        public int resY
+        public int ResY
         {
             get;
             private set; 
         }
     
-        public int updateRate_ms
+        public int UpdateRateMs
         {
             get;
             private set;
@@ -37,31 +37,31 @@ namespace MayhemOpenCVWrapper
 
         protected CameraSettings(int w, int h, int updateRate)
         {
-            resX = w;
-            resY = h;
-            updateRate_ms = updateRate; 
+            ResX = w;
+            ResY = h;
+            UpdateRateMs = updateRate; 
         }
 
         /// <summary>
         /// 320x240 resolution, 20 FPS update rate
         /// </summary>
         /// <returns></returns>
-        public static CameraSettings DEFAULTS_320()
+        public static CameraSettings Defaults320()
         {
             CameraSettings cs = new CameraSettings(320, 240, 50);
             return cs;
         }
 
-        public static CameraSettings DEFAULTS()
+        public static CameraSettings Defaults()
         {
-            return CameraSettings.DEFAULTS_320();
+            return CameraSettings.Defaults320();
         }
 
         /// <summary>
         /// 640x480 resolution, 20 FPS update rate
         /// </summary>
         /// <returns></returns>
-        public static CameraSettings DEFAULTS_640()
+        public static CameraSettings Defaults640()
         {
             CameraSettings cs = new CameraSettings(640, 480, 50);
             return cs;

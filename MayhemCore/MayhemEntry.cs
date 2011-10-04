@@ -6,11 +6,6 @@ namespace MayhemCore
     /// 
     /// When making a new app that uses Mayhem, you should create an instance of this class
     /// </summary>
-    /// <typeparam name="T">
-    /// The interface that modules must implement if they have
-    /// a configuration window. If they don't implement a configuration
-    /// window, they don't have to implement this class
-    /// </typeparam>
     public class MayhemEntry
     {
         internal ConnectionList ConnectionList
@@ -35,18 +30,17 @@ namespace MayhemCore
             private set;
         }
 
-        private static MayhemEntry _instance;
-
+        private static MayhemEntry instance;
         public static MayhemEntry Instance
         {
             get
             {
-                if (_instance == null)
+                if (instance == null)
                 {
-                    _instance = new MayhemEntry();
+                    instance = new MayhemEntry();
                 }
 
-                return _instance;
+                return instance;
             }
         }
 

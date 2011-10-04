@@ -6,7 +6,7 @@ namespace WindowModules.Wpf
     /// <summary>
     /// Interaction logic for WindowMove.xaml
     /// </summary>
-    public partial class WindowMinimize : UserControl, WindowActionConfigControl
+    public partial class WindowMinimize : UserControl, IWindowActionConfigControl
     {
         WindowActionMinimize action;
 

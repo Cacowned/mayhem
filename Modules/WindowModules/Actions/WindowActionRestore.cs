@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace WindowModules.Actions
 {
     [DataContract]
-    public class WindowActionRestore : WindowAction
+    public class WindowActionRestore : IWindowAction
     {
         public void Perform(IntPtr window)
         {
