@@ -87,8 +87,10 @@ namespace PhoneModules
                 {
                     AutoResetEvent a = new AutoResetEvent(false);
                     resetEvents[key] = a;
+                    update = false;
                 }
             }
+            Logger.WriteLine(update);
             if (!update)
             {
                 resetEvents[key].Reset();
@@ -113,7 +115,6 @@ namespace PhoneModules
                     Interlocked.Decrement(ref numToKill);
                     if (isShuttingDown)
                     {
-                        Logger.WriteLine("Killed service " + numToKill);
                         if (numToKill == 0)
                             killResetEvent.Set();
                         return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));
