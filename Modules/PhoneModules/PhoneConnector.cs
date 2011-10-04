@@ -128,13 +128,13 @@ namespace PhoneModules
 
             MayhemService svc = new MayhemService();
             svc.EventCalled += new MayhemService.EventCalledHandler(service_EventCalled);
-            if (true)
-            {
+            //if (true)
+            //{
                 string insideDiv;
                 string html = PhoneLayout.Instance.SerializeToHtml(includeButtons, out insideDiv);
                 svc.SetHtml(html);
                 svc.SetInsideDiv(insideDiv);
-            }
+            //}
 
             host = new WebServiceHost(svc, address);
 
@@ -160,7 +160,10 @@ namespace PhoneModules
             {
                 port = (INetFwOpenPort)enumerate.Current;
                 if (port.Port == PortNumber)
+                {
                     portFound = true;
+                    break;
+                }
             }
             if (!portFound || !ACLHelper.FindUrlPrefix("http://+:" + PortNumber + "/"))
             {
@@ -183,6 +186,7 @@ namespace PhoneModules
 
             WebChannelFactory<IMayhemService> myChannelFactory = new WebChannelFactory<IMayhemService>(new Uri(address.ToString()));
             service = myChannelFactory.CreateChannel();
+            service.Html(false);
 
             return true;
         }

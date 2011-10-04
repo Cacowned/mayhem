@@ -1,17 +1,7 @@
 ﻿<UserControl x:Class="Mayhem.UserControls.MayhemHeader"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Border BorderThickness="0,0,0,1" BorderBrush="White">
-        <Border BorderThickness="0,0,0,1" BorderBrush="Black">
-            <Grid Style="{StaticResource HeaderBackground}">
-                <Grid.RowDefinitions>
-                    <RowDefinition MinHeight="60" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Image Source="../Images/banner.png" Width="645" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" />
+            <Grid Style="{StaticResource HeaderBackground}" Height="137" >
+                <Image Source="../Images/header.png" Width="641" Height="137" />
             </Grid>
-        </Border>
-    </Border>
 </UserControl>
