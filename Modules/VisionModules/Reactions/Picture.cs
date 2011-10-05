@@ -90,13 +90,14 @@ namespace VisionModules.Reactions
         protected override void OnEnabling(EnablingEventArgs e)
         {
             cameraDriver = CameraDriver.Instance;
-            // TODO: Improve this code
+            Logger.WriteLine("");
             if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];            
-                camera.StartFrameGrabbing();
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 dummyListener.RegisterForImages(camera);
             }
+            if (camera.Running == false)
+                camera.StartFrameGrabbing();
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
@@ -190,8 +191,10 @@ namespace VisionModules.Reactions
 
             if (cameraDriver.CamerasAvailable.Count > camera_index)
             {
-                // assign selected cam
+                // unregister, because camera might have changed
+                dummyListener.UnregisterForImages(camera);
                 camera = cameraDriver.CamerasAvailable[camera_index];
+                dummyListener.RegisterForImages(camera);
                 selectedDeviceIndex = camera_index;
             }
             else

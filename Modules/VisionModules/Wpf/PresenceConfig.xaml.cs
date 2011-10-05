@@ -125,11 +125,6 @@ namespace VisionModules.Wpf
             camera_selector.deviceList.SelectedIndex = selectedIndex;
         }
 
-        public override void OnClosing()
-        {
-            camera_selector.OnClosing();
-        }
-
         public override void OnSave()
         {
             camera_selected_ = camera_selector.selected_camera; 

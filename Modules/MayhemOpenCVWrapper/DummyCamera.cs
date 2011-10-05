@@ -20,7 +20,11 @@ namespace MayhemOpenCVWrapper
         public override event ImageUpdateHandler OnImageUpdated;
 
         private  CameraInfo info = CameraInfo.DummyInfo();
-        public override CameraInfo Info { get; protected set; }
+        public override CameraInfo Info 
+        { 
+            get; 
+            protected set; 
+        }
 
         public override CameraSettings Settings
         {

@@ -29,52 +29,84 @@ namespace MayhemOpenCVWrapper
     public class Camera : ImagerBase, IBufferingImager
     {
         #region Fields and Properties
-        private static int instances = 0;       // static counter of camera instances intialized
-        
-        private int index = instances++;       // should be incremented on instantiation
-
-        public static readonly double LOOP_BUFFER_UPDATE_MS = 250.0;  // update the loop only every quarter second -- this should be sufficient for the Picture Event
+        // static counter of camera instances intialized
+        private static int instances = 0;
+        // increment on instantiation 
+        private int index = instances++;           
         private DateTime loopBufferLastUpdate = DateTime.Now;
+        private VideoDiskBuffer videoDiskBuffer = new VideoDiskBuffer();
+        
+        // update rate (ms) with which the camera thread requests new images
+        private int FrameInterval;
+        // update the loop only every quarter second -- this should be sufficient for the Picture Event
+        public static readonly double LOOP_BUFFER_UPDATE_MS = 250.0;
+        // store LOOP_DURATION ms of footage in the past/future
+        public const int LoopDuration = 30000;
+        // calculate amount of storage needed for the given duration 
+        private readonly int loopBufferMaxLength = LoopDuration / CameraSettings.Defaults().UpdateRateMs;
+        // fifo buffer that stores last x images
+        private Queue<BitmapTimestamp> loopBuffer = new Queue<BitmapTimestamp>();
+        // check for thread termination   
+        private ManualResetEvent grabFramesReset;
 
-        private VideoDiskBuffer videoDiskBuffer = new VideoDiskBuffer(); 
-
+        /// <summary>
+        /// Return index of camera device
+        /// </summary>
         public int Index
         {
             get { return index;}
         }
 
+        /// <summary>
+        /// The Camera's running state.
+        /// </summary>
         public override bool Running
         {
             get;
             protected set;
         }
 
+        /// <summary>
+        /// The camera info returned from VideoInput. 
+        /// </summary>
         public override CameraInfo Info
         {
             get;
             protected set;
         }
 
+        /// <summary>
+        /// The setting with which the camera was initialized. 
+        /// </summary>
         public override CameraSettings Settings
         {
             get;
             protected set; 
         }
-        public bool IsInitialized = false;      
-        public int BufferSize;
-        public byte[] ImageBuffer;
+
+        /// <summary>
+        /// The buffer storing the current camera image.
+        /// </summary>
+        public byte[] ImageBuffer
+        {
+            get;
+            protected set;
+        }
+
+        /// <summary>
+        /// The size in bytes of the camera buffer. 
+        /// </summary>
+        public int BufferSize
+        {
+            get;
+            private set;
+        }
+        // Public lock object on the image update thread 
         public object ThreadLocker = new object();
+        // Camera initialization state.
+        public bool IsInitialized = false;   
+        // Image update event handler. 
         public override event ImageUpdateHandler OnImageUpdated;
-        // update rate (ms) with which the camera thread requests new images
-        public int FrameInterval;
-        // store LOOP_DURATION ms of footage in the past/future
-        public const int LoopDuration = 30000; 
-        // calculate amount of storage needed for the given duration 
-        private int loopBufferMaxLength = LoopDuration / CameraSettings.Defaults().UpdateRateMs;
-        // fifo buffer that stores last x images
-        private Queue<BitmapTimestamp> loopBuffer = new Queue<BitmapTimestamp>();
-        // check for thread termination   
-        private ManualResetEvent grabFramesReset;
         #endregion
 
         #region Constructor / Destructor
@@ -85,6 +117,9 @@ namespace MayhemOpenCVWrapper
             grabFramesReset = new ManualResetEvent(false);
         }
 
+        /// <summary>
+        /// Destructor. Last chance to stop the camera if it is running. 
+        /// </summary>
         ~Camera()
         {
             Logger.WriteLine("dtor");
@@ -118,6 +153,9 @@ namespace MayhemOpenCVWrapper
             }
         }
 
+        /// <summary>
+        /// Returns item from the on-disk video frame cache. 
+        /// </summary>
         public List<Bitmap> videoDiskBufferItems
         {
             get
@@ -392,7 +430,7 @@ namespace MayhemOpenCVWrapper
         /// <summary>
         /// IBufferingImager Method -- return index image from end of queue 
         /// </summary>
-        /// <param name="index"></param>
+        /// <param name="index">Item Index</param>
         /// <returns></returns>
         public Bitmap GetBufferItemAtIndex(int index)
         {
@@ -410,7 +448,7 @@ namespace MayhemOpenCVWrapper
         /// <summary>
         /// IBufferingImager Method
         /// </summary>
-        /// <param name="index"></param>
+        /// <param name="index">Item Index</param>
         /// <returns></returns>
         public DateTime GetBufferTimeStampAtIndex(int index)
         {

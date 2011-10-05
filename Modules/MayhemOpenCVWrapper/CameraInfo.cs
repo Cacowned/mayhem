@@ -17,8 +17,16 @@ namespace MayhemOpenCVWrapper
      * */
     public class CameraInfo
     {
-        public int DeviceId;
-        public string Description;
+        public int DeviceId
+        {
+            get;
+            private set; 
+        }
+        public string Description
+        {
+            get;
+            private set; 
+        }
 
         public CameraInfo(int id, string descr)
         {
