@@ -32,11 +32,8 @@ namespace VisionModules.Wpf
         public Camera selected_camera = null;
         private CameraDriver i = null; //CameraDriver.Instance;
         protected List<Camera> cams = new List<Camera>();
-
         public ObservableCollection<ImageBrush> camera_previews = new ObservableCollection<ImageBrush>();
-
         private List<Border> borders = new List<Border>();
-
         private delegate void ImageUpdateHandler(Camera c);
 
         // widths of the preview images
@@ -114,7 +111,8 @@ namespace VisionModules.Wpf
             }
         }
 
-        public  void OnClosing()
+
+        private void OnClosing(object sender, RoutedEventArgs e)
         {
             //cam.OnImageUpdated -= i_OnImageUpdated;
             //cam.TryStopFrameGrabbing();

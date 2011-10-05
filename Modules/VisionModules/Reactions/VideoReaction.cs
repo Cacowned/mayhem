@@ -161,18 +161,19 @@ namespace VisionModules.Reactions
         {
             cameraDriver = CameraDriver.Instance;
             Logger.WriteLine("");
-            if (selectedDeviceIndex < cameraDriver.DeviceCount)
-            {
+            if (!e.WasConfiguring &&  selectedDeviceIndex < cameraDriver.DeviceCount)
+            { 
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 dummyCameraListener.RegisterForImages(camera);
-                if (camera.Running == false)
-                    camera.StartFrameGrabbing();
+                
             }
+            if (camera.Running == false)
+                camera.StartFrameGrabbing();
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            if (camera != null)
+            if (!e.IsConfiguring && camera != null)
             {
                 dummyCameraListener.UnregisterForImages(camera);
                 camera.TryStopFrameGrabbing();
@@ -200,7 +201,10 @@ namespace VisionModules.Reactions
 
             if (cameraDriver.CamerasAvailable.Count > camera_index)
             {
+                // unregister, because camera might have changed
+                dummyCameraListener.UnregisterForImages(camera);
                 camera = cameraDriver.CamerasAvailable[camera_index];
+                dummyCameraListener.RegisterForImages(camera);
                 selectedDeviceIndex = camera_index;
             }
             else
