@@ -5,7 +5,7 @@
  *  This helps reduce Mayhem's memory footprint, as caching high-res video frames in memory consumes
  *  too much memory. 
  *  
- *  Current buffer size on the disk for the chosen block size (1048576 bytes) is about 1GB. 
+ * The space required for caching 600 640x480 bitmaps is about 600mb.
  *  
  *  (c) 2011, Microsoft Applied Sciences Group
  *  
@@ -33,15 +33,22 @@ namespace MayhemOpenCVWrapper
         private readonly string BUFFER_FILENAME;
         private Queue<Bitmap> writeQueue = new Queue<Bitmap>();
         private FileStream fs;
-        private bool accept_frames = true;                   // buffer can accept new frames
-        private int MAX_BUFFER_ITEMS_ = (1000 / CameraSettings.Defaults().UpdateRateMs) * 30 ;           // ensures 30s of footage at 20fps
-        private readonly int MAX_BUFFER_ITEMS; 
-        private const int MAX_QUEUED_BITMAPS = 64;          // max bitmaps allowed in the queue
-        private int currentBlock = 0;                       // ring buffer index
+        // buffer can accept new frames
+        private bool accept_frames = true;                 
+        // ensures 30s of footage at 20fps
+        private int MAX_BUFFER_ITEMS_ = (1000 / CameraSettings.Defaults().UpdateRateMs) * 30 ;          
+        private readonly int MAX_BUFFER_ITEMS;
+        // max bitmaps allowed in the queue
+        private const int MAX_QUEUED_BITMAPS = 64;          
+        // ring buffer index
+        private int currentBlock = 0;                      
         private long[] block_bytes;         
         private object operation_locker = new object();
         private Thread write_thread;
-        private int writtenBlocks = 0; 
+        private int writtenBlocks = 0;
+        private volatile bool threadRunning = true;
+        // when a bitmap is added to the queue, signal the event to let the WriteThread process it 
+        private AutoResetEvent signalNewBitmaps = new AutoResetEvent(false);            
 
         public VideoDiskBuffer()
         {
@@ -57,7 +64,21 @@ namespace MayhemOpenCVWrapper
             fs = new FileStream(BUFFER_FILENAME, FileMode.OpenOrCreate);
             fs.Seek(0, SeekOrigin.Begin);
             write_thread = new Thread(new ThreadStart(this.BufferWriteThread));
-            write_thread.Name = "Video_Disk_Writer";           
+            write_thread.Name = "Video_Disk_Writer";
+            write_thread.Start();
+        }
+
+        /// <summary>
+        /// What we need to do here is to clean up the thread! 
+        /// </summary>
+        ~VideoDiskBuffer()
+        {
+            Logger.WriteLine("Dtor");
+            ClearAndResetBuffer();
+            threadRunning = false;
+            signalNewBitmaps.Set();
+            if (write_thread.ThreadState == ThreadState.Running)
+                write_thread.Join(50);
         }
 
 
@@ -88,16 +109,17 @@ namespace MayhemOpenCVWrapper
             {
                 lock (operation_locker)
                 {
-                    if (write_thread.ThreadState == ThreadState.Running)
-                    {
-                        write_thread.Join(100);
-                    }
                     fs.Close();
                     if (File.Exists(BUFFER_FILENAME))
                         File.Delete(BUFFER_FILENAME);
                     fs = new FileStream(BUFFER_FILENAME, FileMode.OpenOrCreate);
                     fs.Seek(0, SeekOrigin.Begin);
-
+                    // kill the thread while we're at it
+                    threadRunning = false;
+                    signalNewBitmaps.Set();
+                    write_thread.Join(100);
+                    // allow restarts of the thread now
+                    threadRunning = true;
                     // reset indices and counters
                     writtenBlocks = 0;
                     currentBlock = 0;
@@ -110,28 +132,17 @@ namespace MayhemOpenCVWrapper
         {
             if (accept_frames)
             {
-
+                if (write_thread.ThreadState == ThreadState.Stopped)
+                {
+                    //restart the thread
+                    write_thread = new Thread(new ThreadStart(this.BufferWriteThread));
+                    write_thread.Name = "Video_Disk_Writer";
+                    write_thread.Start();
+                }
                 if (writeQueue.Count < MAX_QUEUED_BITMAPS)
                     writeQueue.Enqueue(b);
-                if (write_thread.ThreadState != ThreadState.Running)
-                {
-                    if (write_thread.ThreadState == ThreadState.Unstarted)
-                    {
-                        if (fs.CanWrite)
-                        {
-                            write_thread.Start();
-                        }
-                    }
-                    else if (write_thread.ThreadState == ThreadState.Stopped)
-                    {
-                        write_thread = new Thread(new ThreadStart(this.BufferWriteThread));
-                        write_thread.Name = "Video_Disk_Writer";
-                        if (fs.CanWrite)
-                        {
-                            write_thread.Start();
-                        }
-                    }
-                }
+                // tell the thread to process incoming data
+                signalNewBitmaps.Set();
             }
         }
        
@@ -143,32 +154,33 @@ namespace MayhemOpenCVWrapper
         {
           // Logger.WriteLine("");
             
-            while (writeQueue.Count> 0)
+            while (threadRunning)
             {
-                Bitmap bitmap = writeQueue.Dequeue();
-                MemoryStream ms = new MemoryStream();
-                bitmap.Save(ms, ImageFormat.Bmp);
-                
-                //long next_offset = currentBlock * blockSize;
-
-                long next_offset = GetOffsetForIndex(currentBlock);
-
-                Logger.WriteLine("Writing to Block " + currentBlock + " Offset " + string.Format("{0:x}", next_offset));
-                // lock access to the file
-                lock (operation_locker)
+                if (writeQueue.Count > 0)
                 {
-                    // seek to correct position
-                    fs.Seek(next_offset, SeekOrigin.Begin);
-                    // serialize object in memory
-                    byte[] memBytes = ms.GetBuffer();
-                    fs.Write(memBytes, 0, memBytes.Length);
-                    block_bytes[currentBlock] = memBytes.Length;
+                    Bitmap bitmap = writeQueue.Dequeue();
+                    MemoryStream ms = new MemoryStream();
+                    bitmap.Save(ms, ImageFormat.Bmp);
+                    long next_offset = GetOffsetForIndex(currentBlock);
+                    //Logger.WriteLine("Writing to Block " + currentBlock + " Offset " + string.Format("{0:x}", next_offset));
+                    // lock access to the file
+                    lock (operation_locker)
+                    {
+                        // seek to correct position
+                        fs.Seek(next_offset, SeekOrigin.Begin);
+                        // serialize object in memory
+                        byte[] memBytes = ms.GetBuffer();
+                        fs.Write(memBytes, 0, memBytes.Length);
+                        block_bytes[currentBlock] = memBytes.Length;
+                    }
+                    writtenBlocks++;
+                    // update ring buffer index
+                    currentBlock = (currentBlock + 1) % MAX_BUFFER_ITEMS;
+                    //fs.Flush();
+                    bitmap.Dispose();
                 }
-                writtenBlocks++;
-                // update ring buffer index
-                currentBlock = (currentBlock + 1) % MAX_BUFFER_ITEMS;
-                //fs.Flush();
-                bitmap.Dispose(); 
+                // block thread until signaled (when new data is placed on the queue) 
+                signalNewBitmaps.WaitOne();
             }
         }
 
@@ -199,8 +211,7 @@ namespace MayhemOpenCVWrapper
                 int blck = begin % MAX_BUFFER_ITEMS;
                 if (blck < 0)
                     blck += MAX_BUFFER_ITEMS;
-
-           
+        
                 for (int i = begin; i < end; i++)
                 {
                     //long offset = blck * blockSize;
