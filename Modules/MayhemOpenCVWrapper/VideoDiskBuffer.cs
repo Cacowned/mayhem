@@ -34,11 +34,11 @@ namespace MayhemOpenCVWrapper
         private Queue<Bitmap> writeQueue = new Queue<Bitmap>();
         private FileStream fs;
         private bool accept_frames = true;                   // buffer can accept new frames
-        private int blockSize = 1048576;                     // 1MB
-        private const int MAX_BLOCKS = 512;
+        private int MAX_BUFFER_ITEMS_ = (1000 / CameraSettings.Defaults().UpdateRateMs) * 30 ;           // ensures 30s of footage at 20fps
+        private readonly int MAX_BUFFER_ITEMS; 
         private const int MAX_QUEUED_BITMAPS = 64;          // max bitmaps allowed in the queue
         private int currentBlock = 0;                       // ring buffer index
-        private long[] block_bytes = new long[MAX_BLOCKS];        
+        private long[] block_bytes;         
         private object operation_locker = new object();
         private Thread write_thread;
         private int writtenBlocks = 0; 
@@ -46,13 +46,38 @@ namespace MayhemOpenCVWrapper
         public VideoDiskBuffer()
         {
             inst_cnt++;
-            string bufferfileName_ = "MayhemVideoBuffer" + inst_cnt + ".bin";
+            string bufferfileName_ = "MVidBuf" + inst_cnt + ".bin";
             BUFFER_FILENAME = bufferfileName_;
+            if (MAX_BUFFER_ITEMS_ >= 200 && MAX_BUFFER_ITEMS_ <= 2000)
+                MAX_BUFFER_ITEMS = MAX_BUFFER_ITEMS_;
+            else
+                MAX_BUFFER_ITEMS = 512; 
+            block_bytes = new long[MAX_BUFFER_ITEMS];
+            Logger.WriteLine("MayhemVideoBuffer Nr " + inst_cnt + " filename " + BUFFER_FILENAME + " MAX_BUFFER_ITEMS " + MAX_BUFFER_ITEMS);
             fs = new FileStream(BUFFER_FILENAME, FileMode.OpenOrCreate);
             fs.Seek(0, SeekOrigin.Begin);
             write_thread = new Thread(new ThreadStart(this.BufferWriteThread));
-            write_thread.Name = "Video_Disk_Writer";
+            write_thread.Name = "Video_Disk_Writer";           
         }
+
+
+        /// <summary>
+        /// Calculate the offset by summing up all the buffer positions prior to index. 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private long GetOffsetForIndex(int index)
+        {
+            if (index >= block_bytes.Length || index < 0)
+                throw new NotSupportedException();
+            long offs = 0;
+            for (int i = 0; i < index; i++)
+            {
+                offs += block_bytes[i];
+            }
+            return offs;
+        }
+
 
         /// <summary>
         /// Deletes (clears) buffer file from disk 
@@ -124,8 +149,11 @@ namespace MayhemOpenCVWrapper
                 MemoryStream ms = new MemoryStream();
                 bitmap.Save(ms, ImageFormat.Bmp);
                 
-                long next_offset = currentBlock * blockSize;
-             //   Logger.WriteLine("Writing to Block " + currentBlock + " Offset " + string.Format("{0:x}", next_offset));
+                //long next_offset = currentBlock * blockSize;
+
+                long next_offset = GetOffsetForIndex(currentBlock);
+
+                Logger.WriteLine("Writing to Block " + currentBlock + " Offset " + string.Format("{0:x}", next_offset));
                 // lock access to the file
                 lock (operation_locker)
                 {
@@ -135,10 +163,10 @@ namespace MayhemOpenCVWrapper
                     byte[] memBytes = ms.GetBuffer();
                     fs.Write(memBytes, 0, memBytes.Length);
                     block_bytes[currentBlock] = memBytes.Length;
-                    writtenBlocks++;
                 }
+                writtenBlocks++;
                 // update ring buffer index
-                currentBlock = (currentBlock + 1) % MAX_BLOCKS;
+                currentBlock = (currentBlock + 1) % MAX_BUFFER_ITEMS;
                 //fs.Flush();
                 bitmap.Dispose(); 
             }
@@ -156,9 +184,9 @@ namespace MayhemOpenCVWrapper
             lock (operation_locker)
             {               
                 int begin, end; 
-                if (writtenBlocks >= MAX_BLOCKS)
+                if (writtenBlocks >= MAX_BUFFER_ITEMS)
                 {
-                     begin = currentBlock - MAX_BLOCKS;
+                     begin = currentBlock - MAX_BUFFER_ITEMS;
                      end = currentBlock;
                 }
                 else
@@ -168,23 +196,24 @@ namespace MayhemOpenCVWrapper
                 }
 
                 // fix C# modulo implementation! 
-                int blck = begin % MAX_BLOCKS;
+                int blck = begin % MAX_BUFFER_ITEMS;
                 if (blck < 0)
-                    blck += MAX_BLOCKS;
+                    blck += MAX_BUFFER_ITEMS;
 
            
                 for (int i = begin; i < end; i++)
                 {
-                    long offset = blck * blockSize;
+                    //long offset = blck * blockSize;
+                    long offset = GetOffsetForIndex(blck);
                     int byteCount = (int)block_bytes[blck];
-                    Logger.WriteLine("Deserializing Block " + blck + " offset " + offset + " nr of bytes " + byteCount);
+                    Logger.WriteLine("Deserializing Block " + blck + " offset "+ string.Format("{0:x}", offset) + " nr of bytes " + byteCount);
                     byte[] bytes = new byte[byteCount];
                     fs.Seek(offset, SeekOrigin.Begin);
                     fs.Read(bytes, 0, byteCount);
                     MemoryStream ms = new MemoryStream(bytes);
                     Image img = Image.FromStream(ms);
                     bitmaps.Add(new Bitmap(img));
-                    blck = (blck + 1) % MAX_BLOCKS;
+                    blck = (blck + 1) % MAX_BUFFER_ITEMS;
                 }
             }
             return bitmaps;
