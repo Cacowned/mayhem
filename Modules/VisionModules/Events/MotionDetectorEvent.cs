@@ -124,7 +124,7 @@ namespace VisionModules.Events
             boundingRect = ((MotionDetectorConfig)configurationControl).selectedBoundingRect;
             motionDetectorComponent.SetMotionBoundaryRect(boundingRect);
             // assign selected cam
-            camera = ((MotionDetectorConfig)configurationControl).selected_camera;
+            camera = ((MotionDetectorConfig)configurationControl).CameraSelected;
             selectedDeviceIndex = camera.Info.DeviceId;
         }
 

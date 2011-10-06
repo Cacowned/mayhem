@@ -283,7 +283,7 @@ namespace VisionModules.Wpf
 
 
             BackBuffer.Dispose();
-            VisionModulesWPFCommon.DeleteObject(hBmp);
+            VisionModulesWPFCommon.DeleteGDIObject(hBmp);
         }
 
         /**<summary>
