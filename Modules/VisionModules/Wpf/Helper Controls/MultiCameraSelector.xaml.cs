@@ -30,9 +30,10 @@ namespace VisionModules.Wpf
     public partial class MultiCameraSelector : UserControl
     {
         public Camera selected_camera = null;
+        public ObservableCollection<ImageBrush> camera_previews = new ObservableCollection<ImageBrush>();
+
         private CameraDriver i = null; //CameraDriver.Instance;
         protected List<Camera> cams = new List<Camera>();
-        public ObservableCollection<ImageBrush> camera_previews = new ObservableCollection<ImageBrush>();
         private List<Border> borders = new List<Border>();
         private delegate void ImageUpdateHandler(Camera c);
 
@@ -46,7 +47,7 @@ namespace VisionModules.Wpf
         public delegate void CameraSelectedHandler(Camera c);
         public event CameraSelectedHandler OnCameraSelected;
 
-        public int index = 0;
+ 
 
         private static readonly int DEBUG_LEVEL = 0;
 
@@ -84,9 +85,7 @@ namespace VisionModules.Wpf
                     c.StartFrameGrabbing();
                   
                     Logger.WriteLine("using " + c.Info.ToString());
-                    Logger.WriteLine("Camera IDX " + c.Index);
-                    
-
+                    Logger.WriteLine("Camera IDX " + c.Index);                 
                     Logger.WriteLine("Adding...");
 
                     //camera_preview_panel.Children.Add(canv);
@@ -138,7 +137,7 @@ namespace VisionModules.Wpf
         ///</summary>       
         protected virtual void SetCameraImageSource(Camera cam)
         {
-            Logger.WriteLineIf(DEBUG_LEVEL > 0,"New Image on Camera " + cam.Index + " : " + cam.Info);
+           // Logger.WriteLineIf(DEBUG_LEVEL > 0,"New Image on Camera " + cam.Index + " : " + cam.Info);
 
             Bitmap bm = cam.ImageAsBitmap();
             Bitmap shrink = ImageProcessing.ScaleWithFixedSize(bm, preview_width, preview_height);
@@ -151,7 +150,7 @@ namespace VisionModules.Wpf
             camera_previews[cam.Index].ImageSource = s;
 
             // dispose of all the unneeded data
-            VisionModulesWPFCommon.DeleteObject(hBmp);
+            VisionModulesWPFCommon.DeleteGDIObject(hBmp);
             shrink.Dispose();
             bm.Dispose();
 
@@ -229,8 +228,6 @@ namespace VisionModules.Wpf
                 {
                     selected_index = c.selectedIndex;        
                 }
-
-
 
                 // select a new preview image, if it is a sane alternative
                 if (selected_index < borders.Count)

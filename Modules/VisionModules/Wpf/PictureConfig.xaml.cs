@@ -45,37 +45,39 @@ namespace VisionModules.Wpf
             private set;
         }
 
-        int selectedDeviceIdx_;
         public int SelectedDeviceIdx
         {
             get {return  camera_selector.SelectedIndex;}
             set { selectedDeviceIdx_ = value; }
         }
 
+
         // the selected camera
-        private Camera camera_selected_ = null;
-        public Camera camera_selected
+        public Camera CameraSelected
         {
             get 
             { 
                 int index = SelectedDeviceIdx;
                 return CameraDriver.Instance.CamerasAvailable[index];
             }
+
         }
 
-        public Camera selected_camera = null;
+        // binding to the slider value 
+        public double slider_value
+        {
+            get;
+            private set;
+        }
+
+
+        // for initialization use
+        private Camera camera_selected_ = null;
+
         private CameraDriver i = CameraDriver.Instance;
         protected List<Camera> cams = new List<Camera>();
-        public ObservableCollection<ImageBrush> camera_previews = new ObservableCollection<ImageBrush>();
-
-        // list of borders
-
-        private List<Border> borders = new List<Border>();
-        private delegate void ImageUpdateHandler(Camera c);
-
-        // binding to the slider value 
-        public double slider_value;
-
+        protected int selectedDeviceIdx_;
+       
         public PictureConfig(string location, string prefix,  double capture_offset_time, int deviceIdx)
         {
             this.SaveLocation = location;

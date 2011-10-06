@@ -2,7 +2,7 @@
  * 
  * VideoConfig.cs
  * 
- * Config for the Video Reaction
+ * Config for the Video Reaction. Extends PictureConfig. 
  * 
  * Derives from PictureConfig.cs, so check out the xaml there 
  * 

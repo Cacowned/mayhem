@@ -56,9 +56,7 @@ namespace VisionModules.Reactions
         private CameraDriver cameraDriver = CameraDriver.Instance;
         private Camera camera = null;
         private DummyCameraImageListener dummyCameraListener = new DummyCameraImageListener();
-
         private string lastVideoSaved = String.Empty;
-
         private bool videoSaving = false;
 
         protected override void OnLoadDefaults()

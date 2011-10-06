@@ -80,9 +80,9 @@ namespace VisionModules.Wpf
         {
             // send a frame to the detector
             Logger.WriteLine("Updating Face Detector Points");
-            fd.UpdateFrame(cam, null);
+            fd.UpdateFrame(CameraSelected, null);
 
-            Bitmap BackBuffer = cam.ImageAsBitmap();
+            Bitmap BackBuffer = CameraSelected.ImageAsBitmap();
 
             //int stride = 320 * 3;
             //Bitmap BackBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -156,7 +156,7 @@ namespace VisionModules.Wpf
             // this.camera_image.Source.Freeze();
 
             BackBuffer.Dispose();
-            VisionModulesWPFCommon.DeleteObject(hBmp);
+            VisionModulesWPFCommon.DeleteGDIObject(hBmp);
         }
 
         /**<summary>
