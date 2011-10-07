@@ -14,7 +14,6 @@ namespace DefaultModules.Reactions
     [MayhemModule("Run Program", "Runs a given program")]
     public class RunProgram : ReactionBase, IWpfConfigurable
     {
-        #region Configuration Properties
         [DataMember]
         private string FileName
         {
@@ -28,9 +27,7 @@ namespace DefaultModules.Reactions
             get;
             set;
         }
-        #endregion
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public override void Perform()
         {
             if (File.Exists(FileName))
@@ -62,22 +59,18 @@ namespace DefaultModules.Reactions
             Arguments = rpc.Arguments;
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (File.Exists(FileName))
-            {
-                return true;
-            }
-            else
+            if (!File.Exists(FileName))
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.RunProgram_FileNotFound);
+                e.Cancel = true;
             }
-            return false;
         }
 
         public string GetConfigString()
         {
-            return String.Format(CultureInfo.CurrentCulture, Strings.RunProgram_ConfigString, Path.GetFileName(FileName), Arguments);
+            return String.Format(CultureInfo.CurrentCulture, Strings.RunProgram_ConfigString, Path.GetFileName(FileName));
         }
     }
 }

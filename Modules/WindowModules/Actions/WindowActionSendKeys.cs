@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Threading;
 
 namespace WindowModules.Actions
 {
     [DataContract]
-    public class WindowActionSendKeys : WindowAction
+    public class WindowActionSendKeys : IWindowAction
     {
         internal enum VirtualKeys : uint
         {
@@ -148,8 +144,6 @@ namespace WindowModules.Actions
             KeyList = new List<System.Windows.Forms.Keys>();
         }
 
-        Keys keySpace;
-
         const uint WM_KEYDOWN = 0x100;
 
         const uint WM_KEYUP = 0x101;
@@ -172,14 +166,14 @@ namespace WindowModules.Actions
 
         public void Perform(IntPtr window)
         {
-            for (int i = 0; i < KeyList.Count; i++)
+            foreach (Keys t in KeyList)
             {
-                if (KeyList[i] == Keys.Control || KeyList[i] == Keys.Shift || KeyList[i] == Keys.Alt)
+                if (t == Keys.Control || t == Keys.Shift || t == Keys.Alt)
                 {
-                    byte vk = GetVK(KeyList[i]);
+                    byte vk = GetVK(t);
                     Native.keybd_event(vk, (byte)Native.MapVirtualKey(vk, 0), 0, UIntPtr.Zero);
                 }
-                uint scan = (uint)KeyList[i];
+                uint scan = (uint)t;
                 Native.PostMessage(window, Native.WM_KEYDOWN, scan, 0);
             }
             for (int i = KeyList.Count - 1; i >= 0; i--)

@@ -79,15 +79,6 @@ namespace DefaultModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Triggered!.
-        /// </summary>
-        internal static string Popup_MessageText {
-            get {
-                return ResourceManager.GetString("Popup_MessageText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Could not start the application.
         /// </summary>
         internal static string RunProgram_CantStartProgram {
@@ -97,8 +88,7 @@ namespace DefaultModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File name: &quot;{0}&quot;
-        ///Arguments: &quot;{1}&quot;.
+        ///   Looks up a localized string similar to File name: &quot;{0}&quot;.
         /// </summary>
         internal static string RunProgram_ConfigString {
             get {

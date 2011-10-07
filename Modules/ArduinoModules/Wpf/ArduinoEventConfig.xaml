@@ -2,8 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
-             xmlns:ext="clr-namespace:ArduinoModules.Wpf"
+             xmlns:ext="clr-namespace:ArduinoModules.Wpf.Helpers"
              Width="400" 
+             MinHeight="550"
              Name="root">
     <Grid>
         <StackPanel>

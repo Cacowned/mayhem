@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace X10Modules.Insteon
@@ -55,7 +52,7 @@ namespace X10Modules.Insteon
             // if address has the wrong length throw an exception
             if (address.Length != 3)
                 throw new NotSupportedException();
-            commandBytes = new byte[]{   (byte) 0x02, (byte) 0x62,                  // header for standard command
+            CommandBytes = new byte[]{   (byte) 0x02, (byte) 0x62,                  // header for standard command
                                                 address[0], address[1], address[2], // device address
                                                 0x00,                               //flags (unused)
                                                 c1,                                 // command byte 1
@@ -78,7 +75,7 @@ namespace X10Modules.Insteon
         {
             get
             {
-                return commandByte1 == InsteonCommandBytes._toggle;
+                return commandByte1 == InsteonCommandBytes.Toggle;
             }
         }
 
@@ -90,7 +87,7 @@ namespace X10Modules.Insteon
         { 
             get 
             {
-               return commandByte1 == InsteonCommandBytes.light_on_fast;
+               return commandByte1 == InsteonCommandBytes.LightOnFast;
             }
         }
 
@@ -102,7 +99,7 @@ namespace X10Modules.Insteon
         {
             get
             {
-                return commandByte1 == InsteonCommandBytes.light_off_fast;
+                return commandByte1 == InsteonCommandBytes.LightOffFast;
             }
         }
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace X10Modules.Insteon
 {
@@ -10,22 +6,19 @@ namespace X10Modules.Insteon
     public abstract class InsteonCommandBase
     {
         [DataMember]
-        public byte[] commandBytes = null;
+        public byte[] CommandBytes = null;
 
-        
-
-
-        public int length
+        public int Length
         {
             get
             {
-                if (commandBytes != null)
+                if (CommandBytes != null)
                 {
-                    return commandBytes.Length;
+                    return CommandBytes.Length;
                 }
                 else
                 {
-                    return length;
+                    return Length;
                 }
             }
         }

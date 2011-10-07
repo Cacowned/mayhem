@@ -11,29 +11,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemWpf.UserControls;
-using MayhemOpenCVWrapper;
-using System.Diagnostics;
 using System.Drawing;
-using VisionModules.Events;
 using System.IO;
-using Image = System.Drawing.Image;
-using Point = System.Drawing.Point;
-using System.Drawing.Drawing2D;
-using MayhemOpenCVWrapper.LowLevel;
-using MayhemCore;
 using System.Threading;
+using System.Windows;
+using System.Windows.Documents;
+using MayhemCore;
+using MayhemOpenCVWrapper;
+using MayhemOpenCVWrapper.LowLevel;
+using MayhemWpf.UserControls;
+using VisionModules.Events;
+using Point = System.Drawing.Point;
 
 
 namespace VisionModules.Wpf
@@ -42,7 +30,7 @@ namespace VisionModules.Wpf
     /// Interaction logic for ObjectDetectorConfig.xaml
     /// </summary>
     /// 
-    public partial class ObjectDetectorConfig : WpfConfiguration
+    partial class ObjectDetectorConfig : WpfConfiguration
     {
         public string location;
 
@@ -54,8 +42,6 @@ namespace VisionModules.Wpf
 
         private CameraDriver i = CameraDriver.Instance;
 
-        // handle on the event that will be configured
-        private ObjectDetectorEvent objectDetectorEvent;
 
         // object detector component for visualization use
         private ObjectDetectorComponent od;
@@ -77,9 +63,10 @@ namespace VisionModules.Wpf
                 overlay.DisplayBoundingRect(value);
             }
         }
-        public ObjectDetectorConfig(ObjectDetectorEvent objDetector, object captureDevice)
+
+        public ObjectDetectorConfig()
         {
-            objectDetectorEvent = objDetector;
+            /* objectDetectorEvent = objDetector as ObjectDetector*/;
             InitializeComponent();
         }
 
@@ -90,10 +77,10 @@ namespace VisionModules.Wpf
 
             if (templateImg != null)
             {
-                od.set_template(templateImg);
+                od.SetTemplate(templateImg);
             }
 
-            foreach (Camera c in i.cameras_available)
+            foreach (Camera c in i.CamerasAvailable)
             {
                 DeviceList.Items.Add(c);
             }
@@ -103,8 +90,8 @@ namespace VisionModules.Wpf
             if (i.DeviceCount > 0)
             {
                 // start the camera 0 if it isn't already running
-                cam = i.cameras_available[0];
-                if (!cam.running)
+                cam = i.CamerasAvailable[0];
+                if (!cam.Running)
                 {
                     cam.OnImageUpdated += i_OnImageUpdated;
                     ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
@@ -153,17 +140,17 @@ namespace VisionModules.Wpf
                 BackBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 BackBuffer.PixelFormat);
 
-            int bufSize = cam.bufSize;
+            int bufSize = cam.BufferSize;
 
             IntPtr ImgPtr = bmpData.Scan0;
 
             // grab the image
 
 
-            lock (cam.thread_locker)
+            lock (cam.ThreadLocker)
             {
                 // Copy the RGB values back to the bitmap
-                System.Runtime.InteropServices.Marshal.Copy(cam.imageBuffer, 0, ImgPtr, bufSize);
+                System.Runtime.InteropServices.Marshal.Copy(cam.ImageBuffer, 0, ImgPtr, bufSize);
             }
             // Unlock the bits.
             BackBuffer.UnlockBits(bmpData);
@@ -176,13 +163,13 @@ namespace VisionModules.Wpf
 
                 // Bitmap cameraImage = new Bitmap(BackBuffer);
 
-                od.update_frame(cam, null);
+                od.UpdateFrame(cam, null);
 
 
-                List<Point> matches = od.lastImageMatchingPoints;
-                List<Point> tKeyPts = od.templateKeyPoints;
-                List<Point> iKeyPts = od.lastImageKeyPoints;
-                Point[] corners = od.lastCornerPoints;
+                List<Point> matches = od.LastImageMatchingPoints;
+                List<Point> tKeyPts = od.TemplateKeyPoints;
+                List<Point> iKeyPts = od.LastImageKeyPoints;
+                Point[] corners = od.LastCornerPoints;
 
                 Logger.WriteLine("SetCameraImageSource --> Drawing Overlay");
                 Graphics g = Graphics.FromImage(BackBuffer);
@@ -296,7 +283,7 @@ namespace VisionModules.Wpf
 
 
             BackBuffer.Dispose();
-            VisionModulesWPFCommon.DeleteObject(hBmp);
+            VisionModulesWPFCommon.DeleteGDIObject(hBmp);
         }
 
         /**<summary>
@@ -313,8 +300,9 @@ namespace VisionModules.Wpf
             {
                 if (this.templateImg.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
                 {
-                    this.objectDetectorEvent.setTemplateImage(this.templateImg);
-                    this.objectDetectorEvent.templatePreview = templatePreview;
+                    // Todo: Change this --> should go into th event OnSave
+                    // this.objectDetectorEvent.setTemplateImage(this.templateImg);
+                    // this.objectDetectorEvent.templatePreview = templatePreview;
                     Logger.WriteLine("OnSave --> successfully assigned template image");
                 }
             }
@@ -334,7 +322,7 @@ namespace VisionModules.Wpf
             dlg.DefaultExt = ".jpg";
             dlg.Filter = "Image Files (*.bmp, *.gif, *.exif, *.jpg, *.png, *.tiff)|*.bmp;*.gif;*.exif;*.jpg;*.png;*.tiff";
             dlg.Title = "Select Template Image File";
-            Nullable<bool> result = dlg.ShowDialog();
+            bool? result = dlg.ShowDialog();
 
             if (result == true)
             {
@@ -354,7 +342,7 @@ namespace VisionModules.Wpf
                         this.template_scale_f = 100.0 / w;
                         Bitmap preview = ImageProcessing.ScaleWithFixedSize(templateImg, 100, (int)(h * template_scale_f));
                         this.templatePreview = preview;
-                        od.set_template(templateImg);
+                        od.SetTemplate(templateImg);
                     }
                     else
                     {

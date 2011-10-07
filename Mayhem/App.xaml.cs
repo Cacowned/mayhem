@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using NuGet;
@@ -16,12 +15,12 @@ namespace Mayhem
 	/// </summary>
 	public partial class App : Application
 	{
-        Dictionary<string, Assembly> dependencies = new Dictionary<string, Assembly>();
-        bool wantsUpdates = false;
+        private Dictionary<string, Assembly> dependencies = new Dictionary<string, Assembly>();
+        private bool wantsUpdates = false;
 
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
-            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+            Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
             //foreach (string arg in e.Args)
             //{
@@ -62,15 +61,15 @@ namespace Mayhem
             }
             else
             {
-                Application.Current.Exit += new ExitEventHandler(Current_Exit);
-                ThreadPool.QueueUserWorkItem(new WaitCallback(CheckForUpdates));
+                Current.Exit += Current_Exit;
+                ThreadPool.QueueUserWorkItem(CheckForUpdates);
             }
 
             //Load the correct dependency assemblies
             LoadDependencies();
 
             MainWindow main = new MainWindow();
-            Application.Current.MainWindow = main;
+            Current.MainWindow = main;
 
             main.Load();
             main.Show();
@@ -93,7 +92,7 @@ namespace Mayhem
                 }
             }
 
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         void Current_Exit(object sender, ExitEventArgs e)
@@ -157,7 +156,7 @@ namespace Mayhem
             }
         }
 
-        System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             if (dependencies.ContainsKey(args.Name))
                 return dependencies[args.Name];

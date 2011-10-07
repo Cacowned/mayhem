@@ -1,23 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemWpf.UserControls;
-using System.Diagnostics;
-using MayhemOpenCVWrapper;
-using VisionModules.Events;
-using MayhemCore;
-using System.Threading;
 using System.Windows.Controls.Primitives;
+using MayhemCore;
+using MayhemOpenCVWrapper;
+using MayhemWpf.UserControls;
+using VisionModules.Events;
 
 namespace VisionModules.Wpf
 {
@@ -86,23 +74,8 @@ namespace VisionModules.Wpf
 
         public override void OnLoad()
         {
-            Init();
-            // evil hack to get the camera selector to actually show the selection!
-            System.Timers.Timer tt = new System.Timers.Timer(250);
-            tt.AutoReset = false;
-            tt.Elapsed += new System.Timers.ElapsedEventHandler((object o, System.Timers.ElapsedEventArgs e) =>
-            {
-                Logger.WriteLine("Timer Callback");
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    camera_selector.deviceList.SelectedIndex = this.selectedIndex;
-                    camera_selector.deviceList_SelectionChanged(this, null);
-                }));
-
-            });
-            tt.Enabled = true;
-
-            camera_selector.deviceList.SelectedIndex = selectedIndex;
+            InitCameraSelector();
+           
 
             sdr_sensitivity.Minimum = 0;
             sdr_sensitivity.Maximum = 100;
@@ -121,7 +94,7 @@ namespace VisionModules.Wpf
             sdr_sensitivity.Value = slider_value;
         }
 
-        private void Init()
+        private void InitCameraSelector()
         {
             camera_selector.Init();
             camera_selector.OnCameraSelected += new MultiCameraSelector.CameraSelectedHandler(                
@@ -132,12 +105,24 @@ namespace VisionModules.Wpf
                         }
                     );
             if (camera_selector.camera_previews.Count > 0)
-                this.CanSave = true; 
-        }
+                this.CanSave = true;
 
-        public override void OnClosing()
-        {
-            camera_selector.OnClosing();
+            // evil hack to get the camera selector to actually show the selection!
+            System.Timers.Timer tt = new System.Timers.Timer(250);
+            tt.AutoReset = false;
+            tt.Elapsed += new System.Timers.ElapsedEventHandler((object o, System.Timers.ElapsedEventArgs e) =>
+            {
+                Logger.WriteLine("Timer Callback");
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    camera_selector.deviceList.SelectedIndex = this.selectedIndex;
+                    camera_selector.deviceList_SelectionChanged(this, null);
+                }));
+
+            });
+            tt.Enabled = true;
+
+            camera_selector.deviceList.SelectedIndex = selectedIndex;
         }
 
         public override void OnSave()

@@ -1,8 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using MayhemWpf.UserControls;
 using Microsoft.Xna.Framework.Input;
 using XboxModules.Events;
-using System;
 
 namespace XboxModules.Wpf
 {
@@ -14,7 +14,7 @@ namespace XboxModules.Wpf
         public Buttons ButtonsToSave { get; private set; }
 
         // TODO: Make this configurable
-        private Buttons down_buttons;
+        private Buttons downButtons;
 
         // Contains the string the interface binds to
         public string ButtonsDownText
@@ -59,17 +59,17 @@ namespace XboxModules.Wpf
         private void Instance_OnButtonDown(Buttons button)
         {
             // If this button isn't down already
-            if (!down_buttons.HasFlag(button))
+            if (!downButtons.HasFlag(button))
             {
                 // and we have no buttons down
-                if (down_buttons == 0)
+                if (downButtons == 0)
                 {
                     // then this is the first hit of a new combination. 
                     // clear out the buttons we were going to save
                     ButtonsToSave = 0;
                 }
                 // Add the button
-                down_buttons |= button;
+                downButtons |= button;
                 ButtonsToSave |= button;
 
                 // And update the string
@@ -81,7 +81,7 @@ namespace XboxModules.Wpf
         private void Instance_OnButtonUp(Buttons button)
         {
             // remove button from buttons_down
-            down_buttons &= ~button;
+            downButtons &= ~button;
         }
 
         private void UpdateButtonsDown()

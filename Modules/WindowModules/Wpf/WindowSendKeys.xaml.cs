@@ -1,30 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WindowModules.Actions;
-using System.Diagnostics;
 
 namespace WindowModules.Wpf
 {
     /// <summary>
     /// Interaction logic for WindowMove.xaml
     /// </summary>
-    public partial class WindowSendKeys : UserControl, WindowActionConfigControl
+    public partial class WindowSendKeys : UserControl, IWindowActionConfigControl
     {
-        WindowActionSendKeys action;
+        private WindowActionSendKeys action;
         private InterceptKeys interceptKeys;
 
-        List<Key> keys = new List<Key>();
+        private List<Key> keys = new List<Key>();
         private List<System.Windows.Forms.Keys> keys_down = new List<System.Windows.Forms.Keys>();
 
         public WindowSendKeys(WindowActionSendKeys action)

@@ -8,14 +8,9 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
-using System.Diagnostics;
 using MayhemCore;
 
 namespace MayhemOpenCVWrapper
@@ -24,13 +19,29 @@ namespace MayhemOpenCVWrapper
     {
         public override event ImageUpdateHandler OnImageUpdated;
 
-        private  CameraInfo info = CameraInfo.DummyInfo();
-        public override CameraInfo Info { get { return info; } }
+        public override CameraInfo Info 
+        { 
+            get {return CameraInfo.DummyInfo();} 
+            protected set { }
+        }
+
+        public override CameraSettings Settings
+        {
+            get { return CameraSettings.Defaults();}
+            protected set { }
+        }
+
+        public override bool Running
+        {
+            get;
+            protected set;
+        }
+
         public  override Bitmap ImageAsBitmap()
         {
             Logger.WriteLine("returning dummy image");
-            // todo: add Mayhem's logo or something 
-            return new Bitmap(320, 240);
+            // TODO: add Mayhem's logo or something 
+            return new Bitmap(Settings.ResX, Settings.ResY);
         }
 
         public override  void StartFrameGrabbing()

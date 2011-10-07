@@ -1,11 +1,9 @@
-﻿using System;
-using System.Runtime.Serialization;
-using System.Windows;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using Phidgets;
-using MayhemWpf.UserControls;
 
 namespace PhidgetModules.Reaction
 {
@@ -13,45 +11,43 @@ namespace PhidgetModules.Reaction
     [MayhemModule("Phidget: Digital Output", "Triggers a digital output")]
     public class DigitalOutput : ReactionBase, IWpfConfigurable
     {
-        #region Configuration
         // Which index do we want to be looking at?
         [DataMember]
-        private int Index;
+        private int index;
 
         [DataMember]
-        private DigitalOutputType OutputType;
-        #endregion
+        private DigitalOutputType outputType;
 
         // The interface kit we are using for the sensors
         private InterfaceKit ifKit;
 
-        public DigitalOutput()
+        protected override void OnLoadDefaults()
         {
-            Index = 0;
-            OutputType = DigitalOutputType.Toggle;
+            index = 0;
+            outputType = DigitalOutputType.Toggle;
         }
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             this.ifKit = InterfaceFactory.Interface;
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new PhidgetDigitalOutputConfig(ifKit, Index, OutputType); }
+            get { return new PhidgetDigitalOutputConfig(ifKit, index, outputType); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            Index = ((PhidgetDigitalOutputConfig)configurationControl).Index;
-            OutputType = ((PhidgetDigitalOutputConfig)configurationControl).OutputType;
+            index = ((PhidgetDigitalOutputConfig)configurationControl).Index;
+            outputType = ((PhidgetDigitalOutputConfig)configurationControl).OutputType;
         }
 
         public string GetConfigString()
         {
             string type = "";
 
-            switch (OutputType)
+            switch (outputType)
             {
                 case DigitalOutputType.Toggle: type = "Toggle";
                     break;
@@ -61,21 +57,21 @@ namespace PhidgetModules.Reaction
                     break;
             }
 
-            return type + " output #" + Index;
+            return type + " output #" + index;
         }
 
         public override void Perform()
         {
-            switch (OutputType)
+            switch (outputType)
             {
                 case DigitalOutputType.Toggle:
-                    ifKit.outputs[Index] = !ifKit.outputs[Index];
+                    ifKit.outputs[index] = !ifKit.outputs[index];
                     break;
                 case DigitalOutputType.On:
-                    ifKit.outputs[Index] = true;
+                    ifKit.outputs[index] = true;
                     break;
                 case DigitalOutputType.Off:
-                    ifKit.outputs[Index] = false;
+                    ifKit.outputs[index] = false;
                     break;
             }
         }

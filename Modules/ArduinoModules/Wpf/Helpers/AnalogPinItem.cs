@@ -13,14 +13,10 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ArduinoModules.Firmata;
 using System.Runtime.Serialization;
+using ArduinoModules.Firmata;
 
-namespace ArduinoModules.Wpf
+namespace ArduinoModules.Wpf.Helpers
 {
     /// <summary>
     /// Items for Ditial pins ItemsControl 
@@ -29,7 +25,7 @@ namespace ArduinoModules.Wpf
     public class AnalogPinItem
     {
         [DataMember]
-        private static int analog_pin_id = 0;
+        private static int analogPinId = 0;
 
         // selected 
         [DataMember]
@@ -39,22 +35,22 @@ namespace ArduinoModules.Wpf
 
         // friendly Name
         [DataMember]
-        private string pinName_;
+        private string pinName;
         public string PinName
         {
-            get { return pinName_; }
+            get { return pinName; }
         }
 
         // pin change type
         [DataMember]
-        private ANALOG_PIN_CHANGE monitor_pin_change { get; set; }
-        public ANALOG_PIN_CHANGE ChangeType { get { return monitor_pin_change; } set { monitor_pin_change = value; } }
+        private ANALOG_PIN_CHANGE MonitorPinChange { get; set; }
+        public ANALOG_PIN_CHANGE ChangeType { get { return MonitorPinChange; } set { MonitorPinChange = value; } }
 
         [DataMember]
-        private int firmata_pin_id_ = 0;
-        public int GetPinID()
+        private int firmataPinId = 0;
+        public int GetPinId()
         {
-            return firmata_pin_id_;
+            return firmataPinId;
         }
         //public int pin_id { get { return pin_id_; } }
 
@@ -63,7 +59,7 @@ namespace ArduinoModules.Wpf
 
         public static void ResetAnalogIDs()
         {
-            analog_pin_id = 0;
+            analogPinId = 0;
         }
 
         // change threshold value set by user
@@ -111,9 +107,9 @@ namespace ArduinoModules.Wpf
         public AnalogPinItem(bool check, int id, ANALOG_PIN_CHANGE change)
         {
             isChecked = check;
-            pinName_ = "A" + analog_pin_id++;
-            monitor_pin_change = change;
-            firmata_pin_id_ = id;
+            pinName = "A" + analogPinId++;
+            MonitorPinChange = change;
+            firmataPinId = id;
             setValue = 512;
         }
     }

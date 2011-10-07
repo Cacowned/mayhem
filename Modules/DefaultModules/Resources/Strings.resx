@@ -123,15 +123,11 @@
   <data name="PlaySound_FileNotFound" xml:space="preserve">
     <value>The sound file doesn't exist.</value>
   </data>
-  <data name="Popup_MessageText" xml:space="preserve">
-    <value>Triggered!</value>
-  </data>
   <data name="RunProgram_CantStartProgram" xml:space="preserve">
     <value>Could not start the application</value>
   </data>
   <data name="RunProgram_ConfigString" xml:space="preserve">
-    <value>File name: "{0}"
-Arguments: "{1}"</value>
+    <value>File name: "{0}"</value>
   </data>
   <data name="RunProgram_FileNotFound" xml:space="preserve">
     <value>The application does not exist at the specified location.</value>

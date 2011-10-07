@@ -7,11 +7,7 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+ */
 
 namespace MayhemOpenCVWrapper
 {
@@ -21,28 +17,34 @@ namespace MayhemOpenCVWrapper
      * */
     public class CameraInfo
     {
-        public int deviceId;
-        public string description;
+        public int DeviceId
+        {
+            get;
+            private set; 
+        }
+        public string Description
+        {
+            get;
+            private set; 
+        }
 
         public CameraInfo(int id, string descr)
         {
-            deviceId = id;
-            description = descr;
+            DeviceId = id;
+            Description = descr;
         }
 
-        public string FriendlyName()
-        {
-            return this.ToString();
-        }
-
-        public override string ToString()
-        {
-            return "" + deviceId + " : " + description;
-        }
+        
 
         public static CameraInfo DummyInfo()
         {
             return new CameraInfo(0, "Dummmy Camera");
+        }
+
+       
+        public override string ToString()
+        {
+            return "" + DeviceId + " : " + Description;
         }
 
     }

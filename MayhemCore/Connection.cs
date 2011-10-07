@@ -11,47 +11,41 @@ namespace MayhemCore
     public class Connection
     {
         /// <summary>
-        /// True if this connection is enabled
-        /// false if disabled.
+        /// True if this connection is enabled. False if disabled.
         /// </summary>
         [DataMember]
-        public bool Enabled { get; private set; }
+        public bool IsEnabled
+        {
+            get;
+            private set; 
+        }
 
         /// <summary>
         /// The event that this connection is using
         /// </summary>
         [DataMember]
-        public EventBase Event { get; private set; }
+        internal EventBase Event
+        {
+            get;
+            private set; 
+        }
 
         /// <summary>
         /// The reaction that this connection is using
         /// </summary>
         [DataMember]
-        public ReactionBase Reaction { get; private set; }
-
-        private bool isConfiguring;
-        public bool IsConfiguring
+        internal ReactionBase Reaction
         {
-            get
-            {
-                return isConfiguring;
-            }
-            set
-            {
-                isConfiguring = value;
-                Event.IsConfiguring = value;
-                Reaction.IsConfiguring = value;
-            }
+            get;
+            private set;
         }
-
-        public Connection() { }
 
         /// <summary>
         /// Create a new connection
         /// </summary>
         /// <param name="e">The event to trigger on</param>
         /// <param name="reaction">The reaction to perform</param>
-        public Connection(EventBase e, ReactionBase reaction)
+        internal Connection(EventBase e, ReactionBase reaction)
         {
             // Set our event and reactions 
             this.Event = e;
@@ -60,32 +54,28 @@ namespace MayhemCore
             // Set them to have a reference to this connection
             this.Event.Connection = this;
             this.Reaction.Connection = this;
-
-            // Set up the event handler for when the event triggers
-            this.Event.EventActivated += this.Trigger;
         }
 
         /// <summary>
         /// Calls the Reaction when the event gets triggered.
         /// </summary>
-        private void Trigger(object sender, EventArgs e)
+        internal void Trigger()
         {
             // If we got into this method call, we probably don't need
             // to check if we are enabled.
-            if (Enabled)
+            if (IsEnabled)
             {
-                ThreadPool.QueueUserWorkItem(new WaitCallback((o) => Reaction.Perform()));
+                ThreadPool.QueueUserWorkItem(o => Reaction.Perform());
             }
         }
 
         /// <summary>
-        /// Enable this connection's
-        /// event and reaction
+        /// Enable this connection's event and reaction
         /// </summary>
-        public void Enable(Action actionOnComplete)
+        internal void Enable(EnablingEventArgs e, Action actionOnComplete)
         {
             // if we are already enabled, just stop
-            if (Enabled)
+            if (IsEnabled)
             {
                 if (actionOnComplete != null)
                 {
@@ -93,51 +83,51 @@ namespace MayhemCore
                 }
                 return;
             }
-            _Enable(actionOnComplete);
+            Enable_(e, actionOnComplete);
         }
 
-        private void _Enable(Action actionOnComplete)
+        private void Enable_(EnablingEventArgs e, Action actionOnComplete)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => EnableOnThread(actionOnComplete)));
+            ThreadPool.QueueUserWorkItem(o => EnableOnThread(e, actionOnComplete));
         }
 
-        private void EnableOnThread(Action actionOnComplete)
+        private void EnableOnThread(EnablingEventArgs e, Action actionOnComplete)
         {
-            if (!Event.Enabled)
+            if (!Event.IsEnabled)
             {
                 // Enable the event
-                Event.Enable_();
+                Event.Enable(e);
             }
             // If the event is not enabled we don't try to enable the reaction
-            if (Event.Enabled && !Reaction.Enabled)
+            if (Event.IsEnabled && !Reaction.IsEnabled)
             {
                 try
                 {
-                    Reaction.Enable_();
+                    Reaction.Enable(e);
                 }
                 catch
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error enabling " + Reaction.Name);
                 }
-                if (!Reaction.Enabled)
+                if (!Reaction.IsEnabled)
                 {
                     // If we got here, then it means the event is enabled and the reaction won't enable.
                     // We need to disable the event and then return out
-                    Event.Disable();
+                    Event.Disable(new DisabledEventArgs(e.WasConfiguring));
                 }
             }
             // Double check that both are enabled. We shouldn't be able to get here if they aren't.
-            Enabled = Event.Enabled && Reaction.Enabled;
+            IsEnabled = Event.IsEnabled && Reaction.IsEnabled;
             if (actionOnComplete != null)
             {
                 actionOnComplete();
             }
         }
 
-        public void Disable(Action actionOnComplete)
+        internal void Disable(DisabledEventArgs e, Action actionOnComplete)
         {
             // if we aren't already enabled, just stop
-            if (!Enabled)
+            if (!IsEnabled)
             {
                 if (actionOnComplete != null)
                 {
@@ -146,27 +136,27 @@ namespace MayhemCore
                 return;
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) => DisableOnThread(actionOnComplete)));
+            ThreadPool.QueueUserWorkItem(o => DisableOnThread(e, actionOnComplete));
         }
 
-        private void DisableOnThread(Action actionOnComplete)
+        private void DisableOnThread(DisabledEventArgs e, Action actionOnComplete)
         {
-            if (Event.Enabled)
+            if (Event.IsEnabled)
             {
                 try
                 {
-                    Event.Disable_();
+                    Event.Disable(e);
                 }
                 catch
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error disabling " + Event.Name);
                 }
             }
-            if (Reaction.Enabled)
+            if (Reaction.IsEnabled)
             {
                 try
                 {
-                    Reaction.Disable_();
+                    Reaction.Disable(e);
                 }
                 catch
                 {
@@ -180,18 +170,18 @@ namespace MayhemCore
              * seem like a reasonable option though, so for
              * now, this will stay as it is
              */
-            Enabled = false;
+            IsEnabled = false;
             if (actionOnComplete != null)
             {
                 actionOnComplete();
             }
         }
 
-        public void Delete()
+        internal void Delete()
         {
-            if (Enabled)
+            if (IsEnabled)
             {
-                Disable(null);
+                Disable(new DisabledEventArgs(false), null);
             }
 
             Event.Delete();
@@ -204,13 +194,10 @@ namespace MayhemCore
             Event.Connection = this;
             Reaction.Connection = this;
 
-            // Set up the event handler for when the event triggers
-            this.Event.EventActivated += this.Trigger;
-
             // If we have started up and are enabled, then we need to
             // actually enable our events and reactions
-            if (Enabled)
-                _Enable(null);
+            if (IsEnabled)
+                Enable_(new EnablingEventArgs(false), null);
         }
     }
 }

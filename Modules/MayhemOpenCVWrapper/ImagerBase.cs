@@ -9,21 +9,19 @@
  * 
  */ 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 
 namespace MayhemOpenCVWrapper
 {
     public abstract class ImagerBase
-    {  
-          abstract public CameraInfo Info { get;  }
-          public bool running; 
-          public delegate void ImageUpdateHandler(object sender, EventArgs e);
-          public abstract event ImageUpdateHandler OnImageUpdated;
-          public abstract Bitmap ImageAsBitmap();
-          public abstract void StartFrameGrabbing();
-          public abstract bool TryStopFrameGrabbing();
+    {
+        public abstract CameraInfo Info { get; protected set; }
+        public abstract CameraSettings Settings { get; protected set; }
+        public abstract bool Running { get; protected set; }
+        public delegate void ImageUpdateHandler(object sender, EventArgs e);
+        public abstract event ImageUpdateHandler OnImageUpdated;
+        public abstract Bitmap ImageAsBitmap();
+        public abstract void StartFrameGrabbing();
+        public abstract bool TryStopFrameGrabbing();
     }
 }

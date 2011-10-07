@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using WindowModules.Wpf;
-using System.Diagnostics;
-using System.IO;
-using System.Threading;
 
 namespace WindowModules
 {
@@ -17,8 +12,6 @@ namespace WindowModules
     [MayhemModule("Window Sequence", "Window Sequence")]
     public class WindowSequence : ReactionBase, IWpfConfigurable
     {
-        static readonly ulong TARGETWINDOW = Native.WS_BORDER | Native.WS_VISIBLE;
-
         [DataMember]
         public WindowActionInfo ActionInfo
         {
@@ -26,9 +19,7 @@ namespace WindowModules
             private set;
         }
 
-        private static HashSet<int> processBlackList = new HashSet<int>();
-
-        public WindowSequence()
+        protected override void OnLoadDefaults()
         {
             ActionInfo = new WindowActionInfo();
         }
@@ -53,7 +44,7 @@ namespace WindowModules
         {
             WindowFinder.Find(ActionInfo, new WindowFinder.WindowActionResult((hwnd) =>
                 {
-                    foreach (WindowAction action in ActionInfo.WindowActions)
+                    foreach (IWindowAction action in ActionInfo.WindowActions)
                     {
                         action.Perform(hwnd);
                         Thread.Sleep(50);

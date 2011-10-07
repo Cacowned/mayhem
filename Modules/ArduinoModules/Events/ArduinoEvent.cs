@@ -11,16 +11,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
+using ArduinoModules.Firmata;
+using ArduinoModules.Wpf;
+using ArduinoModules.Wpf.Helpers;
 using MayhemCore;
+using MayhemSerial;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Diagnostics;
-using ArduinoModules.Wpf;
-using System.Runtime.Serialization;
-using MayhemSerial;
-using ArduinoModules.Firmata;
 
 namespace ArduinoModules.Events
 {
@@ -28,34 +26,41 @@ namespace ArduinoModules.Events
     [MayhemModule("Arduino Event", "**Testing** Detects Pin Changes in Arduino")]
     public class ArduinoEvent : EventBase, IWpfConfigurable
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
+        [DataMember]
+        public string ArduinoPortName;
+
+        [DataMember]
+        private List<DigitalPinItem> monitorDigitalPins;
+
+        [DataMember]
+        private List<AnalogPinItem> monitorAnalogPins;
+
+        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
 
         private ArduinoFirmata arduino = null;
 
-        private Action<Pin> OnDigitalPinChanged; // = new Action<Pin>(arduino_OnDigitalPinChanged);
-        private Action<Pin> OnAnalogPinChanged; // = new Action<Pin>(arduino_OnAnalogPinChanged);
+        private Action<Pin> onDigitalPinChanged;
+        private Action<Pin> onAnalogPinChanged;
 
-        private const int ACTIVATE_MIN_DELAY = 50;  //minimum activation interval
+        private const int ActivateMinDelay = 50;  //minimum activation interval
         DateTime lastActivated = DateTime.MinValue;
 
-        [DataMember]
-        public string arduinoPortName = String.Empty;
-
-        [DataMember]
-        private List<DigitalPinItem> monitorDigitalPins = new List<DigitalPinItem>();
-
-        [DataMember]
-        private List<AnalogPinItem> monitorAnalogPins = new List<AnalogPinItem>();
-
-        protected override void Initialize()
+        protected override void OnLoadDefaults()
         {
-            if (arduinoPortName != String.Empty)
+            monitorDigitalPins = new List<DigitalPinItem>();
+            monitorAnalogPins = new List<AnalogPinItem>();
+            ArduinoPortName = String.Empty;
+        }
+
+        protected override void OnAfterLoad()
+        {
+            if (ArduinoPortName != String.Empty)
             {
-                arduino = ArduinoFirmata.InstanceForPortname(arduinoPortName);
+                arduino = ArduinoFirmata.InstanceForPortname(ArduinoPortName);
             }
 
-            OnDigitalPinChanged = new Action<Pin>(arduino_OnDigitalPinChanged);
-            OnAnalogPinChanged = new Action<Pin>(arduino_OnAnalogPinChanged);
+            onDigitalPinChanged = new Action<Pin>(arduino_OnDigitalPinChanged);
+            onAnalogPinChanged = new Action<Pin>(arduino_OnAnalogPinChanged);
         }
 
         public WpfConfiguration ConfigurationControl
@@ -72,27 +77,24 @@ namespace ArduinoModules.Events
         }
 
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (OnAnalogPinChanged != null && OnDigitalPinChanged != null && arduino != null)
+            if (onAnalogPinChanged != null && onDigitalPinChanged != null && arduino != null)
             {
+                arduino.OnAnalogPinChanged -= onAnalogPinChanged;
+                arduino.OnDigitalPinChanged -= onDigitalPinChanged;
 
-                arduino.OnAnalogPinChanged -= OnAnalogPinChanged;
-                arduino.OnDigitalPinChanged -= OnDigitalPinChanged;
-
-                arduino.OnAnalogPinChanged += OnAnalogPinChanged;
-                arduino.OnDigitalPinChanged += OnDigitalPinChanged;
+                arduino.OnAnalogPinChanged += onAnalogPinChanged;
+                arduino.OnDigitalPinChanged += onDigitalPinChanged;
             }
-
-            return true;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (arduino != null)
             {
-                arduino.OnAnalogPinChanged -= OnAnalogPinChanged;
-                arduino.OnDigitalPinChanged -= OnDigitalPinChanged;
+                arduino.OnAnalogPinChanged -= onAnalogPinChanged;
+                arduino.OnDigitalPinChanged -= onDigitalPinChanged;
             }
         }
 
@@ -100,21 +102,21 @@ namespace ArduinoModules.Events
         {
 
             ArduinoEventConfig config = configurationControl as ArduinoEventConfig;
-            arduinoPortName = config.arduinoPortName;
-            arduino = ArduinoFirmata.InstanceForPortname(arduinoPortName);
+            ArduinoPortName = config.ArduinoPortName;
+            arduino = ArduinoFirmata.InstanceForPortname(ArduinoPortName);
             List<DigitalPinItem> digitalPinsMonitor = new List<DigitalPinItem>();
             List<AnalogPinItem> analogPinsMonitor = new List<AnalogPinItem>();
 
-            bool enabled = this.Enabled;
+            bool enabled = this.IsEnabled;
 
             // save references to pins to monitor
             // attach callbacks to arduino events
             if (arduino != null)
             {
-                arduino.OnAnalogPinChanged -= OnAnalogPinChanged;
-                arduino.OnDigitalPinChanged -= OnDigitalPinChanged;
+                arduino.OnAnalogPinChanged -= onAnalogPinChanged;
+                arduino.OnDigitalPinChanged -= onDigitalPinChanged;
 
-                foreach (DigitalPinItem p in config.digital_pin_items)
+                foreach (DigitalPinItem p in config.DigitalPinItems)
                 {
                     if (p.Selected)
                     {
@@ -123,7 +125,7 @@ namespace ArduinoModules.Events
                     }
                 }
 
-                foreach (AnalogPinItem a in config.analog_pin_items)
+                foreach (AnalogPinItem a in config.AnalogPinItems)
                 {
                     // TODO: arduino.FlagPin(p)
                     if (a.Selected)
@@ -135,8 +137,8 @@ namespace ArduinoModules.Events
 
                 if (enabled)
                 {
-                    arduino.OnAnalogPinChanged += OnAnalogPinChanged;
-                    arduino.OnDigitalPinChanged += OnDigitalPinChanged;
+                    arduino.OnAnalogPinChanged += onAnalogPinChanged;
+                    arduino.OnDigitalPinChanged += onDigitalPinChanged;
                 }
             }
         }
@@ -150,7 +152,7 @@ namespace ArduinoModules.Events
 
             TimeSpan ts = now - lastActivated;
 
-            if (ts.TotalMilliseconds >= ACTIVATE_MIN_DELAY)
+            if (ts.TotalMilliseconds >= ActivateMinDelay)
             {
                 // call activate on base
                 base.Trigger();
@@ -160,11 +162,11 @@ namespace ArduinoModules.Events
 
         public void arduino_OnDigitalPinChanged(Pin p)
         {
-            if (Enabled)
+            if (IsEnabled)
             {
                 foreach (DigitalPinItem d in monitorDigitalPins)
                 {
-                    if (d.GetPinID() == p.id)
+                    if (d.GetPinId() == p.id)
                     {
                         if (d.ChangeType == DIGITAL_PIN_CHANGE.FALLING)
                         {
@@ -208,11 +210,11 @@ namespace ArduinoModules.Events
 
         public void arduino_OnAnalogPinChanged(Pin p)
         {
-            if (this.Enabled)
+            if (this.IsEnabled)
             {
                 foreach (AnalogPinItem a in monitorAnalogPins)
                 {
-                    if (a.GetPinID() == p.id)
+                    if (a.GetPinId() == p.id)
                     {
                         if (a.ChangeType == ANALOG_PIN_CHANGE.EQUALS)
                         {
@@ -244,7 +246,28 @@ namespace ArduinoModules.Events
         public string GetConfigString()
         {
             ///TODO: Sven: Put the right thing here
-            throw new Exception("Sven: fill this in");
+            // throw new Exception("Sven: fill this in");
+
+            string cs = string.Empty;
+            cs += ArduinoPortName+" ";
+            for (int i = 0; i < monitorDigitalPins.Count; i++)
+            {
+                if (i < monitorDigitalPins.Count - 1)
+                    cs += monitorDigitalPins[i].PinName + ",";                
+                else
+                    cs += monitorDigitalPins[i].PinName ;
+            }
+            if (monitorAnalogPins.Count > 0)
+                cs += ",";
+            for (int i = 0; i < monitorAnalogPins.Count; i++)
+            {
+                if (i < monitorAnalogPins.Count - 1)
+                    cs += monitorAnalogPins[i].PinName + ",";
+                else
+                    cs += monitorAnalogPins[i].PinName ;
+            }
+
+            return cs;
         }
     }
 }

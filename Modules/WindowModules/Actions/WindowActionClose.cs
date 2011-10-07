@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace WindowModules.Actions
 {
     [DataContract]
-    public class WindowActionClose : WindowAction
+    public class WindowActionClose : IWindowAction
     {
         public void Perform(IntPtr window)
         {

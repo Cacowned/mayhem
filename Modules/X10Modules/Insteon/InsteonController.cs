@@ -12,9 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.CompilerServices;
-using System.Diagnostics;
 using MayhemCore;
 
 namespace X10Modules.Insteon
@@ -91,18 +89,18 @@ namespace X10Modules.Insteon
                     InsteonResponseCommand c = lastCommand as InsteonResponseCommand;
                     Logger.WriteLine("Listing for Response Command Response");
                     // check if an ack has arrived for the last command
-                    if (parse_count >= c.length && parse_buf[c.length] == 0x06)
+                    if (parse_count >= c.Length && parse_buf[c.Length] == 0x06)
                     {
                         // the c.length + 1 is due to expected "ACK"
-                        if (parse_count < c.length+1 + c.expectedResponseLength)
+                        if (parse_count < c.Length+1 + c.expectedResponseLength)
                         {
                             // wait for some more bytes to perhaps appear 
                             return;
                         }
-                        if (parse_count == c.length+1 + c.expectedResponseLength)
+                        if (parse_count == c.Length+1 + c.expectedResponseLength)
                         {
                             // see if all-linking completed has been received
-                            if (parse_buf[1] == InsteonCommandBytes.all_linking_completed)
+                            if (parse_buf[1] == InsteonCommandBytes.AllLinkingCompleted)
                             {
                                 Logger.WriteLine("All-Link Completed");
                                 if (OnAllLinkingCompleted != null)
@@ -116,7 +114,7 @@ namespace X10Modules.Insteon
                         {
                             // gibberish
                             Logger.WriteLine("Response Length was not as expected");
-                            Logger.WriteLine("Expected " + (c.expectedResponseLength+c.length) + " got " + parse_count);
+                            Logger.WriteLine("Expected " + (c.expectedResponseLength+c.Length) + " got " + parse_count);
                       
                             // cleanup
                             ResetRxBuffer();
@@ -151,11 +149,11 @@ namespace X10Modules.Insteon
                 bool device_state = InsteonDevice.GetPowerStateForDeviceAddress(c.device_address);
                 if (device_state == true)
                 {
-                    return SendStandardMsg(new InsteonStandardMessage(c.device_address, InsteonCommandBytes.light_off_fast, 0, 11));
+                    return SendStandardMsg(new InsteonStandardMessage(c.device_address, InsteonCommandBytes.LightOffFast, 0, 11));
                 }
                 else
                 {
-                    return SendStandardMsg(new InsteonStandardMessage(c.device_address, InsteonCommandBytes.light_on_fast, 0, 11));
+                    return SendStandardMsg(new InsteonStandardMessage(c.device_address, InsteonCommandBytes.LightOnFast, 0, 11));
                 }
             }
             else if (c.IsOnCommand)
@@ -168,7 +166,7 @@ namespace X10Modules.Insteon
             }
             /////////
 
-            mSerial.WriteToPort(portName, c.commandBytes, c.length);
+            mSerial.WriteToPort(portName, c.CommandBytes, c.Length);
             bool wait = waitAck.WaitOne(100);
             if (wait)
             {
@@ -194,7 +192,7 @@ namespace X10Modules.Insteon
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool SendOff(InsteonDevice d)
         {
-            InsteonStandardMessage c = new InsteonStandardMessage(d.deviceID, InsteonCommandBytes.light_off_fast, 0, 11);
+            InsteonStandardMessage c = new InsteonStandardMessage(d.deviceID, InsteonCommandBytes.LightOffFast, 0, 11);
             return SendStandardMsg(c); 
         }
 
@@ -206,7 +204,7 @@ namespace X10Modules.Insteon
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool SendOn(InsteonDevice d)
         {
-            InsteonStandardMessage c = new InsteonStandardMessage(d.deviceID, InsteonCommandBytes.light_on_fast, 0, 11);
+            InsteonStandardMessage c = new InsteonStandardMessage(d.deviceID, InsteonCommandBytes.LightOnFast, 0, 11);
             return SendStandardMsg(c);   
         }
 
@@ -220,10 +218,10 @@ namespace X10Modules.Insteon
             Logger.WriteLine("========================== EnumerateLinkedDevices===========================");
             List<InsteonDevice> devices = new List<InsteonDevice>();
 
-            InsteonResponseCommand c = new InsteonResponseCommand(InsteonCommandBytes.get_first_link_record, 10);
+            InsteonResponseCommand c = new InsteonResponseCommand(InsteonCommandBytes.GetFirstLinkRecord, 10);
             this.lastCommand = c;
             ResetRxBuffer();
-            mSerial.WriteToPort(portName, c.commandBytes, c.length);
+            mSerial.WriteToPort(portName, c.CommandBytes, c.Length);
 
             bool wait = waitAck.WaitOne(100);
             if (wait)
@@ -233,13 +231,13 @@ namespace X10Modules.Insteon
                 InsteonDevice d = new InsteonDevice();
 
                 byte[] idBytes = new byte[3];
-                Array.Copy(parse_buf, lastCommand.length + 5, idBytes, 0, 3);
+                Array.Copy(parse_buf, lastCommand.Length + 5, idBytes, 0, 3);
                 d.deviceID  = idBytes;
-                d.ALRecordFlags = parse_buf[lastCommand.length + 3];
-                d.ALGroup = parse_buf[lastCommand.length + 4];
+                d.ALRecordFlags = parse_buf[lastCommand.Length + 3];
+                d.ALGroup = parse_buf[lastCommand.Length + 4];
 
                 byte[] linkData = new byte[3];
-                Array.Copy(parse_buf, lastCommand.length + 8, linkData, 0, 3);
+                Array.Copy(parse_buf, lastCommand.Length + 8, linkData, 0, 3);
                 d.linkData = linkData;
                 devices.Add(d);
                 Logger.WriteLine("Added device: " + d.ToString());
@@ -248,10 +246,10 @@ namespace X10Modules.Insteon
                 ResetRxBuffer();
                 while (wait)
                 {
-                    c = new InsteonResponseCommand(InsteonCommandBytes.get_next_link_record, 10);
+                    c = new InsteonResponseCommand(InsteonCommandBytes.GetNextLinkRecord, 10);
                     lastCommand = c;
 
-                    mSerial.WriteToPort(portName, c.commandBytes, c.length);
+                    mSerial.WriteToPort(portName, c.CommandBytes, c.Length);
                     wait = waitAck.WaitOne(100);
                     if (!wait)
                     {
@@ -262,13 +260,13 @@ namespace X10Modules.Insteon
                     d = new InsteonDevice();
 
                     idBytes = new byte[3];
-                    Array.Copy(parse_buf, lastCommand.length + 5, idBytes, 0, 3);
+                    Array.Copy(parse_buf, lastCommand.Length + 5, idBytes, 0, 3);
                     d.deviceID = idBytes;
-                    d.ALRecordFlags = parse_buf[lastCommand.length + 3];
-                    d.ALGroup = parse_buf[lastCommand.length + 4];
+                    d.ALRecordFlags = parse_buf[lastCommand.Length + 3];
+                    d.ALGroup = parse_buf[lastCommand.Length + 4];
 
                     linkData = new byte[3];
-                    Array.Copy(parse_buf, lastCommand.length + 8, linkData, 0, 3);
+                    Array.Copy(parse_buf, lastCommand.Length + 8, linkData, 0, 3);
                     d.linkData = linkData;
                     devices.Add(d);
                     Logger.WriteLine("Added device: " + d.ToString());
@@ -301,9 +299,9 @@ namespace X10Modules.Insteon
             if (!linking)
             {
                 linking = true; 
-                InsteonBasicCommand c = new InsteonBasicCommand(InsteonCommandBytes.start_all_linking);
+                InsteonBasicCommand c = new InsteonBasicCommand(InsteonCommandBytes.StartAllLinking);
                 lastCommand = c;
-                mSerial.WriteToPort(portName, c.commandBytes, c.length);
+                mSerial.WriteToPort(portName, c.CommandBytes, c.Length);
                 bool wait = waitAck.WaitOne(100);
                 if (wait)
                 {
@@ -330,9 +328,9 @@ namespace X10Modules.Insteon
 
             if (linking)
             {
-                InsteonBasicCommand c = new InsteonBasicCommand(InsteonCommandBytes.cancel_all_linking);
+                InsteonBasicCommand c = new InsteonBasicCommand(InsteonCommandBytes.CancelAllLinking);
                 lastCommand = c;
-                mSerial.WriteToPort(portName, c.commandBytes, c.length);
+                mSerial.WriteToPort(portName, c.CommandBytes, c.Length);
                 bool wait = waitAck.WaitOne(100);
                 if (wait)
                 {

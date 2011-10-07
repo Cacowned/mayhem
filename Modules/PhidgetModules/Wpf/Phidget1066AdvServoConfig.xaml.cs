@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Phidgets;
-using MayhemWpf.UserControls;
-using System.Diagnostics;
 using MayhemCore;
+using MayhemWpf.UserControls;
+using Phidgets;
 
 namespace PhidgetModules.Wpf
 {
@@ -77,18 +66,21 @@ namespace PhidgetModules.Wpf
 
         private void TypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
+            if (AdvServo.servos.Count > 0)
             {
-                AdvServo.servos[Index].Type = (ServoServo.ServoType)Enum.Parse(typeof(ServoServo.ServoType), TypeComboBox.SelectedItem.ToString());
-            }
-            catch (Exception erf)
-            {
-                Logger.WriteLine("Phidget1066AdvServoConfig: " + erf);
-            }
-            PositionSlider.Maximum = AdvServo.servos[Index].PositionMax;
-            PositionSlider.Minimum = AdvServo.servos[Index].PositionMin;
+                try
+                {
+                    AdvServo.servos[Index].Type = (ServoServo.ServoType)Enum.Parse(typeof(ServoServo.ServoType), TypeComboBox.SelectedItem.ToString());
+                }
+                catch (Exception erf)
+                {
+                    Logger.WriteLine("Phidget1066AdvServoConfig: " + erf);
+                }
+                PositionSlider.Maximum = AdvServo.servos[Index].PositionMax;
+                PositionSlider.Minimum = AdvServo.servos[Index].PositionMin;
 
-            PositionSlider.Value = Position;
+                PositionSlider.Value = Position;
+            }
         }
 
         private void PositionSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

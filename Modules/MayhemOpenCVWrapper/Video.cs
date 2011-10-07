@@ -13,17 +13,18 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AviFile;
 using System.Threading;
+using AviFile;
 using MayhemCore;
+using System.Drawing;
 
 namespace MayhemOpenCVWrapper
 {
     public class Video
     {
-        private List<BitmapTimestamp> video_frames = new List<BitmapTimestamp>();
+        public event Action<bool> OnVideoSaved;
+
+        private List<Bitmap> video_frames = new List<Bitmap>();
 
         // video stream settings
         private double frameRate;
@@ -31,22 +32,19 @@ namespace MayhemOpenCVWrapper
         private int height;
 
         // video stream
-        VideoStream stream = null;
-        AviManager aviManager = null;
+        private VideoStream stream = null;
+        private AviManager aviManager = null;
         private int frames = 0;
 
-        public event Action<bool> OnVideoSaved;
-        
         public Video(Camera c, string fileName, bool compress)
         {
             Camera camera = c;
-            frameRate = 1000 / camera.settings.updateRate_ms;
-            width = c.settings.resX;
-            height = c.settings.resY; 
+            frameRate = 1000 / camera.Settings.UpdateRateMs;
+            width = c.Settings.ResX;
+            height = c.Settings.ResY; 
 
             // preserve reference to the camera frames to be saved later
-
-            video_frames = c.buffer_items;
+            video_frames = c.videoDiskBufferItems;
 
             if (video_frames.Count > 0)
             {
@@ -69,16 +67,16 @@ namespace MayhemOpenCVWrapper
                 if (compress)
                 {
                     Logger.WriteLine("Saving Compressed");
-                    stream = aviManager.AddVideoStream(opts, frameRate, video_frames[0].image);     // add first frame as an example of the video's format
+                    stream = aviManager.AddVideoStream(opts, frameRate, video_frames[0]);     // add first frame as an example of the video's format
                 }
                 else
                 {
                     Logger.WriteLine("Saving Uncompressed");
-                    stream = aviManager.AddVideoStream(false, frameRate, video_frames[0].image); 
+                    stream = aviManager.AddVideoStream(false, frameRate, video_frames[0]); 
                 }
               
                 // add the frames
-                ThreadPool.QueueUserWorkItem(new WaitCallback(t_add_frames));         
+                ThreadPool.QueueUserWorkItem(TAddFrames);         
             }
         }
 
@@ -86,18 +84,18 @@ namespace MayhemOpenCVWrapper
         /// Write out the video in a background thread
         /// </summary>
         /// <param name="state"></param>
-        private void t_add_frames(Object state)
+        private void TAddFrames(object state)
         {
             Logger.WriteLine("Adding Frames");
-            foreach (BitmapTimestamp img in video_frames)
+            foreach (Bitmap img in video_frames)
             {
-                stream.AddFrame(img.image);
+                stream.AddFrame(img);
                 frames++;
             }
             aviManager.Close();
             
 
-            foreach (BitmapTimestamp img in video_frames)
+            foreach (Bitmap img in video_frames)
             {
                 img.Dispose(); 
             }

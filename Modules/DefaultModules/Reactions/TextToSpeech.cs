@@ -14,18 +14,16 @@ namespace DefaultModules.Reactions
     [MayhemModule("Text To Speech", "Speaks a given phrase")]
     public class TextToSpeech : ReactionBase, IWpfConfigurable
     {
-        #region Configuration Properties
         [DataMember]
         private string Message
         {
             get;
             set;
         }
-        #endregion
 
         SpVoice voice;
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             voice = new SpVoice();
         }

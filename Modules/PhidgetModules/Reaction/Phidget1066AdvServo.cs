@@ -1,11 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using PhidgetModules.Wpf;
-using System.Windows;
-using System;
-using Phidgets;
 using MayhemWpf.UserControls;
+using PhidgetModules.Wpf;
+using Phidgets;
 
 namespace PhidgetModules.Reaction
 {
@@ -13,35 +12,32 @@ namespace PhidgetModules.Reaction
     [MayhemModule("Phidget: Adv. Servo", "Controls a servo")]
     public class Phidget1066AdvServo : ReactionBase, IWpfConfigurable
     {
-        #region Configuration
-
         // Motor Type
         [DataMember]
-        private ServoServo.ServoType ServoType;
+        private ServoServo.ServoType servoType;
 
         // The servo index we are talking to
         [DataMember]
-        private int Index;
+        private int index;
 
         // This is the position that this reaction instance wants to 
         // move the servo to
         [DataMember]
-        private double Position;
+        private double position;
 
-        #endregion;
         // Instance of the servo class
         private static AdvancedServo advServo;
 
-        public Phidget1066AdvServo()
+        protected override void OnLoadDefaults()
         {
-            Position = 50;
-            Index = 0;
+            position = 50;
+            index = 0;
 
             // This is the one we have, so we are just defaulting to it
-            ServoType = ServoServo.ServoType.HITEC_HS322HD;
+            servoType = ServoServo.ServoType.HITEC_HS322HD;
         }
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             // Only maintain one instance of the servo 
             // for all the AdvServo classes
@@ -66,24 +62,24 @@ namespace PhidgetModules.Reaction
             // TODO: This should be configurable
             if (advServo.servos.Count >= 1)
             {
-                advServo.servos[0].Position = Position;
+                advServo.servos[0].Position = position;
             }
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1066AdvServoConfig(advServo, Index, ServoType, Position); }
+            get { return new Phidget1066AdvServoConfig(advServo, index, servoType, position); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            ServoType = (configurationControl as Phidget1066AdvServoConfig).ServoType;
-            Position = (configurationControl as Phidget1066AdvServoConfig).Position;
+            servoType = (configurationControl as Phidget1066AdvServoConfig).ServoType;
+            position = (configurationControl as Phidget1066AdvServoConfig).Position;
         }
 
         public string GetConfigString()
         {
-            return String.Format("Move to {0}", Position.ToString("0.##"));
+            return String.Format("Move to {0}", position.ToString("0.##"));
         }
     }
 }

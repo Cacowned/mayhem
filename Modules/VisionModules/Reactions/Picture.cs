@@ -10,21 +10,16 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using System.Runtime.Serialization;
-using System.Windows;
-using VisionModules.Wpf;
-using MayhemOpenCVWrapper;
 using System.Drawing;
-using System.Diagnostics;
-using MayhemWpf.UserControls;
-using System.Timers;
-using System.Threading;
 using System.Drawing.Imaging;
+using System.Runtime.Serialization;
+using System.Timers;
+using MayhemCore;
+using MayhemOpenCVWrapper;
+using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
+using VisionModules.Wpf;
+using MayhemOpenCVWrapper.LowLevel;
 
 namespace VisionModules.Reactions
 {
@@ -32,37 +27,41 @@ namespace VisionModules.Reactions
     [MayhemModule("Picture", "Takes a photo with a webcam and saves it to the hard drive")]
     public class Picture : ReactionBase, IWpfConfigurable
     {
-        // default to "My Documents" folder
         [DataMember]
-        private string folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-
-        [DataMember]
-        private int selected_device_idx = 0;
+        private string folderLocation;
 
         [DataMember]
-        private string fileNamePrefix = "Mayhem"; 
+        private int selectedDeviceIndex;
 
-        // The device we are recording from
-        private CameraDriver i = CameraDriver.Instance;
-        private ImagerBase cam;
-
-       
+        [DataMember]
+        private string fileNamePrefix;
 
         // the temporal offset of the picture to be saved
         [DataMember]
-        private double capture_offset_time = 0.0;
+        private double captureOffsetTime;
 
-        protected override void  Initialize()
+        // The device we are recording from
+        private CameraDriver cameraDriver;
+        private ImagerBase camera;
+        private DummyCameraImageListener dummyListener;
+
+        protected override void OnLoadDefaults()
         {
-        
-            if (i == null)
-            {
-                i = CameraDriver.Instance;
-            }
+            cameraDriver = CameraDriver.Instance;
+            dummyListener = new DummyCameraImageListener();
+            captureOffsetTime = 0.0;
+            folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            fileNamePrefix = "Mayhem";
+            selectedDeviceIndex = 0;
+        }
 
-            if (selected_device_idx < i.DeviceCount)
+        protected override void OnAfterLoad()
+        {
+            dummyListener = new DummyCameraImageListener();
+            cameraDriver = CameraDriver.Instance;
+            if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = i.cameras_available[selected_device_idx];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
         }
 
@@ -83,30 +82,30 @@ namespace VisionModules.Reactions
             string path = this.folderLocation + "\\" + filename;
             Logger.WriteLine("saving file to " + path);
             image.Save(path, ImageFormat.Jpeg);
-            
+
             // VERY important! 
             image.Dispose();
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
-            // TODO: Improve this code
-            if (!IsConfiguring && selected_device_idx < i.DeviceCount)
+            cameraDriver = CameraDriver.Instance;
+            Logger.WriteLine("");
+            if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = i.cameras_available[selected_device_idx];
-                //Thread.Sleep(350);
-                cam.StartFrameGrabbing();
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                dummyListener.RegisterForImages(camera);
             }
-
-            return true;
+            if (camera.Running == false)
+                camera.StartFrameGrabbing();
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
-            base.Disable();
-            if (!IsConfiguring && cam != null)
+            if (!e.IsConfiguring && camera != null)
             {
-                cam.TryStopFrameGrabbing();
+                dummyListener.UnregisterForImages(camera); 
+                camera.TryStopFrameGrabbing();
             }
             //Thread.Sleep(350); 
         }
@@ -118,36 +117,34 @@ namespace VisionModules.Reactions
             // image gets saved when image provider calls back
             // cam.OnImageUpdated += this.imageUpdateHandler;
 
-            if (capture_offset_time == 0)
+            if (captureOffsetTime == 0)
             {
                 // save image directly
-                SaveImage(cam.ImageAsBitmap());
+                SaveImage(camera.ImageAsBitmap());
             }
-            else if (capture_offset_time < 0 && Math.Abs(capture_offset_time) <= Camera.LOOP_DURATION)
+            else if (captureOffsetTime < 0 && Math.Abs(captureOffsetTime) <= Camera.LoopDuration)
             {
                 // retrieve image from camera buffer
-
                 // buffer index = capture offset time / camera fram rate
-                int buff_idx = (int)(-capture_offset_time * 1000 / (double)CameraSettings.DEFAULTS().updateRate_ms);
+                int buff_idx = (int)(-captureOffsetTime * 1000.0 / (double) Camera.LOOP_BUFFER_UPDATE_MS);
 
-                if (cam is IBufferingImager)
+                if (camera is IBufferingImager)
                 {
-                    Bitmap image = ((IBufferingImager)cam).GetBufferItemAtIndex(buff_idx);
+                    Bitmap image = ((IBufferingImager)camera).GetBufferItemAtIndex(buff_idx);
                     if (image != null)
                     {
                         SaveImage(image);
                     }
                 }
             }
-            else if ((capture_offset_time > 0 && Math.Abs(capture_offset_time) <= Camera.LOOP_DURATION))
+            else if ((captureOffsetTime > 0 && Math.Abs(captureOffsetTime) <= Camera.LoopDuration))
             {
                 // schedule future retrieval of image
-                double time_ms = capture_offset_time * 1000;
+                double time_ms = captureOffsetTime * 1000;
                 System.Timers.Timer t = new System.Timers.Timer(time_ms);
                 t.Elapsed += new ElapsedEventHandler(SaveFutureImage);
-                t.AutoReset = false; 
+                t.AutoReset = false;
                 t.Enabled = true;
-             
             }
             else
             {
@@ -164,8 +161,8 @@ namespace VisionModules.Reactions
         private void SaveFutureImage(object sender, ElapsedEventArgs e)
         {
             Logger.WriteLine("SaveFutureImage");
-            if (this.Enabled && cam.running)
-                SaveImage(cam.ImageAsBitmap());
+            if (this.IsEnabled && camera.Running)
+                SaveImage(camera.ImageAsBitmap());
         }
 
         protected string DateTimeToTimeStamp(DateTime time)
@@ -177,8 +174,7 @@ namespace VisionModules.Reactions
         {
             get
             {
-                PictureConfig config = new PictureConfig(folderLocation, fileNamePrefix, capture_offset_time);
-                config.deviceList.SelectedIndex = selected_device_idx;
+                PictureConfig config = new PictureConfig(folderLocation, fileNamePrefix, captureOffsetTime, selectedDeviceIndex);
                 return config;
             }
         }
@@ -189,20 +185,24 @@ namespace VisionModules.Reactions
             folderLocation = config.SaveLocation;
             fileNamePrefix = config.FilenamePrefix;
 
-            bool wasEnabled = this.Enabled;
+            bool wasEnabled = this.IsEnabled;
 
-            if (config.deviceList.HasItems)
+            int camera_index = config.SelectedDeviceIdx;
+
+            if (cameraDriver.CamerasAvailable.Count > camera_index)
             {
-                // assign selected cam
-                cam = config.deviceList.SelectedItem as Camera;
-                selected_device_idx = config.deviceList.SelectedIndex;
+                // unregister, because camera might have changed
+                dummyListener.UnregisterForImages(camera);
+                camera = cameraDriver.CamerasAvailable[camera_index];
+                dummyListener.RegisterForImages(camera);
+                selectedDeviceIndex = camera_index;
             }
             else
             {
                 Logger.WriteLine("no cam present, using dummy");
-                cam = new DummyCamera();
+                camera = new DummyCamera();
             }
-            capture_offset_time = config.slider_value;
+            captureOffsetTime = config.slider_value;
         }
 
         public string GetConfigString()

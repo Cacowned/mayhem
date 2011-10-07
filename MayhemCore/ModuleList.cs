@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Diagnostics;
 
 namespace MayhemCore
 {
@@ -11,12 +9,11 @@ namespace MayhemCore
 	/// Helper methods for Event and Reaction lists
 	/// </summary>
 	/// <typeparam name="T">EventBase or ReactionBase</typeparam>
-	/// <typeparam name="V">The interface type that modules must implement</typeparam>
-    public abstract class ModuleList<T> : List<ModuleType>
+    internal abstract class ModuleList<T> : List<ModuleType>
 	{
-        List<Type> allTypes = new List<Type>();
+        private List<Type> allTypes = new List<Type>();
 
-        public bool ScanModules(string path) 
+        internal bool ScanModules(string path) 
         {
             // Load up all the types of things that we want in the application root
             return FindTypes(path);
@@ -27,7 +24,7 @@ namespace MayhemCore
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		protected bool FindTypes(string path)
+		private bool FindTypes(string path)
         {
 			if (String.IsNullOrEmpty(path))
             {
@@ -69,8 +66,8 @@ namespace MayhemCore
                                 }
                                 else
                                 {
-                                    ///TODO: Do something to tell the developer the module has an error
-                                   // throw new Exception("Module does not have MayhemModuleAttribute attribute set:\n" + type.FullName);
+                                    //TODO: Do something to tell the developer the module has an error
+                                    //throw new Exception("Module does not have MayhemModuleAttribute attribute set:\n" + type.FullName);
                                 }
                             }
                             allTypes.Add(type);
@@ -87,13 +84,8 @@ namespace MayhemCore
             return true;
 		}
 
-        public Type[] GetAllTypesInModules()
+        internal Type[] GetAllTypesInModules()
         {
-            //List<Type> types = new List<Type>();
-            //foreach (ModuleType moduleType in this)
-            //{
-            //    types.Add(moduleType.Type);
-            //}
             return allTypes.ToArray();
         }
 	}

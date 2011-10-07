@@ -1,10 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using MayhemWpf.UserControls;
-using Microsoft.Win32;
 using System.Windows.Forms;
-using System;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {

@@ -6,47 +6,41 @@ namespace MayhemCore
     /// 
     /// When making a new app that uses Mayhem, you should create an instance of this class
     /// </summary>
-    /// <typeparam name="T">
-    /// The interface that modules must implement if they have
-    /// a configuration window. If they don't implement a configuration
-    /// window, they don't have to implement this class
-    /// </typeparam>
     public class MayhemEntry
     {
-        public ConnectionList ConnectionList
+        internal ConnectionList ConnectionList
         {
             get;
             private set;
         }
-        public EventList EventList
+        internal EventList EventList
         {
             get;
             private set;
         }
-        public ReactionList ReactionList
-        {
-            get;
-            private set;
-        }
-
-        public Type ConfigurableType
+        internal ReactionList ReactionList
         {
             get;
             private set;
         }
 
-        private static MayhemEntry _instance;
+        internal Type ConfigurableType
+        {
+            get;
+            private set;
+        }
 
+        private static MayhemEntry instance;
         public static MayhemEntry Instance
         {
             get
             {
-                if (_instance == null)
+                if (instance == null)
                 {
-                    _instance = new MayhemEntry();
+                    instance = new MayhemEntry();
                 }
 
-                return _instance;
+                return instance;
             }
         }
 
@@ -65,7 +59,7 @@ namespace MayhemCore
         /// module lists
         /// </summary>
         /// <param name="configType"></param>
-        public void SetConfigurationType(Type configType)
+        internal void SetConfigurationType(Type configType)
         {
             if (this.ConfigurableType != null) {
                 throw new InvalidOperationException("Configuration type has already been set");
@@ -80,7 +74,7 @@ namespace MayhemCore
         /// into this instance's connectionList
         /// </summary>
         /// <param name="connections"></param>
-        public void LoadConnections(ConnectionList connections)
+        internal void LoadConnections(ConnectionList connections)
         {
             if (connections == null)
             {
@@ -93,7 +87,7 @@ namespace MayhemCore
             }
         }
 
-        public void Shutdown()
+        internal void Shutdown()
         {
             if (ShuttingDown != null)
             {

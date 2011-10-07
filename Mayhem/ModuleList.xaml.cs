@@ -4,13 +4,14 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using System.Diagnostics;
+using System.Windows.Navigation;
 
 namespace Mayhem
 {
@@ -19,7 +20,7 @@ namespace Mayhem
     /// </summary>
     public partial class ModuleList : Window
     {
-        public ModuleType SelectedModule
+        internal ModuleType SelectedModule
         {
             get;
             private set;
@@ -42,25 +43,23 @@ namespace Mayhem
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(ModuleList), new UIPropertyMetadata(string.Empty));
 
-        ThicknessAnimation animSlideOut;
-        ThicknessAnimation animSlideIn;
-        RectAnimation animSize;
-
         bool isCheckingSizeChanged = false;
-        bool isFirstLoad = true;
 
         const double AnimationTime = 0.2;
+
+        int heightBasedOnModules;
 
         public ModuleList(IEnumerable list, string headerText)
         {
             Text = headerText;
             InitializeComponent();
 
-            animSlideOut = new ThicknessAnimation(new Thickness(0), new Duration(TimeSpan.FromSeconds(AnimationTime)));
-            animSlideIn = new ThicknessAnimation(new Thickness(0), new Duration(TimeSpan.FromSeconds(AnimationTime)));
-            animSize = new RectAnimation(new Rect(), new Duration(TimeSpan.FromSeconds(AnimationTime)));
+            new RectAnimation(new Rect(), new Duration(TimeSpan.FromSeconds(AnimationTime)));
 
             ModulesList.ItemsSource = list;
+
+            heightBasedOnModules = (int)Math.Min(185 + 43 * ModulesList.Items.Count, Height);
+            Height = heightBasedOnModules;
 
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ModuleList));
@@ -71,17 +70,6 @@ namespace Mayhem
                     ResizeWindow(WindowRect);
                 });
             }
-        }
-
-        private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            double targetWidth = iWpfConfig.Width + 40;
-            double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
-
-            Rect target = new Rect(Left - (targetWidth - ActualWidth) / 2, Top - (targetHeight - ActualHeight) / 2,
-                                   targetWidth, targetHeight);
-
-            StartStoryBoard(WindowRect, target, AnimationTime, false);
         }
 
         private void ChooseButtonClick(object sender, RoutedEventArgs e)
@@ -101,8 +89,8 @@ namespace Mayhem
                         ConfigContent.Content = iWpfConfig;
                         buttonSave.IsEnabled = iWpfConfig.CanSave;
                         windowHeaderConfig.Text = iWpfConfig.Title;
-                        iWpfConfig.Loaded += new RoutedEventHandler(iWpfConfig_Loaded);
-                        iWpfConfig.CanSavedChanged += new WpfConfiguration.ConfigCanSaveHandler(iWpfConfig_CanSavedChanged);
+                        iWpfConfig.Loaded += iWpfConfig_Loaded;
+                        iWpfConfig.CanSavedChanged += iWpfConfig_CanSavedChanged;
                         iWpfConfig.OnLoad();
                     }
                     catch
@@ -122,7 +110,7 @@ namespace Mayhem
 
         private void iWpfConfig_CanSavedChanged(bool canSave)
         {
-            Dispatcher.Invoke(new Action(delegate()
+            Dispatcher.Invoke(new Action(delegate
             {
                 buttonSave.IsEnabled = canSave;
             }));
@@ -133,18 +121,31 @@ namespace Mayhem
             WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
             double targetWidth = iWpfConfig.Width + 40;
             double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
+            stackPanelConfig.Width = targetWidth;
 
-            animSlideOut.To = new Thickness(-targetWidth, 0, targetWidth, 0);
-            stackPanelList.BeginAnimation(StackPanel.MarginProperty, animSlideOut);
+            // Animate the render transform of the grid
+            DoubleAnimation animSlideOut = new DoubleAnimation();
+            animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
+            animSlideOut.To = -300;
+            animSlideOut.Completed += delegate
+            {
+                stackPanelList.Visibility = System.Windows.Visibility.Hidden;
+            };
+            ((TranslateTransform)gridControls.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
-            animSlideIn.To = new Thickness(0);
-            animSlideIn.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime * 0.95));
-            stackPanelConfig.BeginAnimation(StackPanel.MarginProperty, animSlideIn);
+            // Animate the render transform of the config (this covers up the white space between them)
+            ((TranslateTransform)stackPanelConfig.RenderTransform).X = 280;
+            stackPanelConfig.Visibility = System.Windows.Visibility.Visible;
+            animSlideOut = new DoubleAnimation();
+            animSlideOut.To = 300;
+            animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
+            ((TranslateTransform)stackPanelConfig.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
+            // Animate the window size to match the config control
             Rect target = new Rect(Left - (targetWidth - ActualWidth) / 2, Top - (targetHeight - ActualHeight) / 2,
                                    targetWidth, targetHeight);
 
-            StartStoryBoard(WindowRect, target, AnimationTime, true);
+            StartStoryBoard(WindowRect, target, AnimationTime);
 
             buttonChoose.IsEnabled = false;
             buttonCancel.IsEnabled = false;
@@ -170,8 +171,8 @@ namespace Mayhem
             {
                 ErrorLog.AddError(ErrorType.Failure, "Error saving " + SelectedModule.Name);
             }
-            
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+
+            ThreadPool.QueueUserWorkItem(o =>
             {
                 try
                 {
@@ -181,7 +182,7 @@ namespace Mayhem
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error closing " + SelectedModule.Name + "'s configuration");
                 }
-            }));
+            });
             DialogResult = true;
         }
 
@@ -190,10 +191,9 @@ namespace Mayhem
             if (isCheckingSizeChanged)
             {
                 isCheckingSizeChanged = false;
-                ConfigContent.SizeChanged -= new SizeChangedEventHandler(ConfigContent_SizeChanged);
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
+            ThreadPool.QueueUserWorkItem(o =>
                 {
                     try
                     {
@@ -204,19 +204,31 @@ namespace Mayhem
                     {
                         ErrorLog.AddError(ErrorType.Failure, "Error cancelling " + SelectedModule.Name + "'s configuration");
                     }
-                }));
+                });
 
-            animSlideOut.To = new Thickness(0);
-            stackPanelList.BeginAnimation(StackPanel.MarginProperty, animSlideOut);
+            // Animate the render transform of the grid
+            DoubleAnimation animSlideOut = new DoubleAnimation();
+            animSlideOut.To = 0;
+            animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
+            animSlideOut.Completed += delegate(object s, EventArgs args)
+            {
+                stackPanelConfig.Visibility = System.Windows.Visibility.Hidden;
+            };
+            ((TranslateTransform)gridControls.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
-            animSlideIn.To = new Thickness(300,0,-300,0);
-            animSlideIn.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime * 1.1));
-            stackPanelConfig.BeginAnimation(StackPanel.MarginProperty, animSlideIn);
+            // Animate the render transform of the list (this covers up the white space between them)
+            ((TranslateTransform)stackPanelList.RenderTransform).X = 20;
+            stackPanelList.Visibility = System.Windows.Visibility.Visible;
+            animSlideOut = new DoubleAnimation();
+            animSlideOut.To = 0;
+            animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
+            ((TranslateTransform)stackPanelList.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
-            Rect target = new Rect(Left - (300 - ActualWidth) / 2, Top - (550 - ActualHeight) / 2,
-                                   300, 550);
+            // Animate the window size to match the list control
+            Rect target = new Rect(Left - (300 - ActualWidth) / 2, Top - (heightBasedOnModules - ActualHeight) / 2,
+                                   300, heightBasedOnModules);
 
-            StartStoryBoard(WindowRect, target, AnimationTime, false);
+            StartStoryBoard(WindowRect, target, AnimationTime);
 
             buttonChoose.IsEnabled = true;
             buttonCancel.IsEnabled = true;
@@ -224,9 +236,20 @@ namespace Mayhem
             buttonConfigCancel.IsEnabled = false;
         }
 
+        void animSlideIn_Completed(object sender, EventArgs e)
+        {
+            stackPanelConfig.Margin = new Thickness(300, 0, -300, 0);
+        }
+
         void ListBoxItem_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             ChooseButtonClick(sender, e);
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
 
 
@@ -246,10 +269,10 @@ namespace Mayhem
         // Using a DependencyProperty as the backing store for WindowRect.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty WindowRectProperty =
             DependencyProperty.Register("WindowRect", typeof(Rect), typeof(ModuleList), new UIPropertyMetadata(new Rect(0, 0, 0, 0)));
- 
+
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
- 
+
         /// <summary>
         /// Resizes the window to the desired Rect
         /// Called when WindowRect DependencyProperty changes
@@ -261,53 +284,22 @@ namespace Mayhem
             MoveWindow(windowPtr, (int)value.Left, (int)value.Top, (int)value.Width, (int)value.Height, true);
         }
 
-        #region Resize Animation
-        private void StartStoryBoard(Rect currentRect, Rect targetRect, double time, bool checkOnComplete)
+        private void StartStoryBoard(Rect currentRect, Rect targetRect, double time)
         {
-            // Set up animation duration and behavior
             RectAnimation rectAnimation = new RectAnimation();
             rectAnimation.Duration = TimeSpan.FromSeconds(time);
             rectAnimation.FillBehavior = FillBehavior.HoldEnd;
 
-            // Set the From and To properties of the animation.
-//            rectAnimation.From = currentRect;
             rectAnimation.To = targetRect;
 
-            // Set the Target of the animation to the Window
-            // Remember to define a name in XAML
             Storyboard.SetTarget(rectAnimation, this);
             Storyboard.SetTargetProperty(rectAnimation, new PropertyPath(WindowRectProperty));
 
-            // Create a storyboard to apply the animation.
             Storyboard storyBoard = new Storyboard();
             storyBoard.Children.Add(rectAnimation);
 
-            if (checkOnComplete)
-            {
-                storyBoard.Completed += new EventHandler(storyBoard_Completed);
-            }
             storyBoard.Begin(this);
         }
-
-        void storyBoard_Completed(object sender, EventArgs e)
-        {
-            if (!isCheckingSizeChanged)
-            {
-                isCheckingSizeChanged = true;
-                ConfigContent.SizeChanged += new SizeChangedEventHandler(ConfigContent_SizeChanged);
-            }
-        }
         #endregion
-
-        #endregion
-
-        private void ModulesList_LayoutUpdated(object sender, EventArgs e)
-        {
-            if (isFirstLoad)
-            {
-                isFirstLoad = false;
-                Height = 155 + ModulesList.ActualHeight;
-            }
-        }
     }
 }

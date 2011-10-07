@@ -13,25 +13,22 @@ namespace XboxModules.Events
     [MayhemModule("Xbox Controller: Button", "Triggers when buttons on an Xbox 360 controller are pushed")]
     public class XboxButton : EventBase, IWpfConfigurable
     {
-        private ButtonWatcher buttonWatcher;
-
-        public static bool IsConfigOpen { get; set; }
-
-        #region Configuration
         [DataMember]
         private Buttons xboxButtons;
 
         [DataMember]
-        private PlayerIndex player;
-       
-        #endregion
 
-        public XboxButton()
+        private PlayerIndex player;
+        private ButtonWatcher buttonWatcher;
+
+        public static bool IsConfigOpen { get; set; }
+
+        protected override void OnLoadDefaults()
         {
             player = PlayerIndex.One;
         }
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             buttonWatcher = ButtonWatcher.Instance;
         }
@@ -59,30 +56,29 @@ namespace XboxModules.Events
         {
             if (!IsConfigOpen)
             {
-                if (Enabled)
+                if (IsEnabled)
                 {
                     Trigger();
                 }
             }
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             var state = GamePad.GetState(player);
             if (!state.IsConnected)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.XboxButton_CantEnable);
+                e.Cancel = true;
             }
             else
             {
                 // If it is connected, lets enable
                 buttonWatcher.AddCombinationHandler(xboxButtons, OnKeyCombinationActivated);
             }
-
-            return state.IsConnected;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             buttonWatcher.RemoveCombinationHandler(xboxButtons, OnKeyCombinationActivated);
         }
