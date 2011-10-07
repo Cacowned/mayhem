@@ -21,7 +21,17 @@ namespace VisionModules.Wpf
     public static class VisionModulesWPFCommon
     {
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        public static extern bool DeleteGDIObject(IntPtr hObject);
+        private static extern bool DeleteObject(IntPtr hObject);
+
+        /// <summary>
+        /// Wrapper with a more meaningful name for DeleteObject
+        /// </summary>
+        /// <param name="hObject"></param>
+        /// <returns></returns>
+        public static bool DeleteGDIObject(IntPtr hObject)
+        {
+            return DeleteObject(hObject);
+        }
 
         /// <summary>
         /// Convert Bitmap to byte array
