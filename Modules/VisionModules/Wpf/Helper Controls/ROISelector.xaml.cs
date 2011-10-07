@@ -26,9 +26,6 @@ namespace VisionModules.Wpf
         public ROISelector()
         {
             InitializeComponent();
-
-            motionBoundingRect.Stroke = System.Windows.Media.Brushes.OrangeRed;
-            motionBoundingRect.StrokeThickness = 2;
         }
 
         //------   ROI Selection with Mouse
@@ -47,11 +44,19 @@ namespace VisionModules.Wpf
             selected
         }
 
-        private System.Windows.Shapes.Rectangle motionBoundingRect = new System.Windows.Shapes.Rectangle();
-
         private modes mode = modes.start;
 
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
 
+            Loaded += new RoutedEventHandler(ROISelector_Loaded);
+        }
+
+        void ROISelector_Loaded(object sender, RoutedEventArgs e)
+        {
+            OutterRect.Rect = new Rect(0, 0, this.ActualWidth, this.ActualHeight);
+        }
 
         #region ROI Selection with Mouse
         public  void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -85,36 +90,31 @@ namespace VisionModules.Wpf
             System.Windows.Point pos = e.GetPosition(this);
             boundingRectOrigin = pos;
 
-            Canvas.SetLeft(motionBoundingRect, pos.X);
-            Canvas.SetTop(motionBoundingRect, pos.Y);
-
+            var rect = InnerRect.Rect;
+            rect.X = pos.X;
+            rect.Y = pos.Y;
             boundingRectSize = new Point(0, 0);
-            motionBoundingRect.Width = 0;
-            motionBoundingRect.Height = 0;
+            rect.Width = 0;
+            rect.Height = 0;
 
-            if (!overlay.Children.Contains(motionBoundingRect))
-            {
-                overlay.Children.Add(motionBoundingRect);
-            }
+            InnerRect.Rect = rect;
 
            // overlay.Children.Add(rec);
-           // motionBoundingRect = rec; 
+           // InnerRect = rec; 
 
         }
 
         public void DisplayBoundingRect()
         {
-           
-            Canvas.SetLeft(motionBoundingRect, boundingRectOrigin.X);
-            Canvas.SetTop(motionBoundingRect, boundingRectOrigin.Y);
 
-            motionBoundingRect.Width = boundingRectSize.X;
-            motionBoundingRect.Height = boundingRectSize.Y;
+            var rect = InnerRect.Rect;
+            rect.X = boundingRectOrigin.X;
+            rect.Y = boundingRectOrigin.Y;
 
-            if (!overlay.Children.Contains(motionBoundingRect))
-            {
-                overlay.Children.Add(motionBoundingRect);
-            }
+            rect.Width = boundingRectSize.X;
+            rect.Height = boundingRectSize.Y;
+
+            InnerRect.Rect = rect;           
         }
 
         /**<summary>
@@ -141,16 +141,19 @@ namespace VisionModules.Wpf
                     prev_position = position;
                 }
 
-                //  motionBoundingRect
+                //  InnerRect
 
                 boundingRectSize.X = position.X - boundingRectOrigin.X;
                 boundingRectSize.Y = position.Y - boundingRectOrigin.Y;
                 // x,y > 0
                 if (boundingRectSize.X >= 0 && boundingRectSize.Y >= 0)
                 {
-                    motionBoundingRect.Width = boundingRectSize.X;
-                    motionBoundingRect.Height = boundingRectSize.Y;
-                    motionBoundingRect.RenderTransform = new RotateTransform(0);
+                    var rect = InnerRect.Rect;
+                    rect.Width = boundingRectSize.X;
+                    rect.Height = boundingRectSize.Y;
+                    //InnerRect.RenderTransform = new RotateTransform(0);
+
+                    InnerRect.Rect = rect;
                 }
                 // x < 0, y> 0
                 else if (boundingRectSize.X < 0 && boundingRectSize.Y >= 0)
@@ -161,15 +164,16 @@ namespace VisionModules.Wpf
 
 
                     Transform r = new RotateTransform(180);
-                    Transform t = new TranslateTransform(0, motionBoundingRect.Height);
+                    Transform t = new TranslateTransform(0, InnerRect.Rect.Height);
 
                     g.Children.Add(r);
                     g.Children.Add(t);
 
-                    motionBoundingRect.Width = Math.Abs(boundingRectSize.X);
-                    motionBoundingRect.Height = boundingRectSize.Y;
-
-                    motionBoundingRect.RenderTransform = g;
+                    var rect = InnerRect.Rect;
+                    rect.Width = Math.Abs(boundingRectSize.X);
+                    rect.Height = boundingRectSize.Y;
+                    InnerRect.Rect = rect;
+                    //InnerRect.RenderTransform = g;
                 }
                 // x < 0, y < 0
                 else if (boundingRectSize.X < 0 && boundingRectSize.Y < 0)
@@ -178,15 +182,16 @@ namespace VisionModules.Wpf
 
 
                     Transform r = new RotateTransform(180);
-                    //Transform t = new TranslateTransform(0, motionBoundingRect.Height);
+                    //Transform t = new TranslateTransform(0, InnerRect.Height);
 
                     g.Children.Add(r);
                     //g.Children.Add(t);
 
-                    motionBoundingRect.Width = Math.Abs(boundingRectSize.X);
-                    motionBoundingRect.Height = Math.Abs(boundingRectSize.Y);
-
-                    motionBoundingRect.RenderTransform = g;
+                    var rect = InnerRect.Rect;
+                    rect.Width = Math.Abs(boundingRectSize.X);
+                    rect.Height = Math.Abs(boundingRectSize.Y);
+                    InnerRect.Rect = rect;
+                    //InnerRect.RenderTransform = g;
                 }
                 // x>0, y < 0
                 else if (boundingRectSize.X >= 0 && boundingRectSize.Y < 0)
@@ -195,14 +200,17 @@ namespace VisionModules.Wpf
 
 
                     //Transform r = new RotateTransform(180);
-                    Transform t = new TranslateTransform(0, -motionBoundingRect.Height);
+                    Transform t = new TranslateTransform(0, -InnerRect.Rect.Height);
                     g.Children.Add(t);
                     // g.Children.Add(t);
 
-                    motionBoundingRect.Width = Math.Abs(boundingRectSize.X);
-                    motionBoundingRect.Height = Math.Abs(boundingRectSize.Y);
+                    var rect = InnerRect.Rect;
+                    rect.Width = Math.Abs(boundingRectSize.X);
+                    rect.Height = Math.Abs(boundingRectSize.Y);
 
-                    motionBoundingRect.RenderTransform = g;
+                    InnerRect.Rect = rect;
+
+                    //InnerRect.RenderTransform = g;
                 }
 
 
