@@ -6,6 +6,24 @@
              mc:Ignorable="d" 
              d:DesignHeight="240" d:DesignWidth="320">
     <Grid>
-        <Canvas Canvas.Left="0" Canvas.Top="0" Height="240" Width="320" x:Name="overlay" Background= "Transparent"  MouseLeftButtonDown="OnMouseLeftButtonDown" MouseLeftButtonUp="OnMouseLeftButtonUp" MouseMove="OnMouseMove" MouseLeave="OnMouseLeave" MouseEnter="OnMouseEnter"></Canvas>  
+    <Canvas Canvas.Left="0" Canvas.Top="0" Height="240" Width="320" x:Name="overlay" Background= "Transparent"  MouseLeftButtonDown="OnMouseLeftButtonDown" MouseLeftButtonUp="OnMouseLeftButtonUp" MouseMove="OnMouseMove" MouseLeave="OnMouseLeave" MouseEnter="OnMouseEnter">
+      <Path Stroke="Black"
+            StrokeThickness="1"
+            Fill="#66000000">
+        <Path.Data>
+          <!-- Combines two geometries using the XOR combine mode. -->
+          <CombinedGeometry GeometryCombineMode="Xor">
+            <CombinedGeometry.Geometry1>
+              <RectangleGeometry x:Name="OutterRect"
+                                 Rect="0,0,150,150" />
+            </CombinedGeometry.Geometry1>
+            <CombinedGeometry.Geometry2>
+              <RectangleGeometry x:Name="InnerRect"
+                                 Rect="50,50,50,50" />
+            </CombinedGeometry.Geometry2>
+          </CombinedGeometry>
+        </Path.Data>
+      </Path>
+    </Canvas>  
     </Grid>
 </UserControl>
