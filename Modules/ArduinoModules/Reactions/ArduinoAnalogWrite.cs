@@ -11,7 +11,7 @@
 
 namespace ArduinoModules.Reactions
 {
-    class ArduinoAnalogWrite
+    internal class ArduinoAnalogWrite
     {
     }
 }

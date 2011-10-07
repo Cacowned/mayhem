@@ -11,5 +11,7 @@
 
 namespace ArduinoModules.Reactions
 {
-    
+    internal class ArduinoServoWrite
+    {
+    }
 }

@@ -31,7 +31,7 @@ namespace VisionModules.Events
     /// </summary>
     [DataContract]
     [MayhemModule("Object Detector", "Detects objects in scene matching a template image")]
-    class ObjectDetectorEvent : EventBase, IWpfConfigurable
+    internal class ObjectDetectorEvent : EventBase, IWpfConfigurable
     {
         [DataMember]
         private Byte[] templateImage_bytes;
