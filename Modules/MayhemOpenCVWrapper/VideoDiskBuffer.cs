@@ -5,7 +5,7 @@
  *  This helps reduce Mayhem's memory footprint, as caching high-res video frames in memory consumes
  *  too much memory. 
  *  
- * The space required for caching 600 640x480 bitmaps is about 600mb.
+ * The space required for caching 600 640x480 bitmaps, which is 30s worth of video at 20fps,  is about 600mb.
  *  
  *  (c) 2011, Microsoft Applied Sciences Group
  *  
@@ -69,7 +69,7 @@ namespace MayhemOpenCVWrapper
         }
 
         /// <summary>
-        /// What we need to do here is to clean up the thread! 
+        /// Clean up the thread! 
         /// </summary>
         ~VideoDiskBuffer()
         {
@@ -128,6 +128,10 @@ namespace MayhemOpenCVWrapper
             accept_frames = true; 
         }
       
+        /// <summary>
+        /// Allows adding of a Bitmap to the disk buffer. 
+        /// </summary>
+        /// <param name="b"></param>
         public void AddBitmap(Bitmap b)
         {
             if (accept_frames)
@@ -147,10 +151,10 @@ namespace MayhemOpenCVWrapper
         }
        
         /// <summary>
-        /// Write to buffer file. 
+        /// Thread that writes pending items to the buffer file. 
         /// </summary>
         /// <param name="items"></param>
-        public void BufferWriteThread()
+        private void BufferWriteThread()
         {
           // Logger.WriteLine("");
             
@@ -184,6 +188,10 @@ namespace MayhemOpenCVWrapper
             }
         }
 
+        /// <summary>
+        /// Retrieve List of bitmaps from the disk cache and deserialize them to memory. 
+        /// </summary>
+        /// <returns>List containing the Bitmaps from the disk cache.</returns>
         public List<Bitmap> RetrieveBitmapsFromDisk()
         {
             Logger.WriteLine("");
@@ -213,8 +221,7 @@ namespace MayhemOpenCVWrapper
                     blck += MAX_BUFFER_ITEMS;
         
                 for (int i = begin; i < end; i++)
-                {
-                    //long offset = blck * blockSize;
+                {                   
                     long offset = GetOffsetForIndex(blck);
                     int byteCount = (int)block_bytes[blck];
                     Logger.WriteLine("Deserializing Block " + blck + " offset "+ string.Format("{0:x}", offset) + " nr of bytes " + byteCount);

@@ -146,7 +146,7 @@ namespace VisionModules.Wpf
 
             if (selected_cam != CameraSelected)
             {
-                Logger.WriteLine("Switching Cam to " + selected_cam.Info.FriendlyName());
+                Logger.WriteLine("Switching Cam to " + selected_cam.Info.ToString());
 
                 CameraSelected.OnImageUpdated -= i_OnImageUpdated;
                 if (CameraSelected.Running)

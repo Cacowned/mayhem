@@ -20,14 +20,14 @@ using Point = System.Drawing.Point;
 namespace MayhemOpenCVWrapper.LowLevel
 {
     public class FaceDetectorComponent : CameraImageListener
-    {
-        private FaceDetector fd; 
+    {     
         public delegate void DetectionHandler(object sender, List<Point> points);
         public event DetectionHandler OnFaceDetected;
-        
+        public Rect DetectionBoundary = new Rect(0, 0, 0, 0);
+
+        private FaceDetector fd;
         private int frameCount = 0;
         private const bool VerboseDebug = true;
-        public Rect DetectionBoundary = new Rect(0, 0, 0, 0);
 
         public FaceDetectorComponent(ImagerBase c)
         {

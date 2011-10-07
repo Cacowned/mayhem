@@ -34,19 +34,17 @@ namespace MayhemOpenCVWrapper
             Description = descr;
         }
 
-        public string FriendlyName()
-        {
-            return this.ToString();
-        }
-
-        public override string ToString()
-        {
-            return "" + DeviceId + " : " + Description;
-        }
+        
 
         public static CameraInfo DummyInfo()
         {
             return new CameraInfo(0, "Dummmy Camera");
+        }
+
+       
+        public override string ToString()
+        {
+            return "" + DeviceId + " : " + Description;
         }
 
     }

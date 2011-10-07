@@ -23,18 +23,13 @@ namespace MayhemOpenCVWrapper.LowLevel
     /// </summary>
     public class MotionDetectorComponent : CameraImageListener
     {
-        private bool VERBOSE_DEBUG = false;
-        private OpenCVDLL.MotionDetector m;
-
         public delegate void DetectionHandler(object sender, List<Point> points);
         public event DetectionHandler OnMotionUpdate;
-
-        //private Camera.ImageUpdateHandler imageUpdateHandler; 
-
         public Rect MotionBoundaryRect = new Rect();
 
+        private bool VERBOSE_DEBUG = false;
+        private OpenCVDLL.MotionDetector m;
         private int frameCount = 0;
-
         private int[] contourPoints = new int[1200];
         private List<Point> points = new List<Point>();
 
