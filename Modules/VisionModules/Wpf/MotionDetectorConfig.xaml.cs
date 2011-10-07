@@ -27,8 +27,8 @@ namespace VisionModules.Wpf
     public partial class MotionDetectorConfig : WpfConfiguration
     {
         private CameraDriver i = CameraDriver.Instance;
-        protected Camera cam = null;
-        public Camera selected_camera
+        protected ImagerBase cam = null;
+        public ImagerBase selected_camera
         {
             get { return cam; }
         }
@@ -52,11 +52,11 @@ namespace VisionModules.Wpf
             }
         }
 
-        public MotionDetectorConfig(Camera c)
+        public MotionDetectorConfig(ImagerBase camera)
         {
-            cam = c;
+            cam = camera;
             InitializeComponent();
-            DeviceList.SelectedIndex = c.Info.deviceId;
+            DeviceList.SelectedIndex = camera.Info.DeviceId;
             Init();
         }
 
@@ -65,7 +65,7 @@ namespace VisionModules.Wpf
             // populate device list
             Logger.WriteLine("OnLoad");
 
-            foreach (Camera c in i.cameras_available)
+            foreach (Camera c in i.CamerasAvailable)
             {
                 DeviceList.Items.Add(c);
             }
@@ -77,10 +77,10 @@ namespace VisionModules.Wpf
 
             if (i.DeviceCount > 0)
             {
-                int camera_index = (selected_camera != null && selected_camera.Info.deviceId < i.DeviceCount) ? selected_camera.Info.deviceId : 0;
+                int camera_index = (selected_camera != null && selected_camera.Info.DeviceId < i.DeviceCount) ? selected_camera.Info.DeviceId : 0;
 
                 // start the camera 0 if it isn't already running
-                cam = i.cameras_available[camera_index];
+                cam = i.CamerasAvailable[camera_index];
                
                 DeviceList.SelectedIndex = camera_index;
                 Logger.WriteLine("Selected Index " + DeviceList.SelectedIndex);
@@ -88,7 +88,7 @@ namespace VisionModules.Wpf
                 ///TODO: SVEN: Is it ok to comment out cam.running?
                 /// NO, not ok at the moment!
                 /// TODO: Move the check into Camera
-                if (!cam.running)
+                if (!cam.Running)
                 {
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.OnImageUpdated += i_OnImageUpdated;
@@ -138,13 +138,13 @@ namespace VisionModules.Wpf
             // this.camera_image.Source.Freeze();
 
             BackBuffer.Dispose();
-            VisionModulesWPFCommon.DeleteObject(hBmp);
+            VisionModulesWPFCommon.DeleteGDIObject(hBmp);
         }
 
         public override void OnClosing()
         {
             Logger.WriteLine("OnClosing");
-            foreach (Camera c in i.cameras_available)
+            foreach (Camera c in i.CamerasAvailable)
             {
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.TryStopFrameGrabbing();
@@ -162,21 +162,21 @@ namespace VisionModules.Wpf
         private void DeviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Logger.WriteLine("");
-            Camera selected_cam = i.cameras_available[DeviceList.SelectedIndex];
+            Camera selected_cam = i.CamerasAvailable[DeviceList.SelectedIndex];
 
             if (selected_cam != cam)
             {
-                Logger.WriteLine("Switching Cam to " + selected_cam.Info.FriendlyName());
+                Logger.WriteLine("Switching Cam to " + selected_cam.Info.Description);
 
                 cam.OnImageUpdated -= i_OnImageUpdated;
-                if (cam.running)
+                if (cam.Running)
                     cam.TryStopFrameGrabbing();
 
                 // switch the camera display
                 cam = selected_cam;
                 cam.OnImageUpdated -= i_OnImageUpdated;
                 cam.OnImageUpdated += i_OnImageUpdated;
-                if (!cam.running)
+                if (!cam.Running)
                 {
                     ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
                     {
