@@ -49,7 +49,7 @@ namespace X10Modules.Reactions
         {
             serial = MayhemSerialPortMgr.Instance;
             // TODO evaluate is Serial.findInsteonDevices may be 
-            if (serial.GetInsteonPortNames().Keys.Contains(portName))
+            if (serial.GetInsteonPortNames(new InsteonUsbModemSerialSettings()).Keys.Contains(portName))
             {
                 insteonController = InsteonController.ControllerForPortName(portName); //new InsteonController(portName);
             }

@@ -88,8 +88,8 @@ namespace X10Modules.Wpf
         {
             serial = MayhemSerialPortMgr.Instance; 
             serial.UpdatePortList();
-     
-            Dictionary<string,string> portList = serial.GetInsteonPortNames();
+
+            Dictionary<string, string> portList = serial.GetInsteonPortNames(new InsteonUsbModemSerialSettings());
                        
             if (portList.Count > 0)
             {
