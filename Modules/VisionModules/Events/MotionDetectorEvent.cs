@@ -7,18 +7,19 @@
  * 
  * Author: Sven Kratz
  * 
- */
+ */ 
 using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Threading;
 using System.Windows;
 using MayhemCore;
-using MayhemOpenCVWrapper;
-using MayhemOpenCVWrapper.LowLevel;
 using MayhemWpf.ModuleTypes;
-using MayhemWpf.UserControls;
 using VisionModules.Wpf;
+using MayhemOpenCVWrapper;
+using System.Collections.Generic;
+using System.Diagnostics;
+using MayhemWpf.UserControls;
+using MayhemOpenCVWrapper.LowLevel;
+using System.Threading;
 
 namespace VisionModules.Events
 {
@@ -26,28 +27,24 @@ namespace VisionModules.Events
     [MayhemModule("Motion Detector", "Detects when there is motion in the frame")]
     public class MotionDetector : EventBase, IWpfConfigurable
     {
+        private DateTime lastMotionDetected = DateTime.Now;
+        private const int detectionInterval = 5000; //ms
+
+        private MotionDetectorComponent motionDetectorComponent;
+        private bool firstFrame = true; 
+        
         [DataMember]
         private Rect boundingRect;
+
+        private CameraDriver cameraDriver = CameraDriver.Instance;
+        private ImagerBase camera;
 
         // which cam have we selected
         [DataMember]
         private int selectedDeviceIndex;
 
-        private DateTime lastMotionDetected = DateTime.Now;
-        private const int detectionInterval = 5000; //ms
-
-        private MotionDetectorComponent motionDetectorComponent;
-        private bool firstFrame = true;
-
-        private MotionDetectorComponent.DetectionHandler motionUpdateHandler;
-
-        private CameraDriver cameraDriver;
-        private ImagerBase camera = null;
-
-        protected override void OnLoadDefaults()
-        {
-            boundingRect = new Rect(0, 0, 0, 0);
-        }
+        [DataMember]
+        private double sensitivity;
 
         protected override void OnAfterLoad()
         {
@@ -66,70 +63,76 @@ namespace VisionModules.Events
             }
 
             motionDetectorComponent = new MotionDetectorComponent(camera);
-            motionUpdateHandler = new MotionDetectorComponent.DetectionHandler(m_OnMotionUpdate);
+            
+            if (sensitivity != 0)
+                motionDetectorComponent.Sensitivity = sensitivity;
+            else
+                motionDetectorComponent.Sensitivity = 5;
 
             if (boundingRect.Width > 0 && boundingRect.Height > 0)
             {
                 motionDetectorComponent.SetMotionBoundaryRect(boundingRect);
             }
+            else
+            {
+                motionDetectorComponent.SetMotionBoundaryRect(new Rect(0, 0, 320, 240));
+            }
         }
 
-        private void m_OnMotionUpdate(object sender, List<System.Drawing.Point> points)
+        private void OnMotionUpdated(object sender, EventArgs e)
         {
-            TimeSpan ts = DateTime.Now - lastMotionDetected;
-
-            if (ts.TotalMilliseconds > detectionInterval)
-            {
-
-                Logger.WriteLine("m_OnMotionUpdate");
-
-                // trigger the reaction
-                if (!firstFrame)
-                    base.Trigger();
-                else
-                    firstFrame = false;
-
-                lastMotionDetected = DateTime.Now;
-            }
+            if (!firstFrame)
+                base.Trigger();
+                
+            firstFrame = false;
         }
 
         public string GetConfigString()
         {
-            string conf = "";
+            string conf = ""; 
             if (camera != null)
             {
                 conf += "Camera: " + camera.Info.DeviceId;
             }
-            return conf;
+            return conf; 
         }
 
         public WpfConfiguration ConfigurationControl
         {
             get
             {
-                MotionDetectorConfig config = new MotionDetectorConfig(this.camera as Camera); // pass the parameters to initially populate the window in the constructor
+                MotionDetectorConfig config = new MotionDetectorConfig(camera); // pass the parameters to initially populate the window in the constructor
                 config.DeviceList.SelectedIndex = selectedDeviceIndex;
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {
-                    config.selectedBoundingRect = boundingRect;
+                    config.selectedBoundingRect = boundingRect; 
                 }
+
+                config.sensitivity = sensitivity;
+
                 return config;
             }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            // Grab data from the window variable and store it in this class
             // set the selected bounding rectangle
             boundingRect = ((MotionDetectorConfig)configurationControl).selectedBoundingRect;
             motionDetectorComponent.SetMotionBoundaryRect(boundingRect);
+
             // assign selected cam
-            camera = ((MotionDetectorConfig)configurationControl).CameraSelected;
+            camera = ((MotionDetectorConfig)configurationControl).selected_camera;
+
+            motionDetectorComponent.Sensitivity = ((MotionDetectorConfig)configurationControl).sensitivity;
+            sensitivity = motionDetectorComponent.Sensitivity;
+
             selectedDeviceIndex = camera.Info.DeviceId;
         }
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
+            base.OnEnabling(e);
+        
             Logger.WriteLine("Enable");
 
             // TODO: Improve this code
@@ -138,23 +141,24 @@ namespace VisionModules.Events
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 if (!camera.Running)
                     camera.StartFrameGrabbing();
-                firstFrame = true;
+                firstFrame = true; 
                 // register the trigger's motion update handler
                 motionDetectorComponent.RegisterForImages(camera);
-                motionDetectorComponent.OnMotionUpdate -= motionUpdateHandler;
-                motionDetectorComponent.OnMotionUpdate += motionUpdateHandler;
+                motionDetectorComponent.OnMotionUpdate -= OnMotionUpdated;
+                motionDetectorComponent.OnMotionUpdate += OnMotionUpdated;             
             }
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            Logger.WriteLine("Disable");
+            base.OnDisabled(e);
+            Logger.WriteLine("Disable");   
             if (camera != null && !e.IsConfiguring)
             {
-                firstFrame = true;
+                firstFrame = true; 
                 // de-register the trigger's motion update handler
                 motionDetectorComponent.UnregisterForImages(camera);
-                motionDetectorComponent.OnMotionUpdate -= motionUpdateHandler;
+                motionDetectorComponent.OnMotionUpdate -= OnMotionUpdated;
                 // try to shut down the camera
                 camera.TryStopFrameGrabbing();
             }

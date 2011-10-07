@@ -1,11 +1,23 @@
 ﻿using System;
-using System.Drawing;
-using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using MayhemCore;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using MayhemOpenCVWrapper;
+using System.Diagnostics;
+using System.Drawing;
 using MayhemWpf.UserControls;
+using MayhemCore;
+using System.Threading;
+using System.Runtime.Serialization;
 
 namespace VisionModules.Wpf
 {
@@ -15,14 +27,17 @@ namespace VisionModules.Wpf
     public partial class MotionDetectorConfig : WpfConfiguration
     {
         private CameraDriver i = CameraDriver.Instance;
-      
-        public Camera CameraSelected
+        protected ImagerBase cam = null;
+        public ImagerBase selected_camera
         {
-            get;
-            private set; 
+            get { return cam; }
         }
 
-        private delegate void VoidHandler();
+        public Double sensitivity
+        {
+            get { return Sensitivity.Value; }
+            set { Sensitivity.Value = value; }
+        }
 
         // basically forward assignments to the actual overlay
         public Rect selectedBoundingRect
@@ -37,14 +52,15 @@ namespace VisionModules.Wpf
             }
         }
 
-        public MotionDetectorConfig(Camera c)
+        public MotionDetectorConfig(ImagerBase camera)
         {
-            CameraSelected = c;
+            cam = camera;
             InitializeComponent();
-            DeviceList.SelectedIndex = c.Info.DeviceId;
+            DeviceList.SelectedIndex = camera.Info.DeviceId;
+            Init();
         }
 
-        public override void OnLoad()
+        public void Init()
         {
             // populate device list
             Logger.WriteLine("OnLoad");
@@ -54,17 +70,17 @@ namespace VisionModules.Wpf
                 DeviceList.Items.Add(c);
             }
 
-            if (CameraSelected == null)
+            if (cam == null)
             {
                 DeviceList.SelectedIndex = 0;
             }
 
             if (i.DeviceCount > 0)
             {
-                int camera_index = (CameraSelected != null && CameraSelected.Info.DeviceId < i.DeviceCount) ? CameraSelected.Info.DeviceId : 0;
+                int camera_index = (selected_camera != null && selected_camera.Info.DeviceId < i.DeviceCount) ? selected_camera.Info.DeviceId : 0;
 
                 // start the camera 0 if it isn't already running
-                CameraSelected = i.CamerasAvailable[camera_index];
+                cam = i.CamerasAvailable[camera_index];
                
                 DeviceList.SelectedIndex = camera_index;
                 Logger.WriteLine("Selected Index " + DeviceList.SelectedIndex);
@@ -72,24 +88,27 @@ namespace VisionModules.Wpf
                 ///TODO: SVEN: Is it ok to comment out cam.running?
                 /// NO, not ok at the moment!
                 /// TODO: Move the check into Camera
-
-                CameraSelected.OnImageUpdated -= i_OnImageUpdated;
-                CameraSelected.OnImageUpdated += i_OnImageUpdated;
-                if (!CameraSelected.Running)
-                {             
+                if (!cam.Running)
+                {
+                cam.OnImageUpdated -= i_OnImageUpdated;
+                cam.OnImageUpdated += i_OnImageUpdated;
                 ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
                     {
-                        CameraSelected.StartFrameGrabbing();
+                        // Thread sleep to wait for the camera to revive itself from recent shutdown. Todo: Fix this 
+                        Thread.Sleep(250);
+                        cam.StartFrameGrabbing();
                     }));
                 }
-                Logger.WriteLine("using " + CameraSelected.Info.ToString());
-                // alow saving in this state
+
+                Logger.WriteLine("using " + cam.Info.ToString());
+                // allow saving in this state
                 this.CanSave = true;
             }
             else
             {
                 Logger.WriteLine("No camera available");
             }
+
         }
 
         /**<summary>
@@ -98,16 +117,17 @@ namespace VisionModules.Wpf
          */
         public void i_OnImageUpdated(object sender, EventArgs e)
         {
-            Dispatcher.Invoke(new VoidHandler(SetCameraImageSource), null);
+            Dispatcher.Invoke(new Action(SetCameraImageSource), null);
         }
 
+        
         /**<summary>
          * Does the actual drawing of the camera image to the WPF image object in the config window. 
          * </summary>
          */
         public virtual void SetCameraImageSource()
         {
-            Bitmap BackBuffer = CameraSelected.ImageAsBitmap();
+            Bitmap BackBuffer = cam.ImageAsBitmap();
 
             IntPtr hBmp;
 
@@ -126,8 +146,8 @@ namespace VisionModules.Wpf
             Logger.WriteLine("OnClosing");
             foreach (Camera c in i.CamerasAvailable)
             {
-                CameraSelected.OnImageUpdated -= i_OnImageUpdated;
-                CameraSelected.TryStopFrameGrabbing();
+                cam.OnImageUpdated -= i_OnImageUpdated;
+                cam.TryStopFrameGrabbing();
                 Thread.Sleep(200);
             }
 
@@ -136,7 +156,7 @@ namespace VisionModules.Wpf
 
         public override void OnSave()
         {
-            CameraSelected = DeviceList.SelectedItem as Camera;
+            cam = DeviceList.SelectedItem as Camera;
         }
 
         private void DeviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -144,23 +164,23 @@ namespace VisionModules.Wpf
             Logger.WriteLine("");
             Camera selected_cam = i.CamerasAvailable[DeviceList.SelectedIndex];
 
-            if (selected_cam != CameraSelected)
+            if (selected_cam != cam)
             {
-                Logger.WriteLine("Switching Cam to " + selected_cam.Info.ToString());
+                Logger.WriteLine("Switching Cam to " + selected_cam.Info.Description);
 
-                CameraSelected.OnImageUpdated -= i_OnImageUpdated;
-                if (CameraSelected.Running)
-                    CameraSelected.TryStopFrameGrabbing();
+                cam.OnImageUpdated -= i_OnImageUpdated;
+                if (cam.Running)
+                    cam.TryStopFrameGrabbing();
 
                 // switch the camera display
-                CameraSelected = selected_cam;
-                CameraSelected.OnImageUpdated -= i_OnImageUpdated;
-                CameraSelected.OnImageUpdated += i_OnImageUpdated;
-                if (!CameraSelected.Running)
+                cam = selected_cam;
+                cam.OnImageUpdated -= i_OnImageUpdated;
+                cam.OnImageUpdated += i_OnImageUpdated;
+                if (!cam.Running)
                 {
                     ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
                     {
-                        CameraSelected.StartFrameGrabbing();
+                        cam.StartFrameGrabbing();
                     }));
                 }
             }
