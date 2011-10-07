@@ -27,10 +27,9 @@ namespace MayhemOpenCVWrapper.LowLevel
 {
     /* <summary>
      * Wrapper for the C++ Motion Detector
-     *  TODO: Make the detector classes more generic
      * <summary>
      * */
-    public class MotionDetectorComponent : IVisionEventComponent
+    public class MotionDetectorComponent : CameraImageListener
     {
         public event EventHandler OnMotionUpdate;
 
@@ -39,10 +38,11 @@ namespace MayhemOpenCVWrapper.LowLevel
         private int width;
         private int height;
 
-        public MotionDetectorComponent(int width, int height)
+        public MotionDetectorComponent(ImagerBase camera)
         {
-            this.width = width;
-            this.height = height;
+            this.camera = camera;
+            this.width = camera.Settings.ResX;
+            this.height = camera.Settings.ResY;
         }
 
         double? oldAverage = null;
@@ -55,27 +55,28 @@ namespace MayhemOpenCVWrapper.LowLevel
 
         DateTime lastMovement = DateTime.Now;
         TimeSpan settleTime = TimeSpan.FromSeconds(0.5);
+        private ImagerBase camera;
 
-        public override void update_frame(object sender, EventArgs e)
+        public override void UpdateFrame(object sender, EventArgs e)
         {
             Camera camera = sender as Camera;
 
-            int stride = camera.imageBuffer.Length / height;
+            int stride = camera.ImageBuffer.Length / height;
 
             double average = 0;
 
-            lock (camera.thread_locker)
+            lock (camera.ThreadLocker)
             {
                 for (int x = (int)motionBoundaryRect.Left; x < (int)motionBoundaryRect.Right; x++)
                 {
                     for (int y = (int)motionBoundaryRect.Top; y < (int)motionBoundaryRect.Bottom; y++)
                     {
-                        average += camera.imageBuffer[x + y * stride];
+                        average += camera.ImageBuffer[x + y * stride];
                     }
                 }
             }
 
-            average /= camera.imageBuffer.Length;
+            average /= camera.ImageBuffer.Length;
 
             threshold = 0;
 
