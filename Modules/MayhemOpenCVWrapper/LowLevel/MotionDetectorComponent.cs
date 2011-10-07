@@ -92,11 +92,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 points.Add(p2);
             }
 
-            /*
-            if (OnMotionUpdate != null && points.Count() > 0 && frameCount >40)
-                OnMotionUpdate(this, points); */
-
-            // intelligently decide where the motion is
+            // decide the location of the motion 
 
             Point pMax = new Point(int.MinValue, int.MinValue);
             Point pMin = new Point(int.MaxValue, int.MaxValue);
