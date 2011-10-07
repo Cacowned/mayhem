@@ -1,7 +1,7 @@
 ﻿/*
  *  MayhemCameraDriver.cs
  *  
- *  Manages cameras for Mayhem
+ *  Manages cameras for Mayhem. Enforces the singleton pattern for camera objects available at runtime. 
  * 
  * 
  *  (c) 2010/2011, Microsoft Applied Sciences Group
@@ -22,18 +22,24 @@ namespace MayhemOpenCVWrapper
         // singleton class ! 
         public static CameraDriver Instance = new CameraDriver(); 
 
-        private List<CameraInfo> devices_available = new List<CameraInfo>();
-        private List<Camera> cameras_available_ = new List<Camera>(); 
-
+        /// <summary>
+        /// Returns readonly list of the available cameras. 
+        /// </summary>
         public  ReadOnlyCollection<Camera> CamerasAvailable
         {
             get { return cameras_available_.AsReadOnly(); }
         }
 
+        /// <summary>
+        /// Returns number of available cameras.
+        /// </summary>
         public int DeviceCount
         {
             get { return cameras_available_.Count; }
         }
+
+        private List<CameraInfo> devices_available = new List<CameraInfo>();
+        private List<Camera> cameras_available_ = new List<Camera>(); 
       
         protected CameraDriver()
         {

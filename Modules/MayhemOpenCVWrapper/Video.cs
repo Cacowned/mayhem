@@ -22,6 +22,8 @@ namespace MayhemOpenCVWrapper
 {
     public class Video
     {
+        public event Action<bool> OnVideoSaved;
+
         private List<Bitmap> video_frames = new List<Bitmap>();
 
         // video stream settings
@@ -30,12 +32,10 @@ namespace MayhemOpenCVWrapper
         private int height;
 
         // video stream
-        VideoStream stream = null;
-        AviManager aviManager = null;
+        private VideoStream stream = null;
+        private AviManager aviManager = null;
         private int frames = 0;
 
-        public event Action<bool> OnVideoSaved;
-        
         public Video(Camera c, string fileName, bool compress)
         {
             Camera camera = c;
@@ -44,7 +44,6 @@ namespace MayhemOpenCVWrapper
             height = c.Settings.ResY; 
 
             // preserve reference to the camera frames to be saved later
-
             video_frames = c.videoDiskBufferItems;
 
             if (video_frames.Count > 0)

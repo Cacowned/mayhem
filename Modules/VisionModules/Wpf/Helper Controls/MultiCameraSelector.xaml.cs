@@ -47,10 +47,6 @@ namespace VisionModules.Wpf
         public delegate void CameraSelectedHandler(Camera c);
         public event CameraSelectedHandler OnCameraSelected;
 
- 
-
-        private static readonly int DEBUG_LEVEL = 0;
-
         public int SelectedIndex
         {
             get {return deviceList.SelectedIndex;}

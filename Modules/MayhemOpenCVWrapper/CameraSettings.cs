@@ -43,6 +43,15 @@ namespace MayhemOpenCVWrapper
         }
 
         /// <summary>
+        /// Allows switching of the defaults without modifying code in other places. 
+        /// </summary>
+        /// <returns></returns>
+        public static CameraSettings Defaults()
+        {
+            return CameraSettings.Defaults640();
+        }
+
+        /// <summary>
         /// 320x240 resolution, 20 FPS update rate
         /// </summary>
         /// <returns></returns>
@@ -50,11 +59,6 @@ namespace MayhemOpenCVWrapper
         {
             CameraSettings cs = new CameraSettings(320, 240, 50);
             return cs;
-        }
-
-        public static CameraSettings Defaults()
-        {
-            return CameraSettings.Defaults640();
         }
 
         /// <summary>
