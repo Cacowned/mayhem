@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Firmata\ArduinoFirmata.cs" />
     <Compile Include="Events\ArduinoEvent.cs" />
+    <Compile Include="Firmata\ArduinoFirmataSerialSettings.cs" />
     <Compile Include="Firmata\IArduinoEventListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reactions\ArduinoAnalogWrite.cs" />

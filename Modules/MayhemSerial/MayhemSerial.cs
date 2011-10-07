@@ -254,7 +254,7 @@ namespace MayhemSerial
         /// Looks at the attached serial hardware and returns only those portnames that have an Insteon Module attached
         /// </summary>
         /// <returns>List of port name strings that correspond to an Arduino COM port</returns>
-        public Dictionary<string, string> GetInsteonPortNames()
+        public Dictionary<string, string> GetInsteonPortNames(SerialSettings insteonSettings)
         {
             Logger.WriteLine("getInsteonPortNames"); 
             UpdatePortList();
@@ -272,13 +272,13 @@ namespace MayhemSerial
                         try
                         {
 
-                            InsteonUsbModemSettings settings = new InsteonUsbModemSettings();
+                            //InsteonUsbModemSerialSettings settings = new InsteonUsbModemSerialSettings();
 
                             SerialPort port = new SerialPort(portName,
-                                                    settings.BaudRate,
-                                                    settings.Parity,
-                                                    settings.DataBits,
-                                                    settings.StopBits);
+                                                    insteonSettings.BaudRate,
+                                                    insteonSettings.Parity,
+                                                    insteonSettings.DataBits,
+                                                    insteonSettings.StopBits);
                            
                             try
                             {
