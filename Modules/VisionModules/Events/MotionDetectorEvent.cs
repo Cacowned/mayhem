@@ -36,14 +36,15 @@ namespace VisionModules.Events
         [DataMember]
         private Rect boundingRect;
 
-        private MotionDetectorComponent.DetectionHandler motionUpdateHandler;
-
         private CameraDriver i = CameraDriver.Instance;
         private Camera cam = null;
 
         // which cam have we selected
         [DataMember]
         private int selected_device_idx;
+
+        [DataMember]
+        private double sensitivity;
 
         protected override void Initialize()
         {
@@ -62,31 +63,28 @@ namespace VisionModules.Events
             }
 
             m = new MotionDetectorComponent(320, 240);
-            motionUpdateHandler = new MotionDetectorComponent.DetectionHandler(m_OnMotionUpdate);
+            
+            if (sensitivity != 0)
+                m.Sensitivity = sensitivity;
+            else
+                m.Sensitivity = 5;
 
             if (boundingRect.Width > 0 && boundingRect.Height > 0)
             {
                 m.SetMotionBoundaryRect(boundingRect);
             }
+            else
+            {
+                m.SetMotionBoundaryRect(new Rect(0, 0, 320, 240));
+            }
         }
 
-        private void m_OnMotionUpdate(object sender, List<System.Drawing.Point> points)
+        private void OnMotionUpdated(object sender, EventArgs e)
         {
-            TimeSpan ts = DateTime.Now - lastMotionDetected;
-
-            if (ts.TotalMilliseconds > detectionInterval)
-            {
-
-                Logger.WriteLine("m_OnMotionUpdate");
-
-                // trigger the reaction
-                if (!firstFrame)
-                    base.Trigger();
-                else
-                    firstFrame = false;
-
-                lastMotionDetected = DateTime.Now;
-            }
+            if (!firstFrame)
+                base.Trigger();
+                
+            firstFrame = false;
         }
 
         public string GetConfigString()
@@ -109,6 +107,9 @@ namespace VisionModules.Events
                 {
                     config.selectedBoundingRect = boundingRect; 
                 }
+
+                config.sensitivity = sensitivity;
+
                 return config;
             }
         }
@@ -132,6 +133,9 @@ namespace VisionModules.Events
             // assign selected cam
             cam = ((MotionDetectorConfig)configurationControl).selected_camera;
 
+            m.Sensitivity = ((MotionDetectorConfig)configurationControl).sensitivity;
+            sensitivity = m.Sensitivity;
+
             selected_device_idx = cam.Info.deviceId;
 
             if (wasEnabled)
@@ -151,8 +155,8 @@ namespace VisionModules.Events
                 firstFrame = true; 
                 // register the trigger's motion update handler
                 m.RegisterForImages(cam);
-                m.OnMotionUpdate -= motionUpdateHandler;
-                m.OnMotionUpdate += motionUpdateHandler;             
+                m.OnMotionUpdate -= OnMotionUpdated;
+                m.OnMotionUpdate += OnMotionUpdated;             
             }
 
             return true;
@@ -166,8 +170,8 @@ namespace VisionModules.Events
             {
                 firstFrame = true; 
                 // de-register the trigger's motion update handler
-                m.UnregisterForImages(cam); 
-                m.OnMotionUpdate -= motionUpdateHandler;
+                m.UnregisterForImages(cam);
+                m.OnMotionUpdate -= OnMotionUpdated;
                 // try to shut down the camera
                 cam.TryStopFrameGrabbing();
             }
