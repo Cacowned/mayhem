@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
-using MayhemCore;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using XboxModules.Resources;
 
 namespace XboxModules
 {
@@ -25,21 +23,20 @@ namespace XboxModules
         public delegate void ControllerStatusChanged(ControllerStatus status);
         public event ControllerStatusChanged OnStatusChanged;
 
-        protected BackgroundWorker bw;
+        protected BackgroundWorker Worker;
 
         #region Singleton
         private int refCount = 0;
 
-        private static ButtonEvents _instance;
-
+        private static ButtonEvents instance;
         public static ButtonEvents Instance
         {
             get
             {
-                if (_instance == null)
-                    _instance = new ButtonEvents();
+                if (instance == null)
+                    instance = new ButtonEvents();
 
-                return _instance;
+                return instance;
             }
         }
 
@@ -49,8 +46,8 @@ namespace XboxModules
 
         public void Dispose()
         {
-            bw.CancelAsync();
-            bw.Dispose();
+            Worker.CancelAsync();
+            Worker.Dispose();
         }
 
         public void AddRef()
@@ -94,18 +91,18 @@ namespace XboxModules
 
         private void StartWatching()
         {
-            bw = new BackgroundWorker();
+            Worker = new BackgroundWorker();
 
-            bw.WorkerReportsProgress = true;
-            bw.WorkerSupportsCancellation = true;
-            bw.DoWork += new DoWorkEventHandler(WatchButtons);
+            Worker.WorkerReportsProgress = true;
+            Worker.WorkerSupportsCancellation = true;
+            Worker.DoWork += new DoWorkEventHandler(WatchButtons);
 
-            bw.RunWorkerAsync();
+            Worker.RunWorkerAsync();
         }
 
         private void StopWatching()
         {
-            bw.CancelAsync();
+            Worker.CancelAsync();
         }
 
         /// <summary>
@@ -115,7 +112,7 @@ namespace XboxModules
         /// <param name="e"></param>
         private void WatchButtons(object sender, DoWorkEventArgs e)
         {
-            GamePadButtons prev_state = new GamePadButtons();
+            GamePadButtons prevState = new GamePadButtons();
 
             BackgroundWorker worker = sender as BackgroundWorker;
 
@@ -127,7 +124,7 @@ namespace XboxModules
                 }
 
                 var controller = GamePad.GetState(PlayerIndex.One);
-                GamePadButtons current_state = controller.Buttons;
+                GamePadButtons currentState = controller.Buttons;
 
                 Status = controller.IsConnected ? ControllerStatus.Attached : ControllerStatus.Detached;
 
@@ -140,55 +137,55 @@ namespace XboxModules
                 else
                 {
                     // check for new key downs (was released, now pressed)
-                    if (prev_state.A == ButtonState.Released && current_state.A == ButtonState.Pressed)
+                    if (prevState.A == ButtonState.Released && currentState.A == ButtonState.Pressed)
                         ButtonDown(Buttons.A);
-                    if (prev_state.B == ButtonState.Released && current_state.B == ButtonState.Pressed)
+                    if (prevState.B == ButtonState.Released && currentState.B == ButtonState.Pressed)
                         ButtonDown(Buttons.B);
-                    if (prev_state.Back == ButtonState.Released && current_state.Back == ButtonState.Pressed)
+                    if (prevState.Back == ButtonState.Released && currentState.Back == ButtonState.Pressed)
                         ButtonDown(Buttons.Back);
-                    if (prev_state.BigButton == ButtonState.Released && current_state.BigButton == ButtonState.Pressed)
+                    if (prevState.BigButton == ButtonState.Released && currentState.BigButton == ButtonState.Pressed)
                         ButtonDown(Buttons.BigButton);
-                    if (prev_state.LeftShoulder == ButtonState.Released && current_state.LeftShoulder == ButtonState.Pressed)
+                    if (prevState.LeftShoulder == ButtonState.Released && currentState.LeftShoulder == ButtonState.Pressed)
                         ButtonDown(Buttons.LeftShoulder);
-                    if (prev_state.LeftStick == ButtonState.Released && current_state.LeftStick == ButtonState.Pressed)
+                    if (prevState.LeftStick == ButtonState.Released && currentState.LeftStick == ButtonState.Pressed)
                         ButtonDown(Buttons.LeftStick);
-                    if (prev_state.RightShoulder == ButtonState.Released && current_state.RightShoulder == ButtonState.Pressed)
+                    if (prevState.RightShoulder == ButtonState.Released && currentState.RightShoulder == ButtonState.Pressed)
                         ButtonDown(Buttons.RightShoulder);
-                    if (prev_state.RightStick == ButtonState.Released && current_state.RightStick == ButtonState.Pressed)
+                    if (prevState.RightStick == ButtonState.Released && currentState.RightStick == ButtonState.Pressed)
                         ButtonDown(Buttons.RightStick);
-                    if (prev_state.Start == ButtonState.Released && current_state.Start == ButtonState.Pressed)
+                    if (prevState.Start == ButtonState.Released && currentState.Start == ButtonState.Pressed)
                         ButtonDown(Buttons.Start);
-                    if (prev_state.X == ButtonState.Released && current_state.X == ButtonState.Pressed)
+                    if (prevState.X == ButtonState.Released && currentState.X == ButtonState.Pressed)
                         ButtonDown(Buttons.X);
-                    if (prev_state.Y == ButtonState.Released && current_state.Y == ButtonState.Pressed)
+                    if (prevState.Y == ButtonState.Released && currentState.Y == ButtonState.Pressed)
                         ButtonDown(Buttons.Y);
 
                     // check for new key ups (was pressed, now released)
-                    if (prev_state.A == ButtonState.Pressed && current_state.A == ButtonState.Released)
+                    if (prevState.A == ButtonState.Pressed && currentState.A == ButtonState.Released)
                         ButtonUp(Buttons.A);
-                    if (prev_state.B == ButtonState.Pressed && current_state.B == ButtonState.Released)
+                    if (prevState.B == ButtonState.Pressed && currentState.B == ButtonState.Released)
                         ButtonUp(Buttons.B);
-                    if (prev_state.Back == ButtonState.Pressed && current_state.Back == ButtonState.Released)
+                    if (prevState.Back == ButtonState.Pressed && currentState.Back == ButtonState.Released)
                         ButtonUp(Buttons.Back);
-                    if (prev_state.BigButton == ButtonState.Pressed && current_state.BigButton == ButtonState.Released)
+                    if (prevState.BigButton == ButtonState.Pressed && currentState.BigButton == ButtonState.Released)
                         ButtonUp(Buttons.BigButton);
-                    if (prev_state.LeftShoulder == ButtonState.Pressed && current_state.LeftShoulder == ButtonState.Released)
+                    if (prevState.LeftShoulder == ButtonState.Pressed && currentState.LeftShoulder == ButtonState.Released)
                         ButtonUp(Buttons.LeftShoulder);
-                    if (prev_state.LeftStick == ButtonState.Pressed && current_state.LeftStick == ButtonState.Released)
+                    if (prevState.LeftStick == ButtonState.Pressed && currentState.LeftStick == ButtonState.Released)
                         ButtonUp(Buttons.LeftStick);
-                    if (prev_state.RightShoulder == ButtonState.Pressed && current_state.RightShoulder == ButtonState.Released)
+                    if (prevState.RightShoulder == ButtonState.Pressed && currentState.RightShoulder == ButtonState.Released)
                         ButtonUp(Buttons.RightShoulder);
-                    if (prev_state.RightStick == ButtonState.Pressed && current_state.RightStick == ButtonState.Released)
+                    if (prevState.RightStick == ButtonState.Pressed && currentState.RightStick == ButtonState.Released)
                         ButtonUp(Buttons.RightStick);
-                    if (prev_state.Start == ButtonState.Pressed && current_state.Start == ButtonState.Released)
+                    if (prevState.Start == ButtonState.Pressed && currentState.Start == ButtonState.Released)
                         ButtonUp(Buttons.Start);
-                    if (prev_state.X == ButtonState.Pressed && current_state.X == ButtonState.Released)
+                    if (prevState.X == ButtonState.Pressed && currentState.X == ButtonState.Released)
                         ButtonUp(Buttons.X);
-                    if (prev_state.Y == ButtonState.Pressed && current_state.Y == ButtonState.Released)
+                    if (prevState.Y == ButtonState.Pressed && currentState.Y == ButtonState.Released)
                         ButtonUp(Buttons.Y);
 
                     //DownButtons = current_state.AsButtons();
-                    prev_state = current_state;
+                    prevState = currentState;
                 }
                 Thread.Sleep(50);
             }

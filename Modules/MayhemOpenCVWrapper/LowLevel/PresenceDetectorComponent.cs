@@ -10,15 +10,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public class PresenceDetectorComponent : IVisionEventComponent
+    public class PresenceDetectorComponent : CameraImageListener
     {
         public static double DEFAULT_SENSITIVITY
         {
@@ -32,8 +29,6 @@ namespace MayhemOpenCVWrapper.LowLevel
 
         public delegate void DetectionHandler(object sender, Point[] points);
         public event DetectionHandler OnPresenceUpdate;
-
-        private bool presence_ = false;
 
         /// <summary>
         /// Sets the decay sensitivity of the presence detector
@@ -62,6 +57,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             }
         }
 
+        private bool presence_ = false;
         public bool presence
         {
             get { return presence_; }
@@ -78,18 +74,18 @@ namespace MayhemOpenCVWrapper.LowLevel
             pd.Dispose();
         }
 
-        public override void update_frame(object sender, EventArgs e)
+        public override void UpdateFrame(object sender, EventArgs e)
         {
             Camera camera = sender as Camera;
 
             // copy over image data to the DLL 
             try
             {
-                lock (camera.thread_locker)
+                lock (camera.ThreadLocker)
                 {
                     unsafe
                     {
-                        fixed (byte* ptr = camera.imageBuffer)
+                        fixed (byte* ptr = camera.ImageBuffer)
                         {
                             pd.ProcessFrame(ptr);
                         }

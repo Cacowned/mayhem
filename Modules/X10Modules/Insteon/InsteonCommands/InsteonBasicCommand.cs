@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace X10Modules.Insteon
 {
@@ -17,7 +13,7 @@ namespace X10Modules.Insteon
 
         public InsteonBasicCommand(byte[] commandString)
         {
-            commandBytes = commandString;
+            CommandBytes = commandString;
         }
 
 

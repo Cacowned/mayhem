@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Windows.Media;
-using MayhemCore;
-using System.Windows.Threading;
 using System.Threading;
+using System.Windows.Media;
+using System.Windows.Threading;
+using MayhemCore;
 
 namespace DefaultModules
 {
     class MPlayer
     {
-        public MediaPlayer mediaplayer = new MediaPlayer();
+        public MediaPlayer MediaPlayer = new MediaPlayer();
         
         private Thread runThread = null;
 
@@ -54,12 +53,12 @@ namespace DefaultModules
         {
             
             Dispatcher.CurrentDispatcher.VerifyAccess();
-            mediaplayer = new MediaPlayer();
-            mediaplayer.MediaEnded += new EventHandler(p_MediaEnded);
-            mediaplayer.MediaOpened += new EventHandler(p_MediaOpened);
-            mediaplayer.MediaFailed += new EventHandler<ExceptionEventArgs>(mediaplayer_MediaFailed);
-            mediaplayer.Open(fileToPlay);
-            mediaplayer.Play();
+            MediaPlayer = new MediaPlayer();
+            MediaPlayer.MediaEnded += new EventHandler(p_MediaEnded);
+            MediaPlayer.MediaOpened += new EventHandler(p_MediaOpened);
+            MediaPlayer.MediaFailed += new EventHandler<ExceptionEventArgs>(mediaplayer_MediaFailed);
+            MediaPlayer.Open(fileToPlay);
+            MediaPlayer.Play();
             Dispatcher.Run();
 
 
@@ -70,9 +69,8 @@ namespace DefaultModules
 
             Logger.WriteLine("");
 
-            mediaplayer.Dispatcher.BeginInvoke(new Action(delegate()
-                {
-                    mediaplayer.Stop();
+            MediaPlayer.Dispatcher.BeginInvoke(new Action(delegate {
+                    MediaPlayer.Stop();
                 }),
                 DispatcherPriority.Send
             );
@@ -87,8 +85,8 @@ namespace DefaultModules
         {
             isPlaying = false; 
             Logger.WriteLine(" Media Ended!");
-            mediaplayer.Stop();
-            mediaplayer.Position = TimeSpan.Zero;
+            MediaPlayer.Stop();
+            MediaPlayer.Position = TimeSpan.Zero;
         }
 
 

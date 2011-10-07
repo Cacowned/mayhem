@@ -8,22 +8,18 @@
  *   
  */ 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemOpenCVWrapper;
 using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-    public abstract class IVisionEventComponent
+    public abstract class CameraImageListener
     {
 
-        protected Camera.ImageUpdateHandler imageUpdateHandler;
+        protected Camera.ImageUpdateHandler ImageUpdateHandler;
 
-        public IVisionEventComponent()
+        public CameraImageListener()
         {
-            imageUpdateHandler = new Camera.ImageUpdateHandler(update_frame);
+            ImageUpdateHandler = new Camera.ImageUpdateHandler(UpdateFrame);
         }
 
         /// <summary>
@@ -34,21 +30,21 @@ namespace MayhemOpenCVWrapper.LowLevel
             Logger.WriteLine("");
             if (c != null)
             {
-                c.OnImageUpdated -= imageUpdateHandler;
-                c.OnImageUpdated += imageUpdateHandler;
+                c.OnImageUpdated -= ImageUpdateHandler;
+                c.OnImageUpdated += ImageUpdateHandler;
             }
         }
         public virtual void UnregisterForImages(ImagerBase c)
         {
             Logger.WriteLine("");
             if (c != null)
-                c.OnImageUpdated -= imageUpdateHandler;
+                c.OnImageUpdated -= ImageUpdateHandler;
         }
 
         /// <summary>
         ///  Processes a new frame from the camera and decides if event should be triggered
         /// </summary>
-        public abstract void update_frame(object sender, EventArgs e);
+        public abstract void UpdateFrame(object sender, EventArgs e);
 
     }
 }

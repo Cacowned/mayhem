@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Deployment.Application;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Deployment.Application;
-using System.Threading;
 
 namespace Mayhem
 {
@@ -23,11 +20,11 @@ namespace Mayhem
     public partial class MainWindow : Window
     {
         private ModuleType _event;
-        private EventBase _eventInstance = null;
-        private ModuleType _reaction;
-        private ReactionBase _reactionInstance = null;
+        private EventBase eventInstance = null;
+        private ModuleType reaction;
+        private ReactionBase reactionInstance = null;
 
-        AutoResetEvent waitForSave = new AutoResetEvent(false);
+        private AutoResetEvent waitForSave = new AutoResetEvent(false);
 
         public ObservableCollection<MayhemError> Errors
         {
@@ -72,7 +69,7 @@ namespace Mayhem
             foundModules &= mayhem.ReactionList.ScanModules(directory);
             if (!foundModules)
             {
-                ///TODO: Do something user-friendly here
+                // TODO: Do something user-friendly here
                 throw new Exception("No modules!");
             }
 
@@ -141,7 +138,7 @@ namespace Mayhem
                 mayhem.Shutdown();
                 foreach (Connection connection in mayhem.ConnectionList)
                 {
-                    connection.Disable(null);
+                    connection.Disable(new DisabledEventArgs(false), null);
                 }
             }
             catch { }
@@ -164,14 +161,10 @@ namespace Mayhem
                 if (dlg.SelectedModule != null)
                 {
                     _event = dlg.SelectedModule;
-                    _eventInstance = dlg.SelectedModuleInstance as EventBase;
+                    eventInstance = dlg.SelectedModuleInstance as EventBase;
 
                     buttonEmptyEvent.Style = (Style)FindResource("EventButton");
                     buttonEmptyEvent.Content = _event.Name;
-
-                    // Take this item, remove it and add it to the front (MoveToFrontList)
-//                    Mayhem.EventList.Remove(Event);
-//                    Mayhem.EventList.Insert(0, Event);
 
                     CheckEnableBuild();
                 }
@@ -194,11 +187,11 @@ namespace Mayhem
             {
                 if (dlg.SelectedModule != null)
                 {
-                    _reaction = dlg.SelectedModule;
-                    _reactionInstance = dlg.SelectedModuleInstance as ReactionBase;
+                    reaction = dlg.SelectedModule;
+                    reactionInstance = dlg.SelectedModuleInstance as ReactionBase;
 
                     buttonEmptyReaction.Style = (Style)FindResource("ReactionButton");
-                    buttonEmptyReaction.Content = _reaction.Name;
+                    buttonEmptyReaction.Content = reaction.Name;
 
                     // Take this item, remove it and add it to the front (MoveToFrontList)
 //                    Mayhem.ReactionList.Remove(Reaction);
@@ -211,41 +204,41 @@ namespace Mayhem
 
         private void CheckEnableBuild()
         {
-            if (_event != null && _reaction != null)
+            if (_event != null && reaction != null)
             {
-                EventBase ev;
-                ReactionBase reaction;
                 try
                 {
-                    if (_eventInstance != null)
-                        ev = _eventInstance;
+                    EventBase ev;
+                    if (eventInstance != null)
+                        ev = eventInstance;
                     else
                     {
                         Type t = _event.Type;
                         ev = (EventBase)Activator.CreateInstance(t);
                     }
 
-                    if (_reactionInstance != null)
-                        reaction = _reactionInstance;
+                    ReactionBase re;
+                    if (reactionInstance != null)
+                        re = reactionInstance;
                     else
                     {
-                        Type t = _reaction.Type;
-                        reaction = (ReactionBase)Activator.CreateInstance(t);
+                        Type t = this.reaction.Type;
+                        re = (ReactionBase)Activator.CreateInstance(t);
                     }
-                    MayhemEntry.Instance.ConnectionList.Add(new Connection(ev, reaction));
+                    MayhemEntry.Instance.ConnectionList.Add(new Connection(ev, re));
                 }
                 catch 
                 {
-                    ErrorLog.AddError(ErrorType.Failure, "Error creating connection between " + _event.Type.Name + " and " + _reaction.Type.Name);
+                    ErrorLog.AddError(ErrorType.Failure, "Error creating connection between " + _event.Type.Name + " and " + this.reaction.Type.Name);
                 }
 
                 buttonEmptyReaction.Style = (Style)FindResource("EmptyReactionButton");
                 buttonEmptyEvent.Style = (Style)FindResource("EmptyEventButton");
-                buttonEmptyReaction.Content = "Create Reaction";
-                buttonEmptyEvent.Content = "Create Event";
+                buttonEmptyReaction.Content = "Choose Reaction";
+                buttonEmptyEvent.Content = "Choose Event";
 
                 _event = null;
-                _reaction = null;
+                this.reaction = null;
 
                 Save();
             }
@@ -267,8 +260,7 @@ namespace Mayhem
                 {
                     var storyB = (Storyboard)mainW.DimRectangle.FindResource("FadeOut");
 
-                    storyB.Completed += delegate(object sender, EventArgs e)
-                    {
+                    storyB.Completed += delegate {
                         Panel.SetZIndex(mainW.DimRectangle, 0);
                     };
 

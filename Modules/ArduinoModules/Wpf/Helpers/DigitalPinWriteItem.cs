@@ -1,4 +1,5 @@
-﻿/*
+﻿using System.Runtime.Serialization;
+/*
  * DitialPinItem.cs
  * 
  * 
@@ -10,13 +11,8 @@
  * Author: Sven Kratz
  * 
  * 
- */ 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+ */
 using ArduinoModules.Firmata;
-using System.Runtime.Serialization;
 
 
 namespace ArduinoModules.Wpf.Helpers
@@ -26,52 +22,52 @@ namespace ArduinoModules.Wpf.Helpers
     {
         // if checked, output is activated on this pin 
         [DataMember]
-        private bool active_ = false;
+        private bool active = false;
 
         public bool Active
         {
-            get { return active_; }
-            set { active_ = value; }
+            get { return active; }
+            set { active = value; }
         
         }
 
         [DataMember]
-        private int firmata_id=0;
+        private int firmataId=0;
 
-        public int GetPinID()
+        public int GetPinId()
         {
-            return firmata_id;
+            return firmataId;
         }
 
         [DataMember]
-        private DIGITAL_WRITE_MODE write_mode_; 
+        private DIGITAL_WRITE_MODE writeMode; 
         public DIGITAL_WRITE_MODE WriteMode
         {
-            get { return write_mode_; }
-            set { write_mode_ = value; }
+            get { return writeMode; }
+            set { writeMode = value; }
         }
 
         
         public string PinName
         {
-            get { return "D" + firmata_id; }
+            get { return "D" + firmataId; }
         }
 
 
         // state
         [DataMember]
-        private int digitalPinState_ = 0;
+        private int digitalPinState = 0;
         /// <summary>
         /// Explicit getter/setter implementation to avoid getting columnized
         /// </summary>
         /// <returns></returns>
-        public int GetPinState() { return digitalPinState_; }
-        public int SetPinState(int state) { digitalPinState_ = state; return GetPinState(); }           // also return an int for easier asssignment to arduino.digitalwrite
+        public int GetPinState() { return digitalPinState; }
+        public int SetPinState(int state) { digitalPinState = state; return GetPinState(); }           // also return an int for easier asssignment to arduino.digitalwrite
 
         public DigitalPinWriteItem(bool check, int id, DIGITAL_WRITE_MODE mode)
         {
-            active_ = check;
-            firmata_id = id;
+            active = check;
+            firmataId = id;
             WriteMode = mode; 
         }
     }

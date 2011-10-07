@@ -76,26 +76,28 @@ namespace PhoneModules
             OperationContext context = OperationContext.Current;
             MessageProperties messageProperties = context.IncomingMessageProperties;
             RemoteEndpointMessageProperty endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
-            string key = endpointProperty.Address;
+            string key = endpointProperty.Address + WebOperationContext.Current.IncomingRequest.UserAgent;
 
             Logger.WriteLine(update + " " + key + " " + WebOperationContext.Current.IncomingRequest.UserAgent);
             WebOperationContext.Current.OutgoingResponse.ContentType = "text/html";
 
-            if (!resetEvents.ContainsKey(key))
+            lock (resetEvents)
             {
-                AutoResetEvent a = new AutoResetEvent(false);
-                resetEvents[key] = a;
+                if (!resetEvents.ContainsKey(key))
+                {
+                    AutoResetEvent a = new AutoResetEvent(false);
+                    resetEvents[key] = a;
+                    update = false;
+                }
             }
-            //else
-            //{
-            //    resetEvents[key].Set();
-            //}
-            Debug.WriteLine(resetEvents.Count);
+            Logger.WriteLine(update);
             if (!update)
             {
                 resetEvents[key].Reset();
 
                 string userAgent = WebOperationContext.Current.IncomingRequest.UserAgent;
+                if(userAgent == null)
+                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlWP7));
                 if (userAgent.IndexOf("iPhone") >= 0)
                     return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIPhone));
                 else if (userAgent.IndexOf("iPad") >= 0)
@@ -115,7 +117,6 @@ namespace PhoneModules
                     Interlocked.Decrement(ref numToKill);
                     if (isShuttingDown)
                     {
-                        Logger.WriteLine("Killed service " + numToKill);
                         if (numToKill == 0)
                             killResetEvent.Set();
                         return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));

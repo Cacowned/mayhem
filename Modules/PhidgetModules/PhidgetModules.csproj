@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Packages\PhidgetModules\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -52,8 +52,8 @@
   <ItemGroup>
     <Compile Include="Events\DigitalInput.cs" />
     <Compile Include="Events\Phidget1023Rfid.cs" />
-    <Compile Include="Events\Phidget1055IRReceiver.cs" />
-    <Compile Include="Events\Phidget1101IRDistance.cs" />
+    <Compile Include="Events\Phidget1055IrReceiver.cs" />
+    <Compile Include="Events\Phidget1101IrDistance.cs" />
     <Compile Include="Events\Phidget1103IRReflective.cs" />
     <Compile Include="Events\Phidget1106Force.cs" />
     <Compile Include="Events\Phidget1127Light.cs" />
@@ -64,25 +64,25 @@
     <Compile Include="Wpf\UserControls\PhidgetConfigControl.cs" />
     <Compile Include="RangeSensorEventBase.cs" />
     <Compile Include="Reaction\DigitalOutput.cs" />
-    <Compile Include="Reaction\Phidget1055IRTransmit.cs" />
-    <Compile Include="Wpf\Phidget1055IRTransmitConfig.xaml.cs">
-      <DependentUpon>Phidget1055IRTransmitConfig.xaml</DependentUpon>
+    <Compile Include="Reaction\Phidget1055IrTransmit.cs" />
+    <Compile Include="Wpf\Phidget1055IrTransmitConfig.xaml.cs">
+      <DependentUpon>Phidget1055IrTransmitConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Reaction\Phidget1066AdvServo.cs" />
     <Compile Include="Wpf\Phidget1023RFIDConfig.xaml.cs">
       <DependentUpon>Phidget1023RFIDConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\Phidget1055IRReceiverConfig.xaml.cs">
-      <DependentUpon>Phidget1055IRReceiverConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\Phidget1055IrReceiverConfig.xaml.cs">
+      <DependentUpon>Phidget1055IrReceiverConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\Phidget1066AdvServoConfig.xaml.cs">
       <DependentUpon>Phidget1066AdvServoConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\Config1103IRReflective.xaml.cs">
-      <DependentUpon>Config1103IRReflective.xaml</DependentUpon>
+    <Compile Include="Wpf\Config1103IrReflective.xaml.cs">
+      <DependentUpon>Config1103IrReflective.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\Config1101IRDistance.xaml.cs">
-      <DependentUpon>Config1101IRDistance.xaml</DependentUpon>
+    <Compile Include="Wpf\Config1101IrDistance.xaml.cs">
+      <DependentUpon>Config1101IrDistance.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\Config1106Force.xaml.cs">
       <DependentUpon>Config1106Force.xaml</DependentUpon>
@@ -114,7 +114,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Wpf\Phidget1055IRTransmitConfig.xaml">
+    <Page Include="Wpf\Phidget1055IrTransmitConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -122,7 +122,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wpf\Phidget1055IRReceiverConfig.xaml">
+    <Page Include="Wpf\Phidget1055IrReceiverConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -130,11 +130,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\Config1103IRReflective.xaml">
+    <Page Include="Wpf\Config1103IrReflective.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\Config1101IRDistance.xaml">
+    <Page Include="Wpf\Config1101IrDistance.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

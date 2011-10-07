@@ -7,12 +7,8 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -24,10 +20,10 @@ namespace MayhemOpenCVWrapper
         /// Scale input image to fixed size in pixels. 
         /// </summary>
         /// <param name="imgPhoto">input image</param>
-        /// <param name="Width">width</param>
-        /// <param name="Height">height</param>
+        /// <param name="width">width</param>
+        /// <param name="height">height</param>
         /// <returns>scaled Bitmap image</returns>
-        public static Bitmap ScaleWithFixedSize(Image imgPhoto, int Width, int Height)
+        public static Bitmap ScaleWithFixedSize(Image imgPhoto, int width, int height)
         {
             int sourceWidth = imgPhoto.Width;
             int sourceHeight = imgPhoto.Height;
@@ -40,25 +36,25 @@ namespace MayhemOpenCVWrapper
             float nPercentW = 0;
             float nPercentH = 0;
 
-            nPercentW = ((float)Width / (float)sourceWidth);
-            nPercentH = ((float)Height / (float)sourceHeight);
+            nPercentW = ((float)width / (float)sourceWidth);
+            nPercentH = ((float)height / (float)sourceHeight);
             if (nPercentH < nPercentW)
             {
                 nPercent = nPercentH;
-                destX = System.Convert.ToInt16((Width -
+                destX = System.Convert.ToInt16((width -
                               (sourceWidth * nPercent)) / 2);
             }
             else
             {
                 nPercent = nPercentW;
-                destY = System.Convert.ToInt16((Height -
+                destY = System.Convert.ToInt16((height -
                               (sourceHeight * nPercent)) / 2);
             }
 
             int destWidth = (int)(sourceWidth * nPercent);
             int destHeight = (int)(sourceHeight * nPercent);
 
-            Bitmap bmPhoto = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Bitmap bmPhoto = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             bmPhoto.SetResolution(imgPhoto.HorizontalResolution,
                              imgPhoto.VerticalResolution);
 

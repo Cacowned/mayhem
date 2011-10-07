@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace WindowModules.Actions
 {
     [DataContract]
-    public class WindowActionMove : WindowAction
+    public class WindowActionMove : IWindowAction
     {
         [DataMember]
         public int X;
@@ -16,10 +13,10 @@ namespace WindowModules.Actions
 
         public void Perform(IntPtr window)
         {
-            Native.RECT Rect = new Native.RECT();
-            Native.GetWindowRect(window, ref Rect);
-            int width = Rect.right - Rect.left;
-            int height = Rect.bottom - Rect.top;
+            Native.RECT rect = new Native.RECT();
+            Native.GetWindowRect(window, ref rect);
+            int width = rect.right - rect.left;
+            int height = rect.bottom - rect.top;
 
             Native.MoveWindow(window, X, Y, width, height, true);
         }

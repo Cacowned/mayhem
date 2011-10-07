@@ -12,38 +12,35 @@ namespace PhidgetModules.Events
 {
     [DataContract]
     [MayhemModule("Phidget: IR Receiver", "Triggers when it sees a certain IR code")]
-    public class Phidget1055IRReceiver : EventBase, IWpfConfigurable
+    public class Phidget1055IrReceiver : EventBase, IWpfConfigurable
     {
-        #region Configuration
-
         [DataMember]
-        private IRCode Code;
-        #endregion
+        private IRCode code;
 
         private IR ir;
         private IRCodeEventHandler gotCode;
         private DateTime lastSignal;
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
-            ir = InterfaceFactory.IR;
+            ir = InterfaceFactory.Ir;
 
             gotCode = new IRCodeEventHandler(ir_Code);
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1055IRReceiveConfig(Code); }
+            get { return new Phidget1055IrReceiverConfig(code); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            Code = ((Phidget1055IRReceiveConfig)configurationControl).Code;
+            code = ((Phidget1055IrReceiverConfig)configurationControl).Code;
         }
 
         public string GetConfigString()
         {
-            return String.Format("IR Code 0x{0}", Code);
+            return String.Format("IR Code 0x{0}", code);
         }
 
         // When we receive a code
@@ -51,7 +48,7 @@ namespace PhidgetModules.Events
         {
             // If the data matches,
             // Do we care about the number of times it was repeated?
-            if (Code.Data.SequenceEqual(e.Code.Data))
+            if (code.Data.SequenceEqual(e.Code.Data))
             {
                 // We need to make a timeout for the IR
                 TimeSpan diff = DateTime.Now - lastSignal;
@@ -66,14 +63,12 @@ namespace PhidgetModules.Events
             }
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             ir.Code += gotCode;
-
-            return true;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (ir != null)
             {

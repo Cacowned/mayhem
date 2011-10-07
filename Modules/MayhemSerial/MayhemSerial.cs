@@ -7,22 +7,18 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO.Ports;
-using System.Runtime.CompilerServices;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
+using System.Linq;
 using System.Management;
-using System.Collections;
-using Microsoft.Win32;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using MayhemCore;
+using Microsoft.Win32.SafeHandles;
 
 namespace MayhemSerial
 {
@@ -37,9 +33,9 @@ namespace MayhemSerial
         private bool allowWrite = true; 
 
         // toggle receiving or not
-        private bool allowRX = true; 
+        private bool allowRx = true; 
 
-        public List<string> connectionNames
+        public List<string> ConnectionNames
         {
             get
             {
@@ -51,8 +47,8 @@ namespace MayhemSerial
         }
 
         // singular instance
-        public static MayhemSerialPortMgr instance = new MayhemSerialPortMgr();
-        public static readonly int dwFlagsAndAttributes = 0x40000000;
+        public static MayhemSerialPortMgr Instance = new MayhemSerialPortMgr();
+        public static readonly int DwFlagsAndAttributes = 0x40000000;
 
         // sharing of datareceivedevent --> must write the data to a shared buffer and give a copy to the listeners
         // otherwise the modules will preemt each other in consuming the Serial read buffer
@@ -104,7 +100,7 @@ namespace MayhemSerial
                 // -------- new name detected
                 if (!connections.Keys.Contains(name))
                 {
-                    SafeFileHandle hFile = CreateFile(@"\\.\" + name, -1073741824, 0, IntPtr.Zero, 3, dwFlagsAndAttributes, IntPtr.Zero);
+                    SafeFileHandle hFile = CreateFile(@"\\.\" + name, -1073741824, 0, IntPtr.Zero, 3, DwFlagsAndAttributes, IntPtr.Zero);
                     if (!hFile.IsInvalid)
                     {
                         Logger.WriteLine("UpdatePortList --> adding name: " + name); 
@@ -121,7 +117,7 @@ namespace MayhemSerial
         /// <param name="portName">string name of the port</param>
         /// <param name="listener">reference to the data update listener</param>
         /// <param name="settings">the settings to be used for connecting</param>
-        public bool ConnectPort(string portName, ISerialPortDataListener listener,  SERIAL_SETTINGS settings)
+        public bool ConnectPort(string portName, ISerialPortDataListener listener,  SerialSettings settings)
         {
             // check if the port is known 
             if (portName != null && connections.Keys.Contains(portName) )
@@ -130,10 +126,10 @@ namespace MayhemSerial
                 if (port == null)
                 {
                     port = new SerialPort(portName,
-                                           settings.baudRate,
-                                           settings.parity,
-                                           settings.dataBits,
-                                           settings.stopBits);
+                                           settings.BaudRate,
+                                           settings.Parity,
+                                           settings.DataBits,
+                                           settings.StopBits);
                     port.Open();
                 }
 
@@ -169,7 +165,7 @@ namespace MayhemSerial
         /// <summary>
         /// Disconnect a listener from the serial port
         /// </summary>
-        /// <param name="porName"></param>
+        /// <param name="portName"></param>
         /// <param name="listener"></param>
         public void DisconnectListener(string portName, ISerialPortDataListener listener)
         {
@@ -258,14 +254,14 @@ namespace MayhemSerial
         /// Looks at the attached serial hardware and returns only those portnames that have an Insteon Module attached
         /// </summary>
         /// <returns>List of port name strings that correspond to an Arduino COM port</returns>
-        public Dictionary<string, string> getInsteonPortNames()
+        public Dictionary<string, string> GetInsteonPortNames(SerialSettings insteonSettings)
         {
             Logger.WriteLine("getInsteonPortNames"); 
             UpdatePortList();
 
             Dictionary<string,string> pNames = new Dictionary<string,string>();
 
-            allowRX = false; 
+            allowRx = false; 
 
             foreach (string portName in connections.Keys)
             {
@@ -276,13 +272,13 @@ namespace MayhemSerial
                         try
                         {
 
-                            INSTEON_USB_MODEM_SETTINGS settings = new INSTEON_USB_MODEM_SETTINGS();
+                            //InsteonUsbModemSerialSettings settings = new InsteonUsbModemSerialSettings();
 
                             SerialPort port = new SerialPort(portName,
-                                                    settings.baudRate,
-                                                    settings.parity,
-                                                    settings.dataBits,
-                                                    settings.stopBits);
+                                                    insteonSettings.BaudRate,
+                                                    insteonSettings.Parity,
+                                                    insteonSettings.DataBits,
+                                                    insteonSettings.StopBits);
                            
                             try
                             {
@@ -362,7 +358,7 @@ namespace MayhemSerial
                  }
 
                } // --------------- foreach
-            allowRX = true; 
+            allowRx = true; 
             return pNames;
         }
    
@@ -371,7 +367,7 @@ namespace MayhemSerial
         /// Works by executing a wmi query
         /// </summary>
         /// <returns>List of port name strings that correspond to an Arduino COM port</returns>
-        public Dictionary<string,string> getArduinoPortNames()
+        public Dictionary<string,string> GetArduinoPortNames()
         {
             UpdatePortList();
             Dictionary<string,string> arduinoNames = new Dictionary<string,string>();
@@ -422,7 +418,7 @@ namespace MayhemSerial
         void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {           
             Logger.WriteLineIf(VERBOSITY_LEVEL > 0, "----> port_DataReceived <----");
-            if (allowRX)
+            if (allowRx)
             {
                 SerialPort p = sender as SerialPort;
                 // new receive buffer 

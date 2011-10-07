@@ -8,15 +8,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:Borders}">
-                    <Border Margin="10,0,10,0" BorderThickness="1,0,1,1" CornerRadius="20,0,10,0" BorderBrush="Gray">
-                        <Border.Effect>
-                            <DropShadowEffect Opacity="0.9" Direction="270" BlurRadius="16"/>
-                        </Border.Effect>
-                        <Border BorderThickness="1" CornerRadius="20,0,10,0" BorderBrush="Black" Padding="7" Background="#B4BAC4">
-
-                            <ContentPresenter Content="{TemplateBinding Content}" />
-
-                        </Border>
+                    <Border BorderThickness="1" CornerRadius="10,10,10,10" BorderBrush="#D7D9DE" Background="#A2A6AF" Margin="10,15,10,0" Padding="0.1" >
+                        <Grid>
+                            <Border BorderThickness="1,1,0,0" CornerRadius="10,10,10,10" BorderBrush="#333333">
+                                <Border.Effect>
+                                    <BlurEffect Radius="4" />
+                                </Border.Effect>
+                            </Border>
+                            <Border Padding="7">
+                                <ContentPresenter Content="{TemplateBinding Content}" />
+                            </Border>
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

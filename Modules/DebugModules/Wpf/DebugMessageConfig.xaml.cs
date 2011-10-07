@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
 
-namespace DefaultModules.Wpf
+namespace DebugModules.Wpf
 {
     /// <summary>
     /// Interaction logic for DebugMessageConfig.xaml
@@ -28,17 +28,17 @@ namespace DefaultModules.Wpf
 
         public override void OnLoad()
         {
-            MessageBox.Text = this.Message;
+            MessageTextBox.Text = this.Message;
         }
 
         public override void OnSave()
         {
-            Message = MessageBox.Text.Trim();
+            Message = MessageTextBox.Text.Trim();
         }
 
         private void CheckValidity()
         {
-            CanSave = MessageBox.Text.Trim().Length > 0;
+            CanSave = MessageTextBox.Text.Trim().Length > 0;
         }
 
         private void MessageText_TextChanged(object sender, TextChangedEventArgs e)

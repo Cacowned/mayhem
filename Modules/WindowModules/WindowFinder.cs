@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading;
-using System.IO;
-using System.Diagnostics;
 using MayhemCore;
+using System.Collections.Generic;
 
 namespace WindowModules
 {
@@ -14,62 +13,67 @@ namespace WindowModules
         public delegate void WindowActionResult(IntPtr hwnd);
         static WindowActionResult action = null;
         static WindowActionInfo actionInfo = null;
-        static AutoResetEvent resetEvent = new AutoResetEvent(true);
 
         public static void Find(WindowActionInfo windowInfo, WindowActionResult actionOnResult)
         {
-            resetEvent.WaitOne();
             actionInfo = windowInfo;
             action = actionOnResult;
+
             Native.EnumWindows(new Native.EnumWindowsCallback(Report), 0);
+        }
+
+        static bool CheckWindow(IntPtr hwnd)
+        {
+            int procid = 0;
+            int threadid = Native.GetWindowThreadProcessId(hwnd, ref procid);
+            try
+            {
+                Process p = Process.GetProcessById(procid);
+                bool isMatch = true;
+                string filename;
+                try
+                {
+                    filename = p.MainModule.FileName;
+                }
+                catch
+                {
+                    filename = WMIProcess.GetFilename(procid);
+                }
+                if (filename != null)
+                {
+                    FileInfo fi = new FileInfo(filename);
+                    filename = fi.Name;
+                }
+                if (actionInfo.WindowInfo.CheckFileName && !filename.ToLower().EndsWith(actionInfo.WindowInfo.FileName.ToLower()))
+                    isMatch = false;
+                if (isMatch)
+                {
+                    if (actionInfo.WindowInfo.CheckTitle)
+                    {
+                        StringBuilder sb = new StringBuilder(200);
+                        Native.GetWindowText(hwnd, sb, sb.Capacity);
+                        string title = sb.ToString();
+                        if (title != actionInfo.WindowInfo.Title)
+                            isMatch = false;
+                    }
+                    if (isMatch)
+                    {
+                        Logger.WriteLine("Found: " + hwnd);
+                        action(hwnd);
+                        return true;
+                    }
+                }
+            }
+            catch { }
+            return false;
         }
 
         static bool Report(IntPtr hwnd, int lParam)
         {
             if (IsTaskbarWindow(hwnd.ToInt32()))
             {
-                int procid = 0;
-                int threadid = Native.GetWindowThreadProcessId(hwnd, ref procid);
-                try
-                {
-                    Process p = Process.GetProcessById(procid);
-                    bool isMatch = true;
-                    string filename;
-                    try
-                    {
-                        filename = p.MainModule.FileName;
-                    }
-                    catch
-                    {
-                        filename = WMIProcess.GetFilename(procid);
-                    }
-                    if (filename != null)
-                    {
-                        FileInfo fi = new FileInfo(filename);
-                        filename = fi.Name;
-                    }
-                    if (actionInfo.WindowInfo.CheckFileName && !filename.ToLower().EndsWith(actionInfo.WindowInfo.FileName.ToLower()))
-                        isMatch = false;
-                    if (isMatch)
-                    {
-                        if (actionInfo.WindowInfo.CheckTitle)
-                        {
-                            StringBuilder sb = new StringBuilder(200);
-                            Native.GetWindowText(hwnd, sb, sb.Capacity);
-                            string title = sb.ToString();
-                            if (title != actionInfo.WindowInfo.Title)
-                                isMatch = false;
-                        }
-                        if (isMatch)
-                        {
-                            Logger.WriteLine("Found: " + hwnd);
-                            action(hwnd);
-                            resetEvent.Set();
-                            return false;
-                        }
-                    }
-                }
-                catch { }
+                if (CheckWindow(hwnd))
+                    return false;
             }
             return true;
         }

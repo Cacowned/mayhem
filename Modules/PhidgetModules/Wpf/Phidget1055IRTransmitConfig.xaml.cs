@@ -1,15 +1,15 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
+using MayhemWpf.UserControls;
 using Phidgets;
 using Phidgets.Events;
-using MayhemWpf.UserControls;
 
 namespace PhidgetModules.Reaction
 {
     /// <summary>
     /// Interaction logic for Phidget1055IRTransmit.xaml
     /// </summary>
-    public partial class Phidget1055IRTransmitConfig : WpfConfiguration
+    public partial class Phidget1055IrTransmitConfig : WpfConfiguration
     {
         protected IR ir;
 
@@ -21,13 +21,13 @@ namespace PhidgetModules.Reaction
 
         // Using a DependencyProperty as the backing store for Code.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CodeProperty =
-            DependencyProperty.Register("Code", typeof(IRCode), typeof(Phidget1055IRTransmitConfig), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Code", typeof(IRCode), typeof(Phidget1055IrTransmitConfig), new UIPropertyMetadata(null));
 
         public IRCodeInfo CodeInfo { get; private set; }
 
-        public Phidget1055IRTransmitConfig(IRCode code, IRCodeInfo codeInfo)
+        public Phidget1055IrTransmitConfig(IRCode code, IRCodeInfo codeInfo)
         {
-            ir = InterfaceFactory.IR;
+            ir = InterfaceFactory.Ir;
             Code = code;
             CodeInfo = codeInfo;
 

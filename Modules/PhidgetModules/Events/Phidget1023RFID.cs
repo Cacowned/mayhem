@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Windows.Controls;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -14,39 +13,36 @@ namespace PhidgetModules.Events
     [MayhemModule("Phidget: Rfid", "Triggers with a certain Rfid Tag")]
     public class Phidget1023Rfid : EventBase, IWpfConfigurable
     {
-        #region Configuration
         // This is the tag we are watching for
         [DataMember]
-        private string Tag;
-
-        #endregion
+        private string tag;
 
         private RFID rfid;
 
-        protected override void Initialize()
+        protected override void OnAfterLoad()
         {
             rfid = InterfaceFactory.Rfid;
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new Phidget1023RFIDConfig(Tag); }
+            get { return new Phidget1023RFIDConfig(tag); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            Tag = ((Phidget1023RFIDConfig)configurationControl).TagID;
+            tag = ((Phidget1023RFIDConfig)configurationControl).TagID;
         }
 
         public string GetConfigString()
         {
-            return String.Format("Rfid Tag ID {0}", Tag);
+            return String.Format("Rfid Tag ID {0}", tag);
         }
 
         //Tag event handler...we'll display the tag code in the field on the GUI
         private void RfidTag(object sender, TagEventArgs e)
         {
-            if (e.Tag == Tag)
+            if (e.Tag == tag)
             {
                 Trigger();
                 rfid.LED = true;
@@ -59,15 +55,13 @@ namespace PhidgetModules.Events
             rfid.LED = false;
         }
 
-        public override bool Enable()
+        protected override void OnEnabling(EnablingEventArgs e)
         {
             rfid.Tag += RfidTag;
             rfid.TagLost += LostRfidTag;
-
-            return true;
         }
 
-        public override void Disable()
+        protected override void OnDisabled(DisabledEventArgs e)
         {
             if (rfid != null)
             {

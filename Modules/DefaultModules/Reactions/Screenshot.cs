@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemCore;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.Serialization;
+using System.Windows.Forms;
+using DefaultModules.Wpf;
+using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using DefaultModules.Wpf;
-using System.IO;
 
 namespace DefaultModules.Reactions
 {
@@ -19,10 +16,16 @@ namespace DefaultModules.Reactions
     public class Screenshot : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+        private string saveLocation;
 
         [DataMember]
-        private string filenamePrefix = "Mayhem";
+        private string filenamePrefix;
+
+        protected override void OnLoadDefaults()
+        {
+            saveLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            filenamePrefix = "Mayhem";
+        }
 
         public override void Perform()
         {
@@ -31,7 +34,7 @@ namespace DefaultModules.Reactions
             int maxX = 0;
             int maxY = 0;
 
-            foreach (Screen screen in System.Windows.Forms.Screen.AllScreens)
+            foreach (Screen screen in Screen.AllScreens)
             {
                 int x = screen.Bounds.X + screen.Bounds.Width;
                 if (x > maxX)

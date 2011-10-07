@@ -6,9 +6,9 @@ using Phidgets.Events;
 
 namespace PhidgetModules.Wpf
 {
-    public partial class Phidget1055IRReceiveConfig : WpfConfiguration
+    public partial class Phidget1055IrReceiverConfig : WpfConfiguration
     {
-        protected IR ir;
+        protected IR Ir;
 
         public IRCode Code
         {
@@ -18,11 +18,11 @@ namespace PhidgetModules.Wpf
 
         // Using a DependencyProperty as the backing store for Code.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CodeProperty =
-            DependencyProperty.Register("Code", typeof(IRCode), typeof(Phidget1055IRReceiveConfig), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Code", typeof(IRCode), typeof(Phidget1055IrReceiverConfig), new UIPropertyMetadata(null));
 
-        public Phidget1055IRReceiveConfig(IRCode code)
+        public Phidget1055IrReceiverConfig(IRCode code)
         {
-            ir = InterfaceFactory.IR;
+            Ir = InterfaceFactory.Ir;
             Code = code;
 
             this.DataContext = this;
@@ -39,9 +39,9 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
-            ir.Code += ir_Code;
-            ir.Attach += ir_Attach;
-            ir.Detach += ir_Detach;
+            Ir.Code += ir_Code;
+            Ir.Attach += ir_Attach;
+            Ir.Detach += ir_Detach;
         }
 
         #region Phidget Event Handlers
@@ -73,9 +73,9 @@ namespace PhidgetModules.Wpf
 
         public override void OnClosing()
         {
-            ir.Code -= ir_Code;
-            ir.Attach -= ir_Attach;
-            ir.Detach -= ir_Detach;
+            Ir.Code -= ir_Code;
+            Ir.Attach -= ir_Attach;
+            Ir.Detach -= ir_Detach;
         }
     }
 }

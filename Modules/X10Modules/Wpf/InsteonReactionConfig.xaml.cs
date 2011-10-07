@@ -9,28 +9,19 @@
  * Author: Sven Kratz
  * 
  * 
- */ 
+ */
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemWpf.UserControls;
-using MayhemSerial;
-using X10Modules.Insteon;
-using System.Diagnostics;
-using System.Threading;
 using MayhemCore;
-using System.Timers;
+using MayhemSerial;
+using MayhemWpf.UserControls;
+using X10Modules.Insteon;
 
 namespace X10Modules.Wpf
 {
@@ -39,7 +30,7 @@ namespace X10Modules.Wpf
     /// </summary>
     public partial class InsteonReactionConfig : WpfConfiguration
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
+        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
         private InsteonController insteonController = null;
 
         private bool linking = false;
@@ -79,9 +70,9 @@ namespace X10Modules.Wpf
         // TODO: Evaluate in future if byte array is needed or not
         private Dictionary<string, byte[]> selectable_commands = new Dictionary<string, byte[]>()
         {
-            { "ON",  new byte[]{InsteonCommandBytes.light_on_fast}},
-            { "OFF", new byte[]{InsteonCommandBytes.light_off_fast}},
-            { "TOGGLE", new byte[] {InsteonCommandBytes._toggle}}
+            { "ON",  new byte[]{InsteonCommandBytes.LightOnFast}},
+            { "OFF", new byte[]{InsteonCommandBytes.LightOffFast}},
+            { "TOGGLE", new byte[] {InsteonCommandBytes.Toggle}}
         };
 
         public InsteonReactionConfig()
@@ -95,10 +86,10 @@ namespace X10Modules.Wpf
         /// </summary>
         public void Init()
         {
-            serial = MayhemSerialPortMgr.instance; 
+            serial = MayhemSerialPortMgr.Instance; 
             serial.UpdatePortList();
-     
-            Dictionary<string,string> portList = serial.getInsteonPortNames();
+
+            Dictionary<string, string> portList = serial.GetInsteonPortNames(new InsteonUsbModemSerialSettings());
                        
             if (portList.Count > 0)
             {

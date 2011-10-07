@@ -8,16 +8,10 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemSerial;
 using System.Threading;
-using System.Diagnostics;
-using System.IO.Ports;
-using System.Runtime.CompilerServices;
+using MayhemSerial;
 using X10Modules.Insteon;
 
 namespace X10Modules
@@ -26,7 +20,7 @@ namespace X10Modules
     {
         public class NotInitializedException : Exception{}
 
-        protected static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.instance;
+        protected static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.Instance;
         protected string portName = null;
         public bool initialized = false;
         protected bool waitForData = false; 
@@ -45,7 +39,7 @@ namespace X10Modules
 
         protected InsteonControllerBase(string serialPortname) 
         {
-            if (mSerial.ConnectPort(serialPortname, this, new INSTEON_USB_MODEM_SETTINGS()))
+            if (mSerial.ConnectPort(serialPortname, this, new InsteonUsbModemSerialSettings()))
             {
                 portName = ""+serialPortname;
                 InitializeX10();

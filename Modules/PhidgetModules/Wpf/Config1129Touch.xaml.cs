@@ -1,11 +1,4 @@
-﻿using System;
-using System.Windows;
-using Phidgets;
-using MayhemWpf.UserControls;
-using Phidgets.Events;
-using System.Windows.Threading;
-using PhidgetModules.Wpf.UserControls;
-using System.Windows.Controls;
+﻿using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Wpf
 {

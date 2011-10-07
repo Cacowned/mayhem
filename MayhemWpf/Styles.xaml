@@ -9,8 +9,8 @@
         <Setter Property="Background">
             <Setter.Value>
                 <RadialGradientBrush>
-                    <GradientStop Color="#FF82B0BC"/>
-                    <GradientStop Color="#FF458697" Offset="1"/>
+                    <GradientStop Color="#C3C6CC"/>
+                    <GradientStop Color="#9D9FA5" Offset="1"/>
                 </RadialGradientBrush>
             </Setter.Value>
         </Setter>
@@ -41,8 +41,8 @@
         <Setter Property="Background">
             <Setter.Value>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF1E272D" Offset="1"/>
-                    <GradientStop Color="#FF9DBBCE"/>
+                    <GradientStop Color="#C3C6CC" Offset="0"/>
+                    <GradientStop Color="#9D9FA5 " Offset="1"/>
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>

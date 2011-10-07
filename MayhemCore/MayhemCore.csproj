@@ -34,15 +34,15 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingCollection.cs" />
+    <Compile Include="DisabledEventArgs.cs" />
+    <Compile Include="EnablingEventArgs.cs" />
     <Compile Include="EventBase.cs" />
     <Compile Include="EventList.cs" />
     <Compile Include="Connection.cs" />
@@ -50,6 +50,7 @@
     <Compile Include="ErrorLog.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MayhemEntry.cs" />
+    <Compile Include="MayhemError.cs" />
     <Compile Include="MayhemModuleAttribute.cs" />
     <Compile Include="ModuleBase.cs" />
     <Compile Include="ModuleList.cs" />

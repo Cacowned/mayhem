@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemWpf.UserControls;
-using System.Collections.ObjectModel;
-using ArduinoModules.Wpf.Helpers;
 using ArduinoModules.Firmata;
-using MayhemSerial;
+using ArduinoModules.Wpf.Helpers;
 using MayhemCore;
+using MayhemSerial;
+using MayhemWpf.UserControls;
 
 namespace ArduinoModules.Wpf
 {
@@ -26,13 +18,13 @@ namespace ArduinoModules.Wpf
     public partial class ArduinoDigitalWriteConfig : WpfConfiguration, IArduinoEventListener
     {
 
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.instance;
+        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
         private Dictionary<string, string> deviceNamesIds = null;
         private ArduinoFirmata arduino = null;
         private ObservableCollection<DigitalPinWriteItem> pin_items = new ObservableCollection<DigitalPinWriteItem>();
         private List<DigitalPinWriteItem> reaction_set_pins = null;                     // pins already configured by the reaction 
 
-        public string arduinoPortName
+        public string ArduinoPortName
         {
             get
             {
@@ -48,7 +40,7 @@ namespace ArduinoModules.Wpf
         /// <summary>
         /// Returns list of current active items
         /// </summary>
-        public List<DigitalPinWriteItem> active_items
+        public List<DigitalPinWriteItem> ActiveItems
         {
             get
             {
@@ -63,18 +55,17 @@ namespace ArduinoModules.Wpf
         }
         
 
-        public ArduinoDigitalWriteConfig(List<DigitalPinWriteItem> set_pins)
+        public ArduinoDigitalWriteConfig(List<DigitalPinWriteItem> setPins)
         {
-            reaction_set_pins = set_pins;
+            reaction_set_pins = setPins;
             InitializeComponent();
-            Init();
         }
 
-        private void Init()
+        public override void OnLoad()
         {
             digitalPins.ItemsSource = pin_items;
             serial.UpdatePortList();
-            deviceNamesIds = serial.getArduinoPortNames();
+            deviceNamesIds = serial.GetArduinoPortNames();
 
             if (deviceNamesIds.Count > 0)
             {
@@ -89,15 +80,14 @@ namespace ArduinoModules.Wpf
             {
                 connectButton_Click(this, null);
             }
-
-       
+            CanSave = true;
         }
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
         {
             string portname = (string)deviceList.SelectedValue;
             
-            bool update_pins = false;
+            bool updatePins = false;
 
             if (arduino != null)
             {
@@ -109,7 +99,7 @@ namespace ArduinoModules.Wpf
 
             // update pins ? 
             if (ArduinoFirmata.InstanceExists(portname))
-                update_pins = true;
+                updatePins = true;
 
             arduino = ArduinoFirmata.InstanceForPortname(portname);
             arduino.RegisterListener(this);
@@ -117,7 +107,7 @@ namespace ArduinoModules.Wpf
             // update pins if the arduino already exists
             // this makes arduino call the OnPinAdded callbacks, which in turn
             // fill the gridViews with the detected pins 
-            if (update_pins)
+            if (updatePins)
             {
                 // reset analog ids to 0
                 AnalogPinItem.ResetAnalogIDs();
@@ -129,7 +119,10 @@ namespace ArduinoModules.Wpf
 
         public override void OnClosing()
         {
-            arduino.DeregisterListener(this);
+            if (arduino != null)
+            {
+                arduino.DeregisterListener(this);
+            }
             base.OnClosing();
         }
 
@@ -168,12 +161,12 @@ namespace ArduinoModules.Wpf
                 // see if pin is already contained in set pins and take over the settings
                 foreach (DigitalPinWriteItem setPin in reaction_set_pins)
                 {
-                    if (setPin.GetPinID() == p.id)
+                    if (setPin.GetPinId() == p.id)
                     {
                         // pin has already been configured
                         // use the existing DigitalPinWriteItem
                         pw = setPin;
-                        Logger.WriteLine("Using already configured pin " + pw.GetPinID());
+                        Logger.WriteLine("Using already configured pin " + pw.GetPinId());
                     }
                 }
 

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MayhemCore
 {
-    public class ModuleType
+    internal class ModuleType
     {
         public Type Type
         {
@@ -36,7 +34,7 @@ namespace MayhemCore
         }
     }
 
-    public class ModuleTypeComparer : IComparer<ModuleType>
+    internal class ModuleTypeComparer : IComparer<ModuleType>
     {
         public int Compare(ModuleType x, ModuleType y)
         {

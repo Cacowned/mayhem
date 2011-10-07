@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Packages\InsteonAndX10Modules\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -52,6 +52,7 @@
     <Compile Include="Insteon\InsteonDevice.cs" />
     <Compile Include="Insteon\InsteonCommands\InsteonResponseCommand.cs" />
     <Compile Include="Insteon\InsteonCommands\InsteonStandardMessage.cs" />
+    <Compile Include="Insteon\InsteonUsbModemSerialSettings.cs" />
     <Compile Include="Insteon\InsteonX10CommandTable.cs" />
     <Compile Include="Insteon\X10Controller.cs" />
     <Compile Include="Reactions\InsteonReaction.cs" />

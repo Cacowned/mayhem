@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace WindowModules
@@ -32,7 +29,7 @@ namespace WindowModules
         }
 
         [DataMember]
-        public List<WindowAction> WindowActions
+        public List<IWindowAction> WindowActions
         {
             get;
             set;
@@ -41,7 +38,7 @@ namespace WindowModules
         public WindowActionInfo()
         {
             WindowInfo = new WindowInfo();
-            WindowActions = new List<WindowAction>();
+            WindowActions = new List<IWindowAction>();
         }
     }
 }

@@ -13,15 +13,11 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemSerial;
-using System.IO.Ports;
-using System.Diagnostics;
-using System.Threading;
 using System.ComponentModel;
-using Timer = System.Timers.Timer;
+using System.Linq;
 using MayhemCore;
+using MayhemSerial;
+using Timer = System.Timers.Timer;
 
 
 namespace ArduinoModules.Firmata
@@ -151,7 +147,7 @@ namespace ArduinoModules.Firmata
         private string portName_ = null;             // name of the serial port
         public string portName { get { return portName_; } }
 
-        private static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.instance;
+        private static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.Instance;
         public bool initialized = false;
 
         // parsing
@@ -180,15 +176,13 @@ namespace ArduinoModules.Firmata
 
         private ArduinoFirmata(string serialPortName)
         {
-
             operation = AsyncOperationManager.CreateOperation(null);
 
-            if (mSerial.ConnectPort(serialPortName, this,  new ARDUINO_FIRMATA_SETTINGS()))
+            if (mSerial.ConnectPort(serialPortName, this,  new ArduinoFirmataSerialSettings()))
             {
                 portName_ = serialPortName;
                 InitializeFirmata(); 
-            };
-
+            }
         }
 
         /// <summary>
@@ -214,7 +208,7 @@ namespace ArduinoModules.Firmata
         /// <summary>
         /// Registers an Arduino Event Listener
         /// </summary>
-        /// <param name="?"></param>
+        /// <param name="l"></param>
         public void RegisterListener(IArduinoEventListener l)
         {
             // subtract listeners first to suppress multi-listener registration
@@ -251,7 +245,7 @@ namespace ArduinoModules.Firmata
         public static ArduinoFirmata InstanceForPortname(string serialPortName)
         {
             Logger.WriteLine("InstanceForPortname");
-            if (serialPortName != String.Empty && serialPortName != null)
+            if (!string.IsNullOrEmpty(serialPortName))
             {                        
 
                 if (instances.Keys.Contains(serialPortName) && instances[serialPortName] != null)
@@ -260,7 +254,7 @@ namespace ArduinoModules.Firmata
                 }
                 else
                 {
-                    Dictionary<string, string> portNames = mSerial.getArduinoPortNames();
+                    Dictionary<string, string> portNames = mSerial.GetArduinoPortNames();
 
                     if (portNames.Keys.Contains(serialPortName))
                     {
@@ -275,7 +269,7 @@ namespace ArduinoModules.Firmata
         }
 
         /// <summary>
-        /// Sends initial Firmata message and initailized the mcu state
+        /// Sends initial Firmata message and initialize the mcu state
         /// </summary>
         private void InitializeFirmata()
         {
@@ -318,8 +312,6 @@ namespace ArduinoModules.Firmata
 
             byte[] message = new byte[5] { FIRMATA_MSG.START_SYSEX, FIRMATA_MSG.SAMPLING_INTERVAL, ms[0], ms[1], FIRMATA_MSG.END_SYSEX };
             mSerial.WriteToPort(portName_, message, message.Length);
-
-
         }
 
         #region Outgoing commands
@@ -434,8 +426,6 @@ namespace ArduinoModules.Firmata
         /// <summary>
         /// Notfication from the serial port manager when serial data is available
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public void port_DataReceived(string portName, byte[] buffer, int numBytes)
         {
             // Logger.WriteLine("port_DataReceived");
@@ -494,11 +484,8 @@ namespace ArduinoModules.Firmata
                             parse_count = 0;
                             parse_command_len = 0;
                         }
-
                     }
-
-            }
-          
+            }         
         }
 
         private void ProcessMessage()
@@ -522,8 +509,7 @@ namespace ArduinoModules.Firmata
 
 				        return;
                 }
-		      }
-		    
+		      }		    
 	        }
 	        if (cmd == FIRMATA_MSG.DIGITAL_IO_MESSAGE /*&& parse_count == 3*/) {
 		        int port_num = (parse_buf[0] & (byte) 0x0F);
@@ -655,7 +641,6 @@ namespace ArduinoModules.Firmata
 
                         //tx_count += len;
                     }
-
                 }
                 else if (parse_buf[1] == FIRMATA_MSG.ANALOG_MAPPING_RESPONSE)
                 {
@@ -674,27 +659,11 @@ namespace ArduinoModules.Firmata
                     pin_info[pin].value = parse_buf[4];
                     if (parse_count > 6) pin_info[pin].value |= (byte)(parse_buf[5] << 7);
                     if (parse_count > 7) pin_info[pin].value |= (byte)(parse_buf[6] << 14);
-                    //add_pin(pin);
-
                     Logger.WriteLine("Added Pin! " + pin + " " + pin_info[pin].mode + " " + pin_info[pin].value);
 
                     /////////////////////// post asynchronous event on main thread
                     if (this.OnPinAdded != null)
                     {
-                        // this.OnPinAdded(pin_info[pin]);
-                        //OnPinAdded.BeginInvoke(pin_info[pin], null, null);
-                        /*
-                        operation.Post(new SendOrPostCallback(delegate(object state)
-                          {
-                              Action<Pin> handler = OnPinAdded;
-                              if (handler != null)
-                              {
-                                  handler(pin_info[pin]);
-                              }
-                          }
-                         ), null);*/
-
-                        //OnPinAdded.Raise(this, EventArgs.Empty);
                         OnPinAdded(pin_info[pin]);
                     }
                     //////////////////////
@@ -703,9 +672,5 @@ namespace ArduinoModules.Firmata
                 return;
             }
         }
-
-
-
-        
     }
 }

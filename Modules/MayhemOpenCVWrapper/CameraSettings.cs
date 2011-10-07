@@ -7,44 +7,68 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MayhemOpenCVWrapper
 {
     /// <summary>
-    /// Contians settings for  cameras
+    /// Contains settings for  cameras
     /// TODO: find out what more can be set
     /// </summary>
-    public struct CameraSettings
+    public class CameraSettings
     {
-        public int resX;
-        public int resY;
-        // bpp? 
-        // refresh rate ?
-        // pixel format ?
-        private int updateRate_ms_;
-
-        public int updateRate_ms
+        public int ResX
         {
-            get
-            {
-                return updateRate_ms_;
-            }
+            get;
+            private set;
+        }
+        public int ResY
+        {
+            get;
+            private set; 
+        }
+    
+        public int UpdateRateMs
+        {
+            get;
+            private set;
         }
 
-        public static CameraSettings DEFAULTS()
+        protected CameraSettings(int w, int h, int updateRate)
         {
-            CameraSettings cs;
-            cs.resX = 320;
-            cs.resY = 240;
-            cs.updateRate_ms_ = 50;    // 20 fps
+            ResX = w;
+            ResY = h;
+            UpdateRateMs = updateRate; 
+        }
+
+        /// <summary>
+        /// Allows switching of the defaults without modifying code in other places. 
+        /// </summary>
+        /// <returns></returns>
+        public static CameraSettings Defaults()
+        {
+            return CameraSettings.Defaults640();
+        }
+
+        /// <summary>
+        /// 320x240 resolution, 20 FPS update rate
+        /// </summary>
+        /// <returns></returns>
+        public static CameraSettings Defaults320()
+        {
+            CameraSettings cs = new CameraSettings(320, 240, 50);
             return cs;
         }
 
+        /// <summary>
+        /// 640x480 resolution, 20 FPS update rate
+        /// </summary>
+        /// <returns></returns>
+        public static CameraSettings Defaults640()
+        {
+            CameraSettings cs = new CameraSettings(640, 480, 50);
+            return cs;
+        }
     }
 }

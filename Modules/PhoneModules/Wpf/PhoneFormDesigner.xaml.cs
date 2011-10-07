@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +11,6 @@ using MayhemCore;
 using MayhemWpf.UserControls;
 using MessagingToolkit.QRCode.Codec;
 using PhoneModules.Controls;
-using System.Threading;
 
 namespace PhoneModules.Wpf
 {
@@ -35,7 +35,6 @@ namespace PhoneModules.Wpf
 
         public void LoadFromData(string data, string selectedId)
         {
-            phoneLayout.Deserialize(data);
             LoadFromData(selectedId);
         }
 
@@ -50,14 +49,14 @@ namespace PhoneModules.Wpf
             string text = "";
             text += "19283:";
             textPort.Text = "19283";
-            for (int i = 0; i < localIPs.Length; i++)
+            foreach (IPAddress t in localIPs)
             {
-                if (localIPs[i].AddressFamily.ToString() == "InterNetwork")
+                if (t.AddressFamily.ToString() == "InterNetwork")
                 {
-                    text += localIPs[i] + ":";
+                    text += t + ":";
                     if (textIP.Text.Length > 0)
                         textIP.Text += ", ";
-                    textIP.Text += localIPs[i];
+                    textIP.Text += t;
                 }
             }
             System.Drawing.Bitmap image = null;
@@ -90,9 +89,8 @@ namespace PhoneModules.Wpf
         public void LoadFromData(string selectedID)
         {
             this.selectedID = selectedID;
-            for (int i = 0; i < phoneLayout.Buttons.Count; i++)
+            foreach (PhoneLayoutButton layout in phoneLayout.Buttons)
             {
-                PhoneLayoutButton layout = phoneLayout.Buttons[i];
                 if (layout.IsEnabled || layout.ID == selectedID)
                 {
                     PhoneUIElementButton button = new PhoneUIElementButton();

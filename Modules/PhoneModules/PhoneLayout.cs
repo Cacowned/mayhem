@@ -30,7 +30,7 @@ namespace PhoneModules
             set
             {
                 imageFile = value;
-                if (imageFile != null && imageFile.Length > 0)
+                if (!string.IsNullOrEmpty(imageFile))
                 {
                     ImageBytes = FileDictionary.Get(imageFile);
                 }
@@ -40,7 +40,6 @@ namespace PhoneModules
         public bool IsEnabled = true;
     }
 
-    [Serializable()]
     public class PhoneLayout
     {
         public List<PhoneLayoutButton> Buttons = new List<PhoneLayoutButton>();
@@ -60,13 +59,13 @@ namespace PhoneModules
         }
         #endregion
 
-        public void AddButton(string id)
+        public PhoneLayoutButton AddButton(string id)
         {
             for (int i = 0; i < Buttons.Count; i++)
             {
                 if (Buttons[i].ID == id)
                 {
-                    return;
+                    throw new Exception();
                 }
             }
             PhoneLayoutButton button = new PhoneLayoutButton();
@@ -75,16 +74,22 @@ namespace PhoneModules
             button.ID = id;
             button.X = 110;
             button.Y = 200;
+            AddButton(button);
+            return button;
+        }
+
+        public void AddButton(PhoneLayoutButton button)
+        {
             Buttons.Add(button);
         }
 
         public void EnableButton(string id)
         {
-            for (int i = 0; i < Buttons.Count; i++)
+            foreach (PhoneLayoutButton t in Buttons)
             {
-                if (Buttons[i].ID == id)
+                if (t.ID == id)
                 {
-                    Buttons[i].IsEnabled = true;
+                    t.IsEnabled = true;
                     break;
                 }
             }
@@ -92,11 +97,11 @@ namespace PhoneModules
 
         public void DisableButton(string id)
         {
-            for (int i = 0; i < Buttons.Count; i++)
+            foreach (PhoneLayoutButton t in Buttons)
             {
-                if (Buttons[i].ID == id)
+                if (t.ID == id)
                 {
-                    Buttons[i].IsEnabled = false;
+                    t.IsEnabled = false;
                     break;
                 }
             }
@@ -161,7 +166,7 @@ namespace PhoneModules
                     {
                         int width;
                         int height;
-                        if (button.ImageFile == null || button.ImageFile == "")
+                        if (string.IsNullOrEmpty(button.ImageFile))
                         {
                             sb.AppendLine("<input type=\"button\" value=\"" + button.Text + "\" class=\"button\"");
                             width = (int)button.Width;
@@ -192,30 +197,6 @@ namespace PhoneModules
             html = html.Replace("%%INSERTBODYHERE%%", insideDiv);
 
             return html;
-        }
-
-        public string Serialize()
-        {
-            string str = "";
-            XmlSerializer serializer = new XmlSerializer(this.GetType());
-
-            using (StringWriter sw = new StringWriter())
-            {
-                serializer.Serialize(sw, this);
-                str = sw.ToString();
-            }
-            return str;
-        }
-
-        public void Deserialize(string data)
-        {
-            XmlSerializer serializer = new XmlSerializer(this.GetType());
-
-            using (StringReader sr = new StringReader(data))
-            {
-                PhoneLayout layout = serializer.Deserialize(sr) as PhoneLayout;
-                this.Buttons = layout.Buttons;
-            }
         }
     }
 }
