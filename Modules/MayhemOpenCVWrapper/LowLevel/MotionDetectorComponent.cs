@@ -74,11 +74,8 @@ namespace MayhemOpenCVWrapper.LowLevel
             }
 
             Logger.WriteLineIf(VERBOSE_DEBUG, "Got " + numPoints + " contourpoints");
-
             if (numPoints == 0) return;
-
-            int cpIdx = 0;
-          
+            int cpIdx = 0;     
             points.Clear();
             
 

@@ -72,7 +72,7 @@ namespace X10Modules.Wpf
             // TODO: make this auto-detect the X10 Module, like for the Arduino Uno
             // deviceList.ItemsSource = serial.serialPortNames;
 
-            Dictionary<string, string> portList = serial.GetInsteonPortNames();
+            Dictionary<string, string> portList = serial.GetInsteonPortNames(new InsteonUsbModemSerialSettings());
 
             if (portList.Count > 0)
             {

@@ -178,7 +178,7 @@ namespace ArduinoModules.Firmata
         {
             operation = AsyncOperationManager.CreateOperation(null);
 
-            if (mSerial.ConnectPort(serialPortName, this,  new ArduinoFirmataSettings()))
+            if (mSerial.ConnectPort(serialPortName, this,  new ArduinoFirmataSerialSettings()))
             {
                 portName_ = serialPortName;
                 InitializeFirmata(); 

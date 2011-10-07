@@ -12,6 +12,7 @@
 using System;
 using System.Threading;
 using MayhemSerial;
+using X10Modules.Insteon;
 
 namespace X10Modules
 {
@@ -38,7 +39,7 @@ namespace X10Modules
 
         protected InsteonControllerBase(string serialPortname) 
         {
-            if (mSerial.ConnectPort(serialPortname, this, new InsteonUsbModemSettings()))
+            if (mSerial.ConnectPort(serialPortname, this, new InsteonUsbModemSerialSettings()))
             {
                 portName = ""+serialPortname;
                 InitializeX10();
