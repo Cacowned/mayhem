@@ -33,7 +33,11 @@ namespace VisionModules.Wpf
             get { return cam; }
         }
 
-        private delegate void VoidHandler();
+        public Double sensitivity
+        {
+            get { return Sensitivity.Value; }
+            set { Sensitivity.Value = value; }
+        }
 
         // basically forward assignments to the actual overlay
         public Rect selectedBoundingRect
@@ -97,7 +101,7 @@ namespace VisionModules.Wpf
                 }
 
                 Logger.WriteLine("using " + cam.Info.ToString());
-                // alow saving in this state
+                // allow saving in this state
                 this.CanSave = true;
             }
             else
@@ -113,9 +117,10 @@ namespace VisionModules.Wpf
          */
         public void i_OnImageUpdated(object sender, EventArgs e)
         {
-            Dispatcher.Invoke(new VoidHandler(SetCameraImageSource), null);
+            Dispatcher.Invoke(new Action(SetCameraImageSource), null);
         }
 
+        
         /**<summary>
          * Does the actual drawing of the camera image to the WPF image object in the config window. 
          * </summary>

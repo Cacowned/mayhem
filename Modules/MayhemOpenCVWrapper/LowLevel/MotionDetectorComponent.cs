@@ -7,7 +7,7 @@
  * 
  * Author: Sven Kratz
  * 
- */ 
+ */
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +20,7 @@ using System.Windows;
 using Point = System.Drawing.Point;
 using MayhemOpenCVWrapper;
 using MayhemCore;
+using System.Threading;
 
 
 namespace MayhemOpenCVWrapper.LowLevel
@@ -31,20 +32,9 @@ namespace MayhemOpenCVWrapper.LowLevel
      * */
     public class MotionDetectorComponent : IVisionEventComponent
     {
-        private bool VERBOSE_DEBUG = false;
-        private OpenCVDLL.MotionDetector m;
-
-        public delegate void DetectionHandler(object sender, List<Point> points);
-        public event DetectionHandler OnMotionUpdate;
-
-        //private Camera.ImageUpdateHandler imageUpdateHandler; 
+        public event EventHandler OnMotionUpdate;
 
         public Rect motionBoundaryRect = new Rect();
-
-        private int frameCount = 0;
-
-        private int[] contourPoints = new int[1200];
-        private List<Point> points = new List<Point>();
 
         private int width;
         private int height;
@@ -53,31 +43,29 @@ namespace MayhemOpenCVWrapper.LowLevel
         {
             this.width = width;
             this.height = height;
-
-            m = new OpenCVDLL.MotionDetector(width, height);
-        }
-
-        ~MotionDetectorComponent()
-        {
-            Logger.WriteLine("dtor");
-            m.Dispose();
         }
 
         double? oldAverage = null;
         double numberOfMotionFrames = 0;
         double threshold = 0.5;
 
+        Queue<double> runningAverage = new Queue<double>(10);
+
+        int hitCount;
+
+        DateTime lastMovement = DateTime.Now;
+        TimeSpan settleTime = TimeSpan.FromSeconds(0.5);
+
         public override void update_frame(object sender, EventArgs e)
         {
             Camera camera = sender as Camera;
 
             int stride = camera.imageBuffer.Length / height;
-            int bpp = stride / width;
+
+            double average = 0;
 
             lock (camera.thread_locker)
             {
-                double average = 0;
-
                 for (int x = (int)motionBoundaryRect.Left; x < (int)motionBoundaryRect.Right; x++)
                 {
                     for (int y = (int)motionBoundaryRect.Top; y < (int)motionBoundaryRect.Bottom; y++)
@@ -85,140 +73,47 @@ namespace MayhemOpenCVWrapper.LowLevel
                         average += camera.imageBuffer[x + y * stride];
                     }
                 }
+            }
 
-                average /= camera.imageBuffer.Length;
+            average /= camera.imageBuffer.Length;
 
-                double difference = 0;
+            threshold = 0;
 
-                if (oldAverage.HasValue)
+            foreach (var frame in runningAverage)
+            {
+                threshold += frame;
+            }
+
+            threshold /= runningAverage.Count;
+
+            if (oldAverage.HasValue)
+            {
+                double difference = Math.Abs(oldAverage.Value - average);
+
+                if (runningAverage.Count > 10)
                 {
-                    difference = Math.Abs(oldAverage.Value - average);
+                    runningAverage.Dequeue();
+                }
 
-                    if (difference > threshold)
+                runningAverage.Enqueue(difference);
+
+                if (difference > threshold * Sensitivity)
+                {
+                    if (DateTime.Now > lastMovement.Add(settleTime))
                     {
                         if (numberOfMotionFrames == 0)
                         {
+                            Debug.WriteLine("Hit Count: {0}", hitCount++);
                             if (OnMotionUpdate != null)
-                                OnMotionUpdate(this, points);
+                                OnMotionUpdate(this, EventArgs.Empty);
                         }
-
-                        if(numberOfMotionFrames < 5)
-                            numberOfMotionFrames++;
                     }
-                    else
-                    {
-                        if(numberOfMotionFrames > 0)
-                            numberOfMotionFrames--;
-                    }
+                    lastMovement = DateTime.Now;
                 }
+            }
 
-                oldAverage = average;
-
-                Debug.WriteLine("Average: {0}, Difference: {1}, #Frames: {2}", average, difference, numberOfMotionFrames);
-			}
+            oldAverage = average;
         }
-
-       /* public override void update_frame(object sender, EventArgs e)
-        {
-            Camera camera = sender as Camera;
-
-            int numPoints = 0;
-
-            for (int i = 0; i < contourPoints.Length; i++)
-            {
-                contourPoints[i] = 0; 
-            }
-
-            lock (camera.thread_locker)
-            {
-                unsafe
-                {
-                    fixed (byte* ptr = camera.imageBuffer)
-                    {
-                        fixed (int* buf = contourPoints)
-                        {
-                            m.ProcessFrame(ptr, buf, &numPoints);
-
-                            //Marshal.Copy((IntPtr)buf, contourPoints, 0, numPoints);
-                        }
-                    }
-                }
-            }
-
-            Logger.WriteLineIf(VERBOSE_DEBUG, "Got " + numPoints + " contourpoints");
-
-            if (numPoints == 0) return;
-
-            int cpIdx = 0;
-          
-            points.Clear();
-            
-
-            for (cpIdx = 0; cpIdx < numPoints; )
-            {
-                Point p1 = new Point(contourPoints[cpIdx++], contourPoints[cpIdx++]);
-                Point p2 = new Point(contourPoints[cpIdx++], contourPoints[cpIdx++]);
-                Logger.WriteLineIf(VERBOSE_DEBUG, "Point 1: " + p1 + " Point 2: " + p2);
-                
-                points.Add(p1);
-                points.Add(p2);
-            }
-
-            
-            //if (OnMotionUpdate != null && points.Count() > 0 && frameCount >40)
-            //    OnMotionUpdate(this, points); 
-
-            // intelligently decide where the motion is
-
-            Point pMax = new Point(int.MinValue, int.MinValue);
-            Point pMin = new Point(int.MaxValue, int.MaxValue);
-
-            foreach (Point p in points)
-            {
-                if (p.X == 0 && p.Y == 0)
-                    continue;
-
-                pMin.X = Math.Min(pMin.X, p.X);
-                pMax.X = Math.Max(pMax.X, p.X);
-                pMin.Y = Math.Min(pMin.Y, p.Y);
-                pMax.Y = Math.Max(pMax.Y, p.Y);
-            }
-
-            Rect boundingRect = new Rect(pMin.X, pMin.Y, pMax.X - pMin.X, pMax.Y - pMin.Y);
-
-            // create a copy of the intersection
-
-            if ((motionBoundaryRect.Width == 0 && motionBoundaryRect.Height == 0) || (motionBoundaryRect.Width == 320 && motionBoundaryRect.Height == 240))
-            {
-                if (OnMotionUpdate != null && points.Count() > 0 && frameCount > 40)
-                    OnMotionUpdate(this, points);
-            }
-            else if (boundingRect.IntersectsWith(motionBoundaryRect))
-            {
-                Rect intersection = new Rect(boundingRect.X, boundingRect.Y, boundingRect.Width, boundingRect.Height);
-                intersection.Intersect(motionBoundaryRect);
-
-                // compare the respective areas of motionBoundaryRect and the intersection
-                // if the intersection area is > 1/3 then count this as a detected motion
-
-                double motionBoundaryRectArea = motionBoundaryRect.Height * motionBoundaryRect.Width;
-                double intersectionArea = intersection.Height * intersection.Width;
-
-                if (intersectionArea / motionBoundaryRectArea > 0.3)
-                {
-                    // intersection area large enough --> send the update
-                    if (OnMotionUpdate != null && points.Count() > 0 && frameCount > 40)
-                        OnMotionUpdate(this, points);
-                }
-            }
-            frameCount++;
-        }*/
-
-        /*
-         * <summary>
-         * Sets the motion boundary rectangle, called by the associated trigger object
-         * </summary>
-         */
 
         public void SetMotionBoundaryRect(Rect r)
         {
@@ -232,5 +127,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 motionBoundaryRect = new Rect(0, 0, 0, 0);
             }
         }
+
+        public double Sensitivity { get; set; }
     }
 }
