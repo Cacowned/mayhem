@@ -12,7 +12,7 @@ using MayhemWpf.UserControls;
 namespace DefaultModules.Reactions
 {
     [DataContract]
-    [MayhemModule("Screenshot", "Take a screenshot")]
+    [MayhemModule("Screenshot", "Takes a screenshot")]
     public class Screenshot : ReactionBase, IWpfConfigurable
     {
         [DataMember]
