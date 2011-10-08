@@ -25,9 +25,11 @@
         <Button Margin="5,0,0,0" Height="30" Width="50" Click="Button_Click" Grid.Column="2" Grid.Row="0">Browse</Button>
            
         <Label Grid.Row="2" Grid.ColumnSpan="3">Choose changes to monitor:</Label>
-        <CheckBox Name="chk_write" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"></CheckBox>
-        <Label  Grid.Row="4" Grid.Column="1">create, write and delete files and folders</Label>
-        <CheckBox Name="chk_name" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Grid.Row="5"></CheckBox>
-        <Label Grid.Row="5" Grid.Column="1">rename files</Label>
+        <CheckBox Name="chk_write" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4">
+            create, write and delete files and folders
+        </CheckBox>
+        <CheckBox Name="chk_name" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5">
+            rename files
+        </CheckBox>
     </Grid>
 </src:WpfConfiguration>
