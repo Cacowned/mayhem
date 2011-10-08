@@ -3,7 +3,7 @@ using MayhemCore;
 
 namespace DefaultModules.Reactions
 {
-    [MayhemModule("Lock Computer", "Lock the computer")]
+    [MayhemModule("Lock Computer", "Locks the computer")]
     public class LockMachine : ReactionBase
     {
         [DllImport("user32.dll")]
