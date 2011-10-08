@@ -36,6 +36,9 @@ namespace WindowModules.Wpf
 
         public static IntPtr CurrentlySelectedWindow = IntPtr.Zero;
 
+        // True if we are starting up and shouldn't verify till after everything is set.
+        private bool isStartingUp = true;
+
         public WindowSequenceConfig(WindowActionInfo windowActionInfo)
         {
             InitializeComponent();
@@ -55,6 +58,8 @@ namespace WindowModules.Wpf
             textBoxMoveX.Text = SelectedWindow.MoveX.ToString();
             textBoxMoveY.Text = SelectedWindow.MoveY.ToString();
             */
+
+            isStartingUp = false;
         }
 
         public override void OnLoad()
@@ -82,7 +87,7 @@ namespace WindowModules.Wpf
             return procid;
         }
 
-        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             IntPtr handle = Native.GetForegroundWindow();
 
@@ -158,7 +163,7 @@ namespace WindowModules.Wpf
             get { return "Window Sequence"; }
         }
 
-        void Add(IWindowAction action)
+        private void Add(IWindowAction action)
         {
             UserControl newControl = null;
             if (action is WindowActionBringToFront)
@@ -188,11 +193,12 @@ namespace WindowModules.Wpf
             controlMap.Add(newControl, action);
         }
 
-        void wac_Deleted(object sender, EventArgs e)
+        private void wac_Deleted(object sender, EventArgs e)
         {
             WindowActionControl wac = sender as WindowActionControl;
             stackPanelActions.Children.Remove(wac);
             controlMap.Remove(wac);
+            CheckCanSave();
         }
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
@@ -235,7 +241,7 @@ namespace WindowModules.Wpf
             CheckCanSave();
         }
 
-        void CheckCanSave()
+        private void CheckCanSave()
         {
             CanSave = ((textBoxApplication.Text.Length > 0 && checkBoxApplication.IsChecked == true) ||
                       (textBoxWindowTitle.Text.Length > 0 && checkBoxTitle.IsChecked == true)) && stackPanelActions.Children.Count > 0;
@@ -245,5 +251,14 @@ namespace WindowModules.Wpf
         {
             CheckCanSave();
         }
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!isStartingUp)
+            {
+                CheckCanSave();
+            }
+        }
+
     }
 }
