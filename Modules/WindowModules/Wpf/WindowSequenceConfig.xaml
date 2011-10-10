@@ -9,13 +9,15 @@
         <StackPanel>
             <TextBlock TextAlignment="Center">Select the window you want to control</TextBlock>
             <Grid>
-                <CheckBox Name="checkBoxApplication" VerticalAlignment="Center" IsChecked="True" />
-                <TextBlock FontSize="14" VerticalAlignment="Center" Margin="20,0,0,0">Application:</TextBlock>
+                <CheckBox FontSize="14" Name="checkBoxApplication" VerticalAlignment="Center" IsChecked="True" Checked="checkBox_Checked" Unchecked="checkBox_Checked">
+                    Application:
+                </CheckBox>
                 <TextBox Name="textBoxApplication" Margin="110,0,0,0" FontSize="14" TextChanged="textBox_TextChanged" />
             </Grid>
             <Grid Margin="0,5,0,0">
-                <CheckBox Name="checkBoxTitle" VerticalAlignment="Center" IsChecked="True" />
-                <TextBlock FontSize="14" VerticalAlignment="Center" Margin="20,0,0,0">Window Title:</TextBlock>
+                <CheckBox FontSize="14" Name="checkBoxTitle" VerticalAlignment="Center" IsChecked="True" Checked="checkBox_Checked" Unchecked="checkBox_Checked">
+                    Window Title:
+                </CheckBox>
                 <TextBox Name="textBoxWindowTitle" Margin="110,0,0,0" FontSize="14" TextChanged="textBox_TextChanged" />
             </Grid>
             <Separator></Separator>
@@ -25,7 +27,6 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <ComboBox Name="comboBoxActions" Width="150" Margin="0,0,20,0" SelectedIndex="0">
-                    <ComboBoxItem Content="---" />
                     <ComboBoxItem Content="Bring to front" />
                     <ComboBoxItem Content="Close" />
                     <ComboBoxItem Content="Maximize" />
