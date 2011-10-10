@@ -1,0 +1,35 @@
+﻿<src:WpfConfiguration x:Class="DefaultModules.Wpf.FolderChangeConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             Width="400">
+       
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="240" />
+                    <ColumnDefinition Width="60" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition  />
+                    <RowDefinition  />
+                    <RowDefinition  />
+                    <RowDefinition  />
+                </Grid.RowDefinitions>
+
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1">Folder location is invalid</TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Monitor Folder:</TextBlock>
+        <TextBox Name="textBoxDirectory" TextChanged="textBoxDirectory_TextChanged" Grid.Column="1" Grid.Row="0" />
+        <Button Margin="5,0,0,0" Height="30" Width="50" Click="Button_Click" Grid.Column="2" Grid.Row="0">Browse</Button>
+           
+        <Label Grid.Row="2" Grid.ColumnSpan="3">Choose additional changes to monitor:</Label>
+        <CheckBox Name="chk_name" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4" Checked="chk_name_Checked" Click="chk_name_Checked">
+            name changes
+        </CheckBox>
+        <CheckBox Name="chk_subdirs" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5" Checked="chk_subdirs_Checked" Click="chk_subdirs_Checked">
+            subfolders
+        </CheckBox>
+    </Grid>
+</src:WpfConfiguration>
