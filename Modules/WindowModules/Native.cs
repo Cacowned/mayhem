@@ -78,7 +78,13 @@ namespace WindowModules
         public static extern int GetParent(int hwnd);
 
         [DllImport("user32.dll")]
+        public static extern IntPtr GetParent(IntPtr hwnd);
+
+        [DllImport("user32.dll")]
         public static extern int GetWindow(int hwnd, int wCmd);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetActiveWindow();
 
         [DllImport("user32.dll")]
         public static extern int IsWindowVisible(int hwnd);
@@ -95,6 +101,15 @@ namespace WindowModules
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr SetActiveWindow(IntPtr window);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr SetFocus(IntPtr window);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint SendInput(uint nInputs, INPUT [] pInputs, int cbSize);
 
         public const ulong WS_VISIBLE = 0x10000000L;
         public const ulong WS_BORDER = 0x00800000L;
@@ -181,5 +196,56 @@ namespace WindowModules
             public int right;
             public int bottom;
         }
+
+        [StructLayout(LayoutKind.Explicit)]
+        public struct InputUnion
+        {
+            [FieldOffset(0)]
+            public MOUSEINPUT mi;
+            [FieldOffset(0)]
+            public KEYBDINPUT ki;
+            [FieldOffset(0)]
+            public HARDWAREINPUT hi;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct INPUT
+        {
+            public int type;
+            public InputUnion u;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct KEYBDINPUT
+        {
+            public ushort wVk;
+            public ushort wScan;
+            public uint dwFlags;
+            public uint time;
+            public IntPtr dwExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MOUSEINPUT
+        {
+            public int dx;
+            public int dy;
+            public int mouseData;
+            public int dwFlags;
+            public int time;
+            public IntPtr dwExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct HARDWAREINPUT
+        {
+            public int uMsg;
+            public short wParamL;
+            public short wParamH;
+        }
+
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern int GetLastError();
     }
 }
