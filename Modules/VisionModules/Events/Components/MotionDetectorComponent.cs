@@ -1,34 +1,14 @@
-﻿/*
- * PresenceDetectorComponent.cs
- * 
- * Low level object interfacing with the OpenCVDLL motion detector. 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Diagnostics;
-using System.Drawing;
-using System.Runtime.InteropServices;
+using MayhemOpenCVWrapper.LowLevel;
 using System.Windows;
-
-using Point = System.Drawing.Point;
 using MayhemOpenCVWrapper;
-using MayhemCore;
-using System.Threading;
+using System.Diagnostics;
 
-
-namespace MayhemOpenCVWrapper.LowLevel
+namespace VisionModules.Events.Components
 {
-    /* <summary>
-     * Wrapper for the C++ Motion Detector
-     * <summary>
-     * */
     public class MotionDetectorComponent : CameraImageListener
     {
         public event EventHandler OnMotionUpdate;
@@ -54,7 +34,7 @@ namespace MayhemOpenCVWrapper.LowLevel
         int hitCount;
 
         DateTime lastMovement = DateTime.Now;
-        TimeSpan settleTime = TimeSpan.FromSeconds(0.5);
+        TimeSpan settleTime = TimeSpan.FromSeconds(1);
         private ImagerBase camera;
 
         public override void UpdateFrame(object sender, EventArgs e)
