@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using MayhemWpf.UserControls;
+using System.Collections.Generic;
 
 namespace DefaultModules.Wpf
 {
@@ -13,21 +14,16 @@ namespace DefaultModules.Wpf
     public partial class FolderChangeConfig : WpfConfiguration
     {
 
-    
-        public bool MonitorWrite
+        public bool SubDirectories
         {
-            get
-            {
-                return (bool)chk_write.IsChecked;
-            }
+            get;
+            private set; 
         }
-
+        
         public bool MonitorName
         {
-            get
-            {
-                return (bool)chk_name.IsChecked;
-            }
+            get;
+            private set; 
         }
 
         public string FolderToMonitor
@@ -36,14 +32,12 @@ namespace DefaultModules.Wpf
             private set; 
         }
 
-        private bool monitorWrite, monitorName; 
-
-        public FolderChangeConfig(string path, bool mWrite, bool mName)
+        public FolderChangeConfig(Dictionary<string, object> eventSettings)
         {
             InitializeComponent();
-            monitorWrite = mWrite;
-            monitorName = mName;
-            FolderToMonitor = path;
+            FolderToMonitor = (string) eventSettings["folder"];
+            MonitorName = (bool)eventSettings["monitorNameChange"];
+            SubDirectories = (bool)eventSettings["subDirs"]; 
         }
 
         /// <summary>
@@ -51,9 +45,11 @@ namespace DefaultModules.Wpf
         /// </summary>
         public override void OnLoad()
         {
-            chk_write.IsChecked = monitorWrite;
-            chk_name.IsChecked = monitorName;
+
+            chk_name.IsChecked = MonitorName;
+            chk_subdirs.IsChecked = SubDirectories;
             textBoxDirectory.Text = FolderToMonitor;
+
         }
 
         // Browse for file
@@ -96,6 +92,16 @@ namespace DefaultModules.Wpf
                 //return base.Title;
                 return "Folder Change";
             }
+        }
+
+        private void chk_name_Checked(object sender, RoutedEventArgs e)
+        {
+            MonitorName = (bool) chk_name.IsChecked;
+        }
+
+        private void chk_subdirs_Checked(object sender, RoutedEventArgs e)
+        {
+            SubDirectories = (bool) chk_subdirs.IsChecked;
         }
     }
 }
