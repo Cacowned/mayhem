@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace WindowModules.Actions
 {
@@ -166,24 +168,82 @@ namespace WindowModules.Actions
 
         public void Perform(IntPtr window)
         {
+            IntPtr current = Native.GetForegroundWindow();
+            Native.SetForegroundWindow(window);
+            Native.SetFocus(window);
+            Native.SetActiveWindow(window);
+
+            List<Native.INPUT> inputs = new List<Native.INPUT>();
+
             foreach (Keys t in KeyList)
             {
                 if (t == Keys.Control || t == Keys.Shift || t == Keys.Alt)
                 {
                     byte vk = GetVK(t);
-                    Native.keybd_event(vk, (byte)Native.MapVirtualKey(vk, 0), 0, UIntPtr.Zero);
+
+                    var input = new Native.INPUT();
+
+                    input.type = 1;
+                    input.u.ki.wVk = vk;
+                    input.u.ki.wScan = vk;
+                    input.u.ki.time = 10;
+
+                    inputs.Add(input);
                 }
-                uint scan = (uint)t;
-                Native.PostMessage(window, Native.WM_KEYDOWN, scan, 0);
             }
-            for (int i = KeyList.Count - 1; i >= 0; i--)
+
+            foreach (Keys t in KeyList)
             {
-                if (KeyList[i] == Keys.Control || KeyList[i] == Keys.Shift || KeyList[i] == Keys.Alt)
+                if (t != Keys.Control && t != Keys.Shift && t != Keys.Alt)
                 {
-                    byte vk = GetVK(KeyList[i]);
-                    Native.keybd_event(vk, (byte)Native.MapVirtualKey(vk, 0), Native.KEYEVENTF_KEYUP, UIntPtr.Zero);
+                    byte vk = GetVK(t);
+
+                    var input = new Native.INPUT();
+
+                    input.type = 1;
+                    input.u.ki.wVk = vk;
+                    input.u.ki.wScan = vk;
+                    input.u.ki.time = 20;
+
+                    inputs.Add(input);
                 }
             }
+
+            var inputArray = inputs.ToArray();
+
+            var count = Native.SendInput((uint)inputArray.Length, inputArray, Marshal.SizeOf(inputArray[0]));
+
+            if (count == 0)
+            {
+                var error = Native.GetLastError();
+            }
+
+            inputs.Clear();
+
+            foreach (Keys t in KeyList)
+            {
+                byte vk = GetVK(t);
+
+                var input = new Native.INPUT();
+
+                input.type = 1;
+                input.u.ki.wVk = vk;
+                input.u.ki.wScan = vk;
+                input.u.ki.dwFlags = 0x0002;
+
+                inputs.Add(input);
+            }
+
+            inputArray = inputs.ToArray();
+
+            count = Native.SendInput((uint)inputArray.Length, inputArray, Marshal.SizeOf(inputArray[0]));
+
+            if (count == 0)
+            {
+                var error = Native.GetLastError();
+            }
+
+            inputs.Clear();
         }
     }
 }
