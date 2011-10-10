@@ -32,12 +32,12 @@ namespace DefaultModules.Wpf
             private set; 
         }
 
-        public FolderChangeConfig(Dictionary<string, object> eventSettings)
+        public FolderChangeConfig(string path, bool monitorName, bool subDirs)
         {
             InitializeComponent();
-            FolderToMonitor = (string) eventSettings["folder"];
-            MonitorName = (bool)eventSettings["monitorNameChange"];
-            SubDirectories = (bool)eventSettings["subDirs"]; 
+            FolderToMonitor = path;
+            MonitorName = monitorName;
+            SubDirectories = subDirs; 
         }
 
         /// <summary>
