@@ -126,7 +126,7 @@ namespace DefaultModules.Events
                 DateTime now = DateTime.Now;
                 TimeSpan ts = now - lastCreatedDate;
 
-                // don't fire any event --> the change event is caused by the previous created event
+                // don't fire any event --> the change event is caused by the previous "created" event
                 if (a.FullPath == lastArgs_created.FullPath ||  ts.TotalMilliseconds <= 10)
                     return;
             }
@@ -146,6 +146,5 @@ namespace DefaultModules.Events
             if (monitorName)
                 Trigger();
         }
-
     }
 }
