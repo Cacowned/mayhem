@@ -24,12 +24,12 @@
         <TextBox Name="textBoxDirectory" TextChanged="textBoxDirectory_TextChanged" Grid.Column="1" Grid.Row="0" />
         <Button Margin="5,0,0,0" Height="30" Width="50" Click="Button_Click" Grid.Column="2" Grid.Row="0">Browse</Button>
            
-        <Label Grid.Row="2" Grid.ColumnSpan="3">Choose changes to monitor:</Label>
-        <CheckBox Name="chk_write" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4">
-            create, write and delete files and folders
+        <Label Grid.Row="2" Grid.ColumnSpan="3">Choose additional changes to monitor:</Label>
+        <CheckBox Name="chk_name" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4" Checked="chk_name_Checked" Click="chk_name_Checked">
+            name changes
         </CheckBox>
-        <CheckBox Name="chk_name" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5">
-            rename files
+        <CheckBox Name="chk_subdirs" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5" Checked="chk_subdirs_Checked" Click="chk_subdirs_Checked">
+            subfolders
         </CheckBox>
     </Grid>
 </src:WpfConfiguration>

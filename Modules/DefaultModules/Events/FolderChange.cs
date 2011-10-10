@@ -5,6 +5,7 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Collections.Generic;
 
 namespace DefaultModules.Events
 {
@@ -12,58 +13,75 @@ namespace DefaultModules.Events
     [MayhemModule("Folder Change", "This event monitors changes on a given folder.")]
     public class FolderChange : EventBase, IWpfConfigurable
     {
+        
         [DataMember]
-        private string folderToMonitor;
-
-        [DataMember]
-        private bool monitorWrite;
+        private string folderToMonitor = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 
         [DataMember]
         private bool monitorName;
 
+        [DataMember]
+        private bool monitorSubDirs;
+
+       
+        private Dictionary<string, object> eventSettings; 
         private FileSystemWatcher fsWatcher;
         private NotifyFilters defaultFilter = NotifyFilters.DirectoryName;
 
         protected override void OnLoadDefaults()
         {
             folderToMonitor = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            monitorWrite = true;
+            eventSettings = new Dictionary<string, object>();
+            eventSettings["folder"] = folderToMonitor;
+            eventSettings["monitorNameChange"] = false;
+            eventSettings["subDirs"] = false;
         }
 
         protected override void OnAfterLoad()
         {
+
+            eventSettings["folder"] = folderToMonitor;
+            eventSettings["monitorNameChange"] = monitorName;
+            eventSettings["subDirs"] = monitorSubDirs;
+
             // Ensure that an instance of fswatcher always gets created
             try
-            {
+            {             
                 fsWatcher = new FileSystemWatcher(folderToMonitor);
             }
             catch
             {
                 Logger.WriteLine("Exc: Folder doesn't seem to exist or be accesible");
                 fsWatcher = new FileSystemWatcher();
-                folderToMonitor = "Reconfigure!";
             }
-            SetFlags();
+           
             fsWatcher.Changed += OnChanged;
             fsWatcher.Created += OnChanged;
             fsWatcher.Deleted += OnChanged;
             fsWatcher.Renamed += OnRenamed;
             base.OnAfterLoad();
+
+
+
+            ConfigureFSMonitor();
+
         }
 
         /// <summary>
         /// Set Filters the FSWatcher should monitor
         /// </summary>
-        private void SetFlags()
+        private void ConfigureFSMonitor()
         {
             Logger.WriteLine("");
             fsWatcher.NotifyFilter = defaultFilter;
 
-            if (monitorWrite)
-                fsWatcher.NotifyFilter |= NotifyFilters.LastWrite;
+           
+
+            fsWatcher.Path = folderToMonitor; 
+            fsWatcher.NotifyFilter |= NotifyFilters.LastWrite;
             if (monitorName)
                 fsWatcher.NotifyFilter |= NotifyFilters.DirectoryName | NotifyFilters.FileName;
-            fsWatcher.IncludeSubdirectories = true;
+            fsWatcher.IncludeSubdirectories = monitorSubDirs;
         }
 
         protected override void OnEnabling(EnablingEventArgs e)
@@ -82,10 +100,11 @@ namespace DefaultModules.Events
         {
             get
             {
-
-                return new FolderChangeConfig(folderToMonitor,
-                                                monitorWrite,
-                                                monitorName);
+                eventSettings = new Dictionary<string, object>();
+                eventSettings["folder"] = folderToMonitor;
+                eventSettings["monitorNameChange"] = monitorName;
+                eventSettings["subDirs"] = monitorSubDirs;
+                return new FolderChangeConfig(eventSettings);
             }
         }
 
@@ -93,16 +112,19 @@ namespace DefaultModules.Events
         {
             Logger.WriteLine("");
             FolderChangeConfig config = configurationControl as FolderChangeConfig;
+
             folderToMonitor = config.FolderToMonitor;
-            monitorWrite = config.MonitorWrite;
             monitorName = config.MonitorName;
-            fsWatcher.Path = folderToMonitor;
-            SetFlags();
+            monitorSubDirs = config.SubDirectories;
+
+            ConfigureFSMonitor();
         }
 
         public string GetConfigString()
         {
             string conf = string.Empty;
+
+            
 
             int pathLength = folderToMonitor.Length;
 
@@ -113,10 +135,10 @@ namespace DefaultModules.Events
             else
                 substr = folderToMonitor;
             conf += "[...]" + substr;
-            if (monitorWrite)
-                conf += " WRITE ";
             if (monitorName)
                 conf += " NAME ";
+            if (monitorSubDirs)
+                conf += " SUBDIRS ";
             return conf;
         }
 
