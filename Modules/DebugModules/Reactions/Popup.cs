@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Threading;
 using DebugModules.Resources;
 using MayhemCore;
 
@@ -9,7 +11,11 @@ namespace DebugModules.Reactions
     {
         public override void Perform()
         {
-            MessageBox.Show(Strings.Popup_MessageText);
+            // Use the dispatcher to bring the message box to the top
+            Dispatcher.CurrentDispatcher.Invoke((Action)delegate
+            {
+                MessageBox.Show(Strings.Popup_MessageText);
+            });          
         }
     }
 }
