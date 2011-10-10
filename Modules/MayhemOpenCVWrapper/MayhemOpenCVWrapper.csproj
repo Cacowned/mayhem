@@ -71,7 +71,6 @@
     <Compile Include="VideoDiskBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="opencv_calib3d230.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
