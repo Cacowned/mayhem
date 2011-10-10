@@ -9,7 +9,7 @@ using WindowModules.Wpf;
 namespace WindowModules
 {
     [DataContract]
-    [MayhemModule("Window Sequence", "Window Sequence")]
+    [MayhemModule("Window Sequence", "Manipulates an application window with a sequence of actions")]
     public class WindowSequence : ReactionBase, IWpfConfigurable
     {
         [DataMember]
