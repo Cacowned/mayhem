@@ -58,20 +58,17 @@ namespace DefaultModules.Events
         /// </summary>
         private void ConfigureFSMonitor()
         {
-            Logger.WriteLine("");
             fsWatcher.Path = folderToMonitor; 
             fsWatcher.IncludeSubdirectories = monitorSubDirs;
         }
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            Logger.WriteLine("");
             fsWatcher.EnableRaisingEvents = true;
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            Logger.WriteLine("");
             fsWatcher.EnableRaisingEvents = false;
         }
 
@@ -85,7 +82,6 @@ namespace DefaultModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            Logger.WriteLine("");
             FolderChangeConfig config = configurationControl as FolderChangeConfig;
             folderToMonitor = config.FolderToMonitor;
             monitorName = config.MonitorName;

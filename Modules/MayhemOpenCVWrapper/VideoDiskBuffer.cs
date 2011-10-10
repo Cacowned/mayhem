@@ -65,6 +65,7 @@ namespace MayhemOpenCVWrapper
             fs.Seek(0, SeekOrigin.Begin);
             write_thread = new Thread(new ThreadStart(this.BufferWriteThread));
             write_thread.Name = "Video_Disk_Writer";
+            write_thread.IsBackground = true;
             write_thread.Start();
         }
 
