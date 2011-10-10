@@ -7,7 +7,8 @@
 
     <Grid>
         <StackPanel>
-            <TextBlock TextAlignment="Center">Select the window you want to control</TextBlock>
+            <TextBlock TextAlignment="Center">Click on an application to select it.</TextBlock>
+            <TextBlock TextAlignment="Center" TextWrapping="Wrap">Then choose to select just that application, or the window with that specific title.</TextBlock>
             <Grid>
                 <CheckBox FontSize="14" Name="checkBoxApplication" VerticalAlignment="Center" IsChecked="True" Checked="checkBox_Checked" Unchecked="checkBox_Checked">
                     Application:
@@ -21,7 +22,7 @@
                 <TextBox Name="textBoxWindowTitle" Margin="110,0,0,0" FontSize="14" TextChanged="textBox_TextChanged" />
             </Grid>
             <Separator></Separator>
-            <TextBlock TextAlignment="Center">Select the actions to take</TextBlock>
+            <TextBlock TextAlignment="Center">Select the sequence of actions to take on the window.</TextBlock>
             <StackPanel Name="stackPanelActions">
                 
             </StackPanel>

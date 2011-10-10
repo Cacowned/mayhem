@@ -4,7 +4,7 @@
         xmlns:src="clr-namespace:Mayhem.UserControls" 
         Title="Mayhem" Height="686" Width="645" ResizeMode="CanMinimize"
         Icon="Mayhem.ico"
-		x:Name="MayhemMainWindow" >
+		x:Name="MayhemMainWindow">
     <Window.Resources>
         <Style TargetType="{x:Type ToggleButton}">
             <Setter Property="Width" Value="35" />

@@ -66,7 +66,7 @@ namespace Mayhem.UserControls
         public static readonly RoutedEvent HideEvent = EventManager.RegisterRoutedEvent(
             "Hide", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ErrorView));
 
-        DispatcherTimer leaveTimer = null;
+        private DispatcherTimer leaveTimer = null;
 
         public event RoutedEventHandler Hide
         {
@@ -83,7 +83,11 @@ namespace Mayhem.UserControls
             remove { RemoveHandler(NotifyEvent, value); }
         }
 
-        private bool isShowing = false;
+        internal bool IsShowing 
+        {
+            get;
+            private set; 
+        }
 
         public ErrorView()
         {
@@ -93,62 +97,89 @@ namespace Mayhem.UserControls
             Errors.CollectionChanged += Errors_CollectionChanged;
         }
 
+        // When clicking on the number of errors
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //Logger.WriteLine("Border: " + e.GetPosition(this));
+            ShowOrClose();
+        }
+
+        // When clicking on the listbox
+        private void Errors_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // if we aren't showing (only possible while notifying)
+            if (!IsShowing)
+            {
+                // then open the whole thing
+                StartShowing();
+            }
+        }
+
+        // When a new error is added
         private void Errors_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (!isShowing)
+            // If we aren't already showing
+            if (!IsShowing)
             {
+                // start showing
                 RaiseEvent(new RoutedEventArgs(NotifyEvent));
                 StartCloseTimer();
             }
         }
 
-        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Logger.WriteLine("Border: " + e.GetPosition(this));
-            isShowing = true;
-            RaiseEvent(new RoutedEventArgs(ShowEvent));
-            //Mouse.Capture(this);
-            //e.Handled = true;
-        }
-
-        private void MayhemErrorView_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            RaiseEvent(new RoutedEventArgs(ShowEvent));
-            //if (e.GetPosition(this).Y < borderNumber.Height)
-            //{
-            //    Logger.WriteLine("Self: " + e.GetPosition(this));
-            //    RaiseEvent(new RoutedEventArgs(HideEvent));
-            //    Mouse.Capture(null);
-            //}
-        }
-
-        void StartCloseTimer()
-        {
-            if (leaveTimer != null)
-                leaveTimer.Stop();
-            leaveTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 2) };
-            leaveTimer.Tick += leaveTimer_Tick;
-            leaveTimer.Start();
-        }
-
+        // When the mouse leaves, start the timer to close
         private void MayhemErrorView_MouseLeave(object sender, MouseEventArgs e)
         {
             StartCloseTimer();
         }
 
-        void leaveTimer_Tick(object sender, EventArgs e)
+        private void StartCloseTimer()
         {
-            isShowing = false;
-            leaveTimer.Stop();
-            leaveTimer = null;
-            RaiseEvent(new RoutedEventArgs(HideEvent));
-            //Mouse.Capture(null);
+            if (leaveTimer != null)
+                leaveTimer.Stop();
+            // close in two seconds
+            leaveTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 2) };
+            leaveTimer.Tick += leaveTimer_Tick;
+            leaveTimer.Start();
         }
 
+        private void leaveTimer_Tick(object sender, EventArgs e)
+        {
+            leaveTimer.Stop();
+            leaveTimer = null;
+            StopShowing();
+        }
+
+        // If we move the mouse inside of the control, don't close
+        // the view
         private void MayhemErrorView_MouseMove(object sender, MouseEventArgs e)
         {
             if (leaveTimer != null)
                 leaveTimer.Stop();
+        }
+
+        private void ShowOrClose()
+        {
+            if (IsShowing)
+            {
+                StopShowing();
+            }
+            else
+            {
+                StartShowing();
+            }
+        }
+
+        private void StartShowing()
+        {
+            IsShowing = true;
+            RaiseEvent(new RoutedEventArgs(ShowEvent));
+        }
+
+        internal void StopShowing()
+        {
+            IsShowing = false;
+            RaiseEvent(new RoutedEventArgs(HideEvent));
         }
     }
 }
