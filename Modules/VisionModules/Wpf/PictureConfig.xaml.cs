@@ -45,39 +45,36 @@ namespace VisionModules.Wpf
             private set;
         }
 
+        int selectedDeviceIdx_;
         public int SelectedDeviceIdx
         {
             get {return  camera_selector.SelectedIndex;}
             set { selectedDeviceIdx_ = value; }
         }
 
-
         // the selected camera
+        private Camera camera_selected_; 
         public Camera CameraSelected
         {
-            get 
-            { 
+            get
+            {
                 int index = SelectedDeviceIdx;
                 return CameraDriver.Instance.CamerasAvailable[index];
             }
-
+            private set 
+            {
+                camera_selected_ = value;   
+            }
         }
 
-        // binding to the slider value 
-        public double slider_value
-        {
-            get;
-            private set;
-        }
-
-
-        // for initialization use
-        private Camera camera_selected_ = null;
+        // binding to the slider value (needs to stay public due to binding
+        public double slider_value;
+            
+        public Camera selected_camera = null;
 
         private CameraDriver i = CameraDriver.Instance;
         protected List<Camera> cams = new List<Camera>();
-        protected int selectedDeviceIdx_;
-       
+
         public PictureConfig(string location, string prefix,  double capture_offset_time, int deviceIdx)
         {
             this.SaveLocation = location;
@@ -85,8 +82,7 @@ namespace VisionModules.Wpf
             // directory and prefix boxes
            
             slider_value = capture_offset_time;
-            SelectedDeviceIdx = deviceIdx;
-            
+            SelectedDeviceIdx = deviceIdx;            
             InitializeComponent();
              
         }
@@ -126,7 +122,7 @@ namespace VisionModules.Wpf
             slider_capture_offset.SmallChange = 0.5;
             slider_capture_offset.LargeChange = 1.0;
             slider_capture_offset.Value = slider_value;
-            //        
+            //          
             CanSave = true;
         }
 
@@ -137,7 +133,7 @@ namespace VisionModules.Wpf
                     (Camera c) =>
                     {
                         Logger.WriteLine("Handling OnCameraSelected");
-                        camera_selected_ = c;
+                        CameraSelected = c;
                     }
                     );
             if (camera_selector.camera_previews.Count > 0)

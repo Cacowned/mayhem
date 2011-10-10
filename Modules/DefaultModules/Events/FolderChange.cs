@@ -12,22 +12,19 @@ namespace DefaultModules.Events
     [DataContract]
     [MayhemModule("Folder Change", "This event monitors changes on a given folder.")]
     public class FolderChange : EventBase, IWpfConfigurable
-    {
-        
+    {  
         [DataMember]
-        private string folderToMonitor = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        private string folderToMonitor;
 
         [DataMember]
         private bool monitorName;
 
         [DataMember]
         private bool monitorSubDirs;
-
        
         private Dictionary<string, object> eventSettings; 
         private FileSystemWatcher fsWatcher;
-        private NotifyFilters defaultFilter = NotifyFilters.DirectoryName;
-
+        
         private FileSystemEventArgs lastArgs_created;
         private DateTime lastCreatedDate; 
 
@@ -38,8 +35,6 @@ namespace DefaultModules.Events
 
         protected override void OnAfterLoad()
         {
-
-
             // Ensure that an instance of fswatcher always gets created
             try
             {             
@@ -55,7 +50,6 @@ namespace DefaultModules.Events
             fsWatcher.Created += OnChanged;
             fsWatcher.Deleted += OnChanged;
             fsWatcher.Renamed += OnRenamed;
-            base.OnAfterLoad();
             ConfigureFSMonitor();
         }
 
@@ -64,20 +58,17 @@ namespace DefaultModules.Events
         /// </summary>
         private void ConfigureFSMonitor()
         {
-            Logger.WriteLine("");
             fsWatcher.Path = folderToMonitor; 
             fsWatcher.IncludeSubdirectories = monitorSubDirs;
         }
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            Logger.WriteLine("");
             fsWatcher.EnableRaisingEvents = true;
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            Logger.WriteLine("");
             fsWatcher.EnableRaisingEvents = false;
         }
 
@@ -85,32 +76,23 @@ namespace DefaultModules.Events
         {
             get
             {
-                eventSettings = new Dictionary<string, object>();
-                eventSettings["folder"] = folderToMonitor;
-                eventSettings["monitorNameChange"] = monitorName;
-                eventSettings["subDirs"] = monitorSubDirs;
-                return new FolderChangeConfig(eventSettings);
+                return new FolderChangeConfig(folderToMonitor, monitorName, monitorSubDirs);
             }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            Logger.WriteLine("");
             FolderChangeConfig config = configurationControl as FolderChangeConfig;
-
             folderToMonitor = config.FolderToMonitor;
             monitorName = config.MonitorName;
             monitorSubDirs = config.SubDirectories;
-
             ConfigureFSMonitor();
         }
 
         public string GetConfigString()
         {
             string conf = string.Empty;
-
             int pathLength = folderToMonitor.Length;
-
             const int cutoff = 10;
             string substr;
             if (pathLength >= cutoff)
@@ -144,13 +126,11 @@ namespace DefaultModules.Events
                 DateTime now = DateTime.Now;
                 TimeSpan ts = now - lastCreatedDate;
 
-                // don't fire any event --> the change event is caused by the previous created event
+                // don't fire any event --> the change event is caused by the previous "created" event
                 if (a.FullPath == lastArgs_created.FullPath ||  ts.TotalMilliseconds <= 10)
                     return;
             }
-
-            
-
+          
             Logger.WriteLine("Args: " + a.ChangeType + " Fname " + a.Name);
             Trigger();
         }
@@ -166,6 +146,5 @@ namespace DefaultModules.Events
             if (monitorName)
                 Trigger();
         }
-
     }
 }
