@@ -28,21 +28,17 @@ namespace DefaultModules.Events
         private FileSystemWatcher fsWatcher;
         private NotifyFilters defaultFilter = NotifyFilters.DirectoryName;
 
+        private FileSystemEventArgs lastArgs_created;
+        private DateTime lastCreatedDate; 
+
         protected override void OnLoadDefaults()
         {
-            folderToMonitor = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            eventSettings = new Dictionary<string, object>();
-            eventSettings["folder"] = folderToMonitor;
-            eventSettings["monitorNameChange"] = false;
-            eventSettings["subDirs"] = false;
+            folderToMonitor = Environment.GetFolderPath(Environment.SpecialFolder.Personal);      
         }
 
         protected override void OnAfterLoad()
         {
 
-            eventSettings["folder"] = folderToMonitor;
-            eventSettings["monitorNameChange"] = monitorName;
-            eventSettings["subDirs"] = monitorSubDirs;
 
             // Ensure that an instance of fswatcher always gets created
             try
@@ -60,11 +56,7 @@ namespace DefaultModules.Events
             fsWatcher.Deleted += OnChanged;
             fsWatcher.Renamed += OnRenamed;
             base.OnAfterLoad();
-
-
-
             ConfigureFSMonitor();
-
         }
 
         /// <summary>
@@ -73,14 +65,7 @@ namespace DefaultModules.Events
         private void ConfigureFSMonitor()
         {
             Logger.WriteLine("");
-            fsWatcher.NotifyFilter = defaultFilter;
-
-           
-
             fsWatcher.Path = folderToMonitor; 
-            fsWatcher.NotifyFilter |= NotifyFilters.LastWrite;
-            if (monitorName)
-                fsWatcher.NotifyFilter |= NotifyFilters.DirectoryName | NotifyFilters.FileName;
             fsWatcher.IncludeSubdirectories = monitorSubDirs;
         }
 
@@ -124,8 +109,6 @@ namespace DefaultModules.Events
         {
             string conf = string.Empty;
 
-            
-
             int pathLength = folderToMonitor.Length;
 
             const int cutoff = 10;
@@ -149,6 +132,25 @@ namespace DefaultModules.Events
         /// <param name="a"></param>
         private void OnChanged(object o, FileSystemEventArgs a)
         {
+            Logger.WriteLine(a.FullPath);
+            // filter out repeadted triggers when a file is created
+            if (a.ChangeType == WatcherChangeTypes.Created)
+            {
+                lastArgs_created = a;
+                lastCreatedDate = DateTime.Now;
+            }
+            else if (a.ChangeType == WatcherChangeTypes.Changed)
+            {
+                DateTime now = DateTime.Now;
+                TimeSpan ts = now - lastCreatedDate;
+
+                // don't fire any event --> the change event is caused by the previous created event
+                if (a.FullPath == lastArgs_created.FullPath ||  ts.TotalMilliseconds <= 10)
+                    return;
+            }
+
+            
+
             Logger.WriteLine("Args: " + a.ChangeType + " Fname " + a.Name);
             Trigger();
         }
@@ -161,7 +163,8 @@ namespace DefaultModules.Events
         private void OnRenamed(object o, RenamedEventArgs a)
         {
             Logger.WriteLine("Args: " + a.ChangeType + " " + a.Name);
-            Trigger();
+            if (monitorName)
+                Trigger();
         }
 
     }
