@@ -54,8 +54,6 @@ namespace Mayhem
             Text = headerText;
             InitializeComponent();
 
-            new RectAnimation(new Rect(), new Duration(TimeSpan.FromSeconds(AnimationTime)));
-
             ModulesList.ItemsSource = list;
 
             heightBasedOnModules = (int)Math.Min(185 + 43 * ModulesList.Items.Count, Height);
@@ -71,6 +69,19 @@ namespace Mayhem
                 });
             }
         }
+
+        private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
+            double targetWidth = iWpfConfig.Width + 40;
+            double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
+
+            Rect target = new Rect(Left - (targetWidth - ActualWidth) / 2, Top - (targetHeight - ActualHeight) / 2,
+                                   targetWidth, targetHeight);
+
+            StartStoryBoard(WindowRect, target, AnimationTime);
+        }
+
 
         private void ChooseButtonClick(object sender, RoutedEventArgs e)
         {
@@ -91,6 +102,7 @@ namespace Mayhem
                         windowHeaderConfig.Text = iWpfConfig.Title;
                         iWpfConfig.Loaded += iWpfConfig_Loaded;
                         iWpfConfig.CanSavedChanged += iWpfConfig_CanSavedChanged;
+                        iWpfConfig.SizeChanged += new SizeChangedEventHandler(ConfigContent_SizeChanged);
                         iWpfConfig.OnLoad();
                     }
                     catch
@@ -188,11 +200,6 @@ namespace Mayhem
 
         private void buttonConfigCancel_Click(object sender, RoutedEventArgs e)
         {
-            if (isCheckingSizeChanged)
-            {
-                isCheckingSizeChanged = false;
-            }
-
             ThreadPool.QueueUserWorkItem(o =>
                 {
                     try
@@ -300,6 +307,7 @@ namespace Mayhem
 
             storyBoard.Begin(this);
         }
+
         #endregion
     }
 }
