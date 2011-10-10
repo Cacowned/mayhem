@@ -20,6 +20,7 @@ using System.Diagnostics;
 using MayhemWpf.UserControls;
 using MayhemOpenCVWrapper.LowLevel;
 using System.Threading;
+using VisionModules.Events.Components;
 
 namespace VisionModules.Events
 {
