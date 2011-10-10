@@ -56,7 +56,6 @@ namespace DefaultModules.Wpf
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
-            dlg.RootFolder = Environment.SpecialFolder.Personal;
             dlg.ShowNewFolderButton = true;
             dlg.SelectedPath = FolderToMonitor;
 
