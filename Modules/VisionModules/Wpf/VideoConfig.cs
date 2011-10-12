@@ -100,7 +100,7 @@ namespace VisionModules.Wpf
             
             lbl_slider_title.Content = "Select the time frame of the "+video_duration_s+"s video recording:";
             lbl_img_save.Content = "Click the button below to choose the location of saved videos:";
-            img_save_button.Content = "Video Save Location";
+            img_save_button.Content = "Browse";
             
             compress = new CheckBox();
             compress.Content = "Compress Video";
