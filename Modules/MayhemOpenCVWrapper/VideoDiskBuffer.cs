@@ -115,6 +115,7 @@ namespace MayhemOpenCVWrapper
                         File.Delete(BUFFER_FILENAME);
                     fs = new FileStream(BUFFER_FILENAME, FileMode.OpenOrCreate);
                     fs.Seek(0, SeekOrigin.Begin);
+                    block_bytes = new long[MAX_BUFFER_ITEMS]; 
                     // kill the thread while we're at it
                     threadRunning = false;
                     signalNewBitmaps.Set();
@@ -124,6 +125,7 @@ namespace MayhemOpenCVWrapper
                     // reset indices and counters
                     writtenBlocks = 0;
                     currentBlock = 0;
+                    
                 }
             }
             accept_frames = true; 
