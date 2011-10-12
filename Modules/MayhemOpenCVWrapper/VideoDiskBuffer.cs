@@ -139,6 +139,7 @@ namespace MayhemOpenCVWrapper
             {
                 if (write_thread.ThreadState == ThreadState.Stopped)
                 {
+                    ClearAndResetBuffer();
                     //restart the thread
                     write_thread = new Thread(new ThreadStart(this.BufferWriteThread));
                     write_thread.Name = "Video_Disk_Writer";

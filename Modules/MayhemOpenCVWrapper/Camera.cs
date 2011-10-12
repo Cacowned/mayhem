@@ -110,6 +110,28 @@ namespace MayhemOpenCVWrapper
         // check for thread termination   
         private ManualResetEvent grabFramesReset;
 
+        private bool recordingVideo;
+        public bool CanRecordVideo
+        {
+            get
+            {
+                return recordingVideo;
+            }
+            set
+            {
+                if (value == true)
+                {
+                    videoDiskBuffer.ClearAndResetBuffer();
+                    recordingVideo = true;
+                }
+                else
+                {
+                    recordingVideo = false;
+                }
+            }
+
+        }
+
         #endregion
 
         #region Constructor / Destructor
@@ -254,6 +276,7 @@ namespace MayhemOpenCVWrapper
                 //grabFrm = new Thread(GrabFrames);
                 try
                 {
+                    recordingVideo = true;
                     Logger.WriteLine("Starting Frame Grabber");
                     ThreadPool.QueueUserWorkItem((object o) => { GrabFrames_Thread(); });           
                 }
@@ -392,7 +415,8 @@ namespace MayhemOpenCVWrapper
                     }
 
                     // Add new frame to the on-disk image cache
-                    videoDiskBuffer.AddBitmap(ImageAsBitmap());
+                    if (recordingVideo)
+                        videoDiskBuffer.AddBitmap(ImageAsBitmap());
                   
                     if (Running)
                     {
