@@ -88,6 +88,7 @@ namespace VisionModules.Reactions
 
         public void SaveVideo(object sender, ElapsedEventArgs e)
         {
+            camera.CanRecordVideo = false;
             Logger.WriteLine("SaveVideo");
             DateTime now = DateTime.Now;
             string fileName = fileNamePrefix + "_" +
@@ -119,6 +120,7 @@ namespace VisionModules.Reactions
         /// <param name="obj"></param>
         private void v_OnVideoSaved(bool obj)
         {
+            camera.CanRecordVideo = true;
             videoSaving = false;
             Logger.WriteLine("Video saved successfully to: " + lastVideoSaved);
         }
