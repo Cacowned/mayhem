@@ -27,9 +27,12 @@ namespace ArduinoModules.Events
                 manager = MayDuinoConnectionManager.Instance;
         }
 
-        protected virtual string GetReactionConfigString()
+        public virtual string ReactionConfigString
         {
-            throw new NotImplementedException();
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
 
