@@ -7,6 +7,7 @@ using MayhemWpf.ModuleTypes;
 using System.Runtime.Serialization;
 using ArduinoModules.Wpf;
 using MayhemWpf.UserControls;
+using ArduinoModules.MayDuino;
 
 namespace ArduinoModules.Events
 {
@@ -15,10 +16,18 @@ namespace ArduinoModules.Events
     public class MayDuinoDigitalReaction : MayduinoReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private int pin;
+        private int digitalPin;
 
         [DataMember]
         private bool outState;
+
+        protected override Reaction_t ReactionType
+        {
+            get
+            {
+                return Reaction_t.DIGITALREACTION ;
+            }
+        }
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -38,7 +47,7 @@ namespace ArduinoModules.Events
            // throw new NotImplementedException();
             MayDuinoDigitalReactionConfig config = configurationControl as MayDuinoDigitalReactionConfig;
 
-            pin = config.Pin;
+            digitalPin = config.Pin;
             outState = (bool)config.Condition;
         }
 
@@ -54,7 +63,9 @@ namespace ArduinoModules.Events
 
         protected override string GetReactionConfigString()
         {
-            throw new NotImplementedException();
+            //return base.GetEventConfigString();
+            string rc = digitalPin + "," + (int)ReactionType + "," + Convert.ToInt32(outState) + "," + 0;
+            return rc;
         }
     }
 }
