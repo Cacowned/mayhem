@@ -31,10 +31,17 @@ namespace ArduinoModules.Wpf
             get { return (int) bx_pin.SelectedValue; }
         }
 
-        public object Condition
+        public T GetCondition<T>()
         {
-            get { return bx_cond.SelectedValue; }
+           return (T) bx_cond.SelectedValue;
         }
+
+        public T GetPullup<T>()
+        {
+            return (T)bx_pullup.SelectedValue;
+        }
+
+       
 
         public int ActivationValue
         {

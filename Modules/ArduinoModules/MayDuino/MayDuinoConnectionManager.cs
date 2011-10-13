@@ -7,6 +7,7 @@ using MayhemCore;
 using MayhemSerial;
 using ArduinoModules.Firmata;
 using ArduinoModules.MayDuino;
+using System.Threading;
 
 namespace ArduinoModules
 {
@@ -18,6 +19,7 @@ namespace ArduinoModules
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
 
         private Dictionary<MayduinoEventBase, MayduinoReactionBase> mayduinoConnections;
+        private const int TIMEOUT = 100; 
 
         public void EventEnabled(MayduinoEventBase e)
         {
@@ -40,6 +42,7 @@ namespace ArduinoModules
         {
             Logger.WriteLine("EventDisabled -- removing connection"); 
             mayduinoConnections.Remove(e);
+            UpdateDevice();
         }
 
 
@@ -92,6 +95,7 @@ namespace ArduinoModules
                     {
                         // reset current connection settings
                         serial.WriteToPort(portName, MayduinoCommands.RESET_CONNECTIONS);
+                        Thread.Sleep(TIMEOUT);
 
                         List<string> configurationstrings = new List<string>();
                         foreach (KeyValuePair<MayduinoEventBase, MayduinoReactionBase> connection in mayduinoConnections)
@@ -107,10 +111,12 @@ namespace ArduinoModules
                         {
                             Logger.WriteLine("Writing config to device: " + s);
                             serial.WriteToPort(portName, s);
+                            Thread.Sleep(TIMEOUT);
                         }
 
                         // tell arduino to save to eeprom
                         serial.WriteToPort(portName, MayduinoCommands.WRITE_CONNECTIONS);
+                        Thread.Sleep(TIMEOUT);
                     }
                 }
             }

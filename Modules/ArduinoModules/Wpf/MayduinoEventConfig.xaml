@@ -29,9 +29,12 @@
             <Label Name="lbl_cond" Grid.Row="1" Grid.Column="0">Select activation condition</Label>
             <ComboBox Name="bx_cond" Width="150" Grid.Row="1" Grid.Column="1" ></ComboBox>
             
+            <Label Name="lbl_pullup" Grid.Row="2" Grid.Column="0">Pullup</Label>
+            <ComboBox Name="bx_pullup" Grid.Row="2" Grid.Column="1"></ComboBox>
+            
             <!-- Collapse for digital events -->
-            <Label Name="lbl_eventVals" Grid.Row="2" Grid.Column="0">Select activation value</Label>
-            <TextBox Name="bx_eventVals" Grid.Row="2" Grid.Column="1" Width="150">0</TextBox>
+            <Label Name="lbl_eventVals" Grid.Row="3" Grid.Column="0">Select activation value</Label>
+            <TextBox Name="bx_eventVals" Grid.Row="3" Grid.Column="1" Width="150">0</TextBox>
 
         </Grid>
     </StackPanel>
