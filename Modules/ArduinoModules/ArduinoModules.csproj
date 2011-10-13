@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Packages\ArduinoModules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -47,6 +47,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\MayDuinoDigitalEvent.cs" />
     <Compile Include="Firmata\ArduinoFirmata.cs" />
     <Compile Include="Events\ArduinoEvent.cs" />
     <Compile Include="Firmata\ArduinoFirmataSerialSettings.cs" />
@@ -65,6 +66,10 @@
     <Compile Include="Wpf\Helpers\DigitalPinItem.cs" />
     <Compile Include="Wpf\Helpers\DigitalPinWriteItem.cs" />
     <Compile Include="Wpf\Helpers\StretchPropertyExt.cs" />
+    <Compile Include="Wpf\MayDuinoDigitalEventConfig.cs" />
+    <Compile Include="Wpf\MayduinoEventConfig.xaml.cs">
+      <DependentUpon>MayduinoEventConfig.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -90,6 +95,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\ArduinoEventConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\MayduinoEventConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
