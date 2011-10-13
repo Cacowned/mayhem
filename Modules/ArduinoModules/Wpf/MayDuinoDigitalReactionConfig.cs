@@ -5,13 +5,11 @@ using System.Text;
 
 namespace ArduinoModules.Wpf
 {
-    public class MayDuinoDigitalEventConfig : MayduinoEventConfig
+    class MayDuinoDigitalReactionConfig : MayduinoReactionConfig
     {
-
         public override void FillSelections()
         {
-
-            Dictionary<string, int>  pinBoxItems = new Dictionary<string, int>();
+            Dictionary<string, int> pinBoxItems = new Dictionary<string, int>();
             Dictionary<string, bool> conditionItems = new Dictionary<string, bool>();
             // hide activation value
             lbl_eventVals.Visibility = System.Windows.Visibility.Collapsed;
@@ -37,19 +35,17 @@ namespace ArduinoModules.Wpf
             bx_cond.ItemsSource = conditionItems;
             bx_cond.DisplayMemberPath = "Key";
             bx_cond.SelectedValuePath = "Value";
-           
+
 
             bx_pin.SelectedIndex = 0;
             bx_cond.SelectedIndex = 0;
-
-            // fill
         }
 
         public override string Title
         {
             get
             {
-                return "MayDuino Digital Pin Event";
+                return "MayDuino Digital Pin Reaction";
             }
         }
     }

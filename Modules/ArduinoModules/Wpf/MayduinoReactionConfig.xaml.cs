@@ -20,12 +20,9 @@ namespace ArduinoModules.Wpf
     /// Interaction logic for MayduinoEvent.xaml
     /// </summary>
 
-    public partial class MayduinoEventConfig : WpfConfiguration
+    public partial class MayduinoReactionConfig : WpfConfiguration
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
-        private Dictionary<string, string> deviceNamesIds = null;
-
-
+        
         public int Pin
         {
             get { return (int) bx_pin.SelectedValue; }
@@ -61,37 +58,15 @@ namespace ArduinoModules.Wpf
             private set;
         }
 
-        public MayduinoEventConfig()
+        public MayduinoReactionConfig()
         {
             InitializeComponent();
         }
 
         public override void OnLoad()
-        {
-           
-            serial.UpdatePortList();
-            deviceNamesIds = serial.GetArduinoPortNames();
-
-            if (deviceNamesIds.Count > 0)
-            {
-                deviceList.ItemsSource = deviceNamesIds;
-                deviceList.DisplayMemberPath = "Value";
-                deviceList.SelectedValuePath = "Key";
-                deviceList.SelectedIndex = 0;
-            }
-
-            // directly display the list if there is only one board attached
-            if (deviceNamesIds.Count == 1)
-            {
-                connectButton_Click(this, null);
-            }
+        {         
             CanSave = true;
             FillSelections();
-        }
-
-        private void connectButton_Click(object sender, RoutedEventArgs e)
-        {
-            ArduinoPortName  = (string)deviceList.SelectedValue;              
         }
 
         public virtual void FillSelections()
@@ -99,9 +74,6 @@ namespace ArduinoModules.Wpf
             throw new NotImplementedException();
         }
 
-        private void deviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ArduinoPortName = (string)deviceList.SelectedValue;    
-        }
+       
     }
 }

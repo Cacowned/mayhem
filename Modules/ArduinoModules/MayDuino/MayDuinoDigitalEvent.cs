@@ -6,13 +6,20 @@ using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using System.Runtime.Serialization;
 using ArduinoModules.Wpf;
+using MayhemWpf.UserControls;
 
 namespace ArduinoModules.Events
 {
     [DataContract]
-    [MayhemModule("MayDuino Digital Event", "Event Setup for MayDuino Core")]
-    public class MayDuinoDigitalEvent : EventBase, IWpfConfigurable
+    [MayhemModule("MayDuino Digital Pin Event", "Event Setup for MayDuino Core")]
+    public class MayDuinoDigitalEvent : MayduinoEventBase, IWpfConfigurable
     {
+        [DataMember]
+        private int digitalPin;
+
+        [DataMember]
+        private bool condition;
+            
         protected override void OnEnabling(EnablingEventArgs e)
         {
          
@@ -26,9 +33,14 @@ namespace ArduinoModules.Events
             }
         }
 
-        public void OnSaved(MayhemWpf.UserControls.WpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
            // throw new NotImplementedException();
+            MayDuinoDigitalEventConfig config = configurationControl as MayDuinoDigitalEventConfig;
+
+            digitalPin = config.Pin;
+            condition = (bool) config.Condition;
+
         }
 
         public string GetConfigString()
