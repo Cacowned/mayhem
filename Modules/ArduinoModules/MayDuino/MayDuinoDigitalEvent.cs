@@ -19,10 +19,16 @@ namespace ArduinoModules.Events
 
         [DataMember]
         private bool condition;
-            
+
+         
         protected override void OnEnabling(EnablingEventArgs e)
         {
-         
+            manager.EventEnabled(this);
+        }
+
+        protected override void OnDisabled(DisabledEventArgs e)
+        {
+            manager.EventDisabled(this);
         }
 
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
@@ -41,12 +47,11 @@ namespace ArduinoModules.Events
             digitalPin = config.Pin;
             condition = (bool) config.Condition;
 
-        }
+        }     
 
         public string GetConfigString()
         {
-            //throw new NotImplementedException();
-            return "MayDuino Digital";
+            return "MayDuino Digital Event";
         }
     }
 }

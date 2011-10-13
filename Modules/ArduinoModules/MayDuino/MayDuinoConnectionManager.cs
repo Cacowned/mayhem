@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ArduinoModules.Events;
+using MayhemCore;
 
 namespace ArduinoModules
 {
@@ -12,11 +13,16 @@ namespace ArduinoModules
         private MayduinoEventBase last_event;
         private MayduinoReactionBase last_reaction;
 
+        private Dictionary<MayduinoEventBase, MayduinoReactionBase> mayduinoConnections;
+
         public void EventEnabled(MayduinoEventBase e)
         {
             if (last_reaction == null)
             {
-                last_event= e;
+                lock (this)
+                {
+                    last_event = e;
+                }
                 if (last_reaction != null)
                     AddConnection();
             }
@@ -26,12 +32,22 @@ namespace ArduinoModules
             }
         }
 
+        public void EventDisabled(MayduinoEventBase e)
+        {
+            Logger.WriteLine("EventDisabled -- removing connection"); 
+            mayduinoConnections.Remove(e);
+        }
+
 
         public void ReactionEnabled(MayduinoReactionBase r)
         {
+          
             if (last_reaction == null)
             {
-                last_reaction = r;
+                lock (this)
+                {
+                    last_reaction = r;
+                }
                 if (last_event != null)
                     AddConnection();
             }
@@ -46,10 +62,19 @@ namespace ArduinoModules
         /// </summary>
         private void AddConnection()
         {
-            mayduinoConnections[last_event] = last_reaction;
+            lock (this)
+            {
+                mayduinoConnections[last_event] = last_reaction;
+                last_event = null;
+                last_reaction = null;
+            }
+
+            Logger.WriteLine("Connection Added");
+
+            // TODO: Write Stuff to the Arduino Board 
         }
 
-        public Dictionary<MayduinoEventBase, MayduinoReactionBase> mayduinoConnections;
+       
 
         public MayDuinoConnectionManager()
         {
@@ -66,7 +91,6 @@ namespace ArduinoModules
                     instance_ = new MayDuinoConnectionManager();
 
                 return instance_;
-            
             }
         }
 
