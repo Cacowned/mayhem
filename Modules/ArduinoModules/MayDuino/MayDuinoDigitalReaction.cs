@@ -18,7 +18,12 @@ namespace ArduinoModules.Events
         private int pin;
 
         [DataMember]
-        private bool outState; 
+        private bool outState;
+
+        protected override void OnEnabling(EnablingEventArgs e)
+        {
+            manager.ReactionEnabled(this);
+        }
 
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
         {
@@ -39,12 +44,12 @@ namespace ArduinoModules.Events
 
         public string GetConfigString()
         {
-            throw new NotImplementedException();
+            return "Mayduino digital reactiomn";
         }
 
         public override void Perform()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         protected override string GetReactionConfigString()

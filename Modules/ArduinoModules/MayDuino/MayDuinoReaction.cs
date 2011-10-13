@@ -3,14 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MayhemCore;
+using System.Runtime.Serialization;
 
 namespace ArduinoModules.Events
 {
-    public abstract class MayduinoReactionBase: ReactionBase
+    [DataContract]
+    public class MayduinoReactionBase: ReactionBase
     {
-        private MayDuinoConnectionManager manager = MayDuinoConnectionManager.Instance;
+        protected MayDuinoConnectionManager manager = MayDuinoConnectionManager.Instance;
 
-        protected abstract string GetReactionConfigString();
-        
+        protected override void OnAfterLoad()
+        {
+            if (manager == null)
+                manager = MayDuinoConnectionManager.Instance;
+        }
+
+        protected virtual string GetReactionConfigString()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public override void Perform()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
