@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ArduinoModules.Events;
 using MayhemCore;
+using MayhemSerial;
 
 namespace ArduinoModules
 {
@@ -12,6 +13,7 @@ namespace ArduinoModules
 
         private MayduinoEventBase last_event;
         private MayduinoReactionBase last_reaction;
+        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
 
         private Dictionary<MayduinoEventBase, MayduinoReactionBase> mayduinoConnections;
 
@@ -72,6 +74,23 @@ namespace ArduinoModules
             Logger.WriteLine("Connection Added");
 
             // TODO: Write Stuff to the Arduino Board 
+            Dictionary<string,string> portnames = serial.GetArduinoPortNames();
+            if (portnames.Count > 0)
+            {
+
+                string portName =  portnames.Keys.First();
+                List<string> configurationstrings = new List<string>();
+
+                foreach (KeyValuePair<MayduinoEventBase, MayduinoReactionBase> connection in mayduinoConnections)
+                {
+                    MayduinoEventBase mEvent = connection.Key;
+                    MayduinoReactionBase mReact = connection.Value;
+
+                    //int ePin = mEvent.
+
+                }
+
+            }
         }
 
        

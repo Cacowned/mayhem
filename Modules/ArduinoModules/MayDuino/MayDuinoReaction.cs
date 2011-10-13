@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MayhemCore;
 using System.Runtime.Serialization;
+using ArduinoModules.MayDuino;
 
 namespace ArduinoModules.Events
 {
@@ -11,6 +12,14 @@ namespace ArduinoModules.Events
     public class MayduinoReactionBase: ReactionBase
     {
         protected MayDuinoConnectionManager manager = MayDuinoConnectionManager.Instance;
+
+        protected virtual Reaction_t ReactionType
+        {
+            get
+            {
+                return Reaction_t.REACTION_DISABLED;
+            }
+        }
 
         protected override void OnAfterLoad()
         {

@@ -7,6 +7,7 @@ using MayhemWpf.ModuleTypes;
 using System.Runtime.Serialization;
 using ArduinoModules.Wpf;
 using MayhemWpf.UserControls;
+using ArduinoModules.MayDuino;
 
 namespace ArduinoModules.Events
 {
@@ -19,6 +20,14 @@ namespace ArduinoModules.Events
 
         [DataMember]
         private bool condition;
+
+        protected override Event_t EventType
+        {
+            get
+            {
+                return Event_t.DIGITALEVENT;
+            }
+        }
 
          
         protected override void OnEnabling(EnablingEventArgs e)
@@ -52,6 +61,13 @@ namespace ArduinoModules.Events
         public string GetConfigString()
         {
             return "MayDuino Digital Event";
+        }
+
+        protected override string GetEventConfigString()
+        {
+            //return base.GetEventConfigString();
+            string ec = digitalPin + "," + (int)EventType + "," + Convert.ToInt32(condition) + "," + 0;
+            return ec;
         }
     }
 }
