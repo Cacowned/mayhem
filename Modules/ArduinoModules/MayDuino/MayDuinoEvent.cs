@@ -13,7 +13,7 @@ namespace ArduinoModules.Events
     {
         protected MayDuinoConnectionManager manager = MayDuinoConnectionManager.Instance;
 
-        protected   Event_t EventType
+        protected virtual  Event_t EventType
         {
             get
             {
@@ -29,10 +29,12 @@ namespace ArduinoModules.Events
         }
 
    
-
-        protected virtual string GetEventConfigString()
+        public virtual string EventConfigString
         {
-            throw new NotImplementedException();
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

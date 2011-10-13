@@ -5,10 +5,12 @@ using System.Text;
 using ArduinoModules.Events;
 using MayhemCore;
 using MayhemSerial;
+using ArduinoModules.Firmata;
+using ArduinoModules.MayDuino;
 
 namespace ArduinoModules
 {
-    public class MayDuinoConnectionManager
+    public class MayDuinoConnectionManager : ISerialPortDataListener
     {
 
         private MayduinoEventBase last_event;
@@ -72,24 +74,45 @@ namespace ArduinoModules
             }
 
             Logger.WriteLine("Connection Added");
+            UpdateDevice();
+        }
 
+        private void UpdateDevice()
+        {
+            Logger.WriteLine("");
             // TODO: Write Stuff to the Arduino Board 
-            Dictionary<string,string> portnames = serial.GetArduinoPortNames();
+            Dictionary<string, string> portnames = serial.GetArduinoPortNames();
             if (portnames.Count > 0)
             {
-
-                string portName =  portnames.Keys.First();
-                List<string> configurationstrings = new List<string>();
-
-                foreach (KeyValuePair<MayduinoEventBase, MayduinoReactionBase> connection in mayduinoConnections)
+                string portName = portnames.Keys.First();
+                if (portName != null)
                 {
-                    MayduinoEventBase mEvent = connection.Key;
-                    MayduinoReactionBase mReact = connection.Value;
+                    // write out configuration string
+                    if (serial.ConnectPort(portName, this, new ArduinoFirmataSerialSettings()))
+                    {
+                        // reset current connection settings
+                        serial.WriteToPort(portName, MayduinoCommands.RESET_CONNECTIONS);
 
-                    //int ePin = mEvent.
+                        List<string> configurationstrings = new List<string>();
+                        foreach (KeyValuePair<MayduinoEventBase, MayduinoReactionBase> connection in mayduinoConnections)
+                        {
+                            MayduinoEventBase mEvent = connection.Key;
+                            MayduinoReactionBase mReact = connection.Value;
+                            string configString = MayduinoCommands.NEW_CONNECTION + mEvent.EventConfigString + "," + mReact.ReactionConfigString;                          
+                            configurationstrings.Add(configString);
+                        }
 
+                        // write out the new settings
+                        foreach (string s in configurationstrings)
+                        {
+                            Logger.WriteLine("Writing config to device: " + s);
+                            serial.WriteToPort(portName, s);
+                        }
+
+                        // tell arduino to save to eeprom
+                        serial.WriteToPort(portName, MayduinoCommands.WRITE_CONNECTIONS);
+                    }
                 }
-
             }
         }
 
@@ -113,5 +136,10 @@ namespace ArduinoModules
             }
         }
 
+
+        public void port_DataReceived(string portName, byte[] buffer, int nBytes)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

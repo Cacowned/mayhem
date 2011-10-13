@@ -12,7 +12,7 @@ using ArduinoModules.MayDuino;
 namespace ArduinoModules.Events
 {
     [DataContract]
-    [MayhemModule("MayhDuino Digital Pin Reaction", "Writes logic values on selected pins when triggered")]
+    [MayhemModule("MayDuino Digital Reaction", "Writes logic values on selected pins when triggered")]
     public class MayDuinoDigitalReaction : MayduinoReactionBase, IWpfConfigurable
     {
         [DataMember]
@@ -58,14 +58,16 @@ namespace ArduinoModules.Events
 
         public override void Perform()
         {
-            //throw new NotImplementedException();
+            //
         }
 
-        protected override string GetReactionConfigString()
+        public override string ReactionConfigString
         {
-            //return base.GetEventConfigString();
-            string rc = digitalPin + "," + (int)ReactionType + "," + Convert.ToInt32(outState) + "," + 0;
-            return rc;
+            get
+            {             
+                string rc = digitalPin + "," + (int)ReactionType + "," + Convert.ToInt32(outState) + "," + 0;
+                return rc;
+            }
         }
     }
 }

@@ -47,6 +47,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MayDuino\MayDuinoDefs.cs" />
     <Compile Include="MayDuino\MayDuinoDigitalEvent.cs" />
     <Compile Include="MayDuino\MayDuinoDigitalReaction.cs" />
     <Compile Include="MayDuino\MayDuinoEvent.cs" />

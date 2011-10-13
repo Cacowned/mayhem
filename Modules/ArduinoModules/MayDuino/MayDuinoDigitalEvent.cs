@@ -12,7 +12,7 @@ using ArduinoModules.MayDuino;
 namespace ArduinoModules.Events
 {
     [DataContract]
-    [MayhemModule("MayDuino Digital Pin Event", "Event Setup for MayDuino Core")]
+    [MayhemModule("MayDuino Digital Event", "Event Setup for MayDuino Core")]
     public class MayDuinoDigitalEvent : MayduinoEventBase, IWpfConfigurable
     {
         [DataMember]
@@ -63,11 +63,14 @@ namespace ArduinoModules.Events
             return "MayDuino Digital Event";
         }
 
-        protected override string GetEventConfigString()
+        public override string EventConfigString
         {
-            //return base.GetEventConfigString();
-            string ec = digitalPin + "," + (int)EventType + "," + Convert.ToInt32(condition) + "," + 0;
-            return ec;
+            get
+            {
+                //return base.GetEventConfigString();
+                string ec = digitalPin + "," + (int)EventType + "," + Convert.ToInt32(condition) + "," + 0;
+                return ec;
+            }
         }
     }
 }
