@@ -7,12 +7,24 @@ namespace ArduinoModules.Wpf
 {
     public class MayDuinoDigitalEventConfig : MayduinoEventConfig
     {
+        private int digitalPin;
+        private bool condition;
+        private bool pullUp;
+
+        public MayDuinoDigitalEventConfig(int digitalPin, bool condition, bool pullUp)
+        {
+            // TODO: Complete member initialization
+            this.digitalPin = digitalPin;
+            this.condition = condition;
+            this.pullUp = pullUp;
+        }
 
         public override void FillSelections()
         {
 
             Dictionary<string, int>  pinBoxItems = new Dictionary<string, int>();
             Dictionary<string, bool> conditionItems = new Dictionary<string, bool>();
+            Dictionary<string, bool> pullupItems = new Dictionary<string, bool>();
             // hide activation value
             lbl_eventVals.Visibility = System.Windows.Visibility.Collapsed;
             bx_eventVals.Visibility = System.Windows.Visibility.Collapsed;
@@ -37,12 +49,19 @@ namespace ArduinoModules.Wpf
             bx_cond.ItemsSource = conditionItems;
             bx_cond.DisplayMemberPath = "Key";
             bx_cond.SelectedValuePath = "Value";
+
+            // fill pullup box
+            pullupItems["ON"] = true;
+            pullupItems["OFF"] = false;
+            bx_pullup.ItemsSource = pullupItems;
+            bx_pullup.DisplayMemberPath = "Key";
+            bx_pullup.SelectedValuePath = "Value";
            
 
-            bx_pin.SelectedIndex = 0;
-            bx_cond.SelectedIndex = 0;
-
-            // fill
+            // show selections
+            bx_pin.SelectedIndex = digitalPin-2;
+            bx_cond.SelectedIndex = condition ? 0 : 1;
+            bx_pullup.SelectedIndex = pullUp ? 0 : 1;
         }
 
         public override string Title

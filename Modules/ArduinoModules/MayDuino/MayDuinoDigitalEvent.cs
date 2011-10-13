@@ -21,6 +21,9 @@ namespace ArduinoModules.Events
         [DataMember]
         private bool condition;
 
+        [DataMember]
+        private bool pullUp; 
+
         protected override Event_t EventType
         {
             get
@@ -29,6 +32,12 @@ namespace ArduinoModules.Events
             }
         }
 
+        protected override void OnLoadDefaults()
+        {
+            digitalPin = 2;
+            condition = true;
+            pullUp = true;
+        }
          
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -44,7 +53,7 @@ namespace ArduinoModules.Events
         {
             get 
             {
-                return new MayDuinoDigitalEventConfig();
+                return new MayDuinoDigitalEventConfig(digitalPin, condition, pullUp);
             }
         }
 
@@ -54,8 +63,8 @@ namespace ArduinoModules.Events
             MayDuinoDigitalEventConfig config = configurationControl as MayDuinoDigitalEventConfig;
 
             digitalPin = config.Pin;
-            condition = (bool) config.Condition;
-
+            condition = config.GetCondition<bool>();
+            pullUp = config.GetPullup<bool>();
         }     
 
         public string GetConfigString()
@@ -68,7 +77,7 @@ namespace ArduinoModules.Events
             get
             {
                 //return base.GetEventConfigString();
-                string ec = digitalPin + "," + (int)EventType + "," + Convert.ToInt32(condition) + "," + 0;
+                string ec = digitalPin + "," + (int)EventType + "," + Convert.ToInt32(condition) + "," + Convert.ToInt32(pullUp);
                 return ec;
             }
         }
