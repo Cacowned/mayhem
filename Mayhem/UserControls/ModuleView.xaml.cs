@@ -116,7 +116,7 @@ namespace Mayhem.UserControls
             textBlockReactionName.Opacity = Connection.IsEnabled ? 1 : 0;
         }
 
-        void ShowConfig(ModuleBase configurable)
+        private void ShowConfig(ModuleBase configurable)
         {
             if (!configurable.HasConfig)
                 return;
@@ -200,6 +200,7 @@ namespace Mayhem.UserControls
                             blueButtonImage.BeginAnimation(Rectangle.OpacityProperty, animOut);
                             ImageSettingsEventRed.BeginAnimation(Rectangle.OpacityProperty, animOut);
                             ImageSettingsReactionBlue.BeginAnimation(Rectangle.OpacityProperty, animOut);
+                            textBlockEventName.BeginAnimation(Rectangle.OpacityProperty, animOut);
                             textBlockReactionName.BeginAnimation(Rectangle.OpacityProperty, animOut);
                         }
                         ((MainWindow)Application.Current.MainWindow).Save();
