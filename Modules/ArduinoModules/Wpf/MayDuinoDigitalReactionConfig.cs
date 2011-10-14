@@ -7,6 +7,15 @@ namespace ArduinoModules.Wpf
 {
     class MayDuinoDigitalReactionConfig : MayduinoReactionConfig
     {
+        private int digitalPin;
+        private bool outState;
+
+        public MayDuinoDigitalReactionConfig(int digitalPin, bool outState)
+        {
+            // TODO: Complete member initialization
+            this.digitalPin = digitalPin;
+            this.outState = outState;
+        }
         public override void FillSelections()
         {
             Dictionary<string, int> pinBoxItems = new Dictionary<string, int>();
@@ -37,8 +46,8 @@ namespace ArduinoModules.Wpf
             bx_cond.SelectedValuePath = "Value";
 
 
-            bx_pin.SelectedIndex = 0;
-            bx_cond.SelectedIndex = 0;
+            bx_pin.SelectedIndex = digitalPin - 2;
+            bx_cond.SelectedIndex = outState ? 0 : 1;
         }
 
         public override string Title

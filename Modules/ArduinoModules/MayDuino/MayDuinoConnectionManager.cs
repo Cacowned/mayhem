@@ -19,7 +19,7 @@ namespace ArduinoModules
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
 
         private Dictionary<MayduinoEventBase, MayduinoReactionBase> mayduinoConnections;
-        private const int TIMEOUT = 100; 
+        private const int TIMEOUT = 150; 
 
         public void EventEnabled(MayduinoEventBase e)
         {
@@ -80,9 +80,9 @@ namespace ArduinoModules
             UpdateDevice();
         }
 
-        private void UpdateDevice()
+        public void UpdateDevice()
         {
-            Logger.WriteLine("");
+            Logger.WriteLine("=========== Upadating Arduino Device =====================");
             // TODO: Write Stuff to the Arduino Board 
             Dictionary<string, string> portnames = serial.GetArduinoPortNames();
             if (portnames.Count > 0)

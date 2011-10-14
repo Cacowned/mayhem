@@ -39,15 +39,7 @@ namespace ArduinoModules.Events
             pullUp = true;
         }
          
-        protected override void OnEnabling(EnablingEventArgs e)
-        {
-            manager.EventEnabled(this);
-        }
-
-        protected override void OnDisabled(DisabledEventArgs e)
-        {
-            manager.EventDisabled(this);
-        }
+      
 
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
         {
