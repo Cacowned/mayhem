@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Events\FolderChange.cs" />
     <Compile Include="Reactions\LockWorkstation.cs" />
+    <Compile Include="Reactions\OpenUrl.cs" />
     <Compile Include="Reactions\Screenshot.cs" />
     <Compile Include="Resources\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -73,6 +74,9 @@
     <Compile Include="Reactions\PlaySound.cs" />
     <Compile Include="Reactions\RunProgram.cs" />
     <Compile Include="Reactions\TextToSpeech.cs" />
+    <Compile Include="Wpf\OpenUrlConfig.xaml.cs">
+      <DependentUpon>OpenUrlConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\FolderChangeConfig.xaml.cs">
       <DependentUpon>FolderChangeConfig.xaml</DependentUpon>
     </Compile>
@@ -107,6 +111,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Wpf\OpenUrlConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Wpf\FolderChangeConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
