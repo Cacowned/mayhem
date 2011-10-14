@@ -32,6 +32,13 @@ namespace ArduinoModules.MayDuino
             }
         }
 
+        protected override void OnLoadDefaults()
+        {
+            analogPin = 0;
+            condition = false;
+            threshold = 0;
+        }
+
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
         {
             get 
