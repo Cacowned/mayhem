@@ -23,8 +23,8 @@ namespace ArduinoModules.Events
 
         protected override void OnEnabling(EnablingEventArgs e)
         { 
-            if (!e.WasConfiguring)
-                manager.EventEnabled(this);
+            //if (!e.WasConfiguring)
+            manager.EventEnabled(this);
         }
 
         protected override void OnDisabled(DisabledEventArgs e)

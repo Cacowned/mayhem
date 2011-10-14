@@ -38,7 +38,7 @@ namespace ArduinoModules.Wpf
 
         public T GetPullup<T>()
         {
-            return (T)bx_pullup.SelectedValue;
+            return (T) bx_pullup.SelectedValue;
         }
 
        
