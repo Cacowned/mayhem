@@ -42,10 +42,10 @@ namespace ArduinoModules.MayDuino
 
         public void OnSaved(MayhemWpf.UserControls.WpfConfiguration configurationControl)
         {
-            MayDuinoDigitalEventConfig config = configurationControl as MayDuinoDigitalEventConfig;
+            MayDuinoAnalogEventConfig config = configurationControl as MayDuinoAnalogEventConfig;
             analogPin = config.Pin;
             condition = config.GetCondition<bool>();
-            threshold = config.ActivationValue; 
+            threshold = config.GetArgs; 
         }
 
         public string GetConfigString()

@@ -154,13 +154,28 @@ namespace ArduinoModules
 
         public void port_DataReceived(string portName, byte[] buffer, int nBytes)
         {
-            //throw new NotImplementedException();
-            for (int i = 1; i < nBytes-1; i++)
+            if (nBytes > 0)
             {
-                if (buffer[i - 1] == 'O' && buffer[i] == 'K')
+                //throw new NotImplementedException();
+                Logger.Write("RX: ");
+                string contents = String.Empty;
+                for (int i = 0; i < buffer.Length; i++)
                 {
-                    ackWait.Set();
+                    contents += (char)buffer[i];
                 }
+                Logger.WriteLine(contents);
+
+                for (int i = 1; i < nBytes - 1; i++)
+                {
+                    if (buffer[i - 1] == 'O' && buffer[i] == 'K')
+                    {
+                        ackWait.Set();
+                    }
+                }
+            }
+            else
+            {
+                ackWait.Set();
             }
         }
     }
