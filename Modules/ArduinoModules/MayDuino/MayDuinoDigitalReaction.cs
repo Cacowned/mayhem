@@ -29,16 +29,19 @@ namespace ArduinoModules.Events
             }
         }
 
-        protected override void OnEnabling(EnablingEventArgs e)
+       
+
+        protected override void OnLoadDefaults()
         {
-            manager.ReactionEnabled(this);
+            digitalPin = 2;
+            outState = true;
         }
 
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
         {
             get 
             { 
-                return new MayDuinoDigitalReactionConfig(); 
+                return new MayDuinoDigitalReactionConfig(digitalPin, outState); 
             }
         }
 
@@ -49,6 +52,9 @@ namespace ArduinoModules.Events
 
             digitalPin = config.Pin;
             outState = (bool)config.Condition;
+
+            manager.UpdateDevice();
+
         }
 
         public string GetConfigString()

@@ -21,14 +21,24 @@ namespace ArduinoModules.Events
             }
         }
 
+        protected override void OnEnabling(EnablingEventArgs e)
+        { 
+            if (!e.WasConfiguring)
+                manager.EventEnabled(this);
+        }
+
+        protected override void OnDisabled(DisabledEventArgs e)
+        {
+            if (!e.IsConfiguring)
+                manager.EventDisabled(this);
+        }
 
         protected override void OnAfterLoad()
         {
             if (manager == null)
                 manager = MayDuinoConnectionManager.Instance;
         }
-
-   
+  
         public virtual string EventConfigString
         {
             get

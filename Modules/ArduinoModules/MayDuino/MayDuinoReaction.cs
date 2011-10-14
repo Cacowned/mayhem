@@ -21,6 +21,13 @@ namespace ArduinoModules.Events
             }
         }
 
+        protected override void OnEnabling(EnablingEventArgs e)
+        {
+            if (!e.WasConfiguring)
+                manager.ReactionEnabled(this);
+        }
+
+              
         protected override void OnAfterLoad()
         {
             if (manager == null)
