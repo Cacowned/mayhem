@@ -43,16 +43,16 @@ namespace ArduinoModules.Wpf
 
 
             // fill event types
-            conditionItems["HIGH"] = true;
             conditionItems["LOW"] = false;
+            conditionItems["HIGH"] = true;
 
             bx_cond.ItemsSource = conditionItems;
             bx_cond.DisplayMemberPath = "Key";
             bx_cond.SelectedValuePath = "Value";
 
             // fill pullup box
-            pullupItems["ON"] = true;
             pullupItems["OFF"] = false;
+            pullupItems["ON"] = true;
             bx_pullup.ItemsSource = pullupItems;
             bx_pullup.DisplayMemberPath = "Key";
             bx_pullup.SelectedValuePath = "Value";
@@ -60,8 +60,8 @@ namespace ArduinoModules.Wpf
 
             // show selections
             bx_pin.SelectedIndex = digitalPin-2;
-            bx_cond.SelectedIndex = condition ? 0 : 1;
-            bx_pullup.SelectedIndex = pullUp ? 0 : 1;
+            bx_cond.SelectedIndex = condition ? 1 : 0;
+            bx_pullup.SelectedIndex = pullUp ? 1: 0;
         }
 
         public override string Title

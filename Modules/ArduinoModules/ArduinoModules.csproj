@@ -47,6 +47,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MayDuino\MayDuinoAnalogEvent.cs" />
     <Compile Include="MayDuino\MayDuinoDefs.cs" />
     <Compile Include="MayDuino\MayDuinoDigitalEvent.cs" />
     <Compile Include="MayDuino\MayDuinoDigitalReaction.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Wpf\ArduinoEventConfig.xaml.cs">
       <DependentUpon>ArduinoEventConfig.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\MayDuinoAnalogEventConfig.cs" />
     <Compile Include="Wpf\MayDuinoDigitalReactionConfig.cs" />
     <Compile Include="Wpf\MayduinoReactionConfig.xaml.cs">
       <DependentUpon>MayduinoReactionConfig.xaml</DependentUpon>

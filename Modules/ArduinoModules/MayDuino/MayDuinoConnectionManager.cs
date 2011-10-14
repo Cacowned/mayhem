@@ -13,13 +13,12 @@ namespace ArduinoModules
 {
     public class MayDuinoConnectionManager : ISerialPortDataListener
     {
-
         private MayduinoEventBase last_event;
         private MayduinoReactionBase last_reaction;
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
-
         private Dictionary<MayduinoEventBase, MayduinoReactionBase> mayduinoConnections;
-        private const int TIMEOUT = 150; 
+        private const int TIMEOUT = 150;
+        private AutoResetEvent ackWait;
 
         public void EventEnabled(MayduinoEventBase e)
         {
@@ -77,10 +76,18 @@ namespace ArduinoModules
             }
 
             Logger.WriteLine("Connection Added");
-            UpdateDevice();
+            if (UpdateDevice())
+            {
+                Logger.WriteLine("Update Successful");
+            }
+            else
+            {
+                Logger.WriteLine("Update Failed");
+            }
+
         }
 
-        public void UpdateDevice()
+        public bool UpdateDevice()
         {
             Logger.WriteLine("=========== Upadating Arduino Device =====================");
             // TODO: Write Stuff to the Arduino Board 
@@ -95,7 +102,8 @@ namespace ArduinoModules
                     {
                         // reset current connection settings
                         serial.WriteToPort(portName, MayduinoCommands.RESET_CONNECTIONS);
-                        Thread.Sleep(TIMEOUT);
+                        if (!ackWait.WaitOne(250))
+                            return false;
 
                         List<string> configurationstrings = new List<string>();
                         foreach (KeyValuePair<MayduinoEventBase, MayduinoReactionBase> connection in mayduinoConnections)
@@ -111,25 +119,28 @@ namespace ArduinoModules
                         {
                             Logger.WriteLine("Writing config to device: " + s);
                             serial.WriteToPort(portName, s);
-                            Thread.Sleep(TIMEOUT);
+                            if (!ackWait.WaitOne(250))
+                                return false;
                         }
 
                         // tell arduino to save to eeprom
                         serial.WriteToPort(portName, MayduinoCommands.WRITE_CONNECTIONS);
-                        Thread.Sleep(TIMEOUT);
+                        if (!ackWait.WaitOne(250))
+                            return false;
+
+                        //// correct return path
+                        return true; 
                     }
                 }
             }
+            return false;
         }
-
-       
-
+      
         public MayDuinoConnectionManager()
         {
             mayduinoConnections = new Dictionary<MayduinoEventBase, MayduinoReactionBase>();
+            ackWait = new AutoResetEvent(false);
         }
-
-
 
         public static MayDuinoConnectionManager instance_;
         public static MayDuinoConnectionManager Instance
@@ -137,15 +148,20 @@ namespace ArduinoModules
             get {
                 if (instance_ == null)
                     instance_ = new MayDuinoConnectionManager();
-
                 return instance_;
             }
         }
 
-
         public void port_DataReceived(string portName, byte[] buffer, int nBytes)
         {
             //throw new NotImplementedException();
+            for (int i = 1; i < nBytes-1; i++)
+            {
+                if (buffer[i - 1] == 'O' && buffer[i] == 'K')
+                {
+                    ackWait.Set();
+                }
+            }
         }
     }
 }

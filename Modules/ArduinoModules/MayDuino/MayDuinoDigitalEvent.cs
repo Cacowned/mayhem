@@ -39,8 +39,6 @@ namespace ArduinoModules.Events
             pullUp = true;
         }
          
-      
-
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
         {
             get 
