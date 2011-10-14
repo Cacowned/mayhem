@@ -43,7 +43,7 @@ namespace ArduinoModules.Wpf
 
        
 
-        public int ActivationValue
+        public int GetArgs
         {
             get
             {
@@ -51,7 +51,6 @@ namespace ArduinoModules.Wpf
                 try
                 {
                     value = int.Parse(bx_eventVals.Text);
-
                 }
                 catch
                 {
