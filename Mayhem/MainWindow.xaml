@@ -191,8 +191,8 @@
                         <!--<Border.Effect>
                             <DropShadowEffect Opacity="0.6" Direction="135" BlurRadius="16" ShadowDepth="5" x:Name="dropShadow"/>
                         </Border.Effect>-->
-                        <StackPanel Orientation="Vertical" Margin="6,16,6,16">
-                            <ScrollViewer MaxHeight="415" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Vertical" Margin="6,10,6,6">
+                            <ScrollViewer MaxHeight="385" VerticalScrollBarVisibility="Auto">
                                 <ItemsControl x:Name="RunList" HorizontalAlignment="Center">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
