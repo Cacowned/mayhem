@@ -15,3 +15,4 @@ Mayhem-Dev.sdf
 glob:*.rej
 *.orig
 *.nupkg
+StyleCop.Cache
