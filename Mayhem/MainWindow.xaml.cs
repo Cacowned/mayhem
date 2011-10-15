@@ -19,9 +19,9 @@ namespace Mayhem
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ModuleType _event;
+        private ModuleType eventType;
         private EventBase eventInstance = null;
-        private ModuleType reaction;
+        private ModuleType reactionType;
         private ReactionBase reactionInstance = null;
 
         private AutoResetEvent waitForSave = new AutoResetEvent(false);
@@ -37,13 +37,16 @@ namespace Mayhem
             DependencyProperty.Register("Errors", typeof(ObservableCollection<MayhemError>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<MayhemError>()));
 
         private string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
-        MayhemEntry mayhem;
+        
+        private MayhemEntry mayhem;
 
         public MainWindow()
         {
             Application.Current.Exit += new ExitEventHandler(Application_Exit);
             if (!UriParser.IsKnownScheme("pack"))
+            {
                 UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
+            }
 
             ResourceDictionary dict = new ResourceDictionary();
             Uri uri = new Uri("/MayhemWpf;component/Styles.xaml", UriKind.Relative);
@@ -53,16 +56,13 @@ namespace Mayhem
             mayhem = MayhemEntry.Instance;
             mayhem.SetConfigurationType(typeof(IWpfConfigurable));
 
-            string directory = "";
+            string directory = string.Empty;
+
             // if we are running as a clickonce application
             if (ApplicationDeployment.IsNetworkDeployed)
-            {
                 directory = ApplicationDeployment.CurrentDeployment.DataDirectory;
-            }
             else
-            {
                 directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages");
-            }
 
             // Scan for modules in the module directory
             bool foundModules = mayhem.EventList.ScanModules(directory);
@@ -86,6 +86,7 @@ namespace Mayhem
                     {
                         // Empty the connection list (should be empty already)
                         mayhem.ConnectionList.Clear();
+
                         // Load all the serialized connections
                         List<Type> allTypes = new List<Type>();
                         allTypes.AddRange(mayhem.EventList.GetAllTypesInModules());
@@ -93,7 +94,6 @@ namespace Mayhem
                         mayhem.LoadConnections(ConnectionList.Deserialize(stream, allTypes));
 
                         Logger.WriteLine("Starting up with " + mayhem.ConnectionList.Count + " connections");
-
                     }
                     catch (SerializationException e)
                     {
@@ -112,11 +112,12 @@ namespace Mayhem
         {
             try
             {
-                using (FileStream stream = new FileStream(filename, FileMode.Create))
+                using (FileStream stream = new FileStream(this.filename, FileMode.Create))
                 {
                     MayhemEntry.Instance.ConnectionList.Serialize(stream);
                 }
-                waitForSave.Set();
+
+                this.waitForSave.Set();
             }
             catch
             {
@@ -129,7 +130,7 @@ namespace Mayhem
             Parallel.Invoke(Save_);
         }
 
-        void Application_Exit(object sender, ExitEventArgs e)
+        private void Application_Exit(object sender, ExitEventArgs e)
         {
             Save();
             waitForSave.WaitOne();
@@ -141,7 +142,9 @@ namespace Mayhem
                     connection.Disable(new DisabledEventArgs(false), null);
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         private void EventListClick(object sender, RoutedEventArgs e)
@@ -160,11 +163,11 @@ namespace Mayhem
             {
                 if (dlg.SelectedModule != null)
                 {
-                    _event = dlg.SelectedModule;
-                    eventInstance = dlg.SelectedModuleInstance as EventBase;
+                    this.eventType = dlg.SelectedModule;
+                    this.eventInstance = dlg.SelectedModuleInstance as EventBase;
 
                     buttonEmptyEvent.Style = (Style)FindResource("EventButton");
-                    buttonEmptyEvent.Content = _event.Name;
+                    buttonEmptyEvent.Content = this.eventType.Name;
 
                     CheckEnableBuild();
                 }
@@ -187,15 +190,11 @@ namespace Mayhem
             {
                 if (dlg.SelectedModule != null)
                 {
-                    reaction = dlg.SelectedModule;
-                    reactionInstance = dlg.SelectedModuleInstance as ReactionBase;
+                    this.reactionType = dlg.SelectedModule;
+                    this.reactionInstance = dlg.SelectedModuleInstance as ReactionBase;
 
                     buttonEmptyReaction.Style = (Style)FindResource("ReactionButton");
-                    buttonEmptyReaction.Content = reaction.Name;
-
-                    // Take this item, remove it and add it to the front (MoveToFrontList)
-//                    Mayhem.ReactionList.Remove(Reaction);
-//                    Mayhem.ReactionList.Insert(0, Reaction);
+                    buttonEmptyReaction.Content = this.reactionType.Name;
 
                     CheckEnableBuild();
                 }
@@ -204,32 +203,37 @@ namespace Mayhem
 
         private void CheckEnableBuild()
         {
-            if (_event != null && reaction != null)
+            if (eventType != null && reactionType != null)
             {
                 try
                 {
                     EventBase ev;
                     if (eventInstance != null)
+                    {
                         ev = eventInstance;
+                    }
                     else
                     {
-                        Type t = _event.Type;
+                        Type t = eventType.Type;
                         ev = (EventBase)Activator.CreateInstance(t);
                     }
 
                     ReactionBase re;
                     if (reactionInstance != null)
+                    {
                         re = reactionInstance;
+                    }
                     else
                     {
-                        Type t = this.reaction.Type;
+                        Type t = this.reactionType.Type;
                         re = (ReactionBase)Activator.CreateInstance(t);
                     }
+
                     MayhemEntry.Instance.ConnectionList.Add(new Connection(ev, re));
                 }
-                catch 
+                catch
                 {
-                    ErrorLog.AddError(ErrorType.Failure, "Error creating connection between " + _event.Type.Name + " and " + this.reaction.Type.Name);
+                    ErrorLog.AddError(ErrorType.Failure, "Error creating connection between " + eventType.Type.Name + " and " + this.reactionType.Type.Name);
                 }
 
                 buttonEmptyReaction.Style = (Style)FindResource("EmptyReactionButton");
@@ -237,8 +241,8 @@ namespace Mayhem
                 buttonEmptyReaction.Content = "Choose Reaction";
                 buttonEmptyEvent.Content = "Choose Event";
 
-                _event = null;
-                this.reaction = null;
+                eventType = null;
+                this.reactionType = null;
 
                 Save();
             }
@@ -260,15 +264,14 @@ namespace Mayhem
                 {
                     var storyB = (Storyboard)mainW.DimRectangle.FindResource("FadeOut");
 
-                    storyB.Completed += delegate {
+                    storyB.Completed += delegate
+                    {
                         Panel.SetZIndex(mainW.DimRectangle, 0);
                     };
 
                     storyB.Begin();
-
                 }
             }
-
         }
     }
 }

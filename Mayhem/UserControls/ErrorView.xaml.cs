@@ -10,38 +10,6 @@ using MayhemCore;
 
 namespace Mayhem.UserControls
 {
-    class SingleAnalysisStatusConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (!(value is ErrorType))
-                throw new NotImplementedException("SingleAnalysisStatusConverter can only convert from SingleAnalysisStatus");
-
-            String path = null;
-            switch ((ErrorType)value)
-            {
-                case ErrorType.Failure:
-                    path = "Images/error.png";
-                    break;
-                case ErrorType.Message:
-                    path = "Images/message.png";
-                    break;
-                case ErrorType.Warning:
-                    path = "Images/warning.png";
-                    break;
-                default:
-                    throw new NotSupportedException();
-            }
-            return new BitmapImage(new Uri("/Mayhem;component/" + path, UriKind.Relative));
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-    /// <summary>
-    /// Interaction logic for ErrorView.xaml
-    /// </summary>
     public partial class ErrorView : UserControl
     {
         public ObservableCollection<MayhemError> Errors
@@ -100,7 +68,6 @@ namespace Mayhem.UserControls
         // When clicking on the number of errors
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //Logger.WriteLine("Border: " + e.GetPosition(this));
             ShowOrClose();
         }
 
@@ -137,6 +104,7 @@ namespace Mayhem.UserControls
         {
             if (leaveTimer != null)
                 leaveTimer.Stop();
+
             // close in two seconds
             leaveTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 2) };
             leaveTimer.Tick += leaveTimer_Tick;

@@ -3,10 +3,10 @@ using System.Windows.Controls;
 
 namespace MayhemWpf.UserControls
 {
-
     public class Borders : ContentControl
     {
-        static Borders() {
+        static Borders()
+        {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Borders), new FrameworkPropertyMetadata(typeof(Borders)));
         }
     }

@@ -1,5 +1,4 @@
-﻿
-namespace MayhemCore.ModuleTypes
+﻿namespace MayhemCore.ModuleTypes
 {
     public interface IConfigurable
     {

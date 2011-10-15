@@ -1,13 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
+using System.Windows.Shapes;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using System.ComponentModel;
-using System.Windows.Shapes;
 
 namespace Mayhem.UserControls
 {
@@ -21,27 +20,32 @@ namespace Mayhem.UserControls
             get { return (string)GetValue(EventNameProperty); }
             set { SetValue(EventNameProperty, value); }
         }
+
         public string ReactionName
         {
             get { return (string)GetValue(ReactionNameProperty); }
             set { SetValue(ReactionNameProperty, value); }
         }
+
         public string EventConfigString
         {
             get { return (string)GetValue(EventConfigStringProperty); }
             set { SetValue(EventConfigStringProperty, value); }
         }
+
         public string ReactionConfigString
         {
             get { return (string)GetValue(ReactionConfigStringProperty); }
             set { SetValue(ReactionConfigStringProperty, value); }
         }
+
         public Connection Connection
         {
             get
             {
                 return (Connection)GetValue(ConnectionProperty);
             }
+
             set
             {
                 SetValue(ConnectionProperty, value);
@@ -50,33 +54,37 @@ namespace Mayhem.UserControls
 
         public static readonly DependencyProperty ConnectionProperty =
             DependencyProperty.Register("Connection", typeof(Connection), typeof(ModuleView), new UIPropertyMetadata(null));
-        public static readonly DependencyProperty EventNameProperty =
-            DependencyProperty.Register("EventName", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
-        public static readonly DependencyProperty ReactionNameProperty =
-            DependencyProperty.Register("ReactionName", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
-        public static readonly DependencyProperty EventConfigStringProperty =
-            DependencyProperty.Register("EventConfigString", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
-        public static readonly DependencyProperty ReactionConfigStringProperty =
-            DependencyProperty.Register("ReactionConfigString", typeof(string), typeof(ModuleView), new UIPropertyMetadata(""));
 
-        DoubleAnimation animOut;
-        DoubleAnimation animIn;
+        public static readonly DependencyProperty EventNameProperty =
+            DependencyProperty.Register("EventName", typeof(string), typeof(ModuleView), new UIPropertyMetadata(string.Empty));
+
+        public static readonly DependencyProperty ReactionNameProperty =
+            DependencyProperty.Register("ReactionName", typeof(string), typeof(ModuleView), new UIPropertyMetadata(string.Empty));
+
+        public static readonly DependencyProperty EventConfigStringProperty =
+            DependencyProperty.Register("EventConfigString", typeof(string), typeof(ModuleView), new UIPropertyMetadata(string.Empty));
+
+        public static readonly DependencyProperty ReactionConfigStringProperty =
+            DependencyProperty.Register("ReactionConfigString", typeof(string), typeof(ModuleView), new UIPropertyMetadata(string.Empty));
+
+        private DoubleAnimation animOut;
+        private DoubleAnimation animIn;
 
         public ModuleView()
         {
             InitializeComponent();
 
-            animOut = new DoubleAnimation(0, new Duration(TimeSpan.FromSeconds(0.25)));
-            animIn = new DoubleAnimation(1.0, new Duration(TimeSpan.FromSeconds(0.25)));
+            this.animOut = new DoubleAnimation(0, new Duration(TimeSpan.FromSeconds(0.25)));
+            this.animIn = new DoubleAnimation(1.0, new Duration(TimeSpan.FromSeconds(0.25)));
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             Connection connection = Connection;
-            EventName = connection.Event.Name;
-            ReactionName = connection.Reaction.Name;
-            EventConfigString = connection.Event.ConfigString;
-            ReactionConfigString = connection.Reaction.ConfigString;
+            this.EventName = connection.Event.Name;
+            this.ReactionName = connection.Reaction.Name;
+            this.EventConfigString = connection.Event.ConfigString;
+            this.ReactionConfigString = connection.Reaction.ConfigString;
             connection.Event.PropertyChanged += delegate(object s, PropertyChangedEventArgs args)
             {
                 if (args.PropertyName == "ConfigString")
@@ -97,6 +105,7 @@ namespace Mayhem.UserControls
                 textBlockEventNameDisabled.Margin = new Thickness(5, -4, 14, 4);
                 buttonTrigger.Cursor = null;
             }
+
             if (!Connection.Reaction.HasConfig)
             {
                 ImageSettingsReactionOff.Visibility = Visibility.Hidden;
@@ -131,6 +140,7 @@ namespace Mayhem.UserControls
             {
                 connection.Disable(args, null);
             }
+
             ConfigWindow config = new ConfigWindow((IWpfConfigurable)configurable);
             config.ShowDialog();
 
@@ -177,13 +187,12 @@ namespace Mayhem.UserControls
                     {
                         if (!Connection.IsEnabled)
                         {
-                            //Logger.WriteLine("Connection didn't enable.");
-
                             // We wanted to enable it, and it didn't enable
                             // mark the event as handled so it doesn't
                             // flip the button
                             button.IsChecked = false;
                         }
+
                         button.IsChecked = Connection.IsEnabled;
                         if (Connection.IsEnabled)
                         {
@@ -203,6 +212,7 @@ namespace Mayhem.UserControls
                             textBlockEventName.BeginAnimation(Rectangle.OpacityProperty, animOut);
                             textBlockReactionName.BeginAnimation(Rectangle.OpacityProperty, animOut);
                         }
+
                         ((MainWindow)Application.Current.MainWindow).Save();
                     });
                 });

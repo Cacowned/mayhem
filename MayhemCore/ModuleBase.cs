@@ -1,13 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.Serialization;
 using MayhemCore.ModuleTypes;
 
 namespace MayhemCore
 {
-
     /// <summary>
     /// This class is extended by EventBase and ReactionBase
     /// </summary>
@@ -48,6 +45,7 @@ namespace MayhemCore
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string configString;
+
         internal string ConfigString
         {
             get
@@ -109,14 +107,26 @@ namespace MayhemCore
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error loading " + Name);
                 }
+
                 SetConfigString();
             }
         }
 
-        protected virtual void OnBeforeLoad() { }
-        protected virtual void OnLoadDefaults() { }
-        protected virtual void OnLoadFromSaved() { }
-        protected virtual void OnAfterLoad() { }
+        protected virtual void OnBeforeLoad()
+        {
+        }
+
+        protected virtual void OnLoadDefaults()
+        {
+        }
+
+        protected virtual void OnLoadFromSaved()
+        {
+        }
+
+        protected virtual void OnAfterLoad()
+        {
+        }
 
         private void Initialize_()
         {
@@ -130,6 +140,7 @@ namespace MayhemCore
                     break;
                 }
             }
+
             object[] attList = GetType().GetCustomAttributes(typeof(MayhemModuleAttribute), true);
             if (attList.Length > 0)
             {

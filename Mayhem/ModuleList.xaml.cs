@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Navigation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Diagnostics;
-using System.Windows.Navigation;
 
 namespace Mayhem
 {
@@ -37,17 +37,16 @@ namespace Mayhem
             get;
             private set;
         }
-        WpfConfiguration iWpfConfig;
+
+        private WpfConfiguration iWpfConfig;
 
         // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(ModuleList), new UIPropertyMetadata(string.Empty));
 
-        bool isCheckingSizeChanged = false;
+        private const double AnimationTime = 0.2;
 
-        const double AnimationTime = 0.2;
-
-        int heightBasedOnModules;
+        private int heightBasedOnModules;
 
         public ModuleList(IEnumerable list, string headerText)
         {
@@ -56,8 +55,8 @@ namespace Mayhem
 
             ModulesList.ItemsSource = list;
 
-            heightBasedOnModules = (int)Math.Min(185 + 43 * ModulesList.Items.Count, Height);
-            Height = heightBasedOnModules;
+            this.heightBasedOnModules = (int)Math.Min(185 + (43 * ModulesList.Items.Count), Height);
+            Height = this.heightBasedOnModules;
 
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ModuleList));
@@ -76,12 +75,14 @@ namespace Mayhem
             double targetWidth = iWpfConfig.Width + 40;
             double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
 
-            Rect target = new Rect(Left - (targetWidth - ActualWidth) / 2, Top - (targetHeight - ActualHeight) / 2,
-                                   targetWidth, targetHeight);
+            Rect target = new Rect(
+                Left - ((targetWidth - ActualWidth) / 2),
+                Top - ((targetHeight - ActualHeight) / 2),
+                targetWidth,
+                targetHeight);
 
             StartStoryBoard(WindowRect, target, AnimationTime);
         }
-
 
         private void ChooseButtonClick(object sender, RoutedEventArgs e)
         {
@@ -114,6 +115,7 @@ namespace Mayhem
                     break;
                 }
             }
+
             if (!hasConfig)
             {
                 DialogResult = true;
@@ -154,8 +156,11 @@ namespace Mayhem
             ((TranslateTransform)stackPanelConfig.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
             // Animate the window size to match the config control
-            Rect target = new Rect(Left - (targetWidth - ActualWidth) / 2, Top - (targetHeight - ActualHeight) / 2,
-                                   targetWidth, targetHeight);
+            Rect target = new Rect(
+                Left - ((targetWidth - ActualWidth) / 2),
+                Top - ((targetHeight - ActualHeight) / 2),
+                targetWidth, 
+                targetHeight);
 
             StartStoryBoard(WindowRect, target, AnimationTime);
 
@@ -232,8 +237,11 @@ namespace Mayhem
             ((TranslateTransform)stackPanelList.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
             // Animate the window size to match the list control
-            Rect target = new Rect(Left - (300 - ActualWidth) / 2, Top - (heightBasedOnModules - ActualHeight) / 2,
-                                   300, heightBasedOnModules);
+            Rect target = new Rect(
+                Left - ((300 - ActualWidth) / 2),
+                Top - ((heightBasedOnModules - ActualHeight) / 2),
+                300, 
+                heightBasedOnModules);
 
             StartStoryBoard(WindowRect, target, AnimationTime);
 
@@ -243,12 +251,12 @@ namespace Mayhem
             buttonConfigCancel.IsEnabled = false;
         }
 
-        void animSlideIn_Completed(object sender, EventArgs e)
+        private void animSlideIn_Completed(object sender, EventArgs e)
         {
             stackPanelConfig.Margin = new Thickness(300, 0, -300, 0);
         }
 
-        void ListBoxItem_MouseDoubleClick(object sender, RoutedEventArgs e)
+        private void ListBoxItem_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             ChooseButtonClick(sender, e);
         }
@@ -259,7 +267,6 @@ namespace Mayhem
             e.Handled = true;
         }
 
-
         #region Window Resizing
         public Rect WindowRect
         {
@@ -267,6 +274,7 @@ namespace Mayhem
             {
                 return (Rect)GetValue(WindowRectProperty);
             }
+
             set
             {
                 SetValue(WindowRectProperty, value);

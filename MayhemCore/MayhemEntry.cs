@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace MayhemCore
 {
     /// <summary>
@@ -13,11 +14,13 @@ namespace MayhemCore
             get;
             private set;
         }
+
         internal EventList EventList
         {
             get;
             private set;
         }
+
         internal ReactionList ReactionList
         {
             get;
@@ -31,6 +34,7 @@ namespace MayhemCore
         }
 
         private static MayhemEntry instance;
+
         public static MayhemEntry Instance
         {
             get
@@ -61,10 +65,12 @@ namespace MayhemCore
         /// <param name="configType"></param>
         internal void SetConfigurationType(Type configType)
         {
-            if (this.ConfigurableType != null) {
+            if (this.ConfigurableType != null)
+            {
                 throw new InvalidOperationException("Configuration type has already been set");
             }
-            else {
+            else
+            {
                 this.ConfigurableType = configType;
             }
         }

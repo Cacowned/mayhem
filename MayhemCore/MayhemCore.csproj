@@ -55,6 +55,7 @@
     <Compile Include="ModuleBase.cs" />
     <Compile Include="ModuleList.cs" />
     <Compile Include="ModuleType.cs" />
+    <Compile Include="ModuleTypeComparer.cs" />
     <Compile Include="ModuleTypeResolver.cs" />
     <Compile Include="ModuleTypes\ICli.cs" />
     <Compile Include="ModuleTypes\IConfigurable.cs" />

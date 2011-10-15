@@ -10,11 +10,13 @@ namespace MayhemCore
             get;
             set;
         }
+
         public string Name
         {
             get;
             set;
         }
+
         public string Description
         {
             get;
@@ -31,22 +33,6 @@ namespace MayhemCore
         public override string ToString()
         {
             return Name;
-        }
-    }
-
-    internal class ModuleTypeComparer : IComparer<ModuleType>
-    {
-        public int Compare(ModuleType x, ModuleType y)
-        {
-            EnsureNotNull(x);
-            EnsureNotNull(y);
-            return String.Compare(x.Name, y.Name, StringComparison.Ordinal);
-        }
-
-        private static void EnsureNotNull(ModuleType type)
-        {
-            if (type == null)
-                throw new ArgumentNullException("type");
         }
     }
 }

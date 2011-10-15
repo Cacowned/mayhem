@@ -3,18 +3,12 @@ using System.Linq;
 
 namespace MayhemCore
 {
-    // There should be only one of these
-    // We should be able to write to the error log from
-    // any class, thus it is static
     public static class ErrorLog
     {
-        // What do we do if this thing gets huge? It will keep using up memory. 
-        // Do we want to remove things from the beginning?
+        // TODO: Implement trimming on the error log so it doesn't eat up ram
 
         // Collection that stores all of the errors
         private static BindingCollection<MayhemError> errors = new BindingCollection<MayhemError>();
-
-        // private delegate void AddHandler(ErrorType error, string message);
 
         public static void AddError(ErrorType error, string message)
         {
