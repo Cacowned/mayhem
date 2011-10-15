@@ -12,6 +12,9 @@ using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
+    /// <summary>
+    /// Classes depending on camera image updates will need to derivce from cameraImagelistsner.
+    /// </summary>
     public abstract class CameraImageListener
     {
 
@@ -25,6 +28,7 @@ namespace MayhemOpenCVWrapper.LowLevel
         /// <summary>
         /// Register and unregister for image callbacks
         /// </summary> 
+        /// <param name="c">ImagerBase to register</param>
         public virtual void RegisterForImages(ImagerBase c)
         {
             Logger.WriteLine("");
@@ -34,6 +38,11 @@ namespace MayhemOpenCVWrapper.LowLevel
                 c.OnImageUpdated += ImageUpdateHandler;
             }
         }
+
+        /// <summary>
+        /// Deregister from image callbacks
+        /// </summary>
+        /// <param name="c">ImagerBase to unregister</param>
         public virtual void UnregisterForImages(ImagerBase c)
         {
             Logger.WriteLine("");

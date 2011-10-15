@@ -15,6 +15,9 @@ using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {
+    /// <summary>
+    /// Dummy Camera object (useful for debugging) 
+    /// </summary>
     public class DummyCamera : ImagerBase
     {
         public override event ImageUpdateHandler OnImageUpdated;
@@ -37,7 +40,7 @@ namespace MayhemOpenCVWrapper
             protected set;
         }
 
-        public  override Bitmap ImageAsBitmap()
+        public override Bitmap ImageAsBitmap()
         {
             Logger.WriteLine("returning dummy image");
             // TODO: add Mayhem's logo or something 

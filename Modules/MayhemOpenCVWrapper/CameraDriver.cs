@@ -17,10 +17,25 @@ using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {
-    public class CameraDriver
+    public sealed class CameraDriver
     {
         // singleton class ! 
-        public static CameraDriver Instance = new CameraDriver(); 
+        private static CameraDriver instance_ = new CameraDriver();
+
+        /// <summary>
+        /// CameraDriver singleton instance
+        /// </summary>
+        public static CameraDriver Instance
+        {
+            get
+            {
+                if (instance_ == null)
+                {
+                    instance_ = new CameraDriver();
+                }
+                return instance_;
+            }
+        }
 
         /// <summary>
         /// Returns readonly list of the available cameras. 
@@ -41,7 +56,7 @@ namespace MayhemOpenCVWrapper
         private List<CameraInfo> devices_available = new List<CameraInfo>();
         private List<Camera> cameras_available_ = new List<Camera>(); 
       
-        protected CameraDriver()
+        private CameraDriver()
         {
             // just initialize the capture library
             // to get the camera running, InitCaptureDevice must be called!

@@ -36,6 +36,13 @@ namespace MayhemOpenCVWrapper
         private AviManager aviManager = null;
         private int frames = 0;
 
+        /// <summary>
+        /// Initializes a new video object.
+        /// The video object opens a file path and builds a video file with the contents of the image frames from the camera's disk buffer. 
+        /// </summary>
+        /// <param name="c">camera object</param>
+        /// <param name="fileName">path to video file</param>
+        /// <param name="compress">compress the video file or not (affects video encoding speed)</param>
         public Video(Camera c, string fileName, bool compress)
         {
             Camera camera = c;

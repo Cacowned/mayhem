@@ -82,7 +82,7 @@ namespace VisionModules.Events
         {
             selectedDeviceIndex = 0;
             selectedTriggerMode = PresenceTriggerMode.TOGGLE;
-            sensitivity = PresenceDetectorComponent.DEFAULT_SENSITIVITY;
+            sensitivity = PresenceDetectorComponent.kDefaultSensitivity;
         }
 
         protected override void OnAfterLoad()

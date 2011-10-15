@@ -45,16 +45,15 @@ namespace VisionModules.Events.Components
 
             double average = 0;
 
-            lock (camera.ThreadLocker)
+
+            for (int x = (int)motionBoundaryRect.Left; x < (int)motionBoundaryRect.Right; x++)
             {
-                for (int x = (int)motionBoundaryRect.Left; x < (int)motionBoundaryRect.Right; x++)
+                for (int y = (int)motionBoundaryRect.Top; y < (int)motionBoundaryRect.Bottom; y++)
                 {
-                    for (int y = (int)motionBoundaryRect.Top; y < (int)motionBoundaryRect.Bottom; y++)
-                    {
-                        average += camera.ImageBuffer[x + y * stride];
-                    }
+                    average += camera.ImageBuffer[x + y * stride];
                 }
             }
+            
 
             average /= camera.ImageBuffer.Length;
 

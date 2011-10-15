@@ -147,11 +147,10 @@ namespace VisionModules.Wpf
             // grab the image
 
 
-            lock (cam.ThreadLocker)
-            {
-                // Copy the RGB values back to the bitmap
-                System.Runtime.InteropServices.Marshal.Copy(cam.ImageBuffer, 0, ImgPtr, bufSize);
-            }
+          
+            // Copy the RGB values back to the bitmap
+            System.Runtime.InteropServices.Marshal.Copy(cam.ImageBuffer, 0, ImgPtr, bufSize);
+            
             // Unlock the bits.
             BackBuffer.UnlockBits(bmpData);
 

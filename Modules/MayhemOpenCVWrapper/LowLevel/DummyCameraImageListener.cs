@@ -15,6 +15,9 @@ using System.Text;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
+    /// <summary>
+    /// A dummy class acting as a camera listener. 
+    /// </summary>
     public class DummyCameraImageListener : CameraImageListener
     {
         public override void UpdateFrame(object sender, EventArgs e)

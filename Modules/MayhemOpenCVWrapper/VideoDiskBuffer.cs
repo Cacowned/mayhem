@@ -27,7 +27,13 @@ using System.Drawing.Imaging;
 
 namespace MayhemOpenCVWrapper
 {
-    public class VideoDiskBuffer
+
+    /// <summary>
+    /// Video disk buffer for Mayhem's camera objects. 
+    /// By default, the video disk buffer buffers 30s of video frames from each of the cameras active in Mayhem. 
+    /// The buffer is organized as a ring buffer, that over 
+    /// </summary>
+    internal class VideoDiskBuffer
     {
         private static int inst_cnt = 0; 
         private readonly string BUFFER_FILENAME;
@@ -50,7 +56,7 @@ namespace MayhemOpenCVWrapper
         // when a bitmap is added to the queue, signal the event to let the WriteThread process it 
         private AutoResetEvent signalNewBitmaps = new AutoResetEvent(false);            
 
-        public VideoDiskBuffer()
+        internal VideoDiskBuffer()
         {
             inst_cnt++;
             string bufferfileName_ = "MVidBuf" + inst_cnt + ".bin";
@@ -104,7 +110,7 @@ namespace MayhemOpenCVWrapper
         /// <summary>
         /// Deletes (clears) buffer file from disk 
         /// </summary>
-        public void ClearAndResetBuffer()
+        internal void ClearAndResetBuffer()
         {
             accept_frames = false;
             {
@@ -135,7 +141,7 @@ namespace MayhemOpenCVWrapper
         /// Allows adding of a Bitmap to the disk buffer. 
         /// </summary>
         /// <param name="b"></param>
-        public void AddBitmap(Bitmap b)
+        internal void AddBitmap(Bitmap b)
         {
             if (accept_frames)
             {
@@ -196,7 +202,7 @@ namespace MayhemOpenCVWrapper
         /// Retrieve List of bitmaps from the disk cache and deserialize them to memory. 
         /// </summary>
         /// <returns>List containing the Bitmaps from the disk cache.</returns>
-        public List<Bitmap> RetrieveBitmapsFromDisk()
+        internal List<Bitmap> RetrieveBitmapsFromDisk()
         {
             Logger.WriteLine("");
             List<Bitmap> bitmaps = new List<Bitmap>();
