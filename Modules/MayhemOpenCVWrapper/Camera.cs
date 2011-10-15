@@ -21,19 +21,21 @@ namespace MayhemOpenCVWrapper
 {
     /// <summary>
     /// This class packages the functions for individual camera devices
-    /// Modules using vision will now have the ability to request image updates from
+    /// Modules using vision have the ability to request image updates from
     /// multiple cameras.
     /// 
-    /// This class will provide the update events. 
+    /// The camera maintains a 30s disk buffer to enable the generation of video files from sequences of camera frames
+    /// as well as a 30s, 4 frame-per-second in-memory image buffer for capturing still shots or similar tasks. 
     /// </summary>
-    public class Camera : ImagerBase, IBufferingImager
+    public sealed class Camera : ImagerBase, IBufferingImager
     {
-        #region Fields and Properties
-       
+        #region Fields and Properties     
         // update the loop only every quarter second -- this should be sufficient for the Picture Event
-        public static readonly double LOOP_BUFFER_UPDATE_MS = 250.0;
+        public static readonly double kLoopBufferUpdateMs = 250.0;
         // store LOOP_DURATION ms of footage in the past/future
-        public const int LoopDuration = 30000;
+        public const int kLoopDuration = 30000;
+        // Image update event handler. 
+        public override event ImageUpdateHandler OnImageUpdated;
 
         /// <summary>
         /// Return index of camera device
@@ -72,11 +74,22 @@ namespace MayhemOpenCVWrapper
 
         /// <summary>
         /// The buffer storing the current camera image.
+        /// Access is thread-safe. 
         /// </summary>
         public byte[] ImageBuffer
         {
-            get;
-            protected set;
+            get
+            {
+                lock (this.ThreadLocker)
+                {
+                    return imageBuffer_;
+                }
+            }
+
+            private set
+            {
+                imageBuffer_ = value;
+            }
         }
 
         /// <summary>
@@ -88,30 +101,10 @@ namespace MayhemOpenCVWrapper
             private set;
         }
 
-        // Public lock object on the image update thread 
-        public object ThreadLocker = new object();
-        // Camera initialization state.
-        public bool IsInitialized = false;   
-        // Image update event handler. 
-        public override event ImageUpdateHandler OnImageUpdated;
-
-        // static counter of camera instances intialized
-        private static int instances = 0;
-        // increment on instantiation 
-        private int index = instances++;
-        private DateTime loopBufferLastUpdate = DateTime.Now;
-        private VideoDiskBuffer videoDiskBuffer = new VideoDiskBuffer();
-        // update rate (ms) with which the camera thread requests new images
-        private int FrameInterval;
-        // calculate amount of storage needed for the given duration 
-        private readonly int loopBufferMaxLength = LoopDuration / CameraSettings.Defaults().UpdateRateMs;
-        // fifo buffer that stores last x images
-        private Queue<BitmapTimestamp> loopBuffer = new Queue<BitmapTimestamp>();
-        // check for thread termination   
-        private ManualResetEvent grabFramesReset;
-
-        private bool recordingVideo;
-        public bool CanRecordVideo
+        /// <summary>
+        /// Gets or sets the camera's ability to record video 
+        /// </summary>
+        public bool IsRecordingVideo
         {
             get
             {
@@ -129,12 +122,37 @@ namespace MayhemOpenCVWrapper
                     recordingVideo = false;
                 }
             }
-
         }
 
+        private byte[] imageBuffer_;
+        // lock object on the image update thread 
+        private object ThreadLocker = new object();
+        // Camera initialization state.
+        private bool IsInitialized = false;   
+        // static counter of camera instances intialized
+        private static int instances = 0;
+        // increment on instantiation 
+        private int index = instances++;
+        private DateTime loopBufferLastUpdate = DateTime.Now;
+        private VideoDiskBuffer videoDiskBuffer = new VideoDiskBuffer();
+        // update rate (ms) with which the camera thread requests new images
+        private int FrameInterval;
+        // calculate amount of storage needed for the given duration 
+        private readonly int loopBufferMaxLength = kLoopDuration / CameraSettings.Defaults().UpdateRateMs;
+        // fifo buffer that stores last x images
+        private Queue<BitmapTimestamp> loopBuffer = new Queue<BitmapTimestamp>();
+        // check for thread termination   
+        private ManualResetEvent grabFramesReset;
+        // status of video recording
+        private bool recordingVideo;
         #endregion
 
         #region Constructor / Destructor
+        /// <summary>
+        /// Camera object constructor
+        /// </summary>
+        /// <param name="info"> CameraInfo object, containing camera metadata </param>
+        /// <param name="settings">CameraSettings object, containing settings for the camera</param>
         public Camera(CameraInfo info, CameraSettings settings)
         {
             this.Info = info;
@@ -150,6 +168,17 @@ namespace MayhemOpenCVWrapper
             Logger.WriteLine("dtor");
             StopGrabbing();
         }
+       
+
+        /// <summary>
+        /// Returns string representation of Camera object
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return this.Info.ToString();
+        }
+
         #endregion
 
         #region Bitmap Export
@@ -177,6 +206,7 @@ namespace MayhemOpenCVWrapper
                 return itemsOut;
             }
         }
+
 
         /// <summary>
         /// Returns item from the on-disk video frame cache. 
@@ -214,7 +244,7 @@ namespace MayhemOpenCVWrapper
                 lock (ThreadLocker)
                 {
                     // Copy the RGB values back to the bitmap
-                    System.Runtime.InteropServices.Marshal.Copy(this.ImageBuffer, 0, imgPtr, bufSize);
+                    System.Runtime.InteropServices.Marshal.Copy(this.imageBuffer_, 0, imgPtr, bufSize);
                 }
                 // Unlock the bits.
                 backBuffer.UnlockBits(bmpData);
@@ -229,8 +259,10 @@ namespace MayhemOpenCVWrapper
 
         #endregion            
 
+        #region Internal 
+
         /// <summary>
-        /// Initializes the camera via the videoinput lib
+        /// Initializes the camera via the C++/CLI wrapper, which in turn accesses the videoinput lib
         /// </summary>
         private void InitializeCaptureDevice(CameraInfo info, CameraSettings settings)
         {
@@ -243,7 +275,7 @@ namespace MayhemOpenCVWrapper
                     OpenCVDLL.OpenCVBindings.InitCapture(info.DeviceId, settings.ResX, settings.ResY);
                 }
                 BufferSize = OpenCVDLL.OpenCVBindings.GetImageSize();
-                ImageBuffer = new byte[BufferSize];
+                imageBuffer_ = new byte[BufferSize];
                 FrameInterval = CameraSettings.Defaults().UpdateRateMs;
 
                 // StartFrameGrabbing();
@@ -378,7 +410,7 @@ namespace MayhemOpenCVWrapper
                     {
                         unsafe
                         {
-                            fixed (byte* ptr = ImageBuffer)
+                            fixed (byte* ptr = imageBuffer_)
                             {
                                 try
                                 {
@@ -398,7 +430,7 @@ namespace MayhemOpenCVWrapper
                     {
                         DateTime now = DateTime.Now; 
                         TimeSpan last_update  = now - this.loopBufferLastUpdate;                   
-                        if ( last_update.TotalMilliseconds >= LOOP_BUFFER_UPDATE_MS)
+                        if ( last_update.TotalMilliseconds >= kLoopBufferUpdateMs)
                         {
                             this.loopBufferLastUpdate = DateTime.Now;
                             if (loopBuffer.Count < loopBufferMaxLength)
@@ -447,10 +479,7 @@ namespace MayhemOpenCVWrapper
             }
         }
 
-        public override string ToString()
-        {
-            return this.Info.ToString();
-        }
+        #endregion
 
         #region IBufferingImager Methods
         /// <summary>

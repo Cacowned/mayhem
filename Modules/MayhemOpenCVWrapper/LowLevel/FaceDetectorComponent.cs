@@ -16,9 +16,15 @@ using System.Windows;
 using MayhemCore;
 using OpenCVDLL;
 using Point = System.Drawing.Point;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
+
+    /// <summary>
+    /// Face detector component of the face detector event. Can also be used as a standalone face detector. 
+    /// </summary>
     public class FaceDetectorComponent : CameraImageListener
     {     
         public delegate void DetectionHandler(object sender, List<Point> points);
@@ -29,6 +35,10 @@ namespace MayhemOpenCVWrapper.LowLevel
         private int frameCount = 0;
         private const bool VerboseDebug = true;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="c">ImagerBase that provides frame updates</param>
         public FaceDetectorComponent(ImagerBase c)
         {
             int width = c.Settings.ResX;
@@ -54,19 +64,26 @@ namespace MayhemOpenCVWrapper.LowLevel
             int[] faceCoords = new int[1024];
             int numFacesCoords = 0;
 
-            lock (camera.ThreadLocker)
+            Bitmap cameraImage = camera.ImageAsBitmap();
+
+            BitmapData bd = cameraImage.LockBits(new Rectangle(0, 0, cameraImage.Size.Width, cameraImage.Size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, cameraImage.PixelFormat);
+
+            IntPtr imgPointer = bd.Scan0;
+
+            // transmit frame
+           
+            unsafe
             {
-                unsafe
+                
+                fixed (int* buf = faceCoords)
                 {
-                    fixed (byte* ptr = camera.ImageBuffer)
-                    {
-                        fixed (int* buf = faceCoords)
-                        {
-                            fd.ProcessFrame(ptr, buf, &numFacesCoords);
-                        }
-                    }
+                    fd.ProcessFrame((byte *) imgPointer, buf, &numFacesCoords);
                 }
+                
             }
+            
+            cameraImage.UnlockBits(bd);
+            cameraImage.Dispose();
 
             Logger.WriteLineIf(VerboseDebug, ">>>>> Got " + numFacesCoords+ " face coords ");
 

@@ -122,11 +122,11 @@ namespace VisionModules.Reactions
                 // save image directly
                 SaveImage(camera.ImageAsBitmap());
             }
-            else if (captureOffsetTime < 0 && Math.Abs(captureOffsetTime) <= Camera.LoopDuration)
+            else if (captureOffsetTime < 0 && Math.Abs(captureOffsetTime) <= Camera.kLoopDuration)
             {
                 // retrieve image from camera buffer
                 // buffer index = capture offset time / camera fram rate
-                int buff_idx = (int)(-captureOffsetTime * 1000.0 / (double) Camera.LOOP_BUFFER_UPDATE_MS);
+                int buff_idx = (int)(-captureOffsetTime * 1000.0 / (double) Camera.kLoopBufferUpdateMs);
 
                 if (camera is IBufferingImager)
                 {
@@ -137,7 +137,7 @@ namespace VisionModules.Reactions
                     }
                 }
             }
-            else if ((captureOffsetTime > 0 && Math.Abs(captureOffsetTime) <= Camera.LoopDuration))
+            else if ((captureOffsetTime > 0 && Math.Abs(captureOffsetTime) <= Camera.kLoopDuration))
             {
                 // schedule future retrieval of image
                 double time_ms = captureOffsetTime * 1000;

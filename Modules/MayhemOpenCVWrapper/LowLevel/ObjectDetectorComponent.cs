@@ -15,9 +15,13 @@ using System.Runtime.InteropServices;
 using MayhemCore;
 using OpenCVDLL;
 using Point = System.Drawing.Point;
+using System.Drawing.Imaging;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
+    /// <summary>
+    /// Remove for release
+    /// </summary>
     public class ObjectDetectorComponent : CameraImageListener
     {
         public delegate void DetectionHandler(object sender, List<Point> points);
@@ -116,17 +120,19 @@ namespace MayhemOpenCVWrapper.LowLevel
 
             if (TemplateIsSet)
             {
+                Bitmap cameraImage = camera.ImageAsBitmap();
+                BitmapData bd = cameraImage.LockBits(new Rectangle(0,0,cameraImage.Size.Width, cameraImage.Size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, cameraImage.PixelFormat);
+                IntPtr imgPointer = bd.Scan0;
+
                 // transmit frame
-                lock (camera.ThreadLocker)
-                {
-                    unsafe
-                    {
-                        fixed (byte* ptr = camera.ImageBuffer)
-                        {
-                            od.ProcessFrame(ptr);
-                        }
-                    }
+               
+                unsafe
+                {                 
+                    od.ProcessFrame((byte *) imgPointer);                   
                 }
+
+                cameraImage.UnlockBits(bd);
+                cameraImage.Dispose();
 
                 // get feature correspondences
 

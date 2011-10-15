@@ -12,12 +12,19 @@
 using System;
 using System.Drawing;
 using MayhemCore;
+using System.Drawing.Imaging;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
+    /// <summary>
+    /// Presence detector component
+    /// </summary>
     public class PresenceDetectorComponent : CameraImageListener
     {
-        public static double DEFAULT_SENSITIVITY
+        /// <summary>
+        /// Returns the value of the default sensitivity set in the presence detector dll. 
+        /// </summary>
+        public static double kDefaultSensitivity
         {
             get
             {
@@ -58,6 +65,10 @@ namespace MayhemOpenCVWrapper.LowLevel
         }
 
         private bool presence_ = false;
+
+        /// <summary>
+        /// Returns true if presence has been detected in the last frame.
+        /// </summary>
         public bool presence
         {
             get { return presence_; }
@@ -74,6 +85,9 @@ namespace MayhemOpenCVWrapper.LowLevel
             pd.Dispose();
         }
 
+        /// <summary>
+        /// Sends a new frame to the presence detector C++ implementation. 
+        /// </summary>
         public override void UpdateFrame(object sender, EventArgs e)
         {
             Camera camera = sender as Camera;
@@ -81,16 +95,19 @@ namespace MayhemOpenCVWrapper.LowLevel
             // copy over image data to the DLL 
             try
             {
-                lock (camera.ThreadLocker)
+                Bitmap cameraImage = camera.ImageAsBitmap();
+                BitmapData bd = cameraImage.LockBits(new Rectangle(0, 0, cameraImage.Size.Width, cameraImage.Size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, cameraImage.PixelFormat);
+                IntPtr imgPointer = bd.Scan0;
+
+                // transmit frame
+
+                unsafe
                 {
-                    unsafe
-                    {
-                        fixed (byte* ptr = camera.ImageBuffer)
-                        {
-                            pd.ProcessFrame(ptr);
-                        }
-                    }
+                    pd.ProcessFrame((byte*)imgPointer);
                 }
+
+                cameraImage.UnlockBits(bd);
+                cameraImage.Dispose();
             }
             catch (Exception ex)
             {

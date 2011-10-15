@@ -29,8 +29,8 @@ namespace VisionModules.Reactions
     public enum VIDEO_RECORDING_MODE
     {
         PRE_EVENT = 0,                                        // record 30s prior to the event
-        POST_EVENT = Camera.LoopDuration / 1000,             // record 30s after event
-        MID_EVENT = (Camera.LoopDuration / 1000) / 2         // record 15s before and 15s after the event
+        POST_EVENT = Camera.kLoopDuration / 1000,             // record 30s after event
+        MID_EVENT = (Camera.kLoopDuration / 1000) / 2         // record 15s before and 15s after the event
     }
 
     [DataContract]
@@ -88,7 +88,7 @@ namespace VisionModules.Reactions
 
         public void SaveVideo(object sender, ElapsedEventArgs e)
         {
-            camera.CanRecordVideo = false;
+            camera.IsRecordingVideo = false;
             Logger.WriteLine("SaveVideo");
             DateTime now = DateTime.Now;
             string fileName = fileNamePrefix + "_" +
@@ -120,7 +120,7 @@ namespace VisionModules.Reactions
         /// <param name="obj"></param>
         private void v_OnVideoSaved(bool obj)
         {
-            camera.CanRecordVideo = true;
+            camera.IsRecordingVideo = true;
             videoSaving = false;
             Logger.WriteLine("Video saved successfully to: " + lastVideoSaved);
         }

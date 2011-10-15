@@ -13,29 +13,44 @@
 namespace MayhemOpenCVWrapper
 {
     /// <summary>
-    /// Contains settings for  cameras
-    /// TODO: find out what more can be set
+    /// Contains settings for cameras
     /// </summary>
     public class CameraSettings
     {
+        /// <summary>
+        /// camera resolution in X dimension (i.e. image width)
+        /// </summary>
         public int ResX
         {
             get;
             private set;
         }
+
+        /// <summary>
+        /// camera resolution in Y dimension (i.e. image height)
+        /// </summary>
         public int ResY
         {
             get;
             private set; 
         }
     
+        /// <summary>
+        /// camera update rate in milliseconds
+        /// </summary>
         public int UpdateRateMs
         {
             get;
             private set;
         }
 
-        protected CameraSettings(int w, int h, int updateRate)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="w">image width</param>
+        /// <param name="h">image height</param>
+        /// <param name="updateRate">update rate in milliseconds</param>
+        private CameraSettings(int w, int h, int updateRate)
         {
             ResX = w;
             ResY = h;
@@ -43,7 +58,7 @@ namespace MayhemOpenCVWrapper
         }
 
         /// <summary>
-        /// Allows switching of the defaults without modifying code in other places. 
+        /// Retrieves the default (640x480, 20fps) camera settings for use in Mayhem
         /// </summary>
         /// <returns></returns>
         public static CameraSettings Defaults()
