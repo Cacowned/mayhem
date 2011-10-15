@@ -4,7 +4,7 @@ namespace MayhemCore
 {
     public static class Logger
     {
-        static string GetCallStackString()
+        private static string GetCallStackString()
         {
             StackTrace stackTrace = new StackTrace();
             StackFrame frame = stackTrace.GetFrame(2);
@@ -23,7 +23,7 @@ namespace MayhemCore
             Debug.WriteLine(GetCallStackString() + value);
         }
 
-        public static void WriteLine(string format, params object [] args)
+        public static void WriteLine(string format, params object[] args)
         {
             Debug.WriteLine(GetCallStackString() + format, args);
         }

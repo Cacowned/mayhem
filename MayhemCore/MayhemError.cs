@@ -5,6 +5,7 @@ namespace MayhemCore
     public class MayhemError
     {
         public DateTime Time { get; private set; }
+
         public string TimeString
         {
             get
@@ -12,7 +13,9 @@ namespace MayhemCore
                 return Time.ToShortTimeString();
             }
         }
+
         public ErrorType Type { get; private set; }
+
         public string Message { get; private set; }
 
         internal MayhemError(ErrorType type, string message)

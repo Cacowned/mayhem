@@ -7,11 +7,12 @@ namespace MayhemCore
 {
     internal class ModuleTypeResolver : DataContractResolver
     {
-        ICollection<Type> types;
+        private ICollection<Type> types;
 
         public ModuleTypeResolver()
         {
         }
+
         public ModuleTypeResolver(ICollection<Type> types)
         {
             this.types = types;
@@ -34,6 +35,7 @@ namespace MayhemCore
                 if (type.FullName == typeName && type.Assembly.FullName == typeNamespace)
                     return type;
             }
+
             return null;
         }
 

@@ -5,14 +5,13 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Collections.Generic;
 
 namespace DefaultModules.Events
 {
     [DataContract]
     [MayhemModule("Folder Change", "This event monitors changes on a given folder.")]
     public class FolderChange : EventBase, IWpfConfigurable
-    {  
+    {
         [DataMember]
         private string folderToMonitor;
 
@@ -21,23 +20,22 @@ namespace DefaultModules.Events
 
         [DataMember]
         private bool monitorSubDirs;
-       
-        private Dictionary<string, object> eventSettings; 
+
         private FileSystemWatcher fsWatcher;
-        
+
         private FileSystemEventArgs lastArgs_created;
-        private DateTime lastCreatedDate; 
+        private DateTime lastCreatedDate;
 
         protected override void OnLoadDefaults()
         {
-            folderToMonitor = Environment.GetFolderPath(Environment.SpecialFolder.Personal);      
+            folderToMonitor = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         }
 
         protected override void OnAfterLoad()
         {
             // Ensure that an instance of fswatcher always gets created
             try
-            {             
+            {
                 fsWatcher = new FileSystemWatcher(folderToMonitor);
             }
             catch
@@ -45,7 +43,7 @@ namespace DefaultModules.Events
                 Logger.WriteLine("Exc: Folder doesn't seem to exist or be accesible");
                 fsWatcher = new FileSystemWatcher();
             }
-           
+
             fsWatcher.Changed += OnChanged;
             fsWatcher.Created += OnChanged;
             fsWatcher.Deleted += OnChanged;
@@ -58,7 +56,7 @@ namespace DefaultModules.Events
         /// </summary>
         private void ConfigureFSMonitor()
         {
-            fsWatcher.Path = folderToMonitor; 
+            fsWatcher.Path = folderToMonitor;
             fsWatcher.IncludeSubdirectories = monitorSubDirs;
         }
 
@@ -127,10 +125,10 @@ namespace DefaultModules.Events
                 TimeSpan ts = now - lastCreatedDate;
 
                 // don't fire any event --> the change event is caused by the previous "created" event
-                if (a.FullPath == lastArgs_created.FullPath ||  ts.TotalMilliseconds <= 10)
+                if (a.FullPath == lastArgs_created.FullPath || ts.TotalMilliseconds <= 10)
                     return;
             }
-          
+
             Logger.WriteLine("Args: " + a.ChangeType + " Fname " + a.Name);
             Trigger();
         }

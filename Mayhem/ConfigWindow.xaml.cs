@@ -17,11 +17,12 @@ namespace Mayhem
     /// </summary>
     public partial class ConfigWindow : Window
     {
-        IWpfConfigurable iWpf;
-        WpfConfiguration iWpfConfig;
-        const double AnimationTime = 0.2;
+        private const double AnimationTime = 0.2;
 
-        Size previousSize;
+        private IWpfConfigurable iWpf;
+        private WpfConfiguration iWpfConfig;
+        
+        private Size previousSize;
 
         public ConfigWindow(IWpfConfigurable iWpf)
         {
@@ -49,9 +50,9 @@ namespace Mayhem
             }
         }
 
-        void iWpfConfig_Loaded(object sender, RoutedEventArgs e)
+        private void iWpfConfig_Loaded(object sender, RoutedEventArgs e)
         {
-            previousSize = new Size(ActualWidth, ActualHeight);
+            this.previousSize = new Size(ActualWidth, ActualHeight);
             iWpfConfig.SizeChanged += new SizeChangedEventHandler(ConfigContent_SizeChanged);
         }
 
@@ -60,14 +61,17 @@ namespace Mayhem
             WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
             double targetWidth = iWpfConfig.Width + 40;
 
-            Rect target = new Rect(Left - (ActualWidth - previousSize.Width) / 2, Top - (ActualHeight - previousSize.Height) / 2,
-                                   ActualWidth, ActualHeight);
+            Rect target = new Rect(
+                Left - ((ActualWidth - previousSize.Width) / 2),
+                Top - ((ActualHeight - previousSize.Height) / 2),
+                ActualWidth,
+                ActualHeight);
 
             previousSize = new Size(ActualWidth, ActualHeight);
             StartStoryBoard(WindowRect, target, AnimationTime);
         }
 
-        void iWpfConfig_CanSavedChanged(bool canSave)
+        private void iWpfConfig_CanSavedChanged(bool canSave)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
@@ -140,13 +144,13 @@ namespace Mayhem
             {
                 return (Rect)GetValue(WindowRectProperty);
             }
+
             set
             {
                 SetValue(WindowRectProperty, value);
             }
         }
 
-        // Using a DependencyProperty as the backing store for WindowRect.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty WindowRectProperty =
             DependencyProperty.Register("WindowRect", typeof(Rect), typeof(ConfigWindow), new UIPropertyMetadata(new Rect(0, 0, 0, 0)));
 

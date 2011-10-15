@@ -43,7 +43,7 @@ namespace Mayhem
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
-            ModuleName.Text = Package.Id;
+            ModuleName.Text = this.Package.Id;
         }
 
         private void Install_Click(object sender, RoutedEventArgs e)
@@ -51,7 +51,8 @@ namespace Mayhem
             try
             {
                 // Get the package file
-                string installPath = "";
+                string installPath = string.Empty;
+
                 // if we are running as a clickonce application
                 if (ApplicationDeployment.IsNetworkDeployed)
                 {
@@ -61,7 +62,7 @@ namespace Mayhem
                 {
                     installPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages");
                 }
-                
+
                 // Create a repository pointing to the feed
                 IPackageRepository repository;
                 if (Environment.GetCommandLineArgs().Contains("-localrepo"))
@@ -69,7 +70,7 @@ namespace Mayhem
                 else
                 {
                     repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
-                    ((DataServicePackageRepository)repository).ProgressAvailable += Repository_ProgressAvailable;
+                    ((DataServicePackageRepository)repository).ProgressAvailable += this.Repository_ProgressAvailable;
                 }
 
                 // Create a package manager to install and resolve dependencies
@@ -86,7 +87,7 @@ namespace Mayhem
                             buttonClose.Visibility = Visibility.Visible;
 
                             Progress.Value = 100;
-                            Progress.Dispatcher.Invoke(EmptyDelegate, DispatcherPriority.Render);
+                            Progress.Dispatcher.Invoke(emptyDelegate, DispatcherPriority.Render);
                         });
                     });
             }
@@ -110,7 +111,7 @@ namespace Mayhem
             DialogResult = true;
         }
 
-        private Action EmptyDelegate = delegate {};
+        private Action emptyDelegate = delegate { };
 
         private void Repository_ProgressAvailable(object sender, ProgressEventArgs e)
         {
@@ -118,20 +119,22 @@ namespace Mayhem
                 {
                     Progress.Value = e.PercentComplete;
                 });
-            Dispatcher.Invoke(EmptyDelegate, DispatcherPriority.Render);
+            Dispatcher.Invoke(this.emptyDelegate, DispatcherPriority.Render);
         }
 
         public class Logger : ILogger
         {
-            InstallModule parent;
+            private InstallModule parent;
+
             public Logger(InstallModule parent)
             {
                 this.parent = parent;
             }
+
             public void Log(MessageLevel level, string message, params object[] args)
             {
                 Debug.WriteLine(message, args);
-                parent.Dispatcher.Invoke((Action)delegate
+                this.parent.Dispatcher.Invoke((Action)delegate
                     {
                         parent.listBox1.Items.Add(string.Format(message, args));
                         parent.listBox1.SelectedItem = parent.listBox1.Items.GetItemAt(parent.listBox1.Items.Count - 1);
@@ -140,5 +143,4 @@ namespace Mayhem
             }
         }
     }
-
 }

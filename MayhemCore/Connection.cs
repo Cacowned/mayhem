@@ -17,7 +17,7 @@ namespace MayhemCore
         public bool IsEnabled
         {
             get;
-            private set; 
+            private set;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace MayhemCore
         internal EventBase Event
         {
             get;
-            private set; 
+            private set;
         }
 
         /// <summary>
@@ -81,8 +81,10 @@ namespace MayhemCore
                 {
                     actionOnComplete();
                 }
+
                 return;
             }
+
             Enable_(e, actionOnComplete);
         }
 
@@ -98,6 +100,7 @@ namespace MayhemCore
                 // Enable the event
                 Event.Enable(e);
             }
+
             // If the event is not enabled we don't try to enable the reaction
             if (Event.IsEnabled && !Reaction.IsEnabled)
             {
@@ -109,6 +112,7 @@ namespace MayhemCore
                 {
                     ErrorLog.AddError(ErrorType.Failure, "Error enabling " + Reaction.Name);
                 }
+
                 if (!Reaction.IsEnabled)
                 {
                     // If we got here, then it means the event is enabled and the reaction won't enable.
@@ -116,6 +120,7 @@ namespace MayhemCore
                     Event.Disable(new DisabledEventArgs(e.WasConfiguring));
                 }
             }
+
             // Double check that both are enabled. We shouldn't be able to get here if they aren't.
             IsEnabled = Event.IsEnabled && Reaction.IsEnabled;
             if (actionOnComplete != null)
@@ -133,6 +138,7 @@ namespace MayhemCore
                 {
                     actionOnComplete();
                 }
+
                 return;
             }
 
@@ -152,6 +158,7 @@ namespace MayhemCore
                     ErrorLog.AddError(ErrorType.Failure, "Error disabling " + Event.Name);
                 }
             }
+
             if (Reaction.IsEnabled)
             {
                 try
