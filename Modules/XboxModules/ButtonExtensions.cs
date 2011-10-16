@@ -8,7 +8,7 @@ namespace XboxModules
         public static Buttons AsButtons(this GamePadButtons buttons)
         {
             Buttons original = new Buttons();
-            
+
             if (buttons.A == ButtonState.Pressed)
                 original = original | Buttons.A;
             if (buttons.B == ButtonState.Pressed)
@@ -39,13 +39,13 @@ namespace XboxModules
         {
             List<string> list = new List<string>();
 
-            if(buttons.HasFlag(Buttons.A)) 
+            if (buttons.HasFlag(Buttons.A))
                 list.Add("A");
-            if(buttons.HasFlag(Buttons.B))
+            if (buttons.HasFlag(Buttons.B))
                 list.Add("B");
-            if(buttons.HasFlag(Buttons.X))
+            if (buttons.HasFlag(Buttons.X))
                 list.Add("X");
-            if(buttons.HasFlag(Buttons.Y))
+            if (buttons.HasFlag(Buttons.Y))
                 list.Add("Y");
             if (buttons.HasFlag(Buttons.Back))
                 list.Add("Back");

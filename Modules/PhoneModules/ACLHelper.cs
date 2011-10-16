@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace PhoneModules
@@ -104,6 +101,7 @@ namespace PhoneModules
                         {
                             break;
                         }
+
                         if (retval != ERROR_INSUFFICIENT_BUFFER)
                         {
                             throw new Exception("HttpQueryServiceConfiguration returned unexpected error code.");
@@ -119,9 +117,9 @@ namespace PhoneModules
                         }
                         finally
                         {
-                            
                             Marshal.FreeHGlobal(pConfig);
                         }
+
                         if (foundPrefix == urlPrefix)
                         {
                             return true;

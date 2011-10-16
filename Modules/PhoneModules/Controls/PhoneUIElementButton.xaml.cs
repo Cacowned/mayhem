@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,7 +8,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
-using System.Diagnostics;
 
 namespace PhoneModules.Controls
 {
@@ -16,10 +16,10 @@ namespace PhoneModules.Controls
     /// </summary>
     public partial class PhoneUIElementButton : PhoneUIElement
     {
-        Point startPoint;
-        Point startCanvasLoc;
-        bool isMovingElement = false;
-        bool isGridOnRight = true;
+        private Point startPoint;
+        private Point startCanvasLoc;
+        private bool isMovingElement = false;
+        private bool isGridOnRight = true;
 
         public bool IsGridOnRight
         {
@@ -33,6 +33,7 @@ namespace PhoneModules.Controls
             {
                 return base.LayoutInfo as PhoneLayoutButton;
             }
+
             set
             {
                 base.LayoutInfo = value;
@@ -45,13 +46,14 @@ namespace PhoneModules.Controls
             {
                 return textBox1.Text;
             }
+
             set
             {
                 textBox1.Text = value;
             }
         }
 
-        string imageFile = null;
+        private string imageFile = null;
         public string ImageFile
         {
             get
@@ -85,7 +87,7 @@ namespace PhoneModules.Controls
             set;
         }
 
-        Brush defaultButtonBrush;
+        private Brush defaultButtonBrush;
 
         public PhoneUIElementButton()
         {
@@ -101,10 +103,11 @@ namespace PhoneModules.Controls
                 Storyboard storyB = (Storyboard)borderSelected.FindResource("storyboardSelected");
                 storyB.Begin();
             }
+
             ResizeTextBox(false);
         }
 
-        void PhoneUIElement_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void PhoneUIElement_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             startPoint = e.GetPosition(Parent as Canvas);
             if (!isGridOnRight)
@@ -137,10 +140,10 @@ namespace PhoneModules.Controls
                 else if (!isGridOnRight)
                 {
                     isGridOnRight = true;
-                    //x += gridEdit.ActualWidth;
                     stackPanel1.Children.Remove(gridEdit);
                     stackPanel1.Children.Insert(1, gridEdit);
                 }
+
                 if (!isGridOnRight)
                     x -= gridEdit.ActualWidth;
 
@@ -189,7 +192,6 @@ namespace PhoneModules.Controls
 
         private void PhoneUIElement_LostFocus(object sender, RoutedEventArgs e)
         {
-            //this.Focus();
             textBox1.CaretBrush = new SolidColorBrush(Colors.Transparent);
             buttonText.Background = defaultButtonBrush;
             buttonText.UpdateLayout();
@@ -201,11 +203,16 @@ namespace PhoneModules.Controls
             ResizeTextBox(false);
         }
 
-        void ResizeTextBox(bool editing)
+        private void ResizeTextBox(bool editing)
         {
             Typeface myTypeface = new Typeface(textBox1.FontFamily, textBox1.FontStyle, textBox1.FontWeight, textBox1.FontStretch);
-            FormattedText ft = new FormattedText(textBox1.Text, CultureInfo.CurrentCulture,
-                    FlowDirection.LeftToRight, myTypeface, textBox1.FontSize, Brushes.Black);
+            FormattedText ft = new FormattedText(
+                textBox1.Text,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                myTypeface,
+                textBox1.FontSize,
+                Brushes.Black);
             textBox1.Width = ft.WidthIncludingTrailingWhitespace + (editing ? 15 : 10);
             border1.Width = textBox1.Width + 15;
         }

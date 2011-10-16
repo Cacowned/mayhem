@@ -46,7 +46,7 @@ namespace PhoneModules.Wpf
 
             string localComputerName = Dns.GetHostName();
             IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
-            string text = "";
+            string text = string.Empty;
             text += "19283:";
             textPort.Text = "19283";
             foreach (IPAddress t in localIPs)
@@ -59,6 +59,7 @@ namespace PhoneModules.Wpf
                     textIP.Text += t;
                 }
             }
+
             System.Drawing.Bitmap image = null;
             try
             {
@@ -106,6 +107,7 @@ namespace PhoneModules.Wpf
                         SelectedElement = button;
                         button.IsSelected = true;
                     }
+
                     if (!layout.IsEnabled)
                     {
                         textErrorButtonDisabled.Visibility = System.Windows.Visibility.Visible;

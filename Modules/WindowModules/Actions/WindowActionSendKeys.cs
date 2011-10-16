@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace WindowModules.Actions
 {
@@ -146,11 +145,11 @@ namespace WindowModules.Actions
             KeyList = new List<System.Windows.Forms.Keys>();
         }
 
-        const uint WM_KEYDOWN = 0x100;
+        private const uint WM_KEYDOWN = 0x100;
 
-        const uint WM_KEYUP = 0x101;
+        private const uint WM_KEYUP = 0x101;
 
-        byte GetVK(Keys key)
+        private byte GetVK(Keys key)
         {
             switch (key)
             {

@@ -21,7 +21,7 @@ namespace PhoneModules
         {
             get { return isServiceRunning; }
         }
-        //private int refCount = 0;
+
         private WebServiceHost host;
         private IMayhemService service = null;
 
@@ -41,7 +41,7 @@ namespace PhoneModules
         }
 
         #region Singleton
-        static readonly PhoneConnector instance = new PhoneConnector();
+        private static readonly PhoneConnector instance = new PhoneConnector();
 
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
@@ -54,7 +54,7 @@ namespace PhoneModules
             MayhemEntry.Instance.ShuttingDown += new EventHandler(Mayhem_ShuttingDown);
         }
 
-        void Mayhem_ShuttingDown(object sender, EventArgs e)
+        private void Mayhem_ShuttingDown(object sender, EventArgs e)
         {
             if (service != null)
             {
@@ -85,7 +85,7 @@ namespace PhoneModules
                         }
                         catch
                         {
-                            ErrorLog.AddError(ErrorType.Failure, "Phone Remote: Could not communicate with server"); 
+                            ErrorLog.AddError(ErrorType.Failure, "Phone Remote: Could not communicate with server");
                         }
                     }
                 }));
@@ -94,16 +94,14 @@ namespace PhoneModules
 
         public bool Enable(bool includeButtons)
         {
-            //refCount++;
             if (!isServiceRunning)
             {
                 isServiceRunning = true;
                 return StartService(includeButtons);
             }
+
             return true;
         }
-
-
         public void Disable()
         {
             //if (isServiceRunning)
@@ -128,13 +126,11 @@ namespace PhoneModules
 
             MayhemService svc = new MayhemService();
             svc.EventCalled += new MayhemService.EventCalledHandler(service_EventCalled);
-            //if (true)
-            //{
-                string insideDiv;
-                string html = PhoneLayout.Instance.SerializeToHtml(includeButtons, out insideDiv);
-                svc.SetHtml(html);
-                svc.SetInsideDiv(insideDiv);
-            //}
+
+            string insideDiv;
+            string html = PhoneLayout.Instance.SerializeToHtml(includeButtons, out insideDiv);
+            svc.SetHtml(html);
+            svc.SetInsideDiv(insideDiv);
 
             host = new WebServiceHost(svc, address);
 
@@ -146,7 +142,7 @@ namespace PhoneModules
             WebHttpBinding binding = new WebHttpBinding();
             binding.ReaderQuotas.MaxArrayLength = 2147483647;
 
-            host.AddServiceEndpoint(typeof(IMayhemService), binding, "");
+            host.AddServiceEndpoint(typeof(IMayhemService), binding, string.Empty);
 
             bool portFound = false;
             INetFwOpenPorts ports;
@@ -165,6 +161,7 @@ namespace PhoneModules
                     break;
                 }
             }
+
             if (!portFound || !ACLHelper.FindUrlPrefix("http://+:" + PortNumber + "/"))
             {
                 OpenServerHelper();
@@ -181,6 +178,7 @@ namespace PhoneModules
                 ErrorLog.AddError(ErrorType.Failure, "Error starting Phone Remote service");
                 return false;
             }
+
             isServiceRunning = true;
             Logger.WriteLine("Phone service started");
 

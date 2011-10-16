@@ -109,13 +109,13 @@ namespace WindowModules
         public static extern IntPtr SetFocus(IntPtr window);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern uint SendInput(uint nInputs, INPUT [] pInputs, int cbSize);
+        public static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
         public const ulong WS_VISIBLE = 0x10000000L;
         public const ulong WS_BORDER = 0x00800000L;
         public const int GW_OWNER = 4;
-        public const int GWL_STYLE = (-16);
-        public const int GWL_EXSTYLE = (-20);
+        public const int GWL_STYLE = -16;
+        public const int GWL_EXSTYLE = -20;
         public const int WS_EX_TOOLWINDOW = 0x00000080;
         public const int WS_EX_APPWINDOW = 0x40000;
 
@@ -150,7 +150,7 @@ namespace WindowModules
             public System.Drawing.Point ptMinPosition;
             public System.Drawing.Point ptMaxPosition;
             public System.Drawing.Rectangle rcNormalPosition;
-        };
+        }
 
         public enum WindowShowStyle : uint
         {
@@ -243,7 +243,6 @@ namespace WindowModules
             public short wParamL;
             public short wParamH;
         }
-
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern int GetLastError();
