@@ -4,7 +4,7 @@ using Phidgets.Events;
 namespace PhidgetModules
 {
     [DataContract]
-    abstract public class ValueSensorEventBase : SensorEventBase
+    public abstract class ValueSensorEventBase : SensorEventBase
     {
         /// <summary>
         /// If this is true, then we want to trigger when
@@ -27,6 +27,7 @@ namespace PhidgetModules
         }
 
         protected double CurrentValue { get; set; }
+
         protected double LastValue { get; set; }
 
         protected override void OnLoadDefaults()

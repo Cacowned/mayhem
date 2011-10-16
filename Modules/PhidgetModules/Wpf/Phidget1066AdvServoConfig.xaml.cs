@@ -45,7 +45,7 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
-            foreach (String servoType in Enum.GetNames(typeof(ServoServo.ServoType)))
+            foreach (string servoType in Enum.GetNames(typeof(ServoServo.ServoType)))
             {
                 //stop here
 
@@ -76,6 +76,7 @@ namespace PhidgetModules.Wpf
                 {
                     Logger.WriteLine("Phidget1066AdvServoConfig: " + erf);
                 }
+
                 PositionSlider.Maximum = AdvServo.servos[Index].PositionMax;
                 PositionSlider.Minimum = AdvServo.servos[Index].PositionMin;
 
@@ -93,7 +94,5 @@ namespace PhidgetModules.Wpf
             ServoType = (ServoServo.ServoType)Enum.Parse(typeof(ServoServo.ServoType), TypeComboBox.SelectedItem.ToString());
             Position = PositionSlider.Value;
         }
-
-        
     }
 }

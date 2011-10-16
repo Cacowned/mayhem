@@ -51,7 +51,7 @@ namespace PhidgetModules.Wpf
 
         #region Phidget Event Handlers
 
-        //Tag event handler...we'll display the tag code in the field on the GUI
+        // Tag event handler...we'll display the tag code in the field on the GUI
         private void RfidTag(object sender, TagEventArgs e)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
@@ -62,7 +62,7 @@ namespace PhidgetModules.Wpf
             }));
         }
 
-        //Tag event handler...we'll display the tag code in the field on the GUI
+        // Tag event handler...we'll display the tag code in the field on the GUI
         private void LostRfidTag(object sender, TagEventArgs e)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>

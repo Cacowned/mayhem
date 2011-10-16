@@ -6,7 +6,7 @@ using Phidgets.Events;
 namespace PhidgetModules
 {
     [DataContract]
-    abstract public class SensorEventBase : EventBase
+    public abstract class SensorEventBase : EventBase
     {
         // Which index do we want to be looking at?
         [DataMember]
@@ -47,7 +47,6 @@ namespace PhidgetModules
             {
                 IfKit.SensorChange -= handler;
             }
-
         }
     }
 }

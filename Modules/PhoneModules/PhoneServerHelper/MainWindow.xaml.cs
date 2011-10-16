@@ -55,13 +55,13 @@ namespace PhoneServerHelper
             urlAclConfig.KeyDesc.pUrlPrefix = urlPrefix;
             urlAclConfig.ParamDesc.pStringSecurityDescriptor = acl;
 
-            IntPtr pUrlAclConfig = Marshal.AllocHGlobal(Marshal.SizeOf(urlAclConfig));
+            IntPtr UrlAclConfig = Marshal.AllocHGlobal(Marshal.SizeOf(urlAclConfig));
 
-            Marshal.StructureToPtr(urlAclConfig, pUrlAclConfig, false);
+            Marshal.StructureToPtr(urlAclConfig, UrlAclConfig, false);
 
             try
             {
-                uint retval = HttpSetServiceConfiguration(IntPtr.Zero, HTTP_SERVICE_CONFIG_ID.HttpServiceConfigUrlAclInfo, pUrlAclConfig, (uint)Marshal.SizeOf(urlAclConfig), IntPtr.Zero);
+                uint retval = HttpSetServiceConfiguration(IntPtr.Zero, HTTP_SERVICE_CONFIG_ID.HttpServiceConfigUrlAclInfo, UrlAclConfig, (uint)Marshal.SizeOf(urlAclConfig), IntPtr.Zero);
 
                 if (retval != 0 && retval != 183)
                 {
@@ -74,10 +74,10 @@ namespace PhoneServerHelper
             }
             finally
             {
-                if (pUrlAclConfig != IntPtr.Zero)
+                if (UrlAclConfig != IntPtr.Zero)
                 {
-                    Marshal.DestroyStructure(pUrlAclConfig, typeof(HTTP_SERVICE_CONFIG_URLACL_SET));
-                    Marshal.FreeHGlobal(pUrlAclConfig);
+                    Marshal.DestroyStructure(UrlAclConfig, typeof(HTTP_SERVICE_CONFIG_URLACL_SET));
+                    Marshal.FreeHGlobal(UrlAclConfig);
                 }
             }
         }

@@ -49,21 +49,22 @@ namespace DefaultModules.Wpf
         private void CheckValidity()
         {
             CanSave = true;
-            if(!(textBoxDirectory.Text.Length > 0 && Directory.Exists(textBoxDirectory.Text)))
+            if (!(textBoxDirectory.Text.Length > 0 && Directory.Exists(textBoxDirectory.Text)))
             {
                 textInvalid.Text = "Invalid save location";
                 CanSave = false;
             }
-            else if(textBoxPrefix.Text.Length == 0)
+            else if (textBoxPrefix.Text.Length == 0)
             {
                 textInvalid.Text = "You must enter a filename prefix";
                 CanSave = false;
             }
-            else if(textBoxPrefix.Text.Length > 20)
+            else if (textBoxPrefix.Text.Length > 20)
             {
                 textInvalid.Text = "Filename prefix is too long";
                 CanSave = false;
             }
+
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 

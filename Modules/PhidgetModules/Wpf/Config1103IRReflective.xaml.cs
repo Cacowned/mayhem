@@ -12,7 +12,6 @@ namespace PhidgetModules.Wpf
         protected Func<int, string> Convertor;
         public InterfaceKit IfKit;
 
-
         public Config1103IrReflective(bool onTurnOn)
         {
             this.OnTurnOn = onTurnOn;

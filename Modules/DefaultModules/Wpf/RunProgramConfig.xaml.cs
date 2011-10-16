@@ -13,6 +13,7 @@ namespace DefaultModules.Wpf
             get;
             private set;
         }
+
         public string Arguments
         {
             get;

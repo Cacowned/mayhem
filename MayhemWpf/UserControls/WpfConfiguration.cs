@@ -41,6 +41,7 @@ namespace MayhemWpf.UserControls
             {
                 return canSave;
             }
+
             set
             {
                 // Only do this if the flag is being switched

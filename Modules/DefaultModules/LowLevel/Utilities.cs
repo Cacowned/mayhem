@@ -55,6 +55,5 @@ namespace DefaultModules.LowLevel
             keybd_event((byte)key, (byte)MapVirtualKey(key, 0), 0, UIntPtr.Zero);
             keybd_event((byte)key, (byte)MapVirtualKey(key, 0), KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
-
     }
 }

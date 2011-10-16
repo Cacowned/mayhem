@@ -22,7 +22,7 @@ namespace DefaultModules.Reactions
             set;
         }
 
-        MPlayer m;
+        private MPlayer m;
 
         public override void Perform()
         {
@@ -55,13 +55,13 @@ namespace DefaultModules.Reactions
 
         public void CliConfig()
         {
-            string TAG = "[Play Sound]";
+            string tag = "[Play Sound]";
 
-            string path = "";
+            string path = string.Empty;
 
             do
             {
-                Console.WriteLine(String.Format(CultureInfo.CurrentCulture, Strings.PlaySound_CliConfig_AudioPath, TAG));
+                Console.WriteLine(string.Format(CultureInfo.CurrentCulture, Strings.PlaySound_CliConfig_AudioPath, tag));
                 path = Console.ReadLine();
             }
             while (!File.Exists(path));
@@ -84,7 +84,7 @@ namespace DefaultModules.Reactions
 
         public string GetConfigString()
         {
-            return String.Format(CultureInfo.CurrentCulture, "{0}", SoundPath);
+            return string.Format(CultureInfo.CurrentCulture, "{0}", SoundPath);
         }
     }
 }

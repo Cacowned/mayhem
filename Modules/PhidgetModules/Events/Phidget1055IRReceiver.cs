@@ -40,7 +40,7 @@ namespace PhidgetModules.Events
 
         public string GetConfigString()
         {
-            return String.Format("IR Code 0x{0}", code);
+            return string.Format("IR Code 0x{0}", code);
         }
 
         // When we receive a code
@@ -54,7 +54,6 @@ namespace PhidgetModules.Events
                 TimeSpan diff = DateTime.Now - lastSignal;
                 if (diff.TotalMilliseconds >= 750)
                 {
-
                     // then trigger
                     Trigger();
                 }

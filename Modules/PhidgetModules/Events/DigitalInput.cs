@@ -57,7 +57,7 @@ namespace PhidgetModules.Events
                 type = "turns off";
             }
 
-            return String.Format("Triggers when input #{0} {1}", index, type);
+            return string.Format("Triggers when input #{0} {1}", index, type);
         }
 
         // The input has changed, do the work here
@@ -75,15 +75,14 @@ namespace PhidgetModules.Events
                 {
                     Trigger();
                 }
-                // otherwise, if it its off, and we trigger
-                // when it turns off, then trigger
                 else if (ex.Value == false && !onWhenOn)
                 {
+                    // otherwise, if it its off, and we trigger
+                    // when it turns off, then trigger
                     Trigger();
                 }
             }
         }
-
 
         protected override void OnEnabling(EnablingEventArgs e)
         {

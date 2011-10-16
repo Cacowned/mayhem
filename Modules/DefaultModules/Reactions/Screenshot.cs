@@ -47,6 +47,7 @@ namespace DefaultModules.Reactions
                 if (screen.Bounds.Y < minY)
                     minY = screen.Bounds.Y;
             }
+
             int screenWidth = maxX - minX;
             int screenHeight = maxY - minY;
             Bitmap bmpScreenShot = new Bitmap(screenWidth, screenHeight);

@@ -45,7 +45,7 @@ namespace PhidgetModules.Events
                 overUnder = "below";
             }
 
-            return String.Format("Index {0} goes {1} {2} lx", Index, overUnder, TopValue.ToString("0.###"));
+            return string.Format("Index {0} goes {1} {2} lx", Index, overUnder, TopValue.ToString("0.###"));
         }
     }
 }

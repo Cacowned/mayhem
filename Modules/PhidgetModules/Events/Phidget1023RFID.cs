@@ -36,10 +36,10 @@ namespace PhidgetModules.Events
 
         public string GetConfigString()
         {
-            return String.Format("Rfid Tag ID {0}", tag);
+            return string.Format("Rfid Tag ID {0}", tag);
         }
 
-        //Tag event handler...we'll display the tag code in the field on the GUI
+        // Tag event handler...we'll display the tag code in the field on the GUI
         private void RfidTag(object sender, TagEventArgs e)
         {
             if (e.Tag == tag)
@@ -49,8 +49,8 @@ namespace PhidgetModules.Events
             }
         }
 
-        //Tag event handler...we'll display the tag code in the field on the GUI
-        void LostRfidTag(object sender, TagEventArgs e)
+        // Tag event handler...we'll display the tag code in the field on the GUI
+        private void LostRfidTag(object sender, TagEventArgs e)
         {
             rfid.LED = false;
         }
@@ -68,7 +68,6 @@ namespace PhidgetModules.Events
                 rfid.Tag -= RfidTag;
                 rfid.TagLost -= LostRfidTag;
             }
-
         }
     }
 }

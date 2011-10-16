@@ -3,7 +3,6 @@ using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Wpf
 {
-
     public partial class Config1101IrDistance : PhidgetConfigControl
     {
         public double TopValue;
@@ -46,7 +45,7 @@ namespace PhidgetModules.Wpf
                 return "The bottom of the range must be lower than the top of the range";
             }
 
-            return "";
+            return string.Empty;
         }
 
         private void TextChanged(object sender, TextChangedEventArgs e)

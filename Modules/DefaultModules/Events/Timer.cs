@@ -39,7 +39,7 @@ namespace DefaultModules.Events
 
         public string GetConfigString()
         {
-            return String.Format(CultureInfo.CurrentCulture, Strings.Timer_ConfigString, hours, minutes, seconds);
+            return string.Format(CultureInfo.CurrentCulture, Strings.Timer_ConfigString, hours, minutes, seconds);
         }
 
         #region Configuration Views

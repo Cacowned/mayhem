@@ -38,7 +38,8 @@ namespace PhidgetModules.Wpf
             {
                 return "Invalid Top Value";
             }
-            return "";
+
+            return string.Empty;
         }
 
         public override void OnSave()

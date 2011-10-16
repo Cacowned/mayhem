@@ -4,7 +4,7 @@ using Phidgets.Events;
 namespace PhidgetModules
 {
     [DataContract]
-    abstract public class OnOffSensorEventBase : SensorEventBase
+    public abstract class OnOffSensorEventBase : SensorEventBase
     {
         [DataMember]
         protected int TopThreshold;
@@ -19,6 +19,7 @@ namespace PhidgetModules
         protected bool OnTurnOn;
 
         protected double CurrentValue { get; set; }
+
         protected double LastValue { get; set; }
 
         protected override void OnLoadDefaults()

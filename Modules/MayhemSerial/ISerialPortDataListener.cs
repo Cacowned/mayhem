@@ -1,5 +1,4 @@
-﻿
-namespace MayhemSerial
+﻿namespace MayhemSerial
 {
     public interface ISerialPortDataListener
     {

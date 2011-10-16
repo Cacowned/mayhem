@@ -11,11 +11,13 @@ namespace DefaultModules.Wpf
             get;
             private set;
         }
+
         public int Minutes
         {
             get;
             private set;
         }
+
         public int Seconds
         {
             get;
@@ -54,10 +56,9 @@ namespace DefaultModules.Wpf
         {
             int seconds, minutes, hours;
 
-
-            bool badsec = !(Int32.TryParse(SecondsBox.Text, out seconds) && (seconds >= 0 && seconds < 60));
-            bool badmin = !(Int32.TryParse(MinutesBox.Text, out minutes) && (minutes >= 0 && minutes < 60));
-            bool badhour = !(Int32.TryParse(HoursBox.Text, out hours) && (hours >= 0));
+            bool badsec = !(int.TryParse(SecondsBox.Text, out seconds) && (seconds >= 0 && seconds < 60));
+            bool badmin = !(int.TryParse(MinutesBox.Text, out minutes) && (minutes >= 0 && minutes < 60));
+            bool badhour = !(int.TryParse(HoursBox.Text, out hours) && (hours >= 0));
 
             bool badtotal = seconds == 0 && minutes == 0 && hours == 0;
 
@@ -67,19 +68,22 @@ namespace DefaultModules.Wpf
             {
                 s += " seconds";
             }
+
             if (badmin)
             {
                 s += " minutes";
             }
+
             if (badhour)
             {
                 s += " hours";
             }
+
             if (badtotal && !(badsec || badmin || badhour))
                 s = "Timer length must be greater than 0.";
 
             CanSave = !(badsec || badmin || badhour || badtotal);
-            return CanSave ? "" : s;
+            return CanSave ? string.Empty : s;
         }
 
         private void TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)

@@ -45,7 +45,7 @@ namespace PhidgetModules.Reaction
 
         public string GetConfigString()
         {
-            string type = "";
+            string type = string.Empty;
 
             switch (outputType)
             {
