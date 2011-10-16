@@ -51,7 +51,7 @@ namespace PhidgetModules.Reaction
         }
 
         #region Phidget Event Handlers
-        void ir_Learn(object sender, IRLearnEventArgs e)
+        private void ir_Learn(object sender, IRLearnEventArgs e)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {

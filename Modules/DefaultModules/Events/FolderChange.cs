@@ -23,7 +23,7 @@ namespace DefaultModules.Events
 
         private FileSystemWatcher fsWatcher;
 
-        private FileSystemEventArgs lastArgs_created;
+        private FileSystemEventArgs lastArgsCreated;
         private DateTime lastCreatedDate;
 
         protected override void OnLoadDefaults()
@@ -91,7 +91,7 @@ namespace DefaultModules.Events
         {
             string conf = string.Empty;
             int pathLength = folderToMonitor.Length;
-            const int cutoff = 10;
+            int cutoff = 10;
             string substr;
             if (pathLength >= cutoff)
                 substr = folderToMonitor.Substring(pathLength - cutoff, cutoff);
@@ -113,10 +113,11 @@ namespace DefaultModules.Events
         private void OnChanged(object o, FileSystemEventArgs a)
         {
             Logger.WriteLine(a.FullPath);
+
             // filter out repeadted triggers when a file is created
             if (a.ChangeType == WatcherChangeTypes.Created)
             {
-                lastArgs_created = a;
+                lastArgsCreated = a;
                 lastCreatedDate = DateTime.Now;
             }
             else if (a.ChangeType == WatcherChangeTypes.Changed)
@@ -125,7 +126,7 @@ namespace DefaultModules.Events
                 TimeSpan ts = now - lastCreatedDate;
 
                 // don't fire any event --> the change event is caused by the previous "created" event
-                if (a.FullPath == lastArgs_created.FullPath || ts.TotalMilliseconds <= 10)
+                if (a.FullPath == lastArgsCreated.FullPath || ts.TotalMilliseconds <= 10)
                     return;
             }
 

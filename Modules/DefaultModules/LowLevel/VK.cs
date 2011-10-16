@@ -1,5 +1,4 @@
-﻿
-namespace DefaultModules.LowLevel
+﻿namespace DefaultModules.LowLevel
 {
     public enum VK : ushort
     {
@@ -63,10 +62,10 @@ namespace DefaultModules.LowLevel
         OEM_PERIOD = 0xBE,   // '.' any country
         OEM_2 = 0xBF,   // '/?' for US
         OEM_3 = 0xC0,   // '`~' for US
-        OEM_4 = 0xDB,  //  '[{' for US
-        OEM_5 = 0xDC,  //  '\|' for US
-        OEM_6 = 0xDD,  //  ']}' for US
-        OEM_7 = 0xDE,  //  ''"' for US
+        OEM_4 = 0xDB,  // '[{' for US
+        OEM_5 = 0xDC,  // '\|' for US
+        OEM_6 = 0xDD,  // ']}' for US
+        OEM_7 = 0xDE,  // ''"' for US
         OEM_8 = 0xDF,
         MEDIA_NEXT_TRACK = 0xB0,
         MEDIA_PREV_TRACK = 0xB1,

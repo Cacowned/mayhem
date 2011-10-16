@@ -40,7 +40,7 @@ namespace PhidgetModules.Events
                 message = "stops recognizing an object";
             }
 
-            return String.Format("Index {0} {1}", Index, message);
+            return string.Format("Index {0} {1}", Index, message);
         }
 
         protected string ConvertToString(int value)

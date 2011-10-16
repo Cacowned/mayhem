@@ -7,10 +7,8 @@ using MayhemCore;
 
 namespace DefaultModules.KeypressHelpers
 {
-    class InterceptKeys : IDisposable
+    internal class InterceptKeys : IDisposable
     {
-        private static InterceptKeys instance = null;
-
         // windows intercept addresses
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
@@ -18,21 +16,25 @@ namespace DefaultModules.KeypressHelpers
         private const int WM_KEYUP = 0x101;
         private const int WM_SYSKEYUP = 0x105;
 
+        private static InterceptKeys instance = null;
+
         private LowLevelKeyboardProc _proc;
         private IntPtr _hookID = IntPtr.Zero;
 
         public delegate void KeyCombinationHandler();
 
         public delegate void KeyDownHandler(Keys key);
+
         public event KeyDownHandler OnKeyDown;
 
         public delegate void KeyUpHandler(Keys key);
+
         public event KeyUpHandler OnKeyUp;
 
         private HashSet<Keys> keysDown = new HashSet<Keys>();
-        Dictionary<Keys, DateTime> keysDownTimes = new Dictionary<Keys, DateTime>();
+        private Dictionary<Keys, DateTime> keysDownTimes = new Dictionary<Keys, DateTime>();
 
-        Dictionary<HashSet<Keys>, List<KeyCombinationHandler>> keyCombinationHandlerMap;
+        private Dictionary<HashSet<Keys>, List<KeyCombinationHandler>> keyCombinationHandlerMap;
 
         public static InterceptKeys Instance
         {
@@ -47,7 +49,7 @@ namespace DefaultModules.KeypressHelpers
 
         private int refCount = 0;
 
-        InterceptKeys()
+        private InterceptKeys()
         {
             keyCombinationHandlerMap = new Dictionary<HashSet<Keys>, List<KeyCombinationHandler>>();
             _proc = HookCallback;
@@ -90,15 +92,18 @@ namespace DefaultModules.KeypressHelpers
                     break;
                 }
             }
+
             if (listHandlers == null)
             {
                 listHandlers = new List<KeyCombinationHandler>();
                 keyCombinationHandlerMap[keys] = listHandlers;
             }
+
             if (!listHandlers.Contains(handler))
             {
                 listHandlers.Add(handler);
             }
+
             AddRef();
         }
 
@@ -112,10 +117,11 @@ namespace DefaultModules.KeypressHelpers
                     break;
                 }
             }
+
             RemoveRef();
         }
 
-        void CheckCombinations()
+        private void CheckCombinations()
         {
             List<Keys> removeList = null;
             DateTime now = DateTime.Now;
@@ -129,6 +135,7 @@ namespace DefaultModules.KeypressHelpers
                     removeList.Add(key);
                 }
             }
+
             if (removeList != null)
             {
                 foreach (Keys key in removeList)
@@ -137,6 +144,7 @@ namespace DefaultModules.KeypressHelpers
                     keysDown.Remove(key);
                 }
             }
+
             foreach (HashSet<Keys> k in keyCombinationHandlerMap.Keys)
             {
                 if (AreKeysetsEqual(k, keysDown))
@@ -146,6 +154,7 @@ namespace DefaultModules.KeypressHelpers
                     {
                         t();
                     }
+
                     break;
                 }
             }
@@ -215,6 +224,7 @@ namespace DefaultModules.KeypressHelpers
                     OnKeyUp(key);
                 }
             }
+
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }
 

@@ -38,7 +38,7 @@ namespace PhidgetModules.Reaction
 
         public string GetConfigString()
         {
-            return String.Format("IR Code 0x{0}", code);
+            return string.Format("IR Code 0x{0}", code);
         }
 
         public override void Perform()

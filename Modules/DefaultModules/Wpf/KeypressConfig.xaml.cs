@@ -67,6 +67,7 @@ namespace DefaultModules.Wpf
                 {
                     KeysToSave.Clear();
                 }
+
                 keys_down.Add(key);
                 KeysToSave.Add(key);
 
@@ -84,10 +85,10 @@ namespace DefaultModules.Wpf
 
         private void UpdateKeysDown()
         {
-            string str = "";
+            string str = string.Empty;
             foreach (Keys key in KeysToSave)
             {
-                if (str == "")
+                if (str == string.Empty)
                 {
                     str = key.ToString();
                 }
@@ -96,6 +97,7 @@ namespace DefaultModules.Wpf
                     str += " + " + key.ToString();
                 }
             }
+
             KeysDownText = str;
 
             CanSave = KeysToSave.Count > 0;
@@ -119,8 +121,6 @@ namespace DefaultModules.Wpf
         {
             if (e.Key == Key.Enter)
             {
-                // do stuff here.          
-
                 e.Handled = true;
             }
         }

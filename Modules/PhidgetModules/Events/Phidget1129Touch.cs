@@ -42,7 +42,7 @@ namespace PhidgetModules.Events
                 message = "turns off";
             }
 
-            return String.Format("Index {0} {1}", Index, message);
+            return string.Format("Index {0} {1}", Index, message);
         }
     }
 }

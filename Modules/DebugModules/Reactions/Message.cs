@@ -17,7 +17,7 @@ namespace DebugModules.Reactions
 
         public override void Perform()
         {
-            Logger.WriteLine(String.Format(CultureInfo.CurrentCulture, "{0}: {1}", DateTime.Now.ToLongTimeString(), MessageText));
+            Logger.WriteLine(string.Format(CultureInfo.CurrentCulture, "{0}: {1}", DateTime.Now.ToLongTimeString(), MessageText));
         }
 
         public void OnSaved(WpfConfiguration configurationControl)

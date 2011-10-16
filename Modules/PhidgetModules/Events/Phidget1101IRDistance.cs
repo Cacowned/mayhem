@@ -29,7 +29,7 @@ namespace PhidgetModules.Events
 
         protected override bool IsValidInput(int value)
         {
-            return (value < 490 && value > 80);
+            return value < 490 && value > 80;
         }
 
         public override double Convert(int value)
@@ -39,7 +39,6 @@ namespace PhidgetModules.Events
 
         public string ConvertToString(int value)
         {
-
             if ((value < 490) && (value > 80))
             {
                 return Convert(value).ToString("0.##") + " cm";
@@ -52,7 +51,7 @@ namespace PhidgetModules.Events
 
         public string GetConfigString()
         {
-            return String.Format("Index {0}, between {1} and {2} cm", Index, TopValue.ToString("0.##"), BottomValue.ToString("0.##"));
+            return string.Format("Index {0}, between {1} and {2} cm", Index, TopValue.ToString("0.##"), BottomValue.ToString("0.##"));
         }
     }
 }

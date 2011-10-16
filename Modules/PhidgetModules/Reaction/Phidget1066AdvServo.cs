@@ -56,8 +56,6 @@ namespace PhidgetModules.Reaction
 
         public override void Perform()
         {
-            //advServo.servos[0].Engaged = true;
-
             // If we have a servo, use the first one. 
             // TODO: This should be configurable
             if (advServo.servos.Count >= 1)
@@ -79,7 +77,7 @@ namespace PhidgetModules.Reaction
 
         public string GetConfigString()
         {
-            return String.Format("Move to {0}", position.ToString("0.##"));
+            return string.Format("Move to {0}", position.ToString("0.##"));
         }
     }
 }

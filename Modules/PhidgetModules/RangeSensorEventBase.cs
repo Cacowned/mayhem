@@ -4,7 +4,7 @@ using Phidgets.Events;
 namespace PhidgetModules
 {
     [DataContract]
-    abstract public class RangeSensorEventBase : SensorEventBase
+    public abstract class RangeSensorEventBase : SensorEventBase
     {
         // Define the range we care about
         [DataMember]

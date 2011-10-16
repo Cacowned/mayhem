@@ -1,10 +1,6 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
-using Microsoft.Win32;
-using System.Net;
-using System.Net.Sockets;
 
 namespace DefaultModules.Wpf
 {

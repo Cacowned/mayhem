@@ -1,35 +1,29 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using MayhemWpf.UserControls;
-using System.Collections.Generic;
 
 namespace DefaultModules.Wpf
 {
-    /// <summary>
-    /// Interaction logic for FolderChangeConfig.xaml
-    /// </summary>
     public partial class FolderChangeConfig : WpfConfiguration
     {
-
         public bool SubDirectories
         {
             get;
-            private set; 
+            private set;
         }
-        
+
         public bool MonitorName
         {
             get;
-            private set; 
+            private set;
         }
 
         public string FolderToMonitor
         {
             get;
-            private set; 
+            private set;
         }
 
         public FolderChangeConfig(string path, bool monitorName, bool subDirs)
@@ -37,7 +31,7 @@ namespace DefaultModules.Wpf
             InitializeComponent();
             FolderToMonitor = path;
             MonitorName = monitorName;
-            SubDirectories = subDirs; 
+            SubDirectories = subDirs;
         }
 
         /// <summary>
@@ -45,11 +39,9 @@ namespace DefaultModules.Wpf
         /// </summary>
         public override void OnLoad()
         {
-
             chk_name.IsChecked = MonitorName;
             chk_subdirs.IsChecked = SubDirectories;
             textBoxDirectory.Text = FolderToMonitor;
-
         }
 
         // Browse for file
@@ -80,7 +72,8 @@ namespace DefaultModules.Wpf
             {
                 textInvalid.Text = "Invalid folder location";
                 CanSave = false;
-            }       
+            }
+
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
@@ -88,19 +81,18 @@ namespace DefaultModules.Wpf
         {
             get
             {
-                //return base.Title;
                 return "Folder Change";
             }
         }
 
         private void chk_name_Checked(object sender, RoutedEventArgs e)
         {
-            MonitorName = (bool) chk_name.IsChecked;
+            MonitorName = (bool)chk_name.IsChecked;
         }
 
         private void chk_subdirs_Checked(object sender, RoutedEventArgs e)
         {
-            SubDirectories = (bool) chk_subdirs.IsChecked;
+            SubDirectories = (bool)chk_subdirs.IsChecked;
         }
     }
 }

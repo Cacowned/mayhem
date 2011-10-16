@@ -52,6 +52,7 @@ namespace MayhemCore
             {
                 return configString;
             }
+
             private set
             {
                 configString = value;

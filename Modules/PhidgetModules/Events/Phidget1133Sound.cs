@@ -29,7 +29,7 @@ namespace PhidgetModules.Events
 
         public override double Convert(int value)
         {
-            return 16.801 * Math.Log(value) + 9.872;
+            return (16.801 * Math.Log(value)) + 9.872;
         }
 
         public string ConvertToString(int value)
@@ -45,7 +45,7 @@ namespace PhidgetModules.Events
                 overUnder = "below";
             }
 
-            return String.Format("Index {0} goes {1} {2} dB", Index, overUnder, TopValue.ToString("0.###"));
+            return string.Format("Index {0} goes {1} {2} dB", Index, overUnder, TopValue.ToString("0.###"));
         }
     }
 }

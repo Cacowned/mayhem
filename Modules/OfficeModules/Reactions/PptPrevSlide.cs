@@ -9,13 +9,13 @@ namespace OfficeModules.Reactions
     [MayhemModule("PowerPoint: Last Slide", "Navigates to the previous slide")]
     public class PptPrevSlide : ReactionBase
     {
-        private OPowerPoint.Application oApp;
+        private OPowerPoint.Application app;
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
             try
             {
-                oApp = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");
+                app = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");
             }
             catch (Exception ex)
             {
@@ -27,25 +27,27 @@ namespace OfficeModules.Reactions
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            oApp = null;
+            app = null;
         }
 
         public override void Perform()
         {
             try
             {
-                int windows = oApp.SlideShowWindows.Count;
+                int windows = app.SlideShowWindows.Count;
+
                 // If we have a presentation window, go to the next slide
                 if (windows == 1)
                 {
-                    oApp.SlideShowWindows[1].View.Previous();
+                    app.SlideShowWindows[1].View.Previous();
                 }
                 else if (windows == 0)
                 {
                     ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_NoWindowCantChange);
                 }
-                else // more than one window
+                else
                 {
+                    // more than one window
                     ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_MoreThanOneWindow);
                 }
             }

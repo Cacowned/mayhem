@@ -70,7 +70,7 @@ namespace DefaultModules.Reactions
 
         public string GetConfigString()
         {
-            return String.Format(CultureInfo.CurrentCulture, Strings.RunProgram_ConfigString, Path.GetFileName(FileName));
+            return string.Format(CultureInfo.CurrentCulture, Strings.RunProgram_ConfigString, Path.GetFileName(FileName));
         }
     }
 }

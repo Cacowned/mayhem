@@ -63,15 +63,15 @@ namespace PhoneServerHelper
             {
                 SecurityIdentity sd = (SecurityIdentity)obj;
 
-                return (String.Compare(this.sid, sd.sid, true) == 0);
+                return string.Compare(this.sid, sd.sid, true) == 0;
             }
             else return false;
         }
 
         public static bool operator ==(SecurityIdentity obj1, SecurityIdentity obj2)
         {
-            if (Object.ReferenceEquals(obj1, null) && Object.ReferenceEquals(obj2, null)) return true;
-            else if (Object.ReferenceEquals(obj1, null) || Object.ReferenceEquals(obj2, null)) return false;
+            if (object.ReferenceEquals(obj1, null) && object.ReferenceEquals(obj2, null)) return true;
+            else if (object.ReferenceEquals(obj1, null) || object.ReferenceEquals(obj2, null)) return false;
             return obj1.Equals(obj2);
         }
 
@@ -93,7 +93,7 @@ namespace PhoneServerHelper
         /// <returns>An SDDL SID string or abbreviation</returns>
         public override string ToString()
         {
-            if (this.IsWellKnownSid && !String.IsNullOrEmpty(SecurityIdentity.wellKnownSidAbbreviations[(int)this.wellKnownSidType]))
+            if (this.IsWellKnownSid && !string.IsNullOrEmpty(SecurityIdentity.wellKnownSidAbbreviations[(int)this.wellKnownSidType]))
             {
                 return SecurityIdentity.wellKnownSidAbbreviations[(int)this.wellKnownSidType];
             }
@@ -104,7 +104,8 @@ namespace PhoneServerHelper
         /// Table of well known SID strings
         /// </summary>
         /// <remarks>The table indicies correspond to <see cref="WELL_KNOWN_SID_TYPE"/>s</remarks>
-        private static readonly string[] wellKnownSids = new string[] {
+        private static readonly string[] wellKnownSids = new string[]
+        {
             "S-1-0-0", // NULL SID
             "S-1-1-0", // Everyone
             "S-1-2-0", // LOCAL
@@ -188,7 +189,8 @@ namespace PhoneServerHelper
         /// Table of SDDL SID abbreviations
         /// </summary>
         /// <remarks>The table indicies correspond to <see cref="WELL_KNOWN_SID_TYPE"/>s</remarks>
-        private static readonly string[] wellKnownSidAbbreviations = new string[] {
+        private static readonly string[] wellKnownSidAbbreviations = new string[]
+        {
             "",
             "WD",
             "",
@@ -327,7 +329,7 @@ namespace PhoneServerHelper
                 LSA_UNICODE_STRING nameString = new LSA_UNICODE_STRING();
                 nameString.Buffer = name;
                 nameString.Length = (ushort)(name.Length * UnicodeEncoding.CharSize);
-                nameString.MaxLength = (ushort)(name.Length * UnicodeEncoding.CharSize + UnicodeEncoding.CharSize);
+                nameString.MaxLength = (ushort)((name.Length * UnicodeEncoding.CharSize) + UnicodeEncoding.CharSize);
 
                 IntPtr domains;
                 IntPtr sids;
@@ -393,7 +395,7 @@ namespace PhoneServerHelper
                         }
 
                         // Marshal and store the object name
-                        secId.name = String.Format("{0}{1}{2}", domainLen > 1 ? Marshal.PtrToStringAnsi(domainName) : "", domainLen > 1 ? "\\" : "", Marshal.PtrToStringAnsi(accountName));
+                        secId.name = string.Format("{0}{1}{2}", domainLen > 1 ? Marshal.PtrToStringAnsi(domainName) : "", domainLen > 1 ? "\\" : "", Marshal.PtrToStringAnsi(accountName));
 
                         return secId;
                     }
@@ -414,7 +416,6 @@ namespace PhoneServerHelper
                 if (handle != IntPtr.Zero) SecurityIdentity.LsaClose(handle);
             }
         }
-
 
         private const ushort SID_MAX_SUB_AUTHORITIES = 15;
 
@@ -504,7 +505,6 @@ namespace PhoneServerHelper
         [DllImport("Advapi32.dll")]
         private static extern uint LsaNtStatusToWinError(int Status);
 
-
         /*
          * NTSTATUS LsaFreeMemory(
          *     PVOID Buffer
@@ -558,7 +558,6 @@ namespace PhoneServerHelper
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         private static extern UInt32 FormatMessage(UInt32 dwFlags, IntPtr lpSource, UInt32 dwMessageId, UInt32 dwLanguageId, [MarshalAs(UnmanagedType.LPTStr)] ref string lpBuffer, int nSize, IntPtr[] Arguments);
-
     }
 
     /*

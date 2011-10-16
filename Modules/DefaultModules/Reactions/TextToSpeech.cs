@@ -21,7 +21,7 @@ namespace DefaultModules.Reactions
             set;
         }
 
-        SpVoice voice;
+        private SpVoice voice;
 
         protected override void OnAfterLoad()
         {
@@ -45,7 +45,7 @@ namespace DefaultModules.Reactions
 
         public string GetConfigString()
         {
-            return String.Format(CultureInfo.CurrentCulture, Strings.TextToSpeech_ConfigString, Message);
+            return string.Format(CultureInfo.CurrentCulture, Strings.TextToSpeech_ConfigString, Message);
         }
     }
 }
