@@ -8,38 +8,6 @@ using MayhemCore;
 
 namespace PhoneModules
 {
-    public class PhoneLayoutElement
-    {
-        public string ID;
-        public double X;
-        public double Y;
-        public double Width;
-        public double Height;
-    }
-
-    public class PhoneLayoutButton : PhoneLayoutElement
-    {
-        public string Text = "";
-        private string imageFile = "";
-        public string ImageFile
-        {
-            get
-            {
-                return imageFile;
-            }
-            set
-            {
-                imageFile = value;
-                if (!string.IsNullOrEmpty(imageFile))
-                {
-                    ImageBytes = FileDictionary.Get(imageFile);
-                }
-            }
-        }
-        public byte[] ImageBytes = new byte[0];
-        public bool IsEnabled = true;
-    }
-
     public class PhoneLayout
     {
         public List<PhoneLayoutButton> Buttons = new List<PhoneLayoutButton>();
@@ -68,6 +36,7 @@ namespace PhoneModules
                     throw new Exception();
                 }
             }
+
             PhoneLayoutButton button = new PhoneLayoutButton();
             button.Text = "Button";
             button.IsEnabled = true;

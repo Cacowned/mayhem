@@ -68,6 +68,7 @@ namespace XboxModules.Wpf
                     // clear out the buttons we were going to save
                     ButtonsToSave = 0;
                 }
+
                 // Add the button
                 downButtons |= button;
                 ButtonsToSave |= button;
@@ -75,7 +76,6 @@ namespace XboxModules.Wpf
                 // And update the string
                 UpdateButtonsDown();
             }
-            //down_buttons |= button;
         }
 
         private void Instance_OnButtonUp(Buttons button)
@@ -95,7 +95,6 @@ namespace XboxModules.Wpf
                 {
                     textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
                 }
-
             });
         }
 
@@ -115,18 +114,14 @@ namespace XboxModules.Wpf
             {
                 if (status == ControllerStatus.Detached)
                 {
-                    //CanSave = false;
-
                     textInvalid.Visibility = Visibility.Visible;
                 }
+
                 if (status == ControllerStatus.Attached)
                 {
-                    //CanSave = true;
                     textInvalid.Visibility = Visibility.Collapsed;
                 }
             });
-
-            //textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

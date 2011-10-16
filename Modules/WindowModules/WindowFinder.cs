@@ -2,9 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Threading;
 using MayhemCore;
-using System.Collections.Generic;
 
 namespace WindowModules
 {
@@ -39,13 +37,16 @@ namespace WindowModules
                 {
                     filename = WMIProcess.GetFilename(procid);
                 }
+
                 if (filename != null)
                 {
                     FileInfo fi = new FileInfo(filename);
                     filename = fi.Name;
                 }
+
                 if (actionInfo.WindowInfo.CheckFileName && !filename.ToLower().EndsWith(actionInfo.WindowInfo.FileName.ToLower()))
                     isMatch = false;
+
                 if (isMatch)
                 {
                     if (actionInfo.WindowInfo.CheckTitle)
@@ -56,6 +57,7 @@ namespace WindowModules
                         if (title != actionInfo.WindowInfo.Title)
                             isMatch = false;
                     }
+
                     if (isMatch)
                     {
                         Logger.WriteLine("Found: " + hwnd);
@@ -64,7 +66,10 @@ namespace WindowModules
                     }
                 }
             }
-            catch { }
+            catch
+            {
+            }
+
             return false;
         }
 

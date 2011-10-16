@@ -56,7 +56,7 @@ namespace PhoneModules.Events
         {
             if (eventText == button.ID)
             {
-                base.Trigger();
+                Trigger();
             }
         }
 
@@ -97,7 +97,6 @@ namespace PhoneModules.Events
             {
                 PhoneFormDesigner config = new PhoneFormDesigner(isCreatingForFirstTime);
                 config.LoadFromData(button.ID);
-                //config.SetSelected(id);
                 return config;
             }
         }

@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace WindowModules
 {
-    class InterceptKeys
+    internal class InterceptKeys
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
@@ -22,7 +22,6 @@ namespace WindowModules
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
-
 
         // windows intercept addresses
         private const int WH_KEYBOARD_LL = 13;

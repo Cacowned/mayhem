@@ -12,15 +12,18 @@ namespace XboxModules
         Detached
     }
 
-    class ButtonEvents : IDisposable
+    internal class ButtonEvents : IDisposable
     {
         public delegate void ButtonDownHandler(Buttons button);
+
         public event ButtonDownHandler OnButtonDown;
 
         public delegate void ButtonUpHandler(Buttons button);
+
         public event ButtonUpHandler OnButtonUp;
 
         public delegate void ControllerStatusChanged(ControllerStatus status);
+
         public event ControllerStatusChanged OnStatusChanged;
 
         protected BackgroundWorker Worker;
@@ -29,6 +32,7 @@ namespace XboxModules
         private int refCount = 0;
 
         private static ButtonEvents instance;
+
         public static ButtonEvents Instance
         {
             get
@@ -68,12 +72,14 @@ namespace XboxModules
         #endregion
 
         private ControllerStatus status;
+
         public ControllerStatus Status
         {
             get
             {
                 return status;
             }
+
             set
             {
                 // Only do this if the flag is being switched
@@ -184,13 +190,11 @@ namespace XboxModules
                     if (prevState.Y == ButtonState.Pressed && currentState.Y == ButtonState.Released)
                         ButtonUp(Buttons.Y);
 
-                    //DownButtons = current_state.AsButtons();
                     prevState = currentState;
                 }
+
                 Thread.Sleep(50);
             }
-
-
         }
 
         private void ButtonDown(Buttons button)

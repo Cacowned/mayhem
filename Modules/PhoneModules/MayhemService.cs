@@ -43,7 +43,7 @@ namespace PhoneModules
     [ServiceBehavior(Name = "MayhemService", InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class MayhemService : IMayhemService
     {
-        private Dictionary<string,string> cssDict = new Dictionary<string,string>();
+        private Dictionary<string, string> cssDict = new Dictionary<string, string>();
         private string html = null;
         private string htmlWP7 = null;
         private string htmlIPhone = null;
@@ -90,13 +90,14 @@ namespace PhoneModules
                     update = false;
                 }
             }
+
             Logger.WriteLine(update);
             if (!update)
             {
                 resetEvents[key].Reset();
 
                 string userAgent = WebOperationContext.Current.IncomingRequest.UserAgent;
-                if(userAgent == null)
+                if (userAgent == null)
                     return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlWP7));
                 if (userAgent.IndexOf("iPhone") >= 0)
                     return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIPhone));
@@ -119,6 +120,7 @@ namespace PhoneModules
                     {
                         if (numToKill == 0)
                             killResetEvent.Set();
+
                         return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));
                     }
                     else
@@ -127,6 +129,7 @@ namespace PhoneModules
                 else
                     Interlocked.Decrement(ref numToKill);
             }
+
             return null;
         }
 
@@ -153,17 +156,18 @@ namespace PhoneModules
         {
             if (!cssDict.ContainsKey(device))
             {
-                string css = "";
+                string css = string.Empty;
                 try
                 {
-                    Assembly _assembly = this.GetType().Assembly;
-                    using (Stream stream = _assembly.GetManifestResourceStream("PhoneModules.css-" + device + ".html"))
+                    Assembly assembly = this.GetType().Assembly;
+                    using (Stream stream = assembly.GetManifestResourceStream("PhoneModules.css-" + device + ".html"))
                     {
-                        using (StreamReader _textStreamReader = new StreamReader(stream))
+                        using (StreamReader textStreamReader = new StreamReader(stream))
                         {
-                            css = _textStreamReader.ReadToEnd();
+                            css = textStreamReader.ReadToEnd();
                         }
                     }
+
                     cssDict[device] = css;
                     return css;
                 }
@@ -172,6 +176,7 @@ namespace PhoneModules
                     Logger.WriteLine(erf);
                 }
             }
+
             return cssDict[device];
         }
 
@@ -205,7 +210,6 @@ namespace PhoneModules
             isShuttingDown = true;
             if (numToKill > 0)
             {
-                //numToKill = resetEvents.Count;
                 Debug.WriteLine(numToKill);
                 foreach (AutoResetEvent ev in resetEvents.Values)
                 {
@@ -218,6 +222,7 @@ namespace PhoneModules
         }
 
         public delegate void EventCalledHandler(string eventText);
+
         public event EventCalledHandler EventCalled;
     }
 }

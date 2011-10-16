@@ -1,5 +1,4 @@
-﻿
-namespace WindowModules
+﻿namespace WindowModules
 {
     public interface IWindowActionConfigControl
     {

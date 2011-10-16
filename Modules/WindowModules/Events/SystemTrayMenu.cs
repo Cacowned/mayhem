@@ -23,14 +23,14 @@ namespace WindowModules.Events
 
         private SynchronizationContext context;
 
-        MenuItem menuItem;
+        private MenuItem menuItem;
 
         protected override void OnAfterLoad()
         {
             context = SynchronizationContext.Current;
         }
 
-        void SetNotifyIconStuff(object state)
+        private void SetNotifyIconStuff(object state)
         {
             if (notifyIcon == null)
             {
@@ -42,9 +42,11 @@ namespace WindowModules.Events
                 {
                     notifyIcon.Icon = new System.Drawing.Icon(iconStream);
                 }
+
                 notifyIcon.Text = "Mayhem";
                 notifyIcon.MouseUp += new MouseEventHandler(notifyIcon_MouseUp);
             }
+
             if (!notifyIcon.Visible)
                 notifyIcon.Visible = true;
 
@@ -52,7 +54,7 @@ namespace WindowModules.Events
             notifyIcon.ContextMenu.MenuItems.Add(menuItem);
         }
 
-        void RemoveFromContextMenu(object state)
+        private void RemoveFromContextMenu(object state)
         {
             notifyIcon.ContextMenu.MenuItems.Remove(menuItem);
             menuItem = null;
@@ -74,7 +76,7 @@ namespace WindowModules.Events
 
         private void OnClick(object o, EventArgs e)
         {
-            base.Trigger();
+            Trigger();
         }
 
         private void notifyIcon_MouseUp(object sender, MouseEventArgs e)

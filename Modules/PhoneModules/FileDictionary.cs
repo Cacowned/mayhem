@@ -17,6 +17,7 @@ namespace PhoneModules
                     bytes = new byte[fs.Length];
                     fs.Read(bytes, 0, (int)fs.Length);
                 }
+
                 dict[str] = bytes;
             }
         }
@@ -27,6 +28,7 @@ namespace PhoneModules
             {
                 Add(str);
             }
+
             return dict[str];
         }
     }

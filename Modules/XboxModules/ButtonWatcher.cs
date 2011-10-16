@@ -3,9 +3,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace XboxModules
 {
-    class ButtonWatcher
+    internal class ButtonWatcher
     {
         public delegate void KeyCombinationHandler();
+
         private Dictionary<Buttons, List<KeyCombinationHandler>> keyCombinationHandlerMap;
 
         private Buttons buttonsDown;
@@ -48,11 +49,13 @@ namespace XboxModules
                     break;
                 }
             }
+
             if (listHandlers == null)
             {
                 listHandlers = new List<KeyCombinationHandler>();
                 keyCombinationHandlerMap[buttons] = listHandlers;
             }
+
             if (!listHandlers.Contains(handler))
             {
                 listHandlers.Add(handler);
@@ -86,6 +89,7 @@ namespace XboxModules
                     {
                         t();
                     }
+
                     break;
                 }
             }
@@ -103,7 +107,7 @@ namespace XboxModules
         private void events_OnButtonUp(Buttons button)
         {
             // remove button from buttons_down
-            buttonsDown &= ~button;            
+            buttonsDown &= ~button;
         }
     }
 }
