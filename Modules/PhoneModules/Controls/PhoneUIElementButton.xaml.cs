@@ -224,9 +224,25 @@ namespace PhoneModules.Controls
             double right = left + this.ActualWidth;
             if (right > 320)
             {
-                Canvas.SetLeft(this, left + 320 - right);
+                if (Canvas.GetLeft(this) >= 0)
+                {
+                    Canvas.SetLeft(this, left + 320 - right);
+                }
             }
             Debug.WriteLine(right);
+        }
+
+        private void textBox1_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            double left = Canvas.GetLeft(this);
+            double right = left + this.ActualWidth;
+            if (right > 320)
+            {
+                if (Canvas.GetLeft(this) <= 0)
+                {
+                    e.Handled = true;
+                }
+            }
         }
     }
 }
