@@ -6,6 +6,6 @@ namespace PhoneModules.Controls
     {
         public virtual string Text { get; set; }
 
-        public PhoneLayoutElement LayoutInfo;
+        public PhoneLayoutElement LayoutInfo { get; set; }
     }
 }
