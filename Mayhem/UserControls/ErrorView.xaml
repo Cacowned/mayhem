@@ -6,7 +6,6 @@
              xmlns:src="clr-namespace:Mayhem.UserControls"
              mc:Ignorable="d" 
              x:Name="MayhemErrorView"
-             d:DesignHeight="300" d:DesignWidth="300"
              Background="Transparent"
              MouseLeave="MayhemErrorView_MouseLeave"
              MouseMove="MayhemErrorView_MouseMove"
@@ -38,7 +37,7 @@
             <Border Name="borderNumber" BorderThickness="1,1,1,0"  BorderBrush="Black" Width="30" Height="30" HorizontalAlignment="Right" Background="White" MouseDown="Border_MouseDown" CornerRadius="10,10,0,0">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Text="{Binding Path=Errors.Count, ElementName=MayhemErrorView}" />
             </Border>
-            <Border Name="borderListBox" BorderThickness="0,1,0,0" BorderBrush="Black" Height="271" MouseDown="Errors_MouseDown">
+            <Border Name="borderListBox" BorderThickness="0,1,0,0" BorderBrush="Black" Height="130" MouseDown="Errors_MouseDown">
                 <ListBox Name="listErrors" ItemTemplate="{StaticResource errorStyle}" ItemsSource="{Binding Path=Errors, ElementName=MayhemErrorView}" FontSize="14">
                 </ListBox>
             </Border>

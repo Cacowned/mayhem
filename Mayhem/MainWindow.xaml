@@ -168,7 +168,7 @@
                 <EventTrigger SourceName="errorView" RoutedEvent="src:ErrorView.Notify">
                     <BeginStoryboard>
                         <Storyboard TargetName="errorView">
-                            <ThicknessAnimation To="0,600,0,0" Duration="00:00:00.20" Storyboard.TargetProperty="Margin" />
+                            <ThicknessAnimation To="0,605,0,0" Duration="00:00:00.20" Storyboard.TargetProperty="Margin" />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
@@ -212,10 +212,7 @@
                 </Border>
             </StackPanel>
             <src:ErrorView Margin="0,630,0,0" x:Name="errorView">
-
                 <src:ErrorView.Resources>
-
-
                 </src:ErrorView.Resources>
             </src:ErrorView>
         </Grid>
