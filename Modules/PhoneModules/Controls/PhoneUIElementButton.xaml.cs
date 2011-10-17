@@ -54,6 +54,7 @@ namespace PhoneModules.Controls
         }
 
         private string imageFile = null;
+
         public string ImageFile
         {
             get
@@ -226,7 +227,6 @@ namespace PhoneModules.Controls
             {
                 Canvas.SetLeft(this, left + 320 - right);
             }
-            Debug.WriteLine(right);
         }
     }
 }

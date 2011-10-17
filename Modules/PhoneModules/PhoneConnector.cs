@@ -26,6 +26,7 @@ namespace PhoneModules
         private IMayhemService service = null;
 
         public delegate void EventCalledHandler(string eventText);
+
         public event EventCalledHandler EventCalled;
 
         public bool HasBeenSerialized
@@ -49,7 +50,7 @@ namespace PhoneModules
         {
         }
 
-        PhoneConnector()
+        private PhoneConnector()
         {
             MayhemEntry.Instance.ShuttingDown += new EventHandler(Mayhem_ShuttingDown);
         }
@@ -102,6 +103,7 @@ namespace PhoneModules
 
             return true;
         }
+
         public void Disable()
         {
             //if (isServiceRunning)
