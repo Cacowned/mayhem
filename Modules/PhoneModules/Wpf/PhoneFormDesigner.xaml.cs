@@ -47,13 +47,13 @@ namespace PhoneModules.Wpf
             string localComputerName = Dns.GetHostName();
             IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
             string text = string.Empty;
-            text += "19283:";
+            text += "19283";
             textPort.Text = "19283";
             foreach (IPAddress t in localIPs)
             {
                 if (t.AddressFamily.ToString() == "InterNetwork")
                 {
-                    text += t + ":";
+                    text += ":"+t;
                     if (textIP.Text.Length > 0)
                         textIP.Text += ", ";
                     textIP.Text += t;
