@@ -52,6 +52,14 @@ namespace PhoneModules.Events
             }
         }
 
+        private void phoneConnector_EventCalled(string eventText)
+        {
+            if (eventText == button.ID)
+            {
+                Trigger();
+            }
+        }
+
         protected override void OnEnabling(EnablingEventArgs e)
         {
             if (!e.WasConfiguring && !IsEnabled)
@@ -80,14 +88,6 @@ namespace PhoneModules.Events
         protected override void OnDeleted()
         {
             phoneLayout.RemoveButton(button.ID);
-        }
-
-        private void phoneConnector_EventCalled(string eventText)
-        {
-            if (eventText == button.ID)
-            {
-                Trigger();
-            }
         }
 
         #region Configuration Views

@@ -10,30 +10,20 @@ namespace PhoneModules
 {
     public class PhoneLayout
     {
-        public List<PhoneLayoutButton> Buttons { get; set; }
+        public List<PhoneLayoutButton> Buttons = new List<PhoneLayoutButton>();
 
-        private string htmlTemplate;
+        string htmlTemplate = null;
 
         #region Singleton
-        private static PhoneLayout instance;
+        static readonly PhoneLayout instance = new PhoneLayout();
 
-        private PhoneLayout()
+        PhoneLayout()
         {
-            Buttons = new List<PhoneLayoutButton>();
-            htmlTemplate = null;
         }
 
         public static PhoneLayout Instance
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new PhoneLayout(); 
-                }
-
-                return instance;
-            }
+            get { return instance; }
         }
         #endregion
 
@@ -107,7 +97,6 @@ namespace PhoneModules
                     return Buttons[i];
                 }
             }
-
             return null;
         }
 
@@ -122,12 +111,11 @@ namespace PhoneModules
                     Assembly assembly = this.GetType().Assembly;
                     using (Stream stream = assembly.GetManifestResourceStream("PhoneModules.HtmlTemplate.html"))
                     {
-                        using (StreamReader textStreamReader = new StreamReader(stream))
+                        using (StreamReader _textStreamReader = new StreamReader(stream))
                         {
-                            htmlTemplate = textStreamReader.ReadToEnd();
+                            htmlTemplate = _textStreamReader.ReadToEnd();
                         }
                     }
-
                     html = htmlTemplate;
                 }
                 catch (Exception erf)
@@ -160,9 +148,9 @@ namespace PhoneModules
                             {
                                 Directory.CreateDirectory(imageDir);
                             }
-
                             string file = Path.Combine(imageDir, button.ID + ".png");
                             File.Copy(button.ImageFile, file, true);
+                            //sb.AppendLine("<input type=\"image\" src=\"Images/" + button.ID + "\"");
                             width = 96;
                             height = 96;
                             sb.AppendLine("<input type=\"image\" src=\"Images/" + button.ID + "\"");
@@ -173,7 +161,6 @@ namespace PhoneModules
                     }
                 }
             }
-
             sb.AppendLine("</div>");
             insideDiv = sb.ToString();
             html = html.Replace("%%INSERTBODYHERE%%", insideDiv);
