@@ -190,6 +190,9 @@ namespace WindowModules.Wpf
             stackPanelActions.Children.Add(wac);
             wac.Index = stackPanelActions.Children.Count;
 
+            // scroll to the bottom of the viewer.
+            actionScroller.ScrollToBottom();
+
             controlMap.Add(newControl, action);
         }
 

@@ -32,7 +32,6 @@
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
-    <Grid>
         <StackPanel>
             <Border Name="borderNumber" BorderThickness="1,1,1,0"  BorderBrush="Black" Width="30" Height="30" HorizontalAlignment="Right" Background="White" MouseDown="Border_MouseDown" CornerRadius="10,10,0,0">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Text="{Binding Path=Errors.Count, ElementName=MayhemErrorView}" />
@@ -42,5 +41,4 @@
                 </ListBox>
             </Border>
         </StackPanel>
-    </Grid>
 </UserControl>

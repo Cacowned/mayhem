@@ -23,9 +23,10 @@
             </Grid>
             <Separator></Separator>
             <TextBlock TextAlignment="Center">Select the sequence of actions to take on the window.</TextBlock>
-            <StackPanel Name="stackPanelActions">
-                
-            </StackPanel>
+            <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto" Name="actionScroller" >
+                <StackPanel Name="stackPanelActions">
+                </StackPanel>
+            </ScrollViewer>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <ComboBox Name="comboBoxActions" Width="150" Margin="0,0,20,0" SelectedIndex="0">
                     <ComboBoxItem Content="Bring to front" />
