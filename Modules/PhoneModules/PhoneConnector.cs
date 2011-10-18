@@ -72,23 +72,17 @@ namespace PhoneModules
         {
             if (service != null)
             {
-                ThreadPool.QueueUserWorkItem(new WaitCallback(o =>
+                try
                 {
-                    if (service != null)
-                    {
-                        try
-                        {
-                            string insideDiv;
-                            string html = PhoneLayout.Instance.SerializeToHtml(true, out insideDiv);
-                            service.SetHtml(html);
-                            service.SetInsideDiv(insideDiv);
-                        }
-                        catch
-                        {
-                            ErrorLog.AddError(ErrorType.Failure, "Phone Remote: Could not communicate with server");
-                        }
-                    }
-                }));
+                    string insideDiv;
+                    string html = PhoneLayout.Instance.SerializeToHtml(true, out insideDiv);
+                    service.SetHtml(html);
+                    service.SetInsideDiv(insideDiv);
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, "Phone Remote: Could not communicate with server");
+                }
             }
         }
 
