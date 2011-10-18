@@ -67,9 +67,11 @@ namespace PhoneModules.Events
                 phoneLayout.EnableButton(button.ID);
 
                 isCreatingForFirstTime = false;
+                
+                phoneConnector.Enable(true);
+
                 phoneConnector.SetNewData();
 
-                phoneConnector.Enable(true);
                 phoneConnector.EventCalled += phoneConnector_EventCalled;
             }
         }
