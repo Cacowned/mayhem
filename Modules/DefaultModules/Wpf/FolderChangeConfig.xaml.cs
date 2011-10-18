@@ -53,8 +53,7 @@ namespace DefaultModules.Wpf
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                FolderToMonitor = dlg.SelectedPath;
-                textBoxDirectory.Text = FolderToMonitor;
+                textBoxDirectory.Text = dlg.SelectedPath;
             }
         }
 
@@ -72,6 +71,10 @@ namespace DefaultModules.Wpf
             {
                 textInvalid.Text = "Invalid folder location";
                 CanSave = false;
+            }
+            else
+            {
+                FolderToMonitor = textBoxDirectory.Text;
             }
 
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;

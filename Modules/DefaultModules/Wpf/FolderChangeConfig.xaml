@@ -3,33 +3,35 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              Width="400">
-       
-            <Grid >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="240" />
-                    <ColumnDefinition Width="60" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition  />
-                    <RowDefinition  />
-                    <RowDefinition  />
-                    <RowDefinition  />
-                </Grid.RowDefinitions>
 
-        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1">Folder location is invalid</TextBlock>
-        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Monitor Folder:</TextBlock>
-        <TextBox Name="textBoxDirectory" TextChanged="textBoxDirectory_TextChanged" Grid.Column="1" Grid.Row="0" />
-        <Button Margin="5,0,0,0" Height="30" Width="50" Click="Button_Click" Grid.Column="2" Grid.Row="0">Browse</Button>
-           
-        <Label Grid.Row="2" Grid.ColumnSpan="3">Choose additional changes to monitor:</Label>
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="240" />
+            <ColumnDefinition Width="60" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="30" />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" TextAlignment="Center" Margin="0,10,0,10" TextWrapping="Wrap">Monitors when files and folders are added and removed from the specified location.</TextBlock>   
+        
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="2">Folder location is invalid</TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Monitor Folder:</TextBlock>
+        <TextBox Name="textBoxDirectory" TextChanged="textBoxDirectory_TextChanged" Grid.Column="1" Grid.Row="1" />
+        <Button Margin="5,0,0,0" Width="50" Click="Button_Click" Grid.Column="2" Grid.Row="1">Browse</Button>
+        
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="3">Choose additional changes to monitor:</TextBlock>
         <CheckBox Name="chk_name" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4" Checked="chk_name_Checked" Click="chk_name_Checked">
-            name changes
+            Name changes
         </CheckBox>
         <CheckBox Name="chk_subdirs" VerticalAlignment="Center" Grid.Column="1" Grid.Row="5" Checked="chk_subdirs_Checked" Click="chk_subdirs_Checked">
-            subfolders
+            Subfolders
         </CheckBox>
     </Grid>
 </src:WpfConfiguration>

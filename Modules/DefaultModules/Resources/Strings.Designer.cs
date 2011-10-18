@@ -61,6 +61,15 @@ namespace DefaultModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot monitor the folder; it does not exist..
+        /// </summary>
+        internal static string FolderChange_FolderDoesntExist {
+            get {
+                return ResourceManager.GetString("FolderChange_FolderDoesntExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Url: &quot;{0}&quot;.
         /// </summary>
         internal static string OpenUrl_ConfigString {
