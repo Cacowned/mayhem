@@ -6,6 +6,7 @@ using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhoneModules.Controls;
 using PhoneModules.Wpf;
+using System.Threading;
 
 namespace PhoneModules.Events
 {
@@ -67,11 +68,9 @@ namespace PhoneModules.Events
                 phoneLayout.EnableButton(button.ID);
 
                 isCreatingForFirstTime = false;
-                
+
                 phoneConnector.Enable(true);
-
                 phoneConnector.SetNewData();
-
                 phoneConnector.EventCalled += phoneConnector_EventCalled;
             }
         }
@@ -83,7 +82,10 @@ namespace PhoneModules.Events
                 phoneLayout.DisableButton(button.ID);
                 phoneConnector.Disable();
                 phoneConnector.EventCalled -= phoneConnector_EventCalled;
-                phoneConnector.SetNewData();
+                ThreadPool.QueueUserWorkItem(o =>
+                {
+                    phoneConnector.SetNewData();
+                });
             }
         }
 
@@ -107,7 +109,10 @@ namespace PhoneModules.Events
         {
             if (!isCreatingForFirstTime)
             {
-                phoneConnector.SetNewData();
+                ThreadPool.QueueUserWorkItem(o =>
+                {
+                    phoneConnector.SetNewData();
+                });
             }
         }
         #endregion
