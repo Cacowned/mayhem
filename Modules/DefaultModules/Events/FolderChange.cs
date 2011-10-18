@@ -21,7 +21,7 @@ namespace DefaultModules.Events
         [DataMember]
         private bool monitorSubDirs;
 
-        private FileSystemWatcher fsWatcher;
+        private FileSystemWatcher fileWatcher;
 
         private FileSystemEventArgs lastArgsCreated;
         private DateTime lastCreatedDate;
@@ -36,18 +36,18 @@ namespace DefaultModules.Events
             // Ensure that an instance of fswatcher always gets created
             try
             {
-                fsWatcher = new FileSystemWatcher(folderToMonitor);
+                fileWatcher = new FileSystemWatcher(folderToMonitor);
             }
             catch
             {
                 Logger.WriteLine("Exc: Folder doesn't seem to exist or be accesible");
-                fsWatcher = new FileSystemWatcher();
+                fileWatcher = new FileSystemWatcher();
             }
 
-            fsWatcher.Changed += OnChanged;
-            fsWatcher.Created += OnChanged;
-            fsWatcher.Deleted += OnChanged;
-            fsWatcher.Renamed += OnRenamed;
+            fileWatcher.Changed += OnChanged;
+            fileWatcher.Created += OnChanged;
+            fileWatcher.Deleted += OnChanged;
+            fileWatcher.Renamed += OnRenamed;
             ConfigureFSMonitor();
         }
 
@@ -56,18 +56,18 @@ namespace DefaultModules.Events
         /// </summary>
         private void ConfigureFSMonitor()
         {
-            fsWatcher.Path = folderToMonitor;
-            fsWatcher.IncludeSubdirectories = monitorSubDirs;
+            fileWatcher.Path = folderToMonitor;
+            fileWatcher.IncludeSubdirectories = monitorSubDirs;
         }
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            fsWatcher.EnableRaisingEvents = true;
+            fileWatcher.EnableRaisingEvents = true;
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            fsWatcher.EnableRaisingEvents = false;
+            fileWatcher.EnableRaisingEvents = false;
         }
 
         public WpfConfiguration ConfigurationControl

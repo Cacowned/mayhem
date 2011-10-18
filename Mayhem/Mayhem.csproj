@@ -255,6 +255,9 @@
     <Resource Include="Images\red-settings.png" />
     <Resource Include="Images\redbutton_off.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\header-devpreview.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

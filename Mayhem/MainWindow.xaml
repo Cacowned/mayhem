@@ -174,7 +174,7 @@
                 </EventTrigger>
             </Grid.Triggers>
             <StackPanel Style="{StaticResource BackgroundGradient}">
-                <Image Source="/Images/header.png" Width="641" Height="137" />
+                <Image Source="/Images/header-devpreview.png" Width="641" Height="137" />
                 <!--<Border BorderThickness="1" CornerRadius="20,20,20,20" BorderBrush="#D7D9DE" Padding="0,0,0,2">-->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="25,10,0,0">
                     <Button Name="buttonEmptyEvent" Content="Choose Event" Style="{StaticResource EmptyEventButton}" Width="243" Height="46" Click="EventListClick" Margin="0,0,0,0" Focusable="False" Cursor="Hand" />

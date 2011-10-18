@@ -17,7 +17,7 @@ namespace DefaultModules.Wpf
             private set;
         }
         
-        private HashSet<Keys> keys_down = new HashSet<Keys>();
+        private HashSet<Keys> keysDown = new HashSet<Keys>();
 
         // Contains the string the interface binds to
         public string KeysDownText
@@ -61,14 +61,14 @@ namespace DefaultModules.Wpf
 
         private void InterceptKeys_OnInterceptKeyDown(Keys key)
         {
-            if (!keys_down.Contains(key))
+            if (!keysDown.Contains(key))
             {
-                if (keys_down.Count == 0)
+                if (keysDown.Count == 0)
                 {
                     KeysToSave.Clear();
                 }
 
-                keys_down.Add(key);
+                keysDown.Add(key);
                 KeysToSave.Add(key);
 
                 UpdateKeysDown();
@@ -77,9 +77,9 @@ namespace DefaultModules.Wpf
 
         private void InterceptKeys_OnInterceptKeyUp(Keys key)
         {
-            if (keys_down.Contains(key))
+            if (keysDown.Contains(key))
             {
-                keys_down.Remove(key);
+                keysDown.Remove(key);
             }
         }
 

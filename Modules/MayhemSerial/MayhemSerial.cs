@@ -83,7 +83,7 @@ namespace MayhemSerial
             serialPortNames = System.IO.Ports.SerialPort.GetPortNames();
 
             // check for validity of names in the list --> remove non-existant ports
-            foreach (string name in connections.Keys)
+            foreach (string name in ConnectionNames)
             {
                 var isValid = SerialPort.GetPortNames().Any(x => string.Compare(x, name, true) == 0);
                 if (!isValid)
@@ -97,7 +97,7 @@ namespace MayhemSerial
             foreach (string name in serialPortNames)
             {
                 // -------- new name detected
-                if (!connections.Keys.Contains(name))
+                if (!ConnectionNames.Contains(name))
                 {
                     SafeFileHandle hFile = CreateFile(@"\\.\" + name, -1073741824, 0, IntPtr.Zero, 3, DwFlagsAndAttributes, IntPtr.Zero);
                     if (!hFile.IsInvalid)
