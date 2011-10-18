@@ -24,15 +24,15 @@ namespace DefaultModules.Events
         [DataMember]
         private int seconds;
 
-        private DispatcherTimer myTimer;
+        private DispatcherTimer timer;
 
         protected override void OnAfterLoad()
         {
-            myTimer = new DispatcherTimer();
-            myTimer.Tick += myTimer_Tick;
+            timer = new DispatcherTimer();
+            timer.Tick += Tick;
         }
 
-        private void myTimer_Tick(object sender, EventArgs e)
+        private void Tick(object sender, EventArgs e)
         {
             Trigger();
         }
@@ -62,7 +62,7 @@ namespace DefaultModules.Events
         {
             try
             {
-                myTimer.Interval = new TimeSpan(hours, minutes, seconds);
+                timer.Interval = new TimeSpan(hours, minutes, seconds);
             }
             catch (Exception e)
             {
@@ -75,12 +75,12 @@ namespace DefaultModules.Events
             // Update our interval with the current values
             SetInterval();
 
-            myTimer.Start();
+            timer.Start();
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            myTimer.Stop();
+            timer.Stop();
         }
     }
 }

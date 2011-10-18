@@ -8,21 +8,25 @@ namespace DefaultModules
 {
     internal class MPlayer
     {
-        public MediaPlayer MediaPlayer = new MediaPlayer();
+        private MediaPlayer mediaPlayer;
 
-        private Thread runThread = null;
+        private Thread runThread;
 
-        private Uri fileToPlay = null;
+        private Uri fileToPlay;
 
-        private bool isPlaying = false;
+        private bool isPlaying;
 
         public MPlayer()
         {
-            runThread = new Thread(new ThreadStart(t_StartPlaying));
+            mediaPlayer = new MediaPlayer();
+            fileToPlay = null;
+            isPlaying = false;
+
+            runThread = new Thread(new ThreadStart(StartPlaying));
             runThread.IsBackground = true;
         }
 
-        private void mediaplayer_MediaFailed(object sender, ExceptionEventArgs e)
+        private void MediaFailed(object sender, ExceptionEventArgs e)
         {
             Logger.WriteLine("Media Playback Failed");
         }
@@ -37,38 +41,38 @@ namespace DefaultModules
             }
         }
 
-        private void t_StartPlaying()
+        private void StartPlaying()
         {
             Dispatcher.CurrentDispatcher.VerifyAccess();
-            MediaPlayer = new MediaPlayer();
-            MediaPlayer.MediaEnded += new EventHandler(p_MediaEnded);
-            MediaPlayer.MediaOpened += new EventHandler(p_MediaOpened);
-            MediaPlayer.MediaFailed += new EventHandler<ExceptionEventArgs>(mediaplayer_MediaFailed);
-            MediaPlayer.Open(fileToPlay);
-            MediaPlayer.Play();
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.MediaEnded += new EventHandler(MediaEnded);
+            mediaPlayer.MediaOpened += new EventHandler(MediaOpened);
+            mediaPlayer.MediaFailed += new EventHandler<ExceptionEventArgs>(MediaFailed);
+            mediaPlayer.Open(fileToPlay);
+            mediaPlayer.Play();
             Dispatcher.Run();
         }
 
         public void Stop()
         {
-            MediaPlayer.Dispatcher.BeginInvoke(new Action(delegate
+            mediaPlayer.Dispatcher.BeginInvoke(new Action(delegate
             {
-                MediaPlayer.Stop();
+                mediaPlayer.Stop();
             }),
                 DispatcherPriority.Send);
         }
 
-        private void p_MediaOpened(object sender, EventArgs e)
+        private void MediaOpened(object sender, EventArgs e)
         {
             Logger.WriteLine("Media opened");
         }
 
-        private void p_MediaEnded(object sender, EventArgs e)
+        private void MediaEnded(object sender, EventArgs e)
         {
             isPlaying = false;
             Logger.WriteLine("Media Ended!");
-            MediaPlayer.Stop();
-            MediaPlayer.Position = TimeSpan.Zero;
+            mediaPlayer.Stop();
+            mediaPlayer.Position = TimeSpan.Zero;
         }
     }
 }

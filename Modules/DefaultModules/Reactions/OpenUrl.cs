@@ -42,7 +42,7 @@ namespace DefaultModules.Reactions
                         System.Diagnostics.Process.Start(startInfo);
                         startInfo = null;
                     }
-                    catch (Exception exc2)
+                    catch
                     {
                         ErrorLog.AddError(ErrorType.Failure, Strings.OpenUrl_CouldntOpenUrl);
                     }
