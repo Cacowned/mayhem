@@ -5,6 +5,7 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using DefaultModules.Resources;
 
 namespace DefaultModules.Events
 {
@@ -23,8 +24,7 @@ namespace DefaultModules.Events
 
         private FileSystemWatcher fileWatcher;
 
-        private FileSystemEventArgs lastArgsCreated;
-        private DateTime lastCreatedDate;
+        private DateTime lastTriggeredDate;
 
         protected override void OnLoadDefaults()
         {
@@ -34,21 +34,12 @@ namespace DefaultModules.Events
         protected override void OnAfterLoad()
         {
             // Ensure that an instance of fswatcher always gets created
-            try
-            {
-                fileWatcher = new FileSystemWatcher(folderToMonitor);
-            }
-            catch
-            {
-                Logger.WriteLine("Exc: Folder doesn't seem to exist or be accesible");
-                fileWatcher = new FileSystemWatcher();
-            }
+            fileWatcher = new FileSystemWatcher();
 
             fileWatcher.Changed += OnChanged;
             fileWatcher.Created += OnChanged;
             fileWatcher.Deleted += OnChanged;
             fileWatcher.Renamed += OnRenamed;
-            ConfigureFSMonitor();
         }
 
         /// <summary>
@@ -62,7 +53,16 @@ namespace DefaultModules.Events
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            fileWatcher.EnableRaisingEvents = true;
+            try
+            {
+                ConfigureFSMonitor();
+                fileWatcher.EnableRaisingEvents = true;
+            }
+            catch
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.FolderChange_FolderDoesntExist);
+                e.Cancel = true;
+            }
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
@@ -84,7 +84,6 @@ namespace DefaultModules.Events
             folderToMonitor = config.FolderToMonitor;
             monitorName = config.MonitorName;
             monitorSubDirs = config.SubDirectories;
-            ConfigureFSMonitor();
         }
 
         public string GetConfigString()
@@ -97,11 +96,11 @@ namespace DefaultModules.Events
                 substr = folderToMonitor.Substring(pathLength - cutoff, cutoff);
             else
                 substr = folderToMonitor;
-            conf += "[...]" + substr;
+            conf += "..." + substr;
             if (monitorName)
-                conf += " NAME ";
+                conf += ", Renames";
             if (monitorSubDirs)
-                conf += " SUBDIRS ";
+                conf += ", Subdirs";
             return conf;
         }
 
@@ -113,25 +112,12 @@ namespace DefaultModules.Events
         private void OnChanged(object o, FileSystemEventArgs a)
         {
             Logger.WriteLine(a.FullPath);
-
-            // filter out repeadted triggers when a file is created
-            if (a.ChangeType == WatcherChangeTypes.Created)
-            {
-                lastArgsCreated = a;
-                lastCreatedDate = DateTime.Now;
-            }
-            else if (a.ChangeType == WatcherChangeTypes.Changed)
-            {
-                DateTime now = DateTime.Now;
-                TimeSpan ts = now - lastCreatedDate;
-
-                // don't fire any event --> the change event is caused by the previous "created" event
-                if (a.FullPath == lastArgsCreated.FullPath || ts.TotalMilliseconds <= 10)
-                    return;
-            }
-
             Logger.WriteLine("Args: " + a.ChangeType + " Fname " + a.Name);
-            Trigger();
+            
+            if (!TriggeredRecently())
+            {
+                Trigger();
+            }
         }
 
         /// <summary>
@@ -143,7 +129,32 @@ namespace DefaultModules.Events
         {
             Logger.WriteLine("Args: " + a.ChangeType + " " + a.Name);
             if (monitorName)
-                Trigger();
+            {
+                if (!TriggeredRecently())
+                {
+                    Trigger();
+                }
+            }
+        }
+
+        // Returns true if we have triggered recently
+        private bool TriggeredRecently()
+        {
+            var shouldReturn = false;
+
+            // Don't trigger if we have triggered within the last 10 milliseconds
+            if (lastTriggeredDate != null)
+            {
+                var time = DateTime.Now;
+                if ((time - lastTriggeredDate).TotalMilliseconds <= 50)
+                {
+                    shouldReturn = true;
+                }
+            }
+
+            lastTriggeredDate = DateTime.Now;
+
+            return shouldReturn;
         }
     }
 }
