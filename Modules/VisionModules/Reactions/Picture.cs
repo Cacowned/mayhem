@@ -20,6 +20,7 @@ using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
 using MayhemOpenCVWrapper.LowLevel;
+using System.Runtime.CompilerServices;
 
 namespace VisionModules.Reactions
 {
@@ -87,6 +88,7 @@ namespace VisionModules.Reactions
             image.Dispose();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnEnabling(EnablingEventArgs e)
         {
             cameraDriver = CameraDriver.Instance;
@@ -100,6 +102,7 @@ namespace VisionModules.Reactions
                 camera.StartFrameGrabbing();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
             if (!e.IsConfiguring && camera != null)
