@@ -365,7 +365,7 @@ namespace MayhemOpenCVWrapper
                 IsInitialized = false;
                 Running = false;
                 // Wait for frame grab thread to end or 500ms timeout to elapse
-                if (grabFramesReset.WaitOne(10000))
+                if (grabFramesReset.WaitOne())
                 {
                     try
                     {
