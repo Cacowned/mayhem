@@ -142,9 +142,10 @@ namespace MayhemOpenCVWrapper
         // fifo buffer that stores last x images
         private Queue<BitmapTimestamp> loopBuffer = new Queue<BitmapTimestamp>();
         // check for thread termination   
-        private ManualResetEvent grabFramesReset;
+        private AutoResetEvent grabFramesReset;
         // status of video recording
         private bool recordingVideo;
+     
         #endregion
 
         #region Constructor / Destructor
@@ -157,7 +158,7 @@ namespace MayhemOpenCVWrapper
         {
             this.Info = info;
             this.Settings = settings;
-            grabFramesReset = new ManualResetEvent(false);
+            grabFramesReset = new AutoResetEvent(false);
         }
 
         /// <summary>
@@ -364,17 +365,23 @@ namespace MayhemOpenCVWrapper
                 IsInitialized = false;
                 Running = false;
                 // Wait for frame grab thread to end or 500ms timeout to elapse
-                grabFramesReset.WaitOne(500);
-                try
+                if (grabFramesReset.WaitOne(10000))
                 {
-                    OpenCVDLL.OpenCVBindings.StopCamera(this.Info.DeviceId);
+                    try
+                    {
+                        OpenCVDLL.OpenCVBindings.StopCamera(this.Info.DeviceId);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLine("Exception While Shutting Down Cam: " + ex);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    Logger.WriteLine("Exception While Shutting Down Cam: " + ex);
+                    Logger.WriteLine("Problem Stopping Frame Grab Thread"); 
                 }
 
-                Thread.Sleep(200);
+                //Thread.Sleep(200);
             }
         }
         #endregion

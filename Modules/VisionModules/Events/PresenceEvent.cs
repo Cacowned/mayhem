@@ -20,6 +20,7 @@ using MayhemOpenCVWrapper.LowLevel;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
+using System.Runtime.CompilerServices;
 
 namespace VisionModules.Events
 {
@@ -136,6 +137,7 @@ namespace VisionModules.Events
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnEnabling(EnablingEventArgs e)
         {
             Logger.WriteLine("Enable");
@@ -151,6 +153,7 @@ namespace VisionModules.Events
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
             Logger.WriteLine("Disable");

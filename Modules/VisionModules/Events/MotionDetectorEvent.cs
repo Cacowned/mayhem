@@ -21,6 +21,7 @@ using MayhemWpf.UserControls;
 using MayhemOpenCVWrapper.LowLevel;
 using System.Threading;
 using VisionModules.Events.Components;
+using System.Runtime.CompilerServices;
 
 namespace VisionModules.Events
 {
@@ -130,6 +131,7 @@ namespace VisionModules.Events
             selectedDeviceIndex = camera.Info.DeviceId;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnEnabling(EnablingEventArgs e)
         {
             base.OnEnabling(e);
@@ -150,6 +152,7 @@ namespace VisionModules.Events
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
             base.OnDisabled(e);
