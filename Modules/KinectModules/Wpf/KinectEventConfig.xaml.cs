@@ -156,13 +156,10 @@ namespace KinectModules.Wpf
             } // for each skeleton
         }
 
-        public override void OnSave()
+        public override void  OnClosing()
         {
-         
-
-            
-
+ 	           nui.Uninitialize();       
         }
-
+        
     }
 }
