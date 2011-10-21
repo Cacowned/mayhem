@@ -8,6 +8,7 @@ using System.Threading;
 using MayhemCore;
 using System.IO;
 using System.Drawing.Imaging;
+using MayhemOpenCVWrapper;
 
 namespace VisionModules.Helpers
 {
@@ -15,18 +16,40 @@ namespace VisionModules.Helpers
     class HTTPImageServer
     {
         private string prefix;
-        private int port;
+        private static int port = 8080;
         private HttpListener httpListener = new HttpListener();
         private bool threadRunning = true;
         private AutoResetEvent threadStopEvent = new AutoResetEvent(false);
         private AutoResetEvent listenerThreadLock = new AutoResetEvent(false);
         private AutoResetEvent refresh = new AutoResetEvent(false);
-        private Bitmap showBitmap; 
+        private Bitmap showBitmap;
+        private static Dictionary<ImagerBase, HTTPImageServer> servers = new Dictionary<ImagerBase, HTTPImageServer>();
 
-        public HTTPImageServer(int port )
+        public int Port
+        {
+            get;
+            private set;
+        }
+
+        public static HTTPImageServer ServerForCamera(ImagerBase camera)
+        {
+            if (servers.Keys.Contains(camera))
+            {
+                return servers[camera];
+            }
+            else
+            {
+                HTTPImageServer s = new HTTPImageServer(port);
+                port++;
+                servers[camera] = s;
+                return servers[camera];
+            }
+        }
+
+        private HTTPImageServer(int aPort )
         {
             
-            this.port = port;
+            this.Port = aPort;
             prefix = "http://localhost:" + port + "/";
             httpListener.Prefixes.Add(prefix);
             showBitmap = new Bitmap(640, 480, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
