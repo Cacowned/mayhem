@@ -15,12 +15,12 @@ namespace VisionModules.Helpers
     class HTTPImageServer
     {
         private string prefix;
-        private Bitmap serveImage; 
         private int port;
         private HttpListener httpListener = new HttpListener();
         private bool threadRunning = true;
         private AutoResetEvent threadStopEvent = new AutoResetEvent(false);
         private AutoResetEvent listenerThreadLock = new AutoResetEvent(false);
+        private AutoResetEvent refresh = new AutoResetEvent(false);
         private Bitmap showBitmap; 
 
         public HTTPImageServer(int port )
@@ -51,20 +51,38 @@ namespace VisionModules.Helpers
           
         }
 
-        public void ProcessRequestsThread(object o)
+        /// <summary>
+        /// Update Image to be served
+        /// </summary>
+        /// <param name="b">Input Image</param>
+        public void UpdateImage(Bitmap b)
+        {
+            lock (showBitmap)
+            {
+                if (showBitmap != null)
+                    showBitmap.Dispose();
+                showBitmap = b;
+            }
+            // allow refresh
+            refresh.Set();
+        }
+
+        private void ProcessRequestsThread(object o)
         {
             while (threadRunning)
             {
                 IAsyncResult result = httpListener.BeginGetContext(new AsyncCallback(ListenerCallback), httpListener);
                 Logger.WriteLine("Async request handled");
+                // wait for last listenercallback to terminate
                 listenerThreadLock.WaitOne();
+               
             }
             threadStopEvent.Set();
             Logger.WriteLine("ProcessRequestThread Stopped!");
            
         }
 
-        public void ListenerCallback(IAsyncResult result)
+        private void ListenerCallback(IAsyncResult result)
         {
            
             HttpListener listener = result.AsyncState as HttpListener;
@@ -77,27 +95,19 @@ namespace VisionModules.Helpers
             string[] segments = context.Request.Url.Segments;
 
             if (segments.Last().Equals("mayhem.jpg"))
-            {
-                Random r = new Random(DateTime.Now.Millisecond);
-                int px = (int)( r.NextDouble() * (double) showBitmap.Width);
-                int py = (int)( r.NextDouble() * (double)showBitmap.Height);
-
-                Graphics g = Graphics.FromImage(showBitmap);
-
-              //  g.DrawArc(new SolidBrush(), px, py, 10, 10, 0, 360); 
-                
-
-
-                showBitmap.SetPixel(px, py, Color.Red);
+            {           
                 Logger.WriteLine("Sending Image File");
                 response.ContentType = "image/jpeg";
                 System.IO.Stream output = response.OutputStream;
-                showBitmap.Save(output, ImageFormat.Jpeg);
+                showBitmap.Save(output, System.Drawing.Imaging.ImageFormat.Jpeg);              
                 output.Close();
             }
-            else
+            else if (segments.Last().Equals("/"))
             {
+                
                 string responseString = "<HTML><HEAD><META HTTP-EQUIV=\"REFRESH\" CONTENT=\"1\"></HEAD><BODY><IMG SRC=\"mayhem.jpg\"></IMG></BODY></HTML>";
+                // wait for refresh lock to be released
+                refresh.WaitOne();
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                 // Get a response stream and write the response to it.
                 response.ContentLength64 = buffer.Length;
