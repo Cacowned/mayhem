@@ -102,7 +102,7 @@ namespace VisionModules.Events
             }
 
             presenceDetector = new PresenceDetectorComponent(320, 240);
-            presenceHandler = new PresenceDetectorComponent.DetectionHandler(m_OnPresenceUpdate);
+            presenceHandler = new PresenceDetectorComponent.DetectionHandler(m_OnPresenceUpdate) ;
         }
 
         public WpfConfiguration ConfigurationControl
@@ -166,7 +166,7 @@ namespace VisionModules.Events
             }
         }
 
-        public void m_OnPresenceUpdate(object sender, System.Drawing.Point[] points)
+        private void m_OnPresenceUpdate(object sender, DetectionEventArgs points)
         {
             PresenceDetectorComponent presenceDetector = sender as PresenceDetectorComponent;
             bool presence = presenceDetector.presence;

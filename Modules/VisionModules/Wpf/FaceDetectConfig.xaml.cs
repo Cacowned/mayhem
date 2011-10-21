@@ -163,8 +163,9 @@ namespace VisionModules.Wpf
          * Callback from the face detector
          * </summary>
          */
-        void m_onFaceDetected(object sender, List<System.Drawing.Point> points)
+        void m_onFaceDetected(object sender, DetectionEventArgs pts)
         {
+            List<System.Drawing.Point> points = pts.Points; 
             Logger.WriteLine("Got Points from Face Detector!");
             // update the points in a synchronized block
             lock (this)

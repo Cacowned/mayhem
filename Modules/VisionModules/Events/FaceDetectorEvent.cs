@@ -71,8 +71,9 @@ namespace VisionModules.Events
             
         }
 
-        void m_onFaceDetectUpdate(object sender, List<System.Drawing.Point> points)
+        void m_onFaceDetectUpdate(object sender, DetectionEventArgs pts)
         {
+            List<System.Drawing.Point> points = pts.Points;
             // number of faces is points.Size() / 4
             // as each faces is returned with its own bounding box
             int nrFacesDetected = points.Count / 2;

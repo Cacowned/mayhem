@@ -11,6 +11,7 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System;
 
 namespace MayhemOpenCVWrapper
 {
@@ -55,21 +56,32 @@ namespace MayhemOpenCVWrapper
             int destHeight = (int)(sourceHeight * nPercent);
 
             Bitmap bmPhoto = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            bmPhoto.SetResolution(imgPhoto.HorizontalResolution,
-                             imgPhoto.VerticalResolution);
+            try
+            {
+                bmPhoto.SetResolution(imgPhoto.HorizontalResolution,
+                                 imgPhoto.VerticalResolution);
 
-            Graphics grPhoto = Graphics.FromImage(bmPhoto);
-            grPhoto.Clear(System.Drawing.Color.Red);
-            grPhoto.InterpolationMode =
-                    InterpolationMode.HighQualityBicubic;
+                Graphics grPhoto = Graphics.FromImage(bmPhoto);
+                grPhoto.Clear(System.Drawing.Color.Red);
+                grPhoto.InterpolationMode =
+                        InterpolationMode.HighQualityBicubic;
 
-            grPhoto.DrawImage(imgPhoto,
-                new System.Drawing.Rectangle(destX, destY, destWidth, destHeight),
-                new System.Drawing.Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
-                GraphicsUnit.Pixel);
+                grPhoto.DrawImage(imgPhoto,
+                    new System.Drawing.Rectangle(destX, destY, destWidth, destHeight),
+                    new System.Drawing.Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
+                    GraphicsUnit.Pixel);
+                grPhoto.Dispose();
+            }
+            catch (Exception ex)
+            {
+                bmPhoto.Dispose();
+            }
+            
+           
 
-            grPhoto.Dispose();
-            return bmPhoto;
+            
+            // bmPhoto is not disposed, as it is returned. 
+            return  bmPhoto;
         }
     }
 }

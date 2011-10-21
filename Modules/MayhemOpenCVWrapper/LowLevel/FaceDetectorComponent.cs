@@ -25,9 +25,9 @@ namespace MayhemOpenCVWrapper.LowLevel
     /// <summary>
     /// Face detector component of the face detector event. Can also be used as a standalone face detector. 
     /// </summary>
-    public class FaceDetectorComponent : CameraImageListener
+    public class FaceDetectorComponent : CameraImageListener, IDisposable
     {     
-        public delegate void DetectionHandler(object sender, List<Point> points);
+        public delegate void DetectionHandler(object sender, DetectionEventArgs e);
         public event DetectionHandler OnFaceDetected;
         public Rect DetectionBoundary = new Rect(0, 0, 0, 0);
 
@@ -49,8 +49,8 @@ namespace MayhemOpenCVWrapper.LowLevel
 
         ~FaceDetectorComponent()
         {
-            Logger.WriteLine("dtor");
-            fd.Dispose();
+            Dispose(false);
+            return;
         }
        
         /// <summary>
@@ -92,7 +92,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             if (numFacesCoords == 0)
             {
                 if (OnFaceDetected != null)
-                    OnFaceDetected(this, new List<Point>());
+                    OnFaceDetected(this, new DetectionEventArgs(new List<Point>()));
                 return;
             }
                 
@@ -116,7 +116,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 if (DetectionBoundary.Width == 0 && DetectionBoundary.Height == 0)
                 {
                     if (OnFaceDetected != null)
-                         OnFaceDetected(this, points);
+                         OnFaceDetected(this, new DetectionEventArgs(points));
                 }
                 else
                 {
@@ -140,7 +140,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                     if (dataBounds.IntersectsWith(DetectionBoundary))
                     {
                         if (OnFaceDetected != null)
-                            OnFaceDetected(this, points);
+                            OnFaceDetected(this, new DetectionEventArgs(points));
                     }
                 }             
             }
@@ -164,7 +164,22 @@ namespace MayhemOpenCVWrapper.LowLevel
             }
         }
 
+        protected virtual void Dispose(bool dispose)
+        {
+            if (dispose)
+            {
 
+            }
+            else
+            {
+                fd.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
     }
 
        
