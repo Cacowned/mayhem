@@ -17,13 +17,14 @@ using System.Threading;
 using AviFile;
 using MayhemCore;
 using System.Drawing;
+using MayhemOpenCVWrapper.LowLevel;
 
 namespace MayhemOpenCVWrapper
 {
     public class Video
     {
-        public event Action<bool> OnVideoSaved;
-
+        public delegate void VideoSavedEventHandler(object sender, VideoSavedEventArgs e);
+        public event VideoSavedEventHandler OnVideoSaved;
         private List<Bitmap> video_frames = new List<Bitmap>();
 
         // video stream settings
@@ -110,7 +111,7 @@ namespace MayhemOpenCVWrapper
             Logger.WriteLine("Created AVI with " + frames + " frames.");
             if (this.OnVideoSaved != null)
             {
-                OnVideoSaved(true);
+                OnVideoSaved(this, new VideoSavedEventArgs(true));
             }
         }     
     }
