@@ -18,6 +18,7 @@ namespace VisionModules.Helpers
         private HttpListener httpListener = new HttpListener();
         private bool threadRunning = true;
         private AutoResetEvent threadStopEvent = new AutoResetEvent(false);
+        private AutoResetEvent listenerThreadLock = new AutoResetEvent(false);
 
         public HTTPImageServer(int port )
         {
@@ -31,6 +32,7 @@ namespace VisionModules.Helpers
         {
             Logger.WriteLine("Starting Server");
             httpListener.Start();
+            threadRunning = true; 
             ThreadPool.QueueUserWorkItem((o) => ProcessRequestsThread(o));
 
         }
@@ -39,19 +41,23 @@ namespace VisionModules.Helpers
         {
             Logger.WriteLine("Stopping Server");
             threadRunning = false;
+            listenerThreadLock.Set();
             threadStopEvent.WaitOne();
-            httpListener.Stop();
+            
+          
         }
 
         public void ProcessRequestsThread(object o)
         {
-            if (threadRunning)
+            while (threadRunning)
             {
                 IAsyncResult result = httpListener.BeginGetContext(new AsyncCallback(ListenerCallback), httpListener);
-                result.AsyncWaitHandle.WaitOne();
                 Logger.WriteLine("Async request handled");
+                listenerThreadLock.WaitOne();
             }
             threadStopEvent.Set();
+            Logger.WriteLine("ProcessRequestThread Stopped!");
+           
         }
 
         public void ListenerCallback(IAsyncResult result)
@@ -63,7 +69,7 @@ namespace VisionModules.Helpers
             // Obtain a response object.
             HttpListenerResponse response = context.Response;
             // Construct a response.
-            string responseString = "<HTML><BODY><IMG src=\"mayhem.jpg\"><IMG/></BODY></HTML>";
+            string responseString = "<HTML><BODY>It Works!</BODY></HTML>";
             byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
             // Get a response stream and write the response to it.
             response.ContentLength64 = buffer.Length;
@@ -71,6 +77,7 @@ namespace VisionModules.Helpers
             output.Write(buffer, 0, buffer.Length);
             // You must close the output stream.
             output.Close();
+            listenerThreadLock.Set();
         }
     }
 }
