@@ -105,7 +105,7 @@ namespace VisionModules.Reactions
             {
                 videoSaving = true;
                 Video v = new Video(camera, path, shouldCompress);
-                v.OnVideoSaved += new Action<bool>(v_OnVideoSaved);
+                v.OnVideoSaved += new Video.VideoSavedEventHandler(v_OnVideoSaved);
             }
             else
             {
@@ -118,11 +118,12 @@ namespace VisionModules.Reactions
         /// Called when the video is done saving itself
         /// </summary>
         /// <param name="obj"></param>
-        private void v_OnVideoSaved(bool obj)
+        private void v_OnVideoSaved(object sender,VideoSavedEventArgs e)
         {
             camera.IsRecordingVideo = true;
             videoSaving = false;
-            Logger.WriteLine("Video saved successfully to: " + lastVideoSaved);
+            if (e.SavedSuccessfully)
+                Logger.WriteLine("Video saved successfully to: " + lastVideoSaved);
         }
 
         /// <summary>

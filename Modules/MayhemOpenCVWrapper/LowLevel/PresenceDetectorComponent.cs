@@ -19,7 +19,7 @@ namespace MayhemOpenCVWrapper.LowLevel
     /// <summary>
     /// Presence detector component
     /// </summary>
-    public class PresenceDetectorComponent : CameraImageListener
+    public class PresenceDetectorComponent : CameraImageListener, IDisposable
     {
         /// <summary>
         /// Returns the value of the default sensitivity set in the presence detector dll. 
@@ -34,7 +34,7 @@ namespace MayhemOpenCVWrapper.LowLevel
 
         private OpenCVDLL.PresenceDetector pd;
 
-        public delegate void DetectionHandler(object sender, Point[] points);
+        public delegate void DetectionHandler(object sender, DetectionEventArgs e);
         public event DetectionHandler OnPresenceUpdate;
 
         /// <summary>
@@ -80,9 +80,9 @@ namespace MayhemOpenCVWrapper.LowLevel
         }
 
         ~PresenceDetectorComponent()
-        {
-            Logger.WriteLine("dtor");
-            pd.Dispose();
+        {  
+            Dispose(false);
+            return;
         }
 
         /// <summary>
@@ -122,8 +122,26 @@ namespace MayhemOpenCVWrapper.LowLevel
 
             if (OnPresenceUpdate != null && pd.IsInitialized)
             {
-                OnPresenceUpdate(this, points);
+                OnPresenceUpdate(this, new DetectionEventArgs(points));
             }
+        }
+
+        protected virtual void Dispose(bool dispose)
+        {
+            if (dispose)
+            {
+
+            }
+            else
+            {
+                pd.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

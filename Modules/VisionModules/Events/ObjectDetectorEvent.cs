@@ -100,8 +100,9 @@ namespace VisionModules.Events
             }
         }
 
-        void m_onObjectDetected(object sender, List<Point> matchingKeyPoints)
+        void m_onObjectDetected(object sender, DetectionEventArgs e)
         {
+            List<Point> imageMatchingPoints = e.Points;
             // TODO
             TimeSpan ts = DateTime.Now - lastObjectsDetected;
 
