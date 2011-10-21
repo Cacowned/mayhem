@@ -192,6 +192,7 @@ namespace MayhemOpenCVWrapper
                     currentBlock = (currentBlock + 1) % MAX_BUFFER_ITEMS;
                     //fs.Flush();
                     bitmap.Dispose();
+                    ms.Dispose();
                 }
                 // block thread until signaled (when new data is placed on the queue) 
                 signalNewBitmaps.WaitOne();
@@ -242,6 +243,7 @@ namespace MayhemOpenCVWrapper
                     Image img = Image.FromStream(ms);
                     bitmaps.Add(new Bitmap(img));
                     blck = (blck + 1) % MAX_BUFFER_ITEMS;
+                    ms.Dispose();
                 }
             }
             return bitmaps;
