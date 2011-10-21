@@ -12,7 +12,7 @@ using System.Windows.Media;
 namespace KinectModules
 {
     [DataContract]
-    [MayhemModule("HTTP Image Server", "Runs a simple http server and updates the image when triggered")]
+    [MayhemModule("Kinect Event", "Triggers when a Kinect gesture is detected")]
     public class KinectSkeletalGesture : EventBase, IWpfConfigurable
     {
 
