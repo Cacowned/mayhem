@@ -14,7 +14,7 @@ using System.Drawing;
 
 namespace MayhemOpenCVWrapper
 {
-    public class BitmapTimestamp : IDisposable, ICloneable
+    public sealed class BitmapTimestamp : IDisposable, ICloneable
     {
         public DateTime TimeStamp = DateTime.Now;
         public Bitmap Image;
@@ -34,21 +34,20 @@ namespace MayhemOpenCVWrapper
         /// Explicitly dispose of the Bitmap, as they tend to stick around and mess up the memory in .net
         /// </summary>
         ~BitmapTimestamp()
-        {
-            if (Image != null)
-                Image.Dispose();
+        {     
+            Dispose();
         }
 
         public void Dispose()
         {
-            Image.Dispose();
-            Image = null; 
+            if (Image != null)
+                Image.Dispose(); 
+            GC.SuppressFinalize(this);
         }
 
         public object Clone()
-        {
-            Bitmap imageCopy = new Bitmap(Image);
-            BitmapTimestamp objClone = new BitmapTimestamp(imageCopy, this.TimeStamp);
+        {          
+            BitmapTimestamp objClone = new BitmapTimestamp( new Bitmap(Image), this.TimeStamp);
             return objClone; 
         }
     }

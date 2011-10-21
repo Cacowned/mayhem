@@ -24,7 +24,7 @@ namespace MayhemOpenCVWrapper.LowLevel
     /// </summary>
     public class ObjectDetectorComponent : CameraImageListener
     {
-        public delegate void DetectionHandler(object sender, List<Point> points);
+        public delegate void DetectionHandler(object sender, DetectionEventArgs e);
         public event DetectionHandler OnObjectDetected;
 
         //private Camera.ImageUpdateHandler imageUpdateHandler;
@@ -238,7 +238,7 @@ namespace MayhemOpenCVWrapper.LowLevel
                 // TODO: --------------------- firing mechanism
                 if (OnObjectDetected != null && imageMatchingPoints.Count>= DetectThresh && frameCount > 20)
                 {
-                    OnObjectDetected(this, imageMatchingPoints);
+                    OnObjectDetected(this, new DetectionEventArgs( imageMatchingPoints));
                 }
                 // --------------------------------------------
             }

@@ -27,7 +27,7 @@ namespace MayhemOpenCVWrapper
     /// The camera maintains a 30s disk buffer to enable the generation of video files from sequences of camera frames
     /// as well as a 30s, 4 frame-per-second in-memory image buffer for capturing still shots or similar tasks. 
     /// </summary>
-    public sealed class Camera : ImagerBase, IBufferingImager
+    public sealed class Camera : ImagerBase, IBufferingImager, IDisposable
     {
         #region Fields and Properties     
         // update the loop only every quarter second -- this should be sufficient for the Picture Event
@@ -227,7 +227,7 @@ namespace MayhemOpenCVWrapper
         public override Bitmap ImageAsBitmap()
         {
             int w = this.Settings.ResX;
-            int h = this.Settings.ResY; 
+            int h = this.Settings.ResY;
             try
             {
                 Bitmap backBuffer = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -249,13 +249,17 @@ namespace MayhemOpenCVWrapper
                 }
                 // Unlock the bits.
                 backBuffer.UnlockBits(bmpData);
+
+                // code analysis warning: backbuffer does not get disposed, but is returned
                 return backBuffer;
             }
             catch (ArgumentException ex)
             {
                 Logger.WriteLine("ArgumentException: " + ex);
-                return new Bitmap(w, h);      
+
+                return new Bitmap(w, h);
             }
+           
         }
 
         #endregion            
@@ -523,6 +527,12 @@ namespace MayhemOpenCVWrapper
             {
                 return DateTime.MinValue;
             }
+        }
+
+        public void Dispose()
+        {
+            videoDiskBuffer.Dispose();
+            grabFramesReset.Dispose();
         }
     }
         #endregion

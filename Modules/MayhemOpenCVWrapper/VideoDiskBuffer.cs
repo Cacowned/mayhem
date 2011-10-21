@@ -33,7 +33,7 @@ namespace MayhemOpenCVWrapper
     /// By default, the video disk buffer buffers 30s of video frames from each of the cameras active in Mayhem. 
     /// The buffer is organized as a ring buffer, that over 
     /// </summary>
-    internal class VideoDiskBuffer
+    internal class VideoDiskBuffer : IDisposable
     {
         private static int inst_cnt = 0; 
         private readonly string BUFFER_FILENAME;
@@ -174,24 +174,35 @@ namespace MayhemOpenCVWrapper
                 {
                     Bitmap bitmap = writeQueue.Dequeue();
                     MemoryStream ms = new MemoryStream();
-                    bitmap.Save(ms, ImageFormat.Bmp);
-                    long next_offset = GetOffsetForIndex(currentBlock);
-                    //Logger.WriteLine("Writing to Block " + currentBlock + " Offset " + string.Format("{0:x}", next_offset));
-                    // lock access to the file
-                    lock (operation_locker)
+                    try
                     {
-                        // seek to correct position
-                        fs.Seek(next_offset, SeekOrigin.Begin);
-                        // serialize object in memory
-                        byte[] memBytes = ms.GetBuffer();
-                        fs.Write(memBytes, 0, memBytes.Length);
-                        block_bytes[currentBlock] = memBytes.Length;
+                        bitmap.Save(ms, ImageFormat.Bmp);
+                        long next_offset = GetOffsetForIndex(currentBlock);
+                        //Logger.WriteLine("Writing to Block " + currentBlock + " Offset " + string.Format("{0:x}", next_offset));
+                        // lock access to the file
+                        lock (operation_locker)
+                        {
+                            // seek to correct position
+                            fs.Seek(next_offset, SeekOrigin.Begin);
+                            // serialize object in memory
+                            byte[] memBytes = ms.GetBuffer();
+                            fs.Write(memBytes, 0, memBytes.Length);
+                            block_bytes[currentBlock] = memBytes.Length;
+                        }
+                        writtenBlocks++;
+                        // update ring buffer index
+                        currentBlock = (currentBlock + 1) % MAX_BUFFER_ITEMS;
+                        //fs.Flush();
                     }
-                    writtenBlocks++;
-                    // update ring buffer index
-                    currentBlock = (currentBlock + 1) % MAX_BUFFER_ITEMS;
-                    //fs.Flush();
-                    bitmap.Dispose();
+                    catch (Exception ex)
+                    {
+
+                    }
+                    finally
+                    {
+                        bitmap.Dispose();
+                        ms.Dispose();
+                    }
                 }
                 // block thread until signaled (when new data is placed on the queue) 
                 signalNewBitmaps.WaitOne();
@@ -229,22 +240,40 @@ namespace MayhemOpenCVWrapper
                 int blck = begin % MAX_BUFFER_ITEMS;
                 if (blck < 0)
                     blck += MAX_BUFFER_ITEMS;
-        
-                for (int i = begin; i < end; i++)
-                {                   
-                    long offset = GetOffsetForIndex(blck);
-                    int byteCount = (int)block_bytes[blck];
-                    Logger.WriteLine("Deserializing Block " + blck + " offset "+ string.Format("{0:x}", offset) + " nr of bytes " + byteCount);
-                    byte[] bytes = new byte[byteCount];
-                    fs.Seek(offset, SeekOrigin.Begin);
-                    fs.Read(bytes, 0, byteCount);
-                    MemoryStream ms = new MemoryStream(bytes);
-                    Image img = Image.FromStream(ms);
-                    bitmaps.Add(new Bitmap(img));
-                    blck = (blck + 1) % MAX_BUFFER_ITEMS;
-                }
+
+                    for (int i = begin; i < end; i++)
+                    {
+                        long offset = GetOffsetForIndex(blck);
+                        int byteCount = (int)block_bytes[blck];
+                        Logger.WriteLine("Deserializing Block " + blck + " offset " + string.Format("{0:x}", offset) + " nr of bytes " + byteCount);
+                        byte[] bytes = new byte[byteCount];
+                        fs.Seek(offset, SeekOrigin.Begin);
+                        fs.Read(bytes, 0, byteCount);
+                        MemoryStream ms = new MemoryStream(bytes);
+                        try
+                        {
+                            Image img = Image.FromStream(ms);
+                            bitmaps.Add(new Bitmap(img));
+                            blck = (blck + 1) % MAX_BUFFER_ITEMS;
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                        finally
+                        {
+                            ms.Dispose();
+                        }
+                    }
+               
             }
             return bitmaps;
+        }
+
+        public void Dispose()
+        {
+            signalNewBitmaps.Dispose();
+            fs.Dispose();
         }
     }
 }
