@@ -18,18 +18,27 @@ namespace MayhemCore
             set;
         }
 
+        /// <summary>
+        /// True if the module is enabled, false otherwise
+        /// </summary>
         public bool IsEnabled
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// The name of the module
+        /// </summary>
         public string Name
         {
             get;
             internal set;
         }
 
+        /// <summary>
+        /// The description of the module. This shows up in the module lists 
+        /// </summary>
         public string Description
         {
             get;
@@ -113,18 +122,41 @@ namespace MayhemCore
             }
         }
 
+        /// <summary>
+        /// This method is called first, you should use it to instantiate any variables that are
+        /// needed to load your configuration and setup. For example, if you will need to add saved
+        /// items to an object, you should instantiate that object in this method so that it will
+        /// exist in OnLoadDefaults and OnLoadFromSaved.
+        /// This method is called on the main thread.
+        /// </summary>
         protected virtual void OnBeforeLoad()
         {
         }
 
+        /// <summary>
+        /// This method is called after OnBeforeLoad when your module object is created because of
+        /// standard instantiation. Use this method to set the defaults on your configuration
+        /// variables.
+        /// This method is called on the main thread.
+        /// </summary>
         protected virtual void OnLoadDefaults()
         {
         }
 
+        /// <summary>
+        /// This method is called after OnBeforeLoad when your module object is created because of
+        /// deserialization. In this method you are guaranteed that all variables marked with the
+        /// DataMember attribute are set.
+        /// This method is called on the main thread.
+        /// </summary>
         protected virtual void OnLoadFromSaved()
         {
         }
 
+        /// <summary>
+        /// This method is called after both OnLoadDefaults and OnLoadFromSaved. This method is
+        /// guaranteed that all configuration properties are set.
+        /// </summary>
         protected virtual void OnAfterLoad()
         {
         }
@@ -165,6 +197,14 @@ namespace MayhemCore
             }
         }
 
+        /// <summary>
+        /// This method is called before enabling the module. The module should verify that it can
+        /// be started up. If for whatever reason it cannot, then e.Cancel should be set to true.
+        /// The property WasConfiguring is set to true in the case that we are re-enabling after
+        /// the configuration window was closed.
+        /// This method is called on a background thread.
+        /// </summary>
+        /// <param name="e">Enabling arguments object</param>
         protected virtual void OnEnabling(EnablingEventArgs e)
         {
         }
@@ -182,6 +222,13 @@ namespace MayhemCore
             }
         }
 
+        /// <summary>
+        /// This method is called when the module is disabled; on application shutdown, on
+        /// connection deleted, and when the configuration for the module is opened. In the case
+        /// that it is called when configuration is opened, e.IsConfiguring will be set to true.
+        /// This method is called on a background thread.
+        /// </summary>
+        /// <param name="e">Disabled event arguments</param>
         protected virtual void OnDisabled(DisabledEventArgs e)
         {
         }
@@ -191,6 +238,9 @@ namespace MayhemCore
             OnDeleted();
         }
 
+        /// <summary>
+        /// This method is called when the connection containing this module is deleted.
+        /// </summary>
         protected virtual void OnDeleted()
         {
         }
@@ -202,10 +252,9 @@ namespace MayhemCore
 
         protected void OnPropertyChanged(string name)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
+            if (PropertyChanged != null)
             {
-                handler(this, new PropertyChangedEventArgs(name));
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
 
