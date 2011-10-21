@@ -39,8 +39,7 @@ namespace VisionModules.Reactions
 
         protected override void OnAfterLoad()
         {
-            server = new HTTPImageServer(port);
-
+            
             // get a camera
             CameraDriver cDriver = CameraDriver.Instance;
 
@@ -56,6 +55,7 @@ namespace VisionModules.Reactions
                 cam = new DummyCamera() ;
             }
 
+           
         }
 
 
@@ -64,6 +64,8 @@ namespace VisionModules.Reactions
         {
             dummy.RegisterForImages(cam);
             cam.StartFrameGrabbing();
+            if (server == null)
+                server = HTTPImageServer.ServerForCamera(cam);
             server.StartServer();
         }
 
