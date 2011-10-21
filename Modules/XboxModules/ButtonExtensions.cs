@@ -52,17 +52,17 @@ namespace XboxModules
             if (buttons.HasFlag(Buttons.Start))
                 list.Add("Start");
             if (buttons.HasFlag(Buttons.BigButton))
-                list.Add("Big Button");
+                list.Add("Xbox Button");
             if (buttons.HasFlag(Buttons.RightShoulder))
-                list.Add("Right Shoulder");
+                list.Add("Right Bumper");
             if (buttons.HasFlag(Buttons.LeftShoulder))
-                list.Add("Left Shoulder");
+                list.Add("Left Bumper");
             if (buttons.HasFlag(Buttons.RightStick))
                 list.Add("Right Stick");
             if (buttons.HasFlag(Buttons.LeftStick))
                 list.Add("Left Stick");
 
-            return string.Join(", ", list);
+            return string.Join(" + ", list);
         }
     }
 }
