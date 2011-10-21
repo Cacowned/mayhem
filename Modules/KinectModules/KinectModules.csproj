@@ -37,6 +37,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,6 +49,9 @@
   <ItemGroup>
     <Compile Include="Events\KinectSkeletalGesture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wpf\KinectEventConfig.xaml.cs">
+      <DependentUpon>KinectEventConfig.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
@@ -61,7 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reactions\" />
-    <Folder Include="Wpf\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Wpf\KinectEventConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

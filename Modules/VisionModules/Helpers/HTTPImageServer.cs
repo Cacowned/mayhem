@@ -69,9 +69,7 @@ namespace VisionModules.Helpers
             Logger.WriteLine("Stopping Server");
             threadRunning = false;
             listenerThreadLock.Set();
-            threadStopEvent.WaitOne();
-            
-          
+            threadStopEvent.WaitOne();             
         }
 
         /// <summary>
