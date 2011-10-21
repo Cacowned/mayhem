@@ -24,14 +24,15 @@ namespace VisionModules.Reactions
 
         protected override void OnLoadDefaults()
         {
-            port = 8080;
-           
+            port = 8080;          
         }
 
         protected override void OnAfterLoad()
         {
             server = new HTTPImageServer(port);
         }
+
+      
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
