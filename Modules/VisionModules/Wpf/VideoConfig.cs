@@ -27,7 +27,7 @@ namespace VisionModules.Wpf
             private set;
         }
 
-        private const int video_duration_s = Camera.kLoopDuration / 1000; 
+        private const int video_duration_s = Camera.LoopDuration / 1000; 
 
         /// <summary>
         /// Content of the Checkbox items, for selection of the video recording timing modes. 
