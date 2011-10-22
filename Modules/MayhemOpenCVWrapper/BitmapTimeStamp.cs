@@ -50,8 +50,7 @@ namespace MayhemOpenCVWrapper
 
         public object Clone()
         {
-            BitmapTimestamp objClone = new BitmapTimestamp(new Bitmap(Image), this.TimeStamp);
-            return objClone;
+            return new BitmapTimestamp(new Bitmap(Image), TimeStamp);
         }
     }
 }

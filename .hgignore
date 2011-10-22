@@ -16,3 +16,4 @@ glob:*.rej
 *.orig
 *.nupkg
 StyleCop.Cache
+_ReSharper.*

@@ -22,7 +22,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             }
         }
 
-        private OpenCVDLL.PresenceDetector pd;
+        private readonly OpenCVDLL.PresenceDetector pd;
 
         public delegate void DetectionHandler(object sender, DetectionEventArgs e);
 
@@ -53,7 +53,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             }
         }
 
-        private bool presence = false;
+        private bool presence;
 
         /// <summary>
         /// Returns true if presence has been detected in the last frame.
@@ -85,7 +85,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             try
             {
                 Bitmap cameraImage = camera.ImageAsBitmap();
-                BitmapData bd = cameraImage.LockBits(new Rectangle(0, 0, cameraImage.Size.Width, cameraImage.Size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, cameraImage.PixelFormat);
+                BitmapData bd = cameraImage.LockBits(new Rectangle(0, 0, cameraImage.Size.Width, cameraImage.Size.Height), ImageLockMode.ReadOnly, cameraImage.PixelFormat);
                 IntPtr imgPointer = bd.Scan0;
 
                 // transmit frame

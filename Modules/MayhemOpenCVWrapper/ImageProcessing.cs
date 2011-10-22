@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 
 namespace MayhemOpenCVWrapper
@@ -25,9 +24,9 @@ namespace MayhemOpenCVWrapper
             int destX = 0;
             int destY = 0;
 
-            float percent = 0;
-            float percentW = 0;
-            float percentH = 0;
+            float percent;
+            float percentW;
+            float percentH;
 
             percentW = (float)width / (float)sourceWidth;
             percentH = (float)height / (float)sourceHeight;
@@ -54,13 +53,13 @@ namespace MayhemOpenCVWrapper
                                  imgPhoto.VerticalResolution);
 
                 Graphics grPhoto = Graphics.FromImage(photo);
-                grPhoto.Clear(System.Drawing.Color.Red);
+                grPhoto.Clear(Color.Red);
                 grPhoto.InterpolationMode =
                         InterpolationMode.HighQualityBicubic;
 
                 grPhoto.DrawImage(imgPhoto,
-                    new System.Drawing.Rectangle(destX, destY, destWidth, destHeight),
-                    new System.Drawing.Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
+                    new Rectangle(destX, destY, destWidth, destHeight),
+                    new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
                     GraphicsUnit.Pixel);
                 grPhoto.Dispose();
             }

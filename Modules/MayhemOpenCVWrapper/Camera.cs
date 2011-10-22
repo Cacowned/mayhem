@@ -70,7 +70,7 @@ namespace MayhemOpenCVWrapper
         {
             get
             {
-                lock (this.threadLocker)
+                lock (threadLocker)
                 {
                     return imageBuffer;
                 }
@@ -117,7 +117,7 @@ namespace MayhemOpenCVWrapper
         private byte[] imageBuffer;
 
         // lock object on the image update thread 
-        private object threadLocker;
+        private readonly object threadLocker;
 
         // Camera initialization state.
         private bool isInitialized;
@@ -126,9 +126,9 @@ namespace MayhemOpenCVWrapper
         private static int instances;
 
         // increment on instantiation 
-        private int index;
+        private readonly int index;
         private DateTime loopBufferLastUpdate;
-        private VideoDiskBuffer videoDiskBuffer;
+        private readonly VideoDiskBuffer videoDiskBuffer;
 
         // update rate (ms) with which the camera thread requests new images
         private int frameInterval;
@@ -137,10 +137,10 @@ namespace MayhemOpenCVWrapper
         private readonly int loopBufferMaxLength;
 
         // fifo buffer that stores last x images
-        private Queue<BitmapTimestamp> loopBuffer;
+        private readonly Queue<BitmapTimestamp> loopBuffer;
 
         // check for thread termination   
-        private AutoResetEvent grabFramesReset;
+        private readonly AutoResetEvent grabFramesReset;
 
         // status of video recording
         private bool recordingVideo;
@@ -184,7 +184,7 @@ namespace MayhemOpenCVWrapper
         /// <returns></returns>
         public override string ToString()
         {
-            return this.Info.ToString();
+            return Info.ToString();
         }
 
         #endregion
@@ -203,7 +203,7 @@ namespace MayhemOpenCVWrapper
                 // critical section: don't let the read thread dispose of bitmaps before we copy them first
                 lock (threadLocker)
                 {
-                    List<BitmapTimestamp> bufferItems = loopBuffer.ToList<BitmapTimestamp>();
+                    List<BitmapTimestamp> bufferItems = loopBuffer.ToList();
 
                     // return ;
                     foreach (BitmapTimestamp b in bufferItems)
@@ -233,12 +233,12 @@ namespace MayhemOpenCVWrapper
         /// <returns>Bitmap containing the image data</returns>
         public override Bitmap ImageAsBitmap()
         {
-            int w = this.Settings.ResX;
-            int h = this.Settings.ResY;
+            int w = Settings.ResX;
+            int h = Settings.ResY;
             try
             {
                 Bitmap backBuffer = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, w, h);
+                Rectangle rect = new Rectangle(0, 0, w, h);
 
                 // get at the bitmap data in a nicer way
                 System.Drawing.Imaging.BitmapData bmpData =
@@ -247,14 +247,13 @@ namespace MayhemOpenCVWrapper
                         System.Drawing.Imaging.ImageLockMode.ReadWrite,
                         backBuffer.PixelFormat);
 
-                int bufSize = this.BufferSize;
                 IntPtr imgPtr = bmpData.Scan0;
 
                 // grab the image
                 lock (threadLocker)
                 {
                     // Copy the RGB values back to the bitmap
-                    System.Runtime.InteropServices.Marshal.Copy(this.imageBuffer, 0, imgPtr, bufSize);
+                    System.Runtime.InteropServices.Marshal.Copy(ImageBuffer, 0, imgPtr, BufferSize);
                 }
 
                 // Unlock the bits.
@@ -290,7 +289,7 @@ namespace MayhemOpenCVWrapper
                 }
 
                 BufferSize = OpenCVDLL.OpenCVBindings.GetImageSize();
-                imageBuffer = new byte[BufferSize];
+                ImageBuffer = new byte[BufferSize];
                 frameInterval = CameraSettings.Defaults().UpdateRateMs;
 
                 // StartFrameGrabbing();
@@ -298,7 +297,7 @@ namespace MayhemOpenCVWrapper
             }
             catch (Exception e)
             {
-                Logger.WriteLine("exception during camera init\n" + e.ToString());
+                Logger.WriteLine("exception during camera init\n" + e);
             }
         }
 
@@ -318,13 +317,13 @@ namespace MayhemOpenCVWrapper
                 }
             }
 
-            if (!this.Running)
+            if (!Running)
             {
                 try
                 {
                     recordingVideo = true;
                     Logger.WriteLine("Starting Frame Grabber");
-                    ThreadPool.QueueUserWorkItem((object o) => { GrabFrames_Thread(); });
+                    ThreadPool.QueueUserWorkItem(o => GrabFrames());
                 }
                 catch (Exception e)
                 {
@@ -352,24 +351,22 @@ namespace MayhemOpenCVWrapper
         public override bool TryStopFrameGrabbing()
         {
             Logger.WriteLine(Index + " TryStopFrameGrabbing");
-            if (this.OnImageUpdated == null)
+            if (OnImageUpdated == null)
             {
                 Logger.WriteLine(" shutting down camera");
 
                 // Stop device
                 StopGrabbing();
-                this.Running = false;
+                Running = false;
 
                 // clear disk video frame buffer
                 videoDiskBuffer.ClearAndResetBuffer();
 
                 return true;
             }
-            else
-            {
-                Logger.WriteLine(" handlers still attached, not shutting down camera");
-                return false;
-            }
+            
+            Logger.WriteLine(" handlers still attached, not shutting down camera");
+            return false;
         }
 
         private void StopGrabbing()
@@ -384,7 +381,7 @@ namespace MayhemOpenCVWrapper
                 {
                     try
                     {
-                        OpenCVDLL.OpenCVBindings.StopCamera(this.Info.DeviceId);
+                        OpenCVDLL.OpenCVBindings.StopCamera(Info.DeviceId);
                     }
                     catch (Exception ex)
                     {
@@ -402,7 +399,7 @@ namespace MayhemOpenCVWrapper
         /// <summary>
         /// Thread that updates the frame buffer periodically from videoInputLib via OpenCVDLL 
         /// </summary>
-        private void GrabFrames_Thread()
+        private void GrabFrames()
         {
             try
             {
@@ -430,11 +427,11 @@ namespace MayhemOpenCVWrapper
                     {
                         unsafe
                         {
-                            fixed (byte* ptr = imageBuffer)
+                            fixed (byte* ptr = ImageBuffer)
                             {
                                 try
                                 {
-                                    OpenCVDLL.OpenCVBindings.GetNextFrame(this.Index, ptr);
+                                    OpenCVDLL.OpenCVBindings.GetNextFrame(Index, ptr);
                                 }
                                 catch (Exception e)
                                 {
@@ -450,10 +447,10 @@ namespace MayhemOpenCVWrapper
                     lock (threadLocker)
                     {
                         DateTime now = DateTime.Now;
-                        TimeSpan last_update = now - this.loopBufferLastUpdate;
-                        if (last_update.TotalMilliseconds >= LoopBufferUpdateMs)
+                        TimeSpan lastUpdate = now - loopBufferLastUpdate;
+                        if (lastUpdate.TotalMilliseconds >= LoopBufferUpdateMs)
                         {
-                            this.loopBufferLastUpdate = DateTime.Now;
+                            loopBufferLastUpdate = DateTime.Now;
                             if (loopBuffer.Count < loopBufferMaxLength)
                             {
                                 loopBuffer.Enqueue(new BitmapTimestamp(ImageAsBitmap()));
@@ -516,10 +513,8 @@ namespace MayhemOpenCVWrapper
             {
                 return loopBuffer.ElementAt(tailIdx).Image;
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         /// <summary>
@@ -534,10 +529,8 @@ namespace MayhemOpenCVWrapper
             {
                 return loopBuffer.ElementAt(tailIdx).TimeStamp;
             }
-            else
-            {
-                return DateTime.MinValue;
-            }
+
+            return DateTime.MinValue;
         }
 
         public void Dispose()

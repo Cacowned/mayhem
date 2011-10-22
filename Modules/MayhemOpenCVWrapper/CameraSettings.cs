@@ -51,7 +51,7 @@
         /// <returns></returns>
         public static CameraSettings Defaults()
         {
-            return CameraSettings.Defaults640();
+            return Defaults640();
         }
 
         /// <summary>

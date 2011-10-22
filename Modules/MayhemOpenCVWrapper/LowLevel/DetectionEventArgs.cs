@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Point = System.Drawing.Point;
 
 namespace MayhemOpenCVWrapper.LowLevel
@@ -19,7 +18,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             Points = points;
         }
 
-        public DetectionEventArgs(Point[] points)
+        public DetectionEventArgs(IEnumerable<Point> points)
         {
             Points = points.ToList();
         }
