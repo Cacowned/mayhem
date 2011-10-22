@@ -7,9 +7,18 @@ namespace WindowModules.Actions
     public class WindowActionMove : IWindowAction
     {
         [DataMember]
-        public int X;
+        public int X
+        {
+            get;
+            set;
+        }
+
         [DataMember]
-        public int Y;
+        public int Y
+        {
+            get;
+            set;
+        }
 
         public void Perform(IntPtr window)
         {

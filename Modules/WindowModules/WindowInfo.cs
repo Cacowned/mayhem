@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace WindowModules
 {
@@ -7,38 +6,22 @@ namespace WindowModules
     public class WindowInfo
     {
         [DataMember]
-        public string FileName = "";
-        [DataMember]
-        public string Title = "";
-        [DataMember]
-        public bool CheckFileName = true;
-        [DataMember]
-        public bool CheckTitle = false;
-        //[DataMember]
-        //public string ClassName = "";
-    }
-
-    [DataContract]
-    public class WindowActionInfo
-    {
-        [DataMember]
-        public WindowInfo WindowInfo
-        {
-            get;
-            set;
-        }
+        public string FileName { get; set; }
 
         [DataMember]
-        public List<IWindowAction> WindowActions
-        {
-            get;
-            set;
-        }
+        public string Title { get; set; }
 
-        public WindowActionInfo()
+        [DataMember]
+        public bool CheckFileName { get; set; }
+
+        [DataMember]
+        public bool CheckTitle { get; set; }
+
+        public WindowInfo()
         {
-            WindowInfo = new WindowInfo();
-            WindowActions = new List<IWindowAction>();
+            FileName = string.Empty;
+            Title = string.Empty;
+            CheckFileName = true;
         }
     }
 }

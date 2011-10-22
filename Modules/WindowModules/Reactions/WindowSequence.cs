@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Threading;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using WindowModules.Wpf;
 
-namespace WindowModules
+namespace WindowModules.Reactions
 {
     [DataContract]
     [MayhemModule("Window Sequence", "Manipulates an application window with a sequence of actions")]
@@ -42,14 +41,14 @@ namespace WindowModules
 
         public override void Perform()
         {
-            WindowFinder.Find(ActionInfo, new WindowFinder.WindowActionResult((hwnd) =>
-                {
-                    foreach (IWindowAction action in ActionInfo.WindowActions)
-                    {
-                        action.Perform(hwnd);
-                        Thread.Sleep(50);
-                    }
-                }));
+            WindowFinder.Find(ActionInfo, hwnd =>
+                                              {
+                                                  foreach (IWindowAction action in ActionInfo.WindowActions)
+                                                  {
+                                                      action.Perform(hwnd);
+                                                      Thread.Sleep(50);
+                                                  }
+                                              });
         }
     }
 }

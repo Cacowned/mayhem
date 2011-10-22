@@ -32,17 +32,22 @@ namespace WindowModules.Wpf
         private Process thisProcess;
         private IntPtr thisWindowHandle;
 
-        private Dictionary<UserControl, IWindowAction> controlMap = new Dictionary<UserControl, IWindowAction>();
+        private readonly Dictionary<UserControl, IWindowAction> controlMap;
 
-        public static IntPtr CurrentlySelectedWindow = IntPtr.Zero;
+        public static IntPtr CurrentlySelectedWindow;
 
         // True if we are starting up and shouldn't verify till after everything is set.
-        private bool isStartingUp = true;
+        private readonly bool isStartingUp;
 
         public WindowSequenceConfig(WindowActionInfo windowActionInfo)
         {
             InitializeComponent();
-            this.ActionInfo = windowActionInfo;
+            ActionInfo = windowActionInfo;
+
+            controlMap = new Dictionary<UserControl, IWindowAction>();
+            CurrentlySelectedWindow = IntPtr.Zero;
+            isStartingUp = true;
+
             SelectedWindow = ActionInfo.WindowInfo;
             textBoxApplication.Text = ActionInfo.WindowInfo.FileName;
             textBoxWindowTitle.Text = ActionInfo.WindowInfo.Title;
@@ -53,11 +58,6 @@ namespace WindowModules.Wpf
             {
                 Add(action);
             }
-            /*
-            checkBoxMove.IsChecked = SelectedWindow.ShouldMove;
-            textBoxMoveX.Text = SelectedWindow.MoveX.ToString();
-            textBoxMoveY.Text = SelectedWindow.MoveY.ToString();
-            */
 
             isStartingUp = false;
         }
@@ -67,23 +67,23 @@ namespace WindowModules.Wpf
             thisProcess = Process.GetCurrentProcess();
             thisWindowHandle = thisProcess.MainWindowHandle;
             timer = new Timer(500);
-            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+            timer.Elapsed += timer_Elapsed;
             timer.Start();
             CheckCanSave();
 
-            if(textBoxApplication.Text != null || textBoxWindowTitle.Text != null)
+            if (textBoxApplication.Text != null || textBoxWindowTitle.Text != null)
             {
-                WindowFinder.Find(ActionInfo, new WindowFinder.WindowActionResult((hwnd) =>
-                    {
-                        CurrentlySelectedWindow = hwnd;
-                    }));
+                WindowFinder.Find(ActionInfo, hwnd =>
+                                                  {
+                                                      CurrentlySelectedWindow = hwnd;
+                                                  });
             }
         }
 
         public static int GetProcessThreadFromWindow(IntPtr hwnd)
         {
             int procid = 0;
-            int threadid = Native.GetWindowThreadProcessId(hwnd, ref procid);
+            Native.GetWindowThreadProcessId(hwnd, ref procid);
             return procid;
         }
 
@@ -97,7 +97,7 @@ namespace WindowModules.Wpf
             int procId = GetProcessThreadFromWindow(handle);
             Process p = Process.GetProcessById(procId);
 
-            if (p.MainWindowHandle == IntPtr.Zero || p.MainWindowHandle == thisWindowHandle )
+            if (p.MainWindowHandle == IntPtr.Zero || p.MainWindowHandle == thisWindowHandle)
                 return;
 
             string filename;
@@ -112,6 +112,7 @@ namespace WindowModules.Wpf
             {
                 filename = WMIProcess.GetFilename(procId);
             }
+
             if (filename != null)
             {
                 FileInfo fi = new FileInfo(filename);
@@ -169,17 +170,17 @@ namespace WindowModules.Wpf
             if (action is WindowActionBringToFront)
                 newControl = new WindowBringToFront();
             else if (action is WindowActionClose)
-                newControl = new WindowClose((WindowActionClose)action);
+                newControl = new WindowClose();
             else if (action is WindowActionMaximize)
-                newControl = new WindowMaximize((WindowActionMaximize)action);
+                newControl = new WindowMaximize();
             else if (action is WindowActionMinimize)
-                newControl = new WindowMinimize((WindowActionMinimize)action);
+                newControl = new WindowMinimize();
             else if (action is WindowActionMove)
                 newControl = new WindowMove((WindowActionMove)action);
             else if (action is WindowActionResize)
                 newControl = new WindowResize((WindowActionResize)action);
             else if (action is WindowActionRestore)
-                newControl = new WindowRestore((WindowActionRestore)action);
+                newControl = new WindowRestore();
             else if (action is WindowActionSendKeys)
                 newControl = new WindowSendKeys((WindowActionSendKeys)action);
             else if (action is WindowActionWait)
@@ -206,7 +207,7 @@ namespace WindowModules.Wpf
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            IWindowAction action = null;
+            IWindowAction action;
             string name = ((ComboBoxItem)comboBoxActions.SelectedItem).Content as string;
             switch (name)
             {
@@ -240,6 +241,7 @@ namespace WindowModules.Wpf
                 default:
                     return;
             }
+
             Add(action);
             CheckCanSave();
         }
@@ -262,6 +264,5 @@ namespace WindowModules.Wpf
                 CheckCanSave();
             }
         }
-
     }
 }

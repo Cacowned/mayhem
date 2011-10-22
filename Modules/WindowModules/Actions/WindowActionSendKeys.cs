@@ -134,7 +134,7 @@ namespace WindowModules.Actions
         }
 
         [DataMember]
-        public List<System.Windows.Forms.Keys> KeyList
+        public List<Keys> KeyList
         {
             get;
             set;
@@ -142,7 +142,7 @@ namespace WindowModules.Actions
 
         public WindowActionSendKeys()
         {
-            KeyList = new List<System.Windows.Forms.Keys>();
+            KeyList = new List<Keys>();
         }
 
         private const uint WM_KEYDOWN = 0x100;
@@ -160,14 +160,13 @@ namespace WindowModules.Actions
                 case Keys.Shift:
                     return (byte)VirtualKeys.Shift;
                 default:
-                    char c = (char)key;
                     return (byte)key;
             }
         }
 
         public void Perform(IntPtr window)
         {
-            IntPtr current = Native.GetForegroundWindow();
+            Native.GetForegroundWindow();
             Native.SetForegroundWindow(window);
             Native.SetFocus(window);
             Native.SetActiveWindow(window);
@@ -212,11 +211,6 @@ namespace WindowModules.Actions
 
             var count = Native.SendInput((uint)inputArray.Length, inputArray, Marshal.SizeOf(inputArray[0]));
 
-            if (count == 0)
-            {
-                var error = Native.GetLastError();
-            }
-
             inputs.Clear();
 
             foreach (Keys t in KeyList)
@@ -236,11 +230,6 @@ namespace WindowModules.Actions
             inputArray = inputs.ToArray();
 
             count = Native.SendInput((uint)inputArray.Length, inputArray, Marshal.SizeOf(inputArray[0]));
-
-            if (count == 0)
-            {
-                var error = Native.GetLastError();
-            }
 
             inputs.Clear();
         }

@@ -8,7 +8,11 @@ namespace WindowModules.Actions
     public class WindowActionWait : IWindowAction
     {
         [DataMember]
-        public int Milliseconds;
+        public int Milliseconds
+        {
+            get;
+            set;
+        }
 
         public void Perform(IntPtr window)
         {

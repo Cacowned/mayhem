@@ -18,8 +18,7 @@ namespace WindowModules.Events
         [DataMember]
         private string text;
 
-        static object locker = new object();
-        static NotifyIcon notifyIcon = null;
+        private static NotifyIcon notifyIcon;
 
         private SynchronizationContext context;
 
@@ -44,7 +43,7 @@ namespace WindowModules.Events
                 }
 
                 notifyIcon.Text = "Mayhem";
-                notifyIcon.MouseUp += new MouseEventHandler(notifyIcon_MouseUp);
+                notifyIcon.MouseUp += notifyIcon_MouseUp;
             }
 
             if (!notifyIcon.Visible)
@@ -102,7 +101,8 @@ namespace WindowModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            SystemTrayMenuConfig config = configurationControl as SystemTrayMenuConfig;
+            var config = configurationControl as SystemTrayMenuConfig;
+
             text = config.Text;
         }
 
