@@ -1,14 +1,4 @@
-﻿/* CamSnapshotConfig.xaml.cs
- * 
- * Snapshot configuration window using OpenCV Camera Library
- * 
- * Authors: Sven Kratz, Eli White
- * (c) 2011 Mayhem Open Source Project by Microsoft inc. 
- * 
- * 
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -29,7 +19,7 @@ namespace VisionModules.Wpf
 {
 
     /// <summary>
-    /// Interaction logic for WebcamSnapshotConfig.xaml
+    /// Snapshot configuration window using OpenCV Camera Library
     /// </summary>
     public partial class PictureConfig : WpfConfiguration
     {

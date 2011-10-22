@@ -1,16 +1,4 @@
-﻿/*
- * FaceDetectorEvent.cs
- * 
- * A basic Face Detector Event:
- * face detector now only triggers when the amount of faces surpasses a threshold value, and only once then. 
- * When the amount of faces goes below the threshold and then above it again, the reaction triggers again, and so forth. 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Windows;
@@ -24,6 +12,11 @@ using System.Runtime.CompilerServices;
 
 namespace VisionModules.Events
 {
+    /// <summary>
+    /// A basic Face Detector Event:
+    /// face detector now only triggers when the amount of faces surpasses a threshold value, and only once then. 
+    /// When the amount of faces goes below the threshold and then above it again, the reaction triggers again, and so forth. 
+    /// </summary>
     [DataContract]
     [MayhemModule("Face Detector", "Detects if and how many faces are in the scene")]
     public class FaceDetectorEvent : EventBase, IWpfConfigurable

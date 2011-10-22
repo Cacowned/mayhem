@@ -17,7 +17,7 @@ namespace DebugModules.Wpf
 
         public DebugMessageConfig(string message)
         {
-            this.Message = message;
+            Message = message;
             InitializeComponent();
         }
 
@@ -28,7 +28,7 @@ namespace DebugModules.Wpf
 
         public override void OnLoad()
         {
-            MessageTextBox.Text = this.Message;
+            MessageTextBox.Text = Message;
         }
 
         public override void OnSave()

@@ -1,17 +1,4 @@
-﻿/*
- * Video.cs
- * 
- * This vision module records an avi video of the camera before or after an event has fired.
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- *
- * Parts of the code make use of functions from the AviFile library by Corrina John
- * http://www.codeproject.com/KB/audio-video/avifilewrapper.aspx
- * 
- * Author: Sven Kratz
- * 
- */
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Threading;
@@ -33,6 +20,12 @@ namespace VisionModules.Reactions
         MID_EVENT = (Camera.kLoopDuration / 1000) / 2         // record 15s before and 15s after the event
     }
 
+    /// <summary>
+    /// This vision module records an avi video of the camera before or after an event has fired.
+    /// 
+    /// Parts of the code make use of functions from the AviFile library by Corrina John
+    /// http://www.codeproject.com/KB/audio-video/avifilewrapper.aspx
+    /// </summary>
     [DataContract]
     [MayhemModule("Video", "Records an avi video of the camera scene before or after an event has fired")]
     public class VideoReaction : ReactionBase, IWpfConfigurable

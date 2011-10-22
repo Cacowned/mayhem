@@ -1,15 +1,4 @@
-﻿/*
- * MayhemSerial.cs
- * 
- * Serial Port Connection Manager for Mayhem
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
@@ -22,6 +11,9 @@ using Microsoft.Win32.SafeHandles;
 
 namespace MayhemSerial
 {
+    /// <summary>
+    /// Serial Port Connection Manager for Mayhem
+    /// </summary>
     public class MayhemSerialPortMgr
     {
         private readonly int verbosityLevel = 0;

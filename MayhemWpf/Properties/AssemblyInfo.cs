@@ -8,9 +8,9 @@ using System.Windows;
 [assembly: AssemblyTitle("MayhemWpf")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Outercurve")]
 [assembly: AssemblyProduct("MayhemWpf")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCopyright("Copyright © Outercurve 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

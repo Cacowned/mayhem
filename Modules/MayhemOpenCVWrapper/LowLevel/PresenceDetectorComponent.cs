@@ -1,15 +1,4 @@
-﻿/*
- * PresenceDetectorComponent.cs
- * 
- * Low level component interfacing with the OpenCVDLL presence detector component. 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-using System;
+﻿using System;
 using System.Drawing;
 using MayhemCore;
 using System.Drawing.Imaging;
@@ -18,6 +7,7 @@ namespace MayhemOpenCVWrapper.LowLevel
 {
     /// <summary>
     /// Presence detector component
+    /// Low level component interfacing with the OpenCVDLL presence detector component. 
     /// </summary>
     public class PresenceDetectorComponent : CameraImageListener, IDisposable
     {

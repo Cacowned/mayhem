@@ -1,15 +1,4 @@
-﻿/*
- * InsteonReaction.cs
- * 
- * Mayhem Reaction that can send command to Insteon Devices
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using MayhemCore;
@@ -21,6 +10,9 @@ using X10Modules.Wpf;
 
 namespace X10Modules.Reactions
 {
+    /// <summary>
+    /// Mayhem Reaction that can send command to Insteon Devices
+    /// </summary>
     [DataContract]
     [MayhemModule("InsteonReaction", "Triggers Insteon Commands")]
     public class InsteonReaction : ReactionBase, IWpfConfigurable

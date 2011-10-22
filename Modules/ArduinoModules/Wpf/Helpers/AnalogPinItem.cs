@@ -1,24 +1,10 @@
-﻿/*
- * 
- * DitialPinItem.cs
- * 
- * 
- * Data model for Gridviews on Arduino analog pins
- * 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- * 
- */
-
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using ArduinoModules.Firmata;
 
 namespace ArduinoModules.Wpf.Helpers
 {
     /// <summary>
+    /// Data model for Gridviews on Arduino analog pins
     /// Items for Ditial pins ItemsControl 
     /// </summary>
     [DataContract]
@@ -30,37 +16,56 @@ namespace ArduinoModules.Wpf.Helpers
         // selected 
         [DataMember]
         private bool isChecked;
-        public bool Selected { get { return isChecked; } set { isChecked = value; } }
 
+        public bool Selected
+        {
+            get
+            {
+                return isChecked;
+            }
+            set
+            {
+                isChecked = value;
+            }
+        }
 
         // friendly Name
         [DataMember]
         private string pinName;
+
         public string PinName
         {
-            get { return pinName; }
+            get
+            {
+                return pinName;
+            }
         }
 
         // pin change type
         [DataMember]
-        private ANALOG_PIN_CHANGE MonitorPinChange { get; set; }
-        public ANALOG_PIN_CHANGE ChangeType { get { return MonitorPinChange; } set { MonitorPinChange = value; } }
+        private AnalogPinChange MonitorPinChange
+        {
+            get;
+            set;
+        }
+
+        public AnalogPinChange ChangeType
+        {
+            get
+            {
+                return MonitorPinChange;
+            }
+            set
+            {
+                MonitorPinChange = value;
+            }
+        }
 
         [DataMember]
         private int firmataPinId = 0;
-        public int GetPinId()
-        {
-            return firmataPinId;
-        }
-        //public int pin_id { get { return pin_id_; } }
 
         [DataMember]
         private int setValue = 0;
-
-        public static void ResetAnalogIDs()
-        {
-            analogPinId = 0;
-        }
 
         // change threshold value set by user
         public int SetValue
@@ -87,11 +92,27 @@ namespace ArduinoModules.Wpf.Helpers
             }
         }
 
-
         // analog value
         [DataMember]
         private int aValue = 0;
-        public int CurrentAnalogValue { get { return aValue; } }
+
+        public int CurrentAnalogValue
+        {
+            get
+            {
+                return aValue;
+            }
+        }
+
+        public int GetPinId()
+        {
+            return firmataPinId;
+        }
+
+        public static void ResetAnalogIDs()
+        {
+            analogPinId = 0;
+        }
 
         /// <summary>
         /// Sets the analog value for display
@@ -104,7 +125,7 @@ namespace ArduinoModules.Wpf.Helpers
             aValue = (int)value;
         }
 
-        public AnalogPinItem(bool check, int id, ANALOG_PIN_CHANGE change)
+        public AnalogPinItem(bool check, int id, AnalogPinChange change)
         {
             isChecked = check;
             pinName = "A" + analogPinId++;

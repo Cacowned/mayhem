@@ -1,22 +1,15 @@
-﻿/*
- * InsteonControllerBase.cs
- * 
- * This class manages the communication with the serial port for the Insteon Modules.
- * It also ensures that Mayhem Modules get synchronized access to serial port messages. 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-using System;
+﻿using System;
 using System.Threading;
 using MayhemSerial;
 using X10Modules.Insteon;
 
 namespace X10Modules
 {
-    public  class InsteonControllerBase : ISerialPortDataListener, IDisposable
+    /// <summary>
+    /// This class manages the communication with the serial port for the Insteon Modules.
+    /// It also ensures that Mayhem Modules get synchronized access to serial port messages. 
+    /// </summary>
+    public class InsteonControllerBase : ISerialPortDataListener, IDisposable
     {
         public class NotInitializedException : Exception{}
 

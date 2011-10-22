@@ -55,7 +55,7 @@ namespace DefaultModules.Reactions
 
         public void CliConfig()
         {
-            string tag = "[Play Sound]";
+            const string tag = "[Play Sound]";
 
             string path = string.Empty;
 

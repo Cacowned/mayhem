@@ -1,14 +1,4 @@
-﻿/*
- *  MultiCameraSelector.xaml.cs
- * 
- *  Code-Behind for the multi-camera selector. 
- *  
- *  (c) 2011, Microsoft Applied Sciences Group
- * 
- *  Author: Sven Kratz
- * 
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -24,9 +14,6 @@ using Brushes = System.Windows.Media.Brushes;
 
 namespace VisionModules.Wpf
 {
-    /// <summary>
-    /// Interaction logic for MultiCameraSelector.xaml
-    /// </summary>
     public partial class MultiCameraSelector : UserControl
     {
         public Camera selected_camera = null;

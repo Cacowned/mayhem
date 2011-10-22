@@ -1,15 +1,4 @@
-﻿/*
- * InsteonDevice.cs
- * 
- * Stores data about Insteon Devices linked to Modem
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */ 
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 

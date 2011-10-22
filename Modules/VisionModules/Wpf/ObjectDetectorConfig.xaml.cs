@@ -1,15 +1,4 @@
-﻿/*
- *  ObjectDetectorEvent.cs
- * 
- *  Object Detector Mayhem Module
- * 
- * (c) Microsoft Applied Sciences Group, 2011
- * 
- *  Author: Sven Kratz
- * 
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -27,7 +16,7 @@ using Point = System.Drawing.Point;
 namespace VisionModules.Wpf
 {
     /// <summary>
-    /// Interaction logic for ObjectDetectorConfig.xaml
+    /// Object Detector Mayhem Module
     /// </summary>
     /// 
     partial class ObjectDetectorConfig : WpfConfiguration

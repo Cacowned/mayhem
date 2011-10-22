@@ -16,10 +16,10 @@ namespace DefaultModules.KeypressHelpers
         private const int WM_KEYUP = 0x101;
         private const int WM_SYSKEYUP = 0x105;
 
-        private static InterceptKeys instance = null;
+        private static InterceptKeys instance;
 
-        private LowLevelKeyboardProc _proc;
-        private IntPtr _hookID = IntPtr.Zero;
+        private readonly LowLevelKeyboardProc _proc;
+        private IntPtr _hookID; 
 
         public delegate void KeyCombinationHandler();
 
@@ -31,10 +31,10 @@ namespace DefaultModules.KeypressHelpers
 
         public event KeyUpHandler OnKeyUp;
 
-        private HashSet<Keys> keysDown = new HashSet<Keys>();
-        private Dictionary<Keys, DateTime> keysDownTimes = new Dictionary<Keys, DateTime>();
+        private readonly HashSet<Keys> keysDown;
+        private readonly Dictionary<Keys, DateTime> keysDownTimes;
 
-        private Dictionary<HashSet<Keys>, List<KeyCombinationHandler>> keyCombinationHandlerMap;
+        private readonly Dictionary<HashSet<Keys>, List<KeyCombinationHandler>> keyCombinationHandlerMap;
 
         public static InterceptKeys Instance
         {
@@ -52,6 +52,10 @@ namespace DefaultModules.KeypressHelpers
         private InterceptKeys()
         {
             keyCombinationHandlerMap = new Dictionary<HashSet<Keys>, List<KeyCombinationHandler>>();
+            keysDown = new HashSet<Keys>();
+            keysDownTimes = new Dictionary<Keys, DateTime>();
+
+            _hookID = IntPtr.Zero;
             _proc = HookCallback;
         }
 

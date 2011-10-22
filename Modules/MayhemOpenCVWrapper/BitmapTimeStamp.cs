@@ -1,19 +1,12 @@
-﻿/*
- * BitmapTimestamp.cs
- * 
- * Container class that attaches a Timestamp to standard Bitmaps, 
- * to have some additional metadata for Modules to use
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-using System;
+﻿using System;
 using System.Drawing;
 
 namespace MayhemOpenCVWrapper
 {
+    /// <summary> 
+    /// Container class that attaches a Timestamp to standard Bitmaps, 
+    /// to have some additional metadata for Modules to use
+    /// </summary>
     public sealed class BitmapTimestamp : IDisposable, ICloneable
     {
         public DateTime TimeStamp = DateTime.Now;
@@ -34,8 +27,9 @@ namespace MayhemOpenCVWrapper
         /// Explicitly dispose of the Bitmap, as they tend to stick around and mess up the memory in .net
         /// </summary>
         ~BitmapTimestamp()
-        {     
-            Dispose();
+        {
+            if (Image != null)
+                Image.Dispose();
         }
 
         public void Dispose()

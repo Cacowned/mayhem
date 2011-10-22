@@ -1,13 +1,4 @@
-﻿/*
- *   IVisionEventComponent
- * 
- *   Abstract base class for Event components that use vision. 
- *   (c) Microsoft Applied Sciences Group, 2011
- *   
- *   Author: Sven Kratz
- *   
- */ 
-using System;
+﻿using System;
 using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel

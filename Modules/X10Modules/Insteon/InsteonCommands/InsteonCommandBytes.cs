@@ -1,15 +1,4 @@
-﻿/*
- * InsteonCommands.cs
- * 
- * Stores command strings for Insteon Modem device
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-namespace X10Modules.Insteon
+﻿namespace X10Modules.Insteon
 {
     /// <summary>
     /// Stores command codes for Insteon Modem

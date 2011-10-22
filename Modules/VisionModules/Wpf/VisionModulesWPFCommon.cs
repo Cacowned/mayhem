@@ -1,14 +1,4 @@
-﻿/*  VisionModulesWPFCommon.cs
- * 
- * Parking space for static functions common to the vision modules
- * 
- * (c) 2011 Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-using System;
+﻿using System;
 using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -16,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace VisionModules.Wpf
 {
     /// <summary>
+    /// Parking space for static functions common to the vision modules
     /// GDI DeleteObject function used to cleanup hPtrs after painting Bitmaps to WPF Canvases
     /// </summary>
     public static class VisionModulesWPFCommon

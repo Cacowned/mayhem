@@ -1,13 +1,3 @@
-/*
- * MotionDetectorEvent.cs
- * 
- * Motion Detector Mayhem Module
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */ 
 using System;
 using System.Runtime.Serialization;
 using System.Windows;
@@ -25,6 +15,9 @@ using System.Runtime.CompilerServices;
 
 namespace VisionModules.Events
 {
+    /// <summary>
+    /// Motion Detector Mayhem Module
+    /// </summary>
     [DataContract]
     [MayhemModule("Motion Detector", "Detects when there is motion in the frame")]
     public class MotionDetector : EventBase, IWpfConfigurable

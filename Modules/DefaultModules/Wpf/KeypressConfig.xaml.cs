@@ -16,8 +16,8 @@ namespace DefaultModules.Wpf
             get;
             private set;
         }
-        
-        private HashSet<Keys> keysDown = new HashSet<Keys>();
+
+        private readonly HashSet<Keys> keysDown;
 
         // Contains the string the interface binds to
         public string KeysDownText
@@ -30,10 +30,11 @@ namespace DefaultModules.Wpf
         public static readonly DependencyProperty KeysDownTextProperty =
             DependencyProperty.Register("KeysDownText", typeof(string), typeof(KeypressConfig), new UIPropertyMetadata(string.Empty));
 
-        private bool shouldCheckValidity = false;
+        private bool shouldCheckValidity;
 
-        public KeypressConfig(HashSet<Keys> monitorKeysDown)
+        public KeypressConfig(IEnumerable<Keys> monitorKeysDown)
         {
+            keysDown = new HashSet<Keys>();
             KeysToSave = new HashSet<Keys>(monitorKeysDown);
 
             this.DataContext = this;

@@ -1,16 +1,4 @@
-﻿/*
- *  Camera.cs
- * 
- *  Package functionality of an an individual camera and abstracts the camera functions for use by
- *  Mayhem Modules. 
- * 
- *  (c) 2010/2011, Microsoft Applied Sciences Group
- *  
- *  Author: Sven Kratz
- * 
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;

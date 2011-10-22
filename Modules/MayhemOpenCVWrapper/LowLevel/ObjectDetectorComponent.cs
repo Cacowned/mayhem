@@ -1,14 +1,4 @@
-﻿/*
- * ObjectDetectorComponent.cs
- * 
- * Low level object interfacing with the OpenCVDLL object detector component. 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -20,7 +10,7 @@ using System.Drawing.Imaging;
 namespace MayhemOpenCVWrapper.LowLevel
 {
     /// <summary>
-    /// Remove for release
+    /// Low level object interfacing with the OpenCVDLL object detector component. 
     /// </summary>
     public class ObjectDetectorComponent : CameraImageListener
     {
