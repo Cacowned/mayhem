@@ -10,10 +10,9 @@ namespace MayhemCore
     public abstract class EventBase : ModuleBase
     {
         /// <summary>
-        /// Event trigger for when the event is activated. This shouldn't
-        /// need to be overridden, just attached to
+        /// Event trigger for when the event is activated.
         /// </summary>
-        protected virtual void Trigger()
+        protected void Trigger()
         {
             Connection.Trigger();
         }
