@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MayhemOpenCVWrapper.LowLevel;
+using System.Diagnostics;
 using System.Windows;
 using MayhemOpenCVWrapper;
-using System.Diagnostics;
+using MayhemOpenCVWrapper.LowLevel;
 
 namespace VisionModules.Events.Components
 {
@@ -13,29 +11,32 @@ namespace VisionModules.Events.Components
     {
         public event EventHandler OnMotionUpdate;
 
-        public Rect motionBoundaryRect = new Rect();
+        private Rect motionBoundaryRect;
 
         private int width;
         private int height;
 
+        private double? oldAverage;
+        private double numberOfMotionFrames;
+        private double threshold = 0.5;
+
+        private Queue<double> runningAverage;
+
+        private int hitCount;
+
+        private DateTime lastMovement;
+        private TimeSpan settleTime;
+
         public MotionDetectorComponent(ImagerBase camera)
         {
-            this.camera = camera;
-            this.width = camera.Settings.ResX;
-            this.height = camera.Settings.ResY;
+            width = camera.Settings.ResX;
+            height = camera.Settings.ResY;
+
+            motionBoundaryRect = new Rect();
+            runningAverage = new Queue<double>(10);
+            lastMovement = DateTime.Now;
+            settleTime = TimeSpan.FromSeconds(1);
         }
-
-        double? oldAverage = null;
-        double numberOfMotionFrames = 0;
-        double threshold = 0.5;
-
-        Queue<double> runningAverage = new Queue<double>(10);
-
-        int hitCount;
-
-        DateTime lastMovement = DateTime.Now;
-        TimeSpan settleTime = TimeSpan.FromSeconds(1);
-        private ImagerBase camera;
 
         public override void UpdateFrame(object sender, EventArgs e)
         {
@@ -45,16 +46,14 @@ namespace VisionModules.Events.Components
 
             double average = 0;
 
-
             for (int x = (int)motionBoundaryRect.Left; x < (int)motionBoundaryRect.Right; x++)
             {
                 for (int y = (int)motionBoundaryRect.Top; y < (int)motionBoundaryRect.Bottom; y++)
                 {
-                    average += camera.ImageBuffer[x + y * stride];
+                    average += camera.ImageBuffer[x + (y * stride)];
                 }
             }
             
-
             average /= camera.ImageBuffer.Length;
 
             threshold = 0;
@@ -88,6 +87,7 @@ namespace VisionModules.Events.Components
                                 OnMotionUpdate(this, EventArgs.Empty);
                         }
                     }
+
                     lastMovement = DateTime.Now;
                 }
             }

@@ -1,7 +1,6 @@
-﻿// TODO: Handle serialization/deserialization of template image !!!!!!
+﻿// TODO: Handle serialization / deserialization of template image !!!!!!
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Windows;
@@ -11,7 +10,6 @@ using MayhemOpenCVWrapper.LowLevel;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
-using Point = System.Drawing.Point;
 
 namespace VisionModules.Events
 {
@@ -24,17 +22,19 @@ namespace VisionModules.Events
     [MayhemModule("Object Detector", "Detects objects in scene matching a template image")]
     internal class ObjectDetectorEvent : EventBase, IWpfConfigurable
     {
+        // ms
+        private const int DetectionInterval = 2500; 
+
         [DataMember]
-        private Byte[] templateImage_bytes;
+        private byte[] templateImageBytes;
 
         // preview image for template --> shown in config dialog
         [DataMember]
-        private Byte[] templatePreview_bytes;
+        private byte[] templatePreviewBytes;
 
         [DataMember]
         private Rect boundingRect;
 
-        private const int detectionInterval = 2500; //ms
         private DateTime lastObjectsDetected = DateTime.Now;
         private ObjectDetectorComponent od;
         private ObjectDetectorComponent.DetectionHandler objectDetectHandler;
@@ -43,16 +43,14 @@ namespace VisionModules.Events
 
         private Camera camera;
 
-        public Bitmap templateImage;
+        private Bitmap templateImage;
 
-        public Bitmap templatePreview;
-
-        public double previewScaleF = 1;
+        private Bitmap templatePreview;
 
         // the cam we have selected
-        private int selectedDeviceIndex = 0;
+        private int selectedDeviceIndex;
 
-        public bool templateConfigured
+        public bool TemplateConfigured
         {
             get { return od.TemplateIsSet; }
         }
@@ -76,34 +74,30 @@ namespace VisionModules.Events
             }
 
             od = new ObjectDetectorComponent(320, 240);
-            objectDetectHandler = new ObjectDetectorComponent.DetectionHandler(m_onObjectDetected);
+            objectDetectHandler = OnObjectDetected;
 
             // ----------- deserialize image and image preview
-            if (templateImage_bytes != null)
+            if (templateImageBytes != null)
             {
-                templateImage = VisionModulesWPFCommon.ArrayToBitmap(templateImage_bytes);
+                templateImage = VisionModulesWpfCommon.ArrayToBitmap(templateImageBytes);
                 od.SetTemplate(templateImage);
             }
 
-            if (templatePreview_bytes != null)
+            if (templatePreviewBytes != null)
             {
-                templatePreview = VisionModulesWPFCommon.ArrayToBitmap(templatePreview_bytes);
+                templatePreview = VisionModulesWpfCommon.ArrayToBitmap(templatePreviewBytes);
             }
         }
 
-        void m_onObjectDetected(object sender, DetectionEventArgs e)
+        private void OnObjectDetected(object sender, DetectionEventArgs e)
         {
-            List<Point> imageMatchingPoints = e.Points;
             // TODO
             TimeSpan ts = DateTime.Now - lastObjectsDetected;
 
-            if (ts.TotalMilliseconds > detectionInterval)
+            if (ts.TotalMilliseconds > DetectionInterval)
             {
-
-                Logger.WriteLine("m_OnMotionUpdate");
-
                 // trigger the reaction
-                base.Trigger();
+                Trigger();
 
                 lastObjectsDetected = DateTime.Now;
             }
@@ -119,6 +113,7 @@ namespace VisionModules.Events
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 if (camera.Running == false)
                     camera.StartFrameGrabbing();
+
                 // register the trigger's motion update handler
                 od.RegisterForImages(camera);
                 od.OnObjectDetected += objectDetectHandler;
@@ -126,11 +121,11 @@ namespace VisionModules.Events
             }
         }
 
-        /** <summary>
-         *  Passed from configuration dialog 
-         * </summary>
-         */
-        public void setTemplateImage(Bitmap tImage)
+        /// <summary>
+        /// Passed from configuration dialog 
+        /// </summary>
+        /// <param name="tImage"></param>
+        public void SetTemplateImage(Bitmap tImage)
         {
             od.SetTemplate(tImage);
             templateImage = tImage;
@@ -158,27 +153,23 @@ namespace VisionModules.Events
 
         public WpfConfiguration ConfigurationControl
         {
-            // TODO
-            //get { throw new NotImplementedException(); }
             get
             {
                 // TODO (!!!!) 
-                //string folderLocation = "";
 
                 // For now use the FaceDetect Config, and hardcode the template image 
                 ObjectDetectorConfig config = new ObjectDetectorConfig();
 
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {
-                    config.selectedBoundingRect = boundingRect;
+                    config.SelectedBoundingRect = boundingRect;
                 }
 
                 if (templateImage != null)
-                    config.templateImg = templateImage;
-
+                    config.TemplateImg = templateImage;
 
                 if (templatePreview != null)
-                    config.templatePreview = templatePreview;
+                    config.TemplatePreview = templatePreview;
 
                 config.DeviceList.SelectedIndex = selectedDeviceIndex;
                 return config;
@@ -187,22 +178,16 @@ namespace VisionModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            bool wasEnabled = this.IsEnabled;
-
-            // assign selected cam
-            // cam = ((CamSnapshotConfig)configurationControl).DeviceList.SelectedItem as Camera;
-
             ObjectDetectorConfig config = configurationControl as ObjectDetectorConfig;
 
-            camera = config.selected_camera;
-            boundingRect = config.selectedBoundingRect;
-            templateImage = config.templateImg;
-            templatePreview = config.templatePreview;
+            camera = config.SelectedCamera;
+            boundingRect = config.SelectedBoundingRect;
+            templateImage = config.TemplateImg;
+            templatePreview = config.TemplatePreview;
 
             // save the bytes, too!
-
-            templateImage_bytes = VisionModulesWPFCommon.BitmapToArray(templateImage);
-            templatePreview_bytes = VisionModulesWPFCommon.BitmapToArray(templatePreview);
+            templateImageBytes = VisionModulesWpfCommon.BitmapToArray(templateImage);
+            templatePreviewBytes = VisionModulesWpfCommon.BitmapToArray(templatePreview);
 
             // TODO: od.SetDetectionBoundaryRect(boundingRect) 
         }

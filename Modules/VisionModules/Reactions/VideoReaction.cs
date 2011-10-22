@@ -1,23 +1,21 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Threading;
+using System.Timers;
 using MayhemCore;
 using MayhemOpenCVWrapper;
+using MayhemOpenCVWrapper.LowLevel;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
-using MayhemOpenCVWrapper.LowLevel;
-using System.Timers;
 
 namespace VisionModules.Reactions
 {
-
-    public enum VIDEO_RECORDING_MODE
+    public enum VideoRecordingMode
     {
-        PRE_EVENT = 0,                                        // record 30s prior to the event
-        POST_EVENT = Camera.LoopDuration / 1000,             // record 30s after event
-        MID_EVENT = (Camera.LoopDuration / 1000) / 2         // record 15s before and 15s after the event
+        PreEvent = 0,                                        // record 30s prior to the event
+        PostEvent = Camera.LoopDuration / 1000,             // record 30s after event
+        MidEvent = (Camera.LoopDuration / 1000) / 2         // record 15s before and 15s after the event
     }
 
     /// <summary>
@@ -40,17 +38,24 @@ namespace VisionModules.Reactions
         private int selectedDeviceIndex;
 
         [DataMember]
-        private VIDEO_RECORDING_MODE videoRecordingMode;
+        private VideoRecordingMode videoRecordingMode;
 
         [DataMember]
         private bool shouldCompress;
 
         // The device we are recording from
-        private CameraDriver cameraDriver = CameraDriver.Instance;
-        private Camera camera = null;
-        private DummyCameraImageListener dummyCameraListener = new DummyCameraImageListener();
-        private string lastVideoSaved = String.Empty;
-        private bool videoSaving = false;
+        private CameraDriver cameraDriver;
+        private Camera camera;
+        private DummyCameraImageListener dummyCameraListener;
+        private string lastVideoSaved;
+        private bool videoSaving;
+
+        public VideoReaction()
+        {
+            lastVideoSaved = string.Empty;
+            dummyCameraListener = new DummyCameraImageListener();
+            cameraDriver = CameraDriver.Instance;
+        }
 
         protected override void OnLoadDefaults()
         {
@@ -59,7 +64,7 @@ namespace VisionModules.Reactions
             folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
             fileNamePrefix = "Mayhem";
             selectedDeviceIndex = 0;
-            videoRecordingMode = VIDEO_RECORDING_MODE.MID_EVENT;
+            videoRecordingMode = VideoRecordingMode.MidEvent;
             shouldCompress = false;
         }
 
@@ -91,14 +96,14 @@ namespace VisionModules.Reactions
                 now.Hour.ToString("D2") + "_" +
                 now.Minute.ToString("D2") + "_" +
                 now.Second.ToString("D2") + ".avi";
-            string path = this.folderLocation + "\\" + fileName;
+            string path = folderLocation + "\\" + fileName;
             lastVideoSaved = path;
             Logger.WriteLine("saving file to " + path);
             if (Directory.Exists(folderLocation))
             {
                 videoSaving = true;
                 Video v = new Video(camera, path, shouldCompress);
-                v.OnVideoSaved += new Video.VideoSavedEventHandler(v_OnVideoSaved);
+                v.OnVideoSaved += OnVideoSaved;
             }
             else
             {
@@ -110,8 +115,7 @@ namespace VisionModules.Reactions
         /// <summary>
         /// Called when the video is done saving itself
         /// </summary>
-        /// <param name="obj"></param>
-        private void v_OnVideoSaved(object sender,VideoSavedEventArgs e)
+        private void OnVideoSaved(object sender, VideoSavedEventArgs e)
         {
             camera.IsRecordingVideo = true;
             videoSaving = false;
@@ -126,21 +130,21 @@ namespace VisionModules.Reactions
         /// </summary>
         public override void Perform()
         {
-            int capture_offset_time = (int)videoRecordingMode;
-            Logger.WriteLine("Capturing with offset " + capture_offset_time);
+            int captureOffsetTime = (int)videoRecordingMode;
+            Logger.WriteLine("Capturing with offset " + captureOffsetTime);
             if (!videoSaving && camera != null)
             {
                 videoSaving = true;
-                if (capture_offset_time == 0)
+                if (captureOffsetTime == 0)
                 {
                     SaveVideo(this, null);
                 }
                 else
                 {
-                    Logger.WriteLine("Recording Video with offset: " + capture_offset_time + "s");
-                   // Timer t = new Timer(new TimerCallback((object state) => { SaveVideo(); }), this, capture_offset_time * 1000, Timeout.Infinite);
-                    System.Timers.Timer t = new System.Timers.Timer(capture_offset_time * 1000);
-                    t.Elapsed +=new System.Timers.ElapsedEventHandler(this.SaveVideo);
+                    Logger.WriteLine("Recording Video with offset: " + captureOffsetTime + "s");
+
+                    Timer t = new Timer(captureOffsetTime * 1000);
+                    t.Elapsed += SaveVideo;
                     t.AutoReset = false;
                     t.Start();
                 }
@@ -154,13 +158,13 @@ namespace VisionModules.Reactions
         protected override void OnEnabling(EnablingEventArgs e)
         {
             cameraDriver = CameraDriver.Instance;
-            Logger.WriteLine("");
-            if (!e.WasConfiguring &&  selectedDeviceIndex < cameraDriver.DeviceCount)
-            { 
+
+            if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
+            {
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 dummyCameraListener.RegisterForImages(camera);
-                
             }
+
             if (camera.Running == false)
                 camera.StartFrameGrabbing();
         }
@@ -184,28 +188,27 @@ namespace VisionModules.Reactions
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            bool wasEnabled = this.IsEnabled;
-
             VideoConfig config = configurationControl as VideoConfig;
             folderLocation = config.SaveLocation;
-            shouldCompress = config.compress_video;
+            shouldCompress = config.CompressVideo;
             fileNamePrefix = config.FilenamePrefix;
 
-            int camera_index = config.SelectedDeviceIdx;
+            int cameraIndex = config.SelectedDeviceIdx;
 
-            if (cameraDriver.CamerasAvailable.Count > camera_index)
+            if (cameraDriver.CamerasAvailable.Count > cameraIndex)
             {
                 // unregister, because camera might have changed
                 dummyCameraListener.UnregisterForImages(camera);
-                camera = cameraDriver.CamerasAvailable[camera_index];
+                camera = cameraDriver.CamerasAvailable[cameraIndex];
                 dummyCameraListener.RegisterForImages(camera);
-                selectedDeviceIndex = camera_index;
+                selectedDeviceIndex = cameraIndex;
             }
             else
             {
                 Logger.WriteLine("No Camera present, setting cam to null");
                 camera = null;
             }
+
             videoRecordingMode = config.RecordingMode;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemOpenCVWrapper;
@@ -6,7 +7,6 @@ using MayhemOpenCVWrapper.LowLevel;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
-using System.Runtime.CompilerServices;
 
 namespace VisionModules.Events
 {
@@ -18,9 +18,9 @@ namespace VisionModules.Events
     /// </summary>
     public enum PresenceTriggerMode
     {
-        TOGGLE,
-        OFF_ON,     // no presence  --> presence
-        ON_OFF      // presence     --> no presence
+        Toggle,
+        OffOn,     // no presence  --> presence
+        OnOff      // presence     --> no presence
     }
 
     /// <summary>
@@ -41,26 +41,31 @@ namespace VisionModules.Events
 
         private enum PresenceStatus
         {
-            UNINITIALIZED,
-            PRESENCE,
-            NO_PRESENCE
-        };
+            Uninitialized,
+            Presence,
+            NoPresence
+        }
 
         // ============== presence detector and camera ==========================
-        private ImagerBase cam = null;
+        private ImagerBase cam;
         private CameraDriver cameraDriver;
-        private PresenceDetectorComponent presenceDetector = null;
+        private PresenceDetectorComponent presenceDetector;
         private PresenceDetectorComponent.DetectionHandler presenceHandler;
-        private PresenceStatus lastPresenceStatus = PresenceStatus.UNINITIALIZED;
+        private PresenceStatus lastPresenceStatus = PresenceStatus.Uninitialized;
 
         // ================== suppress repeat triggering
-        private const int MinTriggerIntervalMS = 1500;
-        private DateTime lastTriggerDate = DateTime.MinValue;
+        private const int MinTriggerIntervalMs = 1500;
+        private DateTime lastTriggerDate;
+
+        public PresenceEvent()
+        {
+            lastTriggerDate = DateTime.MinValue;
+        }
 
         /// <summary>
         /// Percent value of sensitivity 
         /// </summary>
-        private int sensitivityPercent
+        private int SensitivityPercent
         {
             get
             {
@@ -71,7 +76,7 @@ namespace VisionModules.Events
         protected override void OnLoadDefaults()
         {
             selectedDeviceIndex = 0;
-            selectedTriggerMode = PresenceTriggerMode.TOGGLE;
+            selectedTriggerMode = PresenceTriggerMode.Toggle;
             sensitivity = PresenceDetectorComponent.DefaultSensitivity;
         }
 
@@ -91,32 +96,32 @@ namespace VisionModules.Events
             }
 
             presenceDetector = new PresenceDetectorComponent(320, 240);
-            presenceHandler = new PresenceDetectorComponent.DetectionHandler(m_OnPresenceUpdate) ;
+            presenceHandler = OnPresenceUpdate;
         }
 
         public WpfConfiguration ConfigurationControl
         {
             get
             {
-                int cam_index = 0;
+                int camIndex = 0;
                 if (cam != null)
                 {
-                    cam_index = cam.Info.DeviceId;
+                    camIndex = cam.Info.DeviceId;
                 }
-                return new PresenceConfig(cam_index, selectedTriggerMode, sensitivityPercent);
+
+                return new PresenceConfig(camIndex, selectedTriggerMode, SensitivityPercent);
             }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
             PresenceConfig config = configurationControl as PresenceConfig;
-            bool wasEnabled = this.IsEnabled;
 
             sensitivity = config.SelectedSensitivity;
 
             if (cam != null)
             {
-                cam = config.camera_selected;
+                cam = config.CameraSelected;
                 selectedDeviceIndex = cam.Info.DeviceId;
                 selectedTriggerMode = config.selected_triggerMode;
             }
@@ -145,7 +150,6 @@ namespace VisionModules.Events
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            Logger.WriteLine("Disable");
             // only disable the camera if the event is not configuring
             if (!e.IsConfiguring && cam != null)
             {
@@ -155,12 +159,12 @@ namespace VisionModules.Events
             }
         }
 
-        private void m_OnPresenceUpdate(object sender, DetectionEventArgs points)
+        private void OnPresenceUpdate(object sender, DetectionEventArgs points)
         {
-            PresenceDetectorComponent presenceDetector = sender as PresenceDetectorComponent;
-            bool presence = presenceDetector.Presence;
+            PresenceDetectorComponent presenceComponent = sender as PresenceDetectorComponent;
+            bool presence = presenceComponent.Presence;
 
-            if (lastPresenceStatus == PresenceStatus.UNINITIALIZED)
+            if (lastPresenceStatus == PresenceStatus.Uninitialized)
             {
                 // do nothing!
             }
@@ -171,18 +175,17 @@ namespace VisionModules.Events
                 // decide whether to activate
                 switch (selectedTriggerMode)
                 {
-
-                    case PresenceTriggerMode.OFF_ON:
-                        if (lastPresenceStatus == PresenceStatus.NO_PRESENCE && presence == true)
+                    case PresenceTriggerMode.OffOn:
+                        if (lastPresenceStatus == PresenceStatus.NoPresence && presence)
                             activated = true;
                         break;
-                    case PresenceTriggerMode.ON_OFF:
-                        if (lastPresenceStatus == PresenceStatus.PRESENCE && presence == false)
+                    case PresenceTriggerMode.OnOff:
+                        if (lastPresenceStatus == PresenceStatus.Presence && !presence)
                             activated = true;
                         break;
-                    case PresenceTriggerMode.TOGGLE:
-                        if (lastPresenceStatus == PresenceStatus.PRESENCE && presence == false ||
-                            lastPresenceStatus == PresenceStatus.NO_PRESENCE && presence == true)
+                    case PresenceTriggerMode.Toggle:
+                        if (lastPresenceStatus == PresenceStatus.Presence && !presence ||
+                            lastPresenceStatus == PresenceStatus.NoPresence && presence)
                             activated = true;
                         break;
                 }
@@ -190,27 +193,27 @@ namespace VisionModules.Events
                 TimeSpan span = DateTime.Now - lastTriggerDate;
 
                 // activate
-                if (activated && span.TotalMilliseconds >= MinTriggerIntervalMS)
+                if (activated && span.TotalMilliseconds >= MinTriggerIntervalMs)
                 {
                     lastTriggerDate = DateTime.Now;
-                    base.Trigger();
+                    Trigger();
                 }
             }
 
             // save the last presence state
             if (presence)
             {
-                lastPresenceStatus = PresenceStatus.PRESENCE;
+                lastPresenceStatus = PresenceStatus.Presence;
             }
             else
             {
-                lastPresenceStatus = PresenceStatus.NO_PRESENCE;
+                lastPresenceStatus = PresenceStatus.NoPresence;
             }
         }
 
         public string GetConfigString()
         {
-            string config = "Sensitivity: " + sensitivityPercent;
+            string config = "Sensitivity: " + SensitivityPercent;
             if (cam != null)
                 config += ", Cam Nr: " + cam.Info.DeviceId;
             return config;
