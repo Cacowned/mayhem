@@ -1,16 +1,4 @@
-﻿/*
- * CameraSettings.cs
- * 
- * Storage Class for camera initialization settings.
- * 
- * (c) 2010/2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-
-namespace MayhemOpenCVWrapper
+﻿namespace MayhemOpenCVWrapper
 {
     /// <summary>
     /// Contains settings for cameras

@@ -10,7 +10,6 @@ namespace ArduinoModules.Wpf.Helpers
     /// </summary>
     public class DataGridColumns : DependencyObject
     {
-
         #region Fields
 
         /// <summary>
@@ -30,7 +29,6 @@ namespace ArduinoModules.Wpf.Helpers
             typeof(bool),
             typeof(DataGridColumns),
             new UIPropertyMetadata(true, null, OnCoerceStretch));
-
 
         /// <summary>
         /// Gets the stretch.
@@ -63,13 +61,13 @@ namespace ArduinoModules.Wpf.Helpers
         /// <returns></returns>
         public static object OnCoerceStretch(DependencyObject source, object value)
         {
-            DataGrid lv = (source as DataGrid);
+            DataGrid lv = source as DataGrid;
 
-            //Ensure we dont have an invalid dependancy object of type ListView.
+            // Ensure we dont have an invalid dependancy object of type ListView.
             if (lv == null)
                 throw new ArgumentException("This property may only be used on ListViews");
 
-            //Setup our event handlers for this list view.
+            // Setup our event handlers for this list view.
             lv.Loaded += new RoutedEventHandler(lv_Loaded);
             lv.SizeChanged += new SizeChangedEventHandler(lv_SizeChanged);
             return value;
@@ -86,10 +84,10 @@ namespace ArduinoModules.Wpf.Helpers
         /// <param name="e">The <see cref="System.Windows.SizeChangedEventArgs"/> instance containing the event data.</param>
         private static void lv_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            DataGrid lv = (sender as DataGrid);
+            DataGrid lv = sender as DataGrid;
             if (lv.IsLoaded)
             {
-                //Set our initial widths.
+                // Set our initial widths.
                 SetColumnWidths(lv);
             }
         }
@@ -102,7 +100,8 @@ namespace ArduinoModules.Wpf.Helpers
         private static void lv_Loaded(object sender, RoutedEventArgs e)
         {
             DataGrid lv = (sender as DataGrid);
-            //Set our initial widths.
+
+            // Set our initial widths.
             SetColumnWidths(lv);
         }
         #endregion
@@ -114,7 +113,7 @@ namespace ArduinoModules.Wpf.Helpers
         /// </summary>
         private static void SetColumnWidths(DataGrid gridView)
         {
-            //Pull the stretch columns fromt the tag property.
+            // Pull the stretch columns fromt the tag property.
             ObservableCollection<DataGridColumn> columns = gridView.Columns as ObservableCollection<DataGridColumn>;
             double specifiedWidth = 0;
            
@@ -122,12 +121,12 @@ namespace ArduinoModules.Wpf.Helpers
             {
                 if (columns == null)
                 {
-                    //Instance if its our first run.
+                    // Instance if its our first run.
                     columns = new ObservableCollection<DataGridColumn>();
+
                     // Get all columns with no width having been set.
                     foreach (DataGridColumn column in gridView.Columns)
                     {
-                       
                         if (!(column.Width.Value >= 0))
                             columns.Add(column);
                         else specifiedWidth += column.ActualWidth;
@@ -148,14 +147,10 @@ namespace ArduinoModules.Wpf.Helpers
                     if (newWidth >= 0) column.Width = newWidth - 10;
                 }
 
-                //Store the columns in the TAG property for later use. 
+                // Store the columns in the TAG property for later use. 
                 gridView.Tag = columns;
             }
         }
-
-
         #endregion
-
     }
 }
-

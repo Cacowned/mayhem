@@ -1,14 +1,4 @@
-﻿/*
- * IBufferingImager.cs
- * 
- * Ongoing work to abstract away from the camera as only available imaging source, and to unify image providers within Mayhem. 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */ 
-using System;
+﻿using System;
 using System.Drawing;
 
 namespace MayhemOpenCVWrapper

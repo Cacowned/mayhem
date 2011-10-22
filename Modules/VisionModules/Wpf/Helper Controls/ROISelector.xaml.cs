@@ -1,15 +1,4 @@
-﻿/*
- *  ROISelector.xaml.cs
- * 
- *  Region of interest selector widget for Mayhem
- *  vision modules. 
- * 
- *  (c) 2011, Microsoft Applied Sciences Group
- *  Author: Sven Kratz
- */ 
-
-
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,7 +8,8 @@ using MayhemCore;
 namespace VisionModules.Wpf
 {
     /// <summary>
-    /// Interaction logic for ROISelector.xaml
+    /// Region of interest selector widget for Mayhem
+    /// vision modules.
     /// </summary>
     public partial class ROISelector : UserControl
     {

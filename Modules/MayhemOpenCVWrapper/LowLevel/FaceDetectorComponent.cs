@@ -1,16 +1,4 @@
-﻿/*
- *  FaceDetectirComponent.cs
- * 
- *  Face detector low-level wrapper. 
- *  Used by the Mayhem face detector module. 
- *  
- *  (c) 2011, Microsoft Applied Sciences Group
- *  
- *  Author: Sven Kratz
- *  
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using MayhemCore;

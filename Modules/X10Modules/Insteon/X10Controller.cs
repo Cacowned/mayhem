@@ -1,14 +1,4 @@
-﻿/*
- *  InsteonX10Controller.cs
- * 
- *  This class handles communication with an Insteon Modem in X10 Mode
- * 
- *  (c) 2011, Microsoft Applied Sciences Group
- *  
- *  Author: Sven Kratz
- *  
- */ 
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -17,6 +7,9 @@ using MayhemCore;
 
 namespace X10Modules.Insteon
 {
+    /// <summary>
+    /// This class handles communication with an Insteon Modem in X10 Mode
+    /// </summary>
     public class X10Controller : InsteonControllerBase
     {
         public static Dictionary<X10HouseCode, Dictionary<X10UnitCode, bool>> deviceStates = null ;

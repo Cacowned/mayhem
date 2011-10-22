@@ -1,17 +1,4 @@
-﻿/*
- * InsteonReactionConfig.xaml.cs
- * 
- * 
- * User interface logic for the InsteonReaction Module
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- * 
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Timers;
@@ -26,7 +13,7 @@ using X10Modules.Insteon;
 namespace X10Modules.Wpf
 {
     /// <summary>
-    /// Interaction logic for InsteonReactionConfig.xaml
+    /// User interface logic for the InsteonReaction Module
     /// </summary>
     public partial class InsteonReactionConfig : WpfConfiguration
     {

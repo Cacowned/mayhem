@@ -1,15 +1,4 @@
-﻿/*
- * CamSnapshot.cs
- * 
- * Basic snapshot module that saves camera images to disk. 
- * 
- * (c) 2010/2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization;
@@ -24,6 +13,9 @@ using System.Runtime.CompilerServices;
 
 namespace VisionModules.Reactions
 {
+    /// <summary>
+    /// Basic snapshot module that saves camera images to disk.
+    /// </summary>
     [DataContract]
     [MayhemModule("Picture", "Takes a photo with a webcam and saves it to the hard drive")]
     public class Picture : ReactionBase, IWpfConfigurable

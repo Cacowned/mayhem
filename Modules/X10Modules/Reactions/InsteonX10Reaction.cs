@@ -1,16 +1,4 @@
-﻿/*
- * InsteonX10Reaction.cs
- * 
- * X10  Mayhem Reaction for Insteon Modules -- can be used to control X10 devices on the power line
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * 
- * Author: Sven Kratz
- * 
- */
-
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemSerial;
 using MayhemWpf.ModuleTypes;
@@ -20,6 +8,9 @@ using X10Modules.Wpf;
 
 namespace X10Modules.Reactions
 {
+    /// <summary>
+    /// X10 Mayhem Reaction for Insteon Modules -- can be used to control X10 devices on the power line
+    /// </summary>
     [DataContract]
     [MayhemModule("X10Reaction", "Triggers X10 Commands")]
     public class InsteonX10Reaction : ReactionBase, IWpfConfigurable

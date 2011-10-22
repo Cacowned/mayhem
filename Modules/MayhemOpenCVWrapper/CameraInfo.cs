@@ -1,20 +1,9 @@
-﻿/*
- * CameraInfo.cs
- * 
- * Storage class for info about camera capabilities
- * 
- * (c) 2010/2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-namespace MayhemOpenCVWrapper
+﻿namespace MayhemOpenCVWrapper
 {
-    /** <summary>Just a wrapper for information about detected cameras 
-       could in future be extended to contain the camera's capabilities (i.e. max resolutions, etc.)
-        </summary>
-     * */
+    /// <summary>
+    /// Just a wrapper for information about detected cameras could in
+    /// the future be extended to contain the camera's capabilities (i.e. max resolutions, etc.)
+    /// </summary>
     public class CameraInfo
     {
         /// <summary>

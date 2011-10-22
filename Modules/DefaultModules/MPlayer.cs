@@ -10,7 +10,7 @@ namespace DefaultModules
     {
         private MediaPlayer mediaPlayer;
 
-        private Thread runThread;
+        private readonly Thread runThread;
 
         private Uri fileToPlay;
 

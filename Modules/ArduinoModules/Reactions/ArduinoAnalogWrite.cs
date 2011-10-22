@@ -1,16 +1,8 @@
-﻿/*
- * ArduinoAnalogWrite.cs
- * 
- * Writes PWM to analog-out pins of the Arduino
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-namespace ArduinoModules.Reactions
+﻿namespace ArduinoModules.Reactions
 {
+    /// <summary>
+    /// Writes PWM to analog-out pins of the Arduino
+    /// </summary>
     internal class ArduinoAnalogWrite
     {
     }

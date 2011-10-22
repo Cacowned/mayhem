@@ -1,18 +1,11 @@
-﻿/*
- * ImagerBase.cs
- * 
- * Abstract base class for imaging devices, i.e. cameras or video capture cards. 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */ 
-using System;
+﻿using System;
 using System.Drawing;
 
 namespace MayhemOpenCVWrapper
 {
+    /// <summary>
+    /// Abstract base class for imaging devices, i.e. cameras or video capture cards.
+    /// </summary>
     public abstract class ImagerBase
     {
         /// <summary>

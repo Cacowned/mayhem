@@ -11,7 +11,7 @@ namespace DefaultModules.Events
 {
     [DataContract]
     [MayhemModule("Folder Change", "This event monitors changes on a given folder.")]
-    public class FolderChange : EventBase, IWpfConfigurable
+    public class FolderChange : EventBase, IWpfConfigurable, IDisposable
     {
         [DataMember]
         private string folderToMonitor;
@@ -90,7 +90,9 @@ namespace DefaultModules.Events
         {
             string conf = string.Empty;
             int pathLength = folderToMonitor.Length;
-            int cutoff = 10;
+
+            const int cutoff = 10;
+
             string substr;
             if (pathLength >= cutoff)
                 substr = folderToMonitor.Substring(pathLength - cutoff, cutoff);
@@ -113,7 +115,7 @@ namespace DefaultModules.Events
         {
             Logger.WriteLine(a.FullPath);
             Logger.WriteLine("Args: " + a.ChangeType + " Fname " + a.Name);
-            
+
             if (!TriggeredRecently())
             {
                 Trigger();
@@ -155,6 +157,11 @@ namespace DefaultModules.Events
             lastTriggeredDate = DateTime.Now;
 
             return shouldReturn;
+        }
+
+        public void Dispose()
+        {
+            fileWatcher.Dispose();
         }
     }
 }

@@ -1,22 +1,13 @@
-﻿/*
- *  MayhemCameraDriver.cs
- *  
- *  Manages cameras for Mayhem. Enforces the singleton pattern for camera objects available at runtime. 
- * 
- * 
- *  (c) 2010/2011, Microsoft Applied Sciences Group
- *  
- *  Author: Sven Kratz
- * 
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {
+    /// <summary>
+    /// Manages cameras for Mayhem. Enforces the singleton pattern for camera objects available at runtime. 
+    /// </summary>
     public sealed class CameraDriver
     {
         // singleton class ! 

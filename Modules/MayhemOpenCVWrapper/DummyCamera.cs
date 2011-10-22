@@ -1,16 +1,4 @@
-﻿/*
- * 
- * DummyCamera.cs
- * 
- * A dummy camera implementation. Used when Mayhem has no imaging device attached. 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-using System.Drawing;
+﻿using System.Drawing;
 using MayhemCore;
 
 namespace MayhemOpenCVWrapper

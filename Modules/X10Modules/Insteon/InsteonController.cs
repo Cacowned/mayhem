@@ -1,15 +1,4 @@
-﻿/*
- * InsteonController.cs
- * 
- * Implements Insteon protocol for Mayhem
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * 
- * Author: Sven Kratz
- * 
- */ 
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -18,7 +7,9 @@ using MayhemCore;
 namespace X10Modules.Insteon
 {
     
-
+    /// <summary>
+    /// Implements Insteon protocol for Mayhem
+    /// </summary>
     public class InsteonController : InsteonControllerBase
     {
         private InsteonController(string portName) : base(portName){}

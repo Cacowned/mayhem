@@ -1,15 +1,4 @@
-﻿/*
- *  ObjectDetectorEvent.cs
- * 
- *  Object Detector Mayhem Module
- * 
- * (c) Microsoft Applied Sciences Group, 2011
- * 
- *  Author: Sven Kratz
- * 
- */
-
-// TODO: Handle serialization/deserialization of template image !!!!!!
+﻿// TODO: Handle serialization/deserialization of template image !!!!!!
 
 using System;
 using System.Collections.Generic;
@@ -27,7 +16,9 @@ using Point = System.Drawing.Point;
 namespace VisionModules.Events
 {
     /// <summary>
-    /// Still under development! 
+    /// Still under development!
+    /// 
+    /// Object Detector Mayhem Module
     /// </summary>
     [DataContract]
     [MayhemModule("Object Detector", "Detects objects in scene matching a template image")]

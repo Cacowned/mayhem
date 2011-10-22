@@ -1,29 +1,10 @@
-﻿/*
- *  VideoDiskBuffer.cs
- * 
- *  Maintains a ring buffer for caching video frames on the hard drive.
- *  This helps reduce Mayhem's memory footprint, as caching high-res video frames in memory consumes
- *  too much memory. 
- *  
- * The space required for caching 600 640x480 bitmaps, which is 30s worth of video at 20fps,  is about 600mb.
- *  
- *  (c) 2011, Microsoft Applied Sciences Group
- *  
- *  Author: Sven Kratz
- * 
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Runtime.Serialization.Formatters.Binary;
-using MayhemCore;
-using System.Threading;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Threading;
+using MayhemCore;
 
 namespace MayhemOpenCVWrapper
 {
@@ -32,6 +13,12 @@ namespace MayhemOpenCVWrapper
     /// Video disk buffer for Mayhem's camera objects. 
     /// By default, the video disk buffer buffers 30s of video frames from each of the cameras active in Mayhem. 
     /// The buffer is organized as a ring buffer, that over 
+    /// 
+    /// Maintains a ring buffer for caching video frames on the hard drive.
+    /// This helps reduce Mayhem's memory footprint, as caching high-res video frames in memory consumes
+    /// too much memory. 
+    /// 
+    /// The space required for caching 600 640x480 bitmaps, which is 30s worth of video at 20fps,  is about 600mb.
     /// </summary>
     internal class VideoDiskBuffer : IDisposable
     {

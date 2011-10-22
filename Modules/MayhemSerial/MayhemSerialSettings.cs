@@ -1,16 +1,10 @@
-﻿/*
- * MayhemSerialSettings.cs
- * 
- * Settings database for various serial periphery used by Mayhem 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- */
-using System.IO.Ports;
+﻿using System.IO.Ports;
 
 namespace MayhemSerial
 {
+    /// <summary>
+    /// Settings database for various serial periphery used by Mayhem 
+    /// </summary>
     public abstract class SerialSettings
     {
         public abstract int BaudRate

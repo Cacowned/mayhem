@@ -1,17 +1,4 @@
-﻿/*
- * Video.cs
- * Allows Mayhem to write AVI files from lists of Bitmaps
- * 
- * Uses AviFile Library by Corinna John
- * http://www.codeproject.com/KB/audio-video/avifilewrapper.aspx
- * Licensed as FOSS under Code Project Open License: http://www.codeproject.com/info/cpol10.aspx
- * 
- * (c) 2011, Microsoft Applied Scienced Group
- * 
- * Author: Sven Kratz
- * 
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using AviFile;
@@ -21,6 +8,13 @@ using MayhemOpenCVWrapper.LowLevel;
 
 namespace MayhemOpenCVWrapper
 {
+    /// <summary>
+    /// Allows Mayhem to write AVI files from lists of Bitmaps
+    /// 
+    /// Uses AviFile Library by Corinna John
+    /// http://www.codeproject.com/KB/audio-video/avifilewrapper.aspx
+    /// Licensed as FOSS under Code Project Open License: http://www.codeproject.com/info/cpol10.aspx
+    /// </summary>
     public class Video
     {
         public delegate void VideoSavedEventHandler(object sender, VideoSavedEventArgs e);

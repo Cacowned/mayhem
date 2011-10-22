@@ -53,8 +53,10 @@
     <Compile Include="Insteon\InsteonCommands\InsteonResponseCommand.cs" />
     <Compile Include="Insteon\InsteonCommands\InsteonStandardMessage.cs" />
     <Compile Include="Insteon\InsteonUsbModemSerialSettings.cs" />
-    <Compile Include="Insteon\InsteonX10CommandTable.cs" />
+    <Compile Include="Insteon\X10CommandCode.cs" />
     <Compile Include="Insteon\X10Controller.cs" />
+    <Compile Include="Insteon\X10HouseCode.cs" />
+    <Compile Include="Insteon\X10UnitCode.cs" />
     <Compile Include="Reactions\InsteonReaction.cs" />
     <Compile Include="Reactions\InsteonX10Reaction.cs" />
     <Compile Include="Insteon\InsteonControllerBase.cs" />

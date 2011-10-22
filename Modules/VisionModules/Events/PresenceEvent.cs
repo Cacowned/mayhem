@@ -1,18 +1,4 @@
-﻿/*
- * 
- * PresenceEvent.cs
- * 
- * Presence Mayhem Event
- * 
- * Fires when it detects a change in presence. 
- * 
- * (c) 2011, Microsoft Applied Sciences Group
- * 
- * Author: Sven Kratz
- * 
- */
-
-using System;
+﻿using System;
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemOpenCVWrapper;
@@ -37,6 +23,9 @@ namespace VisionModules.Events
         ON_OFF      // presence     --> no presence
     }
 
+    /// <summary>
+    /// Fires when it detects a change in presence.
+    /// </summary>
     [DataContract]
     [MayhemModule("Presence Detector", "Detects presence of humans in the scene")]
     internal class PresenceEvent : EventBase, IWpfConfigurable
