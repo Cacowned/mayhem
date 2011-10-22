@@ -12,7 +12,7 @@
         public int DeviceId
         {
             get;
-            private set; 
+            private set;
         }
 
         /// <summary>
@@ -21,7 +21,7 @@
         public string Description
         {
             get;
-            private set; 
+            private set;
         }
 
         /// <summary>
@@ -50,10 +50,7 @@
         /// <returns>String</returns>
         public override string ToString()
         {
-            return "" + DeviceId + " : " + Description;
+            return DeviceId + " : " + Description;
         }
-
     }
-
-
 }

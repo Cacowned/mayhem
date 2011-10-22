@@ -8,12 +8,11 @@ namespace MayhemOpenCVWrapper.LowLevel
     /// </summary>
     public abstract class CameraImageListener
     {
-
-        protected Camera.ImageUpdateHandler ImageUpdateHandler;
+        private Camera.ImageUpdateHandler imageUpdateHandler;
 
         public CameraImageListener()
         {
-            ImageUpdateHandler = new Camera.ImageUpdateHandler(UpdateFrame);
+            imageUpdateHandler = new Camera.ImageUpdateHandler(UpdateFrame);
         }
 
         /// <summary>
@@ -22,11 +21,10 @@ namespace MayhemOpenCVWrapper.LowLevel
         /// <param name="c">ImagerBase to register</param>
         public virtual void RegisterForImages(ImagerBase c)
         {
-            Logger.WriteLine("");
             if (c != null)
             {
-                c.OnImageUpdated -= ImageUpdateHandler;
-                c.OnImageUpdated += ImageUpdateHandler;
+                c.OnImageUpdated -= imageUpdateHandler;
+                c.OnImageUpdated += imageUpdateHandler;
             }
         }
 
@@ -36,15 +34,13 @@ namespace MayhemOpenCVWrapper.LowLevel
         /// <param name="c">ImagerBase to unregister</param>
         public virtual void UnregisterForImages(ImagerBase c)
         {
-            Logger.WriteLine("");
             if (c != null)
-                c.OnImageUpdated -= ImageUpdateHandler;
+                c.OnImageUpdated -= imageUpdateHandler;
         }
 
         /// <summary>
         ///  Processes a new frame from the camera and decides if event should be triggered
         /// </summary>
         public abstract void UpdateFrame(object sender, EventArgs e);
-
     }
 }

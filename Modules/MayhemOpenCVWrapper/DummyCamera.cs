@@ -10,15 +10,15 @@ namespace MayhemOpenCVWrapper
     {
         public override event ImageUpdateHandler OnImageUpdated;
 
-        public override CameraInfo Info 
-        { 
-            get {return CameraInfo.DummyInfo();} 
+        public override CameraInfo Info
+        {
+            get { return CameraInfo.DummyInfo(); }
             protected set { }
         }
 
         public override CameraSettings Settings
         {
-            get { return CameraSettings.Defaults();}
+            get { return CameraSettings.Defaults(); }
             protected set { }
         }
 
@@ -31,20 +31,21 @@ namespace MayhemOpenCVWrapper
         public override Bitmap ImageAsBitmap()
         {
             Logger.WriteLine("returning dummy image");
+            
             // TODO: add Mayhem's logo or something 
             return new Bitmap(Settings.ResX, Settings.ResY);
         }
 
-        public override  void StartFrameGrabbing()
+        public override void StartFrameGrabbing()
         {
-            Logger.WriteLine("StartFrameGrabbing");
             // no-op
+            Logger.WriteLine("StartFrameGrabbing");
         }
 
         public override bool TryStopFrameGrabbing()
         {
             Logger.WriteLine("TryStopFrameGrabbing");
-            return true; 
+            return true;
         }
     }
 }

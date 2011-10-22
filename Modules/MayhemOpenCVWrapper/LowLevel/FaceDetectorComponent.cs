@@ -1,23 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows;
 using MayhemCore;
 using OpenCVDLL;
 using Point = System.Drawing.Point;
-using System.Drawing;
-using System.Drawing.Imaging;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
-
     /// <summary>
     /// Face detector component of the face detector event. Can also be used as a standalone face detector. 
     /// </summary>
     public class FaceDetectorComponent : CameraImageListener, IDisposable
-    {     
+    {
         public delegate void DetectionHandler(object sender, DetectionEventArgs e);
+
         public event DetectionHandler OnFaceDetected;
-        public Rect DetectionBoundary = new Rect(0, 0, 0, 0);
+
+        public Rect DetectionBoundary
+        {
+            get;
+            set;
+        }
 
         private FaceDetector fd;
         private int frameCount = 0;
@@ -32,6 +37,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             int width = c.Settings.ResX;
             int height = c.Settings.ResY;
             Logger.WriteLine("Face Detector: w {0} h {1}", width, height);
+            DetectionBoundary = new Rect(0, 0, 0, 0);
             fd = new FaceDetector(width, height);
         }
 
@@ -40,13 +46,13 @@ namespace MayhemOpenCVWrapper.LowLevel
             Dispose(false);
             return;
         }
-       
+
         /// <summary>
         ///  Processes a new frame from the camera and decides if event should be triggered
         /// </summary>
         public override void UpdateFrame(object sender, EventArgs e)
         {
-            Logger.WriteLine("frame nr "+frameCount);
+            Logger.WriteLine("frame nr " + frameCount);
             frameCount++;
             Camera camera = sender as Camera;
             int[] faceCoords = new int[1024];
@@ -59,21 +65,18 @@ namespace MayhemOpenCVWrapper.LowLevel
             IntPtr imgPointer = bd.Scan0;
 
             // transmit frame
-           
             unsafe
             {
-                
                 fixed (int* buf = faceCoords)
                 {
-                    fd.ProcessFrame((byte *) imgPointer, buf, &numFacesCoords);
+                    fd.ProcessFrame((byte*)imgPointer, buf, &numFacesCoords);
                 }
-                
             }
-            
+
             cameraImage.UnlockBits(bd);
             cameraImage.Dispose();
 
-            Logger.WriteLineIf(VerboseDebug, ">>>>> Got " + numFacesCoords+ " face coords ");
+            Logger.WriteLineIf(VerboseDebug, ">>>>> Got " + numFacesCoords + " face coords ");
 
             // no need to do further work if no faces have been detected
             // update listeners with an empty list to inform them that nothing has been detected
@@ -81,17 +84,18 @@ namespace MayhemOpenCVWrapper.LowLevel
             {
                 if (OnFaceDetected != null)
                     OnFaceDetected(this, new DetectionEventArgs(new List<Point>()));
+
                 return;
             }
-                
-            int cpIdx = 0;
+
+            int indexCoord = 0;
             List<Point> points = new List<Point>();
 
             // copy the coordinates to a list
-            for (cpIdx = 0; cpIdx < numFacesCoords; )
+            for (indexCoord = 0; indexCoord < numFacesCoords; )
             {
-                Point p1 = new Point(faceCoords[cpIdx++], faceCoords[cpIdx++]);
-                Point p2 = new Point(faceCoords[cpIdx++], faceCoords[cpIdx++]);
+                Point p1 = new Point(faceCoords[indexCoord++], faceCoords[indexCoord++]);
+                Point p2 = new Point(faceCoords[indexCoord++], faceCoords[indexCoord++]);
                 Logger.WriteLineIf(VerboseDebug, "Point 1: " + p1 + " Point 2: " + p2);
 
                 points.Add(p1);
@@ -104,38 +108,35 @@ namespace MayhemOpenCVWrapper.LowLevel
                 if (DetectionBoundary.Width == 0 && DetectionBoundary.Height == 0)
                 {
                     if (OnFaceDetected != null)
-                         OnFaceDetected(this, new DetectionEventArgs(points));
+                        OnFaceDetected(this, new DetectionEventArgs(points));
                 }
                 else
                 {
                     // decide whether the points are within the boundary
-
-                    Point pMax = new Point(int.MinValue, int.MinValue);
-                    Point pMin = new Point(int.MaxValue, int.MaxValue);
+                    Point maxPoint = new Point(int.MinValue, int.MinValue);
+                    Point minPoint = new Point(int.MaxValue, int.MaxValue);
 
                     foreach (Point p in points)
                     {
                         if (p.X == 0 && p.Y == 0)
                             continue;
-                        pMin.X = Math.Min(pMin.X, p.X);
-                        pMax.X = Math.Max(pMax.X, p.X);
-                        pMin.Y = Math.Min(pMin.Y, p.Y);
-                        pMax.Y = Math.Max(pMax.Y, p.Y);
+                        minPoint.X = Math.Min(minPoint.X, p.X);
+                        maxPoint.X = Math.Max(maxPoint.X, p.X);
+                        minPoint.Y = Math.Min(minPoint.Y, p.Y);
+                        maxPoint.Y = Math.Max(maxPoint.Y, p.Y);
                     }
 
-                    Rect dataBounds = new Rect(pMin.X, pMin.Y, pMax.X - pMin.X, pMax.Y - pMin.Y);
+                    Rect dataBounds = new Rect(minPoint.X, minPoint.Y, maxPoint.X - minPoint.X, maxPoint.Y - minPoint.Y);
 
                     if (dataBounds.IntersectsWith(DetectionBoundary))
                     {
                         if (OnFaceDetected != null)
                             OnFaceDetected(this, new DetectionEventArgs(points));
                     }
-                }             
+                }
             }
         }
 
-        
-        
         /// <summary>
         /// Sets the motion boundary rectangle, called by the associated trigger object
         /// </summary>
@@ -156,7 +157,6 @@ namespace MayhemOpenCVWrapper.LowLevel
         {
             if (dispose)
             {
-
             }
             else
             {
@@ -169,6 +169,4 @@ namespace MayhemOpenCVWrapper.LowLevel
             Dispose(true);
         }
     }
-
-       
 }

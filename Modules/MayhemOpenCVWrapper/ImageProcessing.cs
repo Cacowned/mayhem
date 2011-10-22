@@ -1,6 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
-using System;
 
 namespace MayhemOpenCVWrapper
 {
@@ -25,35 +25,35 @@ namespace MayhemOpenCVWrapper
             int destX = 0;
             int destY = 0;
 
-            float nPercent = 0;
-            float nPercentW = 0;
-            float nPercentH = 0;
+            float percent = 0;
+            float percentW = 0;
+            float percentH = 0;
 
-            nPercentW = ((float)width / (float)sourceWidth);
-            nPercentH = ((float)height / (float)sourceHeight);
-            if (nPercentH < nPercentW)
+            percentW = (float)width / (float)sourceWidth;
+            percentH = (float)height / (float)sourceHeight;
+            if (percentH < percentW)
             {
-                nPercent = nPercentH;
+                percent = percentH;
                 destX = System.Convert.ToInt16((width -
-                              (sourceWidth * nPercent)) / 2);
+                              (sourceWidth * percent)) / 2);
             }
             else
             {
-                nPercent = nPercentW;
+                percent = percentW;
                 destY = System.Convert.ToInt16((height -
-                              (sourceHeight * nPercent)) / 2);
+                              (sourceHeight * percent)) / 2);
             }
 
-            int destWidth = (int)(sourceWidth * nPercent);
-            int destHeight = (int)(sourceHeight * nPercent);
+            int destWidth = (int)(sourceWidth * percent);
+            int destHeight = (int)(sourceHeight * percent);
 
-            Bitmap bmPhoto = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Bitmap photo = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             try
             {
-                bmPhoto.SetResolution(imgPhoto.HorizontalResolution,
+                photo.SetResolution(imgPhoto.HorizontalResolution,
                                  imgPhoto.VerticalResolution);
 
-                Graphics grPhoto = Graphics.FromImage(bmPhoto);
+                Graphics grPhoto = Graphics.FromImage(photo);
                 grPhoto.Clear(System.Drawing.Color.Red);
                 grPhoto.InterpolationMode =
                         InterpolationMode.HighQualityBicubic;
@@ -64,16 +64,13 @@ namespace MayhemOpenCVWrapper
                     GraphicsUnit.Pixel);
                 grPhoto.Dispose();
             }
-            catch (Exception ex)
+            catch
             {
-                bmPhoto.Dispose();
+                photo.Dispose();
             }
-            
-           
 
-            
             // bmPhoto is not disposed, as it is returned. 
-            return  bmPhoto;
+            return photo;
         }
     }
 }

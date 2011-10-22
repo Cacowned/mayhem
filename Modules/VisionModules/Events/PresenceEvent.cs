@@ -72,7 +72,7 @@ namespace VisionModules.Events
         {
             selectedDeviceIndex = 0;
             selectedTriggerMode = PresenceTriggerMode.TOGGLE;
-            sensitivity = PresenceDetectorComponent.kDefaultSensitivity;
+            sensitivity = PresenceDetectorComponent.DefaultSensitivity;
         }
 
         protected override void OnAfterLoad()
@@ -158,7 +158,7 @@ namespace VisionModules.Events
         private void m_OnPresenceUpdate(object sender, DetectionEventArgs points)
         {
             PresenceDetectorComponent presenceDetector = sender as PresenceDetectorComponent;
-            bool presence = presenceDetector.presence;
+            bool presence = presenceDetector.Presence;
 
             if (lastPresenceStatus == PresenceStatus.UNINITIALIZED)
             {

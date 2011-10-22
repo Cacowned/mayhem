@@ -11,7 +11,7 @@ namespace MayhemOpenCVWrapper
     public sealed class CameraDriver
     {
         // singleton class ! 
-        private static CameraDriver instance_ = new CameraDriver();
+        private static CameraDriver instance = new CameraDriver();
 
         /// <summary>
         /// CameraDriver singleton instance
@@ -20,20 +20,24 @@ namespace MayhemOpenCVWrapper
         {
             get
             {
-                if (instance_ == null)
+                if (instance == null)
                 {
-                    instance_ = new CameraDriver();
+                    instance = new CameraDriver();
                 }
-                return instance_;
+
+                return instance;
             }
         }
 
         /// <summary>
-        /// Returns readonly list of the available cameras. 
+        /// Returns read-only list of the available cameras. 
         /// </summary>
-        public  ReadOnlyCollection<Camera> CamerasAvailable
+        public ReadOnlyCollection<Camera> CamerasAvailable
         {
-            get { return cameras_available_.AsReadOnly(); }
+            get
+            {
+                return camerasAvailable.AsReadOnly();
+            }
         }
 
         /// <summary>
@@ -41,12 +45,12 @@ namespace MayhemOpenCVWrapper
         /// </summary>
         public int DeviceCount
         {
-            get { return cameras_available_.Count; }
+            get { return camerasAvailable.Count; }
         }
 
-        private List<CameraInfo> devices_available = new List<CameraInfo>();
-        private List<Camera> cameras_available_ = new List<Camera>(); 
-      
+        private List<CameraInfo> devicesAvailable = new List<CameraInfo>();
+        private List<Camera> camerasAvailable = new List<Camera>();
+
         private CameraDriver()
         {
             // just initialize the capture library
@@ -54,19 +58,18 @@ namespace MayhemOpenCVWrapper
             try
             {
                 OpenCVDLL.OpenCVBindings.Initialize();
-                devices_available = EnumerateDevices();
+                devicesAvailable = EnumerateDevices();
 
                 // instantiate all cameras found
-                if (devices_available.Count > 0)
+                if (devicesAvailable.Count > 0)
                 {
-
-                    foreach (CameraInfo c in devices_available)
+                    foreach (CameraInfo c in devicesAvailable)
                     {
                         Camera cam = new Camera(c, CameraSettings.Defaults());
-                        cameras_available_.Add(cam);
+                        camerasAvailable.Add(cam);
                     }
 
-                    Logger.WriteLine(devices_available.Count + " devices available");
+                    Logger.WriteLine(devicesAvailable.Count + " devices available");
                 }
                 else
                 {
@@ -80,41 +83,44 @@ namespace MayhemOpenCVWrapper
         }
 
         /// <summary>
-        ///  Returns cameraInfo objects of all cameras found
-        ///  index in the array corresponds to the camera's device ID
-        ///  Works by parsing a string returned by OpenCVDLL. 
-        ///  TODO: Return a managed object directly from C++/Clr, getting rid of the unsafe code
+        /// Returns cameraInfo objects of all cameras found
+        /// index in the array corresponds to the camera's device ID
+        /// Works by parsing a string returned by OpenCVDLL. 
+        /// TODO: Return a managed object directly from C++/Clr, getting rid of the unsafe code
         /// </summary>
         private List<CameraInfo> EnumerateDevices()
         {
             List<CameraInfo> c = new List<CameraInfo>();
-            string deviceNames = "";
+            string deviceNames = string.Empty;
 
             unsafe
             {
                 int deviceCount = 0;
+
                 // deviceStrings Buffer will be written to            
-                sbyte[] deviceNameBuf =  new sbyte[1024];
-                
+                sbyte[] deviceNameBuf = new sbyte[1024];
+
                 fixed (sbyte* deviceStrings = deviceNameBuf)
                 {
                     OpenCVDLL.OpenCVBindings.EnumerateDevices(deviceStrings, &deviceCount);
-                    deviceNames = new String(deviceStrings);                 
-                }       
+                    deviceNames = new string(deviceStrings);
+                }
             }
+
             if (deviceNames != string.Empty)
             {
                 string[] deviceStrings = deviceNames.Split(';');
-                //items in device_strings correspond to the actual devices
 
+                // items in deviceStrings correspond to the actual devices
                 if (deviceStrings.Length > 0)
-                {                  
+                {
                     for (int i = 0; i < deviceStrings.Length; i++)
                     {
-                        c.Add( new CameraInfo(i, deviceStrings[i]) ) ;
+                        c.Add(new CameraInfo(i, deviceStrings[i]));
                     }
                 }
             }
+
             return c;
         }
     }

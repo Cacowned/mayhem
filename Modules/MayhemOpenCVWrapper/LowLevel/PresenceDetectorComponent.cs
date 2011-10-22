@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
-using MayhemCore;
 using System.Drawing.Imaging;
+using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
@@ -14,17 +14,18 @@ namespace MayhemOpenCVWrapper.LowLevel
         /// <summary>
         /// Returns the value of the default sensitivity set in the presence detector dll. 
         /// </summary>
-        public static double kDefaultSensitivity
+        public static double DefaultSensitivity
         {
             get
             {
-                return OpenCVDLL.PresenceDetector.DEFAULT_SENSITIVITY; 
+                return OpenCVDLL.PresenceDetector.DEFAULT_SENSITIVITY;
             }
         }
 
         private OpenCVDLL.PresenceDetector pd;
 
         public delegate void DetectionHandler(object sender, DetectionEventArgs e);
+
         public event DetectionHandler OnPresenceUpdate;
 
         /// <summary>
@@ -40,28 +41,26 @@ namespace MayhemOpenCVWrapper.LowLevel
                 {
                     return pd.Sensitivity;
                 }
-                else
-                {
-                    return 0;
-                }
+
+                return 0;
             }
             set
             {
                 if (pd != null)
                 {
-                    pd.Sensitivity = value; 
+                    pd.Sensitivity = value;
                 }
             }
         }
 
-        private bool presence_ = false;
+        private bool presence = false;
 
         /// <summary>
         /// Returns true if presence has been detected in the last frame.
         /// </summary>
-        public bool presence
+        public bool Presence
         {
-            get { return presence_; }
+            get { return presence; }
         }
 
         public PresenceDetectorComponent(int width, int height)
@@ -70,7 +69,7 @@ namespace MayhemOpenCVWrapper.LowLevel
         }
 
         ~PresenceDetectorComponent()
-        {  
+        {
             Dispose(false);
             return;
         }
@@ -90,7 +89,6 @@ namespace MayhemOpenCVWrapper.LowLevel
                 IntPtr imgPointer = bd.Scan0;
 
                 // transmit frame
-
                 unsafe
                 {
                     pd.ProcessFrame((byte*)imgPointer);
@@ -105,10 +103,10 @@ namespace MayhemOpenCVWrapper.LowLevel
             }
 
             // find out what the results are
-            presence_ = pd.GetCurrentPresence();
+            presence = pd.GetCurrentPresence();
+
             // TODO.....
             Point[] points = null;
-            // .... 
 
             if (OnPresenceUpdate != null && pd.IsInitialized)
             {
@@ -118,11 +116,7 @@ namespace MayhemOpenCVWrapper.LowLevel
 
         protected virtual void Dispose(bool dispose)
         {
-            if (dispose)
-            {
-
-            }
-            else
+            if (!dispose)
             {
                 pd.Dispose();
             }

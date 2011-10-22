@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using AviFile;
 using MayhemCore;
-using System.Drawing;
 using MayhemOpenCVWrapper.LowLevel;
 
 namespace MayhemOpenCVWrapper
@@ -18,8 +18,10 @@ namespace MayhemOpenCVWrapper
     public class Video
     {
         public delegate void VideoSavedEventHandler(object sender, VideoSavedEventArgs e);
+
         public event VideoSavedEventHandler OnVideoSaved;
-        private List<Bitmap> video_frames = new List<Bitmap>();
+
+        private List<Bitmap> videoFrames;
 
         // video stream settings
         private double frameRate;
@@ -43,42 +45,42 @@ namespace MayhemOpenCVWrapper
             Camera camera = c;
             frameRate = 1000 / camera.Settings.UpdateRateMs;
             width = c.Settings.ResX;
-            height = c.Settings.ResY; 
+            height = c.Settings.ResY;
 
             // preserve reference to the camera frames to be saved later
-            video_frames = c.videoDiskBufferItems;
+            videoFrames = c.VideoDiskBufferItems;
 
-            if (video_frames.Count > 0)
+            if (videoFrames.Count > 0)
             {
-                aviManager = new AviManager(fileName,false);
+                aviManager = new AviManager(fileName, false);
 
                 Avi.AVICOMPRESSOPTIONS opts = new Avi.AVICOMPRESSOPTIONS();
-                opts.fccType         = (UInt32)Avi.mmioStringToFOURCC("vids", 0);
-                opts.fccHandler      = (UInt32)Avi.mmioStringToFOURCC("CVID", 0);
+                opts.fccType = (UInt32)Avi.mmioStringToFOURCC("vids", 0);
+                opts.fccHandler = (UInt32)Avi.mmioStringToFOURCC("CVID", 0);
                 opts.dwKeyFrameEvery = 0;
-                opts.dwQuality       = 1000;  // 0 .. 10000
-                opts.dwFlags         = 0;  // AVICOMRPESSF_KEYFRAMES = 4
-                opts.dwBytesPerSecond= 0;
-                opts.lpFormat        = new IntPtr(0);
-                opts.cbFormat        = 0;
-                opts.lpParms         = new IntPtr(0);
-                opts.cbParms         = 0;
+                opts.dwQuality = 1000;  // 0 .. 10000
+                opts.dwFlags = 0;  // AVICOMRPESSF_KEYFRAMES = 4
+                opts.dwBytesPerSecond = 0;
+                opts.lpFormat = new IntPtr(0);
+                opts.cbFormat = 0;
+                opts.lpParms = new IntPtr(0);
+                opts.cbParms = 0;
                 opts.dwInterleaveEvery = 0;
 
                 // false creates a new file
                 if (compress)
                 {
                     Logger.WriteLine("Saving Compressed");
-                    stream = aviManager.AddVideoStream(opts, frameRate, video_frames[0]);     // add first frame as an example of the video's format
+                    stream = aviManager.AddVideoStream(opts, frameRate, videoFrames[0]);     // add first frame as an example of the video's format
                 }
                 else
                 {
                     Logger.WriteLine("Saving Uncompressed");
-                    stream = aviManager.AddVideoStream(false, frameRate, video_frames[0]); 
+                    stream = aviManager.AddVideoStream(false, frameRate, videoFrames[0]);
                 }
-              
+
                 // add the frames
-                ThreadPool.QueueUserWorkItem(TAddFrames);         
+                ThreadPool.QueueUserWorkItem(TAddFrames);
             }
         }
 
@@ -89,17 +91,17 @@ namespace MayhemOpenCVWrapper
         private void TAddFrames(object state)
         {
             Logger.WriteLine("Adding Frames");
-            foreach (Bitmap img in video_frames)
+            foreach (Bitmap img in videoFrames)
             {
                 stream.AddFrame(img);
                 frames++;
             }
-            aviManager.Close();
-            
 
-            foreach (Bitmap img in video_frames)
+            aviManager.Close();
+
+            foreach (Bitmap img in videoFrames)
             {
-                img.Dispose(); 
+                img.Dispose();
             }
 
             Logger.WriteLine("Created AVI with " + frames + " frames.");
@@ -107,6 +109,6 @@ namespace MayhemOpenCVWrapper
             {
                 OnVideoSaved(this, new VideoSavedEventArgs(true));
             }
-        }     
+        }
     }
 }
