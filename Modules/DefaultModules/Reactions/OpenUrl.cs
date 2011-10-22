@@ -38,9 +38,8 @@ namespace DefaultModules.Reactions
                     // the URL using IE if we can.    
                     try
                     {
-                        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo("IExplore.exe", Url);
+                        var startInfo = new System.Diagnostics.ProcessStartInfo("IExplore.exe", Url);
                         System.Diagnostics.Process.Start(startInfo);
-                        startInfo = null;
                     }
                     catch
                     {
@@ -57,7 +56,8 @@ namespace DefaultModules.Reactions
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            OpenUrlConfig config = configurationControl as OpenUrlConfig;
+            var config = configurationControl as OpenUrlConfig;
+
             Url = config.Url;
         }
 

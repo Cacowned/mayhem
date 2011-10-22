@@ -10,12 +10,13 @@
                 document.location = 'mayhem:error';
                 window.external.notify('mayhem:error');
             }
+            
             function updateFromServer() {
                 if (http_request.readyState == 4) {
                     if (http_request.status == 200) {
                         clearTimeout(requestUpdateTimer);
                         if (http_request.responseText.length > 0) {
-                            e = document.getElementById('aDiv');
+                            var e = document.getElementById('aDiv');
                             if (http_request.responseText == "kill") {
                                 seterror();
                             }
@@ -30,6 +31,7 @@
                     }
                 }
             }
+            
             function waitForUpdate() {
                 http_request = false;
                 if (window.XMLHttpRequest) {
@@ -38,9 +40,11 @@
                         http_request.overrideMimeType('text/html');
                     }
                 }
+                
                 if (!http_request) {
                     return false;
                 }
+                
                 requestUpdateTimer = setTimeout(function () {
                     http_request.abort();
                 }, 15000);
@@ -49,6 +53,7 @@
                 http_request.open('GET', url, true);
                 http_request.send(null);
             }
+            
             function sendEvent(id) {
                 var req = false;
                 if (window.XMLHttpRequest) {

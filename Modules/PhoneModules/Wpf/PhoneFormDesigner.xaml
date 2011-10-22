@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
-             xmlns:my="clr-namespace:PhoneModules.Controls"
             Width="590" Height="450" >
     <Grid>
         <StackPanel>

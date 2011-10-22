@@ -14,7 +14,7 @@ namespace OfficeModules.Events
         protected override void OnAfterLoad()
         {
             // Create the event handler delegate to attach
-            reminderEvent = new OOutlook.ApplicationEvents_11_ReminderEventHandler(GotReminder);
+            reminderEvent = GotReminder;
         }
 
         private void GotReminder(object sender)

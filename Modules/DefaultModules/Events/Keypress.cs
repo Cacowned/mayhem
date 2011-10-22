@@ -41,7 +41,7 @@ namespace DefaultModules.Events
 
         public string GetConfigString()
         {
-            StringBuilder b = new StringBuilder();
+            var b = new StringBuilder();
 
             foreach (System.Windows.Forms.Keys k in monitorKeysDown)
             {
@@ -86,10 +86,12 @@ namespace DefaultModules.Events
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            Dispatcher.FromThread(mainThread).Invoke((Action)delegate
-            {
-                interceptKeys.AddCombinationHandler(monitorKeysDown, OnKeyCombinationActivated);
-            });
+            Dispatcher.FromThread(mainThread).Invoke((Action)(() =>
+                interceptKeys.AddCombinationHandler(
+                    monitorKeysDown,
+                    OnKeyCombinationActivated
+                )
+            ));
         }
 
         protected override void OnDisabled(DisabledEventArgs e)

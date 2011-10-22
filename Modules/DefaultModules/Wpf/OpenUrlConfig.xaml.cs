@@ -14,7 +14,7 @@ namespace DefaultModules.Wpf
 
         public OpenUrlConfig(string url)
         {
-            this.Url = url;
+            Url = url;
 
             InitializeComponent();
         }

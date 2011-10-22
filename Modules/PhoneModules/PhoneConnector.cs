@@ -5,7 +5,6 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Web;
-using System.Threading;
 using System.Windows;
 using MayhemCore;
 using NetFwTypeLib;
@@ -14,8 +13,8 @@ namespace PhoneModules
 {
     public class PhoneConnector
     {
-        private const int PortNumber = 19283;
-        private bool isServiceRunning = false;
+        private readonly int PortNumber;
+        private bool isServiceRunning;
 
         public bool IsServiceRunning
         {
@@ -23,9 +22,10 @@ namespace PhoneModules
         }
 
         private WebServiceHost host;
-        private IMayhemService service = null;
+        private IMayhemService service;
 
         public delegate void EventCalledHandler(string eventText);
+
         public event EventCalledHandler EventCalled;
 
         public bool HasBeenSerialized
@@ -49,9 +49,10 @@ namespace PhoneModules
         {
         }
 
-        PhoneConnector()
+        private PhoneConnector()
         {
-            MayhemEntry.Instance.ShuttingDown += new EventHandler(Mayhem_ShuttingDown);
+            PortNumber = 19283;
+            MayhemEntry.Instance.ShuttingDown += Mayhem_ShuttingDown;
         }
 
         private void Mayhem_ShuttingDown(object sender, EventArgs e)
@@ -96,22 +97,23 @@ namespace PhoneModules
 
             return true;
         }
+
         public void Disable()
         {
-            //if (isServiceRunning)
-            //{
-            //    refCount--;
-            //    if (refCount == 0)
-            //    {
-            //        if (service != null)
-            //        {
-            //            service.ShuttingDown();
-            //        }
-            //        //isServiceRunning = false;
-            //        //host.Close();
-            //        service = null;
-            //    }
-            //}
+            // if (isServiceRunning)
+            // {
+            //     refCount--;
+            //     if (refCount == 0)
+            //     {
+            //         if (service != null)
+            //         {
+            //             service.ShuttingDown();
+            //         }
+            //         //isServiceRunning = false;
+            //         //host.Close();
+            //         service = null;
+            //     }
+            // }
         }
 
         private bool StartService(bool includeButtons)
@@ -119,7 +121,7 @@ namespace PhoneModules
             Uri address = new Uri("http://localhost:" + PortNumber + "/Mayhem");
 
             MayhemService svc = new MayhemService();
-            svc.EventCalled += new MayhemService.EventCalledHandler(service_EventCalled);
+            svc.EventCalled += service_EventCalled;
 
             string insideDiv;
             string html = PhoneLayout.Instance.SerializeToHtml(includeButtons, out insideDiv);
@@ -139,12 +141,11 @@ namespace PhoneModules
             host.AddServiceEndpoint(typeof(IMayhemService), binding, string.Empty);
 
             bool portFound = false;
-            INetFwOpenPorts ports;
             INetFwOpenPort port;
 
             Type NetFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
             INetFwMgr mgr = (INetFwMgr)Activator.CreateInstance(NetFwMgrType);
-            ports = (INetFwOpenPorts)mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
+            INetFwOpenPorts ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
             System.Collections.IEnumerator enumerate = ports.GetEnumerator();
             while (enumerate.MoveNext())
             {
@@ -156,7 +157,7 @@ namespace PhoneModules
                 }
             }
 
-            if (!portFound || !ACLHelper.FindUrlPrefix("http://+:" + PortNumber + "/"))
+            if (!portFound || !AclHelper.FindUrlPrefix("http://+:" + PortNumber + "/"))
             {
                 OpenServerHelper();
             }

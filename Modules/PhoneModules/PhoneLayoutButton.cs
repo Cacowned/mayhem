@@ -2,8 +2,13 @@
 {
     public class PhoneLayoutButton : PhoneLayoutElement
     {
-        public string Text = string.Empty;
-        private string imageFile = string.Empty;
+        public string Text
+        {
+            get;
+            set;
+        }
+
+        private string imageFile;
 
         public string ImageFile
         {
@@ -21,7 +26,24 @@
             }
         }
 
-        public byte[] ImageBytes = new byte[0];
-        public bool IsEnabled = true;
+        public byte[] ImageBytes
+        {
+            get;
+            set;
+        }
+
+        public bool IsEnabled
+        {
+            get;
+            set;
+        }
+
+        public PhoneLayoutButton()
+        {
+            Text = string.Empty;
+            imageFile = string.Empty;
+            ImageBytes = new byte[0];
+            IsEnabled = true;
+        }
     }
 }

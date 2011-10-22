@@ -57,7 +57,7 @@ namespace DefaultModules.Reactions
         {
             const string tag = "[Play Sound]";
 
-            string path = string.Empty;
+            string path;
 
             do
             {
@@ -76,7 +76,7 @@ namespace DefaultModules.Reactions
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            PlaySoundConfig rpc = configurationControl as PlaySoundConfig;
+            var rpc = configurationControl as PlaySoundConfig;
             SoundPath = rpc.FileName;
         }
 

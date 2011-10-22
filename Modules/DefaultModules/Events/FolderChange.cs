@@ -45,7 +45,7 @@ namespace DefaultModules.Events
         /// <summary>
         /// Set Filters the FSWatcher should monitor
         /// </summary>
-        private void ConfigureFSMonitor()
+        private void ConfigureFsMonitor()
         {
             fileWatcher.Path = folderToMonitor;
             fileWatcher.IncludeSubdirectories = monitorSubDirs;
@@ -55,7 +55,7 @@ namespace DefaultModules.Events
         {
             try
             {
-                ConfigureFSMonitor();
+                ConfigureFsMonitor();
                 fileWatcher.EnableRaisingEvents = true;
             }
             catch
@@ -80,7 +80,8 @@ namespace DefaultModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            FolderChangeConfig config = configurationControl as FolderChangeConfig;
+            var config = configurationControl as FolderChangeConfig;
+
             folderToMonitor = config.FolderToMonitor;
             monitorName = config.MonitorName;
             monitorSubDirs = config.SubDirectories;
@@ -144,14 +145,10 @@ namespace DefaultModules.Events
         {
             var shouldReturn = false;
 
-            // Don't trigger if we have triggered within the last 10 milliseconds
-            if (lastTriggeredDate != null)
+            var time = DateTime.Now;
+            if ((time - lastTriggeredDate).TotalMilliseconds <= 50)
             {
-                var time = DateTime.Now;
-                if ((time - lastTriggeredDate).TotalMilliseconds <= 50)
-                {
-                    shouldReturn = true;
-                }
+                shouldReturn = true;
             }
 
             lastTriggeredDate = DateTime.Now;

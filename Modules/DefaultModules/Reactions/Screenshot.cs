@@ -50,8 +50,9 @@ namespace DefaultModules.Reactions
 
             int screenWidth = maxX - minX;
             int screenHeight = maxY - minY;
-            Bitmap bmpScreenShot = new Bitmap(screenWidth, screenHeight);
-            Graphics gfx = Graphics.FromImage((Image)bmpScreenShot);
+            
+            var bmpScreenShot = new Bitmap(screenWidth, screenHeight);
+            Graphics gfx = Graphics.FromImage(bmpScreenShot);
             gfx.CopyFromScreen(minX, minY, 0, 0, new Size(screenWidth, screenHeight));
 
             DateTime now = DateTime.Now;
@@ -82,7 +83,8 @@ namespace DefaultModules.Reactions
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            ScreenshotConfig config = configurationControl as ScreenshotConfig;
+            var config = configurationControl as ScreenshotConfig;
+
             saveLocation = config.SaveLocation;
             filenamePrefix = config.FilenamePrefix;
         }

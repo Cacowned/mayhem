@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization;
 using DefaultModules.Resources;
@@ -54,7 +53,7 @@ namespace DefaultModules.Reactions
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            RunProgramConfig rpc = configurationControl as RunProgramConfig;
+            var rpc = configurationControl as RunProgramConfig;
             FileName = rpc.Filename;
             Arguments = rpc.Arguments;
         }

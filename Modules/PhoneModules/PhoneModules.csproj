@@ -52,12 +52,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ACLHelper.cs" />
+    <Compile Include="AclHelper.cs" />
     <Compile Include="Controls\PhoneUIElement.cs" />
     <Compile Include="Controls\PhoneUIElementButton.xaml.cs">
       <DependentUpon>PhoneUIElementButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="FileDictionary.cs" />
+    <Compile Include="IMayhemService.cs" />
     <Compile Include="PhoneLayout.cs" />
     <Compile Include="MayhemService.cs" />
     <Compile Include="Events\PhoneEvent.cs" />

@@ -3,27 +3,40 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Xml.Serialization;
 using MayhemCore;
 
 namespace PhoneModules
 {
     public class PhoneLayout
     {
-        public List<PhoneLayoutButton> Buttons = new List<PhoneLayoutButton>();
+        public List<PhoneLayoutButton> Buttons
+        {
+            get;
+            set;
+        }
 
-        string htmlTemplate = null;
+        private string htmlTemplate;
 
         #region Singleton
-        static readonly PhoneLayout instance = new PhoneLayout();
 
-        PhoneLayout()
+        private static PhoneLayout instance;
+
+        private PhoneLayout()
         {
+            Buttons = new List<PhoneLayoutButton>();
         }
 
         public static PhoneLayout Instance
         {
-            get { return instance; }
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new PhoneLayout();
+                }
+
+                return instance;
+            }
         }
         #endregion
 
@@ -31,7 +44,7 @@ namespace PhoneModules
         {
             for (int i = 0; i < Buttons.Count; i++)
             {
-                if (Buttons[i].ID == id)
+                if (Buttons[i].Id == id)
                 {
                     throw new Exception();
                 }
@@ -40,7 +53,7 @@ namespace PhoneModules
             PhoneLayoutButton button = new PhoneLayoutButton();
             button.Text = "Button";
             button.IsEnabled = true;
-            button.ID = id;
+            button.Id = id;
             button.X = 110;
             button.Y = 200;
             AddButton(button);
@@ -56,7 +69,7 @@ namespace PhoneModules
         {
             foreach (PhoneLayoutButton t in Buttons)
             {
-                if (t.ID == id)
+                if (t.Id == id)
                 {
                     t.IsEnabled = true;
                     break;
@@ -68,7 +81,7 @@ namespace PhoneModules
         {
             foreach (PhoneLayoutButton t in Buttons)
             {
-                if (t.ID == id)
+                if (t.Id == id)
                 {
                     t.IsEnabled = false;
                     break;
@@ -80,7 +93,7 @@ namespace PhoneModules
         {
             for (int i = 0; i < Buttons.Count; i++)
             {
-                if (Buttons[i].ID == id)
+                if (Buttons[i].Id == id)
                 {
                     Buttons.RemoveAt(i);
                     break;
@@ -88,15 +101,16 @@ namespace PhoneModules
             }
         }
 
-        public PhoneLayoutButton GetByID(string id)
+        public PhoneLayoutButton GetById(string id)
         {
             for (int i = 0; i < Buttons.Count; i++)
             {
-                if (Buttons[i].ID == id)
+                if (Buttons[i].Id == id)
                 {
                     return Buttons[i];
                 }
             }
+
             return null;
         }
 
@@ -108,14 +122,15 @@ namespace PhoneModules
             {
                 try
                 {
-                    Assembly assembly = this.GetType().Assembly;
+                    Assembly assembly = GetType().Assembly;
                     using (Stream stream = assembly.GetManifestResourceStream("PhoneModules.HtmlTemplate.html"))
                     {
-                        using (StreamReader _textStreamReader = new StreamReader(stream))
+                        using (StreamReader textStreamReader = new StreamReader(stream))
                         {
-                            htmlTemplate = _textStreamReader.ReadToEnd();
+                            htmlTemplate = textStreamReader.ReadToEnd();
                         }
                     }
+
                     html = htmlTemplate;
                 }
                 catch (Exception erf)
@@ -148,19 +163,21 @@ namespace PhoneModules
                             {
                                 Directory.CreateDirectory(imageDir);
                             }
-                            string file = Path.Combine(imageDir, button.ID + ".png");
+
+                            string file = Path.Combine(imageDir, button.Id + ".png");
                             File.Copy(button.ImageFile, file, true);
-                            //sb.AppendLine("<input type=\"image\" src=\"Images/" + button.ID + "\"");
+
                             width = 96;
                             height = 96;
-                            sb.AppendLine("<input type=\"image\" src=\"Images/" + button.ID + "\"");
+                            sb.AppendLine("<input type=\"image\" src=\"Images/" + button.Id + "\"");
                         }
 
-                        sb.AppendLine("onClick=\"sendEvent('" + button.ID + "')\"");
+                        sb.AppendLine("onClick=\"sendEvent('" + button.Id + "')\"");
                         sb.AppendLine("style=\"position: absolute; top: " + button.Y + "px; left: " + button.X + "px; width:" + width + "px; height: " + height + "px;\" />");
                     }
                 }
             }
+
             sb.AppendLine("</div>");
             insideDiv = sb.ToString();
             html = html.Replace("%%INSERTBODYHERE%%", insideDiv);

@@ -18,8 +18,8 @@ namespace PhoneModules.Controls
     {
         private Point startPoint;
         private Point startCanvasLoc;
-        private bool isMovingElement = false;
-        private bool isGridOnRight = true;
+        private bool isMovingElement;
+        private bool isGridOnRight;
 
         public bool IsGridOnRight
         {
@@ -53,7 +53,8 @@ namespace PhoneModules.Controls
             }
         }
 
-        private string imageFile = null;
+        private string imageFile;
+
         public string ImageFile
         {
             get
@@ -75,7 +76,7 @@ namespace PhoneModules.Controls
                     image1.Source = bi;
                     image1.Width = bi.Width;
                     image1.Height = bi.Height;
-                    image1.Visibility = System.Windows.Visibility.Visible;
+                    image1.Visibility = Visibility.Visible;
                     border1.Visibility = Visibility.Hidden;
                 }
             }
@@ -87,13 +88,14 @@ namespace PhoneModules.Controls
             set;
         }
 
-        private Brush defaultButtonBrush;
+        private readonly Brush defaultButtonBrush;
 
         public PhoneUIElementButton()
         {
             InitializeComponent();
             defaultButtonBrush = buttonText.Background;
             stackPanel1.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
+            isGridOnRight = true;
         }
 
         private void PhoneUIElement_Loaded(object sender, RoutedEventArgs e)
@@ -181,7 +183,7 @@ namespace PhoneModules.Controls
 
         private void buttonImage_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog() { CheckPathExists = true, RestoreDirectory = true };
+            OpenFileDialog ofd = new OpenFileDialog { CheckPathExists = true, RestoreDirectory = true };
             ofd.Filter = "Images|*.jpg;*.jpeg;*.png;*.gif|All Files|*.*";
             if (ofd.ShowDialog() == true)
             {
@@ -221,7 +223,7 @@ namespace PhoneModules.Controls
         {
             ResizeTextBox(true);
             double left = Canvas.GetLeft(this);
-            double right = left + this.ActualWidth;
+            double right = left + ActualWidth;
             if (right > 320)
             {
                 if (Canvas.GetLeft(this) >= 0)
@@ -229,13 +231,14 @@ namespace PhoneModules.Controls
                     Canvas.SetLeft(this, left + 320 - right);
                 }
             }
+
             Debug.WriteLine(right);
         }
 
         private void textBox1_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             double left = Canvas.GetLeft(this);
-            double right = left + this.ActualWidth;
+            double right = left + ActualWidth;
             if (right > 320)
             {
                 if (Canvas.GetLeft(this) <= 0)

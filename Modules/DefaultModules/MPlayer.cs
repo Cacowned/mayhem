@@ -22,7 +22,7 @@ namespace DefaultModules
             fileToPlay = null;
             isPlaying = false;
 
-            runThread = new Thread(new ThreadStart(StartPlaying));
+            runThread = new Thread(StartPlaying);
             runThread.IsBackground = true;
         }
 
@@ -45,9 +45,9 @@ namespace DefaultModules
         {
             Dispatcher.CurrentDispatcher.VerifyAccess();
             mediaPlayer = new MediaPlayer();
-            mediaPlayer.MediaEnded += new EventHandler(MediaEnded);
-            mediaPlayer.MediaOpened += new EventHandler(MediaOpened);
-            mediaPlayer.MediaFailed += new EventHandler<ExceptionEventArgs>(MediaFailed);
+            mediaPlayer.MediaEnded += MediaEnded;
+            mediaPlayer.MediaOpened += MediaOpened;
+            mediaPlayer.MediaFailed += MediaFailed;
             mediaPlayer.Open(fileToPlay);
             mediaPlayer.Play();
             Dispatcher.Run();
@@ -55,11 +55,10 @@ namespace DefaultModules
 
         public void Stop()
         {
-            mediaPlayer.Dispatcher.BeginInvoke(new Action(delegate
-            {
-                mediaPlayer.Stop();
-            }),
-                DispatcherPriority.Send);
+            mediaPlayer.Dispatcher.BeginInvoke(
+                new Action(() => mediaPlayer.Stop()),
+                DispatcherPriority.Send
+            );
         }
 
         private void MediaOpened(object sender, EventArgs e)
