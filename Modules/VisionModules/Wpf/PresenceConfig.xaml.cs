@@ -14,59 +14,57 @@ namespace VisionModules.Wpf
     /// </summary>
     public partial class PresenceConfig : WpfConfiguration
     {
-        public int selectedIndex = 0;
-
-        
-
+        public int SelectedIndex { get; set; }
 
         /// <summary>
         /// Sensitivity Slider 
         /// </summary>
-        private int slider_value = 20;
+        private int sliderValue;
         public double SelectedSensitivity
         {
             get
             {
                 // map slider (0..100) to a (0.005 -- 0.1) range
-                return (double) slider_value * (0.0095) / 100 + 0.005; 
+                return sliderValue * (0.0095) / 100 + 0.005;
             }
         }
 
         // the selected camera
-        private Camera camera_selected_ = null;  
-        public Camera camera_selected
+        public Camera CameraSelected
         {
-            get { return camera_selected_; }
+            get;
+            private set;
         }
 
         // the selected trigger mode of the event
-        private PresenceTriggerMode selected_triggerMode_ = PresenceTriggerMode.TOGGLE;
         public PresenceTriggerMode selected_triggerMode
         {
-            get { return selected_triggerMode_; }
+            get;
+            private set;
         }
-
 
         public PresenceConfig(int selectedCameraIndex, PresenceTriggerMode selectedTriggerMode, int aSlidervalue)
         {
-            this.selectedIndex = selectedCameraIndex;
+            selected_triggerMode = PresenceTriggerMode.Toggle;
+            sliderValue = 20;
+            SelectedIndex = selectedCameraIndex;
 
-            slider_value = aSlidervalue;
-           
+            sliderValue = aSlidervalue;
+
             InitializeComponent();
 
-            selected_triggerMode_ = selectedTriggerMode;
+            selected_triggerMode = selectedTriggerMode;
 
             // set the previous trigger mode
             switch (selectedTriggerMode)
             {
-                case PresenceTriggerMode.TOGGLE:
+                case PresenceTriggerMode.Toggle:
                     rb_triggerMode_toggle.IsChecked = true;
                     break;
-                case PresenceTriggerMode.ON_OFF:
+                case PresenceTriggerMode.OnOff:
                     rb_triggerMode_onOff.IsChecked = true;
                     break;
-                case PresenceTriggerMode.OFF_ON:
+                case PresenceTriggerMode.OffOn:
                     rb_triggerMode_offOn.IsChecked = true;
                     break;
             }
@@ -75,15 +73,13 @@ namespace VisionModules.Wpf
         public override void OnLoad()
         {
             InitCameraSelector();
-           
 
             sdr_sensitivity.Minimum = 0;
             sdr_sensitivity.Maximum = 100;
             sdr_sensitivity.IsDirectionReversed = false;
             sdr_sensitivity.IsMoveToPointEnabled = true;
             sdr_sensitivity.AutoToolTipPrecision = 2;
-            sdr_sensitivity.AutoToolTipPlacement =
-              AutoToolTipPlacement.BottomRight;
+            sdr_sensitivity.AutoToolTipPlacement = AutoToolTipPlacement.BottomRight;
             sdr_sensitivity.TickPlacement = TickPlacement.TopLeft;
             sdr_sensitivity.TickFrequency = 5;
             sdr_sensitivity.IsSelectionRangeEnabled = true;
@@ -91,43 +87,41 @@ namespace VisionModules.Wpf
             sdr_sensitivity.SelectionEnd = 100;
             sdr_sensitivity.SmallChange = 1;
             sdr_sensitivity.LargeChange = 5;
-            sdr_sensitivity.Value = slider_value;
+            sdr_sensitivity.Value = sliderValue;
         }
 
         private void InitCameraSelector()
         {
             camera_selector.Init();
-            camera_selector.OnCameraSelected += new MultiCameraSelector.CameraSelectedHandler(                
-                    (Camera c) => 
-                        {
-                            Logger.WriteLine("Handling OnCameraSelected");
-                            camera_selected_ = c; 
-                        }
-                    );
-            if (camera_selector.camera_previews.Count > 0)
-                this.CanSave = true;
+            camera_selector.OnCameraSelected += c =>
+                                                    {
+                                                        Logger.WriteLine("Handling OnCameraSelected");
+                                                        CameraSelected = c;
+                                                    };
+            if (camera_selector.CameraPreviews.Count > 0)
+                CanSave = true;
 
             // evil hack to get the camera selector to actually show the selection!
             System.Timers.Timer tt = new System.Timers.Timer(250);
             tt.AutoReset = false;
-            tt.Elapsed += new System.Timers.ElapsedEventHandler((object o, System.Timers.ElapsedEventArgs e) =>
-            {
-                Logger.WriteLine("Timer Callback");
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    camera_selector.deviceList.SelectedIndex = this.selectedIndex;
-                    camera_selector.deviceList_SelectionChanged(this, null);
-                }));
+            tt.Elapsed += (o, e) =>
+                              {
+                                  Logger.WriteLine("Timer Callback");
+                                  Dispatcher.Invoke((Action)(() =>
+                                                                 {
+                                                                     camera_selector.deviceList.SelectedIndex = SelectedIndex;
+                                                                     camera_selector.deviceList_SelectionChanged(this, null);
+                                                                 }));
 
-            });
+                              };
             tt.Enabled = true;
 
-            camera_selector.deviceList.SelectedIndex = selectedIndex;
+            camera_selector.deviceList.SelectedIndex = SelectedIndex;
         }
 
         public override void OnSave()
         {
-            camera_selected_ = camera_selector.selected_camera; 
+            CameraSelected = camera_selector.SelectedCamera;
         }
 
         public override string Title
@@ -146,22 +140,21 @@ namespace VisionModules.Wpf
 
             if (rb == rb_triggerMode_toggle)
             {
-                selected_triggerMode_ = PresenceTriggerMode.TOGGLE;
+                selected_triggerMode = PresenceTriggerMode.Toggle;
             }
             else if (rb == rb_triggerMode_offOn)
             {
-                selected_triggerMode_ = PresenceTriggerMode.OFF_ON;
+                selected_triggerMode = PresenceTriggerMode.OffOn;
             }
             else if (rb == rb_triggerMode_onOff)
             {
-                selected_triggerMode_ = PresenceTriggerMode.ON_OFF;
+                selected_triggerMode = PresenceTriggerMode.OnOff;
             }
         }
 
         private void sdr_sensitivity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            slider_value = (int) sdr_sensitivity.Value;
+            sliderValue = (int)sdr_sensitivity.Value;
         }
-        
     }
 }

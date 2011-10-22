@@ -12,55 +12,49 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using MayhemOpenCVWrapper;
 using VisionModules.Reactions;
-using System;
 
 namespace VisionModules.Wpf
 {
     public class VideoConfig : PictureConfig
     {
-    
         private CheckBox compress;
 
-        public VIDEO_RECORDING_MODE RecordingMode
+        public VideoRecordingMode RecordingMode
         {
             get;
             private set;
         }
 
-        private const int video_duration_s = Camera.LoopDuration / 1000; 
+        private const int VideoDurationS = Camera.LoopDuration / 1000;
 
         /// <summary>
         /// Content of the Checkbox items, for selection of the video recording timing modes. 
         /// </summary>
-        private  Dictionary<string, VIDEO_RECORDING_MODE> checkbox_items =
-            new Dictionary<string, VIDEO_RECORDING_MODE>()
-            {
-                {video_duration_s/2+"s before until " + video_duration_s/2 + "s after the event (default)", VIDEO_RECORDING_MODE.MID_EVENT},
-                {video_duration_s+"s before the event until the event occurred", VIDEO_RECORDING_MODE.PRE_EVENT},
-                {"instant of event until " +video_duration_s+"s after the event", VIDEO_RECORDING_MODE.POST_EVENT}
-            };
-        private ComboBox cbx_time_offset;
+        private readonly Dictionary<string, VideoRecordingMode> checkboxItems;
+        private ComboBox cbxTimeOffset;
 
-        public bool compress_video
+        public bool CompressVideo
         {
-            get 
+            get
             {
-                    if (compress.IsChecked != null)
-                    {
-                        return (bool)compress.IsChecked;
-                    }
-                    else
-                    {
-                        return false; 
-                    }
+                if (compress.IsChecked != null)
+                {
+                    return (bool)compress.IsChecked;
+                }
+
+                return false;
             }
         }
 
-        public VideoConfig(string location, string prefix, VIDEO_RECORDING_MODE recordingMode, int deviceIdx)
+        public VideoConfig(string location, string prefix, VideoRecordingMode recordingMode, int deviceIdx)
             : base(location, prefix, 0, deviceIdx)
-            
         {
-            RecordingMode = recordingMode; 
+            checkboxItems = new Dictionary<string, VideoRecordingMode>();
+            checkboxItems.Add(VideoDurationS / 2 + "s before until " + VideoDurationS / 2 + "s after the event (default)", VideoRecordingMode.MidEvent);
+            checkboxItems.Add(VideoDurationS + "s before the event until the event occurred", VideoRecordingMode.PreEvent);
+            checkboxItems.Add("instant of event until " + VideoDurationS + "s after the event", VideoRecordingMode.PostEvent);
+
+            RecordingMode = recordingMode;
             Init();
         }
 
@@ -70,14 +64,14 @@ namespace VisionModules.Wpf
 
             switch (RecordingMode)
             {
-                case VIDEO_RECORDING_MODE.MID_EVENT:
-                    cbx_time_offset.SelectedIndex = 0;
+                case VideoRecordingMode.MidEvent:
+                    cbxTimeOffset.SelectedIndex = 0;
                     break;
-                case VIDEO_RECORDING_MODE.PRE_EVENT:
-                    cbx_time_offset.SelectedIndex = 1;
+                case VideoRecordingMode.PreEvent:
+                    cbxTimeOffset.SelectedIndex = 1;
                     break;
-                case VIDEO_RECORDING_MODE.POST_EVENT:
-                    cbx_time_offset.SelectedIndex = 2;
+                case VideoRecordingMode.PostEvent:
+                    cbxTimeOffset.SelectedIndex = 2;
                     break;
             }
         }
@@ -87,21 +81,21 @@ namespace VisionModules.Wpf
         /// </summary>
         public void Init()
         {
-            cbx_time_offset = new ComboBox();
+            cbxTimeOffset = new ComboBox();
             slider_panel.Children.Remove(slider_capture_offset);
-         
-            cbx_time_offset.ItemsSource = checkbox_items;
-            cbx_time_offset.SelectedValuePath = "Value";
-            cbx_time_offset.DisplayMemberPath = "Key";
-            cbx_time_offset.Width = 300;
-            cbx_time_offset.SelectedIndex = 0;
-            slider_panel.Children.Add(cbx_time_offset);
-            cbx_time_offset.SelectionChanged += new SelectionChangedEventHandler(cbx_time_offset_SelectionChanged);
-            
-            lbl_slider_title.Content = "Select the time frame of the "+video_duration_s+"s video recording:";
+
+            cbxTimeOffset.ItemsSource = checkboxItems;
+            cbxTimeOffset.SelectedValuePath = "Value";
+            cbxTimeOffset.DisplayMemberPath = "Key";
+            cbxTimeOffset.Width = 300;
+            cbxTimeOffset.SelectedIndex = 0;
+            slider_panel.Children.Add(cbxTimeOffset);
+            cbxTimeOffset.SelectionChanged += cbx_time_offset_SelectionChanged;
+
+            lbl_slider_title.Content = "Select the time frame of the " + VideoDurationS + "s video recording:";
             lbl_img_save.Content = "Click the button below to choose the location of saved videos:";
             img_save_button.Content = "Browse";
-            
+
             compress = new CheckBox();
             compress.Content = "Compress Video";
             compress.Margin = new System.Windows.Thickness(5, 0, 0, 0);
@@ -109,9 +103,9 @@ namespace VisionModules.Wpf
             slider_panel.Children.Add(compress);
         }
 
-        void cbx_time_offset_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cbx_time_offset_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            RecordingMode = (VIDEO_RECORDING_MODE) cbx_time_offset.SelectedValue;
+            RecordingMode = (VideoRecordingMode)cbxTimeOffset.SelectedValue;
         }
 
         public override string Title

@@ -1,17 +1,13 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Windows;
 using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using VisionModules.Wpf;
 using MayhemOpenCVWrapper;
-using System.Collections.Generic;
-using System.Diagnostics;
+using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using MayhemOpenCVWrapper.LowLevel;
-using System.Threading;
 using VisionModules.Events.Components;
-using System.Runtime.CompilerServices;
+using VisionModules.Wpf;
 
 namespace VisionModules.Events
 {
@@ -22,9 +18,6 @@ namespace VisionModules.Events
     [MayhemModule("Motion Detector", "Detects when there is motion in the frame")]
     public class MotionDetector : EventBase, IWpfConfigurable
     {
-        private DateTime lastMotionDetected = DateTime.Now;
-        private const int detectionInterval = 5000; //ms
-
         private MotionDetectorComponent motionDetectorComponent;
         private bool firstFrame = true; 
         
@@ -77,18 +70,19 @@ namespace VisionModules.Events
         private void OnMotionUpdated(object sender, EventArgs e)
         {
             if (!firstFrame)
-                base.Trigger();
+                Trigger();
                 
             firstFrame = false;
         }
 
         public string GetConfigString()
         {
-            string conf = ""; 
+            string conf = string.Empty; 
             if (camera != null)
             {
                 conf += "Camera: " + camera.Info.DeviceId;
             }
+
             return conf; 
         }
 
@@ -100,10 +94,10 @@ namespace VisionModules.Events
                 config.DeviceList.SelectedIndex = selectedDeviceIndex;
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {
-                    config.selectedBoundingRect = boundingRect; 
+                    config.SelectedBoundingRect = boundingRect; 
                 }
 
-                config.sensitivity = sensitivity;
+                config.Sensitivity = sensitivity;
 
                 return config;
             }
@@ -112,13 +106,13 @@ namespace VisionModules.Events
         public void OnSaved(WpfConfiguration configurationControl)
         {
             // set the selected bounding rectangle
-            boundingRect = ((MotionDetectorConfig)configurationControl).selectedBoundingRect;
+            boundingRect = ((MotionDetectorConfig)configurationControl).SelectedBoundingRect;
             motionDetectorComponent.SetMotionBoundaryRect(boundingRect);
 
             // assign selected cam
-            camera = ((MotionDetectorConfig)configurationControl).selected_camera;
+            camera = ((MotionDetectorConfig)configurationControl).SelectedCamera;
 
-            motionDetectorComponent.Sensitivity = ((MotionDetectorConfig)configurationControl).sensitivity;
+            motionDetectorComponent.Sensitivity = ((MotionDetectorConfig)configurationControl).Sensitivity;
             sensitivity = motionDetectorComponent.Sensitivity;
 
             selectedDeviceIndex = camera.Info.DeviceId;
@@ -138,6 +132,7 @@ namespace VisionModules.Events
                 if (!camera.Running)
                     camera.StartFrameGrabbing();
                 firstFrame = true; 
+
                 // register the trigger's motion update handler
                 motionDetectorComponent.RegisterForImages(camera);
                 motionDetectorComponent.OnMotionUpdate -= OnMotionUpdated;
@@ -153,13 +148,14 @@ namespace VisionModules.Events
             if (camera != null && !e.IsConfiguring)
             {
                 firstFrame = true; 
+
                 // de-register the trigger's motion update handler
                 motionDetectorComponent.UnregisterForImages(camera);
                 motionDetectorComponent.OnMotionUpdate -= OnMotionUpdated;
+
                 // try to shut down the camera
                 camera.TryStopFrameGrabbing();
             }
         }
-
     }
 }

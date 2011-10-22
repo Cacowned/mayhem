@@ -4,14 +4,11 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows;
-using System.Windows.Documents;
 using MayhemCore;
 using MayhemOpenCVWrapper;
 using MayhemOpenCVWrapper.LowLevel;
 using MayhemWpf.UserControls;
-using VisionModules.Events;
 using Point = System.Drawing.Point;
-
 
 namespace VisionModules.Wpf
 {
@@ -19,29 +16,28 @@ namespace VisionModules.Wpf
     /// Object Detector Mayhem Module
     /// </summary>
     /// 
-    partial class ObjectDetectorConfig : WpfConfiguration
+    public partial class ObjectDetectorConfig : WpfConfiguration
     {
-        public string location;
+        public string Location;
 
-        public Camera selected_camera = null;
+        public Camera SelectedCamera;
 
-        protected Camera cam = null;
+        private Camera camera;
 
         private delegate void VoidHandler();
 
-        private CameraDriver i = CameraDriver.Instance;
-
+        private CameraDriver i;
 
         // object detector component for visualization use
         private ObjectDetectorComponent od;
 
-        public Bitmap templateImg = null;
-        public Bitmap templatePreview = null;
+        public Bitmap TemplateImg;
+        public Bitmap TemplatePreview;
 
-        private double template_scale_f = 1.0;
+        private double templateScaleF;
 
         // basically forward assignments to the actual overlay
-        public Rect selectedBoundingRect
+        public Rect SelectedBoundingRect
         {
             get
             {
@@ -55,7 +51,8 @@ namespace VisionModules.Wpf
 
         public ObjectDetectorConfig()
         {
-            /* objectDetectorEvent = objDetector as ObjectDetector*/;
+            templateScaleF = 1.0;
+            i = CameraDriver.Instance;
             InitializeComponent();
         }
 
@@ -64,9 +61,9 @@ namespace VisionModules.Wpf
             // TODO: camera resolution
             od = new ObjectDetectorComponent(320, 240);
 
-            if (templateImg != null)
+            if (TemplateImg != null)
             {
-                od.SetTemplate(templateImg);
+                od.SetTemplate(TemplateImg);
             }
 
             foreach (Camera c in i.CamerasAvailable)
@@ -79,16 +76,14 @@ namespace VisionModules.Wpf
             if (i.DeviceCount > 0)
             {
                 // start the camera 0 if it isn't already running
-                cam = i.CamerasAvailable[0];
-                if (!cam.Running)
+                camera = i.CamerasAvailable[0];
+                if (!camera.Running)
                 {
-                    cam.OnImageUpdated += i_OnImageUpdated;
-                    ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
-                    {
-                        cam.StartFrameGrabbing();
-                    }));
+                    camera.OnImageUpdated += OnImageUpdated;
+                    ThreadPool.QueueUserWorkItem(o => camera.StartFrameGrabbing());
                 }
-                Logger.WriteLine("using " + cam.Info.ToString());
+
+                Logger.WriteLine("using " + camera.Info);
             }
             else
             {
@@ -98,15 +93,15 @@ namespace VisionModules.Wpf
 
         public override void OnClosing()
         {
-            cam.OnImageUpdated -= i_OnImageUpdated;
-            cam.TryStopFrameGrabbing();
+            camera.OnImageUpdated -= OnImageUpdated;
+            camera.TryStopFrameGrabbing();
         }
 
         /**<summary>
         * Invokes image source setting when a new image is available from the update handler. 
         * </summary>
         */
-        public void i_OnImageUpdated(object sender, EventArgs e)
+        public void OnImageUpdated(object sender, EventArgs e)
         {
             Dispatcher.Invoke(new VoidHandler(SetCameraImageSource), null);
         }
@@ -117,42 +112,33 @@ namespace VisionModules.Wpf
          */
         protected virtual void SetCameraImageSource()
         {
-            //Logger.WriteLine("[SetCameraImageSource] ");
+            Bitmap backBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
-            //int stride = 320 * 3;
-            Bitmap BackBuffer = new Bitmap(320, 240, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, 320, 240);
+            Rectangle rect = new Rectangle(0, 0, 320, 240);
 
             // get at the bitmap data in a nicer way
             System.Drawing.Imaging.BitmapData bmpData =
-                BackBuffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
-                BackBuffer.PixelFormat);
+                backBuffer.LockBits(
+                    rect,
+                    System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                    backBuffer.PixelFormat);
 
-            int bufSize = cam.BufferSize;
+            int bufSize = camera.BufferSize;
 
-            IntPtr ImgPtr = bmpData.Scan0;
+            IntPtr imgPtr = bmpData.Scan0;
 
             // grab the image
-
-
-          
             // Copy the RGB values back to the bitmap
-            System.Runtime.InteropServices.Marshal.Copy(cam.ImageBuffer, 0, ImgPtr, bufSize);
-            
-            // Unlock the bits.
-            BackBuffer.UnlockBits(bmpData);
+            System.Runtime.InteropServices.Marshal.Copy(camera.ImageBuffer, 0, imgPtr, bufSize);
 
+            // Unlock the bits.
+            backBuffer.UnlockBits(bmpData);
 
             // if a template preview is available, overlay with camera image
-            if (templatePreview != null)
+            if (TemplatePreview != null)
             {
                 // do some actual object detection 
-
-                // Bitmap cameraImage = new Bitmap(BackBuffer);
-
-                od.UpdateFrame(cam, null);
-
+                od.UpdateFrame(camera, null);
 
                 List<Point> matches = od.LastImageMatchingPoints;
                 List<Point> tKeyPts = od.TemplateKeyPoints;
@@ -160,9 +146,9 @@ namespace VisionModules.Wpf
                 Point[] corners = od.LastCornerPoints;
 
                 Logger.WriteLine("SetCameraImageSource --> Drawing Overlay");
-                Graphics g = Graphics.FromImage(BackBuffer);
-                if (templatePreview != null)
-                    g.DrawImage(templatePreview, 0, 0);
+                Graphics g = Graphics.FromImage(backBuffer);
+                if (TemplatePreview != null)
+                    g.DrawImage(TemplatePreview, 0, 0);
 
                 if (matches != null)
                 {
@@ -171,21 +157,18 @@ namespace VisionModules.Wpf
                     {
                         Logger.Write(p + " , ");
                     }
-                    Logger.WriteLine("");
                 }
 
                 // draw template keypoints (hScalef and wScalef must be correct!)
                 if (tKeyPts != null)
                 {
-
                     foreach (Point p in tKeyPts)
                     {
-                        double wScalef = (double)templatePreview.Width / (double)templateImg.Width;
-                        double hScalef = (double)templatePreview.Height / (double)templateImg.Height;
+                        double wScalef = (double)TemplatePreview.Width / (double)TemplateImg.Width;
+                        double hScalef = (double)TemplatePreview.Height / (double)TemplateImg.Height;
 
-
-                        int x = (int)((double)p.X * wScalef);
-                        int y = (int)((double)p.Y * hScalef);
+                        int x = (int)(p.X * wScalef);
+                        int y = (int)(p.Y * hScalef);
 
                         const int r = 2;
                         if (x - r >= 0 && y - r >= 0)
@@ -197,26 +180,22 @@ namespace VisionModules.Wpf
                             g.DrawRectangle(Pens.Red, x, y, r, r);
                         }
                     }
-
                 }
 
                 // draw matches in camera image (if present) and line do correspondences in 
                 // camera image
                 if (matches != null)
                 {
-
-
                     for (int k = 0; k < matches.Count; k += 2)
                     {
                         Point tPt = matches[k];
                         Point iPt = matches[k + 1];
 
-                        double wScalef = (double)templatePreview.Width / (double)templateImg.Width;
-                        double hScalef = (double)templatePreview.Height / (double)templateImg.Height;
+                        double wScalef = (double)TemplatePreview.Width / (double)TemplateImg.Width;
+                        double hScalef = (double)TemplatePreview.Height / (double)TemplateImg.Height;
 
-
-                        int tx = (int)((double)tPt.X * wScalef);
-                        int ty = (int)((double)tPt.Y * hScalef);
+                        int tx = (int)(tPt.X * wScalef);
+                        int ty = (int)(tPt.Y * hScalef);
 
                         const int r = 5;
                         if (tx - r >= 0 && ty - r >= 0)
@@ -228,9 +207,8 @@ namespace VisionModules.Wpf
                             g.DrawRectangle(Pens.Green, tx, ty, r, r);
                         }
 
-                        int ix = (int)((double)iPt.X);
-                        int iy = (int)((double)iPt.Y);
-
+                        int ix = iPt.X;
+                        int iy = iPt.Y;
 
                         if (ix - r >= 0 && iy - r >= 0)
                         {
@@ -242,13 +220,10 @@ namespace VisionModules.Wpf
                         }
 
                         g.DrawLine(Pens.GreenYellow, tx, ty, ix, iy);
-
                     }
-
                 }
 
                 // draw rectangle of object bounding corner
-
                 if (corners != null)
                 {
                     g.DrawLine(Pens.LightBlue, corners[0], corners[1]);
@@ -258,37 +233,32 @@ namespace VisionModules.Wpf
                 }
 
                 g.Dispose();
-
             }
 
-            IntPtr hBmp;
+            // Convert the bitmap to BitmapSource for use with WPF controls
+            IntPtr hBmp = backBuffer.GetHbitmap();
 
-            //Convert the bitmap to BitmapSource for use with WPF controls
-            hBmp = BackBuffer.GetHbitmap();
+            camera_image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBmp, IntPtr.Zero, Int32Rect.Empty, System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+            camera_image.Source.Freeze();
 
-            this.camera_image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBmp, IntPtr.Zero, Int32Rect.Empty, System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
-            this.camera_image.Source.Freeze();
-
-
-            BackBuffer.Dispose();
-            VisionModulesWPFCommon.DeleteGDIObject(hBmp);
+            backBuffer.Dispose();
+            VisionModulesWpfCommon.DeleteGDIObject(hBmp);
         }
 
-        /**<summary>
-         * Method gets called when the save button is clicked
-         * </summary> */
+        /// <summary>
+        /// Method gets called when the save button is clicked
+        /// </summary>
         public override void OnSave()
         {
             Logger.WriteLine("OnSave!!!!!!!!");
-            selected_camera = DeviceList.SelectedItem as Camera;
-            // cam.OnImageUpdated -= imageUpdateHandler;
+            SelectedCamera = DeviceList.SelectedItem as Camera;
 
-            cam = selected_camera;
-            if (this.templateImg != null)
+            camera = SelectedCamera;
+            if (TemplateImg != null)
             {
-                if (this.templateImg.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
+                if (TemplateImg.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
                 {
-                    // Todo: Change this --> should go into th event OnSave
+                    // Todo: Change this --> should go into the event OnSave
                     // this.objectDetectorEvent.setTemplateImage(this.templateImg);
                     // this.objectDetectorEvent.templatePreview = templatePreview;
                     Logger.WriteLine("OnSave --> successfully assigned template image");
@@ -316,29 +286,29 @@ namespace VisionModules.Wpf
             {
                 string fileName = dlg.FileName;
 
-                Bitmap tImg = null;
+                Bitmap tImg;
+
                 // TODO: Better Exception Handling --> what if the file isn't an image !?
                 try
                 {
                     tImg = new Bitmap(fileName);
                     if (tImg.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb)
                     {
-                        this.templateImg = tImg;
+                        TemplateImg = tImg;
+
                         // scale down the template image to generate a preview image
-                        int w = templateImg.Width;
-                        int h = templateImg.Height;
-                        this.template_scale_f = 100.0 / w;
-                        Bitmap preview = ImageProcessing.ScaleWithFixedSize(templateImg, 100, (int)(h * template_scale_f));
-                        this.templatePreview = preview;
-                        od.SetTemplate(templateImg);
+                        int w = TemplateImg.Width;
+                        int h = TemplateImg.Height;
+                        templateScaleF = 100.0 / w;
+                        Bitmap preview = ImageProcessing.ScaleWithFixedSize(TemplateImg, 100, (int)(h * templateScaleF));
+                        TemplatePreview = preview;
+                        od.SetTemplate(TemplateImg);
                     }
                     else
                     {
                         System.Windows.Forms.MessageBox.Show("The image color format is not supported. You need to provide an 24bit rgb color image", "Mayhem", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                         return;
                     }
-
-
                 }
                 catch (FileNotFoundException)
                 {
@@ -349,7 +319,7 @@ namespace VisionModules.Wpf
                 // pass template bitmap to objectDetectorEvent
                 if (tImg != null)
                 {
-
+                    // TODO
                 }
 
                 Logger.WriteLine("Image Loaded Successfully");
@@ -357,7 +327,6 @@ namespace VisionModules.Wpf
                 // update helper text
                 helperText.Content = "image set (event is now ready to work)";
                 helperText.Foreground = System.Windows.Media.Brushes.DarkGreen;
-
             }
             else
             {
@@ -367,13 +336,9 @@ namespace VisionModules.Wpf
             }
         }
 
-
-
         private void btn_templateFromRegion_Click(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

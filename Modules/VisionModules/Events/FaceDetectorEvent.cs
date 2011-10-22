@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Windows;
 using MayhemCore;
@@ -8,7 +9,6 @@ using MayhemOpenCVWrapper.LowLevel;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
-using System.Runtime.CompilerServices;
 
 namespace VisionModules.Events
 {
@@ -21,6 +21,9 @@ namespace VisionModules.Events
     [MayhemModule("Face Detector", "Detects if and how many faces are in the scene")]
     public class FaceDetectorEvent : EventBase, IWpfConfigurable
     {
+        // ms
+        private const int DetectionInterval = 2500; 
+
         // the cam we have selected
         [DataMember]
         private int selectedDeviceIndex;
@@ -31,13 +34,11 @@ namespace VisionModules.Events
         [DataMember]
         private int triggerOnNrOfFaces;
 
-        private const int detectionInterval = 2500; //ms
         private DateTime lastFacesDetectedTime = DateTime.Now;
         private FaceDetectorComponent faceDetector;
-        private FaceDetectorComponent.DetectionHandler faceDetectUpdateHandler;
         private CameraDriver cameraDriver;
-        private ImagerBase cam = null;
-        private int lastFacesDetectedAmount = 0;
+        private ImagerBase cam;
+        private int lastFacesDetectedAmount;
 
         protected override void OnLoadDefaults()
         {
@@ -48,7 +49,6 @@ namespace VisionModules.Events
         protected override void OnAfterLoad()
         {
             cameraDriver = CameraDriver.Instance;
-            faceDetectUpdateHandler = new FaceDetectorComponent.DetectionHandler(m_onFaceDetectUpdate);
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
@@ -61,33 +61,36 @@ namespace VisionModules.Events
             }
 
             faceDetector = new FaceDetectorComponent(cam);
-            
         }
 
-        void m_onFaceDetectUpdate(object sender, DetectionEventArgs pts)
+        private void OnFaceDetectUpdate(object sender, DetectionEventArgs pts)
         {
             List<System.Drawing.Point> points = pts.Points;
+
             // number of faces is points.Size() / 4
             // as each faces is returned with its own bounding box
             int nrFacesDetected = points.Count / 2;
             Logger.WriteLine("m_onFaceDetected: count " + nrFacesDetected);
             TimeSpan ts = DateTime.Now - lastFacesDetectedTime;
-            if (points.Count > 0 && ts.TotalMilliseconds > detectionInterval)
+
+            if (points.Count > 0 && ts.TotalMilliseconds > DetectionInterval)
             {
                 // only trigger if the lastFacesDetectedAmount was smaller than the trigger threshold
                 // and only if the number of faces detected this time is greater or equal then the trigger threshold
                 if (lastFacesDetectedAmount < triggerOnNrOfFaces && nrFacesDetected >= triggerOnNrOfFaces)
                 {
-                    base.Trigger();
+                    Trigger();
                 }
+
                 lastFacesDetectedTime = DateTime.Now;
             }
+
             lastFacesDetectedAmount = nrFacesDetected;
         }
 
         public string GetConfigString()
         {
-            string config = "";
+            string config = string.Empty;
             if (cam != null)
             {
                 config += "Camera: " + cam.Info.DeviceId + ", ";
@@ -106,10 +109,10 @@ namespace VisionModules.Events
             get
             {
                 Logger.WriteLine("get ConfigurationControl!");
-                FaceDetectConfig config = new FaceDetectConfig(this.cam as Camera);
+                FaceDetectConfig config = new FaceDetectConfig(cam as Camera);
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {
-                    config.selectedBoundingRect = boundingRect;
+                    config.SelectedBoundingRect = boundingRect;
                 }
 
                 config.DeviceList.SelectedIndex = selectedDeviceIndex;
@@ -124,21 +127,22 @@ namespace VisionModules.Events
             {
                 cam = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 cam.StartFrameGrabbing();
+
                 // register the trigger's faceDetection update handler
                 faceDetector.RegisterForImages(cam);
-                faceDetector.OnFaceDetected -= m_onFaceDetectUpdate;
-                faceDetector.OnFaceDetected += m_onFaceDetectUpdate;
+                faceDetector.OnFaceDetected -= OnFaceDetectUpdate;
+                faceDetector.OnFaceDetected += OnFaceDetectUpdate;
             }
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            Logger.WriteLine("");
             if (!e.IsConfiguring && cam != null)
             {
-                faceDetector.OnFaceDetected -= m_onFaceDetectUpdate;
+                faceDetector.OnFaceDetected -= OnFaceDetectUpdate;
                 faceDetector.UnregisterForImages(cam);
+
                 // de-register the trigger's faceDetection update handler                
                 // try to shut down the camera           
                 cam.TryStopFrameGrabbing();
@@ -147,15 +151,15 @@ namespace VisionModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            Logger.WriteLine("OnSaved!");
-            //   folderLocation = ((FaceDetectConfig)configurationControl).location;
             // assign selected cam
-            cam = ((FaceDetectConfig)configurationControl).DeviceList.SelectedItem as Camera;
+            var config = configurationControl as FaceDetectConfig;
+
+            cam = config.DeviceList.SelectedItem as Camera;
 
             // set the selected bounding rectangle
-            boundingRect = ((MotionDetectorConfig)configurationControl).overlay.GetBoundingRect();
+            boundingRect = config.overlay.GetBoundingRect();
             Logger.WriteLine("BOUNDING RECT : " + boundingRect);
-            triggerOnNrOfFaces = ((FaceDetectConfig)configurationControl).NumberOfFacesSelected;
+            triggerOnNrOfFaces = config.NumberOfFacesSelected;
         }
     }
 }

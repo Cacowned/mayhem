@@ -86,7 +86,7 @@
       <DependentUpon>ROISelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\VideoConfig.cs" />
-    <Compile Include="Wpf\VisionModulesWPFCommon.cs" />
+    <Compile Include="Wpf\VisionModulesWpfCommon.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
