@@ -7,25 +7,33 @@ namespace MayhemCore
     {
         // TODO: Implement trimming on the error log so it doesn't eat up ram
 
-        // Collection that stores all of the errors
-        private static BindingCollection<MayhemError> errors = new BindingCollection<MayhemError>();
+        static ErrorLog()
+        {
+            Errors = new BindingCollection<MayhemError>();
+        }
 
+        /// <summary>
+        /// Add an error to the error log.
+        /// </summary>
+        /// <param name="error">The error type for this error</param>
+        /// <param name="message">The error message text</param>
         public static void AddError(ErrorType error, string message)
         {
             MayhemError err = new MayhemError(error, message);
 
-            errors.Insert(0, err);
+            Errors.Insert(0, err);
 
             // For the time being, write the error to Debug as well
             Logger.WriteLine(message);
         }
 
+        /// <summary>
+        /// The collection of all errors logged.
+        /// </summary>
         public static BindingCollection<MayhemError> Errors
         {
-            get
-            {
-                return errors;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -35,7 +43,7 @@ namespace MayhemCore
         /// <returns>An enumeration of the errors that fit the criteria</returns>
         public static IEnumerable<MayhemError> GetErrorsAtLevel(ErrorType minimumType)
         {
-            return errors.Where(x => x.Type > minimumType);
+            return Errors.Where(x => x.Type > minimumType);
         }
     }
 }

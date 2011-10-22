@@ -35,6 +35,9 @@ namespace MayhemCore
 
         private static MayhemEntry instance;
 
+        /// <summary>
+        /// Singleton instance of MayhemEntry
+        /// </summary>
         public static MayhemEntry Instance
         {
             get
