@@ -24,8 +24,8 @@ namespace MayhemOpenCVWrapper.LowLevel
             set;
         }
 
-        private FaceDetector fd;
-        private int frameCount = 0;
+        private readonly FaceDetector faceDetector;
+        private int frameCount;
         private const bool VerboseDebug = true;
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             int height = c.Settings.ResY;
             Logger.WriteLine("Face Detector: w {0} h {1}", width, height);
             DetectionBoundary = new Rect(0, 0, 0, 0);
-            fd = new FaceDetector(width, height);
+            faceDetector = new FaceDetector(width, height);
         }
 
         ~FaceDetectorComponent()
@@ -60,7 +60,7 @@ namespace MayhemOpenCVWrapper.LowLevel
 
             Bitmap cameraImage = camera.ImageAsBitmap();
 
-            BitmapData bd = cameraImage.LockBits(new Rectangle(0, 0, cameraImage.Size.Width, cameraImage.Size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, cameraImage.PixelFormat);
+            BitmapData bd = cameraImage.LockBits(new Rectangle(0, 0, cameraImage.Size.Width, cameraImage.Size.Height), ImageLockMode.ReadOnly, cameraImage.PixelFormat);
 
             IntPtr imgPointer = bd.Scan0;
 
@@ -69,7 +69,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             {
                 fixed (int* buf = faceCoords)
                 {
-                    fd.ProcessFrame((byte*)imgPointer, buf, &numFacesCoords);
+                    faceDetector.ProcessFrame((byte*)imgPointer, buf, &numFacesCoords);
                 }
             }
 
@@ -88,11 +88,10 @@ namespace MayhemOpenCVWrapper.LowLevel
                 return;
             }
 
-            int indexCoord = 0;
             List<Point> points = new List<Point>();
 
             // copy the coordinates to a list
-            for (indexCoord = 0; indexCoord < numFacesCoords; )
+            for (int indexCoord = 0; indexCoord < numFacesCoords; )
             {
                 Point p1 = new Point(faceCoords[indexCoord++], faceCoords[indexCoord++]);
                 Point p2 = new Point(faceCoords[indexCoord++], faceCoords[indexCoord++]);
@@ -160,7 +159,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             }
             else
             {
-                fd.Dispose();
+                faceDetector.Dispose();
             }
         }
 

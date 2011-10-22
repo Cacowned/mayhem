@@ -1,5 +1,4 @@
 ﻿using System;
-using MayhemCore;
 
 namespace MayhemOpenCVWrapper.LowLevel
 {
@@ -8,11 +7,11 @@ namespace MayhemOpenCVWrapper.LowLevel
     /// </summary>
     public abstract class CameraImageListener
     {
-        private Camera.ImageUpdateHandler imageUpdateHandler;
+        private readonly ImagerBase.ImageUpdateHandler imageUpdateHandler;
 
-        public CameraImageListener()
+        protected CameraImageListener()
         {
-            imageUpdateHandler = new Camera.ImageUpdateHandler(UpdateFrame);
+            imageUpdateHandler = UpdateFrame;
         }
 
         /// <summary>

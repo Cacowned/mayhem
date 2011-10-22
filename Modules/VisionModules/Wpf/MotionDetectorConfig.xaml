@@ -5,23 +5,21 @@
              xmlns:visionmods="clr-namespace:VisionModules.Wpf"
              Width="400">
 
-    <Grid>
-        <StackPanel>
-            <StackPanel Orientation="Vertical">
-                <Canvas Width="320" Height="240" >
-                    <Image Canvas.Left="0" Canvas.Top="0" Height="240" Name="camera_image" Stretch="Fill" Width="320"  />
-                    <visionmods:ROISelector Canvas.Left="0" Canvas.Top="0" Height="240" Width="320" x:Name="overlay" Background= "Transparent"/>
-                </Canvas>
-            </StackPanel>
-      <StackPanel Orientation="Horizontal">
-        <Label>Sensitivity</Label>      
-        <Slider Name="Sensitivity" Maximum="10" Interval="1" Minimum="1" MinWidth="300"></Slider>
-      </StackPanel>
-      <Label>Click on the camera preview above to select a region of interest. </Label>
-            <StackPanel Name="pnl_additonal_widgets"> <!-- panel where user can -->
-            </StackPanel>
-            <Label>Click drop down list below to select a camera:</Label>
-            <ComboBox Name="DeviceList" SelectionChanged="DeviceList_SelectionChanged" />
+    <StackPanel>
+        <Canvas Width="320" Height="240" >
+            <Image Canvas.Left="0" Canvas.Top="0" Height="240" Name="camera_image" Stretch="Fill" Width="320"  />
+            <visionmods:ROISelector Canvas.Left="0" Canvas.Top="0" Height="240" Width="320" x:Name="overlay" Background= "Transparent"/>
+        </Canvas>
+        
+        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+            <Label>Sensitivity</Label>
+            <Slider Name="Sensitivity" Maximum="10" Interval="1" Minimum="1" MinWidth="300"></Slider>
         </StackPanel>
-    </Grid>
+        <Label>Click on the camera preview above to select a region of interest.</Label>
+        <StackPanel Name="pnl_additonal_widgets">
+            <!-- panel where user can -->
+        </StackPanel>
+        <Label>Click drop down list below to select a camera:</Label>
+        <ComboBox Name="DeviceList" SelectionChanged="DeviceList_SelectionChanged" />
+    </StackPanel>
 </src:WpfConfiguration>

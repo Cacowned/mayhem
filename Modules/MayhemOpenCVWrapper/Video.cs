@@ -21,17 +21,19 @@ namespace MayhemOpenCVWrapper
 
         public event VideoSavedEventHandler OnVideoSaved;
 
-        private List<Bitmap> videoFrames;
+        private readonly List<Bitmap> videoFrames;
 
         // video stream settings
-        private double frameRate;
+        private readonly double frameRate;
+
+        // TODO: These are never being used
         private int width;
         private int height;
 
         // video stream
-        private VideoStream stream = null;
-        private AviManager aviManager = null;
-        private int frames = 0;
+        private readonly VideoStream stream;
+        private readonly AviManager aviManager;
+        private int frames;
 
         /// <summary>
         /// Initializes a new video object.
@@ -80,7 +82,7 @@ namespace MayhemOpenCVWrapper
                 }
 
                 // add the frames
-                ThreadPool.QueueUserWorkItem(TAddFrames);
+                ThreadPool.QueueUserWorkItem(AddFrames);
             }
         }
 
@@ -88,7 +90,7 @@ namespace MayhemOpenCVWrapper
         /// Write out the video in a background thread
         /// </summary>
         /// <param name="state"></param>
-        private void TAddFrames(object state)
+        private void AddFrames(object state)
         {
             Logger.WriteLine("Adding Frames");
             foreach (Bitmap img in videoFrames)
@@ -105,7 +107,7 @@ namespace MayhemOpenCVWrapper
             }
 
             Logger.WriteLine("Created AVI with " + frames + " frames.");
-            if (this.OnVideoSaved != null)
+            if (OnVideoSaved != null)
             {
                 OnVideoSaved(this, new VideoSavedEventArgs(true));
             }

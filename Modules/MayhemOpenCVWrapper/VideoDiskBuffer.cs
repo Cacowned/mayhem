@@ -21,9 +21,9 @@ namespace MayhemOpenCVWrapper
     /// </summary>
     internal class VideoDiskBuffer : IDisposable
     {
-        private static int instanceCount = 0;
+        private static int instanceCount;
         private readonly string bufferFilename;
-        private Queue<Bitmap> writeQueue;
+        private readonly Queue<Bitmap> writeQueue;
         private FileStream fs;
 
         // buffer can accept new frames
@@ -33,24 +33,27 @@ namespace MayhemOpenCVWrapper
         private readonly int maxBufferItems;
 
         // max bitmaps allowed in the queue
-        private const int maxQueuedBitmaps = 64;
+        private const int MaxQueuedBitmaps = 64;
 
         // ring buffer index
-        private int currentBlock = 0;
+        private int currentBlock;
         private long[] blockBytes;
-        private object operation_locker = new object();
+        private readonly object operationLocker;
         private Thread writeThread;
-        private int writtenBlocks = 0;
+        private int writtenBlocks;
         private volatile bool threadRunning = true;
 
         // when a bitmap is added to the queue, signal the event to let the WriteThread process it 
-        private AutoResetEvent signalNewBitmaps = new AutoResetEvent(false);
+        private readonly AutoResetEvent signalNewBitmaps;
 
         internal VideoDiskBuffer()
         {
             instanceCount++;
-            string bufferfileName_ = "MVidBuf" + instanceCount + ".bin";
-            bufferFilename = bufferfileName_;
+
+            operationLocker = new object();
+            signalNewBitmaps = new AutoResetEvent(false);
+
+            bufferFilename = "MVidBuf" + instanceCount + ".bin";
 
             maxBufferItems = (1000 / CameraSettings.Defaults().UpdateRateMs) * 30;
             if (!(maxBufferItems >= 200 && maxBufferItems <= 2000))
@@ -64,7 +67,7 @@ namespace MayhemOpenCVWrapper
             Logger.WriteLine("MayhemVideoBuffer Nr " + instanceCount + " filename " + bufferFilename + " maxBufferItems " + maxBufferItems);
             fs = new FileStream(bufferFilename, FileMode.OpenOrCreate);
             fs.Seek(0, SeekOrigin.Begin);
-            writeThread = new Thread(new ThreadStart(this.BufferWriteThread));
+            writeThread = new Thread(BufferWriteThread);
             writeThread.Name = "Video_Disk_Writer";
             writeThread.IsBackground = true;
             writeThread.Start();
@@ -107,7 +110,7 @@ namespace MayhemOpenCVWrapper
         {
             acceptFrames = false;
             {
-                lock (operation_locker)
+                lock (operationLocker)
                 {
                     fs.Close();
                     if (File.Exists(bufferFilename))
@@ -146,12 +149,12 @@ namespace MayhemOpenCVWrapper
                     ClearAndResetBuffer();
 
                     // restart the thread
-                    writeThread = new Thread(new ThreadStart(this.BufferWriteThread));
+                    writeThread = new Thread(BufferWriteThread);
                     writeThread.Name = "Video_Disk_Writer";
                     writeThread.Start();
                 }
 
-                if (writeQueue.Count < maxQueuedBitmaps)
+                if (writeQueue.Count < MaxQueuedBitmaps)
                     writeQueue.Enqueue(b);
 
                 // tell the thread to process incoming data
@@ -162,7 +165,6 @@ namespace MayhemOpenCVWrapper
         /// <summary>
         /// Thread that writes pending items to the buffer file. 
         /// </summary>
-        /// <param name="items"></param>
         private void BufferWriteThread()
         {
             while (threadRunning)
@@ -174,13 +176,13 @@ namespace MayhemOpenCVWrapper
                     try
                     {
                         bitmap.Save(ms, ImageFormat.Bmp);
-                        long next_offset = GetOffsetForIndex(currentBlock);
+                        long nextOffset = GetOffsetForIndex(currentBlock);
 
                         // lock access to the file
-                        lock (operation_locker)
+                        lock (operationLocker)
                         {
                             // seek to correct position
-                            fs.Seek(next_offset, SeekOrigin.Begin);
+                            fs.Seek(nextOffset, SeekOrigin.Begin);
 
                             // serialize object in memory
                             byte[] memBytes = ms.GetBuffer();
@@ -217,7 +219,7 @@ namespace MayhemOpenCVWrapper
             if (!acceptFrames)
                 return bitmaps;
 
-            lock (operation_locker)
+            lock (operationLocker)
             {
                 int begin, end;
                 if (writtenBlocks >= maxBufferItems)

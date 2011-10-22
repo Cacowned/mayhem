@@ -48,11 +48,14 @@ namespace MayhemOpenCVWrapper
             get { return camerasAvailable.Count; }
         }
 
-        private List<CameraInfo> devicesAvailable = new List<CameraInfo>();
-        private List<Camera> camerasAvailable = new List<Camera>();
+        private readonly List<CameraInfo> devicesAvailable;
+        private readonly List<Camera> camerasAvailable;
 
         private CameraDriver()
         {
+            devicesAvailable = new List<CameraInfo>();
+            camerasAvailable = new List<Camera>();
+
             // just initialize the capture library
             // to get the camera running, InitCaptureDevice must be called!
             try
@@ -91,7 +94,7 @@ namespace MayhemOpenCVWrapper
         private List<CameraInfo> EnumerateDevices()
         {
             List<CameraInfo> c = new List<CameraInfo>();
-            string deviceNames = string.Empty;
+            string deviceNames;
 
             unsafe
             {
