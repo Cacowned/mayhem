@@ -11,11 +11,10 @@ namespace WindowModules.Wpf
     /// </summary>
     public partial class WindowSendKeys : UserControl, IWindowActionConfigControl
     {
-        private WindowActionSendKeys action;
-        private InterceptKeys interceptKeys;
+        private readonly WindowActionSendKeys action;
+        private readonly InterceptKeys interceptKeys;
 
-        private List<Key> keys = new List<Key>();
-        private List<System.Windows.Forms.Keys> keys_down = new List<System.Windows.Forms.Keys>();
+        private readonly List<System.Windows.Forms.Keys> keysDown;
 
         public WindowSendKeys(WindowActionSendKeys action)
         {
@@ -25,14 +24,16 @@ namespace WindowModules.Wpf
 
             interceptKeys = InterceptKeys.Instance;
 
+            keysDown = new List<System.Windows.Forms.Keys>();
             foreach (System.Windows.Forms.Keys key in action.KeyList)
             {
-                keys_down.Add(key);
+                keysDown.Add(key);
             }
+
             UpdateText();
         }
 
-        void interceptKeys_OnKeyDown(System.Windows.Forms.Keys key)
+        private void interceptKeys_OnKeyDown(System.Windows.Forms.Keys key)
         {
             if (key == System.Windows.Forms.Keys.LControlKey || key == System.Windows.Forms.Keys.RControlKey)
                 key = System.Windows.Forms.Keys.Control;
@@ -40,23 +41,23 @@ namespace WindowModules.Wpf
                 key = System.Windows.Forms.Keys.Alt;
             else if (key == System.Windows.Forms.Keys.LShiftKey || key == System.Windows.Forms.Keys.RShiftKey || key == System.Windows.Forms.Keys.ShiftKey)
                 key = System.Windows.Forms.Keys.Shift;
-            if (!keys_down.Contains(key))
+            if (!keysDown.Contains(key))
             {
                 if (key == System.Windows.Forms.Keys.Control || key == System.Windows.Forms.Keys.Shift || key == System.Windows.Forms.Keys.Alt)
-                    keys_down.Insert(0, key);
+                    keysDown.Insert(0, key);
                 else
-                    keys_down.Add(key);
+                    keysDown.Add(key);
 
                 UpdateText();
             }
         }
 
-        void UpdateText()
+        private void UpdateText()
         {
-            string str = "";
-            foreach (System.Windows.Forms.Keys key in keys_down)
+            string str = string.Empty;
+            foreach (System.Windows.Forms.Keys key in keysDown)
             {
-                if (str == "")
+                if (str == string.Empty)
                 {
                     str = key.ToString();
                 }
@@ -70,26 +71,26 @@ namespace WindowModules.Wpf
 
         public void Save()
         {
-            action.KeyList = keys_down;
+            action.KeyList = keysDown;
             interceptKeys.RemoveHook();
         }
 
         private void buttonClear_Click(object sender, RoutedEventArgs e)
         {
-            keys_down.Clear();
+            keysDown.Clear();
             UpdateText();
         }
 
         private void textBlockKeys_GotFocus(object sender, RoutedEventArgs e)
         {
-            interceptKeys.OnKeyDown += new InterceptKeys.KeyDownHandler(interceptKeys_OnKeyDown);
+            interceptKeys.OnKeyDown += interceptKeys_OnKeyDown;
             interceptKeys.SetHook();
         }
 
         private void textBlockKeys_LostFocus(object sender, RoutedEventArgs e)
         {
             interceptKeys.RemoveHook();
-            interceptKeys.OnKeyDown -= new InterceptKeys.KeyDownHandler(interceptKeys_OnKeyDown);
+            interceptKeys.OnKeyDown -= interceptKeys_OnKeyDown;
         }
 
         private void UserControl_LostFocus(object sender, RoutedEventArgs e)
@@ -101,103 +102,5 @@ namespace WindowModules.Wpf
         {
             e.Handled = true;
         }
-        /*
-        private void textBlockKeys_KeyDown(object sender, KeyEventArgs e)
-        {
-            Key key = e.Key;
-            if(key == Key.RightCtrl)
-                key = Key.LeftCtrl;
-            if(key == Key.RightAlt)
-                key = Key.LeftAlt;
-            if(key == Key.RightShift)
-                key = Key.LeftShift;
-            if (key == Key.System)
-                key = Key.LeftAlt;
-            if (key == Key.RWin)
-                key = Key.LWin;
-
-            Logger.WriteLine(key);
-
-            keys.Add(key);
-  //          SetText();
-
-            if(key == Key.LeftCtrl || key == Key.LeftAlt)
-                e.Handled = true;
-        }
-
-        void SetText()
-        {
-            string text = "";
-            for (int i = 0; i < keys.Count; i++)
-            {
-                string keyString = keys[i].ToString();
-                switch(keyString)
-                {
-                    case "LeftCtrl":
-                        keyString = "Ctrl";
-                        break;
-                    case "LeftShift":
-                        keyString = "Shift";
-                        break;
-                    case "LeftAlt":
-                        keyString = "Alt";
-                        break;
-                    case "LWin":
-                        keyString = "Win";
-                        break;
-                    case "Space":
-                        keyString = "";
-                        break;
-                    case "Capital":
-                        keyString = "Caps";
-                        break;
-                    case "D0":
-                    case "D1":
-                    case "D2":
-                    case "D3":
-                    case "D4":
-                    case "D5":
-                    case "D6":
-                    case "D7":
-                    case "D8":
-                    case "D9":
-                        keyString = keyString[1].ToString();
-                        break;
-                    case "Multiply":
-                        keyString = "*";
-                        break;
-                    case "Add":
-                        keyString = "+";
-                        break;
-                    case "Subtract":
-                        keyString = "-";
-                        break;
-                    case "Decimal":
-                        keyString = ".";
-                        break;
-                    case "Divide":
-                        keyString = "/";
-                        break;
-                    case "Numpad0":
-                    case "Numpad1":
-                    case "Numpad2":
-                    case "Numpad3":
-                    case "Numpad4":
-                    case "Numpad5":
-                    case "Numpad6":
-                    case "Numpad7":
-                    case "Numpad8":
-                    case "Numpad9":
-                        keyString = keyString.Replace("Numpad", "");
-                        break;
-                    case "Oem3":
-                        keyString = "~";
-                        break;
-                }
-                text += keyString + " ";
-            }
-            textBlockKeys.Text = text;
-        }
-         * */
     }
 }

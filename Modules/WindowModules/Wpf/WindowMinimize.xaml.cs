@@ -1,20 +1,12 @@
 ﻿using System.Windows.Controls;
-using WindowModules.Actions;
 
 namespace WindowModules.Wpf
 {
-    /// <summary>
-    /// Interaction logic for WindowMove.xaml
-    /// </summary>
     public partial class WindowMinimize : UserControl, IWindowActionConfigControl
     {
-        WindowActionMinimize action;
-
-        public WindowMinimize(WindowActionMinimize action)
+        public WindowMinimize()
         {
             InitializeComponent();
-
-            this.action = action;
         }
 
         public void Save()

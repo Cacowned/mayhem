@@ -10,7 +10,7 @@ namespace WindowModules.Wpf
     /// </summary>
     public partial class WindowResize : UserControl, IWindowActionConfigControl
     {
-        WindowActionResize action;
+        private readonly WindowActionResize action;
 
         public WindowResize(WindowActionResize action)
         {

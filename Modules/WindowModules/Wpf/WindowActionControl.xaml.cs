@@ -10,21 +10,24 @@ namespace WindowModules.Wpf
     public partial class WindowActionControl : UserControl
     {
         private int index;
+
         public int Index
         {
-            get { return index; }
-            set 
+            get
+            {
+                return index;
+            }
+            set
             {
                 index = value;
                 textIndex.Text = index.ToString();
             }
         }
 
-        private UserControl config;
         public UserControl Config
         {
-            get { return config; }
-            set { config = value; }
+            get;
+            set;
         }
 
         // Using a DependencyProperty as the backing store for TagID.  This enables animation, styling, binding, etc...
@@ -35,7 +38,7 @@ namespace WindowModules.Wpf
 
         public WindowActionControl(UserControl config)
         {
-            this.Config = config;
+            Config = config;
             InitializeComponent();
             control1.Content = config;
         }

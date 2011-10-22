@@ -7,13 +7,22 @@ namespace WindowModules.Actions
     public class WindowActionResize : IWindowAction
     {
         [DataMember]
-        public int Width;
+        public int Width
+        {
+            get;
+            set;
+        }
+
         [DataMember]
-        public int Height;
+        public int Height
+        {
+            get;
+            set;
+        }
 
         public void Perform(IntPtr window)
         {
-            Native.RECT rect = new Native.RECT();
+            var rect = new Native.RECT();
             Native.GetWindowRect(window, ref rect);
             int x = rect.left;
             int y = rect.top;

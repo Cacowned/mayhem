@@ -30,18 +30,21 @@ namespace WindowModules
         private const int WM_KEYUP = 0x101;
         private const int WM_SYSKEYUP = 0x105;
 
-        private LowLevelKeyboardProc _proc;
-        private IntPtr _hookID = IntPtr.Zero;
+        private LowLevelKeyboardProc proc;
+        private IntPtr hookId = IntPtr.Zero;
 
         public delegate void KeyDownHandler(Keys key);
+
         public event KeyDownHandler OnKeyDown;
 
         public delegate void KeyUpHandler(Keys key);
+
         public event KeyUpHandler OnKeyUp;
 
-        private HashSet<Keys> keys_down = new HashSet<Keys>();
+        private readonly HashSet<Keys> keysDown;
 
         private static InterceptKeys instance = null;
+
         public static InterceptKeys Instance
         {
             get
@@ -55,6 +58,7 @@ namespace WindowModules
 
         InterceptKeys()
         {
+            keysDown = new HashSet<Keys>();
         }
 
         ~InterceptKeys()
@@ -64,14 +68,14 @@ namespace WindowModules
 
         public void SetHook()
         {
-            if (_hookID == IntPtr.Zero)
+            if (hookId == IntPtr.Zero)
             {
-                _proc = new LowLevelKeyboardProc(HookCallback);
+                proc = HookCallback;
                 using (Process curProcess = Process.GetCurrentProcess())
                 {
                     using (ProcessModule curModule = curProcess.MainModule)
                     {
-                        _hookID = SetWindowsHookEx(WH_KEYBOARD_LL, _proc, GetModuleHandle(curModule.ModuleName), 0);
+                        hookId = SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
                     }
                 }
             }
@@ -79,10 +83,10 @@ namespace WindowModules
 
         public void RemoveHook()
         {
-            if (_hookID != IntPtr.Zero)
+            if (hookId != IntPtr.Zero)
             {
-                UnhookWindowsHookEx(_hookID);
-                _hookID = IntPtr.Zero;
+                UnhookWindowsHookEx(hookId);
+                hookId = IntPtr.Zero;
             }
         }
 
@@ -92,9 +96,9 @@ namespace WindowModules
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Keys key = (Keys)vkCode;
-                if (!keys_down.Contains(key))
+                if (!keysDown.Contains(key))
                 {
-                    keys_down.Add(key);
+                    keysDown.Add(key);
                     if (OnKeyDown != null)
                     {
                         OnKeyDown(key);
@@ -105,13 +109,14 @@ namespace WindowModules
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Keys key = (Keys)vkCode;
-                keys_down.Remove(key);
+                keysDown.Remove(key);
                 if (OnKeyUp != null)
                 {
                     OnKeyUp(key);
                 }
             }
-            return CallNextHookEx(_hookID, nCode, wParam, lParam);
+
+            return CallNextHookEx(hookId, nCode, wParam, lParam);
         }
     }
 }

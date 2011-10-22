@@ -61,6 +61,7 @@
     <Compile Include="Events\SystemTrayMenu.cs" />
     <Compile Include="IWindowAction.cs" />
     <Compile Include="IWindowActionConfigControl.cs" />
+    <Compile Include="WindowActionInfo.cs" />
     <Compile Include="WindowFinder.cs" />
     <Compile Include="Reactions\WindowSequence.cs" />
     <Compile Include="Native.cs" />

@@ -8,7 +8,7 @@ namespace WindowModules.Wpf
     /// </summary>
     public partial class WindowWait : UserControl, IWindowActionConfigControl
     {
-        private WindowActionWait action;
+        private readonly WindowActionWait action;
 
         public WindowWait(WindowActionWait action)
         {

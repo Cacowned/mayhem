@@ -17,7 +17,7 @@ namespace WindowModules.Wpf
 
         public SystemTrayMenuConfig(string message)
         {
-            this.Text = message;
+            Text = message;
             InitializeComponent();
         }
 
@@ -28,7 +28,7 @@ namespace WindowModules.Wpf
 
         public override void OnLoad()
         {
-            MessageBox.Text = this.Text;
+            MessageBox.Text = Text;
         }
 
         public override void OnSave()

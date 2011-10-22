@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using WindowModules.Actions;
 
 namespace WindowModules.Wpf
 {
@@ -8,13 +7,9 @@ namespace WindowModules.Wpf
     /// </summary>
     public partial class WindowMaximize : UserControl, IWindowActionConfigControl
     {
-        WindowActionMaximize action;
-
-        public WindowMaximize(WindowActionMaximize action)
+        public WindowMaximize()
         {
             InitializeComponent();
-
-            this.action = action;
         }
 
         public void Save()

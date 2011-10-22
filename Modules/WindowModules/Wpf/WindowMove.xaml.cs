@@ -10,7 +10,7 @@ namespace WindowModules.Wpf
     /// </summary>
     public partial class WindowMove : UserControl, IWindowActionConfigControl
     {
-        WindowActionMove action;
+        private readonly WindowActionMove action;
 
         public WindowMove(WindowActionMove action)
         {

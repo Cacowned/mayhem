@@ -5,8 +5,8 @@ namespace WindowModules
 {
     public static class WMIProcess
     {
-        static ConnectionOptions options;
-        static ManagementScope connectionScope;
+        static readonly ConnectionOptions options;
+        static readonly ManagementScope connectionScope;
 
         static WMIProcess()
         {
@@ -25,7 +25,7 @@ namespace WindowModules
             }
             catch (ManagementException e)
             {
-                Console.WriteLine("An Error Occurred: " + e.Message.ToString());
+                Console.WriteLine("An Error Occurred: " + e.Message);
             }
         }
 
