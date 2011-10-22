@@ -39,15 +39,15 @@ namespace DefaultModules.Wpf
         /// </summary>
         public override void OnLoad()
         {
-            chk_name.IsChecked = MonitorName;
-            chk_subdirs.IsChecked = SubDirectories;
+            CheckName.IsChecked = MonitorName;
+            CheckSubdirs.IsChecked = SubDirectories;
             textBoxDirectory.Text = FolderToMonitor;
         }
 
         // Browse for file
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Browse_Click(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog dlg = new FolderBrowserDialog();
+            var dlg = new FolderBrowserDialog();
             dlg.ShowNewFolderButton = true;
             dlg.SelectedPath = FolderToMonitor;
 
@@ -57,7 +57,7 @@ namespace DefaultModules.Wpf
             }
         }
 
-        private void textBoxDirectory_TextChanged(object sender, TextChangedEventArgs e)
+        private void Directory_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
 
@@ -88,14 +88,14 @@ namespace DefaultModules.Wpf
             }
         }
 
-        private void chk_name_Checked(object sender, RoutedEventArgs e)
+        private void CheckName_Checked(object sender, RoutedEventArgs e)
         {
-            MonitorName = (bool)chk_name.IsChecked;
+            MonitorName = (bool)CheckName.IsChecked;
         }
 
-        private void chk_subdirs_Checked(object sender, RoutedEventArgs e)
+        private void CheckSubdirs_Checked(object sender, RoutedEventArgs e)
         {
-            SubDirectories = (bool)chk_subdirs.IsChecked;
+            SubDirectories = (bool)CheckSubdirs.IsChecked;
         }
     }
 }

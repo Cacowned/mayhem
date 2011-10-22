@@ -22,8 +22,8 @@ namespace DefaultModules.Wpf
 
         public RunProgramConfig(string filename, string arguments)
         {
-            this.Filename = filename;
-            this.Arguments = arguments;
+            Filename = filename;
+            Arguments = arguments;
 
             InitializeComponent();
         }
@@ -51,9 +51,10 @@ namespace DefaultModules.Wpf
         }
 
         // Browse for file
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Browse_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
+            var dlg = new OpenFileDialog();
+
             dlg.FileName = Filename;
             dlg.DefaultExt = ".exe";
 

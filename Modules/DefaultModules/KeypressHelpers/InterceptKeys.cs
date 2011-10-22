@@ -18,8 +18,8 @@ namespace DefaultModules.KeypressHelpers
 
         private static InterceptKeys instance;
 
-        private readonly LowLevelKeyboardProc _proc;
-        private IntPtr _hookID; 
+        private readonly LowLevelKeyboardProc proc;
+        private IntPtr hookId; 
 
         public delegate void KeyCombinationHandler();
 
@@ -47,7 +47,7 @@ namespace DefaultModules.KeypressHelpers
             }
         }
 
-        private int refCount = 0;
+        private int refCount;
 
         private InterceptKeys()
         {
@@ -55,8 +55,8 @@ namespace DefaultModules.KeypressHelpers
             keysDown = new HashSet<Keys>();
             keysDownTimes = new Dictionary<Keys, DateTime>();
 
-            _hookID = IntPtr.Zero;
-            _proc = HookCallback;
+            hookId = IntPtr.Zero;
+            proc = HookCallback;
         }
 
         ~InterceptKeys()
@@ -175,14 +175,14 @@ namespace DefaultModules.KeypressHelpers
         public void SetHook()
         {
             keysDown.Clear();
-            if (_hookID == IntPtr.Zero)
+            if (hookId == IntPtr.Zero)
             {
                 using (Process curProcess = Process.GetCurrentProcess())
                 {
                     using (ProcessModule curModule = curProcess.MainModule)
                     {
                         Logger.WriteLine("Setting hook");
-                        _hookID = SetWindowsHookEx(WH_KEYBOARD_LL, _proc, GetModuleHandle(curModule.ModuleName), 0);
+                        hookId = SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
                     }
                 }
             }
@@ -191,11 +191,11 @@ namespace DefaultModules.KeypressHelpers
         public void RemoveHook()
         {
             keysDown.Clear();
-            if (_hookID != IntPtr.Zero)
+            if (hookId != IntPtr.Zero)
             {
                 Logger.WriteLine("Removing hook");
-                UnhookWindowsHookEx(_hookID);
-                _hookID = IntPtr.Zero;
+                UnhookWindowsHookEx(hookId);
+                hookId = IntPtr.Zero;
             }
         }
 
@@ -206,7 +206,9 @@ namespace DefaultModules.KeypressHelpers
             if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
             {
                 int vkCode = Marshal.ReadInt32(lParam);
-                Keys key = (Keys)vkCode;
+                
+                var key = (Keys)vkCode;
+                
                 keysDownTimes[key] = DateTime.Now;
                 if (!keysDown.Contains(key))
                 {
@@ -221,7 +223,7 @@ namespace DefaultModules.KeypressHelpers
             else if (nCode >= 0 && (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))
             {
                 int vkCode = Marshal.ReadInt32(lParam);
-                Keys key = (Keys)vkCode;
+                var key = (Keys)vkCode;
                 keysDown.Remove(key);
                 if (OnKeyUp != null)
                 {
@@ -229,7 +231,7 @@ namespace DefaultModules.KeypressHelpers
                 }
             }
 
-            return CallNextHookEx(_hookID, nCode, wParam, lParam);
+            return CallNextHookEx(hookId, nCode, wParam, lParam);
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]

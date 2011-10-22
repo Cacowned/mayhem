@@ -16,7 +16,7 @@ namespace DefaultModules.Wpf
 
         public PlaySoundConfig(string filename)
         {
-            this.FileName = filename;
+            FileName = filename;
             InitializeComponent();
         }
 
@@ -36,9 +36,10 @@ namespace DefaultModules.Wpf
         }
 
         // Browse for file
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Browse_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
+            var dlg = new OpenFileDialog();
+
             dlg.CheckPathExists = true;
             dlg.Filter = "All Supported Audio | *.mp3; *.wma; *.wav | MP3s | *.mp3 | WMAs | *.wma | WAVs | *.wav";
             dlg.DefaultExt = ".mp3";

@@ -5,7 +5,12 @@ namespace PhoneModules
 {
     public static class FileDictionary
     {
-        private static Dictionary<string, byte[]> dict = new Dictionary<string, byte[]>();
+        private static readonly Dictionary<string, byte[]> dict;
+
+        static FileDictionary()
+        {
+            dict = new Dictionary<string, byte[]>();
+        }
 
         public static void Add(string str)
         {

@@ -68,9 +68,9 @@
     <Compile Include="LowLevel\Utilities.cs" />
     <Compile Include="LowLevel\VK.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reactions\Media\NextItem.cs" />
-    <Compile Include="Reactions\Media\PlayPause.cs" />
-    <Compile Include="Reactions\Media\PreviousItem.cs" />
+    <Compile Include="Reactions\NextItem.cs" />
+    <Compile Include="Reactions\PlayPause.cs" />
+    <Compile Include="Reactions\PreviousItem.cs" />
     <Compile Include="Reactions\PlaySound.cs" />
     <Compile Include="Reactions\RunProgram.cs" />
     <Compile Include="Reactions\TextToSpeech.cs" />

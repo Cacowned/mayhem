@@ -22,13 +22,14 @@ namespace PhoneModules.Wpf
             private set;
         }
 
-        private PhoneLayout phoneLayout = PhoneLayout.Instance;
+        private readonly PhoneLayout phoneLayout;
 
-        private string selectedID;
-        private bool isCreatingForFirstTime;
+        private string selectedId;
+        private readonly bool isCreatingForFirstTime;
 
         public PhoneFormDesigner(bool isCreatingForFirstTime)
         {
+            phoneLayout = PhoneLayout.Instance;
             this.isCreatingForFirstTime = isCreatingForFirstTime;
             InitializeComponent();
         }
@@ -44,7 +45,6 @@ namespace PhoneModules.Wpf
             QRCodeEncoder qrCodeEncoder = new QRCodeEncoder();
             qrCodeEncoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;
 
-            string localComputerName = Dns.GetHostName();
             IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
             string text = string.Empty;
             text += "19283";
@@ -53,7 +53,7 @@ namespace PhoneModules.Wpf
             {
                 if (t.AddressFamily.ToString() == "InterNetwork")
                 {
-                    text += ":"+t;
+                    text += ":" + t;
                     if (textIP.Text.Length > 0)
                         textIP.Text += ", ";
                     textIP.Text += t;
@@ -80,29 +80,26 @@ namespace PhoneModules.Wpf
             imageQR.Source = bi;
             if (!PhoneConnector.Instance.IsServiceRunning)
             {
-                ThreadPool.QueueUserWorkItem(new WaitCallback(o => 
-                    {
-                        PhoneConnector.Instance.Enable(false);
-                    }));
+                ThreadPool.QueueUserWorkItem(o => PhoneConnector.Instance.Enable(false));
             }
         }
 
         public void LoadFromData(string selectedID)
         {
-            this.selectedID = selectedID;
+            selectedId = selectedID;
             foreach (PhoneLayoutButton layout in phoneLayout.Buttons)
             {
-                if (layout.IsEnabled || layout.ID == selectedID)
+                if (layout.IsEnabled || layout.Id == selectedID)
                 {
                     PhoneUIElementButton button = new PhoneUIElementButton();
                     button.Text = layout.Text;
                     button.ImageFile = layout.ImageFile;
-                    button.Tag = layout.ID;
+                    button.Tag = layout.Id;
                     button.LayoutInfo = layout;
                     Canvas.SetLeft(button, layout.X);
                     Canvas.SetTop(button, layout.Y);
                     canvas1.Children.Add(button);
-                    if (layout.ID == selectedID)
+                    if (layout.Id == selectedID)
                     {
                         SelectedElement = button;
                         button.IsSelected = true;
@@ -110,7 +107,7 @@ namespace PhoneModules.Wpf
 
                     if (!layout.IsEnabled)
                     {
-                        textErrorButtonDisabled.Visibility = System.Windows.Visibility.Visible;
+                        textErrorButtonDisabled.Visibility = Visibility.Visible;
                         button.Opacity = 0.5;
                     }
                 }
@@ -154,7 +151,7 @@ namespace PhoneModules.Wpf
         {
             if (isCreatingForFirstTime)
             {
-                phoneLayout.RemoveButton(selectedID);
+                phoneLayout.RemoveButton(selectedId);
             }
         }
     }

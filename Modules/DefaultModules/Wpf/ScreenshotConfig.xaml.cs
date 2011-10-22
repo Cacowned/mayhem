@@ -23,8 +23,8 @@ namespace DefaultModules.Wpf
 
         public ScreenshotConfig(string directory, string filenamePrefix)
         {
-            this.SaveLocation = directory;
-            this.FilenamePrefix = filenamePrefix;
+            SaveLocation = directory;
+            FilenamePrefix = filenamePrefix;
 
             InitializeComponent();
         }
@@ -69,28 +69,29 @@ namespace DefaultModules.Wpf
         }
 
         // Browse for file
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Browse_Click(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog dlg = new FolderBrowserDialog();
+            var dlg = new FolderBrowserDialog();
+
             dlg.RootFolder = Environment.SpecialFolder.MyPictures;
             dlg.ShowNewFolderButton = true;
             dlg.SelectedPath = SaveLocation;
 
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
                 SaveLocation = dlg.SelectedPath;
                 textBoxDirectory.Text = SaveLocation;
             }
         }
 
-        private void textBoxDirectory_TextChanged(object sender, TextChangedEventArgs e)
+        private void Directory_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
 
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        private void textBoxPrefix_TextChanged(object sender, TextChangedEventArgs e)
+        private void Prefix_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
 

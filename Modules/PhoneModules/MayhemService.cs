@@ -12,52 +12,29 @@ using MayhemCore;
 
 namespace PhoneModules
 {
-    [ServiceContract(Name = "IMayhemService")]
-    public interface IMayhemService
-    {
-        [OperationContract]
-        [WebGet(UriTemplate = "Event/{text}", BodyStyle = WebMessageBodyStyle.Bare)]
-        void Event(string text);
-
-        [OperationContract]
-        [WebInvoke]
-        void SetHtml(string html);
-
-        [OperationContract]
-        [WebInvoke]
-        void SetInsideDiv(string insideDiv);
-
-        [OperationContract]
-        [WebGet]
-        Stream Html(bool update);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "Images/{id}")]
-        Stream Images(string id);
-
-        [OperationContract]
-        [WebGet]
-        void ShuttingDown();
-    }
-
     [ServiceBehavior(Name = "MayhemService", InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class MayhemService : IMayhemService
     {
-        private Dictionary<string, string> cssDict = new Dictionary<string, string>();
-        private string html = null;
-        private string htmlWP7 = null;
-        private string htmlIPhone = null;
-        private string htmlIPad = null;
-        private string htmlAndroid = null;
-        private string insideDiv = null;
-        private object locker = new object();
-        private bool isShuttingDown = false;
+        private readonly Dictionary<string, string> cssDict;
+        private string html;
+        private string htmlWp7;
+        private string htmlIPhone;
+        private string htmlIPad;
+        private string htmlAndroid;
+        private string insideDiv;
+        private bool isShuttingDown;
 
-        private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(30);
-        private ManualResetEvent killResetEvent = new ManualResetEvent(false);
-        private int numToKill = 0;
+        private readonly ManualResetEvent killResetEvent;
+        private int numToKill;
 
-        private Dictionary<string, AutoResetEvent> resetEvents = new Dictionary<string, AutoResetEvent>();
+        private readonly Dictionary<string, AutoResetEvent> resetEvents;
+
+        public MayhemService()
+        {
+            cssDict = new Dictionary<string, string>();
+            killResetEvent = new ManualResetEvent(false);
+            resetEvents = new Dictionary<string, AutoResetEvent>();
+        }
 
         public Stream Images(string id)
         {
@@ -69,8 +46,9 @@ namespace PhoneModules
         public Stream Html(bool update)
         {
             if (isShuttingDown)
-                return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));
-            else if (html == null)
+                return new MemoryStream(Encoding.Default.GetBytes("kill"));
+            
+            if (html == null)
                 return null;
 
             OperationContext context = OperationContext.Current;
@@ -98,17 +76,21 @@ namespace PhoneModules
 
                 string userAgent = WebOperationContext.Current.IncomingRequest.UserAgent;
                 if (userAgent == null)
-                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlWP7));
+                    return new MemoryStream(Encoding.Default.GetBytes(htmlWp7));
+
                 if (userAgent.IndexOf("iPhone") >= 0)
-                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIPhone));
-                else if (userAgent.IndexOf("iPad") >= 0)
-                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlIPad));
-                else if (userAgent.IndexOf("Android") >= 0)
-                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlAndroid));
-                else if (userAgent.IndexOf("Windows Phone") >= 0)
-                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlWP7));
-                else
-                    return new MemoryStream(ASCIIEncoding.Default.GetBytes(htmlWP7));
+                    return new MemoryStream(Encoding.Default.GetBytes(htmlIPhone));
+
+                if (userAgent.IndexOf("iPad") >= 0)
+                    return new MemoryStream(Encoding.Default.GetBytes(htmlIPad));
+
+                if (userAgent.IndexOf("Android") >= 0)
+                    return new MemoryStream(Encoding.Default.GetBytes(htmlAndroid));
+
+                if (userAgent.IndexOf("Windows Phone") >= 0)
+                    return new MemoryStream(Encoding.Default.GetBytes(htmlWp7));
+                
+                return new MemoryStream(Encoding.Default.GetBytes(htmlWp7));
             }
             else
             {
@@ -121,10 +103,10 @@ namespace PhoneModules
                         if (numToKill == 0)
                             killResetEvent.Set();
 
-                        return new MemoryStream(ASCIIEncoding.Default.GetBytes("kill"));
+                        return new MemoryStream(Encoding.Default.GetBytes("kill"));
                     }
                     else
-                        return new MemoryStream(ASCIIEncoding.Default.GetBytes(insideDiv));
+                        return new MemoryStream(Encoding.Default.GetBytes(insideDiv));
                 }
                 else
                     Interlocked.Decrement(ref numToKill);
@@ -146,20 +128,20 @@ namespace PhoneModules
         {
             this.html = html;
 
-            htmlWP7 = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("wp7"));
-            htmlIPhone = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("iphone"));
-            htmlIPad = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("ipad"));
-            htmlAndroid = html.Replace("%%INSERTSTYLEHERE%%", GetCSSForDevice("android"));
+            htmlWp7 = html.Replace("%%INSERTSTYLEHERE%%", GetCssForDevice("wp7"));
+            htmlIPhone = html.Replace("%%INSERTSTYLEHERE%%", GetCssForDevice("iphone"));
+            htmlIPad = html.Replace("%%INSERTSTYLEHERE%%", GetCssForDevice("ipad"));
+            htmlAndroid = html.Replace("%%INSERTSTYLEHERE%%", GetCssForDevice("android"));
         }
 
-        private string GetCSSForDevice(string device)
+        private string GetCssForDevice(string device)
         {
             if (!cssDict.ContainsKey(device))
             {
-                string css = string.Empty;
+                string css;
                 try
                 {
-                    Assembly assembly = this.GetType().Assembly;
+                    Assembly assembly = GetType().Assembly;
                     using (Stream stream = assembly.GetManifestResourceStream("PhoneModules.css-" + device + ".html"))
                     {
                         using (StreamReader textStreamReader = new StreamReader(stream))
@@ -187,21 +169,6 @@ namespace PhoneModules
             foreach (AutoResetEvent ev in resetEvents.Values)
             {
                 ev.Set();
-            }
-        }
-
-        private byte[] ToByteArray(Stream stream)
-        {
-            byte[] buffer = new byte[32768];
-            using (MemoryStream ms = new MemoryStream())
-            {
-                while (true)
-                {
-                    int read = stream.Read(buffer, 0, buffer.Length);
-                    if (read <= 0)
-                        return ms.ToArray();
-                    ms.Write(buffer, 0, read);
-                }
             }
         }
 

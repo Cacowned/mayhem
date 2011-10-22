@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Input;
 using DefaultModules.Events;
 using DefaultModules.KeypressHelpers;
 using MayhemWpf.UserControls;
@@ -37,7 +36,7 @@ namespace DefaultModules.Wpf
             keysDown = new HashSet<Keys>();
             KeysToSave = new HashSet<Keys>(monitorKeysDown);
 
-            this.DataContext = this;
+            DataContext = this;
             InitializeComponent();
         }
 
@@ -116,14 +115,6 @@ namespace DefaultModules.Wpf
             keys.OnKeyUp -= InterceptKeys_OnInterceptKeyUp;
 
             KeyPress.IsConfigOpen = false;
-        }
-
-        private void WpfConfiguration_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                e.Handled = true;
-            }
         }
     }
 }

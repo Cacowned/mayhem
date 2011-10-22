@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
@@ -26,9 +25,9 @@ namespace DefaultModules.Wpf
 
         public TimerConfig(int hours, int minutes, int seconds)
         {
-            this.Hours = hours;
-            this.Minutes = minutes;
-            this.Seconds = seconds;
+            Hours = hours;
+            Minutes = minutes;
+            Seconds = seconds;
 
             InitializeComponent();
         }

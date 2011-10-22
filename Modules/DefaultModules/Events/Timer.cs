@@ -5,7 +5,6 @@ using System.Windows.Threading;
 using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
-using MayhemCore.ModuleTypes;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 
@@ -51,7 +50,8 @@ namespace DefaultModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            TimerConfig config = (TimerConfig)configurationControl;
+            var config = (TimerConfig)configurationControl;
+
             hours = config.Hours;
             minutes = config.Minutes;
             seconds = config.Seconds;

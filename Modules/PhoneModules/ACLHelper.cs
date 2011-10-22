@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace PhoneModules
 {
-    public static class ACLHelper
+    public static class AclHelper
     {
         internal enum HTTP_SERVICE_CONFIG_QUERY_TYPE
         {
@@ -65,7 +65,7 @@ namespace PhoneModules
         internal const uint NO_ERROR = 0;
         internal const uint HTTP_INITIALIZE_CONFIG = 2;
 
-        static ACLHelper()
+        static AclHelper()
         {
             HTTPAPI_VERSION version = new HTTPAPI_VERSION();
             version.HttpApiMajorVersion = 1;
@@ -81,12 +81,10 @@ namespace PhoneModules
 
             IntPtr pQuery = Marshal.AllocHGlobal(Marshal.SizeOf(query));
 
-            string foundPrefix = null;
-
             try
             {
                 uint retval = NO_ERROR;
-                for (query.dwToken = 0; true; query.dwToken++)
+                for (query.dwToken = 0; ; query.dwToken++)
                 {
                     Marshal.StructureToPtr(query, pQuery, false);
 
@@ -109,6 +107,7 @@ namespace PhoneModules
 
                         IntPtr pConfig = Marshal.AllocHGlobal((IntPtr)returnSize);
 
+                        string foundPrefix;
                         try
                         {
                             retval = HttpQueryServiceConfiguration(IntPtr.Zero, HTTP_SERVICE_CONFIG_ID.HttpServiceConfigUrlAclInfo, pQuery, (uint)Marshal.SizeOf(query), pConfig, returnSize, ref returnSize, IntPtr.Zero);

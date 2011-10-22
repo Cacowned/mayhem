@@ -13,7 +13,7 @@ namespace DefaultModules.Wpf
 
         public TextToSpeechConfig(string message)
         {
-            this.Message = message;
+            Message = message;
 
             InitializeComponent();
         }
@@ -25,7 +25,7 @@ namespace DefaultModules.Wpf
 
         public override void OnLoad()
         {
-            MessageBox.Text = this.Message;
+            MessageBox.Text = Message;
         }
 
         public override void OnSave()
