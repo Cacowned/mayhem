@@ -57,7 +57,8 @@ namespace VisionModules.Events
             else
             {
                 Logger.WriteLine("No camera available");
-                cam = new DummyCamera();        
+                ErrorLog.AddError(ErrorType.Warning, "FaceDetector is disabled because no camera was detected");
+                cam = null;        
             }
 
             faceDetector = new FaceDetectorComponent(cam);

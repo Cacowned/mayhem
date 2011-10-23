@@ -44,7 +44,8 @@ namespace VisionModules.Wpf
         public MotionDetectorConfig(ImagerBase selectedCamera)
         {
             i = CameraDriver.Instance;
-            SelectedCamera = selectedCamera;
+            if (selectedCamera != null)
+                SelectedCamera = selectedCamera;
             InitializeComponent();
             DeviceList.SelectedIndex = selectedCamera.Info.DeviceId;
             Init();
@@ -128,13 +129,11 @@ namespace VisionModules.Wpf
         public override void OnClosing()
         {
             Logger.WriteLine("OnClosing");
-            foreach (Camera c in i.CamerasAvailable)
+            if (SelectedCamera != null)
             {
-                // TODO: Why is this SelectedCamera and not c?
                 SelectedCamera.OnImageUpdated -= i_OnImageUpdated;
                 SelectedCamera.TryStopFrameGrabbing();
-                Thread.Sleep(200);
-            }
+            }      
         }
 
         public override void OnSave()

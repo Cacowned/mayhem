@@ -38,10 +38,14 @@ namespace VisionModules.Wpf
             amountOfFacesItems = new List<int>();
 
             // set up the face detector
-            fd = new FaceDetectorComponent(c);
+            if (c != null)
+            {
+                fd = new FaceDetectorComponent(c);
+                fd.OnFaceDetected += OnFaceDetected;
+            }
 
             faceDetectorPoints = new List<System.Drawing.Point>();
-            fd.OnFaceDetected += OnFaceDetected;
+          
             if (i.DeviceCount > 0)
                 CanSave = true;
 
