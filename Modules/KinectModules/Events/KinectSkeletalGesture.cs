@@ -20,10 +20,8 @@ namespace KinectModules
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            base.OnEnabling(e);
+          
         }
-
-
 
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
         {
@@ -50,8 +48,27 @@ namespace KinectModules
         {
             _video = new ArrayList();
             _dtw = new DtwGestureRecognizer(12, 0.6, 2, 2, 10);
-            _flipFlop = 0; 
+            _flipFlop = 0;
+
+            nui = new Runtime();
+            try
+            {
+                _nui.Initialize(RuntimeOptions.UseDepthAndPlayerIndex | RuntimeOptions.UseSkeletalTracking |
+                               RuntimeOptions.UseColor);
+            }
+            catch (InvalidOperationException)
+            {
+                System.Windows.MessageBox.Show("Runtime initialization failed. Please make sure Kinect device is plugged in.");
+                return;
+            }
+
+            _nui.SkeletonFrameReady += SkeletonExtractSkeletonFrameReady;
+
+            Skeleton2DDataExtract.Skeleton2DdataCoordReady += NuiSkeleton2DdataCoordReady;
+
         }
+
+         
 
         /// <summary>
         /// The minumum number of frames in the _video buffer before we attempt to start matching gestures
@@ -74,7 +91,22 @@ namespace KinectModules
         /// </summary>
         private int _flipFlop;
 
-        private Runtime nui; 
+        private Runtime _nui; 
+
+        
+        /// <summary>
+        /// Called each time a skeleton frame is ready. Passes skeletal data to the DTW processor
+        /// </summary>
+        /// <param name="sender">The sender object</param>
+        /// <param name="e">Skeleton Frame Ready Event Args</param>
+        private static void SkeletonExtractSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        {
+            SkeletonFrame skeletonFrame = e.SkeletonFrame;
+            foreach (SkeletonData data in skeletonFrame.Skeletons)
+            {
+                Skeleton2DDataExtract.ProcessData(data);
+            }
+        }
 
         /// <summary>
         /// Runs every time our 2D coordinates are ready.
