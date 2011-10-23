@@ -43,28 +43,30 @@ namespace VisionModules.Events
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                motionDetectorComponent = new MotionDetectorComponent(camera);
+
+                if (sensitivity != 0)
+                    motionDetectorComponent.Sensitivity = sensitivity;
+                else
+                    motionDetectorComponent.Sensitivity = 5;
+
+                if (boundingRect.Width > 0 && boundingRect.Height > 0)
+                {
+                    motionDetectorComponent.SetMotionBoundaryRect(boundingRect);
+                }
+                else
+                {
+                    motionDetectorComponent.SetMotionBoundaryRect(new Rect(0, 0, 320, 240));
+                }
             }
             else
             {
                 Logger.WriteLine("No camera available");
-                camera = new DummyCamera();
+                ErrorLog.AddError(ErrorType.Warning, "MotionDector is disabled because no camera was detected");
+                camera = null;
             }
 
-            motionDetectorComponent = new MotionDetectorComponent(camera);
             
-            if (sensitivity != 0)
-                motionDetectorComponent.Sensitivity = sensitivity;
-            else
-                motionDetectorComponent.Sensitivity = 5;
-
-            if (boundingRect.Width > 0 && boundingRect.Height > 0)
-            {
-                motionDetectorComponent.SetMotionBoundaryRect(boundingRect);
-            }
-            else
-            {
-                motionDetectorComponent.SetMotionBoundaryRect(new Rect(0, 0, 320, 240));
-            }
         }
 
         private void OnMotionUpdated(object sender, EventArgs e)
@@ -120,24 +122,42 @@ namespace VisionModules.Events
 
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnEnabling(EnablingEventArgs e)
-        {
-            base.OnEnabling(e);
-        
+        {           
             Logger.WriteLine("Enable");
 
-            // TODO: Improve this code
-            if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
+            if (!e.WasConfiguring)
             {
-                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
-                if (!camera.Running)
-                    camera.StartFrameGrabbing();
-                firstFrame = true; 
+                if (selectedDeviceIndex < cameraDriver.DeviceCount)
+                {
+                    camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                }
+                else if (cameraDriver.DeviceCount > 0)
+                {
+                    camera = cameraDriver.CamerasAvailable[0];
+                }
+                else
+                {
+                    camera = null;
+                }
 
-                // register the trigger's motion update handler
-                motionDetectorComponent.RegisterForImages(camera);
-                motionDetectorComponent.OnMotionUpdate -= OnMotionUpdated;
-                motionDetectorComponent.OnMotionUpdate += OnMotionUpdated;             
+                if (camera != null)
+                {
+                    if (!camera.Running)
+                        camera.StartFrameGrabbing();
+                    firstFrame = true;
+
+                    // register the trigger's motion update handler
+                    motionDetectorComponent.RegisterForImages(camera);
+                    motionDetectorComponent.OnMotionUpdate -= OnMotionUpdated;
+                    motionDetectorComponent.OnMotionUpdate += OnMotionUpdated;        
+                }
             }
+            else if (camera == null)
+            {
+                Logger.WriteLine("No camera available");
+                ErrorLog.AddError(ErrorType.Warning, "FaceDetector is disabled because no camera was detected");
+                throw new NotSupportedException("No Camera");
+            }           
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]

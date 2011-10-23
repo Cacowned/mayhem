@@ -47,7 +47,7 @@ namespace VisionModules.Events
         }
 
         // ============== presence detector and camera ==========================
-        private ImagerBase cam;
+        private ImagerBase camera;
         private CameraDriver cameraDriver;
         private PresenceDetectorComponent presenceDetector;
         private PresenceDetectorComponent.DetectionHandler presenceHandler;
@@ -83,20 +83,18 @@ namespace VisionModules.Events
         protected override void OnAfterLoad()
         {
             Logger.WriteLine("Enumerating Devices");
-
             cameraDriver = CameraDriver.Instance;
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                presenceDetector = new PresenceDetectorComponent(320, 240);
+                presenceHandler = OnPresenceUpdate;
             }
             else
             {
                 Logger.WriteLine("No camera available");
-            }
-
-            presenceDetector = new PresenceDetectorComponent(320, 240);
-            presenceHandler = OnPresenceUpdate;
+            }        
         }
 
         public WpfConfiguration ConfigurationControl
@@ -104,11 +102,10 @@ namespace VisionModules.Events
             get
             {
                 int camIndex = 0;
-                if (cam != null)
+                if (camera != null)
                 {
-                    camIndex = cam.Info.DeviceId;
+                    camIndex = camera.Info.DeviceId;
                 }
-
                 return new PresenceConfig(camIndex, selectedTriggerMode, SensitivityPercent);
             }
         }
@@ -118,16 +115,18 @@ namespace VisionModules.Events
             PresenceConfig config = configurationControl as PresenceConfig;
 
             sensitivity = config.SelectedSensitivity;
+            camera = config.CameraSelected;
 
-            if (cam != null)
+            if (camera != null)
             {
-                cam = config.CameraSelected;
-                selectedDeviceIndex = cam.Info.DeviceId;
+                selectedDeviceIndex = camera.Info.DeviceId;
                 selectedTriggerMode = config.selected_triggerMode;
             }
             else
             {
-                cam = new DummyCamera();
+                Logger.WriteLine("No camera available");
+                ErrorLog.AddError(ErrorType.Warning, "PresenceDetector is disabled because no camera was detected");
+                camera = null;
             }
         }
 
@@ -136,26 +135,48 @@ namespace VisionModules.Events
         {
             Logger.WriteLine("Enable");
 
-            if (cam != null && !e.WasConfiguring)
+            if (!e.WasConfiguring)
             {
-                if (!cam.Running)
-                    cam.StartFrameGrabbing();
-                presenceDetector.RegisterForImages(cam);
-                presenceDetector.Sensitivity = sensitivity;
-                presenceDetector.OnPresenceUpdate -= presenceHandler;
-                presenceDetector.OnPresenceUpdate += presenceHandler;
+                if (selectedDeviceIndex < cameraDriver.DeviceCount)
+                {
+                    camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                }
+                else if (cameraDriver.DeviceCount > 0)
+                {
+                    camera = cameraDriver.CamerasAvailable[0];
+                }
+                else
+                {
+                    camera = null;
+                }
+
+                if (camera != null)
+                {
+                    if (!camera.Running)
+                        camera.StartFrameGrabbing();
+                    presenceDetector.RegisterForImages(camera);
+                    presenceDetector.Sensitivity = sensitivity;
+                    presenceDetector.OnPresenceUpdate -= presenceHandler;
+                    presenceDetector.OnPresenceUpdate += presenceHandler;
+                }
             }
+            else if (camera == null)
+            {
+                Logger.WriteLine("No camera available");
+                ErrorLog.AddError(ErrorType.Warning, "PresenceDetector is disabled because no camera was detected");
+                throw new NotSupportedException("No Camera");
+            }          
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
             // only disable the camera if the event is not configuring
-            if (!e.IsConfiguring && cam != null)
+            if (!e.IsConfiguring && camera != null)
             {
                 presenceDetector.OnPresenceUpdate -= presenceHandler;
-                presenceDetector.UnregisterForImages(cam);
-                cam.TryStopFrameGrabbing();
+                presenceDetector.UnregisterForImages(camera);
+                camera.TryStopFrameGrabbing();
             }
         }
 
@@ -214,8 +235,8 @@ namespace VisionModules.Events
         public string GetConfigString()
         {
             string config = "Sensitivity: " + SensitivityPercent;
-            if (cam != null)
-                config += ", Cam Nr: " + cam.Info.DeviceId;
+            if (camera != null)
+                config += ", Cam Nr: " + camera.Info.DeviceId;
             return config;
         }
     }

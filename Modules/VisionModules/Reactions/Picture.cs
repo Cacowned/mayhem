@@ -85,14 +85,34 @@ namespace VisionModules.Reactions
         {
             cameraDriver = CameraDriver.Instance;
 
-            if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
+            if (!e.WasConfiguring)
             {
-                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
-                dummyListener.RegisterForImages(camera);
-            }
+                if (selectedDeviceIndex < cameraDriver.DeviceCount)
+                {
+                    camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];          
+                }
+                else if (cameraDriver.DeviceCount > 0)
+                {
+                    camera = cameraDriver.CamerasAvailable[0];
+                }
+                else
+                {
+                    camera = null; 
+                }
 
-            if (camera.Running == false)
-                camera.StartFrameGrabbing();
+                if (camera != null)
+                {
+                    dummyListener.RegisterForImages(camera);
+                    if (camera.Running == false)
+                        camera.StartFrameGrabbing();
+                }
+            }
+            else if (camera == null)
+            {
+                Logger.WriteLine("No camera available");
+                ErrorLog.AddError(ErrorType.Warning, "Picture is disabled because no camera was detected");
+                throw new NotSupportedException("No Camera");
+            }  
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -107,39 +127,42 @@ namespace VisionModules.Reactions
 
         public override void Perform()
         {
-            if (captureOffsetTime == 0)
+            if (camera != null)
             {
-                // save image directly
-                SaveImage(camera.ImageAsBitmap());
-            }
-            else if (captureOffsetTime < 0 && Math.Abs(captureOffsetTime) <= Camera.LoopDuration)
-            {
-                // retrieve image from camera buffer
-                // buffer index = capture offset time / camera fram rate
-                int bufferIndex = (int)(-captureOffsetTime * 1000.0 / Camera.LoopBufferUpdateMs);
-
-                if (camera is IBufferingImager)
+                if (captureOffsetTime == 0)
                 {
-                    Bitmap image = ((IBufferingImager)camera).GetBufferItemAtIndex(bufferIndex);
-                    if (image != null)
+                    // save image directly
+                    SaveImage(camera.ImageAsBitmap());
+                }
+                else if (captureOffsetTime < 0 && Math.Abs(captureOffsetTime) <= Camera.LoopDuration)
+                {
+                    // retrieve image from camera buffer
+                    // buffer index = capture offset time / camera fram rate
+                    int bufferIndex = (int)(-captureOffsetTime * 1000.0 / Camera.LoopBufferUpdateMs);
+
+                    if (camera is IBufferingImager)
                     {
-                        SaveImage(image);
+                        Bitmap image = ((IBufferingImager)camera).GetBufferItemAtIndex(bufferIndex);
+                        if (image != null)
+                        {
+                            SaveImage(image);
+                        }
                     }
                 }
-            }
-            else if (captureOffsetTime > 0 && Math.Abs(captureOffsetTime) <= Camera.LoopDuration)
-            {
-                // schedule future retrieval of image
-                double timeMs = captureOffsetTime * 1000;
-                Timer t = new Timer(timeMs);
-                t.Elapsed += SaveFutureImage;
-                t.AutoReset = false;
-                t.Enabled = true;
-            }
-            else
-            {
-                // this branch should never be reached
-                throw new NotSupportedException();
+                else if (captureOffsetTime > 0 && Math.Abs(captureOffsetTime) <= Camera.LoopDuration)
+                {
+                    // schedule future retrieval of image
+                    double timeMs = captureOffsetTime * 1000;
+                    Timer t = new Timer(timeMs);
+                    t.Elapsed += SaveFutureImage;
+                    t.AutoReset = false;
+                    t.Enabled = true;
+                }
+                else
+                {
+                    // this branch should never be reached
+                    throw new NotSupportedException();
+                }
             }
         }
 
@@ -187,8 +210,8 @@ namespace VisionModules.Reactions
             }
             else
             {
-                Logger.WriteLine("no cam present, using dummy");
-                camera = new DummyCamera();
+                Logger.WriteLine("No camera available");
+                ErrorLog.AddError(ErrorType.Warning, "PresenceDetector will be disabled because no camera was detected");
             }
 
             captureOffsetTime = config.SliderValue;

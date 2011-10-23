@@ -17,7 +17,7 @@ namespace VisionModules.Events.Components
         private int height;
 
         private double? oldAverage;
-        private double numberOfMotionFrames;
+        private double numberOfMotionFrames = 0;
         private double threshold = 0.5;
 
         private Queue<double> runningAverage;

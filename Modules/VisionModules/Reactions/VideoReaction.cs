@@ -14,7 +14,7 @@ namespace VisionModules.Reactions
     public enum VideoRecordingMode
     {
         PreEvent = 0,                                        // record 30s prior to the event
-        PostEvent = Camera.LoopDuration / 1000,             // record 30s after event
+        PostEvent =  Camera.LoopDuration / 1000,             // record 30s after event
         MidEvent = (Camera.LoopDuration / 1000) / 2         // record 15s before and 15s after the event
     }
 

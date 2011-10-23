@@ -37,7 +37,7 @@ namespace VisionModules.Events
         private DateTime lastFacesDetectedTime = DateTime.Now;
         private FaceDetectorComponent faceDetector;
         private CameraDriver cameraDriver;
-        private ImagerBase cam;
+        private ImagerBase camera;
         private int lastFacesDetectedAmount;
 
         protected override void OnLoadDefaults()
@@ -52,16 +52,18 @@ namespace VisionModules.Events
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                cam = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                faceDetector = new FaceDetectorComponent(camera);
             }
             else
             {
                 Logger.WriteLine("No camera available");
                 ErrorLog.AddError(ErrorType.Warning, "FaceDetector is disabled because no camera was detected");
-                cam = null;        
+                camera = null;
+                
             }
 
-            faceDetector = new FaceDetectorComponent(cam);
+           
         }
 
         private void OnFaceDetectUpdate(object sender, DetectionEventArgs pts)
@@ -92,9 +94,9 @@ namespace VisionModules.Events
         public string GetConfigString()
         {
             string config = string.Empty;
-            if (cam != null)
+            if (camera != null)
             {
-                config += "Camera: " + cam.Info.DeviceId + ", ";
+                config += "Camera: " + camera.Info.DeviceId + ", ";
             }
 
             config += "Detect " + triggerOnNrOfFaces;
@@ -110,7 +112,7 @@ namespace VisionModules.Events
             get
             {
                 Logger.WriteLine("get ConfigurationControl!");
-                FaceDetectConfig config = new FaceDetectConfig(cam as Camera);
+                FaceDetectConfig config = new FaceDetectConfig(camera as Camera);
                 if (boundingRect.Width > 0 && boundingRect.Height > 0)
                 {
                     config.SelectedBoundingRect = boundingRect;
@@ -124,29 +126,50 @@ namespace VisionModules.Events
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
+            if (!e.WasConfiguring)
             {
-                cam = cameraDriver.CamerasAvailable[selectedDeviceIndex];
-                cam.StartFrameGrabbing();
+                if (selectedDeviceIndex < cameraDriver.DeviceCount)
+                {
+                    camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                }
+                else if (cameraDriver.DeviceCount > 0)
+                {
+                    camera = cameraDriver.CamerasAvailable[0];
+                }
+                else
+                {
+                    camera = null;
+                }
 
-                // register the trigger's faceDetection update handler
-                faceDetector.RegisterForImages(cam);
-                faceDetector.OnFaceDetected -= OnFaceDetectUpdate;
-                faceDetector.OnFaceDetected += OnFaceDetectUpdate;
+                if (camera != null)
+                {
+                    if (!camera.Running)
+                        camera.StartFrameGrabbing();
+                    // register the trigger's faceDetection update handler
+                    faceDetector.RegisterForImages(camera);
+                    faceDetector.OnFaceDetected -= OnFaceDetectUpdate;
+                    faceDetector.OnFaceDetected += OnFaceDetectUpdate;
+                }
             }
+            else if (camera == null)
+            {
+                Logger.WriteLine("No camera available");
+                ErrorLog.AddError(ErrorType.Warning, "FaceDetector is disabled because no camera was detected");
+                throw new NotSupportedException("No Camera");
+            }              
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            if (!e.IsConfiguring && cam != null)
+            if (!e.IsConfiguring && camera != null)
             {
                 faceDetector.OnFaceDetected -= OnFaceDetectUpdate;
-                faceDetector.UnregisterForImages(cam);
+                faceDetector.UnregisterForImages(camera);
 
                 // de-register the trigger's faceDetection update handler                
                 // try to shut down the camera           
-                cam.TryStopFrameGrabbing();
+                camera.TryStopFrameGrabbing();
             }
         }
 
@@ -155,7 +178,7 @@ namespace VisionModules.Events
             // assign selected cam
             var config = configurationControl as FaceDetectConfig;
 
-            cam = config.DeviceList.SelectedItem as Camera;
+            camera = config.DeviceList.SelectedItem as Camera;
 
             // set the selected bounding rectangle
             boundingRect = config.overlay.GetBoundingRect();
