@@ -50,7 +50,7 @@ namespace KinectModules
             _dtw = new DtwGestureRecognizer(12, 0.6, 2, 2, 10);
             _flipFlop = 0;
 
-            nui = new Runtime();
+            _nui = new Runtime();
             try
             {
                 _nui.Initialize(RuntimeOptions.UseDepthAndPlayerIndex | RuntimeOptions.UseSkeletalTracking |
@@ -63,9 +63,7 @@ namespace KinectModules
             }
 
             _nui.SkeletonFrameReady += SkeletonExtractSkeletonFrameReady;
-
             Skeleton2DDataExtract.Skeleton2DdataCoordReady += NuiSkeleton2DdataCoordReady;
-
         }
 
          

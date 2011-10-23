@@ -12,6 +12,9 @@
 //     project!
 //
 //     Enjoy working with Kinect!
+//
+//      [Remark added by SvenKratz:]
+//      See http://kinectdtw.codeplex.com/ for more info.
 // </copyright>
 //-----------------------------------------------------------------------
 
