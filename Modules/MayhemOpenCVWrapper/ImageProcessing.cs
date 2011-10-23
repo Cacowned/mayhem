@@ -52,16 +52,16 @@ namespace MayhemOpenCVWrapper
                 photo.SetResolution(imgPhoto.HorizontalResolution,
                                  imgPhoto.VerticalResolution);
 
-                Graphics grPhoto = Graphics.FromImage(photo);
-                grPhoto.Clear(Color.Red);
-                grPhoto.InterpolationMode =
+                Graphics graphicsPhoto = Graphics.FromImage(photo);
+                graphicsPhoto.Clear(Color.Red);
+                graphicsPhoto.InterpolationMode =
                         InterpolationMode.HighQualityBicubic;
 
-                grPhoto.DrawImage(imgPhoto,
+                graphicsPhoto.DrawImage(imgPhoto,
                     new Rectangle(destX, destY, destWidth, destHeight),
                     new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
                     GraphicsUnit.Pixel);
-                grPhoto.Dispose();
+                graphicsPhoto.Dispose();
             }
             catch
             {

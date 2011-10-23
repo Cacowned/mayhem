@@ -44,6 +44,7 @@ namespace MayhemOpenCVWrapper.LowLevel
 
                 return 0;
             }
+
             set
             {
                 if (pd != null)

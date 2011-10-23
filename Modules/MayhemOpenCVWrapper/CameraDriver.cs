@@ -10,6 +10,9 @@ namespace MayhemOpenCVWrapper
     /// </summary>
     public sealed class CameraDriver
     {
+        private readonly List<CameraInfo> devicesAvailable;
+        private readonly List<Camera> camerasAvailable;
+
         // singleton class ! 
         private static CameraDriver instance = new CameraDriver();
 
@@ -47,10 +50,7 @@ namespace MayhemOpenCVWrapper
         {
             get { return camerasAvailable.Count; }
         }
-
-        private readonly List<CameraInfo> devicesAvailable;
-        private readonly List<Camera> camerasAvailable;
-
+     
         private CameraDriver()
         {
             devicesAvailable = new List<CameraInfo>();
