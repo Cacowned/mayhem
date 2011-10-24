@@ -91,7 +91,7 @@ namespace MayhemOpenCVWrapper.LowLevel
             List<Point> points = new List<Point>();
 
             // copy the coordinates to a list
-            for (int indexCoord = 0; indexCoord < numFacesCoords; )
+            for (int indexCoord = 0; indexCoord < numFacesCoords;)
             {
                 Point p1 = new Point(faceCoords[indexCoord++], faceCoords[indexCoord++]);
                 Point p2 = new Point(faceCoords[indexCoord++], faceCoords[indexCoord++]);

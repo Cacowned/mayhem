@@ -18,11 +18,14 @@ namespace MayhemOpenCVWrapper
     public sealed class Camera : ImagerBase, IBufferingImager, IDisposable
     {
         #region Fields and Properties
-        // update the loop only every quarter second -- this should be sufficient for the Picture Event
-        public static readonly double LoopBufferUpdateMs = 250.0;
 
+        public const double LoopBufferUpdateMs = 250.0; 
+        // update the loop only every quarter second -- this should be sufficient for the Picture Event       
+      
         // store LOOP_DURATION ms of footage in the past/future
         public const int LoopDuration = 30000;
+
+       
 
         // Image update event handler. 
         public override event ImageUpdateHandler OnImageUpdated;
@@ -100,6 +103,7 @@ namespace MayhemOpenCVWrapper
             {
                 return recordingVideo;
             }
+
             set
             {
                 if (value)

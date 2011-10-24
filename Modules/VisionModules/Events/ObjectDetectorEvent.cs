@@ -48,7 +48,7 @@ namespace VisionModules.Events
         private Bitmap templatePreview;
 
         // the cam we have selected
-        private int selectedDeviceIndex;
+        private int selectedDeviceIndex = 0;
 
         public bool TemplateConfigured
         {
