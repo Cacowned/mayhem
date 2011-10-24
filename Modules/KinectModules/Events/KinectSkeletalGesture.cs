@@ -119,13 +119,11 @@ namespace KinectModules
         private void GestureDetected(string gestureName)
         {
             gestureName = gestureName.TrimEnd(new char[] { ' ' });
-            foreach (string s in selectedGestures)
+
+            if (selectedGestures.Contains(gestureName))
             {
-                if (s.Equals(gestureName))
-                {
-                    Trigger();
-                    return;
-                }
+                Trigger();
+                ErrorLog.AddError(ErrorType.Message, "Triggering on Gesture" + gestureName);
             }
         }
         
