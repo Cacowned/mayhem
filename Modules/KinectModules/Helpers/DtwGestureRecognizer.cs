@@ -24,6 +24,7 @@ namespace DTWGestureRecognition
     using System;
     using System.Collections;
     using MayhemCore;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Dynamic Time Warping nearest neighbour sequence comparison class.
@@ -62,6 +63,19 @@ namespace DTWGestureRecognition
         /// The gesture names. Index matches that of the sequences array in _sequences
         /// </summary>
         private readonly ArrayList _labels;
+
+        public List<string> Labels
+        {
+            get
+            {
+                List<string> labelsOut = new List<string>();              
+                foreach (string label in _labels)
+                {
+                    labelsOut.Add(label);
+                }
+                return labelsOut;
+            }
+        }
 
         /// <summary>
         /// Maximum vertical or horizontal steps in a row.
