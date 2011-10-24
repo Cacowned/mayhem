@@ -10,6 +10,7 @@ using Microsoft.Research.Kinect.Nui;
 using System.Windows.Media;
 using DTWGestureRecognition;
 using System.Collections;
+using KinectModules.Helpers;
 
 namespace KinectModules
 {
@@ -17,10 +18,38 @@ namespace KinectModules
     [MayhemModule("Kinect Event", "Triggers when a Kinect gesture is detected")]
     public class KinectSkeletalGesture : EventBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The minumum number of frames in the _video buffer before we attempt to start matching gestures
+        /// </summary>
+        private const int MinimumFrames = 6;
+
+        /// <summary>
+        /// How many skeleton frames to store in the _video buffer
+        /// </summary>
+        private const int BufferSize = 32;
+
+        /// <summary>
+        /// How many skeleton frames to ignore (_flipFlop)
+        /// 1 = capture every frame, 2 = capture every second frame etc.
+        /// </summary>
+        private const int Ignore = 2;
+
+        /// <summary>
+        /// Switch used to ignore certain skeleton frames
+        /// </summary>
+        private int _flipFlop;
+
+        private MayhemKinect kinect;
+        private EventHandler<SkeletonFrameReadyEventArgs> skeletonFrameHandler; 
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-          
+            kinect.AttachSkeletonEventHandler(skeletonFrameHandler);
+        }
+
+        protected override void OnDisabled(DisabledEventArgs e)
+        {
+            kinect.DetachSkeletonEventHandler(skeletonFrameHandler);
         }
 
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
@@ -50,46 +79,16 @@ namespace KinectModules
             _dtw = new DtwGestureRecognizer(12, 0.6, 2, 2, 10);
             _flipFlop = 0;
 
-            _nui = new Runtime();
-            try
-            {
-                _nui.Initialize(RuntimeOptions.UseDepthAndPlayerIndex | RuntimeOptions.UseSkeletalTracking |
-                               RuntimeOptions.UseColor);
-            }
-            catch (InvalidOperationException)
-            {
-                System.Windows.MessageBox.Show("Runtime initialization failed. Please make sure Kinect device is plugged in.");
-                return;
-            }
+            kinect = MayhemKinect.Instance;
+            skeletonFrameHandler = new EventHandler<SkeletonFrameReadyEventArgs>(SkeletonExtractSkeletonFrameReady);
 
-            _nui.SkeletonFrameReady += SkeletonExtractSkeletonFrameReady;
+            // skeleton data extractor
             Skeleton2DDataExtract.Skeleton2DdataCoordReady += NuiSkeleton2DdataCoordReady;
         }
 
          
 
-        /// <summary>
-        /// The minumum number of frames in the _video buffer before we attempt to start matching gestures
-        /// </summary>
-        private const int MinimumFrames = 6;
-
-        /// <summary>
-        /// How many skeleton frames to store in the _video buffer
-        /// </summary>
-        private const int BufferSize = 32;
-
-        /// <summary>
-        /// How many skeleton frames to ignore (_flipFlop)
-        /// 1 = capture every frame, 2 = capture every second frame etc.
-        /// </summary>
-        private const int Ignore = 2;
-
-        /// <summary>
-        /// Switch used to ignore certain skeleton frames
-        /// </summary>
-        private int _flipFlop;
-
-        private Runtime _nui; 
+        
 
         
         /// <summary>
