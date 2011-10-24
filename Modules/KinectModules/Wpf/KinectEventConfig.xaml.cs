@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MayhemWpf.UserControls;
 using Microsoft.Research.Kinect.Nui;
+using KinectModules.Helpers;
 
 namespace KinectModules.Wpf
 {
@@ -21,7 +22,10 @@ namespace KinectModules.Wpf
     /// </summary>
     public partial class KinectEventConfig : WpfConfiguration
     {
-        private Runtime nui;
+       // private Runtime nui;
+        private MayhemKinect kinect;
+
+        private EventHandler<SkeletonFrameReadyEventArgs> skeletonFrameHandler; 
 
         Dictionary<JointID, Brush> jointColors = new Dictionary<JointID, Brush>() { 
             {JointID.HipCenter, new SolidColorBrush(Color.FromRgb(169, 176, 155))},
@@ -53,47 +57,54 @@ namespace KinectModules.Wpf
 
         public override void OnLoad()
         {
-            nui = new Runtime();
+            
+           // nui = new Runtime();
 
-            try
-            {
-                nui.Initialize(RuntimeOptions.UseDepthAndPlayerIndex | RuntimeOptions.UseSkeletalTracking | RuntimeOptions.UseColor);
-            }
-            catch (InvalidOperationException)
-            {
-                System.Windows.MessageBox.Show("Runtime initialization failed. Please make sure Kinect device is plugged in.");
-                return;
-            }
+           // try
+           // {
+           //     nui.Initialize(RuntimeOptions.UseDepthAndPlayerIndex | RuntimeOptions.UseSkeletalTracking | RuntimeOptions.UseColor);
+           // }
+           // catch (InvalidOperationException)
+           // {
+           //     System.Windows.MessageBox.Show("Runtime initialization failed. Please make sure Kinect device is plugged in.");
+           //     return;
+           // }
 
 
-            try
-            {
-                nui.VideoStream.Open(ImageStreamType.Video, 2, ImageResolution.Resolution640x480, ImageType.Color);
-                nui.DepthStream.Open(ImageStreamType.Depth, 2, ImageResolution.Resolution320x240, ImageType.DepthAndPlayerIndex);
-            }
-            catch (InvalidOperationException)
-            {
-                System.Windows.MessageBox.Show("Failed to open stream. Please make sure to specify a supported image type and resolution.");
-                return;
-            }
+           // try
+           // {
+           //    // nui.VideoStream.Open(ImageStreamType.Video, 2, ImageResolution.Resolution640x480, ImageType.Color);
+           //   //  nui.DepthStream.Open(ImageStreamType.Depth, 2, ImageResolution.Resolution320x240, ImageType.DepthAndPlayerIndex);
+           // }
+           // catch (InvalidOperationException)
+           // {
+           //     System.Windows.MessageBox.Show("Failed to open stream. Please make sure to specify a supported image type and resolution.");
+           //     return;
+           // }
 
            
 
-            //nui.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(nui_DepthFrameReady);
-            nui.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(nui_SkeletonFrameReady);
-           // nui.VideoFrameReady += new EventHandler<ImageFrameReadyEventArgs>(nui_ColorFrameReady);
+           // //nui.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(nui_DepthFrameReady);
+           // nui.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(nui_SkeletonFrameReady);
+           //// nui.VideoFrameReady += new EventHandler<ImageFrameReadyEventArgs>(nui_ColorFrameReady);
+
+            kinect = MayhemKinect.Instance;
+            skeletonFrameHandler = new EventHandler<SkeletonFrameReadyEventArgs>(nui_SkeletonFrameReady);
+            kinect.AttachSkeletonEventHandler(skeletonFrameHandler);
+            
+
         }
 
         private Point getDisplayPosition(Joint joint)
         {
             float depthX, depthY;
-            nui.SkeletonEngine.SkeletonToDepthImage(joint.Position, out depthX, out depthY);
+            kinect.SkeletonEngine.SkeletonToDepthImage(joint.Position, out depthX, out depthY);
             depthX = depthX * 320; //convert to 320, 240 space
             depthY = depthY * 240; //convert to 320, 240 space
             int colorX, colorY;
             ImageViewArea iv = new ImageViewArea();
             // only ImageResolution.Resolution640x480 is supported at this point
-            nui.NuiCamera.GetColorPixelCoordinatesFromDepthPixel(ImageResolution.Resolution640x480, iv, (int)depthX, (int)depthY, (short)0, out colorX, out colorY);
+            kinect.NuiCamera.GetColorPixelCoordinatesFromDepthPixel(ImageResolution.Resolution640x480, iv, (int)depthX, (int)depthY, (short)0, out colorX, out colorY);
 
             // map back to skeleton.Width & skeleton.Height
             return new Point((int)(skeleton.Width * colorX / 640.0), (int)(skeleton.Height * colorY / 480));
@@ -158,7 +169,7 @@ namespace KinectModules.Wpf
 
         public override void  OnClosing()
         {
- 	           nui.Uninitialize();       
+            kinect.DetachSkeletonEventHandler(skeletonFrameHandler);      
         }
         
     }
