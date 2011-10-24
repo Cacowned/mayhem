@@ -19,7 +19,7 @@ namespace KinectModules
     [MayhemModule("Kinect Event", "Triggers when a Kinect gesture is detected")]
     public class KinectSkeletalGesture : EventBase, IWpfConfigurable
     {
-        private static const string gestureFileLocation = "Packages\\KinectModules\\GesturesDtw\\GesturesDTW.txt";
+        private static readonly string gestureFileLocation = "Packages\\KinectModules\\GesturesDtw\\GesturesDTW.txt";
 
         /// <summary>
         /// Returns the gesture location file for use in the config 
