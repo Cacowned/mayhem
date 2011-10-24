@@ -13,6 +13,7 @@ using System.Collections;
 using KinectModules.Helpers;
 using System.IO;
 using MayhemWpf.UserControls;
+using System.Globalization;
 
 namespace KinectModules
 {
@@ -117,7 +118,15 @@ namespace KinectModules
 
         private void GestureDetected(string gestureName)
         {
-            Trigger();
+            gestureName = gestureName.TrimEnd(new char[] { ' ' });
+            foreach (string s in selectedGestures)
+            {
+                if (s.Equals(gestureName))
+                {
+                    Trigger();
+                    return;
+                }
+            }
         }
         
         /// <summary>
