@@ -47,12 +47,12 @@ namespace VisionModules.Reactions
         private CameraDriver cameraDriver;
         private Camera camera;
         private DummyCameraImageListener dummyCameraListener;
-        private string lastVideoSaved;
+        private string lastVideoSavedLocation;
         private bool videoSaving;
 
         public VideoReaction()
         {
-            lastVideoSaved = string.Empty;
+            lastVideoSavedLocation = string.Empty;
             dummyCameraListener = new DummyCameraImageListener();
             cameraDriver = CameraDriver.Instance;
         }
@@ -77,6 +77,18 @@ namespace VisionModules.Reactions
                 Logger.WriteLine("Startup with camera " + selectedDeviceIndex);
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
+            else if (cameraDriver.DeviceCount > 0)
+            {
+                // default to first camera
+                camera = cameraDriver.CamerasAvailable[0];
+                ErrorLog.AddError(ErrorType.Warning, "The originally selected camera is not present. Defaulting to first camera. Please check your configuration");
+            }
+            else
+            {
+                Logger.WriteLine("No camera available");
+                ErrorLog.AddError(ErrorType.Warning, "Video is disabled because no camera was detected");
+                camera = null;
+            }
         }
 
         public string GetConfigString()
@@ -97,7 +109,7 @@ namespace VisionModules.Reactions
                 now.Minute.ToString("D2") + "_" +
                 now.Second.ToString("D2") + ".avi";
             string path = folderLocation + "\\" + fileName;
-            lastVideoSaved = path;
+            lastVideoSavedLocation = path;
             Logger.WriteLine("saving file to " + path);
             if (Directory.Exists(folderLocation))
             {
@@ -120,7 +132,10 @@ namespace VisionModules.Reactions
             camera.IsRecordingVideo = true;
             videoSaving = false;
             if (e.SavedSuccessfully)
-                Logger.WriteLine("Video saved successfully to: " + lastVideoSaved);
+            {
+                Logger.WriteLine("Video saved successfully to: " + lastVideoSavedLocation);
+                ErrorLog.AddError(ErrorType.Message, "Video successfully to: " + lastVideoSavedLocation);
+            }
         }
 
         /// <summary>
@@ -159,14 +174,35 @@ namespace VisionModules.Reactions
         {
             cameraDriver = CameraDriver.Instance;
 
-            if (!e.WasConfiguring && selectedDeviceIndex < cameraDriver.DeviceCount)
+            if (!e.WasConfiguring)
             {
-                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
-                dummyCameraListener.RegisterForImages(camera);
-            }
+                if (selectedDeviceIndex < cameraDriver.DeviceCount)
+                {
+                    camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
+                }
+                else if (cameraDriver.DeviceCount > 0)
+                {
+                    camera = cameraDriver.CamerasAvailable[0];
+                    ErrorLog.AddError(ErrorType.Warning, "The originally selected camera is not present. Defaulting to first camera. Please check your configuration");
+                }
+                else
+                {
+                    camera = null;
+                }
 
-            if (camera.Running == false)
-                camera.StartFrameGrabbing();
+                if (camera != null)
+                {
+                    dummyCameraListener.RegisterForImages(camera);
+                    if (camera.Running == false)
+                        camera.StartFrameGrabbing();
+                }
+            }
+            if (camera == null)
+            {
+                Logger.WriteLine("No camera available");
+                ErrorLog.AddError(ErrorType.Warning, "Video cannot start because no camera was detected");
+                throw new NotSupportedException("No Camera");
+            }  
         }
 
         protected override void OnDisabled(DisabledEventArgs e)

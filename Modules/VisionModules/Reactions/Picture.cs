@@ -56,6 +56,18 @@ namespace VisionModules.Reactions
             {
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
             }
+            else if (cameraDriver.DeviceCount > 0)
+            {
+                // default to first camera
+                camera = cameraDriver.CamerasAvailable[0];
+                ErrorLog.AddError(ErrorType.Warning, "The originally selected camera is not present. Defaulting to first camera. Please check your configuration");
+            }
+            else
+            {
+                Logger.WriteLine("No camera available");
+                ErrorLog.AddError(ErrorType.Warning, "Picture is disabled because no camera was detected");
+                camera = null;
+            }
         }
 
         /// <summary>
@@ -78,6 +90,9 @@ namespace VisionModules.Reactions
 
             // VERY important! 
             image.Dispose();
+
+            ErrorLog.AddError(ErrorType.Message, "Picture saved to: " + path);
+
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -89,11 +104,12 @@ namespace VisionModules.Reactions
             {
                 if (selectedDeviceIndex < cameraDriver.DeviceCount)
                 {
-                    camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];          
+                    camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];                 
                 }
                 else if (cameraDriver.DeviceCount > 0)
                 {
                     camera = cameraDriver.CamerasAvailable[0];
+                    ErrorLog.AddError(ErrorType.Warning, "The originally selected camera is not present. Defaulting to first camera. Please check your configuration");
                 }
                 else
                 {
@@ -107,10 +123,10 @@ namespace VisionModules.Reactions
                         camera.StartFrameGrabbing();
                 }
             }
-            else if (camera == null)
+            if (camera == null)
             {
                 Logger.WriteLine("No camera available");
-                ErrorLog.AddError(ErrorType.Warning, "Picture is disabled because no camera was detected");
+                ErrorLog.AddError(ErrorType.Warning, "Picture cannot start because no camera was detected");
                 throw new NotSupportedException("No Camera");
             }  
         }
