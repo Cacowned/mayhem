@@ -33,7 +33,6 @@ namespace KinectModules
             }
         }
 
-
         [DataMember]
         List<string> selectedGestures; 
 
