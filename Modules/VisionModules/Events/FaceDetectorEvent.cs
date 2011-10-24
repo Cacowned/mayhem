@@ -55,15 +55,19 @@ namespace VisionModules.Events
                 camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
                 faceDetector = new FaceDetectorComponent(camera);
             }
+            else if (cameraDriver.DeviceCount > 0)
+            {
+                // default to first camera
+                camera = cameraDriver.CamerasAvailable[0];
+                faceDetector = new FaceDetectorComponent(camera);
+                ErrorLog.AddError(ErrorType.Warning, "The originally selected camera is not present. Defaulting to first camera. Please check your configuration");
+            }
             else
             {
                 Logger.WriteLine("No camera available");
-                ErrorLog.AddError(ErrorType.Warning, "FaceDetector is disabled because no camera was detected");
+                ErrorLog.AddError(ErrorType.Warning, "No camera: FaceDetector is disabled!");
                 camera = null;
-                
-            }
-
-           
+            }    
         }
 
         private void OnFaceDetectUpdate(object sender, DetectionEventArgs pts)
@@ -151,11 +155,13 @@ namespace VisionModules.Events
                     faceDetector.OnFaceDetected += OnFaceDetectUpdate;
                 }
             }
-            else if (camera == null)
+            
+            if (camera == null)
             {
                 Logger.WriteLine("No camera available");
-                ErrorLog.AddError(ErrorType.Warning, "FaceDetector is disabled because no camera was detected");
-                throw new NotSupportedException("No Camera");
+                ErrorLog.AddError(ErrorType.Warning, "FaceDetector cannot start because no camera was detected");
+                if (!e.WasConfiguring)
+                  throw new NotSupportedException("Facedetector could not start: no camera");
             }              
         }
 

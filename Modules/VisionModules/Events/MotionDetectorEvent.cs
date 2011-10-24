@@ -36,15 +36,30 @@ namespace VisionModules.Events
 
         protected override void OnAfterLoad()
         {
-            Logger.WriteLine("Enumerating Devices");
-
             cameraDriver = CameraDriver.Instance;
 
+            // see if we can initialize camera
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
-                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];
-                motionDetectorComponent = new MotionDetectorComponent(camera);
+                camera = cameraDriver.CamerasAvailable[selectedDeviceIndex];             
+            }
+            else if (cameraDriver.DeviceCount > 0)
+            {
+                // default to first camera
+                camera = cameraDriver.CamerasAvailable[0];
+                ErrorLog.AddError(ErrorType.Warning, "The originally selected camera is not present. Defaulting to first camera. Please check your configuration");
+            }
+            else
+            {
+                Logger.WriteLine("No camera available");
+                ErrorLog.AddError(ErrorType.Warning, "MotionDetector will be disabled because no camera is attached");
+                camera = null;
+            }
 
+            // if we have a camera, initialize the motion detector
+            if (camera != null)
+            {
+                motionDetectorComponent = new MotionDetectorComponent(camera);
                 if (sensitivity != 0)
                     motionDetectorComponent.Sensitivity = sensitivity;
                 else
@@ -58,15 +73,7 @@ namespace VisionModules.Events
                 {
                     motionDetectorComponent.SetMotionBoundaryRect(new Rect(0, 0, 320, 240));
                 }
-            }
-            else
-            {
-                Logger.WriteLine("No camera available");
-                ErrorLog.AddError(ErrorType.Warning, "MotionDector is disabled because no camera was detected");
-                camera = null;
-            }
-
-            
+            }          
         }
 
         private void OnMotionUpdated(object sender, EventArgs e)
@@ -152,10 +159,11 @@ namespace VisionModules.Events
                     motionDetectorComponent.OnMotionUpdate += OnMotionUpdated;        
                 }
             }
-            else if (camera == null)
+            
+            if (camera == null)
             {
                 Logger.WriteLine("No camera available");
-                ErrorLog.AddError(ErrorType.Warning, "FaceDetector is disabled because no camera was detected");
+                ErrorLog.AddError(ErrorType.Warning, "MotionDetector cannot start because no camera was detected");
                 throw new NotSupportedException("No Camera");
             }           
         }

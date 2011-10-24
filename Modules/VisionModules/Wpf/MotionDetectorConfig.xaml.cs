@@ -43,11 +43,13 @@ namespace VisionModules.Wpf
 
         public MotionDetectorConfig(ImagerBase selectedCamera)
         {
+            InitializeComponent();
             i = CameraDriver.Instance;
             if (selectedCamera != null)
+            {
                 SelectedCamera = selectedCamera;
-            InitializeComponent();
-            DeviceList.SelectedIndex = selectedCamera.Info.DeviceId;
+                DeviceList.SelectedIndex = selectedCamera.Info.DeviceId;
+            }
             Init();
         }
 
@@ -77,17 +79,17 @@ namespace VisionModules.Wpf
                 Logger.WriteLine("Selected Index " + DeviceList.SelectedIndex);
 
                 // TODO: Move the check into Camera
+                
                 if (!SelectedCamera.Running)
-                {
-                    SelectedCamera.OnImageUpdated -= i_OnImageUpdated;
-                    SelectedCamera.OnImageUpdated += i_OnImageUpdated;
+                {                
                     ThreadPool.QueueUserWorkItem(o =>
                     {
-                        // Thread sleep to wait for the camera to revive itself from recent shutdown. Todo: Fix this 
-                        Thread.Sleep(250);
                         SelectedCamera.StartFrameGrabbing();
                     });
                 }
+
+                SelectedCamera.OnImageUpdated -= i_OnImageUpdated;
+                SelectedCamera.OnImageUpdated += i_OnImageUpdated;
 
                 Logger.WriteLine("using " + SelectedCamera.Info);
 

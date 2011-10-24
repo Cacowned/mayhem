@@ -91,6 +91,13 @@ namespace VisionModules.Events
                 presenceDetector = new PresenceDetectorComponent(320, 240);
                 presenceHandler = OnPresenceUpdate;
             }
+            else if (cameraDriver.DeviceCount > 0)
+            {
+                camera = cameraDriver.CamerasAvailable[0];
+                presenceDetector = new PresenceDetectorComponent(320, 240);
+                presenceHandler = OnPresenceUpdate;
+                ErrorLog.AddError(ErrorType.Warning, "The originally selected camera is not present. Defaulting to first camera. Please check your configuration");
+            }
             else
             {
                 Logger.WriteLine("No camera available");
@@ -125,7 +132,7 @@ namespace VisionModules.Events
             else
             {
                 Logger.WriteLine("No camera available");
-                ErrorLog.AddError(ErrorType.Warning, "PresenceDetector is disabled because no camera was detected");
+                ErrorLog.AddError(ErrorType.Warning, "PresenceDetector is disabled because no camera has been detected");
                 camera = null;
             }
         }
@@ -160,10 +167,10 @@ namespace VisionModules.Events
                     presenceDetector.OnPresenceUpdate += presenceHandler;
                 }
             }
-            else if (camera == null)
+            if (camera == null)
             {
                 Logger.WriteLine("No camera available");
-                ErrorLog.AddError(ErrorType.Warning, "PresenceDetector is disabled because no camera was detected");
+                ErrorLog.AddError(ErrorType.Warning, "PresenceDetector cannot start because no camera was detected");
                 throw new NotSupportedException("No Camera");
             }          
         }
