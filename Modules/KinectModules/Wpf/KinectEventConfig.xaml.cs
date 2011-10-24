@@ -26,7 +26,6 @@ namespace KinectModules.Wpf
     /// </summary>
     public partial class KinectEventConfig : WpfConfiguration
     {
-
         /// <summary>
         /// The minumum number of frames in the _video buffer before we attempt to start matching gestures
         /// </summary>
@@ -47,7 +46,6 @@ namespace KinectModules.Wpf
         /// Switch used to ignore certain skeleton frames
         /// </summary>
         private int _flipFlop;
-
         private ArrayList _video;
         private DtwGestureRecognizer _dtw;
 
@@ -86,6 +84,14 @@ namespace KinectModules.Wpf
             InitializeComponent();
         }
 
+        public override string Title
+        {
+            get
+            {
+               return "Kinect Gesture";
+            }
+        }
+
         public override void OnLoad()
         {
 
@@ -107,7 +113,10 @@ namespace KinectModules.Wpf
             Skeleton2DDataExtract.Skeleton2DdataCoordReady += NuiSkeleton2DdataCoordReady;
 
             // read gesture file
-            if (_dtw.LoadGesturesFromFile(KinectSkeletalGesture.GestureFileLocation)) { }
+            if (_dtw.LoadGesturesFromFile(KinectSkeletalGesture.GestureFileLocation)) 
+            {
+                CanSave = true;
+            }
             else
             {
                 ErrorLog.AddError(ErrorType.Failure, "Could not read gesture definition file!");

@@ -107,16 +107,20 @@ namespace KinectModules
 
         public string GetConfigString()
         {
-            throw new NotImplementedException();
+            return "Recognizing: ";
         }
 
+        private void GestureDetected(string gestureName)
+        {
+            Trigger();
+        }
         
         /// <summary>
         /// Called each time a skeleton frame is ready. Passes skeletal data to the DTW processor
         /// </summary>
         /// <param name="sender">The sender object</param>
         /// <param name="e">Skeleton Frame Ready Event Args</param>
-        private static void SkeletonExtractSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        private void SkeletonExtractSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             SkeletonFrame skeletonFrame = e.SkeletonFrame;
             foreach (SkeletonData data in skeletonFrame.Skeletons)
@@ -141,9 +145,11 @@ namespace KinectModules
                 string s = _dtw.Recognize(_video);
                 //results.Text = "Recognised as: " + s;
                 if (!s.Contains("__UNKNOWN"))
-                {
+                {                  
                     // There was no match so reset the buffer
                     _video = new ArrayList();
+                    // decide if we should trigger
+                    GestureDetected(s);
                 }
             }
 
