@@ -43,10 +43,13 @@ namespace VisionModules.Wpf
 
         public MotionDetectorConfig(ImagerBase selectedCamera)
         {
-            i = CameraDriver.Instance;
-            SelectedCamera = selectedCamera;
             InitializeComponent();
-            DeviceList.SelectedIndex = selectedCamera.Info.DeviceId;
+            i = CameraDriver.Instance;
+            if (selectedCamera != null)
+            {
+                SelectedCamera = selectedCamera;
+                DeviceList.SelectedIndex = selectedCamera.Info.DeviceId;
+            }
             Init();
         }
 
@@ -76,17 +79,17 @@ namespace VisionModules.Wpf
                 Logger.WriteLine("Selected Index " + DeviceList.SelectedIndex);
 
                 // TODO: Move the check into Camera
+                
                 if (!SelectedCamera.Running)
-                {
-                    SelectedCamera.OnImageUpdated -= i_OnImageUpdated;
-                    SelectedCamera.OnImageUpdated += i_OnImageUpdated;
+                {                
                     ThreadPool.QueueUserWorkItem(o =>
                     {
-                        // Thread sleep to wait for the camera to revive itself from recent shutdown. Todo: Fix this 
-                        Thread.Sleep(250);
                         SelectedCamera.StartFrameGrabbing();
                     });
                 }
+
+                SelectedCamera.OnImageUpdated -= i_OnImageUpdated;
+                SelectedCamera.OnImageUpdated += i_OnImageUpdated;
 
                 Logger.WriteLine("using " + SelectedCamera.Info);
 
@@ -128,13 +131,11 @@ namespace VisionModules.Wpf
         public override void OnClosing()
         {
             Logger.WriteLine("OnClosing");
-            foreach (Camera c in i.CamerasAvailable)
+            if (SelectedCamera != null)
             {
-                // TODO: Why is this SelectedCamera and not c?
                 SelectedCamera.OnImageUpdated -= i_OnImageUpdated;
                 SelectedCamera.TryStopFrameGrabbing();
-                Thread.Sleep(200);
-            }
+            }      
         }
 
         public override void OnSave()

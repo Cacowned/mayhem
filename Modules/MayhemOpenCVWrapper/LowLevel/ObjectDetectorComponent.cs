@@ -127,55 +127,55 @@ namespace MayhemOpenCVWrapper.LowLevel
                 // get feature correspondences
 
                 // template keypoints
-                SURFKeyPoint[] tKeyPoints = new SURFKeyPoint[1024];
-                int nTKeyPts = 0;
+                SURFKeyPoint[] templateKeyPoints = new SURFKeyPoint[1024];
+                int numTemplateKeyPts = 0;
 
                 // image keypoints
-                SURFKeyPoint[] iKeyPoints = new SURFKeyPoint[1024];
-                int nIKeyPts = 0;
+                SURFKeyPoint[] imgKeyPoints = new SURFKeyPoint[1024];
+                int numImgKeyPts = 0;
 
                 // pair indices
                 int[] matchPairIndices = new int[2048];
-                int nMatchingPairs = 0;
+                int numMatchingPairs = 0;
 
                 unsafe
                 {
-                    fixed (SURFKeyPoint* tkPtr = tKeyPoints)
+                    fixed (SURFKeyPoint* templeteKeyPointsPtr = templateKeyPoints)
                     {
-                        fixed (SURFKeyPoint* ikPtr = iKeyPoints)
+                        fixed (SURFKeyPoint* imageKeyPointsPtr = imgKeyPoints)
                         {
                             fixed (int* pairPtr = matchPairIndices)
                             {
-                                od.getKeypointsAndMatches(tkPtr, &nTKeyPts, ikPtr, &nIKeyPts, pairPtr, &nMatchingPairs);
+                                od.getKeypointsAndMatches(templeteKeyPointsPtr, &numTemplateKeyPts, imageKeyPointsPtr, &numImgKeyPts, pairPtr, &numMatchingPairs);
                             }
                         }
                     }
                 }
 
                 Logger.WriteLine("==== Results of SURF descriptor calculation ====");
-                Logger.WriteLine("TemplateKeyPoints: " + nTKeyPts + " ImageKeyPoints " + nIKeyPts + " nMatches " + nMatchingPairs);
+                Logger.WriteLine("TemplateKeyPoints: " + numTemplateKeyPts + " ImageKeyPoints " + numImgKeyPts + " nMatches " + numMatchingPairs);
                 Logger.Write("Matching Indices: ");
 
                 // template key points
                 List<Point> tempKeyPoints = new List<Point>();
-                for (int i = 0; i < nTKeyPts; i++)
+                for (int i = 0; i < numTemplateKeyPts; i++)
                 {
-                    tempKeyPoints.Add(new Point((int)tKeyPoints[i].x, (int)tKeyPoints[i].y));
+                    tempKeyPoints.Add(new Point((int)templateKeyPoints[i].x, (int)templateKeyPoints[i].y));
                 }
 
                 TemplateKeyPoints = tempKeyPoints;
 
                 // image key points
                 List<Point> imageKeyPoints = new List<Point>();
-                for (int i = 0; i < nIKeyPts; i++)
+                for (int i = 0; i < numImgKeyPts; i++)
                 {
-                    imageKeyPoints.Add(new Point((int)iKeyPoints[i].x, (int)iKeyPoints[i].y));
+                    imageKeyPoints.Add(new Point((int)imgKeyPoints[i].x, (int)imgKeyPoints[i].y));
                 }
 
                 LastImageKeyPoints = imageKeyPoints;
 
                 // point correspondences
-                for (int i = 0; i < nMatchingPairs; i += 2)
+                for (int i = 0; i < numMatchingPairs; i += 2)
                 {
                     Logger.Write(matchPairIndices[i] + "," + matchPairIndices[i + 1] + " ");
                 }
@@ -184,19 +184,19 @@ namespace MayhemOpenCVWrapper.LowLevel
                 List<Point> imageMatchingPoints = new List<Point>();
 
                 // even are points in template, odd are points in camera image
-                for (int i = 0; i < nMatchingPairs; i += 2)
+                for (int i = 0; i < numMatchingPairs; i += 2)
                 {
-                    int tIdx = matchPairIndices[i];
-                    int iIdx = matchPairIndices[i + 1];
+                    int templateIdx = matchPairIndices[i];
+                    int imageIdx = matchPairIndices[i + 1];
 
-                    SURFKeyPoint tPpt = tKeyPoints[tIdx];
-                    SURFKeyPoint iPpt = iKeyPoints[iIdx];
+                    SURFKeyPoint templatePpt = templateKeyPoints[templateIdx];
+                    SURFKeyPoint imagePpt = imgKeyPoints[imageIdx];
 
-                    Point tPoint = new Point((int)tPpt.x, (int)tPpt.y);
-                    Point iPoint = new Point((int)iPpt.x, (int)iPpt.y);
+                    Point templatePoint = new Point((int)templatePpt.x, (int)templatePpt.y);
+                    Point imagePoint = new Point((int)imagePpt.x, (int)imagePpt.y);
 
-                    imageMatchingPoints.Add(tPoint);
-                    imageMatchingPoints.Add(iPoint);
+                    imageMatchingPoints.Add(templatePoint);
+                    imageMatchingPoints.Add(imagePoint);
                 }
 
                 LastImageMatchingPoints = imageMatchingPoints;

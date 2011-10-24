@@ -37,11 +37,18 @@ namespace VisionModules.Wpf
             faceDetectorPoints = new List<System.Drawing.Point>();
             amountOfFacesItems = new List<int>();
 
+            // collapse the panel containing the sensitivity slider, which is not applicable to the face detector
+            PnlSensitivity.Visibility = Visibility.Collapsed;
+
             // set up the face detector
-            fd = new FaceDetectorComponent(c);
+            if (c != null)
+            {
+                fd = new FaceDetectorComponent(c);
+                fd.OnFaceDetected += OnFaceDetected;
+            }
 
             faceDetectorPoints = new List<System.Drawing.Point>();
-            fd.OnFaceDetected += OnFaceDetected;
+          
             if (i.DeviceCount > 0)
                 CanSave = true;
 
@@ -52,7 +59,7 @@ namespace VisionModules.Wpf
             }
 
             Label ddText = new Label();
-            ddText.Content = "Reaction activates when the following number of faces is detected:";
+            ddText.Content = "Event triggers when the following number of faces is detected:";
 
             StackPanel sp = new StackPanel();
             sp.Orientation = Orientation.Horizontal;
