@@ -148,28 +148,20 @@ namespace KinectModules.Wpf
                 listboxItems = new ObservableCollection<ListViewItem>();
                 //listboxItems.Add("All");
                 // get gesture labels from dtw
-               
+
+                lbGestures.ItemsSource = listboxItems;
+
                 foreach (string s in _dtw.Labels)
                 {
                     ListViewItem l = new ListViewItem();
                     l.Content = s;
-                    l.IsSelected = true;
+                    if (_selectedGestures.Contains(s))
+                    {
+                        l.IsSelected = true;
+                    }                 
                     listboxItems.Add(l);
                 }
-                
-                lbGestures.ItemsSource = listboxItems;
-                
-                if (_selectedGestures != null)
-                {
-                    foreach (string gestureLabel in _selectedGestures)
-                    {
-                        int idx = this.SelectedGestures.IndexOf(gestureLabel);
-                        //listboxItems[idx].selected = true; 
-                    }
-                }
-
-                //lbGestures.UpdateLayout();
-               // Dispatcher.Invoke(new Action(() => { lbGestures.UpdateLayout(); }), null);
+                lbGestures.Focus();
             }
             else
             {
@@ -177,13 +169,7 @@ namespace KinectModules.Wpf
             }
         }
 
-        protected override void  OnMouseEnter(MouseEventArgs e)
-        {
-            
-           // lbGestures.UpdateLayout();
-            lbGestures.ItemsSource = null;
-            lbGestures.ItemsSource = listboxItems;
-        }
+      
 
         private Point getDisplayPosition(Joint joint)
         {
