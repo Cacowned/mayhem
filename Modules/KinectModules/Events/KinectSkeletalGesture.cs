@@ -19,7 +19,18 @@ namespace KinectModules
     [MayhemModule("Kinect Event", "Triggers when a Kinect gesture is detected")]
     public class KinectSkeletalGesture : EventBase, IWpfConfigurable
     {
-        private const string gestureFileLocation = "Packages\\KinectModules\\GesturesDtw\\GesturesDTW.txt";
+        private static const string gestureFileLocation = "Packages\\KinectModules\\GesturesDtw\\GesturesDTW.txt";
+
+        /// <summary>
+        /// Returns the gesture location file for use in the config 
+        /// </summary>
+        public static string GestureFileLocation
+        {
+            get
+            {
+                return Directory.GetCurrentDirectory() + "\\" + gestureFileLocation; 
+            }
+        }
 
         /// <summary>
         /// The minumum number of frames in the _video buffer before we attempt to start matching gestures
@@ -61,11 +72,9 @@ namespace KinectModules
 
             // skeleton data extractor
             Skeleton2DDataExtract.Skeleton2DdataCoordReady += NuiSkeleton2DdataCoordReady;
-
-            string gestureFilePath = Directory.GetCurrentDirectory() + "\\" + gestureFileLocation;
-
+        
             // read gesture file
-            if (_dtw.LoadGesturesFromFile(gestureFilePath))
+            if (_dtw.LoadGesturesFromFile(GestureFileLocation))
             { }
             else
             {
