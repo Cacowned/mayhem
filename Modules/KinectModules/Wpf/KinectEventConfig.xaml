@@ -10,6 +10,10 @@
     <Grid>
         <StackPanel>
             <Canvas Width="400" Height="300" Name="skeleton" Margin="10 0 10 10" Background="Black" ClipToBounds="True"/>
+            <StackPanel Orientation="Horizontal">
+                <Label>Last gesture detected:</Label>
+                <Label Name="lblGestureDetected" Width="150" BorderBrush="DarkGray" BorderThickness="1" Foreground="OrangeRed" FontWeight="Bold">none</Label>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </src:WpfConfiguration>

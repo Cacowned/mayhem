@@ -17,6 +17,7 @@ using KinectModules.Helpers;
 using System.Collections;
 using DTWGestureRecognition;
 using MayhemCore;
+using System.Threading;
 
 namespace KinectModules.Wpf
 {
@@ -225,11 +226,33 @@ namespace KinectModules.Wpf
                 ////Debug.WriteLine("Reading and video.Count=" + video.Count);
                 string s = _dtw.Recognize(_video);
                 //results.Text = "Recognised as: " + s;
+
                 if (!s.Contains("__UNKNOWN"))
                 {
+                    Logger.WriteLine("Recognized as: " + s);
+
                     // There was no match so reset the buffer
                     _video = new ArrayList();
+
+                    lblGestureDetected.Content = s;
+
+                    //Label recognized = new Label();
+                    //recognized.Foreground = new SolidColorBrush(Colors.OrangeRed);
+                    //recognized.Content = s;
+
+                    //Canvas.SetLeft(recognized, 100);
+                    //Canvas.SetTop(recognized, 200);
+                    //Canvas.SetZIndex(recognized, 99);
+
+
+                    //skeleton.Children.Add(recognized);
+
+                     //Timer tm = new Timer((o) => { Dispatcher.BeginInvoke(new Action(() => { lblGestureDetected.Content = "none"; }));},
+                     //                       null,
+                     //                       3000,
+                     //                       Timeout.Infinite);
                 }
+          
             }
 
             // Ensures that we remember only the last x frames
