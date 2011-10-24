@@ -89,6 +89,9 @@
   <ItemGroup>
     <Content Include="Deps\INuiInstanceHelper.dll" />
     <Content Include="Deps\KINECTSQM.DLL" />
+    <None Include="GesturesDtw\GesturesDTW.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Deps\Microsoft.Research.Kinect.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

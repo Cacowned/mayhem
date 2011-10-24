@@ -11,6 +11,7 @@ using System.Windows.Media;
 using DTWGestureRecognition;
 using System.Collections;
 using KinectModules.Helpers;
+using System.IO;
 
 namespace KinectModules
 {
@@ -18,6 +19,8 @@ namespace KinectModules
     [MayhemModule("Kinect Event", "Triggers when a Kinect gesture is detected")]
     public class KinectSkeletalGesture : EventBase, IWpfConfigurable
     {
+        private const string gestureFileLocation = "Packages\\KinectModules\\GesturesDtw\\GesturesDTW.txt";
+
         /// <summary>
         /// The minumum number of frames in the _video buffer before we attempt to start matching gestures
         /// </summary>
@@ -39,8 +42,36 @@ namespace KinectModules
         /// </summary>
         private int _flipFlop;
 
+        private ArrayList _video;
+        private DtwGestureRecognizer _dtw;
+
         private MayhemKinect kinect;
-        private EventHandler<SkeletonFrameReadyEventArgs> skeletonFrameHandler; 
+        private EventHandler<SkeletonFrameReadyEventArgs> skeletonFrameHandler;
+
+  
+
+        protected override void OnAfterLoad()
+        {
+            _video = new ArrayList();
+            _dtw = new DtwGestureRecognizer(12, 0.6, 2, 2, 10);
+            _flipFlop = 0;
+
+            kinect = MayhemKinect.Instance;
+            skeletonFrameHandler = new EventHandler<SkeletonFrameReadyEventArgs>(SkeletonExtractSkeletonFrameReady);
+
+            // skeleton data extractor
+            Skeleton2DDataExtract.Skeleton2DdataCoordReady += NuiSkeleton2DdataCoordReady;
+
+            string gestureFilePath = Directory.GetCurrentDirectory() + "\\" + gestureFileLocation;
+
+            // read gesture file
+            if (_dtw.LoadGesturesFromFile(gestureFilePath))
+            { }
+            else
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Could not read gesture definition file!");
+            }
+        }
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -69,26 +100,6 @@ namespace KinectModules
         {
             throw new NotImplementedException();
         }
-
-        private ArrayList _video;
-        private DtwGestureRecognizer _dtw;
-
-        protected override void OnAfterLoad()
-        {
-            _video = new ArrayList();
-            _dtw = new DtwGestureRecognizer(12, 0.6, 2, 2, 10);
-            _flipFlop = 0;
-
-            kinect = MayhemKinect.Instance;
-            skeletonFrameHandler = new EventHandler<SkeletonFrameReadyEventArgs>(SkeletonExtractSkeletonFrameReady);
-
-            // skeleton data extractor
-            Skeleton2DDataExtract.Skeleton2DdataCoordReady += NuiSkeleton2DdataCoordReady;
-        }
-
-         
-
-        
 
         
         /// <summary>

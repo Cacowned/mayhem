@@ -23,6 +23,7 @@ namespace DTWGestureRecognition
 {
     using System;
     using System.Collections;
+    using MayhemCore;
 
     /// <summary>
     /// Dynamic Time Warping nearest neighbour sequence comparison class.
@@ -319,5 +320,69 @@ namespace DTWGestureRecognition
 
             return Math.Sqrt(d);
         }
+
+        /// <summary>
+        /// Opens the sent text file and creates a _dtw recorded gesture sequence
+        /// Currently not very flexible and totally intolerant of errors.
+        /// </summary>
+        /// <param name="fileLocation">Full path to the gesture file</param>
+        public bool LoadGesturesFromFile(string fileLocation)
+        {
+            Logger.WriteLine("Reading gesture definitions from " + fileLocation);
+            int itemCount = 0;
+            string line;
+            string gestureName = String.Empty;
+
+            // TODO I'm defaulting this to 12 here for now as it meets my current need but I need to cater for variable lengths in the future
+            ArrayList frames = new ArrayList();
+            double[] items = new double[12];
+
+            // Read the file and display it line by line.
+            try
+            {
+                System.IO.StreamReader file = new System.IO.StreamReader(fileLocation);
+                while ((line = file.ReadLine()) != null)
+                {
+                    if (line.StartsWith("@"))
+                    {
+                        gestureName = line;
+                        continue;
+                    }
+
+                    if (line.StartsWith("~"))
+                    {
+                        frames.Add(items);
+                        itemCount = 0;
+                        items = new double[12];
+                        continue;
+                    }
+
+                    if (!line.StartsWith("----"))
+                    {
+                        items[itemCount] = Double.Parse(line);
+                    }
+
+                    itemCount++;
+
+                    if (line.StartsWith("----"))
+                    {
+                        this.AddOrUpdate(frames, gestureName);
+                        frames = new ArrayList();
+                        gestureName = String.Empty;
+                        itemCount = 0;
+                    }
+                }
+
+                file.Close();
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Exception Reading Gesture File: " + ex.ToString());
+                return false; 
+            }
+            Logger.WriteLine("Gesture Definitions Read Successfully");
+            return true; 
+        }
+
     }
 }
