@@ -5,7 +5,7 @@
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"  
              xmlns:kinectMods="clr-namespace:KinectModules.Wpf"
-             Name="root"
+             Name="rootoot"
              Width="420">
     <Grid>
         <StackPanel>
@@ -14,6 +14,9 @@
                 <Label>Last gesture detected:</Label>
                 <Label Name="lblGestureDetected" Width="150" BorderBrush="DarkGray" BorderThickness="1" Foreground="OrangeRed" FontWeight="Bold">none</Label>
             </StackPanel>
+            <Label>Select gestures on which to trigger:</Label>
+            <ListView Name="lbGestures" SelectionMode="Multiple">             
+            </ListView>
         </StackPanel>
     </Grid>
 </src:WpfConfiguration>

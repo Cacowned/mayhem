@@ -12,6 +12,7 @@ using DTWGestureRecognition;
 using System.Collections;
 using KinectModules.Helpers;
 using System.IO;
+using MayhemWpf.UserControls;
 
 namespace KinectModules
 {
@@ -31,6 +32,10 @@ namespace KinectModules
                 return Directory.GetCurrentDirectory() + "\\" + gestureFileLocation; 
             }
         }
+
+
+        [DataMember]
+        List<string> selectedGestures; 
 
         /// <summary>
         /// The minumum number of frames in the _video buffer before we attempt to start matching gestures
@@ -96,13 +101,14 @@ namespace KinectModules
         {
             get 
             {
-                return new KinectEventConfig();
+                return new KinectEventConfig(selectedGestures);
             }
         }
 
-        public void OnSaved(MayhemWpf.UserControls.WpfConfiguration configurationControl)
+        public void OnSaved(WpfConfiguration configurationControl)
         {
-            throw new NotImplementedException();
+            KinectEventConfig config = configurationControl as KinectEventConfig;
+            selectedGestures = config.SelectedGestures;
         }
 
         public string GetConfigString()

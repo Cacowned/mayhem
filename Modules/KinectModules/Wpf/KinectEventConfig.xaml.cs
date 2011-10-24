@@ -18,14 +18,29 @@ using System.Collections;
 using DTWGestureRecognition;
 using MayhemCore;
 using System.Threading;
+using System.Collections.ObjectModel;
 
 namespace KinectModules.Wpf
 {
+    class GestureListItem
+    {
+        public string gestureName;
+        public bool selected; 
+
+        public GestureListItem(string gestureName, bool selected)
+        {
+            this.gestureName = gestureName;
+            this.selected = selected;
+        }       
+    }
     /// <summary>
     /// Interaction logic for KinectEventConfig.xaml
     /// </summary>
     public partial class KinectEventConfig : WpfConfiguration
     {
+
+        private ObservableCollection<ListViewItem> listboxItems; 
+
         /// <summary>
         /// The minumum number of frames in the _video buffer before we attempt to start matching gestures
         /// </summary>
@@ -79,9 +94,24 @@ namespace KinectModules.Wpf
             {JointID.FootRight, new SolidColorBrush(Color.FromRgb(77,  109, 243))}
         };
 
-        public KinectEventConfig()
+        private List<string> _selectedGestures;
+        public List<string> SelectedGestures
+        {
+            get
+            {
+                List<string> listOut = new List<string>();
+                foreach (ListViewItem s in lbGestures.SelectedItems)
+                {
+                    listOut.Add(s.Content as string);
+                }
+                return listOut;
+            }
+        }
+
+        public KinectEventConfig(List<string> selectedGestures)
         {
             InitializeComponent();
+            this._selectedGestures = selectedGestures;
         }
 
         public override string Title
@@ -94,7 +124,6 @@ namespace KinectModules.Wpf
 
         public override void OnLoad()
         {
-
             kinect = MayhemKinect.Instance;
             skeletonRenderFrameHandler = new EventHandler<SkeletonFrameReadyEventArgs>(nui_SkeletonFrameReady);
             kinect.AttachSkeletonEventHandler(skeletonRenderFrameHandler);
@@ -116,13 +145,44 @@ namespace KinectModules.Wpf
             if (_dtw.LoadGesturesFromFile(KinectSkeletalGesture.GestureFileLocation)) 
             {
                 CanSave = true;
+                listboxItems = new ObservableCollection<ListViewItem>();
+                //listboxItems.Add("All");
+                // get gesture labels from dtw
+               
+                foreach (string s in _dtw.Labels)
+                {
+                    ListViewItem l = new ListViewItem();
+                    l.Content = s;
+                    l.IsSelected = true;
+                    listboxItems.Add(l);
+                }
+                
+                lbGestures.ItemsSource = listboxItems;
+                
+                if (_selectedGestures != null)
+                {
+                    foreach (string gestureLabel in _selectedGestures)
+                    {
+                        int idx = this.SelectedGestures.IndexOf(gestureLabel);
+                        //listboxItems[idx].selected = true; 
+                    }
+                }
+
+                //lbGestures.UpdateLayout();
+               // Dispatcher.Invoke(new Action(() => { lbGestures.UpdateLayout(); }), null);
             }
             else
             {
                 ErrorLog.AddError(ErrorType.Failure, "Could not read gesture definition file!");
             }
-            
+        }
 
+        protected override void  OnMouseEnter(MouseEventArgs e)
+        {
+            
+           // lbGestures.UpdateLayout();
+            lbGestures.ItemsSource = null;
+            lbGestures.ItemsSource = listboxItems;
         }
 
         private Point getDisplayPosition(Joint joint)
