@@ -41,12 +41,13 @@ namespace WindowModules.Wpf
 
         public WindowSequenceConfig(WindowActionInfo windowActionInfo)
         {
+            isStartingUp = true;
+
             InitializeComponent();
             ActionInfo = windowActionInfo;
 
             controlMap = new Dictionary<UserControl, IWindowAction>();
             CurrentlySelectedWindow = IntPtr.Zero;
-            isStartingUp = true;
 
             SelectedWindow = ActionInfo.WindowInfo;
             textBoxApplication.Text = ActionInfo.WindowInfo.FileName;
@@ -248,21 +249,24 @@ namespace WindowModules.Wpf
 
         private void CheckCanSave()
         {
-            CanSave = ((textBoxApplication.Text.Length > 0 && checkBoxApplication.IsChecked == true) ||
-                      (textBoxWindowTitle.Text.Length > 0 && checkBoxTitle.IsChecked == true)) && stackPanelActions.Children.Count > 0;
+            if (!isStartingUp)
+            {
+                CanSave = ((textBoxApplication.Text.Length > 0 && checkBoxApplication.IsChecked == true) ||
+                           (textBoxWindowTitle.Text.Length > 0 && checkBoxTitle.IsChecked == true)) &&
+                          stackPanelActions.Children.Count > 0;
+            }
         }
 
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+
             CheckCanSave();
         }
 
         private void checkBox_Checked(object sender, RoutedEventArgs e)
         {
-            if (!isStartingUp)
-            {
-                CheckCanSave();
-            }
+            CheckCanSave();
+
         }
     }
 }
