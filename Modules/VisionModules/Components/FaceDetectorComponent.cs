@@ -6,8 +6,9 @@ using System.Windows;
 using MayhemCore;
 using OpenCVDLL;
 using Point = System.Drawing.Point;
+using MayhemOpenCVWrapper;
 
-namespace MayhemOpenCVWrapper.LowLevel
+namespace VisionModules.Components
 {
     /// <summary>
     /// Face detector component of the face detector event. Can also be used as a standalone face detector. 

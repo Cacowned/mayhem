@@ -6,9 +6,9 @@ using System.Threading;
 using System.Windows;
 using MayhemCore;
 using MayhemOpenCVWrapper;
-using MayhemOpenCVWrapper.LowLevel;
 using MayhemWpf.UserControls;
 using Point = System.Drawing.Point;
+using VisionModules.Components;
 
 namespace VisionModules.Wpf
 {

@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using MayhemCore;
 using MayhemOpenCVWrapper;
-using MayhemOpenCVWrapper.LowLevel;
+using VisionModules.Components;
 
 namespace VisionModules.Wpf
 {

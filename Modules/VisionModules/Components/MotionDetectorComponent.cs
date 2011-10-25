@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using MayhemOpenCVWrapper;
-using MayhemOpenCVWrapper.LowLevel;
 
-namespace VisionModules.Events.Components
+namespace VisionModules.Components
 {
     public class MotionDetectorComponent : CameraImageListener
     {

@@ -2,8 +2,10 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using MayhemCore;
+using MayhemOpenCVWrapper;
 
-namespace MayhemOpenCVWrapper.LowLevel
+
+namespace VisionModules.Components
 {
     /// <summary>
     /// Presence detector component

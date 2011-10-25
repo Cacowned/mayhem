@@ -4,10 +4,10 @@ using System.Runtime.Serialization;
 using System.Timers;
 using MayhemCore;
 using MayhemOpenCVWrapper;
-using MayhemOpenCVWrapper.LowLevel;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using VisionModules.Wpf;
+using VisionModules.Components;
 
 namespace VisionModules.Reactions
 {

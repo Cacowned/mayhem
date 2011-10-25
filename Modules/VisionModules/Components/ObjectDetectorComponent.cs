@@ -6,8 +6,9 @@ using System.Runtime.InteropServices;
 using MayhemCore;
 using OpenCVDLL;
 using Point = System.Drawing.Point;
+using MayhemOpenCVWrapper;
 
-namespace MayhemOpenCVWrapper.LowLevel
+namespace VisionModules.Components
 {
     /// <summary>
     /// Low level object interfacing with the OpenCVDLL object detector component. 

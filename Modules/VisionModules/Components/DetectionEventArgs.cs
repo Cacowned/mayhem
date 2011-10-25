@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Point = System.Drawing.Point;
 
-namespace MayhemOpenCVWrapper.LowLevel
+namespace VisionModules.Components
 {
     public class DetectionEventArgs : EventArgs
     {

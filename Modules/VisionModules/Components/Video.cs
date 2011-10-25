@@ -4,9 +4,9 @@ using System.Drawing;
 using System.Threading;
 using AviFile;
 using MayhemCore;
-using MayhemOpenCVWrapper.LowLevel;
+using MayhemOpenCVWrapper;
 
-namespace MayhemOpenCVWrapper
+namespace VisionModules.Components
 {
     /// <summary>
     /// Allows Mayhem to write AVI files from lists of Bitmaps

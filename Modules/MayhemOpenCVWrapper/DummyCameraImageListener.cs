@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MayhemOpenCVWrapper.LowLevel
+namespace MayhemOpenCVWrapper
 {
     /// <summary>
     /// A dummy class acting as a camera listener. 
