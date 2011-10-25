@@ -89,7 +89,7 @@ namespace VisionModules.Events
             string conf = string.Empty; 
             if (camera != null)
             {
-                conf += "Camera: " + camera.Info.DeviceId;
+                conf += camera.Info.Description;
             }
 
             return conf; 
