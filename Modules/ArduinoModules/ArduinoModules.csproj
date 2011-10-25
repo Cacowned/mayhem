@@ -17,10 +17,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Packages\ArduinoModules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,6 +45,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="USBHIDDRIVER">
+      <HintPath>..\..\..\..\..\Downloads\csharp-usb-hid-driver\csharp-usb-hid-driver\USBHIDDRIVER\bin\Release\USBHIDDRIVER.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +66,8 @@
     <Compile Include="Reactions\ArduinoAnalogWrite.cs" />
     <Compile Include="Reactions\ArduinoDigitalWrite.cs" />
     <Compile Include="Reactions\ArduinoServoWrite.cs" />
+    <Compile Include="Reactions\HIDImports.cs" />
+    <Compile Include="Reactions\USBRocketModule.cs" />
     <Compile Include="Wpf\ArduinoDigitalWriteConfig.xaml.cs">
       <DependentUpon>ArduinoDigitalWriteConfig.xaml</DependentUpon>
     </Compile>
