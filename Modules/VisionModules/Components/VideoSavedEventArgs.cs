@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MayhemOpenCVWrapper.LowLevel
+namespace VisionModules.Components
 {
     public class VideoSavedEventArgs : EventArgs
     {

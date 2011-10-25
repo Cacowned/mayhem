@@ -6,8 +6,8 @@ using MayhemCore;
 using MayhemOpenCVWrapper;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using VisionModules.Events.Components;
 using VisionModules.Wpf;
+using VisionModules.Components;
 
 namespace VisionModules.Events
 {

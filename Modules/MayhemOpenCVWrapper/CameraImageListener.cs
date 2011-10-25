@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MayhemOpenCVWrapper.LowLevel
+namespace MayhemOpenCVWrapper
 {
     /// <summary>
     /// Classes depending on camera image updates will need to derivce from cameraImagelistsner.
