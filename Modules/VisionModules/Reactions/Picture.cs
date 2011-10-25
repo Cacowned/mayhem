@@ -86,12 +86,23 @@ namespace VisionModules.Reactions
                                 now.Second.ToString("D2") + ".jpg";
             string path = folderLocation + "\\" + filename;
             Logger.WriteLine("saving file to " + path);
-            image.Save(path, ImageFormat.Jpeg);
+            try
+            {
+                image.Save(path, ImageFormat.Jpeg);
+                ErrorLog.AddError(ErrorType.Message, "Picture saved to: " + path);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine("Exception while saving picture");
+                ErrorLog.AddError(ErrorType.Failure, "Could not save a picture to: " + path);
+            }
+            finally
+            {
+                // VERY important! 
+                image.Dispose();
+            }
 
-            // VERY important! 
-            image.Dispose();
-
-            ErrorLog.AddError(ErrorType.Message, "Picture saved to: " + path);
+           
 
         }
 

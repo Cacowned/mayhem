@@ -182,8 +182,35 @@ namespace VisionModules.Wpf
                     textInvalid.Text = "Filename prefix is too long";
                 CanSave = false;
             }
+            else if (!HasAccessToWrite(box_current_loc.Text))
+            {
+                if (textInvalid != null)
+                    textInvalid.Text = "No write access to selected directory";
+                CanSave = false; 
+            }
             if (textInvalid != null)
                 textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        /// <summary>
+        /// Check if we have write access to a directory. This kind of a kludge, but it was the most terse way to test for write permission on 
+        /// StackOverflow
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>if we have write access</returns>
+        private bool HasAccessToWrite(string path)
+        {
+            try
+            {
+                using (FileStream fs = File.Create(Path.Combine(path, "Access.txt"), 1, FileOptions.DeleteOnClose))
+                {
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public override void OnSave()
