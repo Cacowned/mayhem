@@ -22,7 +22,7 @@ namespace VisionModules.Events
     public class FaceDetectorEvent : EventBase, IWpfConfigurable
     {
         // ms
-        private const int DetectionInterval = 2500; 
+        private const int DetectionInterval = 2500;
 
         // the cam we have selected
         [DataMember]
@@ -67,7 +67,7 @@ namespace VisionModules.Events
                 Logger.WriteLine("No camera available");
                 ErrorLog.AddError(ErrorType.Warning, "No camera: FaceDetector is disabled!");
                 camera = null;
-            }    
+            }
         }
 
         private void OnFaceDetectUpdate(object sender, DetectionEventArgs pts)
@@ -155,14 +155,14 @@ namespace VisionModules.Events
                     faceDetector.OnFaceDetected += OnFaceDetectUpdate;
                 }
             }
-            
+
             if (camera == null)
             {
                 Logger.WriteLine("No camera available");
                 ErrorLog.AddError(ErrorType.Warning, "FaceDetector cannot start because no camera was detected");
                 if (!e.WasConfiguring)
-                  throw new NotSupportedException("Facedetector could not start: no camera");
-            }              
+                    throw new NotSupportedException("Facedetector could not start: no camera");
+            }
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]

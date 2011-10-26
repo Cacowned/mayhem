@@ -24,7 +24,7 @@ namespace VisionModules.Events
         [DataMember]
         private Rect boundingRect;
 
-        private CameraDriver cameraDriver = CameraDriver.Instance;
+        private CameraDriver cameraDriver;
         private ImagerBase camera;
 
         // which cam have we selected
