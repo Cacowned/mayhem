@@ -69,6 +69,9 @@
     <Compile Include="Reactions\ArduinoAnalogWrite.cs" />
     <Compile Include="Reactions\ArduinoDigitalWrite.cs" />
     <Compile Include="Reactions\ArduinoServoWrite.cs" />
+    <Compile Include="Wpf\ArduinoAnalogWriteConfig.xaml.cs">
+      <DependentUpon>ArduinoAnalogWriteConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\ArduinoDigitalWriteConfig.xaml.cs">
       <DependentUpon>ArduinoDigitalWriteConfig.xaml</DependentUpon>
     </Compile>
@@ -111,6 +114,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Wpf\ArduinoAnalogWriteConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wpf\ArduinoDigitalWriteConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
