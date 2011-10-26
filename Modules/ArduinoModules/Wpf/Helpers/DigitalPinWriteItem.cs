@@ -28,9 +28,9 @@ namespace ArduinoModules.Wpf.Helpers
         [DataMember]
         private int firmataId = 0;
 
-        public int GetPinId()
+        public int PinId
         {
-            return firmataId;
+            get {  return firmataId; }
         }
 
         [DataMember]

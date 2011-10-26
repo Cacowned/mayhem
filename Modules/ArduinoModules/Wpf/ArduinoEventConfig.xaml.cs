@@ -45,6 +45,7 @@ namespace ArduinoModules.Wpf
 
         private BackgroundWorker bgPinUpdate = new BackgroundWorker();
 
+
         public string ArduinoPortName
         {
             get
@@ -91,8 +92,8 @@ namespace ArduinoModules.Wpf
 
             bgPinUpdate.DoWork += new DoWorkEventHandler((object o, DoWorkEventArgs e) =>
             {
-                Dispatcher.BeginInvoke(new Action(() => { digitalPins.Items.Refresh(); }), DispatcherPriority.Render);
-                Dispatcher.BeginInvoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.Render);
+                Dispatcher.BeginInvoke(new Action(() => { digitalPins.Items.Refresh(); }), DispatcherPriority.Background);
+                Dispatcher.BeginInvoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.Background);
             });
 
             bgPinUpdate.WorkerSupportsCancellation = true;
@@ -106,8 +107,8 @@ namespace ArduinoModules.Wpf
 
         private void t_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (!bgPinUpdate.IsBusy)
-                bgPinUpdate.RunWorkerAsync();
+            //if (!bgPinUpdate.IsBusy)
+           //     bgPinUpdate.RunWorkerAsync();
         }
 
         #region WPF Events
@@ -199,15 +200,17 @@ namespace ArduinoModules.Wpf
 
         public void Arduino_OnAnalogPinChanged(Pin p)
         {
+            /*
             if (p.AnalogChannel < AnalogPinItems.Count)
             {
                 // refresh data grid items
                 AnalogPinItems[p.AnalogChannel].SetAnalogValue(p.Value);
-            }
+            } */
         }
 
         public void Arduino_OnDigitalPinChanged(Pin p)
         {
+            /*
             Logger.WriteLine("arduino_OnDigitalPinChanged " + p.Id + " " + p.Value);
 
             if (p.Id < DigitalPinItems.Count)
@@ -217,7 +220,7 @@ namespace ArduinoModules.Wpf
                     if (pin.GetPinId() == p.Id)
                         pin.SetPinState(p.Value);
                 }
-            }
+            }*/
         }
 
         public void Arduino_OnPinAdded(Pin p)
@@ -243,7 +246,7 @@ namespace ArduinoModules.Wpf
                 // set digital pin mode to input
                 if (p.Mode != PinMode.INPUT && p.Flagged == false)
                 {
-                    arduino.SetPinMode(p, PinMode.INPUT);
+                    //arduino.SetPinMode(p, PinMode.INPUT);
                 }
             }
             else if (p.Mode == PinMode.ANALOG)
@@ -301,13 +304,13 @@ namespace ArduinoModules.Wpf
             (sender as DataGrid).CommitEdit();
             (sender as DataGrid).RowEditEnding += digitalPins_RowEditEnding;
 
-            bgPinUpdate.RunWorkerAsync();
+          
             t.Enabled = true;
         }
 
         private void digitalPins_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            bgPinUpdate.CancelAsync();
+          
             t.Enabled = false;
             while (bgPinUpdate.IsBusy)
             {
@@ -316,7 +319,7 @@ namespace ArduinoModules.Wpf
 
         private void analogPins_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
-            bgPinUpdate.CancelAsync();
+           
             t.Enabled = false;
             while (bgPinUpdate.IsBusy)
             {
@@ -326,13 +329,13 @@ namespace ArduinoModules.Wpf
             (sender as DataGrid).CommitEdit();
             (sender as DataGrid).RowEditEnding += analogPins_RowEditEnding;
 
-            bgPinUpdate.RunWorkerAsync();
+          
             t.Enabled = true;
         }
 
         private void analogPins_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            bgPinUpdate.CancelAsync();
+           
             t.Enabled = false;
             while (bgPinUpdate.IsBusy)
             {

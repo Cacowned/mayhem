@@ -162,12 +162,12 @@ namespace ArduinoModules.Wpf
                 // see if pin is already contained in set pins and take over the settings
                 foreach (DigitalPinWriteItem setPin in reactionSetPins)
                 {
-                    if (setPin.GetPinId() == p.Id)
+                    if (setPin.PinId == p.Id)
                     {
                         // pin has already been configured
                         // use the existing DigitalPinWriteItem
                         pw = setPin;
-                        Logger.WriteLine("Using already configured pin " + pw.GetPinId());
+                        Logger.WriteLine("Using already configured pin " + pw.PinId);
                     }
                 }
 
