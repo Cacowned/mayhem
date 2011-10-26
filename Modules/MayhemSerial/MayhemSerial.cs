@@ -219,6 +219,8 @@ namespace MayhemSerial
             }
         }
 
+
+
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void WriteToPort(string portName, byte[] buffer, int count)
         {

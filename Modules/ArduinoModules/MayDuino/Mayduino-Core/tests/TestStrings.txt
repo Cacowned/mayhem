@@ -1,0 +1,15 @@
+
+// analog 0 < 150 --> servo 6 180
+$c,0,2,0,150,6,3,0,180
+
+// analog 0 > 150 --> servo 6 180
+$c,0,2,1,150,6,3,0,0
+
+// digital 2 h --> digital 5 h 
+$c,2,1,1,0,5,1,1,0
+
+// digital 8 h --> digital 6 h
+$c,8,1,1,1,6,1,1,0
+
+//digital 8 l --> digital 6 l
+$c,8,1,0,1,6,1,0,0

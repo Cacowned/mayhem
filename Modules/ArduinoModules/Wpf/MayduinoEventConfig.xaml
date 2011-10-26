@@ -1,0 +1,41 @@
+﻿<src:WpfConfiguration x:Class="ArduinoModules.Wpf.MayduinoEventConfig"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+                xmlns:ext="clr-namespace:ArduinoModules.Wpf.Helpers"
+                Width="400" 
+               >
+    <StackPanel>
+        <Label>Select an Arduino board:</Label>
+        <StackPanel Orientation="Horizontal">
+            <ComboBox Name="deviceList" Width="200" SelectionChanged="deviceList_SelectionChanged"></ComboBox>        
+        </StackPanel>
+        <Grid Margin="0 5 0 0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Name="r1"></RowDefinition>
+                <RowDefinition Name="r2"></RowDefinition>
+                <RowDefinition Name="r3"></RowDefinition>
+                <RowDefinition Name="r4"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+                 
+            <Label Grid.Row="0" Grid.Column="0">Select pin</Label>
+            <ComboBox Name="bx_pin" Width="150" Grid.Row="0" Grid.Column="1">              
+            </ComboBox>
+       
+            <Label Name="lbl_cond" Grid.Row="1" Grid.Column="0">Select activation condition</Label>
+            <ComboBox Name="bx_cond" Width="150" Grid.Row="1" Grid.Column="1" ></ComboBox>
+            
+            <Label Name="lbl_pullup" Grid.Row="2" Grid.Column="0">Pullup</Label>
+            <ComboBox Name="bx_pullup" Grid.Row="2" Grid.Column="1"></ComboBox>
+            
+            <!-- Collapse for digital events -->
+            <Label Name="lbl_eventVals" Grid.Row="3" Grid.Column="0">Select activation value</Label>
+            <TextBox Name="bx_eventVals" Grid.Row="3" Grid.Column="1" Width="150">0</TextBox>
+
+        </Grid>
+    </StackPanel>
+</src:WpfConfiguration>

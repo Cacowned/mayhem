@@ -1,0 +1,22 @@
+﻿<src:WpfConfiguration x:Class="KinectModules.Wpf.KinectEventConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"  
+             xmlns:kinectMods="clr-namespace:KinectModules.Wpf"
+             Name="rootoot"
+             Width="420">
+    <Grid>
+        <StackPanel>
+            <Canvas Width="400" Height="300" Name="skeleton" Margin="10 0 10 10" Background="Black" ClipToBounds="True"/>
+            <StackPanel Orientation="Horizontal">
+                <Label>Last gesture detected:</Label>
+                <Label Name="lblGestureDetected" Width="150" BorderBrush="DarkGray" BorderThickness="1" Foreground="OrangeRed" FontWeight="Bold">none</Label>
+            </StackPanel>
+            <Label>Select gestures on which to trigger:</Label>
+            <ListView Name="lbGestures" SelectionMode="Multiple">             
+            </ListView>
+        </StackPanel>
+    </Grid>
+</src:WpfConfiguration>

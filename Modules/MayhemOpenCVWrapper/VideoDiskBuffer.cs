@@ -252,6 +252,7 @@ namespace MayhemOpenCVWrapper
                         Image img = Image.FromStream(ms);
                         bitmaps.Add(new Bitmap(img));
                         blck = (blck + 1) % maxBufferItems;
+                    ms.Dispose();
                     }
                     finally
                     {
