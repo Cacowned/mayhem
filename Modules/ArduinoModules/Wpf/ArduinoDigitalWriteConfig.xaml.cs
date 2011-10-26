@@ -20,10 +20,10 @@ namespace ArduinoModules.Wpf
         private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
         private Dictionary<string, string> deviceNamesIds = null;
         private ArduinoFirmata arduino = null;
-        private ObservableCollection<DigitalPinWriteItem> pinItems = new ObservableCollection<DigitalPinWriteItem>();
+        private ObservableCollection<DigitalWriteItem> pinItems = new ObservableCollection<DigitalWriteItem>();
 
         // pins already configured by the reaction 
-        private List<DigitalPinWriteItem> reactionSetPins = null;
+        private List<DigitalWriteItem> reactionSetPins = null;
 
         public string ArduinoPortName
         {
@@ -41,12 +41,12 @@ namespace ArduinoModules.Wpf
         /// <summary>
         /// Returns list of current active items
         /// </summary>
-        public List<DigitalPinWriteItem> ActiveItems
+        public List<DigitalWriteItem> ActiveItems
         {
             get
             {
-                List<DigitalPinWriteItem> items = new List<DigitalPinWriteItem>();
-                foreach (DigitalPinWriteItem p in pinItems)
+                List<DigitalWriteItem> items = new List<DigitalWriteItem>();
+                foreach (DigitalWriteItem p in pinItems)
                 {
                     if (p.Active)
                         items.Add(p);
@@ -56,7 +56,7 @@ namespace ArduinoModules.Wpf
             }
         }
 
-        public ArduinoDigitalWriteConfig(List<DigitalPinWriteItem> setPins)
+        public ArduinoDigitalWriteConfig(List<DigitalWriteItem> setPins)
         {
             reactionSetPins = setPins;
             InitializeComponent();
@@ -157,10 +157,10 @@ namespace ArduinoModules.Wpf
                 p.Mode != PinMode.UNASSIGNED &&
                 p.Mode != PinMode.SHIFT)
             {
-                DigitalPinWriteItem pw = new DigitalPinWriteItem(false, p.Id, DigitalWriteMode.HIGH);
+                DigitalWriteItem pw = new DigitalWriteItem(false, p.Id, DigitalWriteMode.HIGH);
 
                 // see if pin is already contained in set pins and take over the settings
-                foreach (DigitalPinWriteItem setPin in reactionSetPins)
+                foreach (DigitalWriteItem setPin in reactionSetPins)
                 {
                     if (setPin.PinId == p.Id)
                     {

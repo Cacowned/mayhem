@@ -7,7 +7,7 @@ namespace ArduinoModules.Wpf.Helpers
     /// Data model for Gridviews on Arduino digital pins for ArduinoDigitalWriteConfig
     /// </summary>
     [DataContract]
-    public class DigitalPinWriteItem
+    public class DigitalWriteItem
     {
         // if checked, output is activated on this pin 
         [DataMember]
@@ -66,7 +66,7 @@ namespace ArduinoModules.Wpf.Helpers
             return GetPinState();
         }           // also return an int for easier asssignment to arduino.digitalwrite
 
-        public DigitalPinWriteItem(bool check, int id, DigitalWriteMode mode)
+        public DigitalWriteItem(bool check, int id, DigitalWriteMode mode)
         {
             active = check;
             firmataId = id;
