@@ -273,15 +273,15 @@ namespace ArduinoModules.Firmata
         /// </summary>
         /// <param name="p"></param>
         /// <param name="mode"></param>
-        public void SetPinMode(Pin p, PinMode mode)
+        public void SetPinMode(int pinId, PinMode mode)
         {
-            pin_info[p.Id].Mode = mode;
+            pin_info[pinId].Mode = mode;
 
             // flag this pin as an output pin (?)
             if (mode == PinMode.OUTPUT)
-                pin_info[p.Id].Flagged = true;
+                pin_info[pinId].Flagged = true;
 
-            byte[] buf = new byte[3] { FirmataMsg.PIN_MODE_SET, (byte)p.Id, (byte)mode };
+            byte[] buf = new byte[3] { FirmataMsg.PIN_MODE_SET, (byte)pinId, (byte)mode };
             serial.WriteToPort(portName, buf, buf.Length);
         }
 

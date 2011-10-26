@@ -47,7 +47,13 @@ namespace ArduinoModules.Events
             if (arduinoPortName != string.Empty)
             {
                 arduino = ArduinoFirmata.InstanceForPortname(arduinoPortName);
+                foreach (DigitalPinItem pin in monitorDigitalPins)
+                {
+                    arduino.SetPinMode(pin.GetPinId(), PinMode.INPUT);
+                }
             }
+
+            
 
             onDigitalPinChanged = new Action<Pin>(arduino_OnDigitalPinChanged);
             onAnalogPinChanged = new Action<Pin>(arduino_OnAnalogPinChanged);
@@ -109,6 +115,7 @@ namespace ArduinoModules.Events
                     {
                         // TODO: arduino.FlagPin(p)
                         digitalPinsMonitor.Add(p);
+                        arduino.SetPinMode(p.GetPinId(), PinMode.INPUT);
                     }
                 }
 
