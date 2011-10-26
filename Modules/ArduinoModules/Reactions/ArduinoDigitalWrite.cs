@@ -16,7 +16,7 @@ namespace ArduinoModules.Reactions
     public class ArduinoDigitalWrite : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private List<DigitalPinWriteItem> writePins;
+        private List<DigitalWriteItem> writePins;
         [DataMember]
         private string arduinoPortName;
 
@@ -29,7 +29,7 @@ namespace ArduinoModules.Reactions
 
         protected override void OnLoadDefaults()
         {
-            writePins = new List<DigitalPinWriteItem>();
+            writePins = new List<DigitalWriteItem>();
             arduinoPortName = string.Empty;
         }
 
@@ -39,7 +39,7 @@ namespace ArduinoModules.Reactions
             {
                 arduino = ArduinoFirmata.InstanceForPortname(arduinoPortName);
 
-                foreach (DigitalPinWriteItem pin in writePins)
+                foreach (DigitalWriteItem pin in writePins)
                 {
                     arduino.SetPinMode(pin.PinId, PinMode.OUTPUT); 
                 }
@@ -51,7 +51,7 @@ namespace ArduinoModules.Reactions
         {
             if (arduino != null)
             {
-                foreach (DigitalPinWriteItem p in writePins)
+                foreach (DigitalWriteItem p in writePins)
                 {
                     if (p.WriteMode == DigitalWriteMode.HIGH)
                     {
@@ -86,7 +86,7 @@ namespace ArduinoModules.Reactions
         /// "Pulse Off" Activation mode
         /// pulls the pin to ground for a short amount of time
         /// </summary>
-        private void PulseOff(DigitalPinWriteItem p)
+        private void PulseOff(DigitalWriteItem p)
         {
             arduino.DigitalWrite(p.PinId, p.SetPinState(0));
             Timer t = new Timer(PulseTime);
@@ -104,7 +104,7 @@ namespace ArduinoModules.Reactions
         /// "Pulse On" Activation mode
         /// pulls the pin to ground for a short amount of time
         /// </summary>
-        private void PulseOn(DigitalPinWriteItem p)
+        private void PulseOn(DigitalWriteItem p)
         {
             arduino.DigitalWrite(p.PinId, p.SetPinState(1));
             Timer t = new Timer(PulseTime);
@@ -120,7 +120,7 @@ namespace ArduinoModules.Reactions
         /// <summary>
         /// "Toggle" Activation mode
         /// </summary>
-        private void TogglePin(DigitalPinWriteItem p)
+        private void TogglePin(DigitalWriteItem p)
         {
             Logger.WriteLine("Pin " + p.PinId + " " + p.GetPinState());
             if (p.GetPinState() > 0)
@@ -154,7 +154,7 @@ namespace ArduinoModules.Reactions
                 writePins = config.ActiveItems;
 
 
-                foreach (DigitalPinWriteItem p in writePins)
+                foreach (DigitalWriteItem p in writePins)
                 {
                     arduino.SetPinMode(p.PinId, PinMode.OUTPUT); 
                     if (p.WriteMode == DigitalWriteMode.HIGH)             

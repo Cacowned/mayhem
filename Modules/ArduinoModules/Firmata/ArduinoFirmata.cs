@@ -231,7 +231,7 @@ namespace ArduinoModules.Firmata
                 DigitalWrite(writePin, val);
             }
         }
-
+      
         /// <summary>
         /// Sets the logic value of the pin 
         /// </summary>
@@ -260,6 +260,29 @@ namespace ArduinoModules.Firmata
             buf[2] = (byte)((port_val >> 7) & 0x7f);
 
             serial.WriteToPort(portName, buf, 3);
+        }
+
+
+        public void AnalogWrite(int pinIndex, Int16 pwmValue)
+        {
+            // retrieve the pin to write to from the index
+            if (pinIndex >= 0 && pinIndex <= 128 /*todo: check if in pwm pins */)
+            {
+                Pin writePin = pin_info[pinIndex];
+                AnalogWrite(writePin, pwmValue);
+            }
+        }
+
+        public void AnalogWrite(Pin p, Int16 pwmValue)
+        {
+            if (p.Id < 15)
+            {
+                byte[] buf = new byte[3];
+                buf[0] = (byte) (FirmataMsg.ANALOG_IO_MESSAGE | (byte) p.Id);
+                buf[1] = (byte)(pwmValue & 0x7f);
+                buf[2] = (byte)((pwmValue >> 7) & 0x7f);
+                serial.WriteToPort(portName, buf, 3);
+            }
         }
 
         /// <summary>
