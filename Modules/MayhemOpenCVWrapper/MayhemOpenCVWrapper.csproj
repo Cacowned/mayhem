@@ -54,7 +54,7 @@
     <Compile Include="ImagerBase.cs" />
     <Compile Include="CameraInfo.cs" />
     <Compile Include="ImageProcessing.cs" />
-    <Compile Include="DummyCameraImageListener.cs" />
+    <Compile Include="CameraImageListenerBase.cs" />
     <Compile Include="CameraImageListener.cs" />
     <Compile Include="CameraDriver.cs" />
     <Compile Include="CameraSettings.cs" />

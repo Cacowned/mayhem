@@ -35,12 +35,12 @@ namespace VisionModules.Reactions
         // The device we are recording from
         private CameraDriver cameraDriver;
         private ImagerBase camera;
-        private DummyCameraImageListener dummyListener;
+        private CameraImageListenerBase dummyListener;
 
         protected override void OnLoadDefaults()
         {
             cameraDriver = CameraDriver.Instance;
-            dummyListener = new DummyCameraImageListener();
+            dummyListener = new CameraImageListenerBase();
             captureOffsetTime = 0.0;
             folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
             fileNamePrefix = "Mayhem";
@@ -49,7 +49,7 @@ namespace VisionModules.Reactions
 
         protected override void OnAfterLoad()
         {
-            dummyListener = new DummyCameraImageListener();
+            dummyListener = new CameraImageListenerBase();
             cameraDriver = CameraDriver.Instance;
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
             {
