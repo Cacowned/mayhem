@@ -48,7 +48,8 @@ namespace VisionModules.Events
         private Bitmap templatePreview;
 
         // the cam we have selected
-        private int selectedDeviceIndex = 0;
+        [DataMember]
+        private int selectedDeviceIndex;
 
         public bool TemplateConfigured
         {
@@ -57,7 +58,9 @@ namespace VisionModules.Events
 
         protected override void OnLoadDefaults()
         {
+            selectedDeviceIndex = 0;
             boundingRect = new Rect(0, 0, 0, 0);
+
         }
 
         protected override void OnAfterLoad()
@@ -178,7 +181,7 @@ namespace VisionModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            ObjectDetectorConfig config = configurationControl as ObjectDetectorConfig;
+            var config = configurationControl as ObjectDetectorConfig;
 
             camera = config.SelectedCamera;
             boundingRect = config.SelectedBoundingRect;

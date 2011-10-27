@@ -16,8 +16,8 @@ namespace VisionModules.Components
         private int height;
 
         private double? oldAverage;
-        private double numberOfMotionFrames = 0;
-        private double threshold = 0.5;
+        private double numberOfMotionFrames;
+        private double threshold;
 
         private Queue<double> runningAverage;
 
@@ -28,6 +28,10 @@ namespace VisionModules.Components
 
         public MotionDetectorComponent(ImagerBase camera)
         {
+
+            numberOfMotionFrames = 0;
+            threshold = 0.5;
+
             width = camera.Settings.ResX;
             height = camera.Settings.ResY;
 
@@ -39,7 +43,7 @@ namespace VisionModules.Components
 
         public override void UpdateFrame(object sender, EventArgs e)
         {
-            Camera camera = sender as Camera;
+            var camera = sender as Camera;
 
             int stride = camera.ImageBuffer.Length / height;
 

@@ -34,7 +34,7 @@ namespace VisionModules.Events
         [DataMember]
         private int triggerOnNrOfFaces;
 
-        private DateTime lastFacesDetectedTime = DateTime.Now;
+        private DateTime lastFacesDetectedTime;
         private FaceDetectorComponent faceDetector;
         private CameraDriver cameraDriver;
         private ImagerBase camera;
@@ -48,6 +48,7 @@ namespace VisionModules.Events
 
         protected override void OnAfterLoad()
         {
+            lastFacesDetectedTime = DateTime.Now;
             cameraDriver = CameraDriver.Instance;
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)

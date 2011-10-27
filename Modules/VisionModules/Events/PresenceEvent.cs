@@ -51,7 +51,7 @@ namespace VisionModules.Events
         private CameraDriver cameraDriver;
         private PresenceDetectorComponent presenceDetector;
         private PresenceDetectorComponent.DetectionHandler presenceHandler;
-        private PresenceStatus lastPresenceStatus = PresenceStatus.Uninitialized;
+        private PresenceStatus lastPresenceStatus; 
 
         // ================== suppress repeat triggering
         private const int MinTriggerIntervalMs = 1500;
@@ -78,11 +78,14 @@ namespace VisionModules.Events
             selectedDeviceIndex = 0;
             selectedTriggerMode = PresenceTriggerMode.Toggle;
             sensitivity = PresenceDetectorComponent.DefaultSensitivity;
+            lastPresenceStatus = PresenceStatus.Uninitialized;
         }
 
         protected override void OnAfterLoad()
         {
-            Logger.WriteLine("Enumerating Devices");
+            lastPresenceStatus = PresenceStatus.Uninitialized;
+
+            Logger.WriteLine("Enumerating Devices");       
             cameraDriver = CameraDriver.Instance;
 
             if (selectedDeviceIndex < cameraDriver.DeviceCount)
