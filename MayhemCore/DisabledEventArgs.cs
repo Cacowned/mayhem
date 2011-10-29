@@ -19,7 +19,7 @@ namespace MayhemCore
 
         public DisabledEventArgs(bool isConfiguring)
         {
-            this.IsConfiguring = isConfiguring;
+            IsConfiguring = isConfiguring;
         }
     }
 }

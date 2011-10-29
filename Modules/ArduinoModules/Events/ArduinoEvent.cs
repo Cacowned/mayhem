@@ -155,7 +155,7 @@ namespace ArduinoModules.Events
                 {
                     if (d.GetPinId() == p.Id)
                     {
-                        if (d.ChangeType == DigitalPinChange.FALLING)
+                        if (d.ChangeType == DigitalPinChange.Falling)
                         {
                             if (p.Value > 0 && d.GetDigitalPinState() == 0)
                             {
@@ -163,7 +163,7 @@ namespace ArduinoModules.Events
                                 Activate();
                             }
                         }
-                        else if (d.ChangeType == DigitalPinChange.HIGH)
+                        else if (d.ChangeType == DigitalPinChange.High)
                         {
                             if (p.Value > 0)
                             {
@@ -171,7 +171,7 @@ namespace ArduinoModules.Events
                                 Activate();
                             }
                         }
-                        else if (d.ChangeType == DigitalPinChange.LOW)
+                        else if (d.ChangeType == DigitalPinChange.Low)
                         {
                             if (p.Value == 0)
                             {
@@ -179,7 +179,7 @@ namespace ArduinoModules.Events
                                 Activate();
                             }
                         }
-                        else if (d.ChangeType == DigitalPinChange.RISING)
+                        else if (d.ChangeType == DigitalPinChange.Rising)
                         {
                             if (p.Value == 0 && d.GetDigitalPinState() > 0)
                             {
@@ -203,21 +203,21 @@ namespace ArduinoModules.Events
                 {
                     if (a.GetPinId() == p.Id)
                     {
-                        if (a.ChangeType == AnalogPinChange.EQUALS)
+                        if (a.ChangeType == AnalogPinChange.Equal)
                         {
                             if (a.SetValue == p.Value)
                             {
                                 Activate();
                             }
                         }
-                        else if (a.ChangeType == AnalogPinChange.GREATER)
+                        else if (a.ChangeType == AnalogPinChange.Greater)
                         {
                             if (a.SetValue <= p.Value)
                             {
                                 Activate();
                             }
                         }
-                        else if (a.ChangeType == AnalogPinChange.LOWER)
+                        else if (a.ChangeType == AnalogPinChange.Lower)
                         {
                             if (a.SetValue >= p.Value)
                             {

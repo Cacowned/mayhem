@@ -14,7 +14,7 @@ namespace VisionModules.Wpf
     /// </summary>
     public partial class MotionDetectorConfig : WpfConfiguration
     {
-        private CameraDriver i;
+        private readonly CameraDriver i;
 
         public ImagerBase SelectedCamera
         {
@@ -82,10 +82,7 @@ namespace VisionModules.Wpf
                 
                 if (!SelectedCamera.Running)
                 {                
-                    ThreadPool.QueueUserWorkItem(o =>
-                    {
-                        SelectedCamera.StartFrameGrabbing();
-                    });
+                    ThreadPool.QueueUserWorkItem(o => SelectedCamera.StartFrameGrabbing());
                 }
 
                 SelectedCamera.OnImageUpdated -= i_OnImageUpdated;

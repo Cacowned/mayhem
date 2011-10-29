@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace X10Modules.Insteon
+namespace X10Modules.Insteon.InsteonCommands
 {
     [DataContract]
     public abstract class InsteonCommandBase

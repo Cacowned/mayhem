@@ -15,8 +15,13 @@ namespace Mayhem
     /// </summary>
     public partial class App : Application
     {
-        private Dictionary<string, Assembly> dependencies = new Dictionary<string, Assembly>();
-        private bool wantsUpdates = false;
+        private readonly Dictionary<string, Assembly> dependencies;
+        private bool wantsUpdates;
+
+        public App()
+        {
+            dependencies = new Dictionary<string, Assembly>();
+        }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -44,20 +49,16 @@ namespace Mayhem
                     {
                         // Installation was a success
                     }
-                    else
-                    {
-                        // Installation failed?
-                    }
 
                     // Close the application 
-                    this.Shutdown();
+                    Shutdown();
                     return;
                 }
             }
             else
             {
-                Current.Exit += this.Current_Exit;
-                ThreadPool.QueueUserWorkItem(this.CheckForUpdates);
+                Current.Exit += Current_Exit;
+                ThreadPool.QueueUserWorkItem(CheckForUpdates);
             }
 
             // Load the correct dependency assemblies
@@ -75,24 +76,22 @@ namespace Mayhem
             string[] files = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"), "*.dll", SearchOption.AllDirectories);
             foreach (string file in files)
             {
-                FileInfo fi = new FileInfo(file);
-
                 try
                 {
                     Assembly assembly = Assembly.LoadFrom(file);
-                    this.dependencies.Add(assembly.FullName, assembly);
+                    dependencies.Add(assembly.FullName, assembly);
                 }
                 catch
                 {
                 }
             }
 
-            AppDomain.CurrentDomain.AssemblyResolve += this.CurrentDomain_AssemblyResolve;
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         private void Current_Exit(object sender, ExitEventArgs e)
         {
-            if (this.wantsUpdates)
+            if (wantsUpdates)
             {
                 if (Environment.GetCommandLineArgs().Contains("-localrepo"))
                     Process.Start("Mayhem.exe", "-installupdates -localrepo");
@@ -114,7 +113,7 @@ namespace Mayhem
                 if (Environment.GetCommandLineArgs().Contains("-localrepo"))
                     repository = new LocalPackageRepository(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\MayhemPackages\\Packages"));
                 else
-                    repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
+                    repository = new DataServicePackageRepository(new Uri("http://makemayhem.com/nuget/"));
 
                 var manager = new PackageManager(repository, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"));
 
@@ -137,7 +136,7 @@ namespace Mayhem
                         {
                             if (MessageBox.Show("Press yes to get updates", "Mayhem Updates", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                             {
-                                this.wantsUpdates = true;
+                                wantsUpdates = true;
                                 Shutdown();
                             }
                         });
@@ -152,8 +151,9 @@ namespace Mayhem
 
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            if (this.dependencies.ContainsKey(args.Name))
-                return this.dependencies[args.Name];
+            if (dependencies.ContainsKey(args.Name))
+                return dependencies[args.Name];
+
             return null;
         }
     }

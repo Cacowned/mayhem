@@ -12,7 +12,7 @@ namespace Mayhem.UserControls
             if (!(value is ErrorType))
                 throw new NotImplementedException("SingleAnalysisStatusConverter can only convert from SingleAnalysisStatus");
 
-            string path = null;
+            string path;
             switch ((ErrorType)value)
             {
                 case ErrorType.Failure:

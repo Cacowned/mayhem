@@ -20,6 +20,8 @@ namespace Mayhem
     /// </summary>
     public partial class ModuleList : Window
     {
+        private const double AnimationTime = 0.2;
+
         internal ModuleType SelectedModule
         {
             get;
@@ -38,15 +40,13 @@ namespace Mayhem
             private set;
         }
 
+        private readonly int heightBasedOnModules;
+
         private WpfConfiguration iWpfConfig;
 
         // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(ModuleList), new UIPropertyMetadata(string.Empty));
-
-        private const double AnimationTime = 0.2;
-
-        private int heightBasedOnModules;
 
         public ModuleList(IEnumerable list, string headerText)
         {
@@ -55,8 +55,8 @@ namespace Mayhem
 
             ModulesList.ItemsSource = list;
 
-            this.heightBasedOnModules = (int)Math.Min(185 + (43 * ModulesList.Items.Count), Height);
-            Height = this.heightBasedOnModules;
+            heightBasedOnModules = (int)Math.Min(185 + (43 * ModulesList.Items.Count), Height);
+            Height = heightBasedOnModules;
 
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ModuleList));
@@ -97,13 +97,13 @@ namespace Mayhem
                     try
                     {
                         SelectedModuleInstance = (IWpfConfigurable)Activator.CreateInstance(SelectedModule.Type);
-                        iWpfConfig = (WpfConfiguration)SelectedModuleInstance.ConfigurationControl;
+                        iWpfConfig = SelectedModuleInstance.ConfigurationControl;
                         ConfigContent.Content = iWpfConfig;
                         buttonSave.IsEnabled = iWpfConfig.CanSave;
                         windowHeaderConfig.Text = iWpfConfig.Title;
-                        iWpfConfig.Loaded += iWpfConfig_Loaded;
-                        iWpfConfig.CanSavedChanged += iWpfConfig_CanSavedChanged;
-                        iWpfConfig.SizeChanged += new SizeChangedEventHandler(ConfigContent_SizeChanged);
+                        iWpfConfig.Loaded += Configuration_Loaded;
+                        iWpfConfig.CanSavedChanged += Configuration_CanSavedChanged;
+                        iWpfConfig.SizeChanged += ConfigContent_SizeChanged;
                         iWpfConfig.OnLoad();
                     }
                     catch
@@ -122,7 +122,7 @@ namespace Mayhem
             }
         }
 
-        private void iWpfConfig_CanSavedChanged(bool canSave)
+        private void Configuration_CanSavedChanged(bool canSave)
         {
             Dispatcher.Invoke(new Action(delegate
             {
@@ -130,7 +130,7 @@ namespace Mayhem
             }));
         }
 
-        private void iWpfConfig_Loaded(object sender, RoutedEventArgs e)
+        private void Configuration_Loaded(object sender, RoutedEventArgs e)
         {
             WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
             double targetWidth = iWpfConfig.Width + 40;
@@ -143,17 +143,17 @@ namespace Mayhem
             animSlideOut.To = -300;
             animSlideOut.Completed += delegate
             {
-                stackPanelList.Visibility = System.Windows.Visibility.Hidden;
+                stackPanelList.Visibility = Visibility.Hidden;
             };
-            ((TranslateTransform)gridControls.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
+            gridControls.RenderTransform.BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
             // Animate the render transform of the config (this covers up the white space between them)
             ((TranslateTransform)stackPanelConfig.RenderTransform).X = 280;
-            stackPanelConfig.Visibility = System.Windows.Visibility.Visible;
+            stackPanelConfig.Visibility = Visibility.Visible;
             animSlideOut = new DoubleAnimation();
             animSlideOut.To = 300;
             animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
-            ((TranslateTransform)stackPanelConfig.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
+            stackPanelConfig.RenderTransform.BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
             // Animate the window size to match the config control
             Rect target = new Rect(
@@ -222,19 +222,18 @@ namespace Mayhem
             DoubleAnimation animSlideOut = new DoubleAnimation();
             animSlideOut.To = 0;
             animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
-            animSlideOut.Completed += delegate(object s, EventArgs args)
-            {
-                stackPanelConfig.Visibility = System.Windows.Visibility.Hidden;
+            animSlideOut.Completed += delegate {
+                stackPanelConfig.Visibility = Visibility.Hidden;
             };
-            ((TranslateTransform)gridControls.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
+            gridControls.RenderTransform.BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
             // Animate the render transform of the list (this covers up the white space between them)
             ((TranslateTransform)stackPanelList.RenderTransform).X = 20;
-            stackPanelList.Visibility = System.Windows.Visibility.Visible;
+            stackPanelList.Visibility = Visibility.Visible;
             animSlideOut = new DoubleAnimation();
             animSlideOut.To = 0;
             animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
-            ((TranslateTransform)stackPanelList.RenderTransform).BeginAnimation(TranslateTransform.XProperty, animSlideOut);
+            stackPanelList.RenderTransform.BeginAnimation(TranslateTransform.XProperty, animSlideOut);
 
             // Animate the window size to match the list control
             Rect target = new Rect(

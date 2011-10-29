@@ -1,4 +1,4 @@
-﻿namespace X10Modules.Insteon
+﻿namespace X10Modules.Insteon.InsteonCommands
 {
     /// <summary>
     /// Stores command codes for Insteon Modem

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading;
 using MayhemSerial;
-using X10Modules.Insteon;
 
-namespace X10Modules
+namespace X10Modules.Insteon
 {
     /// <summary>
     /// This class manages the communication with the serial port for the Insteon Modules.
@@ -14,29 +13,26 @@ namespace X10Modules
         public class NotInitializedException : Exception{}
 
         protected static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.Instance;
-        protected string portName = null;
-        public bool initialized = false;
-        protected bool waitForData = false; 
+        protected string PortName;
+        public bool Initialized;
+
+        protected bool WaitForData; 
 
         // parsing
-        protected byte[] parse_buf = new byte[1024];
+        protected byte[] ParseBuf = new byte[1024];
         //private int parse_command_len = 0;
-        protected int parse_count = 0;
+        protected int ParseCount;
 
         //public bool lastCommandSuccess = false
         protected AutoResetEvent waitAck = new AutoResetEvent(false);
-
-
-        
-
 
         protected InsteonControllerBase(string serialPortname) 
         {
             if (mSerial.ConnectPort(serialPortname, this, new InsteonUsbModemSerialSettings()))
             {
-                portName = ""+serialPortname;
+                PortName = serialPortname;
                 InitializeX10();
-                this.initialized = true;
+                Initialized = true;
             }
         }
 
@@ -47,10 +43,10 @@ namespace X10Modules
 
         public virtual void Dispose()
          {
-             this.initialized = false; 
+             Initialized = false; 
          }
 
-        public virtual void port_DataReceived(string portName, byte[] buffer, int nBytes)
+        public virtual void DataReceived(string portName, byte[] buffer, int nBytes)
         {
             throw new NotImplementedException();
         }
@@ -58,8 +54,8 @@ namespace X10Modules
         public void ResetRxBuffer()
         {
             // cleanup
-            parse_buf = new byte[1024];
-            parse_count = 0; ;
+            ParseBuf = new byte[1024];
+            ParseCount = 0;
         }
     }
 }

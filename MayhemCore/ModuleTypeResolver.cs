@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using System.Xml;
 
@@ -7,9 +8,10 @@ namespace MayhemCore
 {
     internal class ModuleTypeResolver : DataContractResolver
     {
-        private ICollection<Type> types;
+        private readonly ICollection<Type> types;
 
-        public ModuleTypeResolver()
+        public ModuleTypeResolver() :
+            this(new Collection<Type>())
         {
         }
 

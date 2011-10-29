@@ -12,10 +12,12 @@ namespace DebugModules.Reactions
         public override void Perform()
         {
             // Use the dispatcher to bring the message box to the top
-            Dispatcher.CurrentDispatcher.Invoke((Action)delegate
-            {
-                MessageBox.Show(Strings.Popup_MessageText);
-            });          
+            Dispatcher.CurrentDispatcher.Invoke((Action)(OnAction));          
+        }
+
+        private void OnAction()
+        {
+            MessageBox.Show(Strings.Popup_MessageText);
         }
     }
 }

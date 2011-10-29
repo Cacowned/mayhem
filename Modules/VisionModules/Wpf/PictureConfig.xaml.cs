@@ -28,15 +28,15 @@ namespace VisionModules.Wpf
             private set;
         }
 
-        private int selectedDeviceIdx_;
+        private int selectedDeviceIdx;
         public int SelectedDeviceIdx
         {
             get { return camera_selector.SelectedIndex; }
-            set { selectedDeviceIdx_ = value; }
+            set { selectedDeviceIdx = value; }
         }
 
         // the selected camera
-        private Camera camera_selected_;
+        private Camera cameraSelected;
         public Camera CameraSelected
         {
             get
@@ -46,7 +46,7 @@ namespace VisionModules.Wpf
             }
             private set
             {
-                camera_selected_ = value;
+                cameraSelected = value;
             }
         }
 
@@ -55,7 +55,7 @@ namespace VisionModules.Wpf
 
         public Camera SelectedCamera;
 
-        private CameraDriver i;
+        private readonly CameraDriver i;
 
         public PictureConfig(string location, string prefix, double captureOffsetTime, int deviceIdx)
         {
@@ -83,9 +83,10 @@ namespace VisionModules.Wpf
             Logger.WriteLine("Nr of Cameras available: " + i.DeviceCount);
 
             // capture offset slider
-            int capture_size_s = Camera.LoopDuration / 1000;
-            slider_capture_offset.Minimum = -capture_size_s;
-            slider_capture_offset.Maximum = capture_size_s;
+            const int captureSizeS = Camera.LoopDuration / 1000;
+
+            slider_capture_offset.Minimum = -captureSizeS;
+            slider_capture_offset.Maximum = captureSizeS;
             slider_capture_offset.IsDirectionReversed = false;
             slider_capture_offset.IsMoveToPointEnabled = true;
             slider_capture_offset.AutoToolTipPrecision = 2;
@@ -93,14 +94,14 @@ namespace VisionModules.Wpf
             slider_capture_offset.TickPlacement = TickPlacement.TopLeft;
             slider_capture_offset.TickFrequency = 0.5;
             DoubleCollection tickMarks = new DoubleCollection();
-            for (int k = -capture_size_s; k <= capture_size_s; k++)
+            for (int k = -captureSizeS; k <= captureSizeS; k++)
             {
                 tickMarks.Add(k);
             }
             slider_capture_offset.Ticks = tickMarks;
             slider_capture_offset.IsSelectionRangeEnabled = true;
-            slider_capture_offset.SelectionStart = -capture_size_s;
-            slider_capture_offset.SelectionEnd = capture_size_s;
+            slider_capture_offset.SelectionStart = -captureSizeS;
+            slider_capture_offset.SelectionEnd = captureSizeS;
             slider_capture_offset.SmallChange = 0.5;
             slider_capture_offset.LargeChange = 1.0;
             slider_capture_offset.Value = SliderValue;

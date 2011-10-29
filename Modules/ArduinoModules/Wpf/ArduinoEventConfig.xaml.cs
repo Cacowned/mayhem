@@ -19,10 +19,18 @@ namespace ArduinoModules.Wpf
     /// </summary>
     public partial class ArduinoEventConfig : WpfConfiguration, IArduinoEventListener
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
-        private int itemSelected = -1;
-        private Dictionary<string, string> deviceNamesIds = null;
-        private ArduinoFirmata arduino = null;
+        private readonly MayhemSerialPortMgr serial;
+        private int itemSelected;
+        private Dictionary<string, string> deviceNamesIds;
+        private ArduinoFirmata arduino;
+
+        private readonly Timer timer;
+
+        private readonly List<DigitalPinItem> presetDigitalPins;
+
+        private readonly List<AnalogPinItem> presetAnalogPins;
+
+        private readonly BackgroundWorker bgPinUpdate;
 
         // collections driving the itemPanels
         public ObservableCollection<DigitalPinItem> DigitalPinItems
@@ -36,14 +44,6 @@ namespace ArduinoModules.Wpf
             get;
             private set;
         }
-
-        private Timer t = new Timer(1000);
-
-        private List<DigitalPinItem> presetDigitalPins = null;
-
-        private List<AnalogPinItem> presetAnalogPins = null;
-
-        private BackgroundWorker bgPinUpdate = new BackgroundWorker();
 
         public string ArduinoPortName
         {
@@ -60,6 +60,10 @@ namespace ArduinoModules.Wpf
 
         public ArduinoEventConfig(List<DigitalPinItem> reactionDigitalPins, List<AnalogPinItem> reactionAnalogPins)
         {
+            bgPinUpdate = new BackgroundWorker();
+            timer = new Timer(1000);
+            itemSelected = -1;
+            serial = MayhemSerialPortMgr.Instance;
             presetDigitalPins = reactionDigitalPins;
             presetAnalogPins = reactionAnalogPins;
 
@@ -89,22 +93,22 @@ namespace ArduinoModules.Wpf
                 Button_Click(this, null);
             }
 
-            bgPinUpdate.DoWork += new DoWorkEventHandler((object o, DoWorkEventArgs e) =>
+            bgPinUpdate.DoWork += (o, e) =>
             {
-                Dispatcher.BeginInvoke(new Action(() => { digitalPins.Items.Refresh(); }), DispatcherPriority.Render);
-                Dispatcher.BeginInvoke(new Action(() => { analogPins.Items.Refresh(); }), DispatcherPriority.Render);
-            });
+                Dispatcher.BeginInvoke(new Action(() => digitalPins.Items.Refresh()), DispatcherPriority.Render);
+                Dispatcher.BeginInvoke(new Action(() => analogPins.Items.Refresh()), DispatcherPriority.Render);
+            };
 
             bgPinUpdate.WorkerSupportsCancellation = true;
 
-            t.AutoReset = true;
-            t.Elapsed += new ElapsedEventHandler(t_Elapsed);
-            t.Enabled = true;
+            timer.AutoReset = true;
+            timer.Elapsed += TimerElapsed;
+            timer.Enabled = true;
 
             CanSave = true;
         }
 
-        private void t_Elapsed(object sender, ElapsedEventArgs e)
+        private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
             if (!bgPinUpdate.IsBusy)
                 bgPinUpdate.RunWorkerAsync();
@@ -172,7 +176,7 @@ namespace ArduinoModules.Wpf
                 arduino.DeregisterListener(this);
             }
 
-            t.Enabled = false;
+            timer.Enabled = false;
             bgPinUpdate.CancelAsync();
             bgPinUpdate.Dispose();
         }
@@ -224,11 +228,11 @@ namespace ArduinoModules.Wpf
         {
             Logger.WriteLine("arduino_OnPinAdded: " + p.Id);
 
-            if (p.Mode != PinMode.ANALOG &&
-                p.Mode != PinMode.UNASSIGNED &&
-                p.Mode != PinMode.SHIFT)
+            if (p.Mode != PinMode.Analog &&
+                p.Mode != PinMode.Unassigned &&
+                p.Mode != PinMode.Shift)
             {
-                DigitalPinItem pItem = new DigitalPinItem(false, p.Id, DigitalPinChange.LOW);
+                DigitalPinItem pItem = new DigitalPinItem(false, p.Id, DigitalPinChange.Low);
                 foreach (DigitalPinItem setPin in presetDigitalPins)
                 {
                     if (setPin.GetPinId() == p.Id)
@@ -241,14 +245,14 @@ namespace ArduinoModules.Wpf
                 Dispatcher.Invoke(new Action(() => { DigitalPinItems.Add(pItem); }), null);
 
                 // set digital pin mode to input
-                if (p.Mode != PinMode.INPUT && p.Flagged == false)
+                if (p.Mode != PinMode.Input && p.Flagged == false)
                 {
-                    arduino.SetPinMode(p, PinMode.INPUT);
+                    arduino.SetPinMode(p, PinMode.Input);
                 }
             }
-            else if (p.Mode == PinMode.ANALOG)
+            else if (p.Mode == PinMode.Analog)
             {
-                AnalogPinItem aItem = new AnalogPinItem(false, p.Id, AnalogPinChange.EQUALS);
+                AnalogPinItem aItem = new AnalogPinItem(false, p.Id, AnalogPinChange.Equal);
                 foreach (AnalogPinItem setPin in presetAnalogPins)
                 {
                     if (setPin.GetPinId() == p.Id)
@@ -292,7 +296,7 @@ namespace ArduinoModules.Wpf
 
         private void digitalPins_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
-            t.Enabled = false;
+            timer.Enabled = false;
             while (bgPinUpdate.IsBusy)
             {
             }
@@ -302,13 +306,13 @@ namespace ArduinoModules.Wpf
             (sender as DataGrid).RowEditEnding += digitalPins_RowEditEnding;
 
             bgPinUpdate.RunWorkerAsync();
-            t.Enabled = true;
+            timer.Enabled = true;
         }
 
         private void digitalPins_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             bgPinUpdate.CancelAsync();
-            t.Enabled = false;
+            timer.Enabled = false;
             while (bgPinUpdate.IsBusy)
             {
             }
@@ -317,7 +321,7 @@ namespace ArduinoModules.Wpf
         private void analogPins_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
             bgPinUpdate.CancelAsync();
-            t.Enabled = false;
+            timer.Enabled = false;
             while (bgPinUpdate.IsBusy)
             {
             }
@@ -327,13 +331,13 @@ namespace ArduinoModules.Wpf
             (sender as DataGrid).RowEditEnding += analogPins_RowEditEnding;
 
             bgPinUpdate.RunWorkerAsync();
-            t.Enabled = true;
+            timer.Enabled = true;
         }
 
         private void analogPins_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             bgPinUpdate.CancelAsync();
-            t.Enabled = false;
+            timer.Enabled = false;
             while (bgPinUpdate.IsBusy)
             {
             }

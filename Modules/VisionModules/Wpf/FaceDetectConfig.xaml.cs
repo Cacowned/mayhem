@@ -17,10 +17,14 @@ namespace VisionModules.Wpf
     public class FaceDetectConfig : MotionDetectorConfig
     {
         // use custom face detector to give feedback in the config window
-        private FaceDetectorComponent fd;
+        private readonly FaceDetectorComponent fd;
+
         private List<System.Drawing.Point> faceDetectorPoints;
-        private CameraDriver i = CameraDriver.Instance;
+
+        private readonly CameraDriver i;
+
         private readonly List<int> amountOfFacesItems;
+
         private readonly ComboBox cbxNrFacesSelect;
 
         public int NumberOfFacesSelected
@@ -34,6 +38,7 @@ namespace VisionModules.Wpf
         public FaceDetectConfig(Camera c)
             : base(c)
         {
+            i = CameraDriver.Instance;
             faceDetectorPoints = new List<System.Drawing.Point>();
             amountOfFacesItems = new List<int>();
 

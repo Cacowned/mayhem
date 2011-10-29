@@ -4,7 +4,7 @@ using MayhemWpf.UserControls;
 using Phidgets;
 using Phidgets.Events;
 
-namespace PhidgetModules.Reaction
+namespace PhidgetModules.Wpf
 {
     /// <summary>
     /// Interaction logic for Phidget1055IRTransmit.xaml

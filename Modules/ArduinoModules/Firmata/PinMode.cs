@@ -10,13 +10,13 @@ namespace ArduinoModules.Firmata
     /// </summary>
     public enum PinMode
     {
-        INPUT = 0x00,
-        OUTPUT = 0x01,
-        ANALOG = 0x02,
-        PWM = 0x03,
-        SERVO = 0x04,
-        SHIFT = 0x05,
+        Input = 0x00,
+        Output = 0x01,
+        Analog = 0x02,
+        Pwm = 0x03,
+        Servo = 0x04,
+        Shift = 0x05,
         I2C = 0x06,
-        UNASSIGNED = 0xff
+        Unassigned = 0xff
     }
 }

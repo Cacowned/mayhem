@@ -138,10 +138,10 @@ namespace PhoneModules
         {
             if (!cssDict.ContainsKey(device))
             {
-                string css;
                 try
                 {
                     Assembly assembly = GetType().Assembly;
+                    string css;
                     using (Stream stream = assembly.GetManifestResourceStream("PhoneModules.css-" + device + ".html"))
                     {
                         using (StreamReader textStreamReader = new StreamReader(stream))

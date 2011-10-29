@@ -12,10 +12,9 @@ namespace X10Modules.Insteon
     /// </summary>
     public class X10Controller : InsteonControllerBase
     {
-        public static Dictionary<X10HouseCode, Dictionary<X10UnitCode, bool>> deviceStates = null ;
+        public static Dictionary<X10HouseCode, Dictionary<X10UnitCode, bool>> DeviceStates;
 
-
-        private static Dictionary<string, X10Controller> instances = new Dictionary<string, X10Controller>();
+        private static readonly Dictionary<string, X10Controller> Instances = new Dictionary<string, X10Controller>();
 
         /// <summary>
         /// Factory method for insteon controllers, so multiple events can share a controller
@@ -24,16 +23,16 @@ namespace X10Modules.Insteon
         /// <returns></returns>
         public static X10Controller ControllerForPortName(string pName)
         {
-            if (!instances.Keys.Contains(pName))
+            if (!Instances.Keys.Contains(pName))
             {
                 Logger.WriteLine("Creating new X10Controller for PortName: " + pName);
-                instances[pName] = new X10Controller(pName);
+                Instances[pName] = new X10Controller(pName);
             }
             else
             {
                 Logger.WriteLine("Returning Existing Controller");
             }
-            return instances[pName];
+            return Instances[pName];
         }
 
      
@@ -45,16 +44,16 @@ namespace X10Modules.Insteon
         {
             // initialize device states
 
-            if (deviceStates == null)
+            if (DeviceStates == null)
             {
-                deviceStates = new Dictionary<X10HouseCode, Dictionary<X10UnitCode, bool>>();
+                DeviceStates = new Dictionary<X10HouseCode, Dictionary<X10UnitCode, bool>>();
 
                 foreach (X10HouseCode hCode in Enum.GetValues(typeof(X10HouseCode)))
                 {
-                    deviceStates[hCode] = new Dictionary<X10UnitCode,bool>();
+                    DeviceStates[hCode] = new Dictionary<X10UnitCode,bool>();
                     foreach(X10UnitCode uCode in Enum.GetValues(typeof(X10UnitCode)))
                     {
-                        deviceStates[hCode][uCode] = false; 
+                        DeviceStates[hCode][uCode] = false; 
                     }
                 }
             }
@@ -78,7 +77,7 @@ namespace X10Modules.Insteon
             buf[2] = (byte)(hCode | cCode);
 
             Logger.WriteLine("House/Command: {0,10:X} {1,10:X} {2,10:X} {3,10:X}", buf[0], buf[1], buf[2], buf[3]);
-            mSerial.WriteToPort(portName, buf, 4);
+            mSerial.WriteToPort(PortName, buf, 4);
             bool wait = waitAck.WaitOne(100);
 
             if (wait)
@@ -109,26 +108,26 @@ namespace X10Modules.Insteon
             buf1[1] = 0x63;
 
             // process toggle command
-            if (command == X10CommandCode.TOGGLE)
+            if (command == X10CommandCode.Toggle)
             {
-                if (deviceStates[houseCode][unitCode] == true)
+                if (DeviceStates[houseCode][unitCode] == true)
                 {
-                    command = X10CommandCode.OFF;
-                    deviceStates[houseCode][unitCode] = false;
+                    command = X10CommandCode.Off;
+                    DeviceStates[houseCode][unitCode] = false;
                 }
                 else
                 {
-                    command = X10CommandCode.ON;
-                    deviceStates[houseCode][unitCode] = true;
+                    command = X10CommandCode.On;
+                    DeviceStates[houseCode][unitCode] = true;
                 }
             }
             // set states correctly if command if on or off 
             else
             {
-                if (command == X10CommandCode.ON)
-                    deviceStates[houseCode][unitCode] = true;
-                else if (command == X10CommandCode.OFF)
-                    deviceStates[houseCode][unitCode] = false;
+                if (command == X10CommandCode.On)
+                    DeviceStates[houseCode][unitCode] = true;
+                else if (command == X10CommandCode.Off)
+                    DeviceStates[houseCode][unitCode] = false;
             }
 
             byte hCode = (byte)((Convert.ToByte(houseCode) & (byte)0xf) << 4);
@@ -139,8 +138,8 @@ namespace X10Modules.Insteon
             buf1[3] = 0x00; // 0x00 terminates unit selection
             Logger.WriteLine("House/Unit: {0,10:X}", buf1[2]);
 
-            mSerial.WriteToPort(portName, buf1, 4);
-            waitForData = true;
+            mSerial.WriteToPort(PortName, buf1, 4);
+            WaitForData = true;
             bool wait = waitAck.WaitOne();
             if (wait)
             {
@@ -151,12 +150,12 @@ namespace X10Modules.Insteon
                 buf1[3] = 0x80; // 0x80 terminates command code
                 Logger.WriteLine("House/Command: {0,10:X} {1,10:X} {2,10:X} {3,10:X}", buf1[0], buf1[1], buf1[2], buf1[3]);
                 int retry = 10;
-                waitForData = true;
+                WaitForData = true;
                 wait = waitAck.WaitOne(100);
 
                 while (!wait && retry-- > 0)
                 {
-                    mSerial.WriteToPort(portName, buf1, 4);
+                    mSerial.WriteToPort(PortName, buf1, 4);
                     wait = waitAck.WaitOne(100);
                     Thread.Sleep(15);
                     Logger.WriteLine("retry : " + retry);
@@ -180,18 +179,18 @@ namespace X10Modules.Insteon
             }
         }
 
-        public override void port_DataReceived(string portName, byte[] buffer, int nBytes)
+        public override void DataReceived(string portName, byte[] buffer, int nBytes)
         {
             // check if data is from the port name we are monitoring
-            if (portName == this.portName && waitForData)
+            if (portName == this.PortName && WaitForData)
             {
                 if (nBytes > 0)
                 {
                     // look for the ack at the end
                     if (buffer[nBytes - 1] == 0x06)
                     {
-                        parse_count = 0;
-                        waitForData = false;
+                        ParseCount = 0;
+                        WaitForData = false;
                         waitAck.Set();
                     }
                 }

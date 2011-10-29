@@ -8,7 +8,7 @@ namespace MayhemOpenCVWrapper
     /// </summary>
     public class CameraImageListenerBase
     {
-        protected ImagerBase.ImageUpdateHandler imageUpdateHandler;
+        protected ImagerBase.ImageUpdateHandler ImageUpdateHandler;
 
         /// <summary>
         /// The frame update function
@@ -17,8 +17,9 @@ namespace MayhemOpenCVWrapper
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public virtual void UpdateFrame(object sender, EventArgs e) 
-        { }
+        public virtual void UpdateFrame(object sender, EventArgs e)
+        {
+        }
 
         /// <summary>
         /// Register and unregister for image callbacks
@@ -28,8 +29,8 @@ namespace MayhemOpenCVWrapper
         {
             if (c != null)
             {
-                c.OnImageUpdated -= imageUpdateHandler;
-                c.OnImageUpdated += imageUpdateHandler;
+                c.OnImageUpdated -= ImageUpdateHandler;
+                c.OnImageUpdated += ImageUpdateHandler;
             }
         }
 
@@ -40,8 +41,7 @@ namespace MayhemOpenCVWrapper
         public void UnregisterForImages(ImagerBase c)
         {
             if (c != null)
-                c.OnImageUpdated -= imageUpdateHandler;
+                c.OnImageUpdated -= ImageUpdateHandler;
         } 
-
     }
 }

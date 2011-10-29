@@ -35,7 +35,7 @@ namespace X10Modules.Reactions
         {
             houseCode = X10HouseCode.A;
             unitCode = X10UnitCode.U1;
-            commandCode = X10CommandCode.ON;
+            commandCode = X10CommandCode.On;
             serialPortName = string.Empty;
         }
 
@@ -54,10 +54,10 @@ namespace X10Modules.Reactions
             // TODO
             InsteonX10ReactionConfig c = configurationControl as InsteonX10ReactionConfig;
 
-            houseCode = c.selected_housecode;
-            unitCode = c.selected_unitcode;
-            commandCode = c.selected_commandcode;
-            serialPortName = "" + c.selected_portName;
+            houseCode = c.SelectedHousecode;
+            unitCode = c.SelectedUnitcode;
+            commandCode = c.SelectedCommandcode;
+            serialPortName = "" + c.SelectedPortName;
             if (x10Controller != null)
             {
                 x10Controller.Dispose();

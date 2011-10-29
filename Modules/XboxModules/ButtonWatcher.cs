@@ -7,11 +7,11 @@ namespace XboxModules
     {
         public delegate void KeyCombinationHandler();
 
-        private Dictionary<Buttons, List<KeyCombinationHandler>> keyCombinationHandlerMap;
+        private readonly Dictionary<Buttons, List<KeyCombinationHandler>> keyCombinationHandlerMap;
 
         private Buttons buttonsDown;
 
-        private ButtonEvents events;
+        private readonly ButtonEvents events;
 
         #region Singleton
 

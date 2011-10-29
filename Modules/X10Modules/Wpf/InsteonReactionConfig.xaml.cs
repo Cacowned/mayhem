@@ -9,6 +9,7 @@ using MayhemCore;
 using MayhemSerial;
 using MayhemWpf.UserControls;
 using X10Modules.Insteon;
+using X10Modules.Insteon.InsteonCommands;
 
 namespace X10Modules.Wpf
 {
@@ -22,7 +23,7 @@ namespace X10Modules.Wpf
 
         private bool linking = false;
 
-        public byte[] selected_device_address
+        public byte[] SelectedDeviceAddress
         {
             get
             {
@@ -36,30 +37,30 @@ namespace X10Modules.Wpf
             }
         }
 
-        public string selected_portname
+        public string SelectedPortname
         {
             get
             {
-                return (string) deviceList.SelectedValue; 
+                return (string)deviceList.SelectedValue;
             }
         }
 
-        public byte selected_command
+        public byte SelectedCommand
         {
             get
             {
-                return selectable_commands[(string)commandID.SelectedItem][0];
+                return selectableCommands[(string)commandID.SelectedItem][0];
             }
         }
 
 
         // define the available commands
         // TODO: Evaluate in future if byte array is needed or not
-        private Dictionary<string, byte[]> selectable_commands = new Dictionary<string, byte[]>()
+        private readonly Dictionary<string, byte[]> selectableCommands = new Dictionary<string, byte[]>()
         {
-            { "ON",  new byte[]{InsteonCommandBytes.LightOnFast}},
-            { "OFF", new byte[]{InsteonCommandBytes.LightOffFast}},
-            { "TOGGLE", new byte[] {InsteonCommandBytes.Toggle}}
+            { "ON",  new[] {InsteonCommandBytes.LightOnFast}},
+            { "OFF", new[] {InsteonCommandBytes.LightOffFast}},
+            { "TOGGLE", new[] {InsteonCommandBytes.Toggle}}
         };
 
         public InsteonReactionConfig()
@@ -73,11 +74,11 @@ namespace X10Modules.Wpf
         /// </summary>
         public void Init()
         {
-            serial = MayhemSerialPortMgr.Instance; 
+            serial = MayhemSerialPortMgr.Instance;
             serial.UpdatePortList();
 
             Dictionary<string, string> portList = serial.GetInsteonPortNames(new InsteonUsbModemSerialSettings());
-                       
+
             if (portList.Count > 0)
             {
 
@@ -88,9 +89,9 @@ namespace X10Modules.Wpf
 
                 // if the device list has more than one entry, also enumerate the detected devices on that port
 
-               insteonController = InsteonController.ControllerForPortName((string) deviceList.SelectedValue);
-                
-                if (insteonController.initialized)
+                insteonController = InsteonController.ControllerForPortName((string)deviceList.SelectedValue);
+
+                if (insteonController.Initialized)
                 {
                     insteonController.startAllLinking();
                     Thread.Sleep(100);
@@ -105,7 +106,7 @@ namespace X10Modules.Wpf
                 }
 
             }
-            commandID.ItemsSource = selectable_commands.Keys;
+            commandID.ItemsSource = selectableCommands.Keys;
             commandID.SelectedIndex = 0;
             CanSave = true;
         }
@@ -118,21 +119,21 @@ namespace X10Modules.Wpf
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Logger.WriteLine("Button_Click");
-            string portname = (string) deviceList.SelectedValue;
+            string portname = (string)deviceList.SelectedValue;
             if (insteonController == null)
             {
                 insteonController = InsteonController.ControllerForPortName(portname);
             }
-            if (insteonController.initialized)
+            if (insteonController.Initialized)
             {
                 Logger.WriteLine("insteon initialized");
 
 
-                byte[] address = selected_device_address;
+                byte[] address = SelectedDeviceAddress;
 
-                byte command_code = selectable_commands[(string) commandID.SelectedItem][0];
+                byte commandCode = selectableCommands[(string)commandID.SelectedItem][0];
 
-                InsteonStandardMessage m = new InsteonStandardMessage(address, command_code);
+                InsteonStandardMessage m = new InsteonStandardMessage(address, commandCode);
 
                 // execute command
                 new Thread(
@@ -151,12 +152,12 @@ namespace X10Modules.Wpf
         private void btn_link_devices_Click(object sender, RoutedEventArgs e)
         {
             // cancel the linking process
-            Action cancel_all_link =
+            Action cancelAllLink =
                             () =>
                             {
-                                linking = false; 
+                                linking = false;
                                 btn_link_devices.Content = "Link Devices";
-                                if (insteonController.initialized)
+                                if (insteonController.Initialized)
                                 {
                                     // stop all linking
                                     insteonController.stopAllLinking();
@@ -179,30 +180,24 @@ namespace X10Modules.Wpf
                 insteonController = InsteonController.ControllerForPortName(portname);
             }
 
-            if (insteonController.initialized)
+            if (insteonController.Initialized)
             {
                 Logger.WriteLine("Insteon Initialized");
             }
 
             if (!linking)
             {
-                if (insteonController.initialized)
+                if (insteonController.Initialized)
                 {
-                    linking = true; 
+                    linking = true;
                     // send start linking command
                     if (insteonController.startAllLinking())
                     {
                         // create a callback that resets the and cancels the linking process                  
                         System.Timers.Timer t = new System.Timers.Timer(10000);
                         t.AutoReset = false;
-                        t.Elapsed += new System.Timers.ElapsedEventHandler
-                            (
-                                 (object o, ElapsedEventArgs ea) =>
-                                 {
-                                     Dispatcher.Invoke(cancel_all_link);
-                                 }
-                              );
-                        t.Enabled = true; 
+                        t.Elapsed += (o, ea) => Dispatcher.Invoke(cancelAllLink);
+                        t.Enabled = true;
 
                     }
                     else
@@ -213,10 +208,10 @@ namespace X10Modules.Wpf
             }
             else
             {
-                cancel_all_link();
+                cancelAllLink();
             }
         }
-     
+
 
         /// <summary>
         /// Gets called when a different device is selected
@@ -246,7 +241,7 @@ namespace X10Modules.Wpf
         /// <param name="e"></param>
         private void deviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string selected_portname = deviceList.SelectedItem as string; 
+            string selectedPortname = deviceList.SelectedItem as string;
         }
 
         public override string Title

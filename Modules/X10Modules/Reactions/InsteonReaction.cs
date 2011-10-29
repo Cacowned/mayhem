@@ -6,6 +6,7 @@ using MayhemSerial;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using X10Modules.Insteon;
+using X10Modules.Insteon.InsteonCommands;
 using X10Modules.Wpf;
 
 namespace X10Modules.Reactions
@@ -18,7 +19,7 @@ namespace X10Modules.Reactions
     public class InsteonReaction : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private byte[] device_address;
+        private byte[] deviceAddress;
 
         [DataMember]
         private InsteonStandardMessage command;
@@ -32,7 +33,7 @@ namespace X10Modules.Reactions
 
         protected override void OnLoadDefaults()
         {
-            device_address = new byte[3];
+            deviceAddress = new byte[3];
             command = null;
             portName = string.Empty;
         }
@@ -64,17 +65,17 @@ namespace X10Modules.Reactions
         public void OnSaved(WpfConfiguration configurationControl)
         {
             InsteonReactionConfig c = configurationControl as InsteonReactionConfig;
-            device_address = c.selected_device_address;
-            portName = c.selected_portname;
-            byte command_byte = c.selected_command;
-            command = new InsteonStandardMessage(device_address, command_byte);
+            deviceAddress = c.SelectedDeviceAddress;
+            portName = c.SelectedPortname;
+            byte commandByte = c.SelectedCommand;
+            command = new InsteonStandardMessage(deviceAddress, commandByte);
             insteonController = InsteonController.ControllerForPortName(portName);
         }
 
 
         public string GetConfigString()
         {
-            string config = String.Format("Device: {0:x2}:{1:x2}:{2:x2}", device_address[0], device_address[1], device_address[2]);
+            string config = String.Format("Device: {0:x2}:{1:x2}:{2:x2}", deviceAddress[0], deviceAddress[1], deviceAddress[2]);
             if (command != null)
                 config += ", Command: " + command.ToString();
             return config;

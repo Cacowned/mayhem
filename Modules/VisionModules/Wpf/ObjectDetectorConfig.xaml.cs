@@ -26,7 +26,7 @@ namespace VisionModules.Wpf
 
         private delegate void VoidHandler();
 
-        private CameraDriver i;
+        private readonly CameraDriver i;
 
         // object detector component for visualization use
         private ObjectDetectorComponent od;

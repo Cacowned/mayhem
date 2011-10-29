@@ -45,7 +45,7 @@ namespace VisionModules.Components
         public Video(Camera c, string fileName, bool compress)
         {
             Camera camera = c;
-            frameRate = 1000 / camera.Settings.UpdateRateMs;
+            frameRate = 1000.0 / camera.Settings.UpdateRateMs;
             width = c.Settings.ResX;
             height = c.Settings.ResY;
 

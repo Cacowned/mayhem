@@ -7,8 +7,8 @@ namespace ArduinoModules.Firmata
 {
     public enum AnalogPinChange
     {
-        EQUALS,
-        GREATER,
-        LOWER
+        Equal,
+        Greater,
+        Lower
     }
 }

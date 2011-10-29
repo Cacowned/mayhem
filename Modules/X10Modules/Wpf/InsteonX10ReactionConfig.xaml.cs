@@ -16,20 +16,20 @@ namespace X10Modules.Wpf
     /// </summary>
     public partial class InsteonX10ReactionConfig : WpfConfiguration
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
-        private X10Controller x10 = null;
+        private readonly MayhemSerialPortMgr serial;
+        private X10Controller x10;
 
-        public X10HouseCode selected_housecode
+        public X10HouseCode SelectedHousecode
         {
             get { return (X10HouseCode)Enum.Parse(typeof(X10HouseCode), (string)houseID.SelectedValue); }
         }
 
-        public X10UnitCode selected_unitcode
+        public X10UnitCode SelectedUnitcode
         {
             get { return (X10UnitCode)Enum.Parse(typeof(X10UnitCode), (string)unitID.SelectedValue); }
         }
 
-        public X10CommandCode selected_commandcode
+        public X10CommandCode SelectedCommandcode
         {
             get
             {
@@ -37,13 +37,14 @@ namespace X10Modules.Wpf
             }
         }
 
-        public string selected_portName
+        public string SelectedPortName
         {
             get { return (string)deviceList.SelectedValue; }
         }
 
         public InsteonX10ReactionConfig()
         {
+            serial = MayhemSerialPortMgr.Instance;
             InitializeComponent();
 
             Init();
@@ -101,7 +102,7 @@ namespace X10Modules.Wpf
             string portname = (string)deviceList.SelectedValue;
             if (x10 == null)
                 x10 =  X10Controller.ControllerForPortName(portname);
-            if (x10.initialized)
+            if (x10.Initialized)
             {
                 Logger.WriteLine("initialized");
                 // send a test command
@@ -110,9 +111,9 @@ namespace X10Modules.Wpf
 
                 // start threaded as x10 might require some send repeats, etc.. 
                 // TODO: delegate to handle the send result
-                X10HouseCode houseC = selected_housecode;
-                X10UnitCode unitC = selected_unitcode;
-                X10CommandCode commandC = selected_commandcode;
+                X10HouseCode houseC = SelectedHousecode;
+                X10UnitCode unitC = SelectedUnitcode;
+                X10CommandCode commandC = SelectedCommandcode;
                 new Thread(new System.Threading.ThreadStart(() => x10.X10SendCommand(houseC, unitC, commandC))).Start();
             }
         }

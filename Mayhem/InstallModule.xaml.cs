@@ -35,7 +35,7 @@ namespace Mayhem
             dict.Source = uri;
             Application.Current.Resources.MergedDictionaries.Add(dict);
 
-            this.Package = package;
+            Package = package;
 
             InitializeComponent();
         }
@@ -43,7 +43,7 @@ namespace Mayhem
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
-            ModuleName.Text = this.Package.Id;
+            ModuleName.Text = Package.Id;
         }
 
         private void Install_Click(object sender, RoutedEventArgs e)
@@ -51,7 +51,7 @@ namespace Mayhem
             try
             {
                 // Get the package file
-                string installPath = string.Empty;
+                string installPath;
 
                 // if we are running as a clickonce application
                 if (ApplicationDeployment.IsNetworkDeployed)
@@ -70,7 +70,7 @@ namespace Mayhem
                 else
                 {
                     repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
-                    ((DataServicePackageRepository)repository).ProgressAvailable += this.Repository_ProgressAvailable;
+                    ((DataServicePackageRepository)repository).ProgressAvailable += Repository_ProgressAvailable;
                 }
 
                 // Create a package manager to install and resolve dependencies
@@ -87,7 +87,8 @@ namespace Mayhem
                             buttonClose.Visibility = Visibility.Visible;
 
                             Progress.Value = 100;
-                            Progress.Dispatcher.Invoke(emptyDelegate, DispatcherPriority.Render);
+                            
+                            // Progress.Dispatcher.Invoke(emptyDelegate, DispatcherPriority.Render);
                         });
                     });
             }
@@ -111,20 +112,17 @@ namespace Mayhem
             DialogResult = true;
         }
 
-        private Action emptyDelegate = delegate { };
-
         private void Repository_ProgressAvailable(object sender, ProgressEventArgs e)
         {
             Dispatcher.Invoke((Action)delegate
-                {
-                    Progress.Value = e.PercentComplete;
-                });
-            Dispatcher.Invoke(this.emptyDelegate, DispatcherPriority.Render);
+            {
+                Progress.Value = e.PercentComplete;
+            });
         }
 
         public class Logger : ILogger
         {
-            private InstallModule parent;
+            private readonly InstallModule parent;
 
             public Logger(InstallModule parent)
             {
@@ -134,12 +132,12 @@ namespace Mayhem
             public void Log(MessageLevel level, string message, params object[] args)
             {
                 Debug.WriteLine(message, args);
-                this.parent.Dispatcher.Invoke((Action)delegate
-                    {
-                        parent.listBox1.Items.Add(string.Format(message, args));
-                        parent.listBox1.SelectedItem = parent.listBox1.Items.GetItemAt(parent.listBox1.Items.Count - 1);
-                        parent.listBox1.ScrollIntoView(parent.listBox1.SelectedItem);
-                    });
+                parent.Dispatcher.Invoke((Action)delegate
+                {
+                    parent.listBox1.Items.Add(string.Format(message, args));
+                    parent.listBox1.SelectedItem = parent.listBox1.Items.GetItemAt(parent.listBox1.Items.Count - 1);
+                    parent.listBox1.ScrollIntoView(parent.listBox1.SelectedItem);
+                });
             }
         }
     }

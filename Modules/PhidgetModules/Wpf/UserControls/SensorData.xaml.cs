@@ -12,9 +12,17 @@ namespace PhidgetModules.Wpf.UserControls
     /// </summary>
     public partial class SensorData : UserControl
     {
-        public Func<int, string> convertor;
+        public Func<int, string> Convertor
+        {
+            get;
+            set;
+        }
 
-        public int Index { get; set; }
+        public int Index
+        {
+            get;
+            set;
+        }
 
         public InterfaceKit IfKit;
 
@@ -50,7 +58,7 @@ namespace PhidgetModules.Wpf.UserControls
                 if (IfKit.sensors.Count > 0)
                 {
                     // We want to start with some data.
-                    SetString(convertor(IfKit.sensors[Index].Value));
+                    SetString(Convertor(IfKit.sensors[Index].Value));
                 }
             }));
         }
@@ -67,7 +75,7 @@ namespace PhidgetModules.Wpf.UserControls
                 // We only care about the index we are looking at.
                 if (e.Index == Index)
                 {
-                    SetString(convertor(e.Value));
+                    SetString(Convertor(e.Value));
 
                 }
             }));

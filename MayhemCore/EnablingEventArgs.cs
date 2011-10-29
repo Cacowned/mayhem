@@ -28,8 +28,8 @@ namespace MayhemCore
 
         public EnablingEventArgs(bool wasConfiguring)
         {
-            this.Cancel = false;
-            this.WasConfiguring = wasConfiguring;
+            Cancel = false;
+            WasConfiguring = wasConfiguring;
         }
     }
 }

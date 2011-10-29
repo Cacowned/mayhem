@@ -19,16 +19,16 @@ namespace Mayhem
     {
         private const double AnimationTime = 0.2;
 
-        private IWpfConfigurable iWpf;
-        private WpfConfiguration iWpfConfig;
+        private readonly IWpfConfigurable iWpf;
+        private readonly WpfConfiguration iWpfConfig;
         
         private Size previousSize;
 
         public ConfigWindow(IWpfConfigurable iWpf)
         {
-            this.Owner = Application.Current.MainWindow;
+            Owner = Application.Current.MainWindow;
             this.iWpf = iWpf;
-            this.iWpfConfig = iWpf.ConfigurationControl;
+            iWpfConfig = iWpf.ConfigurationControl;
             InitializeComponent();
             ConfigContent.Content = iWpfConfig;
 
@@ -37,7 +37,7 @@ namespace Mayhem
             windowHeader.Text = iWpfConfig.Title;
             iWpfConfig.CanSavedChanged += iWpfConfig_CanSavedChanged;
 
-            iWpfConfig.Loaded += new RoutedEventHandler(iWpfConfig_Loaded);
+            iWpfConfig.Loaded += Configuration_Loaded;
 
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ConfigWindow));
@@ -50,10 +50,10 @@ namespace Mayhem
             }
         }
 
-        private void iWpfConfig_Loaded(object sender, RoutedEventArgs e)
+        private void Configuration_Loaded(object sender, RoutedEventArgs e)
         {
-            this.previousSize = new Size(ActualWidth, ActualHeight);
-            iWpfConfig.SizeChanged += new SizeChangedEventHandler(ConfigContent_SizeChanged);
+            previousSize = new Size(ActualWidth, ActualHeight);
+            iWpfConfig.SizeChanged += ConfigContent_SizeChanged;
         }
 
         private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -73,7 +73,7 @@ namespace Mayhem
 
         private void iWpfConfig_CanSavedChanged(bool canSave)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
                 buttonSave.IsEnabled = canSave;
             }));
