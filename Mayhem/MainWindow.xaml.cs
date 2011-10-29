@@ -19,12 +19,14 @@ namespace Mayhem
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ModuleType eventType;
-        private EventBase eventInstance = null;
-        private ModuleType reactionType;
-        private ReactionBase reactionInstance = null;
+        private readonly AutoResetEvent waitForSave;
+        private readonly string filename;
+        private readonly MayhemEntry mayhem;
 
-        private AutoResetEvent waitForSave = new AutoResetEvent(false);
+        private ModuleType eventType;
+        private EventBase eventInstance;
+        private ModuleType reactionType;
+        private ReactionBase reactionInstance;
 
         public ObservableCollection<MayhemError> Errors
         {
@@ -36,13 +38,12 @@ namespace Mayhem
         public static readonly DependencyProperty ErrorsProperty =
             DependencyProperty.Register("Errors", typeof(ObservableCollection<MayhemError>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<MayhemError>()));
 
-        private string filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
-        
-        private MayhemEntry mayhem;
-
         public MainWindow()
         {
-            Application.Current.Exit += new ExitEventHandler(Application_Exit);
+            filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
+            waitForSave = new AutoResetEvent(false);
+
+            Application.Current.Exit += Application_Exit;
             if (!UriParser.IsKnownScheme("pack"))
             {
                 UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
@@ -56,7 +57,7 @@ namespace Mayhem
             mayhem = MayhemEntry.Instance;
             mayhem.SetConfigurationType(typeof(IWpfConfigurable));
 
-            string directory = string.Empty;
+            string directory;
 
             // if we are running as a clickonce application
             if (ApplicationDeployment.IsNetworkDeployed)
@@ -108,16 +109,16 @@ namespace Mayhem
             Errors = ErrorLog.Errors;
         }
 
-        private void Save_()
+        private void SaveHelper()
         {
             try
             {
-                using (FileStream stream = new FileStream(this.filename, FileMode.Create))
+                using (FileStream stream = new FileStream(filename, FileMode.Create))
                 {
                     MayhemEntry.Instance.ConnectionList.Serialize(stream);
                 }
 
-                this.waitForSave.Set();
+                waitForSave.Set();
             }
             catch
             {
@@ -127,7 +128,7 @@ namespace Mayhem
 
         public void Save()
         {
-            Parallel.Invoke(Save_);
+            Parallel.Invoke(SaveHelper);
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
@@ -163,11 +164,11 @@ namespace Mayhem
             {
                 if (dlg.SelectedModule != null)
                 {
-                    this.eventType = dlg.SelectedModule;
-                    this.eventInstance = dlg.SelectedModuleInstance as EventBase;
+                    eventType = dlg.SelectedModule;
+                    eventInstance = dlg.SelectedModuleInstance as EventBase;
 
                     buttonEmptyEvent.Style = (Style)FindResource("EventButton");
-                    buttonEmptyEvent.Content = this.eventType.Name;
+                    buttonEmptyEvent.Content = eventType.Name;
 
                     CheckEnableBuild();
                 }
@@ -190,11 +191,11 @@ namespace Mayhem
             {
                 if (dlg.SelectedModule != null)
                 {
-                    this.reactionType = dlg.SelectedModule;
-                    this.reactionInstance = dlg.SelectedModuleInstance as ReactionBase;
+                    reactionType = dlg.SelectedModule;
+                    reactionInstance = dlg.SelectedModuleInstance as ReactionBase;
 
                     buttonEmptyReaction.Style = (Style)FindResource("ReactionButton");
-                    buttonEmptyReaction.Content = this.reactionType.Name;
+                    buttonEmptyReaction.Content = reactionType.Name;
 
                     CheckEnableBuild();
                 }
@@ -242,7 +243,7 @@ namespace Mayhem
                 buttonEmptyEvent.Content = "Choose Event";
 
                 eventType = null;
-                this.reactionType = null;
+                reactionType = null;
 
                 Save();
             }

@@ -13,7 +13,7 @@ namespace MayhemOpenCVWrapper
         /// </summary>
         protected CameraImageListener()
         {
-            imageUpdateHandler = UpdateFrame;
+            ImageUpdateHandler = UpdateFrame;
         } 
     }
 }

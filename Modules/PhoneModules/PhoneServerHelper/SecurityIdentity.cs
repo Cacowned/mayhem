@@ -21,7 +21,7 @@ namespace PhoneServerHelper
         /// </summary>
         public string Name
         {
-            get { return this.name; }
+            get { return name; }
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace PhoneServerHelper
         /// </summary>
         public string SID
         {
-            get { return this.sid; }
+            get { return sid; }
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace PhoneServerHelper
         /// </summary>
         public bool IsWellKnownSid
         {
-            get { return this.wellKnownSidType != WELL_KNOWN_SID_TYPE.None; }
+            get { return wellKnownSidType != WELL_KNOWN_SID_TYPE.None; }
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace PhoneServerHelper
         /// </summary>
         public WELL_KNOWN_SID_TYPE WellKnownSidType
         {
-            get { return this.wellKnownSidType; }
+            get { return wellKnownSidType; }
         }
 
         /// <summary>
@@ -63,28 +63,36 @@ namespace PhoneServerHelper
             {
                 SecurityIdentity sd = (SecurityIdentity)obj;
 
-                return string.Compare(this.sid, sd.sid, true) == 0;
+                return string.Compare(sid, sd.sid, true) == 0;
             }
-            else return false;
+            return false;
         }
 
         public static bool operator ==(SecurityIdentity obj1, SecurityIdentity obj2)
         {
-            if (object.ReferenceEquals(obj1, null) && object.ReferenceEquals(obj2, null)) return true;
-            else if (object.ReferenceEquals(obj1, null) || object.ReferenceEquals(obj2, null)) return false;
+            if (ReferenceEquals(obj1, null) && ReferenceEquals(obj2, null))
+                return true;
+
+            if (ReferenceEquals(obj1, null) || ReferenceEquals(obj2, null))
+                return false;
+
             return obj1.Equals(obj2);
         }
 
         public static bool operator !=(SecurityIdentity obj1, SecurityIdentity obj2)
         {
-            if (Object.ReferenceEquals(obj1, null) && Object.ReferenceEquals(obj2, null)) return false;
-            else if (Object.ReferenceEquals(obj1, null) || Object.ReferenceEquals(obj2, null)) return true;
+            if (ReferenceEquals(obj1, null) && ReferenceEquals(obj2, null))
+                return false;
+
+            if (ReferenceEquals(obj1, null) || ReferenceEquals(obj2, null)) 
+                return true;
+
             return !obj1.Equals(obj2);
         }
 
         public override int GetHashCode()
         {
-            return this.sid != null ? this.sid.GetHashCode() : base.GetHashCode();
+            return sid != null ? sid.GetHashCode() : base.GetHashCode();
         }
 
         /// <summary>
@@ -93,18 +101,19 @@ namespace PhoneServerHelper
         /// <returns>An SDDL SID string or abbreviation</returns>
         public override string ToString()
         {
-            if (this.IsWellKnownSid && !string.IsNullOrEmpty(SecurityIdentity.wellKnownSidAbbreviations[(int)this.wellKnownSidType]))
+            if (IsWellKnownSid && !string.IsNullOrEmpty(WellKnownSidAbbreviations[(int)wellKnownSidType]))
             {
-                return SecurityIdentity.wellKnownSidAbbreviations[(int)this.wellKnownSidType];
+                return WellKnownSidAbbreviations[(int)wellKnownSidType];
             }
-            else return this.sid;
+
+            return sid;
         }
 
         /// <summary>
         /// Table of well known SID strings
         /// </summary>
         /// <remarks>The table indicies correspond to <see cref="WELL_KNOWN_SID_TYPE"/>s</remarks>
-        private static readonly string[] wellKnownSids = new string[]
+        private static readonly string[] WellKnownSids = new[]
         {
             "S-1-0-0", // NULL SID
             "S-1-1-0", // Everyone
@@ -189,7 +198,7 @@ namespace PhoneServerHelper
         /// Table of SDDL SID abbreviations
         /// </summary>
         /// <remarks>The table indicies correspond to <see cref="WELL_KNOWN_SID_TYPE"/>s</remarks>
-        private static readonly string[] wellKnownSidAbbreviations = new string[]
+        private static readonly string[] WellKnownSidAbbreviations = new[]
         {
             "",
             "WD",
@@ -287,7 +296,7 @@ namespace PhoneServerHelper
                 throw new ArgumentException("Argument 'abbreviation' cannot be the empty string.", "abbreviation");
             }
 
-            return (WELL_KNOWN_SID_TYPE)Array.IndexOf<string>(SecurityIdentity.wellKnownSidAbbreviations, abbreviation);
+            return (WELL_KNOWN_SID_TYPE)Array.IndexOf(WellKnownSidAbbreviations, abbreviation);
         }
 
         /// <summary>
@@ -317,11 +326,11 @@ namespace PhoneServerHelper
 
             IntPtr handle;
 
-            int status = SecurityIdentity.LsaOpenPolicy(IntPtr.Zero, ref attribs, ACCESS_MASK.POLICY_LOOKUP_NAMES, out handle);
+            int status = LsaOpenPolicy(IntPtr.Zero, ref attribs, ACCESS_MASK.POLICY_LOOKUP_NAMES, out handle);
 
             if (status != 0)
             {
-                throw new ExternalException("Unable to Find Object: " + GetErrorMessage(SecurityIdentity.LsaNtStatusToWinError(status)));
+                throw new ExternalException("Unable to Find Object: " + GetErrorMessage(LsaNtStatusToWinError(status)));
             }
 
             try
@@ -334,11 +343,11 @@ namespace PhoneServerHelper
                 IntPtr domains;
                 IntPtr sids;
 
-                status = SecurityIdentity.LsaLookupNames2(handle, 0, 1, new LSA_UNICODE_STRING[] { nameString }, out domains, out sids);
+                status = LsaLookupNames2(handle, 0, 1, new[] { nameString }, out domains, out sids);
 
                 if (status != 0)
                 {
-                    throw new ExternalException("Unable to Find Object: " + GetErrorMessage(SecurityIdentity.LsaNtStatusToWinError(status)));
+                    throw new ExternalException("Unable to Find Object: " + GetErrorMessage(LsaNtStatusToWinError(status)));
                 }
 
                 try
@@ -352,7 +361,7 @@ namespace PhoneServerHelper
                     IntPtr sidString = IntPtr.Zero;
 
                     // Get the SID string
-                    if (!SecurityIdentity.ConvertSidToStringSid(sidStruct, out sidString))
+                    if (!ConvertSidToStringSid(sidStruct, out sidString))
                     {
                         throw new ExternalException("Unable to Find Object: " + GetErrorMessage(GetLastError()));
                     }
@@ -368,7 +377,7 @@ namespace PhoneServerHelper
                     }
 
                     // Check if the SID is a well known SID
-                    secId.wellKnownSidType = (WELL_KNOWN_SID_TYPE)Array.IndexOf<string>(SecurityIdentity.wellKnownSids, secId.sid);
+                    secId.wellKnownSidType = (WELL_KNOWN_SID_TYPE)Array.IndexOf<string>(WellKnownSids, secId.sid);
 
                     SID_NAME_USE nameUse;
 
@@ -376,7 +385,7 @@ namespace PhoneServerHelper
                     uint domainLen = 0;
 
                     // Get the lengths for the object and domain names
-                    SecurityIdentity.LookupAccountSid(null, sidStruct, IntPtr.Zero, ref nameLen, IntPtr.Zero, ref domainLen, out nameUse);
+                    LookupAccountSid(null, sidStruct, IntPtr.Zero, ref nameLen, IntPtr.Zero, ref domainLen, out nameUse);
 
                     if (nameLen == 0)
                     {
@@ -389,7 +398,7 @@ namespace PhoneServerHelper
                     try
                     {
                         // Get the object and domain names
-                        if (!SecurityIdentity.LookupAccountSid(null, sidStruct, accountName, ref nameLen, domainName, ref domainLen, out nameUse))
+                        if (!LookupAccountSid(null, sidStruct, accountName, ref nameLen, domainName, ref domainLen, out nameUse))
                         {
                             throw new ExternalException("Unable to Find SID: " + GetErrorMessage(GetLastError()));
                         }
@@ -407,13 +416,13 @@ namespace PhoneServerHelper
                 }
                 finally
                 {
-                    if (domains != IntPtr.Zero) SecurityIdentity.LsaFreeMemory(domains);
-                    if (sids != IntPtr.Zero) SecurityIdentity.LsaFreeMemory(sids);
+                    if (domains != IntPtr.Zero) LsaFreeMemory(domains);
+                    if (sids != IntPtr.Zero) LsaFreeMemory(sids);
                 }
             }
             finally
             {
-                if (handle != IntPtr.Zero) SecurityIdentity.LsaClose(handle);
+                if (handle != IntPtr.Zero) LsaClose(handle);
             }
         }
 
@@ -538,17 +547,17 @@ namespace PhoneServerHelper
 
         public static string GetErrorMessage(UInt32 errorCode)
         {
-            UInt32 FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100;
-            UInt32 FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200;
-            UInt32 FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000;
+            const uint formatMessageAllocateBuffer = 0x00000100;
+            const uint formatMessageIgnoreInserts = 0x00000200;
+            const uint formatMessageFromSystem = 0x00001000;
 
-            UInt32 dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
+            const uint dwFlags = formatMessageAllocateBuffer | formatMessageFromSystem | formatMessageIgnoreInserts;
 
             IntPtr source = new IntPtr();
 
             string msgBuffer = "";
 
-            UInt32 retVal = FormatMessage(dwFlags, source, errorCode, 0, ref msgBuffer, 512, null);
+            FormatMessage(dwFlags, source, errorCode, 0, ref msgBuffer, 512, null);
 
             return msgBuffer.ToString();
         }

@@ -5,16 +5,16 @@ namespace PhoneModules
 {
     public static class FileDictionary
     {
-        private static readonly Dictionary<string, byte[]> dict;
+        private static readonly Dictionary<string, byte[]> Dictionary;
 
         static FileDictionary()
         {
-            dict = new Dictionary<string, byte[]>();
+            Dictionary = new Dictionary<string, byte[]>();
         }
 
         public static void Add(string str)
         {
-            if (!dict.ContainsKey(str))
+            if (!Dictionary.ContainsKey(str))
             {
                 byte[] bytes;
                 using (FileStream fs = new FileStream(str, FileMode.Open))
@@ -23,18 +23,18 @@ namespace PhoneModules
                     fs.Read(bytes, 0, (int)fs.Length);
                 }
 
-                dict[str] = bytes;
+                Dictionary[str] = bytes;
             }
         }
 
         public static byte[] Get(string str)
         {
-            if (!dict.ContainsKey(str))
+            if (!Dictionary.ContainsKey(str))
             {
                 Add(str);
             }
 
-            return dict[str];
+            return Dictionary[str];
         }
     }
 }

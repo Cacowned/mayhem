@@ -19,13 +19,11 @@ namespace MayhemOpenCVWrapper
     {
         #region Fields and Properties
 
-        public const double LoopBufferUpdateMs = 250.0; 
         // update the loop only every quarter second -- this should be sufficient for the Picture Event       
-      
+        public const double LoopBufferUpdateMs = 250.0; 
+
         // store LOOP_DURATION ms of footage in the past/future
         public const int LoopDuration = 30000;
-
-       
 
         // Image update event handler. 
         public override event ImageUpdateHandler OnImageUpdated;

@@ -2,6 +2,6 @@
 {
     public interface ISerialPortDataListener
     {
-          void port_DataReceived(string portName, byte[] buffer, int nBytes);
+          void DataReceived(string portName, byte[] buffer, int nBytes);
     }
 }

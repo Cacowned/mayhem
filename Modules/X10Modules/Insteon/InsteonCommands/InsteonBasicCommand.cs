@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace X10Modules.Insteon
+namespace X10Modules.Insteon.InsteonCommands
 {
     /// <summary>
     /// Basic Insteon Command
@@ -8,14 +8,11 @@ namespace X10Modules.Insteon
     [DataContract]
     public class InsteonBasicCommand : InsteonCommandBase
     {
-
         public InsteonBasicCommand() { }
 
         public InsteonBasicCommand(byte[] commandString)
         {
             CommandBytes = commandString;
         }
-
-
     }
 }

@@ -33,8 +33,8 @@ namespace MayhemCore
         /// <param name="description">The description of the module</param>
         public MayhemModuleAttribute(string name, string description)
         {
-            this.Name = name;
-            this.Description = description;
+            Name = name;
+            Description = description;
         }
     }
 }

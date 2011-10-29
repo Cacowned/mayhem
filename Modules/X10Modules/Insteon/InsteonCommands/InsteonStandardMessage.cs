@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace X10Modules.Insteon
+namespace X10Modules.Insteon.InsteonCommands
 {
     /// <summary>
     /// Insteon standard messages addressed to specific devices
@@ -19,16 +19,16 @@ namespace X10Modules.Insteon
     public class InsteonStandardMessage : InsteonResponseCommand
     {
         [DataMember]
-        public static readonly int standard_resp_length = 11;
+        public static readonly int StandardRespLength = 11;
 
         [DataMember]
-        public byte commandByte1;
+        public byte CommandByte1;
 
         [DataMember]
-        public byte commandByte2;
+        public byte CommandByte2;
 
         [DataMember]
-        public byte[] device_address; 
+        public byte[] DeviceAddress;
 
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace X10Modules.Insteon
         /// </summary>
         /// <param name="address"></param>
         /// <param name="c1"></param>
-        public InsteonStandardMessage(byte[] address, byte c1) : this(address, c1, 0x00, standard_resp_length) { }
+        public InsteonStandardMessage(byte[] address, byte c1) : this(address, c1, 0x00, StandardRespLength) { }
 
 
         /// <summary>
@@ -45,26 +45,27 @@ namespace X10Modules.Insteon
         /// <param name="address"></param>
         /// <param name="c1"></param>
         /// <param name="c2"></param>
-        public InsteonStandardMessage(byte[] address, byte c1, byte c2) : this(address, c1, c2, standard_resp_length) { }
+        public InsteonStandardMessage(byte[] address, byte c1, byte c2) : this(address, c1, c2, StandardRespLength) { }
 
-        public InsteonStandardMessage(byte[] address, byte c1, byte c2, int resp_length)
+        public InsteonStandardMessage(byte[] address, byte c1, byte c2, int respLength)
         {
             // if address has the wrong length throw an exception
             if (address.Length != 3)
-                throw new NotSupportedException();
-            CommandBytes = new byte[]{   (byte) 0x02, (byte) 0x62,                  // header for standard command
+                throw new InvalidOperationException();
+
+            CommandBytes = new byte[]{   0x02, 0x62,                  // header for standard command
                                                 address[0], address[1], address[2], // device address
                                                 0x00,                               //flags (unused)
                                                 c1,                                 // command byte 1
                                                 c2                                  // command byte 2
                                             };
 
-            commandByte1 = c1;
-            commandByte2 = c2;
+            CommandByte1 = c1;
+            CommandByte2 = c2;
 
-            device_address = address;
+            DeviceAddress = address;
 
-            this.expectedResponseLength = resp_length;
+            ExpectedResponseLength = respLength;
         }
 
         /// <summary>
@@ -75,7 +76,7 @@ namespace X10Modules.Insteon
         {
             get
             {
-                return commandByte1 == InsteonCommandBytes.Toggle;
+                return CommandByte1 == InsteonCommandBytes.Toggle;
             }
         }
 
@@ -84,10 +85,10 @@ namespace X10Modules.Insteon
         /// </summary>
         /// <returns></returns>
         public bool IsOnCommand
-        { 
-            get 
+        {
+            get
             {
-               return commandByte1 == InsteonCommandBytes.LightOnFast;
+                return CommandByte1 == InsteonCommandBytes.LightOnFast;
             }
         }
 
@@ -99,7 +100,7 @@ namespace X10Modules.Insteon
         {
             get
             {
-                return commandByte1 == InsteonCommandBytes.LightOffFast;
+                return CommandByte1 == InsteonCommandBytes.LightOffFast;
             }
         }
 
@@ -107,15 +108,14 @@ namespace X10Modules.Insteon
         {
             if (IsToggleCommand)
                 return "TOGGLE";
-            else if (IsOnCommand)
+
+            if (IsOnCommand)
                 return "ON";
-            else if (IsOffCommand)
+
+            if (IsOffCommand)
                 return "OFF";
-            else
-                return string.Format("{0:X}-{1:X}", commandByte1, commandByte2);
+
+            return string.Format("{0:X}-{1:X}", CommandByte1, CommandByte2);
         }
-
-
-
     }
 }

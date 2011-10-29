@@ -14,7 +14,7 @@ namespace MayhemCore
     {
         internal static ConnectionList Deserialize(Stream stream, ICollection<Type> types)
         {
-            ConnectionList obj = null;
+            ConnectionList obj;
             DataContractSerializer dcs = new DataContractSerializer(typeof(ConnectionList));
 
             using (XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(stream, XmlDictionaryReaderQuotas.Max))

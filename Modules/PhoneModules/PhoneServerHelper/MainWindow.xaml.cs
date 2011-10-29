@@ -21,14 +21,13 @@ namespace PhoneServerHelper
             Type type = Type.GetTypeFromProgID("HNetCfg.FWOpenPort");
             INetFwOpenPort port = Activator.CreateInstance(type) as INetFwOpenPort;
 
-            INetFwOpenPorts ports;
             port.Port = 19283;
             port.Name = "Mayhem";
             port.Enabled = true;
 
             Type netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
             INetFwMgr mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
-            ports = (INetFwOpenPorts)mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
+            INetFwOpenPorts ports = (INetFwOpenPorts)mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
 
             ports.Add(port);
 

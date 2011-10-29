@@ -11,7 +11,12 @@ namespace MayhemCore
     /// <typeparam name="T">EventBase or ReactionBase</typeparam>
     internal abstract class ModuleList<T> : List<ModuleType>
     {
-        private List<Type> allTypes = new List<Type>();
+        private readonly List<Type> allTypes;
+
+        protected ModuleList()
+        {
+            allTypes = new List<Type>();
+        }
 
         internal bool ScanModules(string path)
         {
@@ -32,7 +37,7 @@ namespace MayhemCore
             }
 
             // Clear this of all the modules
-            this.Clear();
+            Clear();
 
             if (!Directory.Exists(path))
                 return false;
@@ -40,10 +45,10 @@ namespace MayhemCore
             string[] pluginFiles = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
 
             // Go through each dll file
-            for (int i = 0; i < pluginFiles.Length; i++)
+            foreach (string pluginFile in pluginFiles)
             {
                 // load it
-                string pathFile = Path.Combine(path, pluginFiles[i]);
+                string pathFile = Path.Combine(path, pluginFile);
                 try
                 {
                     Assembly assembly = Assembly.LoadFrom(pathFile);
@@ -63,7 +68,7 @@ namespace MayhemCore
                                     MayhemModuleAttribute att = attList[0] as MayhemModuleAttribute;
 
                                     // Add it to our final list
-                                    this.Add(new ModuleType(type, att.Name, att.Description));
+                                    Add(new ModuleType(type, att.Name, att.Description));
                                 }
                                 else
                                 {
@@ -81,7 +86,7 @@ namespace MayhemCore
                 }
             }
 
-            this.Sort(new ModuleTypeComparer());
+            Sort(new ModuleTypeComparer());
             return true;
         }
 

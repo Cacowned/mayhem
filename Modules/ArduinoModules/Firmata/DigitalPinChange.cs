@@ -10,9 +10,9 @@ namespace ArduinoModules.Firmata
     /// </summary>
     public enum DigitalPinChange
     {
-        HIGH,
-        LOW,
-        RISING,
-        FALLING
+        High,
+        Low,
+        Rising,
+        Falling
     }
 }

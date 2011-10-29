@@ -16,18 +16,18 @@ namespace MayhemSerial
     /// </summary>
     public class MayhemSerialPortMgr
     {
-        private readonly int verbosityLevel = 0;
+        private const int VerbosityLevel = 0;
 
         private string[] serialPortNames;
-        private Dictionary<string, SerialPort> connections = new Dictionary<string, SerialPort>();
+        private readonly Dictionary<string, SerialPort> connections;
 
         private byte[] rxBuf = new byte[4096];
 
         // toggle writing to ports or not 
-        private bool allowWrite = true;
+        private bool allowWrite;
 
         // toggle receiving or not
-        private bool allowRx = true;
+        private bool allowRx;
 
         public List<string> ConnectionNames
         {
@@ -51,9 +51,9 @@ namespace MayhemSerial
         public Action<string, byte[], int> OnDataReceived;
 
         // handlers
-        private SerialDataReceivedEventHandler serialReceived;
-        private SerialErrorReceivedEventHandler serialError;
-        private EventHandler serialDisposed;
+        private readonly SerialDataReceivedEventHandler serialReceived;
+        private readonly SerialErrorReceivedEventHandler serialError;
+        private readonly EventHandler serialDisposed;
 
         // checking for presence of serial ports
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -61,9 +61,13 @@ namespace MayhemSerial
 
         public MayhemSerialPortMgr()
         {
-            serialReceived = new SerialDataReceivedEventHandler(port_DataReceived);
-            serialError = new SerialErrorReceivedEventHandler(port_ErrorReceived);
-            serialDisposed = new EventHandler(port_Disposed);
+            allowRx = true;
+            allowWrite = true;
+            connections = new Dictionary<string, SerialPort>();
+
+            serialReceived = DataReceived;
+            serialError = ErrorReceived;
+            serialDisposed = Disposed;
             UpdatePortList();
         }
 
@@ -72,7 +76,7 @@ namespace MayhemSerial
         /// </summary>
         public void UpdatePortList()
         {
-            serialPortNames = System.IO.Ports.SerialPort.GetPortNames();
+            serialPortNames = SerialPort.GetPortNames();
 
             // check for validity of names in the list --> remove non-existant ports
             foreach (string name in ConnectionNames)
@@ -137,14 +141,14 @@ namespace MayhemSerial
 
                     connections[portName] = port;
 
-                    OnDataReceived += new Action<string, byte[], int>(listener.port_DataReceived);
+                    OnDataReceived += new Action<string, byte[], int>(listener.DataReceived);
 
                     return true;
                 }
                 else
                 {
                     Logger.WriteLine("port did not open!");
-                    port.Disposed += new EventHandler(port_Disposed);
+                    port.Disposed += new EventHandler(Disposed);
                     port.Close();
                     return false;
                 }
@@ -160,7 +164,7 @@ namespace MayhemSerial
         /// <param name="listener"></param>
         public void DisconnectListener(string portName, ISerialPortDataListener listener)
         {
-            OnDataReceived -= listener.port_DataReceived;
+            OnDataReceived -= listener.DataReceived;
         }
 
         public void DisconnectPort(string portName)
@@ -403,9 +407,9 @@ namespace MayhemSerial
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            Logger.WriteLineIf(verbosityLevel > 0, "----> port_DataReceived <----");
+            Logger.WriteLineIf(VerbosityLevel > 0, "----> port_DataReceived <----");
             if (allowRx)
             {
                 SerialPort p = sender as SerialPort;
@@ -416,7 +420,7 @@ namespace MayhemSerial
                 if (nBytes > 0 && nBytes <= rx.Length)
                 {
                     p.Read(rx, 0, nBytes);
-                    if (verbosityLevel > 0)
+                    if (VerbosityLevel > 0)
                     {
                         for (int i = 0; i < nBytes; i++)
                         {
@@ -453,12 +457,12 @@ namespace MayhemSerial
             }
         }
 
-        private void port_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        private void ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
             Logger.WriteLine("port_errorReceived " + e.ToString());
         }
 
-        private void port_Disposed(object sender, EventArgs e)
+        private void Disposed(object sender, EventArgs e)
         {
             Logger.WriteLine("port Disposed: " + e.ToString());
             SerialPort disposedPort = sender as SerialPort;

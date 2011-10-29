@@ -13,7 +13,8 @@ namespace PhoneModules
 {
     public class PhoneConnector
     {
-        private readonly int PortNumber;
+        private readonly int portNumber;
+
         private bool isServiceRunning;
 
         public bool IsServiceRunning
@@ -51,7 +52,7 @@ namespace PhoneModules
 
         private PhoneConnector()
         {
-            PortNumber = 19283;
+            portNumber = 19283;
             MayhemEntry.Instance.ShuttingDown += Mayhem_ShuttingDown;
         }
 
@@ -118,7 +119,7 @@ namespace PhoneModules
 
         private bool StartService(bool includeButtons)
         {
-            Uri address = new Uri("http://localhost:" + PortNumber + "/Mayhem");
+            Uri address = new Uri("http://localhost:" + portNumber + "/Mayhem");
 
             MayhemService svc = new MayhemService();
             svc.EventCalled += service_EventCalled;
@@ -141,23 +142,22 @@ namespace PhoneModules
             host.AddServiceEndpoint(typeof(IMayhemService), binding, string.Empty);
 
             bool portFound = false;
-            INetFwOpenPort port;
 
-            Type NetFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
-            INetFwMgr mgr = (INetFwMgr)Activator.CreateInstance(NetFwMgrType);
+            Type netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
+            INetFwMgr mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
             INetFwOpenPorts ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
             System.Collections.IEnumerator enumerate = ports.GetEnumerator();
             while (enumerate.MoveNext())
             {
-                port = (INetFwOpenPort)enumerate.Current;
-                if (port.Port == PortNumber)
+                INetFwOpenPort port = (INetFwOpenPort)enumerate.Current;
+                if (port.Port == portNumber)
                 {
                     portFound = true;
                     break;
                 }
             }
 
-            if (!portFound || !AclHelper.FindUrlPrefix("http://+:" + PortNumber + "/"))
+            if (!portFound || !AclHelper.FindUrlPrefix("http://+:" + portNumber + "/"))
             {
                 OpenServerHelper();
             }

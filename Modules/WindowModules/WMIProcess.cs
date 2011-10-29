@@ -5,23 +5,23 @@ namespace WindowModules
 {
     public static class WMIProcess
     {
-        static readonly ConnectionOptions options;
-        static readonly ManagementScope connectionScope;
+        private static readonly ConnectionOptions Options;
+        private static readonly ManagementScope ConnectionScope;
 
         static WMIProcess()
         {
-            options = new ConnectionOptions();
-            options.Impersonation = ImpersonationLevel.Impersonate;
-            options.Authentication = AuthenticationLevel.Default;
-            options.EnablePrivileges = true;
+            Options = new ConnectionOptions();
+            Options.Impersonation = ImpersonationLevel.Impersonate;
+            Options.Authentication = AuthenticationLevel.Default;
+            Options.EnablePrivileges = true;
 
-            connectionScope = new ManagementScope();
-            connectionScope.Path = new ManagementPath(@"\\" + Environment.MachineName + @"\root\CIMV2");
-            connectionScope.Options = options;
+            ConnectionScope = new ManagementScope();
+            ConnectionScope.Path = new ManagementPath(@"\\" + Environment.MachineName + @"\root\CIMV2");
+            ConnectionScope.Options = Options;
 
             try
             {
-                connectionScope.Connect();
+                ConnectionScope.Connect();
             }
             catch (ManagementException e)
             {
@@ -32,7 +32,7 @@ namespace WindowModules
         public static string GetFilename(int pid)
         {
             SelectQuery msQuery = new SelectQuery("SELECT * FROM Win32_Process Where ProcessId = '" + pid + "'");
-            ManagementObjectSearcher searchProcedure = new ManagementObjectSearcher(connectionScope, msQuery);
+            ManagementObjectSearcher searchProcedure = new ManagementObjectSearcher(ConnectionScope, msQuery);
 
             foreach (ManagementObject item in searchProcedure.Get())
             {

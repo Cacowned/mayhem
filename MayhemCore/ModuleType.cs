@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace MayhemCore
 {
@@ -25,9 +24,9 @@ namespace MayhemCore
 
         public ModuleType(Type type, string name, string description)
         {
-            this.Type = type;
-            this.Name = name;
-            this.Description = description;
+            Type = type;
+            Name = name;
+            Description = description;
         }
 
         public override string ToString()

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace X10Modules.Insteon
+namespace X10Modules.Insteon.InsteonCommands
 {
     /// <summary>
     /// Insteon command that expects a response
@@ -9,14 +9,14 @@ namespace X10Modules.Insteon
     public class InsteonResponseCommand : InsteonBasicCommand
     {
         [DataMember]
-        public int expectedResponseLength = 0;
+        public int ExpectedResponseLength;
 
         public InsteonResponseCommand() { }
 
-        public InsteonResponseCommand(byte[] commandBytes, int resp_length)
+        public InsteonResponseCommand(byte[] commandBytes, int respLength)
             : base(commandBytes)
         {
-            expectedResponseLength = resp_length;
+            ExpectedResponseLength = respLength;
         }
     }
 }

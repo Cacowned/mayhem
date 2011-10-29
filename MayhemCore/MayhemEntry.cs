@@ -68,14 +68,12 @@ namespace MayhemCore
         /// <param name="configType"></param>
         internal void SetConfigurationType(Type configType)
         {
-            if (this.ConfigurableType != null)
+            if (ConfigurableType != null)
             {
                 throw new InvalidOperationException("Configuration type has already been set");
             }
-            else
-            {
-                this.ConfigurableType = configType;
-            }
+
+            ConfigurableType = configType;
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿<src:WpfConfiguration x:Class="PhidgetModules.Reaction.Phidget1055IrTransmitConfig"
+﻿<src:WpfConfiguration x:Class="PhidgetModules.Wpf.Phidget1055IrTransmitConfig"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"

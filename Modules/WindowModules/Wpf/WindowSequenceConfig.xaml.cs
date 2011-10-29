@@ -68,7 +68,7 @@ namespace WindowModules.Wpf
             thisProcess = Process.GetCurrentProcess();
             thisWindowHandle = thisProcess.MainWindowHandle;
             timer = new Timer(500);
-            timer.Elapsed += timer_Elapsed;
+            timer.Elapsed += TimerElapsed;
             timer.Start();
             CheckCanSave();
 
@@ -88,7 +88,7 @@ namespace WindowModules.Wpf
             return procid;
         }
 
-        private void timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
             IntPtr handle = Native.GetForegroundWindow();
 
@@ -188,7 +188,7 @@ namespace WindowModules.Wpf
                 newControl = new WindowWait((WindowActionWait)action);
 
             WindowActionControl wac = new WindowActionControl(newControl);
-            wac.Deleted += new EventHandler(wac_Deleted);
+            wac.Deleted += ContDeleted;
             stackPanelActions.Children.Add(wac);
             wac.Index = stackPanelActions.Children.Count;
 
@@ -198,7 +198,7 @@ namespace WindowModules.Wpf
             controlMap.Add(newControl, action);
         }
 
-        private void wac_Deleted(object sender, EventArgs e)
+        private void ContDeleted(object sender, EventArgs e)
         {
             WindowActionControl wac = sender as WindowActionControl;
             stackPanelActions.Children.Remove(wac);

@@ -35,10 +35,10 @@ namespace MayhemCore
 
         internal MayhemError(ErrorType type, string message)
         {
-            this.Type = type;
-            this.Message = message;
+            Type = type;
+            Message = message;
 
-            this.Time = DateTime.Now;
+            Time = DateTime.Now;
         }
     }
 

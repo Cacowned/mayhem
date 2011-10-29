@@ -21,30 +21,33 @@ namespace MayhemOpenCVWrapper
     /// </summary>
     internal class VideoDiskBuffer : IDisposable
     {
-        private static int instanceCount;
+        // max bitmaps allowed in the queue
+        private const int MaxQueuedBitmaps = 64;
+
         private readonly string bufferFilename;
         private readonly Queue<Bitmap> writeQueue;
+
+        // ensures 30s of footage at 20fps
+        private readonly int maxBufferItems;
+
+        // when a bitmap is added to the queue, signal the event to let the WriteThread process it 
+        private readonly AutoResetEvent signalNewBitmaps;
+
+        private readonly object operationLocker;
+
+        private static int instanceCount;
         private FileStream fs;
 
         // buffer can accept new frames
         private bool acceptFrames;
 
-        // ensures 30s of footage at 20fps
-        private readonly int maxBufferItems;
-
-        // max bitmaps allowed in the queue
-        private const int MaxQueuedBitmaps = 64;
-
         // ring buffer index
         private int currentBlock;
         private long[] blockBytes;
-        private readonly object operationLocker;
+
         private Thread writeThread;
         private int writtenBlocks;
         private volatile bool threadRunning = true;
-
-        // when a bitmap is added to the queue, signal the event to let the WriteThread process it 
-        private readonly AutoResetEvent signalNewBitmaps;
 
         internal VideoDiskBuffer()
         {

@@ -16,15 +16,15 @@ namespace VisionModules.Components
         private int height;
 
         private double? oldAverage;
-        private double numberOfMotionFrames;
+        private readonly double numberOfMotionFrames;
         private double threshold;
 
-        private Queue<double> runningAverage;
+        private readonly Queue<double> runningAverage;
 
         private int hitCount;
 
         private DateTime lastMovement;
-        private TimeSpan settleTime;
+        private readonly TimeSpan settleTime;
 
         public MotionDetectorComponent(ImagerBase camera)
         {

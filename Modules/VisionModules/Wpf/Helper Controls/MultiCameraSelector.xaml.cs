@@ -19,8 +19,10 @@ namespace VisionModules.Wpf
         public ObservableCollection<ImageBrush> CameraPreviews;
 
         private CameraDriver cameraDriver;
-        private List<Camera> cameras;
-        private List<Border> borders;
+
+        private readonly List<Camera> cameras;
+        private readonly List<Border> borders;
+
         private delegate void ImageUpdateHandler(Camera c);
 
         // widths of the preview images

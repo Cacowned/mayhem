@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 
@@ -67,24 +66,24 @@ namespace Mayhem.UserControls
         public static readonly DependencyProperty ReactionConfigStringProperty =
             DependencyProperty.Register("ReactionConfigString", typeof(string), typeof(ModuleView), new UIPropertyMetadata(string.Empty));
 
-        private DoubleAnimation animOut;
-        private DoubleAnimation animIn;
+        private readonly DoubleAnimation animOut;
+        private readonly DoubleAnimation animIn;
 
         public ModuleView()
         {
             InitializeComponent();
 
-            this.animOut = new DoubleAnimation(0, new Duration(TimeSpan.FromSeconds(0.25)));
-            this.animIn = new DoubleAnimation(1.0, new Duration(TimeSpan.FromSeconds(0.25)));
+            animOut = new DoubleAnimation(0, new Duration(TimeSpan.FromSeconds(0.25)));
+            animIn = new DoubleAnimation(1.0, new Duration(TimeSpan.FromSeconds(0.25)));
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             Connection connection = Connection;
-            this.EventName = connection.Event.Name;
-            this.ReactionName = connection.Reaction.Name;
-            this.EventConfigString = connection.Event.ConfigString;
-            this.ReactionConfigString = connection.Reaction.ConfigString;
+            EventName = connection.Event.Name;
+            ReactionName = connection.Reaction.Name;
+            EventConfigString = connection.Event.ConfigString;
+            ReactionConfigString = connection.Reaction.ConfigString;
             connection.Event.PropertyChanged += delegate(object s, PropertyChangedEventArgs args)
             {
                 if (args.PropertyName == "ConfigString")
@@ -165,57 +164,51 @@ namespace Mayhem.UserControls
         private void DeleteConnectionClick(object sender, RoutedEventArgs e)
         {
             Connection c = ((Button)sender).Tag as Connection;
-            c.Disable(new DisabledEventArgs(false), new Action(() =>
-                {
-                    Dispatcher.Invoke((Action)delegate
-                    {
-                        c.Delete();
+            c.Disable(new DisabledEventArgs(false), () => Dispatcher.Invoke((Action)delegate
+            {
+                c.Delete();
 
-                        MayhemEntry.Instance.ConnectionList.Remove(c);
-                        ((MainWindow)Application.Current.MainWindow).Save();
-                    });
-                }));
+                MayhemEntry.Instance.ConnectionList.Remove(c);
+                ((MainWindow)Application.Current.MainWindow).Save();
+            }));
         }
 
         private void OnOffClick(object sender, RoutedEventArgs e)
         {
             ToggleButton button = (ToggleButton)sender;
 
-            Action action = new Action(() =>
+            Action action = () => Dispatcher.Invoke((Action)delegate
+            {
+                if (!Connection.IsEnabled)
                 {
-                    Dispatcher.Invoke((Action)delegate
-                    {
-                        if (!Connection.IsEnabled)
-                        {
-                            // We wanted to enable it, and it didn't enable
-                            // mark the event as handled so it doesn't
-                            // flip the button
-                            button.IsChecked = false;
-                        }
+                    // We wanted to enable it, and it didn't enable
+                    // mark the event as handled so it doesn't
+                    // flip the button
+                    button.IsChecked = false;
+                }
 
-                        button.IsChecked = Connection.IsEnabled;
-                        if (Connection.IsEnabled)
-                        {
-                            redButtonImage.BeginAnimation(Rectangle.OpacityProperty, animIn);
-                            blueButtonImage.BeginAnimation(Rectangle.OpacityProperty, animIn);
-                            ImageSettingsEventRed.BeginAnimation(Rectangle.OpacityProperty, animIn);
-                            ImageSettingsReactionBlue.BeginAnimation(Rectangle.OpacityProperty, animIn);
-                            textBlockEventName.BeginAnimation(Rectangle.OpacityProperty, animIn);
-                            textBlockReactionName.BeginAnimation(Rectangle.OpacityProperty, animIn);
-                        }
-                        else
-                        {
-                            redButtonImage.BeginAnimation(Rectangle.OpacityProperty, animOut);
-                            blueButtonImage.BeginAnimation(Rectangle.OpacityProperty, animOut);
-                            ImageSettingsEventRed.BeginAnimation(Rectangle.OpacityProperty, animOut);
-                            ImageSettingsReactionBlue.BeginAnimation(Rectangle.OpacityProperty, animOut);
-                            textBlockEventName.BeginAnimation(Rectangle.OpacityProperty, animOut);
-                            textBlockReactionName.BeginAnimation(Rectangle.OpacityProperty, animOut);
-                        }
+                button.IsChecked = Connection.IsEnabled;
+                if (Connection.IsEnabled)
+                {
+                    redButtonImage.BeginAnimation(OpacityProperty, animIn);
+                    blueButtonImage.BeginAnimation(OpacityProperty, animIn);
+                    ImageSettingsEventRed.BeginAnimation(OpacityProperty, animIn);
+                    ImageSettingsReactionBlue.BeginAnimation(OpacityProperty, animIn);
+                    textBlockEventName.BeginAnimation(OpacityProperty, animIn);
+                    textBlockReactionName.BeginAnimation(OpacityProperty, animIn);
+                }
+                else
+                {
+                    redButtonImage.BeginAnimation(OpacityProperty, animOut);
+                    blueButtonImage.BeginAnimation(OpacityProperty, animOut);
+                    ImageSettingsEventRed.BeginAnimation(OpacityProperty, animOut);
+                    ImageSettingsReactionBlue.BeginAnimation(OpacityProperty, animOut);
+                    textBlockEventName.BeginAnimation(OpacityProperty, animOut);
+                    textBlockReactionName.BeginAnimation(OpacityProperty, animOut);
+                }
 
-                        ((MainWindow)Application.Current.MainWindow).Save();
-                    });
-                });
+                ((MainWindow)Application.Current.MainWindow).Save();
+            });
 
             if (!Connection.IsEnabled)
             {

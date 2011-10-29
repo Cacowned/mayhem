@@ -48,12 +48,12 @@ namespace MayhemCore
         internal Connection(EventBase e, ReactionBase reaction)
         {
             // Set our event and reactions 
-            this.Event = e;
-            this.Reaction = reaction;
+            Event = e;
+            Reaction = reaction;
 
             // Set them to have a reference to this connection
-            this.Event.Connection = this;
-            this.Reaction.Connection = this;
+            Event.Connection = this;
+            Reaction.Connection = this;
         }
 
         /// <summary>
@@ -85,10 +85,10 @@ namespace MayhemCore
                 return;
             }
 
-            Enable_(e, actionOnComplete);
+            EnableHelper(e, actionOnComplete);
         }
 
-        private void Enable_(EnablingEventArgs e, Action actionOnComplete)
+        private void EnableHelper(EnablingEventArgs e, Action actionOnComplete)
         {
             ThreadPool.QueueUserWorkItem(o => EnableOnThread(e, actionOnComplete));
         }
@@ -204,7 +204,7 @@ namespace MayhemCore
             // If we have started up and are enabled, then we need to
             // actually enable our events and reactions
             if (IsEnabled)
-                Enable_(new EnablingEventArgs(false), null);
+                EnableHelper(new EnablingEventArgs(false), null);
         }
     }
 }

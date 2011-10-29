@@ -73,7 +73,7 @@ namespace MayhemCore
         {
             try
             {
-                Initialize_();
+                InitializeHelper();
                 OnBeforeLoad();
                 OnLoadDefaults();
                 OnAfterLoad();
@@ -87,10 +87,10 @@ namespace MayhemCore
         [OnDeserializing]
         private void OnDeserializing(StreamingContext context)
         {
-            object[] attList = this.GetType().GetCustomAttributes(typeof(DataContractAttribute), true);
+            object[] attList = GetType().GetCustomAttributes(typeof(DataContractAttribute), true);
             if (attList.Length > 0)
             {
-                Initialize_();
+                InitializeHelper();
                 try
                 {
                     OnBeforeLoad();
@@ -105,7 +105,7 @@ namespace MayhemCore
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            object[] attList = this.GetType().GetCustomAttributes(typeof(DataContractAttribute), true);
+            object[] attList = GetType().GetCustomAttributes(typeof(DataContractAttribute), true);
             if (attList.Length > 0)
             {
                 try
@@ -161,7 +161,7 @@ namespace MayhemCore
         {
         }
 
-        private void Initialize_()
+        private void InitializeHelper()
         {
             Type configurableType = MayhemEntry.Instance.ConfigurableType;
             Type[] interfaceTypes = GetType().GetInterfaces();
@@ -178,8 +178,8 @@ namespace MayhemCore
             if (attList.Length > 0)
             {
                 MayhemModuleAttribute att = attList[0] as MayhemModuleAttribute;
-                this.Name = att.Name;
-                this.Description = att.Name;
+                Name = att.Name;
+                Description = att.Name;
             }
         }
 

@@ -9,14 +9,12 @@ namespace X10Modules.Insteon
     /// </summary>
     public class InsteonDevice
     {
-        public static Dictionary<int, InsteonDevice>  devices = new Dictionary<int,InsteonDevice>(); 
+        private static readonly Dictionary<int, InsteonDevice> Devices = new Dictionary<int, InsteonDevice>();
 
-        public string name = string.Empty;
-
-        private byte[] deviceID_ = new byte[3];
-        public byte[] deviceID
+        private byte[] deviceId = new byte[3];
+        public byte[] DeviceId
         {
-            get { return deviceID_; }
+            get { return deviceId; }
             set
             {
                 // assert that the value length is always 3 bytes
@@ -24,21 +22,19 @@ namespace X10Modules.Insteon
                 {
                     throw new NotSupportedException();
                 }
-                else
-                {
-                    deviceID_ = value;
-                }
-            }        
+
+                deviceId = value;
+            }
         }
 
-        public bool powerState = false; 
-        public byte ALRecordFlags = 0;
-        public byte ALGroup = 0;
+        private bool powerState;
+        public byte ALRecordFlags;
+        public byte ALGroup;
 
-        private byte[] linkData_ = new byte[3];
-        public byte[] linkData
+        private byte[] linkData = new byte[3];
+        public byte[] LinkData
         {
-            get { return linkData_; }
+            get { return linkData; }
             set
             {
                 // assert that the value length is always 3 bytes
@@ -46,10 +42,8 @@ namespace X10Modules.Insteon
                 {
                     throw new NotSupportedException();
                 }
-                else
-                {
-                    linkData_ = value;
-                }
+
+                linkData = value;
             }
         }
 
@@ -62,20 +56,18 @@ namespace X10Modules.Insteon
         {
             if (address.Length != 3)
             {
-                throw new NotSupportedException();          
+                throw new NotSupportedException();
             }
-            
-            int dev_hash = DeviceHash(address);
 
-            if (devices.Keys.Count > 0 && devices.Keys.Contains(dev_hash))
+            int devHash = DeviceHash(address);
+
+            if (Devices.Keys.Count > 0 && Devices.Keys.Contains(devHash))
             {
-                InsteonDevice d = devices[dev_hash];
-                return d.powerState; 
+                InsteonDevice d = Devices[devHash];
+                return d.powerState;
             }
-            else
-            {             
-                return false;
-            }
+
+            return false;
         }
 
         /// <summary>
@@ -89,10 +81,8 @@ namespace X10Modules.Insteon
             {
                 return address[0] + (address[1] << 8) + (address[2] << 16);
             }
-            else
-            {
-                throw new NotSupportedException();
-            }
+
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -104,20 +94,20 @@ namespace X10Modules.Insteon
         {
             if (address.Length != 3)
             {
-                throw new NotSupportedException(); 
+                throw new NotSupportedException();
             }
 
-            int dev_hash = DeviceHash(address);
+            int devHash = DeviceHash(address);
 
-            if (devices.Keys.Count > 0 && devices.Keys.Contains(dev_hash))
+            if (Devices.Keys.Count > 0 && Devices.Keys.Contains(devHash))
             {
-                InsteonDevice d = devices[dev_hash];
-                d.powerState = state; 
+                InsteonDevice d = Devices[devHash];
+                d.powerState = state;
             }
             else
             {
-                devices[dev_hash] = new InsteonDevice();
-                devices[dev_hash].powerState = state;
+                Devices[devHash] = new InsteonDevice();
+                Devices[devHash].powerState = state;
             }
         }
 
@@ -127,14 +117,14 @@ namespace X10Modules.Insteon
         /// <returns>string with the name</returns>
         public string ListName
         {
-            get { return String.Format("{0}-{1:x2}:{2:x2}:{3:x2}", ALGroup, deviceID[0], deviceID[1], deviceID[2]); }
+            get { return String.Format("{0}-{1:x2}:{2:x2}:{3:x2}", ALGroup, DeviceId[0], DeviceId[1], DeviceId[2]); }
         }
 
         public override string ToString()
-        {            
+        {
             string str = String.Format("deviceID {0:x2}:{1:x2}:{2:x2} linkdata {3:x4}:{4:x4}:{5:x4} ALrFlags {6:x4} ALGroup {7:x4}",
-                                           deviceID[0], deviceID[1], deviceID[2],
-                                           linkData[0], linkData[1], linkData[2],
+                                           DeviceId[0], DeviceId[1], DeviceId[2],
+                                           LinkData[0], LinkData[1], LinkData[2],
                                            ALRecordFlags,
                                            ALGroup);
             return str;
