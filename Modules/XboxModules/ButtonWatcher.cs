@@ -32,8 +32,8 @@ namespace XboxModules
         {
             keyCombinationHandlerMap = new Dictionary<Buttons, List<KeyCombinationHandler>>();
             events = ButtonEvents.Instance;
-            events.OnButtonDown += new ButtonEvents.ButtonDownHandler(events_OnButtonDown);
-            events.OnButtonUp += new ButtonEvents.ButtonUpHandler(events_OnButtonUp);
+            events.OnButtonDown += events_OnButtonDown;
+            events.OnButtonUp += events_OnButtonUp;
         }
 
         #endregion

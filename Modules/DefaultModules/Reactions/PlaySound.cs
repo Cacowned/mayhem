@@ -55,13 +55,13 @@ namespace DefaultModules.Reactions
 
         public void CliConfig()
         {
-            const string tag = "[Play Sound]";
+            const string Tag = "[Play Sound]";
 
             string path;
 
             do
             {
-                Console.WriteLine(string.Format(CultureInfo.CurrentCulture, Strings.PlaySound_CliConfig_AudioPath, tag));
+                Console.WriteLine(string.Format(CultureInfo.CurrentCulture, Strings.PlaySound_CliConfig_AudioPath, Tag));
                 path = Console.ReadLine();
             }
             while (!File.Exists(path));

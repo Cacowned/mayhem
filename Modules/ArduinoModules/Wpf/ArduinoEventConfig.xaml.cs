@@ -20,17 +20,14 @@ namespace ArduinoModules.Wpf
     public partial class ArduinoEventConfig : WpfConfiguration, IArduinoEventListener
     {
         private readonly MayhemSerialPortMgr serial;
+        private readonly Timer timer;
+        private readonly List<DigitalPinItem> presetDigitalPins;
+        private readonly List<AnalogPinItem> presetAnalogPins;
+        private readonly BackgroundWorker bgPinUpdate;
+
         private int itemSelected;
         private Dictionary<string, string> deviceNamesIds;
         private ArduinoFirmata arduino;
-
-        private readonly Timer timer;
-
-        private readonly List<DigitalPinItem> presetDigitalPins;
-
-        private readonly List<AnalogPinItem> presetAnalogPins;
-
-        private readonly BackgroundWorker bgPinUpdate;
 
         // collections driving the itemPanels
         public ObservableCollection<DigitalPinItem> DigitalPinItems
@@ -157,7 +154,7 @@ namespace ArduinoModules.Wpf
         {
             ComboBox box = sender as ComboBox;
 
-            if (arduino != null && (string)box.SelectedValue != (string)arduino.PortName)
+            if (arduino != null && (string)box.SelectedValue != arduino.PortName)
             {
                 connectButton.IsEnabled = true;
             }

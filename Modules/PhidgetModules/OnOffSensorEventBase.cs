@@ -7,20 +7,32 @@ namespace PhidgetModules
     public abstract class OnOffSensorEventBase : SensorEventBase
     {
         [DataMember]
-        protected int TopThreshold;
+        protected int TopThreshold
+        {
+            get;
+            set;
+        }
 
         [DataMember]
-        protected int BottomThreshold;
+        protected int BottomThreshold
+        {
+            get;
+            set;
+        }
 
         // If this is true, then we want to trigger
         // when this sensor turns "on" otherwise
         // trigger when this sensor turns "off"
         [DataMember]
-        protected bool OnTurnOn;
+        protected bool OnTurnOn
+        {
+            get;
+            set;
+        }
 
-        protected double CurrentValue { get; set; }
+        private double currentValue;
 
-        protected double LastValue { get; set; }
+        private double lastValue;
 
         protected override void OnLoadDefaults()
         {
@@ -35,18 +47,18 @@ namespace PhidgetModules
             if (ex.Index != Index)
                 return;
 
-            CurrentValue = ex.Value;
+            currentValue = ex.Value;
 
-            if (OnTurnOn && CurrentValue >= TopThreshold && LastValue < TopThreshold)
+            if (OnTurnOn && currentValue >= TopThreshold && lastValue < TopThreshold)
             {
                 Trigger();
             }
-            else if (!OnTurnOn && CurrentValue <= BottomThreshold && LastValue > BottomThreshold)
+            else if (!OnTurnOn && currentValue <= BottomThreshold && lastValue > BottomThreshold)
             {
                 Trigger();
             }
 
-            LastValue = CurrentValue;
+            lastValue = currentValue;
         }
     }
 }

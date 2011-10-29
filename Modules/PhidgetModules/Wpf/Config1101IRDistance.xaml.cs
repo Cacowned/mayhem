@@ -5,13 +5,22 @@ namespace PhidgetModules.Wpf
 {
     public partial class Config1101IrDistance : PhidgetConfigControl
     {
-        public double TopValue;
-        public double BottomValue;
+        public double TopValue
+        {
+            get;
+            private set;
+        }
+
+        public double BottomValue
+        {
+            get;
+            private set;
+        }
 
         public Config1101IrDistance(double topValue, double bottomValue)
         {
-            this.TopValue = topValue;
-            this.BottomValue = bottomValue;
+            TopValue = topValue;
+            BottomValue = bottomValue;
 
             InitializeComponent();
         }
@@ -32,18 +41,26 @@ namespace PhidgetModules.Wpf
 
         public override string CheckValidity()
         {
-            if (!double.TryParse(textBoxTopValue.Text, out TopValue) && TopValue >= 0)
+            double topValue;
+            double bottomValue;
+
+            if (!double.TryParse(textBoxTopValue.Text, out topValue) && TopValue >= 0)
             {
                 return "You must enter a valid number for the top of the range";
             }
-            else if (!double.TryParse(textBoxBottomValue.Text, out BottomValue) && TopValue >= 0)
+
+            if (!double.TryParse(textBoxBottomValue.Text, out bottomValue) && TopValue >= 0)
             {
                 return "You must enter a valid number for the bottom of the range";
             }
-            else if (BottomValue > TopValue)
+
+            if (BottomValue > TopValue)
             {
                 return "The bottom of the range must be lower than the top of the range";
             }
+
+            TopValue = topValue;
+            BottomValue = bottomValue;
 
             return string.Empty;
         }

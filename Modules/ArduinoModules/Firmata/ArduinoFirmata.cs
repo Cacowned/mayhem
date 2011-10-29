@@ -130,16 +130,14 @@ namespace ArduinoModules.Firmata
                 {
                     return Instances[serialPortName];
                 }
-                else
-                {
-                    Dictionary<string, string> portNames = Serial.GetArduinoPortNames();
 
-                    if (portNames.Keys.Contains(serialPortName))
-                    {
-                        Logger.WriteLine("creating new instance for port " + serialPortName);
-                        Instances[serialPortName] = new ArduinoFirmata(serialPortName);
-                        return Instances[serialPortName];
-                    }
+                Dictionary<string, string> portNames = Serial.GetArduinoPortNames();
+
+                if (portNames.Keys.Contains(serialPortName))
+                {
+                    Logger.WriteLine("creating new instance for port " + serialPortName);
+                    Instances[serialPortName] = new ArduinoFirmata(serialPortName);
+                    return Instances[serialPortName];
                 }
             }
 
@@ -164,7 +162,7 @@ namespace ArduinoModules.Firmata
             }
 
             // send handshake
-            byte[] buf = new byte[3] { FirmataMsg.StartSysex, FirmataMsg.ReportFirmware, FirmataMsg.EndSysex };
+            byte[] buf = new[] { FirmataMsg.StartSysex, FirmataMsg.ReportFirmware, FirmataMsg.EndSysex };
             Serial.WriteToPort(portName, buf, 3);
 
             SetSamplingInterval(100);
@@ -175,13 +173,13 @@ namespace ArduinoModules.Firmata
             QueryPins(32);
         }
 
-        public void SetSamplingInterval(UInt16 interval)
+        public void SetSamplingInterval(ushort interval)
         {
             byte[] ms = new byte[2];
-            ms[0] = (byte)(interval & (UInt16)0xff);
+            ms[0] = (byte)(interval & 0xff);
             ms[1] = (byte)((interval) >> 8);
 
-            byte[] message = new byte[5] { FirmataMsg.StartSysex, FirmataMsg.SamplingInterval, ms[0], ms[1], FirmataMsg.EndSysex };
+            byte[] message = new[] { FirmataMsg.StartSysex, FirmataMsg.SamplingInterval, ms[0], ms[1], FirmataMsg.EndSysex };
             Serial.WriteToPort(portName, message, message.Length);
         }
 
@@ -201,7 +199,7 @@ namespace ArduinoModules.Firmata
         /// <param name="upto"></param>
         private void QueryPins(int upto)
         {
-            int pin = 0;
+            int pin;
 
             // send a state query for for every pin with any modes
             for (pin = 0; pin < upto; pin++)
@@ -245,7 +243,7 @@ namespace ArduinoModules.Firmata
             pinInfo[p.Id].Value = value;
             byte[] buf = new byte[3];
             int portNumber = (p.Id >> 3) & 0x0F;
-            UInt16 port_val = 0;
+            ushort portVal = 0;
             for (int i = 0; i < 8; i++)
             {
                 int idx = (portNumber * 8) + i;
@@ -253,14 +251,14 @@ namespace ArduinoModules.Firmata
                 {
                     if (pinInfo[i].Value > 0)
                     {
-                        port_val |= (UInt16)(1 << i);
+                        portVal |= (ushort)(1 << i);
                     }
                 }
             }
 
             buf[0] = (byte)(0x90 | portNumber);
-            buf[1] = (byte)(port_val & 0x7f);
-            buf[2] = (byte)((port_val >> 7) & 0x7f);
+            buf[1] = (byte)(portVal & 0x7f);
+            buf[2] = (byte)((portVal >> 7) & 0x7f);
 
             Serial.WriteToPort(portName, buf, 3);
         }
@@ -284,7 +282,7 @@ namespace ArduinoModules.Firmata
             if (mode == PinMode.Output)
                 pinInfo[p.Id].Flagged = true;
 
-            byte[] buf = new byte[3] { FirmataMsg.PinModeSet, (byte)p.Id, (byte)mode };
+            byte[] buf = new[] { FirmataMsg.PinModeSet, (byte)p.Id, (byte)mode };
             Serial.WriteToPort(portName, buf, buf.Length);
         }
 
@@ -308,7 +306,7 @@ namespace ArduinoModules.Firmata
                 for (int i = 0; i < nBytes; i++)
                 {
                     byte msn = (byte)(buf[i] & 0xf0);
-                    if (msn == FirmataMsg.AnalogIoMessage || msn == FirmataMsg.DigitalIoMessage || buf[i] == (byte)0xf9)
+                    if (msn == FirmataMsg.AnalogIoMessage || msn == FirmataMsg.DigitalIoMessage || buf[i] == 0xf9)
                     {
                         parseCommandLen = 3;
                         parseCount = 0;
@@ -327,7 +325,7 @@ namespace ArduinoModules.Firmata
                     {
                         parseCommandLen = parseCount + 1;
                     }
-                    else if ((buf[i] & (byte)(0x80)) == 1)
+                    else if ((buf[i] & 0x80) == 1)
                     {
                         parseCommandLen = 1;
                         parseCount = 0;
@@ -356,20 +354,20 @@ namespace ArduinoModules.Firmata
 
         private void ProcessMessage()
         {
-            byte cmd = (byte)(parseBuf[0] & (byte)0xF0);
+            byte cmd = (byte)(parseBuf[0] & 0xF0);
 
             if (cmd == FirmataMsg.AnalogIoMessage && parseCount == 3)
             {
-                int analog_ch = (parseBuf[0] & 0x0F);
-                int analog_val = parseBuf[1] | (parseBuf[2] << 7);
+                int analogCh = parseBuf[0] & 0x0F;
+                int analogVal = parseBuf[1] | (parseBuf[2] << 7);
                 for (int pin = 0; pin < 128; pin++)
                 {
-                    if (pinInfo[pin].AnalogChannel == analog_ch)
+                    if (pinInfo[pin].AnalogChannel == analogCh)
                     {
-                        pinInfo[pin].Value = analog_val;
+                        pinInfo[pin].Value = analogVal;
 
                         // event callbacks
-                        if (this.OnAnalogPinChanged != null)
+                        if (OnAnalogPinChanged != null)
                         {
                             OnAnalogPinChanged(pinInfo[pin]);
                         }
@@ -381,17 +379,17 @@ namespace ArduinoModules.Firmata
 
             if (cmd == FirmataMsg.DigitalIoMessage /*&& parse_count == 3*/)
             {
-                int port_num = (parseBuf[0] & (byte)0x0F);
-                int port_val = parseBuf[1] | (parseBuf[2] << 7);
-                int pin = port_num * 8;
+                int portNum = parseBuf[0] & 0x0F;
+                int portVal = parseBuf[1] | (parseBuf[2] << 7);
+                int pin = portNum * 8;
 
                 // basically: go through the bits in the register and mask with 1
                 for (; pin < 128; pin++)
                 {
                     if (pinInfo[pin].Mode == PinMode.Input)
                     {
-                        int val = 0;
-                        if (((port_val >> pin) & 1) == 1)
+                        int val;
+                        if (((portVal >> pin) & 1) == 1)
                         {
                             val = 1;
                         }
@@ -406,7 +404,7 @@ namespace ArduinoModules.Firmata
                             pinInfo[pin].Value = val;
 
                             // event callbacks
-                            if (this.OnDigitalPinChanged != null)
+                            if (OnDigitalPinChanged != null)
                             {
                                 OnDigitalPinChanged(pinInfo[pin]);
                             }
@@ -427,7 +425,7 @@ namespace ArduinoModules.Firmata
                     for (int i = 4; i < parseCount - 2; i += 2)
                     {
                         name[len++] = Convert.ToChar(((parseBuf[i] & 0x7F)
-                          | ((byte)(parseBuf[i + 1] & (byte)(0x7F)) << 7)));
+                          | ((byte)(parseBuf[i + 1] & 0x7F) << 7)));
                     }
 
                     name[len++] = '-';
@@ -438,8 +436,8 @@ namespace ArduinoModules.Firmata
                     firmataName = new string(name);
 
                     // consider Arduino initialized if it has a new name
-                    this.initialized = true;
-                    if (this.OnInitialized != null)
+                    initialized = true;
+                    if (OnInitialized != null)
                     {
                         OnInitialized(this, null);
                     }
@@ -488,7 +486,7 @@ namespace ArduinoModules.Firmata
                         if (n == 0)
                         {
                             // first byte is supported mode
-                            pinInfo[pin].SupportedModes |= ((ulong)1 << parseBuf[i]);
+                            pinInfo[pin].SupportedModes |= (ulong)1 << parseBuf[i];
                         }
 
                         n = n ^ 1;
@@ -531,7 +529,7 @@ namespace ArduinoModules.Firmata
                     Logger.WriteLine("Added Pin! " + pin + " " + pinInfo[pin].Mode + " " + pinInfo[pin].Value);
 
                     /////////////////////// post asynchronous event on main thread
-                    if (this.OnPinAdded != null)
+                    if (OnPinAdded != null)
                     {
                         OnPinAdded(pinInfo[pin]);
                     }

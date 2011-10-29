@@ -10,6 +10,8 @@ namespace Mayhem.UserControls
 {
     public partial class ErrorView : UserControl
     {
+        private DispatcherTimer leaveTimer;
+
         public ObservableCollection<MayhemError> Errors
         {
             get { return (ObservableCollection<MayhemError>)GetValue(ErrorsProperty); }
@@ -31,8 +33,6 @@ namespace Mayhem.UserControls
 
         public static readonly RoutedEvent HideEvent = EventManager.RegisterRoutedEvent(
             "Hide", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ErrorView));
-
-        private DispatcherTimer leaveTimer = null;
 
         public event RoutedEventHandler Hide
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -29,7 +28,7 @@ namespace PhidgetModules.Events
 
         public override double Convert(int value)
         {
-            return (double)value;
+            return value;
         }
 
         protected string ConvertToString(int value)

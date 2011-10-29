@@ -6,7 +6,11 @@ namespace X10Modules.Insteon.InsteonCommands
     public abstract class InsteonCommandBase
     {
         [DataMember]
-        public byte[] CommandBytes = null;
+        public byte[] CommandBytes
+        {
+            get;
+            set;
+        }
 
         public int Length
         {
@@ -16,12 +20,9 @@ namespace X10Modules.Insteon.InsteonCommands
                 {
                     return CommandBytes.Length;
                 }
-                else
-                {
-                    return Length;
-                }
+
+                return Length;
             }
         }
-
     }
 }

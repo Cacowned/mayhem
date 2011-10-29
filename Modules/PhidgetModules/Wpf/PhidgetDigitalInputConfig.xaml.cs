@@ -21,9 +21,9 @@ namespace PhidgetModules.Wpf
 
         public PhidgetDigitalInputConfig(InterfaceKit ifKit, int index, bool onWhenOn)
         {
-            this.Index = index;
-            this.IfKit = ifKit;
-            this.OnWhenOn = onWhenOn;
+            Index = index;
+            IfKit = ifKit;
+            OnWhenOn = onWhenOn;
 
             InitializeComponent();
         }
@@ -38,7 +38,7 @@ namespace PhidgetModules.Wpf
 
         private void ifKit_Attach(object sender, AttachEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
                 CanSave = true;
 
@@ -47,7 +47,7 @@ namespace PhidgetModules.Wpf
                     InputBox.Items.Add(i);
                 }
 
-                this.InputBox.SelectedIndex = Index;
+                InputBox.SelectedIndex = Index;
             }));
         }
 

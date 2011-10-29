@@ -29,7 +29,7 @@ namespace XboxModules
         protected BackgroundWorker Worker;
 
         #region Singleton
-        private int refCount = 0;
+        private int refCount;
 
         private static ButtonEvents instance;
 
@@ -101,7 +101,7 @@ namespace XboxModules
 
             Worker.WorkerReportsProgress = true;
             Worker.WorkerSupportsCancellation = true;
-            Worker.DoWork += new DoWorkEventHandler(WatchButtons);
+            Worker.DoWork += WatchButtons;
 
             Worker.RunWorkerAsync();
         }
@@ -124,7 +124,7 @@ namespace XboxModules
 
             while (true)
             {
-                if (worker.CancellationPending == true)
+                if (worker.CancellationPending)
                 {
                     return;
                 }

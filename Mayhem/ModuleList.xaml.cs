@@ -250,11 +250,6 @@ namespace Mayhem
             buttonConfigCancel.IsEnabled = false;
         }
 
-        private void animSlideIn_Completed(object sender, EventArgs e)
-        {
-            stackPanelConfig.Margin = new Thickness(300, 0, -300, 0);
-        }
-
         private void ListBoxItem_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             ChooseButtonClick(sender, e);

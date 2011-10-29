@@ -27,7 +27,7 @@ namespace PhoneServerHelper
 
             Type netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
             INetFwMgr mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
-            INetFwOpenPorts ports = (INetFwOpenPorts)mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
+            INetFwOpenPorts ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
 
             ports.Add(port);
 
@@ -35,11 +35,11 @@ namespace PhoneServerHelper
 
             string name = WindowsIdentity.GetCurrent().Name;
             SecurityIdentity sid = SecurityIdentity.SecurityIdentityFromName(name);
-            string acl = "D:(A;;GA;;;" + sid.ToString() + ")";
+            string acl = "D:(A;;GA;;;" + sid + ")";
             Debug.WriteLine(acl);
             SetHttpNamespaceAcl("http://+:19283/", acl);
 
-            this.Close();
+            Close();
         }
 
         public void SetHttpNamespaceAcl(string urlPrefix, string acl)

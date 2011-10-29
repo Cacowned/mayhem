@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -30,8 +29,8 @@ namespace PhidgetModules.Events
         {
             if (value > 500)
                 return "Touch Detected";
-            else
-                return "No Touch Detected";
+
+            return "No Touch Detected";
         }
 
         public string GetConfigString()

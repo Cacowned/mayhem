@@ -26,8 +26,8 @@ namespace MayhemOpenCVWrapper
 
             float percent;
 
-            float percentW = (float)width / (float)sourceWidth;
-            float percentH = (float)height / (float)sourceHeight;
+            float percentW = (float)width / sourceWidth;
+            float percentH = (float)height / sourceHeight;
 
             if (percentH < percentW)
             {

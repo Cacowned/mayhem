@@ -11,7 +11,7 @@ namespace ArduinoModules.Wpf.Helpers
     {
         // if checked, output is activated on this pin 
         [DataMember]
-        private bool active = false;
+        private bool active;
 
         public bool Active
         {
@@ -26,7 +26,7 @@ namespace ArduinoModules.Wpf.Helpers
         }
 
         [DataMember]
-        private int firmataId = 0;
+        private int firmataId;
 
         public int GetPinId()
         {
@@ -49,7 +49,7 @@ namespace ArduinoModules.Wpf.Helpers
 
         // state
         [DataMember]
-        private int digitalPinState = 0;
+        private int digitalPinState;
 
         /// <summary>
         /// Explicit getter/setter implementation to avoid getting columnized

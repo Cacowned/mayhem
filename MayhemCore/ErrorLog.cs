@@ -6,7 +6,6 @@ namespace MayhemCore
     public static class ErrorLog
     {
         // TODO: Implement trimming on the error log so it doesn't eat up ram
-
         static ErrorLog()
         {
             Errors = new BindingCollection<MayhemError>();

@@ -16,9 +16,15 @@ namespace DefaultModules.KeypressHelpers
         private const int WM_KEYUP = 0x101;
         private const int WM_SYSKEYUP = 0x105;
 
-        private static InterceptKeys instance;
-
         private readonly LowLevelKeyboardProc proc;
+
+        private readonly HashSet<Keys> keysDown;
+        private readonly Dictionary<Keys, DateTime> keysDownTimes;
+
+        private readonly Dictionary<HashSet<Keys>, List<KeyCombinationHandler>> keyCombinationHandlerMap;
+
+        private static InterceptKeys instance;
+        
         private IntPtr hookId; 
 
         public delegate void KeyCombinationHandler();
@@ -31,10 +37,7 @@ namespace DefaultModules.KeypressHelpers
 
         public event KeyUpHandler OnKeyUp;
 
-        private readonly HashSet<Keys> keysDown;
-        private readonly Dictionary<Keys, DateTime> keysDownTimes;
-
-        private readonly Dictionary<HashSet<Keys>, List<KeyCombinationHandler>> keyCombinationHandlerMap;
+        private int refCount;
 
         public static InterceptKeys Instance
         {
@@ -46,8 +49,6 @@ namespace DefaultModules.KeypressHelpers
                 return instance;
             }
         }
-
-        private int refCount;
 
         private InterceptKeys()
         {

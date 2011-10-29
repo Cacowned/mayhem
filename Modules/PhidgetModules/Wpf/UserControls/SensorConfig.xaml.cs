@@ -18,15 +18,15 @@ namespace PhidgetModules.Wpf.UserControls
 
         public PhidgetConfigControl Sensor { get; private set; }
 
-        private bool shouldCheckValidity = false;
+        private bool shouldCheckValidity;
 
         public SensorConfig(InterfaceKit ifKit, int index, Func<int, string> conversion, PhidgetConfigControl control)
         {
-            this.Index = index;
-            this.IfKit = ifKit;
-            this.Convertor = conversion;
+            Index = index;
+            IfKit = ifKit;
+            Convertor = conversion;
 
-            this.Sensor = control;
+            Sensor = control;
 
             InitializeComponent();
         }
@@ -53,7 +53,7 @@ namespace PhidgetModules.Wpf.UserControls
 
             IfKit.Attach += ifKit_Attach;
 
-            this.CanSavedChanged += PhidgetConfig_CanSavedChanged;
+            CanSavedChanged += PhidgetConfig_CanSavedChanged;
 
             // If we have detected sensors already, then enable the save button
             if (IfKit.sensors.Count > 0)
@@ -72,18 +72,18 @@ namespace PhidgetModules.Wpf.UserControls
         public override void OnClosing()
         {
             IfKit.Attach -= ifKit_Attach;
-            this.CanSavedChanged -= PhidgetConfig_CanSavedChanged;
+            CanSavedChanged -= PhidgetConfig_CanSavedChanged;
         }
 
         private void PhidgetConfig_CanSavedChanged(bool canSave)
         {
-            System.Windows.Visibility visible = System.Windows.Visibility.Visible;
+            Visibility visible = Visibility.Visible;
             if (canSave)
-                visible = System.Windows.Visibility.Collapsed;
+                visible = Visibility.Collapsed;
 
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
-                this.phidgetAttached.Visibility = visible;
+                phidgetAttached.Visibility = visible;
             }));
         }
 

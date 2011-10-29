@@ -29,7 +29,7 @@ namespace X10Modules.Reactions
 
         private MayhemSerialPortMgr serial;
 
-        private InsteonController insteonController = null;
+        private InsteonController insteonController;
 
         protected override void OnLoadDefaults()
         {
@@ -41,10 +41,11 @@ namespace X10Modules.Reactions
         protected override void OnAfterLoad()
         {
             serial = MayhemSerialPortMgr.Instance;
+
             // TODO evaluate is Serial.findInsteonDevices may be 
             if (serial.GetInsteonPortNames(new InsteonUsbModemSerialSettings()).Keys.Contains(portName))
             {
-                insteonController = InsteonController.ControllerForPortName(portName); //new InsteonController(portName);
+                insteonController = InsteonController.ControllerForPortName(portName); 
             }
         }
 
@@ -72,12 +73,11 @@ namespace X10Modules.Reactions
             insteonController = InsteonController.ControllerForPortName(portName);
         }
 
-
         public string GetConfigString()
         {
-            string config = String.Format("Device: {0:x2}:{1:x2}:{2:x2}", deviceAddress[0], deviceAddress[1], deviceAddress[2]);
+            string config = string.Format("Device: {0:x2}:{1:x2}:{2:x2}", deviceAddress[0], deviceAddress[1], deviceAddress[2]);
             if (command != null)
-                config += ", Command: " + command.ToString();
+                config += ", Command: " + command;
             return config;
         }
     }

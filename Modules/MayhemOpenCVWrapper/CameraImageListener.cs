@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MayhemOpenCVWrapper
+﻿namespace MayhemOpenCVWrapper
 {
     /// <summary>
     /// Classes depending on camera image updates will need to derivce from cameraImageListener.

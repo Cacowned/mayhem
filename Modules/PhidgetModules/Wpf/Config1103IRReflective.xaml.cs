@@ -6,15 +6,19 @@ namespace PhidgetModules.Wpf
 {
     public partial class Config1103IrReflective : PhidgetConfigControl
     {
-        public int Index;
-        public bool OnTurnOn;
+        public bool OnTurnOn
+        {
+            get;
+            private set;
+        }
+
 
         protected Func<int, string> Convertor;
         public InterfaceKit IfKit;
 
         public Config1103IrReflective(bool onTurnOn)
         {
-            this.OnTurnOn = onTurnOn;
+            OnTurnOn = onTurnOn;
 
             InitializeComponent();
         }

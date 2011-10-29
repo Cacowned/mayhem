@@ -29,7 +29,7 @@ namespace PhidgetModules.Reaction
 
         protected override void OnAfterLoad()
         {
-            this.ifKit = InterfaceFactory.Interface;
+            ifKit = InterfaceFactory.Interface;
         }
 
         public WpfConfiguration ConfigurationControl

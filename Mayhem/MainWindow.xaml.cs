@@ -226,7 +226,7 @@ namespace Mayhem
                     }
                     else
                     {
-                        Type t = this.reactionType.Type;
+                        Type t = reactionType.Type;
                         re = (ReactionBase)Activator.CreateInstance(t);
                     }
 
@@ -234,7 +234,7 @@ namespace Mayhem
                 }
                 catch
                 {
-                    ErrorLog.AddError(ErrorType.Failure, "Error creating connection between " + eventType.Type.Name + " and " + this.reactionType.Type.Name);
+                    ErrorLog.AddError(ErrorType.Failure, "Error creating connection between " + eventType.Type.Name + " and " + reactionType.Type.Name);
                 }
 
                 buttonEmptyReaction.Style = (Style)FindResource("EmptyReactionButton");

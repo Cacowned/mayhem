@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ArduinoModules.Firmata
 {
@@ -22,7 +19,7 @@ namespace ArduinoModules.Firmata
             set;
         }
 
-        public UInt64 SupportedModes
+        public ulong SupportedModes
         {
             get;
             set;

@@ -11,7 +11,7 @@ namespace ArduinoModules.Wpf.Helpers
     public class AnalogPinItem
     {
         [DataMember]
-        private static int analogPinId = 0;
+        private static int analogPinId;
 
         // selected 
         [DataMember]
@@ -62,10 +62,10 @@ namespace ArduinoModules.Wpf.Helpers
         }
 
         [DataMember]
-        private int firmataPinId = 0;
+        private int firmataPinId;
 
         [DataMember]
-        private int setValue = 0;
+        private int setValue;
 
         // change threshold value set by user
         public int SetValue
@@ -92,15 +92,14 @@ namespace ArduinoModules.Wpf.Helpers
             }
         }
 
-        // analog value
         [DataMember]
-        private int aValue = 0;
+        private int analogValue;
 
         public int CurrentAnalogValue
         {
             get
             {
-                return aValue;
+                return analogValue;
             }
         }
 
@@ -122,7 +121,7 @@ namespace ArduinoModules.Wpf.Helpers
         /// <param name="value"></param>
         public void SetAnalogValue(int value)
         {
-            aValue = (int)value;
+            analogValue = value;
         }
 
         public AnalogPinItem(bool check, int id, AnalogPinChange change)

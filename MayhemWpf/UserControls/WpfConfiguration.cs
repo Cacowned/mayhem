@@ -51,7 +51,7 @@ namespace MayhemWpf.UserControls
         public event ConfigCanSaveHandler CanSavedChanged;
 
         // When the configuration windows open, you can't save without changing fields.
-        private bool canSave = false;
+        private bool canSave;
 
         /// <summary>
         /// Flag for whether the configuration window is in a state that can be saved.

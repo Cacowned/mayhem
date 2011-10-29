@@ -25,7 +25,7 @@ namespace PhidgetModules.Events
         {
             ir = InterfaceFactory.Ir;
 
-            gotCode = new IRCodeEventHandler(ir_Code);
+            gotCode = ir_Code;
         }
 
         public WpfConfiguration ConfigurationControl

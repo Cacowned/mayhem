@@ -18,8 +18,18 @@ namespace MayhemSerial
     {
         private const int VerbosityLevel = 0;
 
-        private string[] serialPortNames;
+        public const int DwFlagsAndAttributes = 0x40000000;
+
         private readonly Dictionary<string, SerialPort> connections;
+
+        // sharing of datareceivedevent --> must write the data to a shared buffer and give a copy to the listeners
+        // otherwise the modules will preemt each other in consuming the Serial read buffer
+        // handlers
+        private readonly SerialDataReceivedEventHandler serialReceived;
+        private readonly SerialErrorReceivedEventHandler serialError;
+        private readonly EventHandler serialDisposed;
+
+        private string[] serialPortNames;
 
         private byte[] rxBuf = new byte[4096];
 
@@ -41,23 +51,23 @@ namespace MayhemSerial
         }
 
         // singular instance
-        public static MayhemSerialPortMgr Instance = new MayhemSerialPortMgr();
-        public static readonly int DwFlagsAndAttributes = 0x40000000;
-
-        // sharing of datareceivedevent --> must write the data to a shared buffer and give a copy to the listeners
-        // otherwise the modules will preemt each other in consuming the Serial read buffer
+        public static MayhemSerialPortMgr Instance
+        {
+            get;
+            private set;
+        }
 
         // serialPortname, buffer, length
-        public Action<string, byte[], int> OnDataReceived;
-
-        // handlers
-        private readonly SerialDataReceivedEventHandler serialReceived;
-        private readonly SerialErrorReceivedEventHandler serialError;
-        private readonly EventHandler serialDisposed;
+        private Action<string, byte[], int> onDataReceived;
 
         // checking for presence of serial ports
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern SafeFileHandle CreateFile(string lpFileName, int dwDesiredAccess, int dwShareMode, IntPtr securityAttrs, int dwCreationDisposition, int dwFlagsAndAttributes, IntPtr hTemplateFile);
+
+        static MayhemSerialPortMgr()
+        {
+            Instance = new MayhemSerialPortMgr();
+        }
 
         public MayhemSerialPortMgr()
         {
@@ -141,17 +151,15 @@ namespace MayhemSerial
 
                     connections[portName] = port;
 
-                    OnDataReceived += new Action<string, byte[], int>(listener.DataReceived);
+                    onDataReceived += listener.DataReceived;
 
                     return true;
                 }
-                else
-                {
-                    Logger.WriteLine("port did not open!");
-                    port.Disposed += new EventHandler(Disposed);
-                    port.Close();
-                    return false;
-                }
+
+                Logger.WriteLine("port did not open!");
+                port.Disposed += Disposed;
+                port.Close();
+                return false;
             }
 
             return false;
@@ -164,7 +172,7 @@ namespace MayhemSerial
         /// <param name="listener"></param>
         public void DisconnectListener(string portName, ISerialPortDataListener listener)
         {
-            OnDataReceived -= listener.DataReceived;
+            onDataReceived -= listener.DataReceived;
         }
 
         public void DisconnectPort(string portName)
@@ -184,7 +192,7 @@ namespace MayhemSerial
         public bool PortExists(string portName)
         {
             UpdatePortList();
-            return this.connections.Keys.Contains(portName);
+            return connections.Keys.Contains(portName);
         }
 
         /// <summary>
@@ -281,7 +289,7 @@ namespace MayhemSerial
                         }
 
                         // send "Version Command to module" 
-                        port.Write(new byte[] { (byte)0x02, (byte)0x69 }, 0, 2);
+                        port.Write(new byte[] { 0x02, 0x69 }, 0, 2);
                         Thread.Sleep(30);
                         if (port.BytesToRead > 2)
                         {
@@ -303,7 +311,8 @@ namespace MayhemSerial
 
                     continue;
                 }
-                else if (connections[portName].IsOpen)
+
+                if (connections[portName].IsOpen)
                 {
                     Logger.WriteLine("Trying (B) " + portName);
                     try
@@ -328,7 +337,7 @@ namespace MayhemSerial
                         }
 
                         // now query
-                        port.Write(new byte[] { (byte)0x02, (byte)0x69 }, 0, 2);
+                        port.Write(new byte[] { 0x02, 0x69 }, 0, 2);
                         Thread.Sleep(30);
                         if (port.BytesToRead > 2)
                         {
@@ -365,7 +374,7 @@ namespace MayhemSerial
         {
             UpdatePortList();
             Dictionary<string, string> arduinoNames = new Dictionary<string, string>();
-            string sInstanceName = string.Empty;
+            string sInstanceName;
             try
             {
                 ManagementObjectSearcher searcher =
@@ -424,7 +433,7 @@ namespace MayhemSerial
                     {
                         for (int i = 0; i < nBytes; i++)
                         {
-                            Logger.Write(i + " "); 
+                            Logger.Write(i + " ");
                             Logger.WriteLine("{0,10:X}", rx[i]);
                         }
                     }
@@ -436,11 +445,11 @@ namespace MayhemSerial
                 }
 
                 // notify any attached delegates of the received data
-                if (OnDataReceived != null)
+                if (onDataReceived != null)
                 {
                     try
                     {
-                        OnDataReceived(p.PortName, rx, nBytes);
+                        onDataReceived(p.PortName, rx, nBytes);
                     }
                     catch (ObjectDisposedException ex)
                     {
@@ -459,12 +468,12 @@ namespace MayhemSerial
 
         private void ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
-            Logger.WriteLine("port_errorReceived " + e.ToString());
+            Logger.WriteLine("port_errorReceived " + e);
         }
 
         private void Disposed(object sender, EventArgs e)
         {
-            Logger.WriteLine("port Disposed: " + e.ToString());
+            Logger.WriteLine("port Disposed: " + e);
             SerialPort disposedPort = sender as SerialPort;
             connections.Remove(disposedPort.PortName);
         }

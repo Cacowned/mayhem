@@ -358,7 +358,7 @@ namespace PhoneServerHelper
 
                     IntPtr sidStruct = lsaSid.Sid;
 
-                    IntPtr sidString = IntPtr.Zero;
+                    IntPtr sidString;
 
                     // Get the SID string
                     if (!ConvertSidToStringSid(sidStruct, out sidString))
@@ -377,7 +377,7 @@ namespace PhoneServerHelper
                     }
 
                     // Check if the SID is a well known SID
-                    secId.wellKnownSidType = (WELL_KNOWN_SID_TYPE)Array.IndexOf<string>(WellKnownSids, secId.sid);
+                    secId.wellKnownSidType = (WELL_KNOWN_SID_TYPE)Array.IndexOf(WellKnownSids, secId.sid);
 
                     SID_NAME_USE nameUse;
 
@@ -559,7 +559,7 @@ namespace PhoneServerHelper
 
             FormatMessage(dwFlags, source, errorCode, 0, ref msgBuffer, 512, null);
 
-            return msgBuffer.ToString();
+            return msgBuffer;
         }
 
         [DllImport("kernel32.dll")]

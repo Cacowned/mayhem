@@ -8,7 +8,7 @@ namespace PhidgetModules.Wpf
 
         public Config1129Touch(bool onTurnOn)
         {
-            this.OnTurnOn = onTurnOn;
+            OnTurnOn = onTurnOn;
 
             InitializeComponent();
         }

@@ -29,7 +29,7 @@ namespace X10Modules.Reactions
 
         private MayhemSerialPortMgr serial;
 
-        private X10Controller x10Controller = null;
+        private X10Controller x10Controller;
 
         protected override void OnLoadDefaults()
         {
@@ -42,7 +42,7 @@ namespace X10Modules.Reactions
         protected override void OnAfterLoad()
         {
             serial = MayhemSerialPortMgr.Instance;
-            if (serial.PortExists(this.serialPortName))
+            if (serial.PortExists(serialPortName))
             {
                 x10Controller = X10Controller.ControllerForPortName(serialPortName);
             }
@@ -51,17 +51,19 @@ namespace X10Modules.Reactions
         public void OnSaved(WpfConfiguration configurationControl)
         {
             Logger.WriteLine("OnSaved");
+
             // TODO
             InsteonX10ReactionConfig c = configurationControl as InsteonX10ReactionConfig;
 
             houseCode = c.SelectedHousecode;
             unitCode = c.SelectedUnitcode;
             commandCode = c.SelectedCommandcode;
-            serialPortName = "" + c.SelectedPortName;
+            serialPortName = c.SelectedPortName;
             if (x10Controller != null)
             {
                 x10Controller.Dispose();
             }
+
             x10Controller = X10Controller.ControllerForPortName(serialPortName);
         }
 

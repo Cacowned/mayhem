@@ -15,7 +15,7 @@ namespace ArduinoModules.Wpf.Helpers
         /// <summary>
         /// Holds a reference to our parent ListView control
         /// </summary>
-        private DataGrid parentListView = null;
+        private DataGrid parentListView;
 
         #endregion
 
@@ -68,8 +68,8 @@ namespace ArduinoModules.Wpf.Helpers
                 throw new ArgumentException("This property may only be used on ListViews");
 
             // Setup our event handlers for this list view.
-            lv.Loaded += new RoutedEventHandler(lv_Loaded);
-            lv.SizeChanged += new SizeChangedEventHandler(lv_SizeChanged);
+            lv.Loaded += lv_Loaded;
+            lv.SizeChanged += lv_SizeChanged;
             return value;
         }
 
@@ -99,7 +99,7 @@ namespace ArduinoModules.Wpf.Helpers
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
         private static void lv_Loaded(object sender, RoutedEventArgs e)
         {
-            DataGrid lv = (sender as DataGrid);
+            DataGrid lv = sender as DataGrid;
 
             // Set our initial widths.
             SetColumnWidths(lv);
@@ -114,42 +114,39 @@ namespace ArduinoModules.Wpf.Helpers
         private static void SetColumnWidths(DataGrid gridView)
         {
             // Pull the stretch columns fromt the tag property.
-            ObservableCollection<DataGridColumn> columns = gridView.Columns as ObservableCollection<DataGridColumn>;
+            ObservableCollection<DataGridColumn> columns = gridView.Columns;
             double specifiedWidth = 0;
-           
-            if (gridView != null)
+
+            if (columns == null)
             {
-                if (columns == null)
-                {
-                    // Instance if its our first run.
-                    columns = new ObservableCollection<DataGridColumn>();
+                // Instance if its our first run.
+                columns = new ObservableCollection<DataGridColumn>();
 
-                    // Get all columns with no width having been set.
-                    foreach (DataGridColumn column in gridView.Columns)
-                    {
-                        if (!(column.Width.Value >= 0))
-                            columns.Add(column);
-                        else specifiedWidth += column.ActualWidth;
-                    }
-                }
-                else
+                // Get all columns with no width having been set.
+                foreach (DataGridColumn column in gridView.Columns)
                 {
-                    // Get all columns with no width having been set.
-                    foreach (DataGridColumn column in gridView.Columns)
-                        if (!columns.Contains(column))
-                            specifiedWidth += column.ActualWidth;
+                    if (!(column.Width.Value >= 0))
+                        columns.Add(column);
+                    else specifiedWidth += column.ActualWidth;
                 }
-
-                // Allocate remaining space equally.
-                foreach (DataGridColumn column in columns)
-                {
-                    double newWidth = (gridView.ActualWidth - specifiedWidth) / columns.Count;
-                    if (newWidth >= 0) column.Width = newWidth - 10;
-                }
-
-                // Store the columns in the TAG property for later use. 
-                gridView.Tag = columns;
             }
+            else
+            {
+                // Get all columns with no width having been set.
+                foreach (DataGridColumn column in gridView.Columns)
+                    if (!columns.Contains(column))
+                        specifiedWidth += column.ActualWidth;
+            }
+
+            // Allocate remaining space equally.
+            foreach (DataGridColumn column in columns)
+            {
+                double newWidth = (gridView.ActualWidth - specifiedWidth) / columns.Count;
+                if (newWidth >= 0) column.Width = newWidth - 10;
+            }
+
+            // Store the columns in the TAG property for later use. 
+            gridView.Tag = columns;
         }
         #endregion
     }

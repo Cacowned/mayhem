@@ -1,7 +1,6 @@
 ﻿<UserControl x:Class="PhidgetModules.Wpf.UserControls.SensorData"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
              Unloaded="UserControl_Unloaded" Width="400">
     <Border>
         <Grid>
