@@ -8,7 +8,9 @@ namespace X10Modules.Insteon.InsteonCommands
     [DataContract]
     public class InsteonBasicCommand : InsteonCommandBase
     {
-        public InsteonBasicCommand() { }
+        public InsteonBasicCommand()
+        {
+        }
 
         public InsteonBasicCommand(byte[] commandString)
         {

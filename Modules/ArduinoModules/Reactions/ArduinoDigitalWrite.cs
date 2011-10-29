@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Timers;
 using ArduinoModules.Firmata;
@@ -15,17 +14,18 @@ namespace ArduinoModules.Reactions
     [MayhemModule("Arduino Digital Write", "Writes logic values to a set of digital pins on the Arduino.")]
     public class ArduinoDigitalWrite : ReactionBase, IWpfConfigurable
     {
-        [DataMember]
-        private List<DigitalPinWriteItem> writePins;
-        [DataMember]
-        private string arduinoPortName;
-
-        private ArduinoFirmata arduino = null;
-
         // ms pulse time. 
         // TODO: evaluate if this may be required to
         // be set by the user
         private const int PulseTime = 20;
+
+        [DataMember]
+        private List<DigitalPinWriteItem> writePins;
+        
+        [DataMember]
+        private string arduinoPortName;
+
+        private ArduinoFirmata arduino;
 
         protected override void OnLoadDefaults()
         {
@@ -124,7 +124,7 @@ namespace ArduinoModules.Reactions
         {
             get
             {
-                return new ArduinoDigitalWriteConfig(this.writePins);
+                return new ArduinoDigitalWriteConfig(writePins);
             }
         }
 

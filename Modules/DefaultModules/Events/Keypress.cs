@@ -87,7 +87,8 @@ namespace DefaultModules.Events
         protected override void OnEnabling(EnablingEventArgs e)
         {
             Dispatcher.FromThread(mainThread).Invoke((Action)(() =>
-                interceptKeys.AddCombinationHandler(
+                interceptKeys.AddCombinationHandler
+                (
                     monitorKeysDown,
                     OnKeyCombinationActivated
                 )

@@ -9,9 +9,15 @@ namespace X10Modules.Insteon.InsteonCommands
     public class InsteonResponseCommand : InsteonBasicCommand
     {
         [DataMember]
-        public int ExpectedResponseLength;
+        public int ExpectedResponseLength
+        {
+            get;
+            set;
+        }
 
-        public InsteonResponseCommand() { }
+        public InsteonResponseCommand()
+        {
+        }
 
         public InsteonResponseCommand(byte[] commandBytes, int respLength)
             : base(commandBytes)

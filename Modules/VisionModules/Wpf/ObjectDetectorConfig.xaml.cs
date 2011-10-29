@@ -164,8 +164,8 @@ namespace VisionModules.Wpf
                 {
                     foreach (Point p in tKeyPts)
                     {
-                        double wScalef = (double)TemplatePreview.Width / (double)TemplateImg.Width;
-                        double hScalef = (double)TemplatePreview.Height / (double)TemplateImg.Height;
+                        double wScalef = (double)TemplatePreview.Width / TemplateImg.Width;
+                        double hScalef = (double)TemplatePreview.Height / TemplateImg.Height;
 
                         int x = (int)(p.X * wScalef);
                         int y = (int)(p.Y * hScalef);
@@ -191,8 +191,8 @@ namespace VisionModules.Wpf
                         Point tPt = matches[k];
                         Point iPt = matches[k + 1];
 
-                        double wScalef = (double)TemplatePreview.Width / (double)TemplateImg.Width;
-                        double hScalef = (double)TemplatePreview.Height / (double)TemplateImg.Height;
+                        double wScalef = (double)TemplatePreview.Width / TemplateImg.Width;
+                        double hScalef = (double)TemplatePreview.Height / TemplateImg.Height;
 
                         int tx = (int)(tPt.X * wScalef);
                         int ty = (int)(tPt.Y * hScalef);

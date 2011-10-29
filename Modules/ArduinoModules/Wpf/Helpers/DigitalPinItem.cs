@@ -12,7 +12,7 @@ namespace ArduinoModules.Wpf.Helpers
     {
         // selected
         [DataMember]
-        private bool isChecked = false;
+        private bool isChecked;
 
         public bool Selected
         {
@@ -59,7 +59,7 @@ namespace ArduinoModules.Wpf.Helpers
         }
 
         [DataMember]
-        private int firmataPinId = 0;
+        private int firmataPinId;
 
         public int GetPinId()
         {
@@ -68,7 +68,7 @@ namespace ArduinoModules.Wpf.Helpers
 
         // state
         [DataMember]
-        private int digitalPinState = 0;
+        private int digitalPinState;
 
         /// <summary>
         /// Explicit getter/setter implementation to avoid getting columnized
@@ -85,8 +85,8 @@ namespace ArduinoModules.Wpf.Helpers
             {
                 if (digitalPinState > 0)
                     return "HIGH";
-                else
-                    return "LOW";
+
+                return "LOW";
             }
         }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using System.Windows.Documents;
 using MayhemCore;
 using MayhemSerial;
 using MayhemWpf.UserControls;
@@ -56,9 +55,8 @@ namespace X10Modules.Wpf
         public void Init()
         {
             serial.UpdatePortList();
-            // TODO: make this auto-detect the X10 Module, like for the Arduino Uno
-            // deviceList.ItemsSource = serial.serialPortNames;
 
+            // TODO: make this auto-detect the X10 Module, like for the Arduino Uno
             Dictionary<string, string> portList = serial.GetInsteonPortNames(new InsteonUsbModemSerialSettings());
 
             if (portList.Count > 0)
@@ -69,10 +67,12 @@ namespace X10Modules.Wpf
                 deviceList.SelectedIndex = 0;
             }
 
-            List<string> houseCodes = Enum.GetNames(typeof(X10HouseCode)).ToList(); houseCodes.Sort();
+            List<string> houseCodes = Enum.GetNames(typeof(X10HouseCode)).ToList(); 
+            houseCodes.Sort();
             houseID.ItemsSource = houseCodes;
 
-            List<string> unitCodes = Enum.GetNames(typeof(X10UnitCode)).ToList(); unitCodes.Sort();
+            List<string> unitCodes = Enum.GetNames(typeof(X10UnitCode)).ToList(); 
+            unitCodes.Sort();
             unitID.ItemsSource = unitCodes;
 
             List<string> commandCodes = new List<string>(); // Enum.GetNames(typeof(X10CommandCode)).ToList(); commandCodes.Sort();
@@ -88,7 +88,7 @@ namespace X10Modules.Wpf
             unitID.SelectedIndex = 0;
             commandID.SelectedIndex = 0;
 
-            CanSave = true; 
+            CanSave = true;
         }
 
         /// <summary>
@@ -101,20 +101,20 @@ namespace X10Modules.Wpf
             // test x10 module
             string portname = (string)deviceList.SelectedValue;
             if (x10 == null)
-                x10 =  X10Controller.ControllerForPortName(portname);
+                x10 = X10Controller.ControllerForPortName(portname);
             if (x10.Initialized)
             {
                 Logger.WriteLine("initialized");
+
                 // send a test command
                 // x10.X10SendCommand(0x6, 0x6, 0x2);
                 // start the sending thread explicitly
-
                 // start threaded as x10 might require some send repeats, etc.. 
                 // TODO: delegate to handle the send result
                 X10HouseCode houseC = SelectedHousecode;
                 X10UnitCode unitC = SelectedUnitcode;
                 X10CommandCode commandC = SelectedCommandcode;
-                new Thread(new System.Threading.ThreadStart(() => x10.X10SendCommand(houseC, unitC, commandC))).Start();
+                new Thread(() => x10.X10SendCommand(houseC, unitC, commandC)).Start();
             }
         }
 

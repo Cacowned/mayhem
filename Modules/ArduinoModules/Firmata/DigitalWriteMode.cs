@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ArduinoModules.Firmata
+﻿namespace ArduinoModules.Firmata
 {
     /// <summary>
     /// Digital pin write modes for use by Mayhem

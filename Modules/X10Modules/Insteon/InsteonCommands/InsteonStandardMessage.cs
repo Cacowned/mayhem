@@ -22,22 +22,23 @@ namespace X10Modules.Insteon.InsteonCommands
         public static readonly int StandardRespLength = 11;
 
         [DataMember]
-        public byte CommandByte1;
+        private byte commandByte1;
 
         [DataMember]
-        public byte CommandByte2;
+        private byte commandByte2;
 
         [DataMember]
-        public byte[] DeviceAddress;
-
+        public byte[] DeviceAddress { get; private set; }
 
         /// <summary>
         /// Overload constructor with standard response length and command2 set to zero.
         /// </summary>
         /// <param name="address"></param>
         /// <param name="c1"></param>
-        public InsteonStandardMessage(byte[] address, byte c1) : this(address, c1, 0x00, StandardRespLength) { }
-
+        public InsteonStandardMessage(byte[] address, byte c1)
+            : this(address, c1, 0x00, StandardRespLength)
+        {
+        }
 
         /// <summary>
         /// Overload constructor with standard response length already set.
@@ -45,7 +46,10 @@ namespace X10Modules.Insteon.InsteonCommands
         /// <param name="address"></param>
         /// <param name="c1"></param>
         /// <param name="c2"></param>
-        public InsteonStandardMessage(byte[] address, byte c1, byte c2) : this(address, c1, c2, StandardRespLength) { }
+        public InsteonStandardMessage(byte[] address, byte c1, byte c2)
+            : this(address, c1, c2, StandardRespLength)
+        {
+        }
 
         public InsteonStandardMessage(byte[] address, byte c1, byte c2, int respLength)
         {
@@ -53,15 +57,17 @@ namespace X10Modules.Insteon.InsteonCommands
             if (address.Length != 3)
                 throw new InvalidOperationException();
 
-            CommandBytes = new byte[]{   0x02, 0x62,                  // header for standard command
-                                                address[0], address[1], address[2], // device address
-                                                0x00,                               //flags (unused)
-                                                c1,                                 // command byte 1
-                                                c2                                  // command byte 2
-                                            };
+            CommandBytes = new byte[] 
+            {
+                0x02, 0x62, // header for standard command
+                address[0], address[1], address[2], // device address
+                0x00, // flags (unused)
+                c1, // command byte 1
+                c2 // command byte 2
+            };
 
-            CommandByte1 = c1;
-            CommandByte2 = c2;
+            commandByte1 = c1;
+            commandByte2 = c2;
 
             DeviceAddress = address;
 
@@ -76,7 +82,7 @@ namespace X10Modules.Insteon.InsteonCommands
         {
             get
             {
-                return CommandByte1 == InsteonCommandBytes.Toggle;
+                return commandByte1 == InsteonCommandBytes.Toggle;
             }
         }
 
@@ -88,7 +94,7 @@ namespace X10Modules.Insteon.InsteonCommands
         {
             get
             {
-                return CommandByte1 == InsteonCommandBytes.LightOnFast;
+                return commandByte1 == InsteonCommandBytes.LightOnFast;
             }
         }
 
@@ -100,7 +106,7 @@ namespace X10Modules.Insteon.InsteonCommands
         {
             get
             {
-                return CommandByte1 == InsteonCommandBytes.LightOffFast;
+                return commandByte1 == InsteonCommandBytes.LightOffFast;
             }
         }
 
@@ -115,7 +121,7 @@ namespace X10Modules.Insteon.InsteonCommands
             if (IsOffCommand)
                 return "OFF";
 
-            return string.Format("{0:X}-{1:X}", CommandByte1, CommandByte2);
+            return string.Format("{0:X}-{1:X}", commandByte1, commandByte2);
         }
     }
 }

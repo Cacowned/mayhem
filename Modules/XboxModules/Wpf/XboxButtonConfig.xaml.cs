@@ -26,13 +26,13 @@ namespace XboxModules.Wpf
         public static readonly DependencyProperty ButtonsDownTextProperty =
             DependencyProperty.Register("ButtonsDownText", typeof(string), typeof(XboxButtonConfig), new UIPropertyMetadata(string.Empty));
 
-        private bool shouldCheckValidity = false;
+        private bool shouldCheckValidity;
 
         public XboxButtonConfig(Buttons buttons)
         {
             ButtonsToSave = buttons;
 
-            this.DataContext = this;
+            DataContext = this;
             InitializeComponent();
         }
 

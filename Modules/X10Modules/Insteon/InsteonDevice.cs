@@ -12,9 +12,13 @@ namespace X10Modules.Insteon
         private static readonly Dictionary<int, InsteonDevice> Devices = new Dictionary<int, InsteonDevice>();
 
         private byte[] deviceId = new byte[3];
+
         public byte[] DeviceId
         {
-            get { return deviceId; }
+            get
+            {
+                return deviceId;
+            }
             set
             {
                 // assert that the value length is always 3 bytes
@@ -27,14 +31,28 @@ namespace X10Modules.Insteon
             }
         }
 
+        public byte AlRecordFlags
+        {
+            get;
+            set;
+        }
+
+        public byte ALGroup
+        {
+            get;
+            set;
+        }
+
         private bool powerState;
-        public byte ALRecordFlags;
-        public byte ALGroup;
 
         private byte[] linkData = new byte[3];
+
         public byte[] LinkData
         {
-            get { return linkData; }
+            get
+            {
+                return linkData;
+            }
             set
             {
                 // assert that the value length is always 3 bytes
@@ -117,15 +135,19 @@ namespace X10Modules.Insteon
         /// <returns>string with the name</returns>
         public string ListName
         {
-            get { return String.Format("{0}-{1:x2}:{2:x2}:{3:x2}", ALGroup, DeviceId[0], DeviceId[1], DeviceId[2]); }
+            get { return string.Format("{0}-{1:x2}:{2:x2}:{3:x2}", ALGroup, DeviceId[0], DeviceId[1], DeviceId[2]); }
         }
 
         public override string ToString()
         {
-            string str = String.Format("deviceID {0:x2}:{1:x2}:{2:x2} linkdata {3:x4}:{4:x4}:{5:x4} ALrFlags {6:x4} ALGroup {7:x4}",
-                                           DeviceId[0], DeviceId[1], DeviceId[2],
-                                           LinkData[0], LinkData[1], LinkData[2],
-                                           ALRecordFlags,
+            string str = string.Format("deviceID {0:x2}:{1:x2}:{2:x2} linkdata {3:x4}:{4:x4}:{5:x4} ALrFlags {6:x4} ALGroup {7:x4}",
+                                           DeviceId[0],
+                                           DeviceId[1],
+                                           DeviceId[2],
+                                           LinkData[0],
+                                           LinkData[1],
+                                           LinkData[2],
+                                           AlRecordFlags,
                                            ALGroup);
             return str;
         }

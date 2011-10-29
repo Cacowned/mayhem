@@ -20,10 +20,10 @@ namespace PhidgetModules.Wpf
 
         public PhidgetDigitalOutputConfig(InterfaceKit ifKit, int index, DigitalOutputType outputType)
         {
-            this.Index = index;
-            this.IfKit = ifKit;
+            Index = index;
+            IfKit = ifKit;
 
-            this.OutputType = outputType;
+            OutputType = outputType;
 
             InitializeComponent();
         }
@@ -32,24 +32,24 @@ namespace PhidgetModules.Wpf
         {
             IfKit.Attach += ifKit_Attach;
 
-            this.OutputBox.SelectedIndex = Index;
+            OutputBox.SelectedIndex = Index;
 
-            this.ControlBox.SelectedIndex = 0;
+            ControlBox.SelectedIndex = 0;
 
             switch (OutputType)
             {
-                case DigitalOutputType.Toggle: this.ControlBox.SelectedIndex = 0;
+                case DigitalOutputType.Toggle: ControlBox.SelectedIndex = 0;
                     break;
-                case DigitalOutputType.On: this.ControlBox.SelectedIndex = 1;
+                case DigitalOutputType.On: ControlBox.SelectedIndex = 1;
                     break;
-                case DigitalOutputType.Off: this.ControlBox.SelectedIndex = 2;
+                case DigitalOutputType.Off: ControlBox.SelectedIndex = 2;
                     break;
             }
         }
 
         private void ifKit_Attach(object sender, AttachEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
                 CanSave = true;
 

@@ -92,25 +92,23 @@ namespace PhoneModules
                 
                 return new MemoryStream(Encoding.Default.GetBytes(htmlWp7));
             }
-            else
-            {
-                Interlocked.Increment(ref numToKill);
-                if (resetEvents[key].WaitOne(10000))
-                {
-                    Interlocked.Decrement(ref numToKill);
-                    if (isShuttingDown)
-                    {
-                        if (numToKill == 0)
-                            killResetEvent.Set();
 
-                        return new MemoryStream(Encoding.Default.GetBytes("kill"));
-                    }
-                    else
-                        return new MemoryStream(Encoding.Default.GetBytes(insideDiv));
+            Interlocked.Increment(ref numToKill);
+            if (resetEvents[key].WaitOne(10000))
+            {
+                Interlocked.Decrement(ref numToKill);
+                if (isShuttingDown)
+                {
+                    if (numToKill == 0)
+                        killResetEvent.Set();
+
+                    return new MemoryStream(Encoding.Default.GetBytes("kill"));
                 }
-                else
-                    Interlocked.Decrement(ref numToKill);
+
+                return new MemoryStream(Encoding.Default.GetBytes(insideDiv));
             }
+
+            Interlocked.Decrement(ref numToKill);
 
             return null;
         }

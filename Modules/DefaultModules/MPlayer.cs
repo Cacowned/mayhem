@@ -8,9 +8,9 @@ namespace DefaultModules
 {
     internal class MPlayer
     {
-        private MediaPlayer mediaPlayer;
-
         private readonly Thread runThread;
+
+        private MediaPlayer mediaPlayer;
 
         private Uri fileToPlay;
 
@@ -55,7 +55,8 @@ namespace DefaultModules
 
         public void Stop()
         {
-            mediaPlayer.Dispatcher.BeginInvoke(
+            mediaPlayer.Dispatcher.BeginInvoke
+            (
                 new Action(() => mediaPlayer.Stop()),
                 DispatcherPriority.Send
             );

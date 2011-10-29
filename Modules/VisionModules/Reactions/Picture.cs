@@ -90,7 +90,7 @@ namespace VisionModules.Reactions
                 image.Save(path, ImageFormat.Jpeg);
                 ErrorLog.AddError(ErrorType.Message, "Picture saved to: " + path);
             }
-            catch (Exception ex)
+            catch
             {
                 Logger.WriteLine("Exception while saving picture");
                 ErrorLog.AddError(ErrorType.Failure, "Could not save a picture to: " + path);

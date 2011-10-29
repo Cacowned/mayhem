@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using MayhemCore;
 using MayhemSerial;
 using MayhemWpf.UserControls;
@@ -18,10 +16,19 @@ namespace X10Modules.Wpf
     /// </summary>
     public partial class InsteonReactionConfig : WpfConfiguration
     {
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
-        private InsteonController insteonController = null;
+        // define the available commands
+        // TODO: Evaluate in future if byte array is needed or not
+        private readonly Dictionary<string, byte[]> selectableCommands = new Dictionary<string, byte[]>
+        {
+            { "ON",  new[] { InsteonCommandBytes.LightOnFast } },
+            { "OFF", new[] { InsteonCommandBytes.LightOffFast } },
+            { "TOGGLE", new[] { InsteonCommandBytes.Toggle } }
+        };
 
-        private bool linking = false;
+        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
+        private InsteonController insteonController;
+
+        private bool linking;
 
         public byte[] SelectedDeviceAddress
         {
@@ -31,9 +38,9 @@ namespace X10Modules.Wpf
                 byte id1 = byte.Parse(devAddr1.Text, System.Globalization.NumberStyles.AllowHexSpecifier);
                 byte id2 = byte.Parse(devAddr2.Text, System.Globalization.NumberStyles.AllowHexSpecifier);
 
-                byte[] address = new byte[3] { id0, id1, id2 };
-                return address;
+                byte[] address = new[] { id0, id1, id2 };
 
+                return address;
             }
         }
 
@@ -53,16 +60,6 @@ namespace X10Modules.Wpf
             }
         }
 
-
-        // define the available commands
-        // TODO: Evaluate in future if byte array is needed or not
-        private readonly Dictionary<string, byte[]> selectableCommands = new Dictionary<string, byte[]>()
-        {
-            { "ON",  new[] {InsteonCommandBytes.LightOnFast}},
-            { "OFF", new[] {InsteonCommandBytes.LightOffFast}},
-            { "TOGGLE", new[] {InsteonCommandBytes.Toggle}}
-        };
-
         public InsteonReactionConfig()
         {
             InitializeComponent();
@@ -81,21 +78,20 @@ namespace X10Modules.Wpf
 
             if (portList.Count > 0)
             {
-
                 deviceList.ItemsSource = portList;
                 deviceList.DisplayMemberPath = "Value";
                 deviceList.SelectedValuePath = "Key";
                 deviceList.SelectedIndex = 0;
 
                 // if the device list has more than one entry, also enumerate the detected devices on that port
-
                 insteonController = InsteonController.ControllerForPortName((string)deviceList.SelectedValue);
 
                 if (insteonController.Initialized)
                 {
-                    insteonController.startAllLinking();
+                    insteonController.StartAllLinking();
                     Thread.Sleep(100);
                     insteonController.stopAllLinking();
+
                     // retrieve device lists from controller
                     List<InsteonDevice> devices = insteonController.EnumerateLinkedDevices();
 
@@ -104,8 +100,8 @@ namespace X10Modules.Wpf
                     cbox_link_devices.SelectedValuePath = "deviceID";
                     cbox_link_devices.SelectedIndex = 0;
                 }
-
             }
+
             commandID.ItemsSource = selectableCommands.Keys;
             commandID.SelectedIndex = 0;
             CanSave = true;
@@ -124,10 +120,10 @@ namespace X10Modules.Wpf
             {
                 insteonController = InsteonController.ControllerForPortName(portname);
             }
+
             if (insteonController.Initialized)
             {
                 Logger.WriteLine("insteon initialized");
-
 
                 byte[] address = SelectedDeviceAddress;
 
@@ -136,11 +132,7 @@ namespace X10Modules.Wpf
                 InsteonStandardMessage m = new InsteonStandardMessage(address, commandCode);
 
                 // execute command
-                new Thread(
-                   new ThreadStart(() => insteonController.SendStandardMsg(m))).Start();
-                //insteonController.SendStandardMsg(m);
-
-
+                new Thread(() => insteonController.SendStandardMsg(m)).Start();
             }
         }
 
@@ -190,15 +182,15 @@ namespace X10Modules.Wpf
                 if (insteonController.Initialized)
                 {
                     linking = true;
+
                     // send start linking command
-                    if (insteonController.startAllLinking())
+                    if (insteonController.StartAllLinking())
                     {
                         // create a callback that resets the and cancels the linking process                  
                         System.Timers.Timer t = new System.Timers.Timer(10000);
                         t.AutoReset = false;
                         t.Elapsed += (o, ea) => Dispatcher.Invoke(cancelAllLink);
                         t.Enabled = true;
-
                     }
                     else
                     {
@@ -212,7 +204,6 @@ namespace X10Modules.Wpf
             }
         }
 
-
         /// <summary>
         /// Gets called when a different device is selected
         /// Updates the entries of the address fields
@@ -221,16 +212,15 @@ namespace X10Modules.Wpf
         /// <param name="e"></param>
         private void cbox_link_devices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
             if (cbox_link_devices.SelectedValue != null)
             {
                 byte[] selection = cbox_link_devices.SelectedValue as byte[];
                 Logger.WriteLine("cbox_link_devices_selectionChanged " +
-                 String.Format("{0:x2}:{1:x2}:{2:x2}", selection[0], selection[1], selection[2]));
+                 string.Format("{0:x2}:{1:x2}:{2:x2}", selection[0], selection[1], selection[2]));
 
-                devAddr0.Text = String.Format("{0:x2}", selection[0]);
-                devAddr1.Text = String.Format("{0:x2}", selection[1]);
-                devAddr2.Text = String.Format("{0:x2}", selection[2]);
+                devAddr0.Text = string.Format("{0:x2}", selection[0]);
+                devAddr1.Text = string.Format("{0:x2}", selection[1]);
+                devAddr2.Text = string.Format("{0:x2}", selection[2]);
             }
         }
 
@@ -251,7 +241,5 @@ namespace X10Modules.Wpf
                 return "Insteon Reaction";
             }
         }
-
-
     }
 }

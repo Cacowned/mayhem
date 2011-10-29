@@ -25,7 +25,7 @@ namespace PhidgetModules.Wpf
             Ir = InterfaceFactory.Ir;
             Code = code;
 
-            this.DataContext = this;
+            DataContext = this;
             InitializeComponent();
         }
 
@@ -47,26 +47,26 @@ namespace PhidgetModules.Wpf
         #region Phidget Event Handlers
         private void ir_Code(object sender, IRCodeEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
                 CanSave = true;
-                this.Code = e.Code;
+                Code = e.Code;
             }));
         }
 
-        private void ir_Attach(object sender, Phidgets.Events.AttachEventArgs e)
+        private void ir_Attach(object sender, AttachEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
-                this.NoReciever.Visibility = Visibility.Collapsed;
+                NoReciever.Visibility = Visibility.Collapsed;
             }));
         }
 
         private void ir_Detach(object sender, DetachEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
-                this.NoReciever.Visibility = Visibility.Visible;
+                NoReciever.Visibility = Visibility.Visible;
             }));
         }
         #endregion

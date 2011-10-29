@@ -59,7 +59,6 @@ namespace Mayhem
         private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
-            double targetWidth = iWpfConfig.Width + 40;
 
             Rect target = new Rect(
                 Left - ((ActualWidth - previousSize.Width) / 2),

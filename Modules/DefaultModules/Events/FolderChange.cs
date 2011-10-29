@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization;
+using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using DefaultModules.Resources;
 
 namespace DefaultModules.Events
 {
@@ -92,11 +92,11 @@ namespace DefaultModules.Events
             string conf = string.Empty;
             int pathLength = folderToMonitor.Length;
 
-            const int cutoff = 10;
+            const int Cutoff = 10;
 
             string substr;
-            if (pathLength >= cutoff)
-                substr = folderToMonitor.Substring(pathLength - cutoff, cutoff);
+            if (pathLength >= Cutoff)
+                substr = folderToMonitor.Substring(pathLength - Cutoff, Cutoff);
             else
                 substr = folderToMonitor;
             conf += "..." + substr;

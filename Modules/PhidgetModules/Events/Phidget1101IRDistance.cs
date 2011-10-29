@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -43,10 +42,8 @@ namespace PhidgetModules.Events
             {
                 return Convert(value).ToString("0.##") + " cm";
             }
-            else
-            {
-                return "Object Not Detected";
-            }
+
+            return "Object Not Detected";
         }
 
         public string GetConfigString()

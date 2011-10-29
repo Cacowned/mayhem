@@ -43,7 +43,7 @@ namespace WindowModules
 
         private readonly HashSet<Keys> keysDown;
 
-        private static InterceptKeys instance = null;
+        private static InterceptKeys instance;
 
         public static InterceptKeys Instance
         {

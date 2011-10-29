@@ -8,7 +8,11 @@ namespace MayhemOpenCVWrapper
     /// </summary>
     public class CameraImageListenerBase
     {
-        protected ImagerBase.ImageUpdateHandler ImageUpdateHandler;
+        protected ImagerBase.ImageUpdateHandler ImageUpdateHandler
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// The frame update function
@@ -42,6 +46,6 @@ namespace MayhemOpenCVWrapper
         {
             if (c != null)
                 c.OnImageUpdated -= ImageUpdateHandler;
-        } 
+        }
     }
 }

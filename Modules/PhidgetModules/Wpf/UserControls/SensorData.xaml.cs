@@ -46,14 +46,14 @@ namespace PhidgetModules.Wpf.UserControls
 
         private void SetUpSensorBox()
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
                 for (int i = 0; i < IfKit.sensors.Count; i++)
                 {
                     SensorBox.Items.Add(i);
                 }
 
-                this.SensorBox.SelectedIndex = Index;
+                SensorBox.SelectedIndex = Index;
 
                 if (IfKit.sensors.Count > 0)
                 {
@@ -65,12 +65,12 @@ namespace PhidgetModules.Wpf.UserControls
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.IfKit.SensorChange -= SensorChange;
+            IfKit.SensorChange -= SensorChange;
         }
 
         protected void SensorChange(object sender, SensorChangeEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
                 // We only care about the index we are looking at.
                 if (e.Index == Index)
@@ -83,9 +83,9 @@ namespace PhidgetModules.Wpf.UserControls
 
         protected void SetString(string text)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
-                this.ValueBox.Text = text;
+                ValueBox.Text = text;
             }));
         }
 

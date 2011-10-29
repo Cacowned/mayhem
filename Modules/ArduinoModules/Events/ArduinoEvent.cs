@@ -5,7 +5,6 @@ using ArduinoModules.Firmata;
 using ArduinoModules.Wpf;
 using ArduinoModules.Wpf.Helpers;
 using MayhemCore;
-using MayhemSerial;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 
@@ -24,9 +23,7 @@ namespace ArduinoModules.Events
         [DataMember]
         private List<AnalogPinItem> monitorAnalogPins;
 
-        private MayhemSerialPortMgr serial = MayhemSerialPortMgr.Instance;
-
-        private ArduinoFirmata arduino = null;
+        private ArduinoFirmata arduino;
 
         private Action<Pin> onDigitalPinChanged;
         private Action<Pin> onAnalogPinChanged;
@@ -49,8 +46,8 @@ namespace ArduinoModules.Events
                 arduino = ArduinoFirmata.InstanceForPortname(arduinoPortName);
             }
 
-            onDigitalPinChanged = new Action<Pin>(arduino_OnDigitalPinChanged);
-            onAnalogPinChanged = new Action<Pin>(arduino_OnAnalogPinChanged);
+            onDigitalPinChanged = arduino_OnDigitalPinChanged;
+            onAnalogPinChanged = arduino_OnAnalogPinChanged;
         }
 
         public WpfConfiguration ConfigurationControl
@@ -94,7 +91,7 @@ namespace ArduinoModules.Events
             List<DigitalPinItem> digitalPinsMonitor = new List<DigitalPinItem>();
             List<AnalogPinItem> analogPinsMonitor = new List<AnalogPinItem>();
 
-            bool enabled = this.IsEnabled;
+            bool enabled = IsEnabled;
 
             // save references to pins to monitor
             // attach callbacks to arduino events
@@ -197,7 +194,7 @@ namespace ArduinoModules.Events
 
         public void arduino_OnAnalogPinChanged(Pin p)
         {
-            if (this.IsEnabled)
+            if (IsEnabled)
             {
                 foreach (AnalogPinItem a in monitorAnalogPins)
                 {

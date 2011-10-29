@@ -5,13 +5,22 @@ namespace PhidgetModules.Wpf
 {
     public partial class Config1127Light : PhidgetConfigControl
     {
-        public double TopValue;
-        public bool Increasing;
+        public double TopValue
+        {
+            get;
+            private set;
+        }
+
+        public bool Increasing
+        {
+            get;
+            private set;
+        }
 
         public Config1127Light(double topValue, bool increasing)
         {
-            this.TopValue = topValue;
-            this.Increasing = increasing;
+            TopValue = topValue;
+            Increasing = increasing;
 
             InitializeComponent();
         }
@@ -26,10 +35,14 @@ namespace PhidgetModules.Wpf
 
         public override string CheckValidity()
         {
-            if (!(double.TryParse(textBoxTopValue.Text, out TopValue) && (TopValue >= 0 && TopValue <= 1000)))
+            double topValue;
+
+            if (!(double.TryParse(textBoxTopValue.Text, out topValue) && (TopValue >= 0 && TopValue <= 1000)))
             {
                 return "Invalid Top Value";
             }
+
+            TopValue = topValue;
 
             return string.Empty;
         }

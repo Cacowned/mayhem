@@ -10,25 +10,60 @@ namespace X10Modules.Insteon
     /// </summary>
     public class InsteonControllerBase : ISerialPortDataListener, IDisposable
     {
-        public class NotInitializedException : Exception{}
+        protected static MayhemSerialPortMgr MSerial
+        {
+            get;
+            private set;
+        }
 
-        protected static MayhemSerialPortMgr mSerial = MayhemSerialPortMgr.Instance;
-        protected string PortName;
-        public bool Initialized;
+        protected string PortName
+        {
+            get;
+            private set;
+        }
 
-        protected bool WaitForData; 
+        public bool Initialized
+        {
+            get;
+            private set;
+        }
+
+        protected bool WaitForData
+        {
+            get;
+            set;
+        }
 
         // parsing
-        protected byte[] ParseBuf = new byte[1024];
-        //private int parse_command_len = 0;
-        protected int ParseCount;
-
-        //public bool lastCommandSuccess = false
-        protected AutoResetEvent waitAck = new AutoResetEvent(false);
-
-        protected InsteonControllerBase(string serialPortname) 
+        protected byte[] ParseBuf
         {
-            if (mSerial.ConnectPort(serialPortname, this, new InsteonUsbModemSerialSettings()))
+            get;
+            private set;
+        }
+
+        protected int ParseCount
+        {
+            get;
+            set;
+        }
+
+        protected AutoResetEvent waitAck
+        {
+            get;
+            private set;
+        }
+
+        static InsteonControllerBase()
+        {
+            MSerial = MayhemSerialPortMgr.Instance;
+        }
+
+        protected InsteonControllerBase(string serialPortname)
+        {
+            ParseBuf = new byte[1024];
+            waitAck = new AutoResetEvent(false);
+
+            if (MSerial.ConnectPort(serialPortname, this, new InsteonUsbModemSerialSettings()))
             {
                 PortName = serialPortname;
                 InitializeX10();
@@ -42,9 +77,9 @@ namespace X10Modules.Insteon
         }
 
         public virtual void Dispose()
-         {
-             Initialized = false; 
-         }
+        {
+            Initialized = false;
+        }
 
         public virtual void DataReceived(string portName, byte[] buffer, int nBytes)
         {

@@ -209,7 +209,7 @@ namespace WindowModules.Actions
 
             var inputArray = inputs.ToArray();
 
-            var count = Native.SendInput((uint)inputArray.Length, inputArray, Marshal.SizeOf(inputArray[0]));
+            Native.SendInput((uint)inputArray.Length, inputArray, Marshal.SizeOf(inputArray[0]));
 
             inputs.Clear();
 
@@ -229,7 +229,7 @@ namespace WindowModules.Actions
 
             inputArray = inputs.ToArray();
 
-            count = Native.SendInput((uint)inputArray.Length, inputArray, Marshal.SizeOf(inputArray[0]));
+            Native.SendInput((uint)inputArray.Length, inputArray, Marshal.SizeOf(inputArray[0]));
 
             inputs.Clear();
         }

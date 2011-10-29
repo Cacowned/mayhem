@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -47,8 +46,8 @@ namespace PhidgetModules.Events
         {
             if (value < 100)
                 return "Detected";
-            else
-                return "Not Detected";
+
+            return "Not Detected";
         }
     }
 }

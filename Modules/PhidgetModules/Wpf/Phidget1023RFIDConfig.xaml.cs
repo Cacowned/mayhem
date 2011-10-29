@@ -25,10 +25,10 @@ namespace PhidgetModules.Wpf
 
         public Phidget1023RFIDConfig(string tagId)
         {
-            this.Rfid = InterfaceFactory.Rfid;
+            Rfid = InterfaceFactory.Rfid;
             TagID = tagId;
 
-            this.DataContext = this;
+            DataContext = this;
             InitializeComponent();
         }
 
@@ -54,7 +54,7 @@ namespace PhidgetModules.Wpf
         // Tag event handler...we'll display the tag code in the field on the GUI
         private void RfidTag(object sender, TagEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
                 CanSave = true;
                 Rfid.LED = true;
@@ -65,25 +65,25 @@ namespace PhidgetModules.Wpf
         // Tag event handler...we'll display the tag code in the field on the GUI
         private void LostRfidTag(object sender, TagEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
                 Rfid.LED = false;
             }));
         }
 
-        private void RfidAttach(object sender, Phidgets.Events.AttachEventArgs e)
+        private void RfidAttach(object sender, AttachEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
-                this.NoReader.Visibility = Visibility.Collapsed;
+                NoReader.Visibility = Visibility.Collapsed;
             }));
         }
 
         private void RfidDetach(object sender, DetachEventArgs e)
         {
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
             {
-                this.NoReader.Visibility = Visibility.Visible;
+                NoReader.Visibility = Visibility.Visible;
             }));
         }
 

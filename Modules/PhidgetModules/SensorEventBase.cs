@@ -8,12 +8,20 @@ namespace PhidgetModules
     [DataContract]
     public abstract class SensorEventBase : EventBase
     {
+        // The interface kit we are using for the sensors
+        protected static InterfaceKit IfKit
+        {
+            get;
+            private set;
+        }
+
         // Which index do we want to be looking at?
         [DataMember]
-        protected int Index;
-
-        // The interface kit we are using for the sensors
-        protected static InterfaceKit IfKit { get; private set; }
+        protected int Index
+        {
+            get;
+            set;
+        }
 
         private SensorChangeEventHandler handler;
 
@@ -31,7 +39,7 @@ namespace PhidgetModules
 
         protected override void OnAfterLoad()
         {
-            handler = new SensorChangeEventHandler(SensorChange);
+            handler = SensorChange;
         }
 
         protected abstract void SensorChange(object sender, SensorChangeEventArgs ex);

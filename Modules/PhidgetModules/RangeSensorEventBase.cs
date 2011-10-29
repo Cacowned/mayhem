@@ -8,13 +8,22 @@ namespace PhidgetModules
     {
         // Define the range we care about
         [DataMember]
-        protected double TopValue;
+        protected double TopValue
+        {
+            get;
+            set;
+        }
 
         [DataMember]
-        protected double BottomValue;
+        protected double BottomValue
+        {
+            get;
+            set;
+        }
 
-        protected double CurrentValue { get; set; }
-        protected double LastValue { get; set; }
+        private double currentValue;
+
+        private double lastValue;
 
         protected override void OnLoadDefaults()
         {
@@ -25,7 +34,7 @@ namespace PhidgetModules
         protected override void OnAfterLoad()
         {
             // put it somewhere in the middle
-            CurrentValue = LastValue = TopValue - BottomValue;
+            currentValue = lastValue = TopValue - BottomValue;
         }
 
         public abstract double Convert(int value);
@@ -48,14 +57,14 @@ namespace PhidgetModules
 
             if (IsValidInput(ex.Value))
             {
-                CurrentValue = Convert(ex.Value);
+                currentValue = Convert(ex.Value);
 
-                if (IsInRange(CurrentValue) && !IsInRange(LastValue))
+                if (IsInRange(currentValue) && !IsInRange(lastValue))
                 {
                     Trigger();
                 }
 
-                LastValue = CurrentValue;
+                lastValue = currentValue;
             }
         }
     }

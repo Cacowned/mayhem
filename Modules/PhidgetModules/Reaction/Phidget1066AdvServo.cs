@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -12,6 +11,9 @@ namespace PhidgetModules.Reaction
     [MayhemModule("Phidget: Adv. Servo", "Controls a servo")]
     public class Phidget1066AdvServo : ReactionBase, IWpfConfigurable
     {
+        // Instance of the servo class
+        private static AdvancedServo advServo;
+
         // Motor Type
         [DataMember]
         private ServoServo.ServoType servoType;
@@ -24,9 +26,6 @@ namespace PhidgetModules.Reaction
         // move the servo to
         [DataMember]
         private double position;
-
-        // Instance of the servo class
-        private static AdvancedServo advServo;
 
         protected override void OnLoadDefaults()
         {

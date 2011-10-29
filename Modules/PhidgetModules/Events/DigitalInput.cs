@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -34,8 +33,8 @@ namespace PhidgetModules.Events
 
         protected override void OnAfterLoad()
         {
-            this.ifKit = InterfaceFactory.Interface;
-            inputChangeHandler = new InputChangeEventHandler(InputChanged);
+            ifKit = InterfaceFactory.Interface;
+            inputChangeHandler = InputChanged;
         }
 
         public WpfConfiguration ConfigurationControl
@@ -71,11 +70,11 @@ namespace PhidgetModules.Events
             {
                 // If its true and we turn on when it turns on
                 // then trigger
-                if (ex.Value == true && onWhenOn)
+                if (ex.Value && onWhenOn)
                 {
                     Trigger();
                 }
-                else if (ex.Value == false && !onWhenOn)
+                else if (!ex.Value && !onWhenOn)
                 {
                     // otherwise, if it its off, and we trigger
                     // when it turns off, then trigger
