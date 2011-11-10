@@ -10,7 +10,7 @@ using MayhemWpf.UserControls;
 namespace DefaultModules.Events
 {
     [DataContract]
-    [MayhemModule("Folder Change", "This event monitors changes on a given folder.")]
+    [MayhemModule("Folder Change", "Triggers when a folder is changed")]
     public class FolderChange : EventBase, IWpfConfigurable, IDisposable
     {
         [DataMember]
