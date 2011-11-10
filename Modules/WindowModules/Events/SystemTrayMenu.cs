@@ -12,7 +12,7 @@ using WindowModules.Wpf;
 namespace WindowModules.Events
 {
     [DataContract]
-    [MayhemModule("System Tray Menu", "Add a menu into the system tray")]
+    [MayhemModule("System Tray Menu", "Adds a menu into the system tray")]
     public class SystemTrayMenu : EventBase, IWpfConfigurable
     {
         [DataMember]
