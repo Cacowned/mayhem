@@ -103,7 +103,7 @@ namespace DefaultModules.Events
             if (monitorName)
                 conf += ", Renames";
             if (monitorSubDirs)
-                conf += ", Subdirs";
+                conf += ", Subfolders";
             return conf;
         }
 
