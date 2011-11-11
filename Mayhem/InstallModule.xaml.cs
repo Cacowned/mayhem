@@ -69,8 +69,10 @@ namespace Mayhem
                 else
                 {
                     repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
-                    ((DataServicePackageRepository)repository).ProgressAvailable += Repository_ProgressAvailable;
+                    ((IProgressProvider)repository).ProgressAvailable += Repository_ProgressAvailable;
                 }
+
+
 
                 // Create a package manager to install and resolve dependencies
                 var packageManager = new PackageManager(repository, installPath);
@@ -86,8 +88,8 @@ namespace Mayhem
                             buttonClose.Visibility = Visibility.Visible;
 
                             Progress.Value = 100;
-                            
-                            // Progress.Dispatcher.Invoke(emptyDelegate, DispatcherPriority.Render);
+
+                            //Progress.Dispatcher.Invoke(emptyDelegate, DispatcherPriority.Render);
                         });
                     });
             }
@@ -113,8 +115,10 @@ namespace Mayhem
 
         private void Repository_ProgressAvailable(object sender, ProgressEventArgs e)
         {
+            MessageBox.Show("hello");
             Dispatcher.Invoke((Action)delegate
             {
+                
                 Progress.Value = e.PercentComplete;
             });
         }

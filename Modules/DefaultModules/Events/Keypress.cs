@@ -9,6 +9,7 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Windows.Forms;
 
 namespace DefaultModules.Events
 {
@@ -18,7 +19,7 @@ namespace DefaultModules.Events
     public class KeyPress : EventBase, IWpfConfigurable
     {
         [DataMember]
-        private HashSet<System.Windows.Forms.Keys> monitorKeysDown;
+        private HashSet<Keys> monitorKeysDown;
 
         private InterceptKeys interceptKeys;
 
@@ -30,7 +31,7 @@ namespace DefaultModules.Events
 
         protected override void OnLoadDefaults()
         {
-            monitorKeysDown = new HashSet<System.Windows.Forms.Keys>();
+            monitorKeysDown = new HashSet<Keys>();
         }
 
         protected override void OnAfterLoad()
@@ -43,7 +44,7 @@ namespace DefaultModules.Events
         {
             var b = new StringBuilder();
 
-            foreach (System.Windows.Forms.Keys k in monitorKeysDown)
+            foreach (Keys k in monitorKeysDown)
             {
                 if (b.Length == 0)
                 {
