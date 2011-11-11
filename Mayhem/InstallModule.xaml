@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:src="clr-namespace:Mayhem.UserControls"
 		xmlns:common="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
-        Title="InstallModule" Width="500" Height="380">
+        Title="InstallModule" Width="500" Height="300">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="TextAlignment" Value="Center" />
@@ -12,7 +12,6 @@
         </Style>
     </Window.Resources>
     <StackPanel Style="{StaticResource BackgroundGradient}">
-        <src:MayhemHeader />
         <common:Borders Margin="0,5,0,0">
             <StackPanel>
                 <TextBlock>Install <Run Name="ModuleName" />?</TextBlock>
