@@ -113,7 +113,7 @@ namespace Mayhem
                 if (Environment.GetCommandLineArgs().Contains("-localrepo"))
                     repository = new LocalPackageRepository(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\MayhemPackages\\Packages"));
                 else
-                    repository = new DataServicePackageRepository(new Uri("http://makemayhem.com/nuget/"));
+                    repository = new DataServicePackageRepository(new Uri("http://makemayhem.com/www/nuget/"));
 
                 var manager = new PackageManager(repository, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"));
 
