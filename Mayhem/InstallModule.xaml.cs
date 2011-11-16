@@ -68,7 +68,7 @@ namespace Mayhem
                     repository = new LocalPackageRepository(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\MayhemPackages\\Packages"));
                 else
                 {
-                    repository = new DataServicePackageRepository(new Uri("http://makemayhem.com.cloudsites.gearhost.com/nuget/"));
+                    repository = new DataServicePackageRepository(new Uri("http://makemayhem.com/www/nuget/"));
                     ((IProgressProvider)repository).ProgressAvailable += Repository_ProgressAvailable;
                 }
 
@@ -115,10 +115,8 @@ namespace Mayhem
 
         private void Repository_ProgressAvailable(object sender, ProgressEventArgs e)
         {
-            MessageBox.Show("hello");
             Dispatcher.Invoke((Action)delegate
             {
-                
                 Progress.Value = e.PercentComplete;
             });
         }
