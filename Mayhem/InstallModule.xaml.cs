@@ -49,6 +49,12 @@ namespace Mayhem
         {
             try
             {
+                Dispatcher.Invoke((Action)delegate
+                {
+                    stackPanelDefaultButtons.Visibility = Visibility.Hidden;
+                    buttonClose.Visibility = Visibility.Visible;
+                });
+
                 // Get the package file
                 string installPath;
 
@@ -82,15 +88,6 @@ namespace Mayhem
                 ThreadPool.QueueUserWorkItem(o =>
                     {
                         packageManager.InstallPackage(Package, ignoreDependencies: false);
-                        Dispatcher.Invoke((Action)delegate
-                        {
-                            stackPanelDefaultButtons.Visibility = Visibility.Hidden;
-                            buttonClose.Visibility = Visibility.Visible;
-
-                            Progress.Value = 100;
-
-                            //Progress.Dispatcher.Invoke(emptyDelegate, DispatcherPriority.Render);
-                        });
                     });
             }
             catch (Exception ex)
