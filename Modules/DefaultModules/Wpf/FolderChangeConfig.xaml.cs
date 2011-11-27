@@ -44,7 +44,6 @@ namespace DefaultModules.Wpf
             textBoxDirectory.Text = FolderToMonitor;
         }
 
-        // Browse for file
         private void Browse_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new FolderBrowserDialog();

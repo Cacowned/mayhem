@@ -85,10 +85,7 @@ namespace Mayhem
                 packageManager.Logger = new Logger(this);
 
                 // Install the package
-                ThreadPool.QueueUserWorkItem(o =>
-                    {
-                        packageManager.InstallPackage(Package, ignoreDependencies: false);
-                    });
+                ThreadPool.QueueUserWorkItem(o => packageManager.InstallPackage(Package, ignoreDependencies: false));
             }
             catch (Exception ex)
             {
@@ -117,7 +114,7 @@ namespace Mayhem
                 Progress.Value = e.PercentComplete;
             });
         }
-
+        
         public class Logger : ILogger
         {
             private readonly InstallModule parent;

@@ -54,8 +54,11 @@ namespace Mayhem
             InitializeComponent();
 
             ModulesList.ItemsSource = list;
-
+            
             heightBasedOnModules = (int)Math.Min(185 + (43 * ModulesList.Items.Count), Height);
+            heightBasedOnModules = Math.Max(280, heightBasedOnModules);
+            
+
             Height = heightBasedOnModules;
 
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty
