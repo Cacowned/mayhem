@@ -230,7 +230,7 @@ namespace Mayhem
                         re = (ReactionBase)Activator.CreateInstance(t);
                     }
 
-                    MayhemEntry.Instance.ConnectionList.Add(new Connection(ev, re));
+                    MayhemEntry.Instance.ConnectionList.Insert(0, new Connection(ev, re));
                 }
                 catch
                 {
