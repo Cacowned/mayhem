@@ -54,10 +54,8 @@ namespace Mayhem
             InitializeComponent();
 
             ModulesList.ItemsSource = list;
-            
-            heightBasedOnModules = (int)Math.Min(185 + (43 * ModulesList.Items.Count), Height);
-            heightBasedOnModules = Math.Max(280, heightBasedOnModules);
-            
+
+            heightBasedOnModules = (int)Math.Min(185 + (43 * ModulesList.Items.Count), Height);            
 
             Height = heightBasedOnModules;
 
