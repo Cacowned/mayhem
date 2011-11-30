@@ -45,7 +45,7 @@ namespace MayhemCore
         {
             var nowTime = DateTime.Now;
 
-            if ((nowTime - lastUpdated).TotalMilliseconds > 500)
+            if ((nowTime - lastUpdated).TotalMilliseconds > 30)
             {
                 FindTypes(Location);
                 lastUpdated = nowTime;

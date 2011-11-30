@@ -43,9 +43,10 @@ namespace Mayhem
             private set;
         }
 
-        private readonly int heightBasedOnModules;
-
         private WpfConfiguration iWpfConfig;
+
+        private int listHeight;
+        private int listWidth;
 
         // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TextProperty =
@@ -56,16 +57,18 @@ namespace Mayhem
             Text = headerText;
             InitializeComponent();
 
+            // This is the size of the module list when in list view (not config view);
+            listHeight = 540;
+            listWidth = 304;
+
+            Height = listHeight;
+            Width = listWidth;
+
             var view = CollectionViewSource.GetDefaultView(list);
             view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
             ModulesList.ItemsSource = view;
-
-            heightBasedOnModules = (int)Math.Min(185 + (43 * ModulesList.Items.Count), Height);            
-            heightBasedOnModules = Math.Max(heightBasedOnModules, 280);
             
-            Height = heightBasedOnModules;
-
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ModuleList));
             if (dpd != null)
@@ -76,7 +79,7 @@ namespace Mayhem
                 });
             }
         }
-
+        
         private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
@@ -245,10 +248,10 @@ namespace Mayhem
 
             // Animate the window size to match the list control
             Rect target = new Rect(
-                Left - ((300 - ActualWidth) / 2),
-                Top - ((heightBasedOnModules - ActualHeight) / 2),
-                300, 
-                heightBasedOnModules);
+                Left - ((listWidth - ActualWidth) / 2),
+                Top - ((listHeight - ActualHeight) / 2),
+                listWidth, 
+                listHeight);
 
             StartStoryBoard(WindowRect, target, AnimationTime);
 
