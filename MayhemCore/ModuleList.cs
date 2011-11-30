@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace MayhemCore
 {
@@ -9,9 +10,13 @@ namespace MayhemCore
     /// Helper methods for Event and Reaction lists
     /// </summary>
     /// <typeparam name="T">EventBase or ReactionBase</typeparam>
-    internal abstract class ModuleList<T> : List<ModuleType>
+    internal abstract class ModuleList<T> : BindingCollection<ModuleType>
     {
         private readonly List<Type> allTypes;
+
+        private string Location;
+
+        private DateTime lastUpdated;
 
         protected ModuleList()
         {
@@ -20,8 +25,31 @@ namespace MayhemCore
 
         internal bool ScanModules(string path)
         {
+            Location = path;
+
+            FileSystemWatcher fileWatcher = new FileSystemWatcher(Location);
+            fileWatcher.IncludeSubdirectories = true;
+            fileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            fileWatcher.Changed += UpdateDependencies;
+            fileWatcher.Created += UpdateDependencies;
+            fileWatcher.Deleted += UpdateDependencies;
+            fileWatcher.Renamed += UpdateDependencies;
+            fileWatcher.EnableRaisingEvents = true;
+
+            lastUpdated = DateTime.Now;
             // Load up all the types of things that we want in the application root
-            return FindTypes(path);
+            return FindTypes(Location);
+        }
+
+        private void UpdateDependencies(object source, FileSystemEventArgs e)
+        {
+            var nowTime = DateTime.Now;
+
+            if ((nowTime - lastUpdated).TotalMilliseconds > 500)
+            {
+                FindTypes(Location);
+                lastUpdated = nowTime;
+            }
         }
 
         /// <summary>
@@ -38,6 +66,7 @@ namespace MayhemCore
 
             // Clear this of all the modules
             Clear();
+
 
             if (!Directory.Exists(path))
                 return false;
@@ -86,7 +115,7 @@ namespace MayhemCore
                 }
             }
 
-            Sort(new ModuleTypeComparer());
+            //Sort(new ModuleTypeComparer());
             return true;
         }
 

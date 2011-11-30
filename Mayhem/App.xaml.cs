@@ -18,6 +18,8 @@ namespace Mayhem
         private readonly Dictionary<string, Assembly> dependencies;
         private bool wantsUpdates;
 
+        private DateTime lastUpdated;
+
         public App()
         {
             dependencies = new Dictionary<string, Assembly>();
@@ -61,6 +63,17 @@ namespace Mayhem
                 ThreadPool.QueueUserWorkItem(CheckForUpdates);
             }
 
+            FileSystemWatcher fileWatcher = new FileSystemWatcher(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"));
+            fileWatcher.IncludeSubdirectories = true;
+            fileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            fileWatcher.Changed += UpdateDependencies;
+            fileWatcher.Created += UpdateDependencies;
+            fileWatcher.Deleted += UpdateDependencies;
+            fileWatcher.Renamed += UpdateDependencies;
+            fileWatcher.EnableRaisingEvents = true;
+
+            lastUpdated = DateTime.Now;
+
             // Load the correct dependency assemblies
             LoadDependencies();
 
@@ -71,6 +84,20 @@ namespace Mayhem
             main.Show();
         }
 
+        private void UpdateDependencies(object source, FileSystemEventArgs e)
+        {
+            var nowTime = DateTime.Now;
+
+            if ((nowTime - lastUpdated).TotalMilliseconds > 500)
+            {
+                dependencies.Clear();
+
+                LoadDependencies();
+
+                lastUpdated = nowTime;
+            }
+        }
+
         private void LoadDependencies()
         {
             string[] files = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"), "*.dll", SearchOption.AllDirectories);
@@ -79,7 +106,14 @@ namespace Mayhem
                 try
                 {
                     Assembly assembly = Assembly.LoadFrom(file);
-                    dependencies.Add(assembly.FullName, assembly);
+
+                    // If we haven't already added it.
+                    // This is in the case that we happen to have two copies of the same
+                    // package installed (Visual Studio and NuGet version for example)
+                    if (!dependencies.ContainsKey(assembly.FullName))
+                    {
+                        dependencies.Add(assembly.FullName, assembly);
+                    }
                 }
                 catch
                 {
