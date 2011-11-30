@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -12,6 +13,8 @@ using System.Windows.Navigation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Windows.Data;
+using System.Collections.Generic;
 
 namespace Mayhem
 {
@@ -48,15 +51,19 @@ namespace Mayhem
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(ModuleList), new UIPropertyMetadata(string.Empty));
 
-        public ModuleList(IEnumerable list, string headerText)
+        public ModuleList(ObservableCollection<ModuleType> list, string headerText)
         {
             Text = headerText;
             InitializeComponent();
 
-            ModulesList.ItemsSource = list;
+            var view = CollectionViewSource.GetDefaultView(list);
+            view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+
+            ModulesList.ItemsSource = view;
 
             heightBasedOnModules = (int)Math.Min(185 + (43 * ModulesList.Items.Count), Height);            
-
+            heightBasedOnModules = Math.Max(heightBasedOnModules, 280);
+            
             Height = heightBasedOnModules;
 
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty

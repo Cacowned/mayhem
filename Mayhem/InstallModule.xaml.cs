@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using NuGet;
+using System.Net;
 
 namespace Mayhem
 {
@@ -85,7 +86,16 @@ namespace Mayhem
                 packageManager.Logger = new Logger(this);
 
                 // Install the package
-                ThreadPool.QueueUserWorkItem(o => packageManager.InstallPackage(Package, ignoreDependencies: false));
+                ThreadPool.QueueUserWorkItem(o => {
+                    try
+                    {
+                        packageManager.InstallPackage(Package, ignoreDependencies: false);
+                    }
+                    catch (WebException exception)
+                    {
+                        packageManager.Logger.Log(MessageLevel.Error, "Could not connect to server.");
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -114,7 +124,7 @@ namespace Mayhem
                 Progress.Value = e.PercentComplete;
             });
         }
-        
+
         public class Logger : ILogger
         {
             private readonly InstallModule parent;

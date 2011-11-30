@@ -2,7 +2,7 @@
 
 namespace MayhemCore
 {
-    internal class ModuleType
+    public class ModuleType
     {
         public Type Type
         {
