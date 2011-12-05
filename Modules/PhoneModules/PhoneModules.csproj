@@ -69,6 +69,9 @@
     <Compile Include="Wpf\PhoneFormDesigner.xaml.cs">
       <DependentUpon>PhoneFormDesigner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\QRCodeWindow.xaml.cs">
+      <DependentUpon>QRCodeWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\PhoneUIElementButton.xaml">
@@ -76,6 +79,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\PhoneFormDesigner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\QRCodeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
