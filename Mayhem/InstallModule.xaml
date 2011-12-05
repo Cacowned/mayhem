@@ -14,7 +14,6 @@
         <common:Borders Margin="0,5,0,0">
             <StackPanel>
                 <TextBlock>Install <Run Name="ModuleName" />?</TextBlock>
-                <ProgressBar Height="10" Name="Progress" Margin="10" Minimum="0" Maximum="100" />
                 <ListBox Margin="5,10,5,10" Height="100" Name="listBox1" />
                 <Grid HorizontalAlignment="Center" Margin="0 0 0 20">
                     <StackPanel Name="stackPanelDefaultButtons" Orientation="Horizontal" >

@@ -83,7 +83,7 @@ namespace Mayhem
         private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
-            double targetWidth = iWpfConfig.Width + 40;
+            double targetWidth = iWpfConfig.ActualWidth + 40;
             double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
 
             Rect target = new Rect(
@@ -144,7 +144,7 @@ namespace Mayhem
         private void Configuration_Loaded(object sender, RoutedEventArgs e)
         {
             WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
-            double targetWidth = iWpfConfig.Width + 40;
+            double targetWidth = iWpfConfig.ActualWidth + 40;
             double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
             stackPanelConfig.Width = targetWidth;
 
