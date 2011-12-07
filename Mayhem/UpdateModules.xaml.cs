@@ -1,48 +1,25 @@
 ﻿using System;
-using System.Deployment.Application;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Windows;
 using NuGet;
-using System.Net;
 
 namespace Mayhem
 {
-	/// <summary>
-	/// Interaction logic for InstallModule.xaml
-	/// </summary>
-	public partial class InstallModule : Window
+	public partial class UpdateModules : Window
 	{
-		private IPackage Package
+		private List<IPackage> packages;
+
+		public UpdateModules(List<IPackage> packages)
 		{
-			get;
-			set;
-		}
-
-		public InstallModule(IPackage package)
-		{
-			if (!UriParser.IsKnownScheme("pack"))
-				UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
-
-			ResourceDictionary dict = new ResourceDictionary();
-			Uri uri = new Uri("/MayhemWpf;component/Styles.xaml", UriKind.Relative);
-			dict.Source = uri;
-			Application.Current.Resources.MergedDictionaries.Add(dict);
-
-			Package = package;
+			this.packages = packages;
 
 			InitializeComponent();
 		}
 
-		protected override void OnInitialized(EventArgs e)
-		{
-			base.OnInitialized(e);
-			ModuleName.Text = Package.Id;
-		}
-
-		private void Install_Click(object sender, RoutedEventArgs e)
+		private void Update_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
@@ -57,15 +34,21 @@ namespace Mayhem
 				var packageManager = MayhemNuget.PackageManager;
 				packageManager.Logger = new Logger(this);
 
-				packageManager.Logger.Log(MessageLevel.Info, "Starting install.");
-				
+				packageManager.Logger.Log(MessageLevel.Info, "Starting update.");
+
 				// Install the package
-				ThreadPool.QueueUserWorkItem(o => {
+				ThreadPool.QueueUserWorkItem(o =>
+				{
 					try
 					{
-						packageManager.InstallPackage(Package, ignoreDependencies: false);
-						packageManager.Logger.Log(MessageLevel.Info, "Finished installing. You may now close this window.");
-						
+						foreach (IPackage package in packages)
+						{
+							Debug.WriteLine("Updating " + package.GetFullName());
+							packageManager.UpdatePackage(package, true);
+						}
+
+						packageManager.Logger.Log(MessageLevel.Info, "Finished updating. You may now close this window.");
+
 						Dispatcher.Invoke((Action)delegate
 						{
 							buttonClose.IsEnabled = true;
@@ -99,9 +82,9 @@ namespace Mayhem
 
 		public class Logger : ILogger
 		{
-			private readonly InstallModule parent;
+			private readonly UpdateModules parent;
 
-			public Logger(InstallModule parent)
+			public Logger(UpdateModules parent)
 			{
 				this.parent = parent;
 			}

@@ -10,9 +10,6 @@ using NuGet;
 
 namespace Mayhem
 {
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
 	public partial class App : Application
 	{
 		private readonly Dictionary<string, Assembly> dependencies;
@@ -28,12 +25,16 @@ namespace Mayhem
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
-
+			//Thread.Sleep(10 * 1000);
 			if (e.Args.Any())
 			{
 				if (e.Args.Contains("-installupdates"))
 				{
-					CheckForUpdates(false);
+					//Thread.Sleep(10 * 1000);
+					CheckForUpdates(true);
+					Process.Start("Mayhem.exe");
+					Shutdown();
+					return;
 				}
 				else if (e.Args.Contains("-noupdates"))
 				{
@@ -63,7 +64,7 @@ namespace Mayhem
 				ThreadPool.QueueUserWorkItem(CheckForUpdates);
 			}
 
-			FileSystemWatcher fileWatcher = new FileSystemWatcher(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"));
+			FileSystemWatcher fileWatcher = new FileSystemWatcher(MayhemNuget.InstallPath);
 			fileWatcher.IncludeSubdirectories = true;
 			fileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
 			fileWatcher.Changed += UpdateDependencies;
@@ -100,7 +101,7 @@ namespace Mayhem
 
 		private void LoadDependencies()
 		{
-			string[] files = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"), "*.dll", SearchOption.AllDirectories);
+			string[] files = Directory.GetFiles(MayhemNuget.InstallPath, "*.dll", SearchOption.AllDirectories);
 			foreach (string file in files)
 			{
 				try
@@ -143,13 +144,7 @@ namespace Mayhem
 		{
 			try
 			{
-				IPackageRepository repository;
-				if (Environment.GetCommandLineArgs().Contains("-localrepo"))
-					repository = new LocalPackageRepository(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\MayhemPackages\\Packages"));
-				else
-					repository = new DataServicePackageRepository(new Uri("http://makemayhem.com/www/nuget/"));
-
-				var manager = new PackageManager(repository, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"));
+				var manager = MayhemNuget.PackageManager;
 
 				List<IPackage> packagesLocal = manager.LocalRepository.GetPackages().ToList();
 
@@ -158,17 +153,20 @@ namespace Mayhem
 				{
 					if (install)
 					{
-						foreach (IPackage package in updates)
+						Dispatcher.Invoke((Action)delegate
 						{
-							Debug.WriteLine("Update: " + package.GetFullName());
-							manager.UpdatePackage(package, true);
-						}
+							UpdateModules window = new UpdateModules(updates);
+							if (window.ShowDialog() == true)
+							{
+								// Installation was a success
+							}
+						});
 					}
 					else
 					{
 						Dispatcher.Invoke((Action)delegate
 						{
-							if (MessageBox.Show("Press yes to get updates", "Mayhem Updates", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+							if (MessageBox.Show("Updates are available. Would you like to update?", "Mayhem Updates", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
 							{
 								wantsUpdates = true;
 								Shutdown();
