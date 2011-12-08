@@ -26,7 +26,7 @@ namespace VisionModules.Reactions
     /// </summary>
     [DataContract]
     [MayhemModule("Video", "Records an avi video of the camera scene before or after an event has fired")]
-    public class VideoReaction : ReactionBase, IWpfConfigurable
+    internal class VideoReaction : ReactionBase, IWpfConfigurable
     {
         [DataMember]
         private string folderLocation;
