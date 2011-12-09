@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -13,8 +15,6 @@ using System.Windows.Navigation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Windows.Data;
-using System.Collections.Generic;
 
 namespace Mayhem
 {
@@ -66,9 +66,13 @@ namespace Mayhem
 
             var view = CollectionViewSource.GetDefaultView(list);
             view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            list.CollectionChanged += list_CollectionChanged;
 
             ModulesList.ItemsSource = view;
-            
+
+            // set the choose button off the initial collection
+            EnableChoose(list);
+
             // In constructor subscribe to the Change event of the WindowRect DependencyProperty
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ModuleList));
             if (dpd != null)
@@ -79,7 +83,28 @@ namespace Mayhem
                 });
             }
         }
-        
+
+        private void list_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // If there are no modules, disable the choose button.
+            EnableChoose(e.NewItems);
+        }
+
+        private void EnableChoose(IList list)
+        {
+            if (list != null)
+            {
+                if (list.Count == 0)
+                {
+                    buttonChoose.IsEnabled = false;
+                }
+                else
+                {
+                    buttonChoose.IsEnabled = true;
+                }
+            }
+        }
+
         private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
