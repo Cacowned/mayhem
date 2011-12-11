@@ -85,6 +85,17 @@ namespace Mayhem
 			main.Show();
 		}
 
+		public static void OutputException(Exception e, int indent = 0)
+		{
+			if (e != null)
+			{
+				string prefix = new String(' ', indent * 4);
+				Debug.WriteLine(prefix + "Message: " + e.Message);
+				Debug.WriteLine(prefix + "Target Site: " + e.TargetSite);
+				OutputException(e.InnerException, indent+1);
+			}
+		}
+
 		private void UpdateDependencies(object source, FileSystemEventArgs e)
 		{
 			var nowTime = DateTime.Now;
