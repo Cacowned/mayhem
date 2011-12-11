@@ -9,156 +9,136 @@ using MayhemWpf.UserControls;
 
 namespace DefaultModules.Events
 {
-    [DataContract]
-    [MayhemModule("Folder Change", "Triggers when a folder is changed")]
-    public class FolderChange : EventBase, IWpfConfigurable, IDisposable
-    {
-        [DataMember]
-        private string folderToMonitor;
+	[DataContract]
+	[MayhemModule("Folder Change", "Triggers when a folder's contents are changed")]
+	public class FolderChange : EventBase, IWpfConfigurable, IDisposable
+	{
+		[DataMember]
+		private string folderToMonitor;
 
-        [DataMember]
-        private bool monitorName;
+		[DataMember]
+		private bool monitorSubDirs;
 
-        [DataMember]
-        private bool monitorSubDirs;
+		private FileSystemWatcher fileWatcher;
 
-        private FileSystemWatcher fileWatcher;
+		private DateTime lastTriggeredDate;
 
-        private DateTime lastTriggeredDate;
+		protected override void OnLoadDefaults()
+		{
+			folderToMonitor = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+		}
 
-        protected override void OnLoadDefaults()
-        {
-            folderToMonitor = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-        }
+		protected override void OnAfterLoad()
+		{
+			// Ensure that an instance of fswatcher always gets created
+			fileWatcher = new FileSystemWatcher();
 
-        protected override void OnAfterLoad()
-        {
-            // Ensure that an instance of fswatcher always gets created
-            fileWatcher = new FileSystemWatcher();
+			fileWatcher.NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName;
 
-            fileWatcher.Changed += OnChanged;
-            fileWatcher.Created += OnChanged;
-            fileWatcher.Deleted += OnChanged;
-            fileWatcher.Renamed += OnRenamed;
-        }
+			fileWatcher.Changed += OnChanged;
+			fileWatcher.Created += OnChanged;
+			fileWatcher.Deleted += OnChanged;
+			fileWatcher.Renamed += OnChanged;
+		}
 
-        /// <summary>
-        /// Set Filters the FSWatcher should monitor
-        /// </summary>
-        private void ConfigureFsMonitor()
-        {
-            fileWatcher.Path = folderToMonitor;
-            fileWatcher.IncludeSubdirectories = monitorSubDirs;
-        }
+		/// <summary>
+		/// Set Filters the FSWatcher should monitor
+		/// </summary>
+		private void ConfigureFsMonitor()
+		{
+			fileWatcher.Path = folderToMonitor;
+			fileWatcher.IncludeSubdirectories = monitorSubDirs;
+		}
 
-        protected override void OnEnabling(EnablingEventArgs e)
-        {
-            try
-            {
-                ConfigureFsMonitor();
-                fileWatcher.EnableRaisingEvents = true;
-            }
-            catch
-            {
-                ErrorLog.AddError(ErrorType.Failure, Strings.FolderChange_FolderDoesntExist);
-                e.Cancel = true;
-            }
-        }
+		protected override void OnEnabling(EnablingEventArgs e)
+		{
+			if (Directory.Exists(folderToMonitor))
+			{
+				ConfigureFsMonitor();
+				fileWatcher.EnableRaisingEvents = true;
+				
+				return;
+			}
 
-        protected override void OnDisabled(DisabledEventArgs e)
-        {
-            fileWatcher.EnableRaisingEvents = false;
-        }
+			ErrorLog.AddError(ErrorType.Failure, Strings.FolderChange_FolderDoesntExist);
+			e.Cancel = true;
+		}
 
-        public WpfConfiguration ConfigurationControl
-        {
-            get
-            {
-                return new FolderChangeConfig(folderToMonitor, monitorName, monitorSubDirs);
-            }
-        }
+		protected override void OnDisabled(DisabledEventArgs e)
+		{
+			fileWatcher.EnableRaisingEvents = false;
+		}
 
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            var config = configurationControl as FolderChangeConfig;
+		public WpfConfiguration ConfigurationControl
+		{
+			get
+			{
+				return new FolderChangeConfig(folderToMonitor, monitorSubDirs);
+			}
+		}
 
-            folderToMonitor = config.FolderToMonitor;
-            monitorName = config.MonitorName;
-            monitorSubDirs = config.SubDirectories;
-        }
+		public void OnSaved(WpfConfiguration configurationControl)
+		{
+			var config = configurationControl as FolderChangeConfig;
 
-        public string GetConfigString()
-        {
-            string conf = string.Empty;
-            int pathLength = folderToMonitor.Length;
+			folderToMonitor = config.FolderToMonitor;
+			monitorSubDirs = config.SubDirectories;
+		}
 
-            const int Cutoff = 10;
+		public string GetConfigString()
+		{
+			string conf = string.Empty;
+			int pathLength = folderToMonitor.Length;
 
-            string substr;
-            if (pathLength >= Cutoff)
-                substr = folderToMonitor.Substring(pathLength - Cutoff, Cutoff);
-            else
-                substr = folderToMonitor;
-            conf += "..." + substr;
-            if (monitorName)
-                conf += ", Renames";
-            if (monitorSubDirs)
-                conf += ", Subfolders";
-            return conf;
-        }
+			const int Cutoff = 20;
 
-        /// <summary>
-        /// Handler for file changes
-        /// </summary>
-        /// <param name="o"></param>
-        /// <param name="a"></param>
-        private void OnChanged(object o, FileSystemEventArgs a)
-        {
-            Logger.WriteLine(a.FullPath);
-            Logger.WriteLine("Args: " + a.ChangeType + " Fname " + a.Name);
+			string substr;
+			if (pathLength >= Cutoff)
+				substr = folderToMonitor.Substring(pathLength - Cutoff, Cutoff);
+			else
+				substr = folderToMonitor;
+			conf += "..." + substr;
 
-            if (!TriggeredRecently())
-            {
-                Trigger();
-            }
-        }
+			if (monitorSubDirs)
+				conf += ", Subfolders";
+			return conf;
+		}
 
-        /// <summary>
-        /// Handler for file renames
-        /// </summary>
-        /// <param name="o"></param>
-        /// <param name="a"></param>
-        private void OnRenamed(object o, RenamedEventArgs a)
-        {
-            Logger.WriteLine("Args: " + a.ChangeType + " " + a.Name);
-            if (monitorName)
-            {
-                if (!TriggeredRecently())
-                {
-                    Trigger();
-                }
-            }
-        }
+		/// <summary>
+		/// Handler for file changes
+		/// </summary>
+		/// <param name="o"></param>
+		/// <param name="a"></param>
+		private void OnChanged(object o, FileSystemEventArgs a)
+		{
+			Logger.WriteLine(a.FullPath);
+			Logger.WriteLine("Args: " + a.ChangeType + " Fname " + a.Name);
 
-        // Returns true if we have triggered recently
-        private bool TriggeredRecently()
-        {
-            var shouldReturn = false;
+			if (!TriggeredRecently())
+			{
+				Trigger();
+			}
+		}
 
-            var time = DateTime.Now;
-            if ((time - lastTriggeredDate).TotalMilliseconds <= 50)
-            {
-                shouldReturn = true;
-            }
+		// Returns true if we have triggered recently
+		private bool TriggeredRecently()
+		{
+			var shouldReturn = false;
 
-            lastTriggeredDate = DateTime.Now;
+			var time = DateTime.Now;
+			if ((time - lastTriggeredDate).TotalMilliseconds <= 50)
+			{
+				shouldReturn = true;
+			}
 
-            return shouldReturn;
-        }
+			lastTriggeredDate = DateTime.Now;
 
-        public void Dispose()
-        {
-            fileWatcher.Dispose();
-        }
-    }
+			return shouldReturn;
+		}
+
+		public void Dispose()
+		{
+			fileWatcher.Dispose();
+		}
+	}
 }

@@ -89,8 +89,7 @@
 
 
     <!-- This is the label that shows up in the configuration user controls to label rows -->
-    <Style TargetType="{x:Type TextBlock}" x:Key="ConfigLabel">
-        
+    <Style TargetType="FrameworkElement" x:Key="ConfigLabel">
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
 
