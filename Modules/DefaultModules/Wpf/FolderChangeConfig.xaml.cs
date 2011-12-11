@@ -14,23 +14,16 @@ namespace DefaultModules.Wpf
             private set;
         }
 
-        public bool MonitorName
-        {
-            get;
-            private set;
-        }
-
         public string FolderToMonitor
         {
             get;
             private set;
         }
 
-        public FolderChangeConfig(string path, bool monitorName, bool subDirs)
+        public FolderChangeConfig(string path, bool subDirs)
         {
             InitializeComponent();
             FolderToMonitor = path;
-            MonitorName = monitorName;
             SubDirectories = subDirs;
         }
 
@@ -39,7 +32,6 @@ namespace DefaultModules.Wpf
         /// </summary>
         public override void OnLoad()
         {
-            CheckName.IsChecked = MonitorName;
             CheckSubdirs.IsChecked = SubDirectories;
             textBoxDirectory.Text = FolderToMonitor;
         }
@@ -85,11 +77,6 @@ namespace DefaultModules.Wpf
             {
                 return "Folder Change";
             }
-        }
-
-        private void CheckName_Checked(object sender, RoutedEventArgs e)
-        {
-            MonitorName = (bool)CheckName.IsChecked;
         }
 
         private void CheckSubdirs_Checked(object sender, RoutedEventArgs e)
