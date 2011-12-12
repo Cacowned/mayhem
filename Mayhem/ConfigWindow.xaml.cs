@@ -12,178 +12,178 @@ using MayhemWpf.UserControls;
 
 namespace Mayhem
 {
-    /// <summary>
-    /// Interaction logic for ConfigWindow.xaml
-    /// </summary>
-    public partial class ConfigWindow : Window
-    {
-        private const double AnimationTime = 0.2;
+	/// <summary>
+	/// Interaction logic for ConfigWindow.xaml
+	/// </summary>
+	public partial class ConfigWindow : Window
+	{
+		private const double AnimationTime = 0.2;
 
-        private readonly IWpfConfigurable iWpf;
-        private readonly WpfConfiguration iWpfConfig;
-        
-        private Size previousSize;
+		private readonly IWpfConfigurable module;
+		private readonly WpfConfiguration configuration;
 
-        public ConfigWindow(IWpfConfigurable iWpf)
-        {
-            Owner = Application.Current.MainWindow;
-            this.iWpf = iWpf;
-            iWpfConfig = iWpf.ConfigurationControl;
-            InitializeComponent();
-            ConfigContent.Content = iWpfConfig;
+		private Size previousSize;
 
-            buttonSave.IsEnabled = iWpfConfig.CanSave;
+		public ConfigWindow(IWpfConfigurable module)
+		{
+			Owner = Application.Current.MainWindow;
+			this.module = module;
+			configuration = module.ConfigurationControl;
+			InitializeComponent();
+			ConfigContent.Content = configuration;
 
-            windowHeader.Text = iWpfConfig.Title;
-            iWpfConfig.CanSavedChanged += iWpfConfig_CanSavedChanged;
+			buttonSave.IsEnabled = configuration.CanSave;
 
-            iWpfConfig.Loaded += Configuration_Loaded;
+			windowHeader.Text = configuration.Title;
+			configuration.CanSavedChanged += configuration_CanSavedChanged;
 
-            // In constructor subscribe to the Change event of the WindowRect DependencyProperty
-            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ConfigWindow));
-            if (dpd != null)
-            {
-                dpd.AddValueChanged(this, delegate
-                {
-                    ResizeWindow(WindowRect);
-                });
-            }
-        }
+			configuration.Loaded += Configuration_Loaded;
 
-        private void Configuration_Loaded(object sender, RoutedEventArgs e)
-        {
-            previousSize = new Size(ActualWidth, ActualHeight);
-            iWpfConfig.SizeChanged += ConfigContent_SizeChanged;
-        }
+			// In constructor subscribe to the Change event of the WindowRect DependencyProperty
+			DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ConfigWindow));
+			if (dpd != null)
+			{
+				dpd.AddValueChanged(this, delegate
+				{
+					ResizeWindow(WindowRect);
+				});
+			}
+		}
 
-        private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
+		private void Configuration_Loaded(object sender, RoutedEventArgs e)
+		{
+			previousSize = new Size(ActualWidth, ActualHeight);
+			configuration.SizeChanged += ConfigContent_SizeChanged;
+		}
 
-            Rect target = new Rect(
-                Left - ((ActualWidth - previousSize.Width) / 2),
-                Top - ((ActualHeight - previousSize.Height) / 2),
-                ActualWidth,
-                ActualHeight);
+		private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
 
-            previousSize = new Size(ActualWidth, ActualHeight);
-            StartStoryBoard(WindowRect, target, AnimationTime);
-        }
+			Rect target = new Rect(
+				Left - ((ActualWidth - previousSize.Width) / 2),
+				Top - ((ActualHeight - previousSize.Height) / 2),
+				ActualWidth,
+				ActualHeight);
 
-        private void iWpfConfig_CanSavedChanged(bool canSave)
-        {
-            Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
-            {
-                buttonSave.IsEnabled = canSave;
-            }));
-        }
+			previousSize = new Size(ActualWidth, ActualHeight);
+			StartStoryBoard(WindowRect, target, AnimationTime);
+		}
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                iWpfConfig.OnLoad();
-            }
-            catch
-            {
-                MessageBox.Show("Error loading " + iWpfConfig.Name, "Mayhem: Error", MessageBoxButton.OK);
-            }
-        }
+		private void configuration_CanSavedChanged(bool canSave)
+		{
+			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
+			{
+				buttonSave.IsEnabled = canSave;
+			}));
+		}
 
-        private void Button_Save_Click(object sender, RoutedEventArgs e)
-        {
-            WpfConfiguration config = ConfigContent.Content as WpfConfiguration;
-            try
-            {
-                iWpfConfig.OnSave();
-                iWpf.OnSaved(config);
-                ((ModuleBase)iWpf).SetConfigString();
-            }
-            catch
-            {
-                ErrorLog.AddError(ErrorType.Failure, "Error saving " + iWpfConfig.Name);
-            }
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				configuration.OnLoad();
+			}
+			catch
+			{
+				MessageBox.Show("Error loading " + configuration.Name, "Mayhem: Error", MessageBoxButton.OK);
+			}
+		}
 
-            ThreadPool.QueueUserWorkItem(o =>
-            {
-                try
-                {
-                    iWpfConfig.OnClosing();
-                }
-                catch
-                {
-                    ErrorLog.AddError(ErrorType.Failure, "Error closing " + iWpfConfig.Name + "'s configuration");
-                }
-            });
-            ((MainWindow)Application.Current.MainWindow).Save();
-            DialogResult = true;
-        }
+		private void Button_Save_Click(object sender, RoutedEventArgs e)
+		{
+			WpfConfiguration config = ConfigContent.Content as WpfConfiguration;
+			try
+			{
+				configuration.OnSave();
+				module.OnSaved(config);
+				((ModuleBase)module).SetConfigString();
+			}
+			catch
+			{
+				ErrorLog.AddError(ErrorType.Failure, "Error saving " + configuration.Name);
+			}
 
-        private void Button_Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            ThreadPool.QueueUserWorkItem(o =>
-            {
-                try
-                {
-                    iWpfConfig.OnCancel();
-                    iWpfConfig.OnClosing();
-                }
-                catch
-                {
-                    ErrorLog.AddError(ErrorType.Failure, "Error cancelling " + iWpfConfig.Name + "'s configuration");
-                }
-            });
-            DialogResult = false;
-        }
+			ThreadPool.QueueUserWorkItem(o =>
+			{
+				try
+				{
+					configuration.OnClosing();
+				}
+				catch
+				{
+					ErrorLog.AddError(ErrorType.Failure, "Error closing " + configuration.Name + "'s configuration");
+				}
+			});
+			((MainWindow)Application.Current.MainWindow).Save();
+			DialogResult = true;
+		}
 
-        #region Window Resizing
-        public Rect WindowRect
-        {
-            get
-            {
-                return (Rect)GetValue(WindowRectProperty);
-            }
+		private void Button_Cancel_Click(object sender, RoutedEventArgs e)
+		{
+			ThreadPool.QueueUserWorkItem(o =>
+			{
+				try
+				{
+					configuration.OnCancel();
+					configuration.OnClosing();
+				}
+				catch
+				{
+					ErrorLog.AddError(ErrorType.Failure, "Error cancelling " + configuration.Name + "'s configuration");
+				}
+			});
+			DialogResult = false;
+		}
 
-            set
-            {
-                SetValue(WindowRectProperty, value);
-            }
-        }
+		#region Window Resizing
+		public Rect WindowRect
+		{
+			get
+			{
+				return (Rect)GetValue(WindowRectProperty);
+			}
 
-        public static readonly DependencyProperty WindowRectProperty =
-            DependencyProperty.Register("WindowRect", typeof(Rect), typeof(ConfigWindow), new UIPropertyMetadata(new Rect(0, 0, 0, 0)));
+			set
+			{
+				SetValue(WindowRectProperty, value);
+			}
+		}
 
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+		public static readonly DependencyProperty WindowRectProperty =
+			DependencyProperty.Register("WindowRect", typeof(Rect), typeof(ConfigWindow), new UIPropertyMetadata(new Rect(0, 0, 0, 0)));
 
-        /// <summary>
-        /// Resizes the window to the desired Rect
-        /// Called when WindowRect DependencyProperty changes
-        /// </summary>
-        /// <param name="value">The target Rect containing size and Position</param>
-        private void ResizeWindow(Rect value)
-        {
-            IntPtr windowPtr = new WindowInteropHelper(this).Handle;
-            MoveWindow(windowPtr, (int)value.Left, (int)value.Top, (int)value.Width, (int)value.Height, true);
-        }
+		[DllImport("user32.dll", SetLastError = true)]
+		internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
 
-        private void StartStoryBoard(Rect currentRect, Rect targetRect, double time)
-        {
-            RectAnimation rectAnimation = new RectAnimation();
-            rectAnimation.Duration = TimeSpan.FromSeconds(time);
-            rectAnimation.FillBehavior = FillBehavior.HoldEnd;
+		/// <summary>
+		/// Resizes the window to the desired Rect
+		/// Called when WindowRect DependencyProperty changes
+		/// </summary>
+		/// <param name="value">The target Rect containing size and Position</param>
+		private void ResizeWindow(Rect value)
+		{
+			IntPtr windowPtr = new WindowInteropHelper(this).Handle;
+			MoveWindow(windowPtr, (int)value.Left, (int)value.Top, (int)value.Width, (int)value.Height, true);
+		}
 
-            rectAnimation.To = targetRect;
+		private void StartStoryBoard(Rect currentRect, Rect targetRect, double time)
+		{
+			RectAnimation rectAnimation = new RectAnimation();
+			rectAnimation.Duration = TimeSpan.FromSeconds(time);
+			rectAnimation.FillBehavior = FillBehavior.HoldEnd;
 
-            Storyboard.SetTarget(rectAnimation, this);
-            Storyboard.SetTargetProperty(rectAnimation, new PropertyPath(WindowRectProperty));
+			rectAnimation.To = targetRect;
 
-            Storyboard storyBoard = new Storyboard();
-            storyBoard.Children.Add(rectAnimation);
+			Storyboard.SetTarget(rectAnimation, this);
+			Storyboard.SetTargetProperty(rectAnimation, new PropertyPath(WindowRectProperty));
 
-            storyBoard.Begin(this);
-        }
+			Storyboard storyBoard = new Storyboard();
+			storyBoard.Children.Add(rectAnimation);
 
-        #endregion
-    }
+			storyBoard.Begin(this);
+		}
+
+		#endregion
+	}
 }

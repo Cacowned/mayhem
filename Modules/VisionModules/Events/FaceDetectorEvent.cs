@@ -18,8 +18,8 @@ namespace VisionModules.Events
     /// When the amount of faces goes below the threshold and then above it again, the reaction triggers again, and so forth. 
     /// </summary>
     [DataContract]
-    //[MayhemModule("Face Detector", "Detects if and how many faces are in the scene")]
-    public class FaceDetectorEvent : EventBase, IWpfConfigurable
+    [MayhemModule("Face Detector", "Detects if and how many faces are in the scene")]
+    internal class FaceDetectorEvent : EventBase, IWpfConfigurable
     {
         // ms
         private const int DetectionInterval = 2500;

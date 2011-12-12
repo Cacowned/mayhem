@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Deployment.Application;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Windows;
 using NuGet;
-using System.Net;
 
 namespace Mayhem
 {
@@ -58,14 +55,15 @@ namespace Mayhem
 				packageManager.Logger = new Logger(this);
 
 				packageManager.Logger.Log(MessageLevel.Info, "Starting install.");
-				
+
 				// Install the package
-				ThreadPool.QueueUserWorkItem(o => {
+				ThreadPool.QueueUserWorkItem(o =>
+				{
 					try
 					{
 						packageManager.InstallPackage(Package, ignoreDependencies: false);
 						packageManager.Logger.Log(MessageLevel.Info, "Finished installing. You may now close this window.");
-						
+
 						Dispatcher.Invoke((Action)delegate
 						{
 							buttonClose.IsEnabled = true;

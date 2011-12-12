@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Collections.ObjectModel;
 
 namespace MayhemCore
 {
@@ -14,7 +13,7 @@ namespace MayhemCore
     {
         private readonly List<Type> allTypes;
 
-        private string Location;
+        private string location;
 
         private DateTime lastUpdated;
 
@@ -25,9 +24,9 @@ namespace MayhemCore
 
         internal bool ScanModules(string path)
         {
-            Location = path;
+            location = path;
 
-            FileSystemWatcher fileWatcher = new FileSystemWatcher(Location);
+            FileSystemWatcher fileWatcher = new FileSystemWatcher(location);
             fileWatcher.IncludeSubdirectories = true;
             fileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
             fileWatcher.Changed += UpdateDependencies;
@@ -37,8 +36,9 @@ namespace MayhemCore
             fileWatcher.EnableRaisingEvents = true;
 
             lastUpdated = DateTime.Now;
+
             // Load up all the types of things that we want in the application root
-            return FindTypes(Location);
+            return FindTypes(location);
         }
 
         private void UpdateDependencies(object source, FileSystemEventArgs e)
@@ -47,7 +47,7 @@ namespace MayhemCore
 
             if ((nowTime - lastUpdated).TotalMilliseconds > 30)
             {
-                FindTypes(Location);
+                FindTypes(location);
                 lastUpdated = nowTime;
             }
         }
@@ -66,7 +66,6 @@ namespace MayhemCore
 
             // Clear this of all the modules
             Clear();
-
 
             if (!Directory.Exists(path))
                 return false;
@@ -115,7 +114,6 @@ namespace MayhemCore
                 }
             }
 
-            //Sort(new ModuleTypeComparer());
             return true;
         }
 

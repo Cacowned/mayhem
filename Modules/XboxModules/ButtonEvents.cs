@@ -44,7 +44,7 @@ namespace XboxModules
             }
         }
 
-        ButtonEvents()
+        internal ButtonEvents()
         {
         }
 

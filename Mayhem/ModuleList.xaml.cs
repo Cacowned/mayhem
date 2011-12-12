@@ -43,7 +43,7 @@ namespace Mayhem
 			private set;
 		}
 
-		private WpfConfiguration iWpfConfig;
+		private WpfConfiguration configuration;
 
 		private int listHeight;
 		private int listWidth;
@@ -66,12 +66,12 @@ namespace Mayhem
 
 			var view = CollectionViewSource.GetDefaultView(list);
 			view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
-            list.CollectionChanged += list_CollectionChanged;
+			list.CollectionChanged += list_CollectionChanged;
 
 			ModulesList.ItemsSource = view;
-			
-            // set the choose button off the initial collection
-            EnableChoose(list);
+
+			// set the choose button off the initial collection
+			EnableChoose(list);
 
 			// In constructor subscribe to the Change event of the WindowRect DependencyProperty
 			DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(WindowRectProperty, typeof(ModuleList));
@@ -83,33 +83,33 @@ namespace Mayhem
 				});
 			}
 		}
-		
-        private void list_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            // If there are no modules, disable the choose button.
-            EnableChoose(e.NewItems);
-        }
 
-        private void EnableChoose(IList list)
-        {
-            if (list != null)
-            {
-                if (list.Count == 0)
-                {
-                    buttonChoose.IsEnabled = false;
-                }
-                else
-                {
-                    buttonChoose.IsEnabled = true;
-                }
-            }
-        }
+		private void list_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			// If there are no modules, disable the choose button.
+			EnableChoose(e.NewItems);
+		}
+
+		private void EnableChoose(IList list)
+		{
+			if (list != null)
+			{
+				if (list.Count == 0)
+				{
+					buttonChoose.IsEnabled = false;
+				}
+				else
+				{
+					buttonChoose.IsEnabled = true;
+				}
+			}
+		}
 
 		private void ConfigContent_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
 			WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
-			double targetWidth = iWpfConfig.ActualWidth + 40;
-			double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
+			double targetWidth = configuration.ActualWidth + 40;
+			double targetHeight = windowHeaderConfig.ActualHeight + configuration.ActualHeight + 100;
 
 			Rect target = new Rect(
 				Left - ((targetWidth - ActualWidth) / 2),
@@ -133,14 +133,14 @@ namespace Mayhem
 					try
 					{
 						SelectedModuleInstance = (IWpfConfigurable)Activator.CreateInstance(SelectedModule.Type);
-						iWpfConfig = SelectedModuleInstance.ConfigurationControl;
-						ConfigContent.Content = iWpfConfig;
-						buttonSave.IsEnabled = iWpfConfig.CanSave;
-						windowHeaderConfig.Text = iWpfConfig.Title;
-						iWpfConfig.Loaded += Configuration_Loaded;
-						iWpfConfig.CanSavedChanged += Configuration_CanSavedChanged;
-						iWpfConfig.SizeChanged += ConfigContent_SizeChanged;
-						iWpfConfig.OnLoad();
+						configuration = SelectedModuleInstance.ConfigurationControl;
+						ConfigContent.Content = configuration;
+						buttonSave.IsEnabled = configuration.CanSave;
+						windowHeaderConfig.Text = configuration.Title;
+						configuration.Loaded += Configuration_Loaded;
+						configuration.CanSavedChanged += Configuration_CanSavedChanged;
+						configuration.SizeChanged += ConfigContent_SizeChanged;
+						configuration.OnLoad();
 					}
 					catch (Exception ex)
 					{
@@ -170,8 +170,8 @@ namespace Mayhem
 		private void Configuration_Loaded(object sender, RoutedEventArgs e)
 		{
 			WindowRect = new Rect(Left, Top, ActualWidth, ActualHeight);
-			double targetWidth = iWpfConfig.ActualWidth + 40;
-			double targetHeight = windowHeaderConfig.ActualHeight + iWpfConfig.ActualHeight + 100;
+			double targetWidth = configuration.ActualWidth + 40;
+			double targetHeight = windowHeaderConfig.ActualHeight + configuration.ActualHeight + 100;
 			stackPanelConfig.Width = targetWidth;
 
 			// Animate the render transform of the grid
@@ -196,14 +196,14 @@ namespace Mayhem
 			Rect target = new Rect(
 				Left - ((targetWidth - ActualWidth) / 2),
 				Top - ((targetHeight - ActualHeight) / 2),
-				targetWidth, 
+				targetWidth,
 				targetHeight);
 
 			StartStoryBoard(WindowRect, target, AnimationTime);
 
 			buttonChoose.IsEnabled = false;
 			buttonCancel.IsEnabled = false;
-			buttonSave.IsEnabled = iWpfConfig.CanSave;
+			buttonSave.IsEnabled = configuration.CanSave;
 			buttonConfigCancel.IsEnabled = true;
 		}
 
@@ -217,7 +217,7 @@ namespace Mayhem
 			WpfConfiguration config = ConfigContent.Content as WpfConfiguration;
 			try
 			{
-				iWpfConfig.OnSave();
+				configuration.OnSave();
 				SelectedModuleInstance.OnSaved(config);
 				((ModuleBase)SelectedModuleInstance).SetConfigString();
 			}
@@ -230,7 +230,7 @@ namespace Mayhem
 			{
 				try
 				{
-					iWpfConfig.OnClosing();
+					configuration.OnClosing();
 				}
 				catch
 				{
@@ -246,8 +246,8 @@ namespace Mayhem
 				{
 					try
 					{
-						iWpfConfig.OnCancel();
-						iWpfConfig.OnClosing();
+						configuration.OnCancel();
+						configuration.OnClosing();
 					}
 					catch
 					{
@@ -259,7 +259,8 @@ namespace Mayhem
 			DoubleAnimation animSlideOut = new DoubleAnimation();
 			animSlideOut.To = 0;
 			animSlideOut.Duration = new Duration(TimeSpan.FromSeconds(AnimationTime));
-			animSlideOut.Completed += delegate {
+			animSlideOut.Completed += delegate
+			{
 				stackPanelConfig.Visibility = Visibility.Hidden;
 			};
 			gridControls.RenderTransform.BeginAnimation(TranslateTransform.XProperty, animSlideOut);
@@ -276,7 +277,7 @@ namespace Mayhem
 			Rect target = new Rect(
 				Left - ((listWidth - ActualWidth) / 2),
 				Top - ((listHeight - ActualHeight) / 2),
-				listWidth, 
+				listWidth,
 				listHeight);
 
 			StartStoryBoard(WindowRect, target, AnimationTime);
