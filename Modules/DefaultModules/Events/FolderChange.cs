@@ -6,6 +6,9 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Windows.Media;
+using System.Globalization;
+using System.Windows;
 
 namespace DefaultModules.Events
 {
@@ -90,7 +93,7 @@ namespace DefaultModules.Events
 			string conf = string.Empty;
 			int pathLength = folderToMonitor.Length;
 
-			const int Cutoff = 20;
+			const int Cutoff = 11;
 
 			string substr;
 			if (pathLength >= Cutoff)

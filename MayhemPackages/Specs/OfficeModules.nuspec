@@ -3,12 +3,12 @@
   <metadata>
     <id>OfficeModules</id>
     <version>1.0</version>
-    <authors>Microsoft</authors>
-    <owners>Microsoft</owners>
+    <authors>Eli White</authors>
+    <owners>Outercurve</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Package description</description>
-    <copyright>Copyright © Microsoft 2011</copyright>
-    <tags>Tag1 Tag2</tags>
+    <description>Modules that interact with Office 2010 applications.</description>
+    <copyright>Copyright © Outercurve 2011</copyright>
+    <tags>Outlook, Powerpoint, Email, Reminder, Slides, Next, Previous</tags>
     <dependencies>
       <dependency id="MayhemCore" version="1.0" />
     </dependencies>

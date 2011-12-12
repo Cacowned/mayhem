@@ -28,7 +28,7 @@ namespace XboxModules
             }
         }
 
-        ButtonWatcher()
+        internal ButtonWatcher()
         {
             keyCombinationHandlerMap = new Dictionary<Buttons, List<KeyCombinationHandler>>();
             events = ButtonEvents.Instance;

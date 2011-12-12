@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NuGet;
-using System.IO;
 using System.Deployment.Application;
+using System.IO;
+using System.Linq;
+using NuGet;
+
 namespace Mayhem
 {
 	public class MayhemNuget
@@ -55,12 +54,11 @@ namespace Mayhem
 		{
 			get
 			{
-				if(manager == null)
+				if (manager == null)
 					manager = new PackageManager(MayhemNuget.Repository, MayhemNuget.InstallPath);
 
 				return manager;
 			}
 		}
-		
 	}
 }
