@@ -3,92 +3,99 @@ using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
-    public partial class TimerConfig : WpfConfiguration
-    {
-        public int Hours
-        {
-            get;
-            private set;
-        }
+	public partial class TimerConfig : WpfConfiguration
+	{
+		public int Hours
+		{
+			get;
+			private set;
+		}
 
-        public int Minutes
-        {
-            get;
-            private set;
-        }
+		public int Minutes
+		{
+			get;
+			private set;
+		}
 
-        public int Seconds
-        {
-            get;
-            private set;
-        }
+		public int Seconds
+		{
+			get;
+			private set;
+		}
 
-        public TimerConfig(int hours, int minutes, int seconds)
-        {
-            Hours = hours;
-            Minutes = minutes;
-            Seconds = seconds;
+		private bool shouldCheckValidity;
 
-            InitializeComponent();
-        }
+		public TimerConfig(int hours, int minutes, int seconds)
+		{
+			Hours = hours;
+			Minutes = minutes;
+			Seconds = seconds;
 
-        public override string Title
-        {
-            get { return "Timer"; }
-        }
+			InitializeComponent();
+		}
 
-        public override void OnLoad()
-        {
-            HoursBox.Text = Hours.ToString();
-            MinutesBox.Text = Minutes.ToString();
-            SecondsBox.Text = Seconds.ToString();
-        }
+		public override string Title
+		{
+			get { return "Timer"; }
+		}
 
-        public override void OnSave()
-        {
-            Seconds = int.Parse(SecondsBox.Text);
-            Minutes = int.Parse(MinutesBox.Text);
-            Hours = int.Parse(HoursBox.Text);
-        }
+		public override void OnLoad()
+		{
+			HoursBox.Text = Hours.ToString();
+			MinutesBox.Text = Minutes.ToString();
+			SecondsBox.Text = Seconds.ToString();
 
-        private string CheckValidity()
-        {
-            int seconds, minutes, hours;
+			shouldCheckValidity = true;
+		}
 
-            bool badsec = !(int.TryParse(SecondsBox.Text, out seconds) && (seconds >= 0 && seconds < 60));
-            bool badmin = !(int.TryParse(MinutesBox.Text, out minutes) && (minutes >= 0 && minutes < 60));
-            bool badhour = !(int.TryParse(HoursBox.Text, out hours) && (hours >= 0));
+		public override void OnSave()
+		{
+			Seconds = int.Parse(SecondsBox.Text);
+			Minutes = int.Parse(MinutesBox.Text);
+			Hours = int.Parse(HoursBox.Text);
+		}
 
-            bool badtotal = seconds == 0 && minutes == 0 && hours == 0;
+		private string CheckValidity()
+		{
+			int seconds, minutes, hours;
 
-            string s = "Invalid";
+			bool badsec = !(int.TryParse(SecondsBox.Text, out seconds) && (seconds >= 0 && seconds < 60));
+			bool badmin = !(int.TryParse(MinutesBox.Text, out minutes) && (minutes >= 0 && minutes < 60));
+			bool badhour = !(int.TryParse(HoursBox.Text, out hours) && (hours >= 0));
 
-            if (badsec)
-            {
-                s += " seconds";
-            }
+			bool badtotal = seconds == 0 && minutes == 0 && hours == 0;
 
-            if (badmin)
-            {
-                s += " minutes";
-            }
+			string s = "Invalid";
 
-            if (badhour)
-            {
-                s += " hours";
-            }
+			if (badsec)
+			{
+				s += " seconds";
+			}
 
-            if (badtotal && !(badsec || badmin || badhour))
-                s = "Timer length must be greater than 0.";
+			if (badmin)
+			{
+				s += " minutes";
+			}
 
-            CanSave = !(badsec || badmin || badhour || badtotal);
-            return CanSave ? string.Empty : s;
-        }
+			if (badhour)
+			{
+				s += " hours";
+			}
 
-        private void TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            textInvalid.Text = CheckValidity();
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-        }
-    }
+			if (badtotal && !(badsec || badmin || badhour))
+				s = "Timer length must be greater than 0.";
+
+			CanSave = !(badsec || badmin || badhour || badtotal);
+			return CanSave ? string.Empty : s;
+		}
+
+		private void TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+		{
+			textInvalid.Text = CheckValidity();
+			if (shouldCheckValidity)
+			{
+				textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+			}
+		}
+	}
 }
