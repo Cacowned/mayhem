@@ -62,17 +62,24 @@ namespace PhidgetModules.Reaction
 
         public override void Perform()
         {
-            switch (outputType)
+            if (ifKit.Attached)
             {
-                case DigitalOutputType.Toggle:
-                    ifKit.outputs[index] = !ifKit.outputs[index];
-                    break;
-                case DigitalOutputType.On:
-                    ifKit.outputs[index] = true;
-                    break;
-                case DigitalOutputType.Off:
-                    ifKit.outputs[index] = false;
-                    break;
+                switch (outputType)
+                {
+                    case DigitalOutputType.Toggle:
+                        ifKit.outputs[index] = !ifKit.outputs[index];
+                        break;
+                    case DigitalOutputType.On:
+                        ifKit.outputs[index] = true;
+                        break;
+                    case DigitalOutputType.Off:
+                        ifKit.outputs[index] = false;
+                        break;
+                }
+            }
+            else
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Phidget Interface Kit is not attached");
             }
         }
     }
