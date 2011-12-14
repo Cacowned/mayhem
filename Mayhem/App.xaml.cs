@@ -22,7 +22,6 @@ namespace Mayhem
 			dependencies = new Dictionary<string, Assembly>();
 		}
 
-		[PreEmptive.Attributes.Setup(CustomEndpoint = "s.info/PreEmptive.Web.Services.Messaging/MessagingServiceV2.asmx")]
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
@@ -135,7 +134,6 @@ namespace Mayhem
 			AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 		}
 
-		[PreEmptive.Attributes.Teardown]
 		private void Current_Exit(object sender, ExitEventArgs e)
 		{
 			if (wantsUpdates)

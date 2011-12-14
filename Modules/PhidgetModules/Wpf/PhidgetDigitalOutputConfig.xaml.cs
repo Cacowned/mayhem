@@ -31,6 +31,7 @@ namespace PhidgetModules.Wpf
         public override void OnLoad()
         {
             IfKit.Attach += ifKit_Attach;
+            PopulateOutputs();
 
             OutputBox.SelectedIndex = Index;
 
@@ -49,15 +50,23 @@ namespace PhidgetModules.Wpf
 
         private void ifKit_Attach(object sender, AttachEventArgs e)
         {
-            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-            {
-                CanSave = true;
+            PopulateOutputs();
+        }
 
-                for (int i = 0; i < IfKit.outputs.Count; i++)
+        private void PopulateOutputs()
+        {
+            if (IfKit.Attached)
+            {
+                Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
                 {
-                    OutputBox.Items.Add(i);
-                }
-            }));
+                    CanSave = true;
+
+                    for (int i = 0; i < IfKit.outputs.Count; i++)
+                    {
+                        OutputBox.Items.Add(i);
+                    }
+                }));
+            }
         }
 
         private void OutputBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
