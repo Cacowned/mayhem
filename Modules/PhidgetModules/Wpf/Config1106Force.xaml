@@ -14,7 +14,7 @@
 			<RowDefinition />
 		</Grid.RowDefinitions>
 
-		<StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
+		<StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Center" Orientation="Vertical">
 			<RadioButton Name="IncreasingRadio" GroupName="Direction" Content="Goes Above" IsChecked="True" />
 			<RadioButton Name="DecreasingRadio" GroupName="Direction" Content="Drops Below" />
 		</StackPanel>

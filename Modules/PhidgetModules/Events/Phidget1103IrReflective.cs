@@ -7,47 +7,52 @@ using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Events
 {
-    [DataContract]
-    [MayhemModule("Phidget: Proximity Sensor", "Triggers based on object detection")]
-    public class Phidget1103IRReflective : OnOffSensorEventBase, IWpfConfigurable
-    {
-        protected override void OnLoadDefaults()
-        {
-            BottomThreshold = 0;
-            TopThreshold = 100;
-        }
+	[DataContract]
+	[MayhemModule("Phidget: Proximity Sensor", "Triggers based on object detection")]
+	public class Phidget1103IRReflective : OnOffSensorEventBase, IWpfConfigurable
+	{
+		protected override void OnLoadDefaults()
+		{
+			BottomThreshold = 0;
+			TopThreshold = 100;
+		}
 
-        public WpfConfiguration ConfigurationControl
-        {
-            get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1103IrReflective(OnTurnOn)); }
-        }
+		public WpfConfiguration ConfigurationControl
+		{
+			// We negate OnTurnOn because the proximity sensor actually says that it sees an object
+			// when the value drops below 100 opposed to sensors like touch which shoot up when they
+			// detect.
+			get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1103IrReflective(!OnTurnOn)); }
+		}
 
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            SensorConfig sensor = configurationControl as SensorConfig;
-            Config1103IrReflective config = sensor.Sensor as Config1103IrReflective;
+		public void OnSaved(WpfConfiguration configurationControl)
+		{
+			SensorConfig sensor = configurationControl as SensorConfig;
+			Config1103IrReflective config = sensor.Sensor as Config1103IrReflective;
 
-            Index = sensor.Index;
-            OnTurnOn = config.OnTurnOn;
-        }
+			Index = sensor.Index;
 
-        public string GetConfigString()
-        {
-            string message = "recognizes an object";
-            if (!OnTurnOn)
-            {
-                message = "stops recognizing an object";
-            }
+			// The reason we negate here is explained above.
+			OnTurnOn = !config.OnTurnOn;
+		}
 
-            return string.Format("Index {0} {1}", Index, message);
-        }
+		public string GetConfigString()
+		{
+			string message = "recognizes an object";
+			if (!OnTurnOn)
+			{
+				message = "stops recognizing an object";
+			}
 
-        protected string ConvertToString(int value)
-        {
-            if (value < 100)
-                return "Detected";
+			return string.Format("Index {0} {1}", Index, message);
+		}
 
-            return "Not Detected";
-        }
-    }
+		protected string ConvertToString(int value)
+		{
+			if (value < 100)
+				return "Detected";
+
+			return "Not Detected";
+		}
+	}
 }

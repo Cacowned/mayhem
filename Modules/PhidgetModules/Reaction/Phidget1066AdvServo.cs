@@ -9,7 +9,7 @@ namespace PhidgetModules.Reaction
 {
     [DataContract]
     [MayhemModule("Phidget: Adv. Servo", "Controls a servo")]
-    public class Phidget1066AdvServo : ReactionBase, IWpfConfigurable
+	internal class Phidget1066AdvServo : ReactionBase, IWpfConfigurable
     {
         // Instance of the servo class
         private static AdvancedServo advServo;

@@ -36,6 +36,8 @@ namespace PhidgetModules
 
         protected override void OnLoadDefaults()
         {
+			base.OnLoadDefaults();
+
             TopThreshold = 900;
             BottomThreshold = 500;
             OnTurnOn = true;

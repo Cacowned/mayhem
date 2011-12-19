@@ -28,7 +28,6 @@ namespace PhidgetModules
         protected override void OnBeforeLoad()
         {
             IfKit = InterfaceFactory.Interface;
-            base.OnBeforeLoad();
         }
 
         protected override void OnLoadDefaults()

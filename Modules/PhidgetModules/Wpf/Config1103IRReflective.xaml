@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">Trigger When:</TextBlock>
-        <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Orientation="Vertical">
             <RadioButton Name="OnWhenOn" GroupName="OnWhenOn" Content="Goes On" IsChecked="True" />
             <RadioButton Name="OnWhenOff" GroupName="OnWhenOn" Content="Turns Off" />
         </StackPanel>

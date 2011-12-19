@@ -9,8 +9,8 @@ using Phidgets.Events;
 namespace PhidgetModules.Events
 {
     [DataContract]
-    //[MayhemModule("Phidget: Digital Input", "Triggers on a digital input")]
-    public class DigitalInput : EventBase, IWpfConfigurable
+    [MayhemModule("Phidget: Digital Input", "Triggers on a digital input")]
+    internal class DigitalInput : EventBase, IWpfConfigurable
     {
         // Which index do we want to be looking at?
         [DataMember]

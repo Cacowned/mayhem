@@ -12,7 +12,7 @@ namespace PhidgetModules.Events
 {
     [DataContract]
     [MayhemModule("Phidget: IR Receiver", "Triggers when it sees a certain IR code")]
-    public class Phidget1055IrReceiver : EventBase, IWpfConfigurable
+	internal class Phidget1055IrReceiver : EventBase, IWpfConfigurable
     {
         [DataMember]
         private IRCode code;
