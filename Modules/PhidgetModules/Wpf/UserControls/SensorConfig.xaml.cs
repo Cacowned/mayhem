@@ -13,7 +13,9 @@ namespace PhidgetModules.Wpf.UserControls
     public partial class SensorConfig : WpfConfiguration
     {
         public int Index { get; private set; }
+
         public InterfaceKit IfKit { get; private set; }
+
         public Func<int, string> Convertor { get; private set; }
 
         public PhidgetConfigControl Sensor { get; private set; }

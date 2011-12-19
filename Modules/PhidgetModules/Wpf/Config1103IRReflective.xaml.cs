@@ -12,7 +12,6 @@ namespace PhidgetModules.Wpf
             private set;
         }
 
-
         protected Func<int, string> Convertor;
         public InterfaceKit IfKit;
 
@@ -25,9 +24,16 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
-            OnWhenOn.IsChecked = OnTurnOn;
-            OnWhenOff.IsChecked = !OnTurnOn;
+			// The reason this is backwards is because of how the IR Reflective sensor says it detects things.
+			// Read the comment in the event class.
+            OnWhenOn.IsChecked = !OnTurnOn;
+            OnWhenOff.IsChecked = OnTurnOn;
         }
+
+		public override void OnSave()
+		{
+			OnTurnOn = (bool)OnWhenOn.IsChecked;
+		}
 
         public override string Title
         {

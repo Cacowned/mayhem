@@ -10,7 +10,7 @@ namespace PhidgetModules.Events
 {
     [DataContract]
     [MayhemModule("Phidget: Rfid", "Triggers with a certain Rfid Tag")]
-    public class Phidget1023Rfid : EventBase, IWpfConfigurable
+    internal class Phidget1023Rfid : EventBase, IWpfConfigurable
     {
         // This is the tag we are watching for
         [DataMember]

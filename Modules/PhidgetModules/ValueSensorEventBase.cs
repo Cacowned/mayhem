@@ -32,12 +32,14 @@ namespace PhidgetModules
 
         protected override void OnLoadDefaults()
         {
+			base.OnLoadDefaults();
             Increasing = true;
             TopValue = 85;
         }
 
         protected override void OnAfterLoad()
         {
+			base.OnAfterLoad();
             CurrentValue = LastValue = TopValue;
         }
 

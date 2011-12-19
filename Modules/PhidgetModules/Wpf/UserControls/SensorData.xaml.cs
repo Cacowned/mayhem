@@ -76,7 +76,6 @@ namespace PhidgetModules.Wpf.UserControls
                 if (e.Index == Index)
                 {
                     SetString(Convertor(e.Value));
-
                 }
             }));
         }
