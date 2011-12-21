@@ -11,51 +11,47 @@ namespace OfficeModules.Reactions
     {
         private OPowerPoint.Application app;
 
-        protected override void OnEnabling(EnablingEventArgs e)
-        {
-            try
-            {
-                app = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");
-            }
-            catch (Exception ex)
-            {
-                ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
-                Logger.Write(ex);
-                e.Cancel = true;
-            }
-        }
-
-        protected override void OnDisabled(DisabledEventArgs e)
-        {
-            app = null;
-        }
-
         public override void Perform()
         {
-            try
-            {
-                int windows = app.SlideShowWindows.Count;
+			try
+			{
+				app = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");
+			}
+			catch (Exception ex)
+			{
+				ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
+				Logger.Write(ex);
 
-                // If we have a presentation window, go to the next slide
-                if (windows == 1)
-                {
-                    app.SlideShowWindows[1].View.Previous();
-                }
-                else if (windows == 0)
-                {
-                    ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_NoWindowCantChange);
-                }
-                else
-                {
-                    // more than one window
-                    ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_MoreThanOneWindow);
-                }
-            }
-            catch (Exception e)
-            {
-                ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_CantChangeSlidesPrevious);
-                Logger.Write(e);
-            }
+				return;
+			}
+
+			try
+			{
+				int windows = app.SlideShowWindows.Count;
+
+				if (windows == 0)
+				{
+					ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_NoWindowCantChange);
+				}
+				else
+				{
+					if (windows > 1)
+					{
+						// we've got more than one
+						ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_MoreThanOneWindow);
+					}
+					app.SlideShowWindows[1].View.Previous();
+				}
+			}
+			catch (Exception e)
+			{
+				ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_CantChangeSlidesPrevious);
+				Logger.Write(e);
+			}
+			finally
+			{
+				app = null;
+			}
         }
     }
 }
