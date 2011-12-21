@@ -44,17 +44,17 @@ namespace PhidgetModules.Wpf
             double topValue;
             double bottomValue;
 
-            if (!double.TryParse(textBoxTopValue.Text, out topValue) && TopValue >= 0)
+            if (!double.TryParse(textBoxTopValue.Text, out topValue) && topValue >= 0)
             {
                 return "You must enter a valid number for the top of the range";
             }
 
-            if (!double.TryParse(textBoxBottomValue.Text, out bottomValue) && TopValue >= 0)
+            if (!double.TryParse(textBoxBottomValue.Text, out bottomValue) && bottomValue >= 0)
             {
                 return "You must enter a valid number for the bottom of the range";
             }
 
-            if (BottomValue > TopValue)
+            if (bottomValue > topValue)
             {
                 return "The bottom of the range must be lower than the top of the range";
             }
