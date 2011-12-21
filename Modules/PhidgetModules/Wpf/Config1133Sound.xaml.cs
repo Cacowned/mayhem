@@ -44,7 +44,7 @@ namespace PhidgetModules.Wpf
         public override string CheckValidity()
         {
             double topValue;
-            if (!(double.TryParse(textBoxTopValue.Text, out topValue) && (TopValue >= 0 && TopValue <= 1000)))
+            if (!(double.TryParse(textBoxTopValue.Text, out topValue) && (topValue >= 0 && topValue <= 1000)))
             {
                 return "Invalid Top Value";
             }
