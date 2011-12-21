@@ -130,7 +130,7 @@
     <value>Can't go to the previous slide.</value>
   </data>
   <data name="PowerPoint_MoreThanOneWindow" xml:space="preserve">
-    <value>More than one slideshow window detected, using the first one.</value>
+    <value>More than one slideshow window detected, using the last opened one.</value>
   </data>
   <data name="PowerPoint_NoWindowCantChange" xml:space="preserve">
     <value>You must be in a slideshow view to change slide.</value>
