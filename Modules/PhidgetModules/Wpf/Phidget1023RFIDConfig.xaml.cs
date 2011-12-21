@@ -6,96 +6,108 @@ using Phidgets.Events;
 
 namespace PhidgetModules.Wpf
 {
-	/// <summary>
-	/// Interaction logic for Phidget1023RFIDConfig.xaml
-	/// </summary>
-	public partial class Phidget1023RFIDConfig : WpfConfiguration
-	{
-		protected RFID Rfid;
+    /// <summary>
+    /// Interaction logic for Phidget1023RFIDConfig.xaml
+    /// </summary>
+    public partial class Phidget1023RFIDConfig : WpfConfiguration
+    {
+        protected RFID Rfid;
 
-		public string TagID
-		{
-			get { return (string)GetValue(TagIDProperty); }
-			set { SetValue(TagIDProperty, value); }
-		}
+        public string TagID
+        {
+            get { return (string)GetValue(TagIDProperty); }
+            set { SetValue(TagIDProperty, value); }
+        }
 
-		// Using a DependencyProperty as the backing store for TagID.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty TagIDProperty =
-			DependencyProperty.Register("TagID", typeof(string), typeof(Phidget1023RFIDConfig), new UIPropertyMetadata(string.Empty));
+        // Using a DependencyProperty as the backing store for TagID.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TagIDProperty =
+            DependencyProperty.Register("TagID", typeof(string), typeof(Phidget1023RFIDConfig), new UIPropertyMetadata(string.Empty));
 
-		public Phidget1023RFIDConfig(string tagId)
-		{
-			Rfid = InterfaceFactory.Rfid;
-			TagID = tagId;
+        public Phidget1023RFIDConfig(string tagId)
+        {
+            DataContext = this;
 
-			DataContext = this;
-			InitializeComponent();
-		}
+            Rfid = InterfaceFactory.Rfid;
+            TagID = tagId;
 
-		public override string Title
-		{
-			get
-			{
-				return "Phidget - Rfid";
-			}
-		}
+            InitializeComponent();
+        }
 
-		public override void OnLoad()
-		{
-			Rfid.Tag += RfidTag;
-			Rfid.TagLost += LostRfidTag;
+        public override string Title
+        {
+            get
+            {
+                return "Phidget - Rfid";
+            }
+        }
 
-			Rfid.Attach += RfidAttach;
-			Rfid.Detach += RfidDetach;
-		}
+        public override void OnLoad()
+        {
+            Rfid.Tag += RfidTag;
+            Rfid.TagLost += LostRfidTag;
 
-		#region Phidget Event Handlers
+            Rfid.Attach += RfidAttach;
+            Rfid.Detach += RfidDetach;
 
-		// Tag event handler...we'll display the tag code in the field on the GUI
-		private void RfidTag(object sender, TagEventArgs e)
-		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-			{
-				CanSave = true;
-				Rfid.LED = true;
-				TagID = e.Tag;
-			}));
-		}
+            SetAttached();
+        }
 
-		// Tag event handler...we'll display the tag code in the field on the GUI
-		private void LostRfidTag(object sender, TagEventArgs e)
-		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-			{
-				Rfid.LED = false;
-			}));
-		}
+        #region Phidget Event Handlers
 
-		private void RfidAttach(object sender, AttachEventArgs e)
-		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-			{
-				NoReader.Visibility = Visibility.Collapsed;
-			}));
-		}
+        // Tag event handler...we'll display the tag code in the field on the GUI
+        private void RfidTag(object sender, TagEventArgs e)
+        {
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                CanSave = true;
+                Rfid.LED = true;
+                TagID = e.Tag;
+            }));
+        }
 
-		private void RfidDetach(object sender, DetachEventArgs e)
-		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-			{
-				NoReader.Visibility = Visibility.Visible;
-			}));
-		}
+        // Tag event handler...we'll display the tag code in the field on the GUI
+        private void LostRfidTag(object sender, TagEventArgs e)
+        {
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+            {
+                Rfid.LED = false;
+            }));
+        }
 
-		#endregion
+        private void RfidAttach(object sender, AttachEventArgs e)
+        {
+            SetAttached();
+        }
 
-		public override void OnClosing()
-		{
-			Rfid.Tag -= RfidTag;
-			Rfid.TagLost -= LostRfidTag;
+        private void RfidDetach(object sender, DetachEventArgs e)
+        {
+            SetAttached();
+        }
 
-			Rfid.Attach -= RfidAttach;
-			Rfid.Detach -= RfidDetach;
-		}
-	}
+        private void SetAttached()
+        {
+            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+                {
+                    if (Rfid.Attached)
+                    {
+                        NoReader.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        NoReader.Visibility = Visibility.Visible;
+                    }
+                }));
+        }
+
+        #endregion
+
+        public override void OnClosing()
+        {
+            Rfid.Tag -= RfidTag;
+            Rfid.TagLost -= LostRfidTag;
+
+            Rfid.Attach -= RfidAttach;
+            Rfid.Detach -= RfidDetach;
+        }
+    }
 }
