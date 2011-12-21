@@ -2,43 +2,43 @@
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
 
-namespace DebugModules.Wpf
+namespace DefaultModules.Wpf
 {
-    public partial class DebugMessageConfig : WpfConfiguration
+	public partial class SpeechRecognitionConfig : WpfConfiguration
     {
-        public string Message
+        public string Phrase
         {
             get;
             private set;
         }
 
-        public DebugMessageConfig(string message)
+        public SpeechRecognitionConfig(string phrase)
         {
-            Message = message;
+			Phrase = phrase;
             InitializeComponent();
         }
 
         public override string Title
         {
-            get { return "Debug Message"; }
+            get { return "Speech Recognition"; }
         }
 
         public override void OnLoad()
         {
-            MessageTextBox.Text = Message;
+            PhraseTextBox.Text = Phrase;
         }
 
         public override void OnSave()
         {
-            Message = MessageTextBox.Text.Trim();
+            Phrase = PhraseTextBox.Text.Trim();
         }
 
         private void CheckValidity()
         {
-            CanSave = MessageTextBox.Text.Trim().Length > 0;
+            CanSave = PhraseTextBox.Text.Trim().Length > 0;
         }
 
-        private void MessageText_TextChanged(object sender, TextChangedEventArgs e)
+        private void PhraseText_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
 
