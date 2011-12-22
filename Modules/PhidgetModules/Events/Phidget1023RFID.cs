@@ -10,7 +10,7 @@ namespace PhidgetModules.Events
 {
     [DataContract]
     [MayhemModule("Phidget: Rfid", "Triggers with a certain Rfid Tag")]
-    internal class Phidget1023Rfid : EventBase, IWpfConfigurable
+    public class Phidget1023Rfid : EventBase, IWpfConfigurable
     {
         // This is the tag we are watching for
         [DataMember]
@@ -18,9 +18,13 @@ namespace PhidgetModules.Events
 
         private RFID rfid;
 
+		// count the number of connections to the rfid
+		private static int counter;
+
         protected override void OnAfterLoad()
         {
             rfid = InterfaceFactory.Rfid;
+			counter++;
         }
 
         public WpfConfiguration ConfigurationControl
@@ -30,7 +34,7 @@ namespace PhidgetModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            tag = ((Phidget1023RFIDConfig)configurationControl).TagID;
+            tag = ((Phidget1023RFIDConfig)configurationControl).TagId;
         }
 
         public string GetConfigString()
@@ -66,6 +70,15 @@ namespace PhidgetModules.Events
             {
                 rfid.Tag -= RfidTag;
                 rfid.TagLost -= LostRfidTag;
+
+				if (!e.IsConfiguring)
+				{
+					counter--;
+					if (counter == 0)
+					{
+						InterfaceFactory.CloseRfid();
+					}
+				}
             }
         }
     }

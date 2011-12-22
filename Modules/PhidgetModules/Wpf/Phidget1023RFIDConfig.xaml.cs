@@ -13,22 +13,24 @@ namespace PhidgetModules.Wpf
 	{
 		protected RFID Rfid;
 
-		public string TagID
+		public string TagId
 		{
-			get { return (string)GetValue(TagIDProperty); }
-			set { SetValue(TagIDProperty, value); }
+			get { return (string)GetValue(TagIdProperty); }
+			set { SetValue(TagIdProperty, value); }
 		}
 
-		// Using a DependencyProperty as the backing store for TagID.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty TagIDProperty =
-			DependencyProperty.Register("TagID", typeof(string), typeof(Phidget1023RFIDConfig), new UIPropertyMetadata(string.Empty));
+		// Using a DependencyProperty as the backing store for TagId.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty TagIdProperty =
+			DependencyProperty.Register("TagId", typeof(string), typeof(Phidget1023RFIDConfig), new UIPropertyMetadata(string.Empty));
+
+		
 
 		public Phidget1023RFIDConfig(string tagId)
 		{
 			Rfid = InterfaceFactory.Rfid;
-			TagID = tagId;
+			TagId = tagId;
 
-			DataContext = this;
+			this.DataContext = this;
 			InitializeComponent();
 		}
 
@@ -58,7 +60,7 @@ namespace PhidgetModules.Wpf
 			{
 				CanSave = true;
 				Rfid.LED = true;
-				TagID = e.Tag;
+				TagId = e.Tag;
 			}));
 		}
 

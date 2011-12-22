@@ -2,52 +2,61 @@
 
 namespace PhidgetModules
 {
-    public static class InterfaceFactory
-    {
-        private static InterfaceKit ifKit;
-        private static RFID rfid;
-        private static IR ir;
+	public static class InterfaceFactory
+	{
+		private static InterfaceKit ifKit;
+		private static RFID rfid;
+		private static IR ir;
 
-        public static InterfaceKit Interface
-        {
-            get
-            {
-                if (ifKit == null)
-                {
-                    ifKit = new InterfaceKit();
-                    ifKit.open();
-                }
+		public static InterfaceKit Interface
+		{
+			get
+			{
+				if (ifKit == null)
+				{
+					ifKit = new InterfaceKit();
+					ifKit.open();
+				}
 
-                return ifKit;
-            }
-        }
+				return ifKit;
+			}
+		}
 
-        public static RFID Rfid
-        {
-            get
-            {
-                if (rfid == null)
-                {
-                    rfid = new RFID();
-                    rfid.open();
-                }
+		public static RFID Rfid
+		{
+			get
+			{
+				if (rfid == null)
+				{
+					rfid = new RFID();
+					rfid.open();
+				}
 
-                return rfid;
-            }
-        }
+				return rfid;
+			}
+		}
 
-        public static IR Ir
-        {
-            get
-            {
-                if (ir == null)
-                {
-                    ir = new IR();
-                    ir.open();
-                }
+		public static void CloseRfid()
+		{
+			if (rfid != null)
+			{
+				rfid.close();
+				rfid = null;
+			}
+		}
 
-                return ir;
-            }
-        }
-    }
+		public static IR Ir
+		{
+			get
+			{
+				if (ir == null)
+				{
+					ir = new IR();
+					ir.open();
+				}
+
+				return ir;
+			}
+		}
+	}
 }
