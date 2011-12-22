@@ -5,7 +5,7 @@ using OOutlook = Microsoft.Office.Interop.Outlook;
 
 namespace OfficeModules.Events
 {
-    [MayhemModule("Outlook Reminder", "Triggers when a reminder goes off for an outlook event")]
+    [MayhemModule("Outlook Reminder", "Triggers when a reminder goes off for an Outlook event")]
     public class OutlookReminder : EventBase
     {
         private OOutlook.Application outlook;

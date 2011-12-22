@@ -8,7 +8,7 @@ using PhidgetModules.Wpf.UserControls;
 namespace PhidgetModules.Events
 {
     [DataContract]
-    [MayhemModule("Phidget: Touch Sensor", "Triggers based on touching the sensor")]
+    [MayhemModule("Phidget: Touch Sensor", "Triggers based on touch detection")]
     public class Phidget1129Touch : OnOffSensorEventBase, IWpfConfigurable
     {
         public WpfConfiguration ConfigurationControl
