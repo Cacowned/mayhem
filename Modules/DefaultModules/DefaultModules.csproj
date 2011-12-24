@@ -44,6 +44,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Speech" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\FolderChange.cs" />
+    <Compile Include="Events\SpeechRecognition.cs" />
     <Compile Include="Reactions\LockWorkstation.cs" />
     <Compile Include="Reactions\OpenUrl.cs" />
     <Compile Include="Reactions\Screenshot.cs" />
@@ -91,6 +93,9 @@
     </Compile>
     <Compile Include="Wpf\RunProgramConfig.xaml.cs">
       <DependentUpon>RunProgramConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\SpeechRecognitionConfig.xaml.cs">
+      <DependentUpon>SpeechRecognitionConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\TextToSpeechConfig.xaml.cs">
       <DependentUpon>TextToSpeechConfig.xaml</DependentUpon>
@@ -132,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\RunProgramConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\SpeechRecognitionConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
