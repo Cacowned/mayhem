@@ -1,33 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
-using MayhemCore;
-using System.Windows;
-using MayhemWpf.ModuleTypes;
 using System.IO;
+using System.Runtime.Serialization;
 using DebugModules.Wpf;
+using MayhemCore;
+using MayhemWpf.ModuleTypes;
 
 namespace DebugModules.Reactions
 {
     [DataContract]
-    [MayhemModule("Append Line", "Appends a line to a file")]
+    [MayhemModule("Append Line", "Appends a line to a .txt file")]
     public class AppendLine : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private String LineToAdd;
+        private string lineToAdd;
+
         [DataMember]
-        private String FilePath;
+        private string filePath;
 
         public override void Perform()
         {
-
-            if (File.Exists(FilePath))
+            if (File.Exists(filePath))
             {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@FilePath, true))
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(filePath, true))
                 {
-                    file.WriteLine(LineToAdd);
+                    file.WriteLine(lineToAdd);
                 }
             }
             else
@@ -38,18 +34,19 @@ namespace DebugModules.Reactions
 
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
         {
-            get { return new AppendLineConfig(LineToAdd, FilePath); }
+            get { return new AppendLineConfig(lineToAdd, filePath); }
         }
 
         public void OnSaved(MayhemWpf.UserControls.WpfConfiguration configurationControl)
         {
-            LineToAdd = ((AppendLineConfig)configurationControl).Line;
-            FilePath = ((AppendLineConfig)configurationControl).File;
+            var config = (AppendLineConfig)configurationControl;
+            lineToAdd = config.Line;
+            filePath = config.File;
         }
 
         public string GetConfigString()
         {
-            return "\"" + LineToAdd + "\" to File: " + Path.GetFileName(FilePath);
+            return "\"" + lineToAdd + "\" to File: " + Path.GetFileName(filePath);
         }
     }
 }

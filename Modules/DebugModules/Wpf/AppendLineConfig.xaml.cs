@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MayhemWpf.UserControls;
 using Microsoft.Win32;
 
@@ -22,6 +11,7 @@ namespace DebugModules.Wpf
     public partial class AppendLineConfig : WpfConfiguration
     {
         private bool shouldCheckVisibility = false;
+
         public string Line
         {
             get;
@@ -53,22 +43,22 @@ namespace DebugModules.Wpf
             Line = LineBox.Text.Trim();
         }
 
-        private void checkFile(string File)
+        private void CheckFile(string file)
         {
-            CanSave = File.Length > 0 && System.IO.File.Exists(FileBox.Text.Trim());
+            CanSave = file.Length > 0 && System.IO.File.Exists(FileBox.Text.Trim());
         }
 
         public override string Title
         {
             get
             {
-                return "Add Line";
+                return "Append Line";
             }
         }
 
         private void File_Changed(object sender, TextChangedEventArgs e)
         {
-            checkFile(File);
+            CheckFile(File);
             fileInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
@@ -76,7 +66,7 @@ namespace DebugModules.Wpf
         private void Browse_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new OpenFileDialog();
-
+            dlg.Filter = "txt files (*.txt)|*.txt";
             dlg.FileName = File;
             dlg.DefaultExt = ".txt";
 
