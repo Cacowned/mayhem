@@ -1,0 +1,19 @@
+glob:bin/
+glob:obj/
+glob:*.cs.orig
+glob:*.suo
+glob:*.suo.orig
+glob:*.vs10x
+glob:*.user
+glob:*.tlog
+glob:*.cache
+glob:*.opensdf
+glob:Release/
+glob:Debug/
+syntax: glob
+Mayhem-Dev.sdf
+glob:*.rej
+*.orig
+*.nupkg
+StyleCop.Cache
+_ReSharper.*
