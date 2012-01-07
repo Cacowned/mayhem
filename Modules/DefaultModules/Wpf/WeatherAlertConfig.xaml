@@ -1,0 +1,38 @@
+﻿<src:WpfConfiguration x:Class="DefaultModules.Wpf.WeatherAlertConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf" 
+             Width="340" >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="140" />
+            <ColumnDefinition Width="105" />
+            <ColumnDefinition Width="95"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Name="ZipCity" HorizontalAlignment="Center" Style="{StaticResource ConfigLabel}" Grid.ColumnSpan="3" Grid.Row="0" FontWeight="Bold" FontSize="15">City</TextBlock>
+        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Zip Code or City Name</TextBlock>
+        <TextBox Name="ZipCode" TextChanged="ZipCode_TextChanged" Grid.Column="1" Grid.Row="1" />
+        
+        
+        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">Temperature (F)</TextBlock>
+        <TextBox Name="Temperature" TextChanged="Temperature_TextChanged" Grid.Column="1" Grid.Row="2" />
+        
+        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="3">Trigger above or below</TextBlock>
+        <RadioButton Name="Above" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="3">Above</RadioButton>
+        <RadioButton Name="Below" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="3">Below</RadioButton>
+        
+        <Image Name="WeatherIcon" Source="http://www.google.com/ig/images/weather/chance_of_rain.gif" Grid.Column="2" Grid.RowSpan="3" Height="75" Grid.Row="1" />
+        
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+        
+    </Grid>
+</src:WpfConfiguration>

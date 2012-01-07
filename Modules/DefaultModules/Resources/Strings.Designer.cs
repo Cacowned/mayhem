@@ -70,6 +70,15 @@ namespace DefaultModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot connect to the internet.
+        /// </summary>
+        internal static string Internet_NotConnected {
+            get {
+                return ResourceManager.GetString("Internet_NotConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Url: &quot;{0}&quot;.
         /// </summary>
         internal static string OpenUrl_ConfigString {
