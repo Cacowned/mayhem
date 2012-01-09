@@ -6,7 +6,10 @@
     <authors>Eli White</authors>
     <owners>Outercurve</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Modules that interact with Xbox hardware. Currently only supports the Xbox Controller</description>
+    <description>
+	Modules that interact with Xbox hardware. Currently only supports the Xbox Controller.
+Requires the XNA Framework v4.0. The XNA installer can be found here: http://www.microsoft.com/download/en/details.aspx?id=20914
+    </description>
     <copyright>Copyright © Outercurve 2011</copyright>
     <tags>Xbox, Controller, Remote</tags>
     <dependencies>
