@@ -8,9 +8,9 @@ using System.Windows;
 [assembly: AssemblyTitle("PhoneServerHelper")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Outercurve")]
 [assembly: AssemblyProduct("PhoneServerHelper")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCopyright("Copyright © Outercurve 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
