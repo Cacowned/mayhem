@@ -120,8 +120,11 @@
   <data name="FolderChange_FolderDoesntExist" xml:space="preserve">
     <value>Cannot monitor the folder; it does not exist.</value>
   </data>
+  <data name="Internet_InvalidUrl" xml:space="preserve">
+    <value>Invalid url</value>
+  </data>
   <data name="Internet_NotConnected" xml:space="preserve">
-    <value>Cannot connect to the internet</value>
+    <value>There is no Internet connection</value>
   </data>
   <data name="OpenUrl_ConfigString" xml:space="preserve">
     <value>Url: "{0}"</value>

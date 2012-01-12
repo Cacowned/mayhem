@@ -7,11 +7,13 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace DefaultModules.Events
 {
     [DataContract]
-    [MayhemModule("Weather Alert", "This event moniters changes in temperature.")]
+    [MayhemModule("Weather Alert", "Monitors changes in temperature")]
 
     public class WeatherAlert : EventBase, IWpfConfigurable
     {
@@ -25,11 +27,10 @@ namespace DefaultModules.Events
         private bool checkBelow;
 
         private bool hasPassed;
-        private int firstTemp;
-
-        // current temp vs goal temp
-
         private DispatcherTimer timer;
+
+        [DllImport("wininet.dll")]
+        private extern static bool InternetGetConnectedState(out int Desciption, int ReservedValue);
 
         protected override void OnLoadDefaults()
         {
@@ -41,26 +42,22 @@ namespace DefaultModules.Events
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
-            try
-            {
-                timer.Interval = new TimeSpan(0, 0, 10);
-            }
-            catch (Exception e)
-            {
-                Logger.WriteLine(Strings.Timer_CantSetInterval, e.Message);
-            }
-            timer.Tick += Tick;
+            timer.Interval = new TimeSpan(0, 1, 0);
+            timer.Tick += checkWeather;
+            hasPassed = false;
         }
 
         #region Timer
-        private void Tick(object sender, EventArgs e)
-        {
-            checkWeather();
-        }
-
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            timer.Start();
+            if (ConnectedToInternet())
+            {
+                timer.Start();
+            }
+            else
+            {
+                ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
+            }
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
@@ -69,43 +66,57 @@ namespace DefaultModules.Events
         }
         #endregion
 
-        // add onchanged for weather or trigger in weather function?
         public string GetConfigString()
         {
             string above_below = checkBelow ? "above " : "below ";
-            return "Watching " + zipCode + " for " + above_below + temperature + "F";
+            above_below += temperature;
+            return String.Format("Watching {0} for {1}F", zipCode, above_below);
         }
 
-        private void checkWeather()
+        private void checkWeather(object sender, EventArgs e)
         {
-            // Retrieve XML document  
-            XmlTextReader reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + zipCode.Replace(" ", "%20"));  
-            reader.WhitespaceHandling = WhitespaceHandling.Significant;
-            
             // Test for internet connection
-            try
+            if (ConnectedToInternet())
             {
-                reader.Read();
-            }
-            catch
-            {
-                ErrorLog.AddError(ErrorType.Failure, Strings.Internet_NotConnected);
-            }
+                // Retrieve XML document  
+                XmlTextReader reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + zipCode.Replace(" ", "%20"));
+                reader.WhitespaceHandling = WhitespaceHandling.Significant;
+                bool valid = false;
 
-            // Read nodes one at a time  
-            while (reader.Read())
-            {
-                if (reader.Name.Equals("temp_f"))
+                // test url validity
+                try
                 {
+                    valid = reader.Read();
+                }
+                catch
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.Internet_InvalidUrl);
+                }
+
+                if (valid)
+                {
+                    reader.ReadToFollowing("temp_f");
                     int temp = Convert.ToInt32(reader.GetAttribute("data"));
-                    if ((checkBelow && temp > temperature) || (!checkBelow && temp < temperature)) 
+                    
+                    bool isBelowOrAbove = (checkBelow && temp >= temperature) || (!checkBelow && temp <= temperature);
+
+                    // if below desired temperature and watching for below, trigger
+                    // if above desired temperature and watching for abovem trigger
+                    if (isBelowOrAbove)
                     {
-                       Trigger();
+                        if (!hasPassed)
+                        {
+                            hasPassed = true;
+                            Trigger();
+                        }
+                        else if(temp == temperature)
+                        {
+                            hasPassed = false;
+                        }
                     }
-                    // close reader after temp is found
-                    reader.Close();
                 }
             }
+
         }
 
         public WpfConfiguration ConfigurationControl
@@ -119,6 +130,12 @@ namespace DefaultModules.Events
             zipCode = config.ZipCodeProp;
             temperature = config.TempProp;
             checkBelow = config.CheckAbove;
+        }
+
+        public static bool ConnectedToInternet()
+        {
+            int Desc;
+            return InternetGetConnectedState(out Desc, 0);
         }
     }
 }

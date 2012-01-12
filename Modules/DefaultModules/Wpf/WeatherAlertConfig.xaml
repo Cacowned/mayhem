@@ -20,11 +20,11 @@
 
         <TextBlock Name="ZipCity" HorizontalAlignment="Center" Style="{StaticResource ConfigLabel}" Grid.ColumnSpan="3" Grid.Row="0" FontWeight="Bold" FontSize="15">City</TextBlock>
         <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Zip Code or City Name</TextBlock>
-        <TextBox Name="ZipCode" TextChanged="ZipCode_TextChanged" Grid.Column="1" Grid.Row="1" />
+        <TextBox Name="ZipCode" TextChanged="TempZip_TextChanged" Grid.Column="1" Grid.Row="1" />
         
         
         <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">Temperature (F)</TextBlock>
-        <TextBox Name="Temperature" TextChanged="Temperature_TextChanged" Grid.Column="1" Grid.Row="2" />
+        <TextBox Name="Temperature" TextChanged="TempZip_TextChanged" Grid.Column="1" Grid.Row="2" />
         
         <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="3">Trigger above or below</TextBlock>
         <RadioButton Name="Above" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="3">Above</RadioButton>

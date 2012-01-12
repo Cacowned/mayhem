@@ -5,13 +5,14 @@ using System.Windows.Media.Imaging;
 using System.Xml;
 using MayhemCore;
 using DefaultModules.Resources;
+using System.Runtime.InteropServices;
 
 namespace DefaultModules.Wpf
 {
-   
+
     public partial class WeatherAlertConfig : WpfConfiguration
     {
-        public string ZipCodeProp 
+        public string ZipCodeProp
         {
             get;
             private set;
@@ -33,6 +34,9 @@ namespace DefaultModules.Wpf
         private string city;
         private string icon;
 
+        [DllImport("wininet.dll")]
+        private extern static bool InternetGetConnectedState(out int Desciption, int ReservedValue);
+
         public WeatherAlertConfig(string zipcode, int temp, bool checks)
         {
             ZipCodeProp = zipcode;
@@ -41,44 +45,50 @@ namespace DefaultModules.Wpf
             InitializeComponent();
         }
 
-        private void ZipCode_TextChanged(object sender, RoutedEventArgs e)
-        {
-            CanSave = (ZipCode.Text.Length > 0 && IsValid());
-            //CanSave = true;
-            TextChanged("Invalid zip code or city name");
-        }
-
         private bool IsValid()
         {
-            reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + ZipCode.Text.Replace(" ", "%20"));
+            if (ConnectedToInternet())
+            {
+                reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + ZipCode.Text.Replace(" ", "%20"));
 
-            // check valid url (has internet)
-            try
-            {
-                reader.Read();
+                // check that there is xml data
+                for (int i = 0; i < 4; i++)
+                {
+                    reader.Read();
+                }
+                return !reader.Name.Equals("problem_cause");
             }
-            catch
-            {
-                ErrorLog.AddError(ErrorType.Failure, Strings.Internet_NotConnected);
-            }
-            // check valid zip
-            for (int i = 0; i < 3; i++)
-            {
-                reader.Read();
-            }
-            return !reader.Name.Equals("problem_cause");
+            return false;
         }
 
-        private void Temperature_TextChanged(object sender, RoutedEventArgs e)
+        private void TempZip_TextChanged(object sender, RoutedEventArgs e)
         {
-            CanSave = true;
-            int temp;
-            bool isInt = int.TryParse(Temperature.Text, out temp) && (temp < 150 && temp > -50);
-            if (!isInt)
+            if (ConnectedToInternet())
+            {
+                string error = "Invalid";
+
+                int temp;
+                bool isTemp = int.TryParse(Temperature.Text, out temp) && (temp < 150 && temp > -50);
+                bool isZip = (ZipCode.Text.Length > 0 && IsValid());
+
+                if (!isTemp)
+                {
+                    error += " temperature";
+                }
+
+                if (!isZip)
+                {
+                    error += " zip code or city name";
+                }
+
+                CanSave = isZip && isTemp;
+                TextChanged(error);
+            }
+            else
             {
                 CanSave = false;
+                TextChanged("Not connected to the Internet");
             }
-            TextChanged("Invalid temperature");
         }
 
         private void TextChanged(string text)
@@ -87,7 +97,7 @@ namespace DefaultModules.Wpf
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
             if (CanSave)
             {
-                UpdateImage();
+                CheckWeather();
             }
         }
 
@@ -111,8 +121,9 @@ namespace DefaultModules.Wpf
             {
                 Below.IsChecked = true;
             }
+            IsValid();
             UpdateImage();
-            
+
         }
 
         public override void OnSave()
@@ -122,45 +133,43 @@ namespace DefaultModules.Wpf
             CheckAbove = (bool)Above.IsChecked;
         }
 
-        private string CheckWeather()
+        private void CheckWeather()
         {
-            // Read nodes one at a time  
-            while (reader.Read())
-            {
-                if (reader.Name.Equals("city"))
-                {
-                    city = reader.GetAttribute("data");
-                }
-                else if (reader.Name.Equals("icon"))
-                {
-                    icon = reader.GetAttribute("data");
-                }
-            }
-            return "";
+            reader.ReadToFollowing("city");
+            city = reader.GetAttribute("data");
+            reader.ReadToFollowing("icon");
+            icon = reader.GetAttribute("data");
+
+            ZipCity.Text = city;
+            UpdateImage();
         }
 
         private void UpdateImage()
         {
-            CheckWeather();
-            BitmapImage bi = new BitmapImage();
-            bi.BeginInit();
-            bi.UriSource = new Uri("http://www.google.com/" + icon, UriKind.Absolute);
-            bi.EndInit();
-            WeatherIcon.Source = bi;
+            if (ConnectedToInternet()) // excessive?
+            {
+                BitmapImage bi = new BitmapImage();
+                bi.BeginInit();
+                bi.UriSource = new Uri("http://www.google.com/" + icon, UriKind.Absolute);
+                bi.EndInit();
 
-            ZipCity.Text = city;
+                WeatherIcon.Source = bi;
+            }
+            else
+            {
+                TextChanged("Not connected to the Internet");
+            }
         }
 
-        private bool HaveInternet(XmlTextReader reader)
+        public static bool ConnectedToInternet()
         {
+            int Desc;
             try
             {
-                reader.Read();
-                return true;
+                return InternetGetConnectedState(out Desc, 0);
             }
             catch
             {
-                ErrorLog.AddError(ErrorType.Failure, Strings.Internet_NotConnected);
                 return false;
             }
         }
