@@ -46,8 +46,17 @@ namespace Mayhem
 			if (!containsCore)
 			{
 				MessageBox.Show("This is the first time Mayhem has been run on this computer. Setting up. This may take a few minutes.");
-				var packageManager = MayhemNuget.PackageManager;
-				packageManager.InstallPackage("DefaultModules");
+                try
+                {
+                    var packageManager = MayhemNuget.PackageManager;
+                    packageManager.InstallPackage("DefaultModules");
+                }
+                catch
+                {
+                    MessageBox.Show("Unable to connect to the Mayhem servers to set up. Please connect to the internet and try again.", "Setup Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Shutdown();
+                    return;
+                }
 				MessageBox.Show("Set up successfully. Click OK to start Mayhem.");
 			}
 

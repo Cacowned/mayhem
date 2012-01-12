@@ -30,9 +30,23 @@ namespace PhidgetModules
             set;
         }
 
+        // This is necessary to invert the effect of the configuration.
+        // For example, the touch sensor is "detecting" when the value is
+        // over 800 and below that is not detected.
+        // However, for the ir reflective, it is "detected" when you are close (lower value)
+        // thus we must invert the way we trigger in that case.
+        protected bool invert;
+
         private double currentValue;
 
         private double lastValue;
+
+        protected override void OnBeforeLoad()
+        {
+            base.OnBeforeLoad();
+
+            invert = false;
+        }
 
         protected override void OnLoadDefaults()
         {
@@ -51,11 +65,19 @@ namespace PhidgetModules
 
             currentValue = ex.Value;
 
-            if (OnTurnOn && currentValue >= TopThreshold && lastValue < TopThreshold)
+            bool shouldTrigger = false;
+
+            // Take the xor of whether we should trigger and whether to invert the result
+            if (OnTurnOn ^ invert && currentValue >= TopThreshold && lastValue < TopThreshold)
             {
-                Trigger();
+                shouldTrigger = true;
             }
-            else if (!OnTurnOn && currentValue <= BottomThreshold && lastValue > BottomThreshold)
+            else if (!OnTurnOn ^ invert && currentValue <= BottomThreshold && lastValue > BottomThreshold)
+            {
+                shouldTrigger = true;
+            }
+            
+            if (shouldTrigger)
             {
                 Trigger();
             }

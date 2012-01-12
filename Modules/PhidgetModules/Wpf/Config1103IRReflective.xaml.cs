@@ -24,10 +24,8 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
-			// The reason this is backwards is because of how the IR Reflective sensor says it detects things.
-			// Read the comment in the event class.
-            OnWhenOn.IsChecked = !OnTurnOn;
-            OnWhenOff.IsChecked = OnTurnOn;
+            OnWhenOn.IsChecked = OnTurnOn;
+            OnWhenOff.IsChecked = !OnTurnOn;
         }
 
 		public override void OnSave()
