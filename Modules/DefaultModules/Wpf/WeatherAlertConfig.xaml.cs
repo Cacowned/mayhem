@@ -1,17 +1,18 @@
-﻿using MayhemWpf.UserControls;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows;
-using System;
 using System.Windows.Media.Imaging;
 using System.Xml;
-using MayhemCore;
-using DefaultModules.Resources;
-using System.Runtime.InteropServices;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
-
     public partial class WeatherAlertConfig : WpfConfiguration
     {
+        private XmlTextReader reader;
+        private string city;
+        private string icon;
+
         public string ZipCodeProp
         {
             get;
@@ -30,12 +31,13 @@ namespace DefaultModules.Wpf
             private set;
         }
 
-        private XmlTextReader reader;
-        private string city;
-        private string icon;
-
-        [DllImport("wininet.dll")]
-        private extern static bool InternetGetConnectedState(out int Desciption, int ReservedValue);
+        public override string Title
+        {
+            get
+            {
+                return "Weather Alert";
+            }
+        }
 
         public WeatherAlertConfig(string zipcode, int temp, bool checks)
         {
@@ -43,8 +45,32 @@ namespace DefaultModules.Wpf
             TempProp = temp;
             CheckAbove = checks;
             InitializeComponent();
+        } 
+
+        public override void OnLoad()
+        {
+            ZipCode.Text = ZipCodeProp;
+            Temperature.Text = TempProp.ToString();
+            if (CheckAbove)
+            {
+                Above.IsChecked = true;
+            }
+            else
+            {
+                Below.IsChecked = true;
+            }
+
+            IsValid();
+            UpdateImage();
         }
 
+        public override void OnSave()
+        {
+            ZipCodeProp = ZipCode.Text;
+            TempProp = Convert.ToInt32(Temperature.Text);
+            CheckAbove = (bool)Above.IsChecked;
+        }
+        
         private bool IsValid()
         {
             if (ConnectedToInternet())
@@ -56,8 +82,10 @@ namespace DefaultModules.Wpf
                 {
                     reader.Read();
                 }
+
                 return !reader.Name.Equals("problem_cause");
             }
+
             return false;
         }
 
@@ -69,7 +97,7 @@ namespace DefaultModules.Wpf
 
                 int temp;
                 bool isTemp = int.TryParse(Temperature.Text, out temp) && (temp < 150 && temp > -50);
-                bool isZip = (ZipCode.Text.Length > 0 && IsValid());
+                bool isZip = ZipCode.Text.Length > 0 && IsValid();
 
                 if (!isTemp)
                 {
@@ -101,38 +129,6 @@ namespace DefaultModules.Wpf
             }
         }
 
-        public override string Title
-        {
-            get
-            {
-                return "Weather Alert";
-            }
-        }
-
-        public override void OnLoad()
-        {
-            ZipCode.Text = ZipCodeProp;
-            Temperature.Text = TempProp.ToString();
-            if (CheckAbove)
-            {
-                Above.IsChecked = true;
-            }
-            else
-            {
-                Below.IsChecked = true;
-            }
-            IsValid();
-            UpdateImage();
-
-        }
-
-        public override void OnSave()
-        {
-            ZipCodeProp = ZipCode.Text;
-            TempProp = Convert.ToInt32(Temperature.Text);
-            CheckAbove = (bool)Above.IsChecked;
-        }
-
         private void CheckWeather()
         {
             reader.ReadToFollowing("city");
@@ -146,7 +142,8 @@ namespace DefaultModules.Wpf
 
         private void UpdateImage()
         {
-            if (ConnectedToInternet()) // excessive?
+            // excessive?
+            if (ConnectedToInternet()) 
             {
                 BitmapImage bi = new BitmapImage();
                 bi.BeginInit();
@@ -161,12 +158,15 @@ namespace DefaultModules.Wpf
             }
         }
 
-        public static bool ConnectedToInternet()
+        [DllImport("wininet.dll")]
+        private static bool InternetGetConnectedState(out int desciption, int reservedValue);
+
+        private bool ConnectedToInternet()
         {
-            int Desc;
+            int desc;
             try
             {
-                return InternetGetConnectedState(out Desc, 0);
+                return InternetGetConnectedState(out desc, 0);
             }
             catch
             {
