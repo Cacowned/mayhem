@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>WindowModules</id>
+    <version>1.0</version>
+    <authors>Jay Meistrich</authors>
+    <owners>Outercurve</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Interact with the Windows interface and running applications.</description>
+    <copyright>Copyright © Outercurve 2011</copyright>
+    <tags>Windows, Resize, Move, Minimize, Maximize, Taskbar, System Tray</tags>
+    <dependencies>
+      <dependency id="MayhemCore" version="1.0" />
+      <dependency id="MayhemWpf" version="1.0" />
+    </dependencies>
+  </metadata>
+</package>
