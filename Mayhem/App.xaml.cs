@@ -25,6 +25,40 @@ namespace Mayhem
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+			
+			// if we don't have a packages folder, create it.
+			if (!Directory.Exists(MayhemNuget.InstallPath))
+			{
+				Directory.CreateDirectory(MayhemNuget.InstallPath);
+			}
+			
+			LoadDependencies();
+			bool containsCore = false;
+			foreach (string dependency in dependencies.Keys)
+			{
+				if (dependency.Contains("MayhemCore"))
+				{
+					containsCore = true;
+					break;
+				}
+			}
+
+			if (!containsCore)
+			{
+				MessageBox.Show("This is the first time Mayhem has been run on this computer. Setting up. This may take a few minutes.");
+                try
+                {
+                    var packageManager = MayhemNuget.PackageManager;
+                    packageManager.InstallPackage("DefaultModules");
+                }
+                catch
+                {
+                    MessageBox.Show("Unable to connect to the Mayhem servers to set up. Please connect to the internet and try again.", "Setup Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Shutdown();
+                    return;
+                }
+				MessageBox.Show("Set up successfully. Click OK to start Mayhem.");
+			}
 
 			if (e.Args.Any())
 			{

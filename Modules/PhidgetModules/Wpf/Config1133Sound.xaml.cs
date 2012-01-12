@@ -33,17 +33,10 @@ namespace PhidgetModules.Wpf
             DecreasingRadio.IsChecked = !Increasing;
         }
 
-        public override string Title
-        {
-            get
-            {
-                return "Phidget - Sound";
-            }
-        }
-
-        public override string CheckValidity()
+        public override string GetErrorString()
         {
             double topValue;
+
             if (!(double.TryParse(textBoxTopValue.Text, out topValue) && (topValue >= 0 && topValue <= 1000)))
             {
                 return "Invalid Top Value";
@@ -62,6 +55,14 @@ namespace PhidgetModules.Wpf
         private void TextChanged(object sender, TextChangedEventArgs e)
         {
             Validate();
+        }
+
+        public override string Title
+        {
+            get
+            {
+                return "Phidget - Sound";
+            }
         }
     }
 }

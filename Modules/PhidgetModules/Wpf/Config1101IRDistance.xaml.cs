@@ -39,7 +39,7 @@ namespace PhidgetModules.Wpf
             }
         }
 
-        public override string CheckValidity()
+        public override string GetErrorString()
         {
             double topValue;
             double bottomValue;
