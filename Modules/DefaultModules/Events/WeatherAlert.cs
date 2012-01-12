@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Windows.Threading;
 using System.Xml;
@@ -7,8 +8,6 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace DefaultModules.Events
 {
@@ -29,8 +28,25 @@ namespace DefaultModules.Events
         private bool hasPassed;
         private DispatcherTimer timer;
 
-        [DllImport("wininet.dll")]
-        private extern static bool InternetGetConnectedState(out int Desciption, int ReservedValue);
+        public void OnSaved(WpfConfiguration configurationControl)
+        {
+            var config = (WeatherAlertConfig)configurationControl;
+            zipCode = config.ZipCodeProp;
+            temperature = config.TempProp;
+            checkBelow = config.CheckAbove;
+        }
+
+        public WpfConfiguration ConfigurationControl
+        {
+            get { return new WeatherAlertConfig(zipCode, temperature, checkBelow); }
+        }
+
+        public string GetConfigString()
+        {
+            string above_below = checkBelow ? "above " : "below ";
+            above_below += temperature;
+            return String.Format("Watching {0} for {1}F", zipCode, above_below);
+        }
 
         protected override void OnLoadDefaults()
         {
@@ -43,7 +59,7 @@ namespace DefaultModules.Events
         {
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 1, 0);
-            timer.Tick += checkWeather;
+            timer.Tick += CheckWeather;
             hasPassed = false;
         }
 
@@ -66,14 +82,7 @@ namespace DefaultModules.Events
         }
         #endregion
 
-        public string GetConfigString()
-        {
-            string above_below = checkBelow ? "above " : "below ";
-            above_below += temperature;
-            return String.Format("Watching {0} for {1}F", zipCode, above_below);
-        }
-
-        private void checkWeather(object sender, EventArgs e)
+        private void CheckWeather(object sender, EventArgs e)
         {
             // Test for internet connection
             if (ConnectedToInternet())
@@ -109,33 +118,22 @@ namespace DefaultModules.Events
                             hasPassed = true;
                             Trigger();
                         }
-                        else if(temp == temperature)
+                        else if (temp == temperature)
                         {
                             hasPassed = false;
                         }
                     }
                 }
             }
-
         }
 
-        public WpfConfiguration ConfigurationControl
-        {
-            get { return new WeatherAlertConfig(zipCode, temperature, checkBelow); }
-        }
+        [DllImport("wininet.dll")]
+        private static bool InternetGetConnectedState(out int desciption, int reservedValue);
 
-        public void OnSaved(WpfConfiguration configurationControl)
+        private static bool ConnectedToInternet()
         {
-            var config = (WeatherAlertConfig)configurationControl;
-            zipCode = config.ZipCodeProp;
-            temperature = config.TempProp;
-            checkBelow = config.CheckAbove;
-        }
-
-        public static bool ConnectedToInternet()
-        {
-            int Desc;
-            return InternetGetConnectedState(out Desc, 0);
+            int desc;
+            return InternetGetConnectedState(out desc, 0);
         }
     }
 }
