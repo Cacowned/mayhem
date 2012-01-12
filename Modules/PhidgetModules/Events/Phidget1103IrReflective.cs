@@ -13,16 +13,25 @@ namespace PhidgetModules.Events
 	{
 		protected override void OnLoadDefaults()
 		{
+            base.OnLoadDefaults();
+
 			BottomThreshold = 0;
 			TopThreshold = 100;
 		}
 
+        protected override void OnBeforeLoad()
+        {
+            base.OnBeforeLoad();
+
+            // We invert because the proximity sensor actually says that it sees an object
+            // when the value drops below 100 opposed to sensors like touch which shoot up when they
+            // detect.
+            base.invert = true;
+        }
+
 		public WpfConfiguration ConfigurationControl
 		{
-			// We negate OnTurnOn because the proximity sensor actually says that it sees an object
-			// when the value drops below 100 opposed to sensors like touch which shoot up when they
-			// detect.
-			get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1103IrReflective(!OnTurnOn)); }
+			get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1103IrReflective(OnTurnOn)); }
 		}
 
 		public void OnSaved(WpfConfiguration configurationControl)
@@ -33,7 +42,7 @@ namespace PhidgetModules.Events
 			Index = sensor.Index;
 
 			// The reason we negate here is explained above.
-			OnTurnOn = !config.OnTurnOn;
+			OnTurnOn = config.OnTurnOn;
 		}
 
 		public string GetConfigString()

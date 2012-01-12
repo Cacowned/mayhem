@@ -7,100 +7,120 @@ using Phidgets.Events;
 
 namespace PhidgetModules.Wpf.UserControls
 {
-	/// <summary>
-	/// Interaction logic for SensorConfig.xaml
-	/// </summary>
-	public partial class SensorConfig : WpfConfiguration
-	{
-		public int Index { get; private set; }
+    /// <summary>
+    /// Interaction logic for SensorConfig.xaml
+    /// </summary>
+    public partial class SensorConfig : WpfConfiguration
+    {
+        public int Index { get; private set; }
 
-		public InterfaceKit IfKit { get; private set; }
+        public InterfaceKit IfKit { get; private set; }
 
-		public Func<int, string> Convertor { get; private set; }
+        public Func<int, string> Convertor { get; private set; }
 
-		public PhidgetConfigControl Sensor { get; private set; }
+        public PhidgetConfigControl Sensor { get; private set; }
 
-		private bool shouldCheckValidity;
+        private bool shouldCheckValidity;
 
-		public SensorConfig(InterfaceKit ifKit, int index, Func<int, string> conversion, PhidgetConfigControl control)
-		{
-			Index = index;
-			IfKit = ifKit;
-			Convertor = conversion;
+        private bool isValid;
 
-			Sensor = control;
+        private bool isAttached;
 
-			InitializeComponent();
-		}
+        public SensorConfig(InterfaceKit ifKit, int index, Func<int, string> conversion, PhidgetConfigControl control)
+        {
+            Index = index;
+            IfKit = ifKit;
+            Convertor = conversion;
 
-		public override string Title
-		{
-			get
-			{
-				return Sensor.Title;
-			}
-		}
+            Sensor = control;
 
-		public override void OnLoad()
-		{
-			SensorDataBox.Index = Index;
-			SensorDataBox.IfKit = IfKit;
-			SensorDataBox.Convertor = Convertor;
-			SensorDataBox.Setup();
+            InitializeComponent();
+        }
 
-			Sensor.OnLoad();
-			Sensor.OnRevalidate += Revalidate;
+        public override string Title
+        {
+            get
+            {
+                return Sensor.Title;
+            }
+        }
 
-			sensorControl.Content = Sensor;
+        public override void OnLoad()
+        {
+            SensorDataBox.Index = Index;
+            SensorDataBox.IfKit = IfKit;
+            SensorDataBox.Convertor = Convertor;
+            SensorDataBox.Setup();
 
-			IfKit.Attach += ifKit_Attach;
+            Sensor.OnLoad();
+            Sensor.OnRevalidate += Revalidate;
 
-			CanSavedChanged += PhidgetConfig_CanSavedChanged;
+            sensorControl.Content = Sensor;
 
-			// If we have detected sensors already, then enable the save button
-			if (IfKit.sensors.Count > 0)
-				CanSave = true;
+            IfKit.Attach += ifKit_Attach;
+            
+            // If we have detected sensors already, then we are attached but haven't triggered
+            // attached event
+            if (IfKit.sensors.Count > 0)
+            	isAttached = true;
 
-			shouldCheckValidity = true;
-		}
+            Revalidate();
 
-		public override void OnSave()
-		{
-			Index = SensorDataBox.Index;
-			Sensor.OnSave();
-		}
+            shouldCheckValidity = true;
 
-		public override void OnClosing()
-		{
-			IfKit.Attach -= ifKit_Attach;
-			CanSavedChanged -= PhidgetConfig_CanSavedChanged;
-		}
+            CheckCanSave();
+        }
 
-		private void PhidgetConfig_CanSavedChanged(bool canSave)
-		{
-			Visibility visible = Visibility.Visible;
-			if (canSave)
-				visible = Visibility.Collapsed;
+        public override void OnSave()
+        {
+            Index = SensorDataBox.Index;
+            Sensor.OnSave();
+        }
 
-			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
-			{
-				phidgetAttached.Visibility = visible;
-			}));
-		}
+        public override void OnClosing()
+        {
+            IfKit.Attach -= ifKit_Attach;
+        }
 
-		private void ifKit_Attach(object sender, AttachEventArgs e)
-		{
-			CanSave = true;
-		}
+        private void SetAttachedMessage(bool attached)
+        {
+            Visibility visible = Visibility.Visible;
+            if (attached)
+                visible = Visibility.Collapsed;
 
-		private void Revalidate()
-		{
-			if (shouldCheckValidity)
-			{
-				string text = Sensor.CheckValidity();
-				textInvalid.Text = text;
-				textInvalid.Visibility = text.Length == 0 ? Visibility.Collapsed : Visibility.Visible;
-			}
-		}
-	}
+            Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
+            {
+                phidgetAttached.Visibility = visible;
+
+            }));
+        }
+
+        private void CheckCanSave()
+        {
+            CanSave = isAttached && isValid;
+
+            SetAttachedMessage(isAttached);
+        }
+
+        private void ifKit_Attach(object sender, AttachEventArgs e)
+        {
+            isAttached = true;
+
+            CheckCanSave();
+        }
+
+        private void Revalidate()
+        {
+            string text = Sensor.GetErrorString();
+            isValid = String.IsNullOrEmpty(text);
+
+            if (shouldCheckValidity)
+            {
+                textInvalid.Text = text;
+                textInvalid.Visibility = String.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
+
+                CheckCanSave();
+            }
+        }
+    }
 }
