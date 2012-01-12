@@ -33,7 +33,7 @@ namespace PhidgetModules.Wpf
             DecreasingRadio.IsChecked = !Increasing;
         }
 
-        public override string CheckValidity()
+        public override string GetErrorString()
         {
             double topValue;
 

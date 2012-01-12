@@ -16,7 +16,7 @@ namespace PhidgetModules.Wpf.UserControls
 
         public virtual void OnSave() { }
 
-        public virtual string CheckValidity() { return string.Empty; }
+        public virtual string GetErrorString() { return string.Empty; }
 
         public delegate void Revalidate();
 
