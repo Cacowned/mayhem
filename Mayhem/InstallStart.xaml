@@ -4,6 +4,7 @@
 		Title="First time setup" Width="400" ResizeMode="NoResize" SizeToContent="Height" Background="#ddd">
 	<StackPanel Margin="5">
 		<TextBlock TextWrapping="WrapWithOverflow">This is the first time Mayhem has been run on this computer. Click continue to set up Mayhem. You must be connected to the internet.</TextBlock>
+		<!--<ProgressBar Name="progress" Margin="15, 10, 15, 0" Height="10" />-->
 		<ListBox Margin="5,10,5,10" Height="100" Name="listBox1" />
 		<Grid HorizontalAlignment="Center">
 			<Button Name="buttonSetup" Height="30" Width="60" Click="Setup_Click">Continue</Button>
