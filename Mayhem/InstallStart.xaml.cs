@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
@@ -15,64 +14,72 @@ namespace Mayhem
 		public InstallStart()
 		{
 			InitializeComponent();
+			success = false;
 		}
 
 		private void Setup_Click(object sender, RoutedEventArgs e)
 		{
 			var packageManager = MayhemNuget.PackageManager;
+			/*
+			var repo = packageManager.SourceRepository;
+			var progressProvider = repo as IProgressProvider;
+			if (progressProvider != null)
+			{
+				progressProvider.ProgressAvailable += OnProgressAvailable;
+			}
+			 */
+
 			packageManager.Logger = new Logger(this);
 
 			packageManager.Logger.Log(MessageLevel.Info, "Starting setup.");
 
-			try
+			// Install the package
+			ThreadPool.QueueUserWorkItem(o =>
 			{
+				try
+				{
+					Dispatcher.Invoke((Action)delegate
+					{
+						buttonSetup.IsEnabled = false;
+					});
+
+					// Create a package manager to install and resolve dependencies
+					packageManager.InstallPackage("DefaultModules");
+
+					packageManager.Logger.Log(MessageLevel.Info, "Set up successfully. Click OK to start Mayhem.");
+
+					success = true;
+				}
+				catch (WebException exception)
+				{
+					packageManager.Logger.Log(MessageLevel.Error, "Unable to connect to the Mayhem servers to set up.");
+					packageManager.Logger.Log(MessageLevel.Error, "Please make sure you are connected to the internet and try again.");
+					Debug.WriteLine(exception.Message);
+					success = false;
+				}
+				catch (Exception ex)
+				{
+					// TODO: This should be a better message
+					// MessageBox.Show(ex.Message);
+					packageManager.Logger.Log(MessageLevel.Error, "An unknown error occurred.");
+					Debug.WriteLine(ex.Message);
+					success = false;
+				}
+				// toggle the buttons so we can do something now.
 				Dispatcher.Invoke((Action)delegate
 				{
-					buttonSetup.IsEnabled = false;
-				});
+					buttonSetup.Visibility = Visibility.Hidden;
 
-				// Create a package manager to install and resolve dependencies
-
-				// Install the package
-				ThreadPool.QueueUserWorkItem(o =>
-				{
-					try
+					if (!success)
 					{
-						packageManager.InstallPackage("DefaultModules");
-
-						packageManager.Logger.Log(MessageLevel.Info, "Set up successfully. Click OK to start Mayhem.");
-
-						success = true;
+						buttonClose.Content = "Close";
 					}
-					catch (WebException exception)
-					{
-						packageManager.Logger.Log(MessageLevel.Error, "Unable to connect to the Mayhem servers to set up.");
-						packageManager.Logger.Log(MessageLevel.Error, "Please connect to the internet and try again.");
-						success = false;
-					}
+
+					buttonClose.IsEnabled = true;
+					buttonClose.Visibility = Visibility.Visible;
+
+
 				});
-			}
-			catch (Exception ex)
-			{
-				// TODO: This should be a better message
-				// MessageBox.Show(ex.Message);
-				packageManager.Logger.Log(MessageLevel.Error, "An unknown error occurred.");
-				Debug.WriteLine(ex.Message);
-				success = false;
-			}
-
-			// toggle the buttons so we can do something now.
-			Dispatcher.Invoke((Action)delegate
-			{
-				buttonSetup.Visibility = Visibility.Hidden;
-
-				buttonClose.IsEnabled = true;
-				buttonClose.Visibility = Visibility.Visible;
-
-				if (!success)
-				{
-					buttonClose.Content = "Close";
-				}
 			});
 		}
 
@@ -80,6 +87,16 @@ namespace Mayhem
 		{
 			DialogResult = success;
 		}
+
+		/*
+		public void OnProgressAvailable(object sender, ProgressEventArgs e)
+		{
+			Dispatcher.Invoke((Action)delegate
+			{
+				progress.Value = e.PercentComplete;
+			});
+		}
+		 */
 
 		public class Logger : ILogger
 		{
