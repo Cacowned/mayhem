@@ -1,24 +1,16 @@
 ﻿<Window x:Class="Mayhem.UpdateModules"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		Title="InstallModule"  Width="400"  ResizeMode="NoResize" SizeToContent="Height">
-	<Window.Resources>
-		<Style TargetType="TextBlock">
-			<Setter Property="TextAlignment" Value="Center" />
-			<Setter Property="FontSize" Value="16" />
-			<Setter Property="FontWeight" Value="Bold" />
-			<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
-		</Style>
-	</Window.Resources>
-	<StackPanel Margin="0,5,0,0">
-			<TextBlock>Update Modules</TextBlock>
-			<ListBox Margin="5,10,5,10" Height="100" Name="listBox1" />
-			<Grid HorizontalAlignment="Center" Margin="0 0 0 20">
-				<StackPanel Name="stackPanelDefaultButtons" Orientation="Horizontal" >
-					<Button Name="buttonUpdate" Width="50" Height="30" Click="Update_Click">Update</Button>
-					<Button Name="buttonCancel" Margin="10,0,0,0" Width="50" Height="30" Click="Cancel_Click">Skip</Button>
-				</StackPanel>
-				<Button Name="buttonClose" Width="50" Height="30" Click="Close_Click" Visibility="Hidden">Close</Button>
-			</Grid>
+		Title="Update Modules" Width="400" ResizeMode="NoResize" SizeToContent="Height" Background="#ddd">
+	<StackPanel Margin="5">
+		<TextBlock TextWrapping="WrapWithOverflow">There are new versions of some installed addons. Would you like to update now or later?</TextBlock>
+		<ListBox Margin="5,10,5,10" Height="100" Name="listBox1" />
+		<Grid HorizontalAlignment="Center">
+			<StackPanel Name="stackPanelDefaultButtons" Orientation="Horizontal">
+				<Button Name="buttonUpdate" Click="Update_Click">Update Now</Button>
+				<Button Name="buttonCancel" Margin="10,0,0,0" Click="Cancel_Click">Update Later</Button>
+			</StackPanel>
+			<Button Name="buttonClose" Click="Close_Click" Visibility="Hidden">Close</Button>
+		</Grid>
 	</StackPanel>
 </Window>
