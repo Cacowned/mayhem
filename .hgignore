@@ -17,4 +17,3 @@ glob:*.rej
 *.nupkg
 StyleCop.Cache
 _ReSharper.*
-publish/
