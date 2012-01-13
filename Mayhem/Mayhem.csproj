@@ -30,11 +30,14 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://mayhem.codeplex.com/releases/clickonce/</InstallUrl>
+    <ProductName>Mayhem</ProductName>
+    <PublisherName>Outercurve</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -98,6 +101,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="InstallStart.xaml.cs">
+      <DependentUpon>InstallStart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MayhemNuget.cs" />
     <Compile Include="UpdateModules.xaml.cs">
       <DependentUpon>UpdateModules.xaml</DependentUpon>
@@ -106,6 +112,10 @@
     <Page Include="ConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InstallStart.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="InstallModule.xaml">
       <SubType>Designer</SubType>
