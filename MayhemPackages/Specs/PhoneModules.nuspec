@@ -6,7 +6,11 @@
     <authors>Jay Meistrich, Eli White</authors>
     <owners>Outercurve</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Allows your smartphone to trigger Mayhem reactions.</description>
+    <description>Allows your smartphone to trigger Mayhem reactions. Each event is represented by a different virtual button on the phone. To use this module, you will need to download the Mayhem application to your phone. The Mayhem Remote application is freely available for Windows Phone, iOS (Apple), and Android in their respective online stores.
+
+Designing the interface - Choose the Phone Remote event. A button is added to the virtual phone display. Hovering over the button allows the text and the image to be changed. The buttons can also be moved by dragging them to the desired positions. To enable the Save button, you must hit Pair Phone first. (This only needs to be done once. Future buttons will have Save already enabled.)
+
+Pairing the phone - Launch the Mayhem Remote application on your smartphone and choose automatic pairing from the settings menu. In the Phone Remote event, select Pair Phone. This will display a QR code which the phone application uses for automatic pairing. Point the phones camera at the QR code, and the pairing will be automatically completed. Any number of phones can be simultaneously paired. Any changes made to the events will be automatically updated on the phones - no need to pair again!</description>
     <copyright>Copyright © Outercurve 2011</copyright>
     <tags>iPhone, Windows Phone, Android, Phone Event, Remote</tags>
     <dependencies>

@@ -58,7 +58,6 @@
     <Compile Include="Actions\WindowActionMinimize.cs" />
     <Compile Include="Actions\WindowActionMove.cs" />
     <Compile Include="InterceptKeys.cs" />
-    <Compile Include="Events\SystemTrayMenu.cs" />
     <Compile Include="IWindowAction.cs" />
     <Compile Include="IWindowActionConfigControl.cs" />
     <Compile Include="WindowActionInfo.cs" />
@@ -68,9 +67,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WindowInfo.cs" />
     <Compile Include="WMIProcess.cs" />
-    <Compile Include="Wpf\SystemTrayMenuConfig.xaml.cs">
-      <DependentUpon>SystemTrayMenuConfig.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Wpf\WindowWait.xaml.cs">
       <DependentUpon>WindowWait.xaml</DependentUpon>
     </Compile>
@@ -106,10 +102,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Wpf\SystemTrayMenuConfig.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Wpf\WindowWait.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

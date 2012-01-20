@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Events\FolderChange.cs" />
     <Compile Include="Events\SpeechRecognition.cs" />
+    <Compile Include="Events\SystemTrayMenu.cs" />
     <Compile Include="Events\WeatherAlert.cs" />
     <Compile Include="Reactions\LockWorkstation.cs" />
     <Compile Include="Reactions\OpenUrl.cs" />
@@ -97,6 +98,9 @@
     </Compile>
     <Compile Include="Wpf\SpeechRecognitionConfig.xaml.cs">
       <DependentUpon>SpeechRecognitionConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\SystemTrayMenuConfig.xaml.cs">
+      <DependentUpon>SystemTrayMenuConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\TextToSpeechConfig.xaml.cs">
       <DependentUpon>TextToSpeechConfig.xaml</DependentUpon>
@@ -147,6 +151,10 @@
     <Page Include="Wpf\SpeechRecognitionConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\SystemTrayMenuConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Wpf\TextToSpeechConfig.xaml">
       <SubType>Designer</SubType>
