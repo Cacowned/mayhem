@@ -17,7 +17,7 @@ namespace VisionModules.Reactions
     /// </summary>
     [DataContract]
     [MayhemModule("Picture", "Takes a photo with a webcam and saves it to the hard drive")]
-    public class Picture : ReactionBase, IWpfConfigurable
+    internal class Picture : ReactionBase, IWpfConfigurable
     {
         [DataMember]
         private string folderLocation;

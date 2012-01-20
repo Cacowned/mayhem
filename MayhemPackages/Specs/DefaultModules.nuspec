@@ -11,6 +11,8 @@ Events
 Folder Change – Triggers when the filenames or number of files in the specified folder is changed. This includes an option to check subfolders.
 Keypress – Triggers when the specified key or key combination is pressed. This works transparently in the background, independent of which application is in the foreground.
 Timer – Triggers repeatedly at the specified interval.
+System Tray Menu - This allows a user to manually trigger an event from a Mayhem icon in the System Tray. Multiple System Tray Menu events can be running simultaneously, and the user can select among them from a list via the single Mayhem icon.
+
 
 Reactions
 Lock Workstation – Put the computer into the Windows lock state

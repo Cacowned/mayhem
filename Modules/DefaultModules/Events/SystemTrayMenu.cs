@@ -7,9 +7,10 @@ using System.Windows.Forms;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using WindowModules.Wpf;
+using DefaultModules.Wpf;
+using System.Drawing;
 
-namespace WindowModules.Events
+namespace DefaultModules.Events
 {
     [DataContract]
     [MayhemModule("System Tray Menu", "Adds a menu into the system tray")]
@@ -35,11 +36,11 @@ namespace WindowModules.Events
             {
                 notifyIcon = new NotifyIcon();
                 notifyIcon.ContextMenu = new ContextMenu();
-                Uri iconUri = new Uri("pack://application:,,,/Mayhem.ico", UriKind.RelativeOrAbsolute);
-                Stream iconStream = System.Windows.Application.GetResourceStream(iconUri).Stream;
-                if (iconStream != null)
+                
+				Icon icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+				if (icon != null)
                 {
-                    notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+					notifyIcon.Icon = icon;
                 }
 
                 notifyIcon.Text = "Mayhem";
