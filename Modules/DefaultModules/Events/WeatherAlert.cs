@@ -128,7 +128,7 @@ namespace DefaultModules.Events
         }
 
         [DllImport("wininet.dll")]
-        private static bool InternetGetConnectedState(out int desciption, int reservedValue);
+        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
 
         private static bool ConnectedToInternet()
         {
