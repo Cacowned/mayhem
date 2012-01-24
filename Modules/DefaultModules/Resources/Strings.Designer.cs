@@ -79,7 +79,7 @@ namespace DefaultModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no Internet connection.
+        ///   Looks up a localized string similar to There is no Internet connection, weather event will start when Internet is detected..
         /// </summary>
         internal static string Internet_NotConnected {
             get {

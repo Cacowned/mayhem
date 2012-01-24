@@ -66,14 +66,11 @@ namespace DefaultModules.Events
         #region Timer
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (ConnectedToInternet())
-            {
-                timer.Start();
-            }
-            else
+            if (!ConnectedToInternet())
             {
                 ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
             }
+            timer.Start();
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
