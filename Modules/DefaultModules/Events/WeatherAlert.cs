@@ -27,6 +27,7 @@ namespace DefaultModules.Events
 
         private bool hasPassed;
         private DispatcherTimer timer;
+        private bool internetFlag;
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
@@ -84,6 +85,7 @@ namespace DefaultModules.Events
             // Test for internet connection
             if (ConnectedToInternet())
             {
+                internetFlag = true;
                 // Retrieve XML document  
                 XmlTextReader reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + zipCode.Replace(" ", "%20"));
                 reader.WhitespaceHandling = WhitespaceHandling.Significant;
@@ -103,7 +105,7 @@ namespace DefaultModules.Events
                 {
                     reader.ReadToFollowing("temp_f");
                     int temp = Convert.ToInt32(reader.GetAttribute("data"));
-                    
+
                     bool isBelowOrAbove = (checkBelow && temp >= temperature) || (!checkBelow && temp <= temperature);
 
                     // if below desired temperature and watching for below, trigger
@@ -121,6 +123,11 @@ namespace DefaultModules.Events
                         }
                     }
                 }
+            }
+            else if (internetFlag)
+            {
+                internetFlag = false;
+                ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
             }
         }
 
