@@ -124,7 +124,7 @@
     <value>Invalid url</value>
   </data>
   <data name="Internet_NotConnected" xml:space="preserve">
-    <value>There is no Internet connection</value>
+    <value>There is no Internet connection, weather event will start when Internet is detected.</value>
   </data>
   <data name="OpenUrl_ConfigString" xml:space="preserve">
     <value>Url: "{0}"</value>
