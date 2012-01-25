@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using MayhemWpf.UserControls;
+using System.Windows.Threading;
 
 namespace DefaultModules.Wpf
 {
@@ -12,6 +13,8 @@ namespace DefaultModules.Wpf
         private XmlTextReader reader;
         private string city;
         private string icon;
+        private DispatcherTimer timer;
+        private bool hasNetLastChecked;
 
         public string ZipCodeProp
         {
@@ -44,8 +47,20 @@ namespace DefaultModules.Wpf
             ZipCodeProp = zipcode;
             TempProp = temp;
             CheckAbove = checks;
+            hasNetLastChecked = false;
+
+            timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 0, 2);
+            timer.Tick += CheckInternet;
+
             InitializeComponent();
-        } 
+        }
+
+        private void CheckInternet(object sender, EventArgs e)
+        {
+            // don't want to add overloads to ConnectedToInternet()
+            ConnectedToInternet();
+        }
 
         public override void OnLoad()
         {
@@ -60,7 +75,8 @@ namespace DefaultModules.Wpf
                 Below.IsChecked = true;
             }
 
-            IsValid();
+            // done when text fields are set above
+            // VerifyFields();
             UpdateImage();
         }
 
@@ -70,10 +86,24 @@ namespace DefaultModules.Wpf
             TempProp = Convert.ToInt32(Temperature.Text);
             CheckAbove = (bool)Above.IsChecked;
         }
-        
-        private bool IsValid()
+
+        private void VerifyFields()
         {
-            if (ConnectedToInternet())
+            string error = "Invalid";
+
+            int temp;
+            bool isTemp = int.TryParse(Temperature.Text, out temp) && (temp < 150 && temp > -50);
+
+            error += isTemp ? "" : " temperature";
+            error += IsValidXML() ? "" : " zip code or city name";
+
+            CanSave = error.Equals("Invalid");
+            TextChanged(error);
+        }
+
+        private bool IsValidXML()
+        {
+            if (ConnectedToInternet() && ZipCode.Text.Length > 0)
             {
                 reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + ZipCode.Text.Replace(" ", "%20"));
 
@@ -82,51 +112,37 @@ namespace DefaultModules.Wpf
                 {
                     reader.Read();
                 }
-
-                return !reader.Name.Equals("problem_cause");
+                if (reader.Name.Equals("problem_cause"))
+                {
+                    ZipCity.Text = "City";
+                    return false;
+                }
+                return true;
             }
-
             return false;
         }
 
         private void TempZip_TextChanged(object sender, RoutedEventArgs e)
         {
-            if (ConnectedToInternet())
+            if (!timer.IsEnabled)
             {
-                string error = "Invalid";
-
-                int temp;
-                bool isTemp = int.TryParse(Temperature.Text, out temp) && (temp < 150 && temp > -50);
-                bool isZip = ZipCode.Text.Length > 0 && IsValid();
-
-                if (!isTemp)
-                {
-                    error += " temperature";
-                }
-
-                if (!isZip)
-                {
-                    error += " zip code or city name";
-                }
-
-                CanSave = isZip && isTemp;
-                TextChanged(error);
+                VerifyFields();
             }
             else
             {
-                CanSave = false;
-                TextChanged("Not connected to the Internet");
+                ZipCity.Text = "City";
+                TextChanged("Cannot connect to the Internet");
             }
         }
 
         private void TextChanged(string text)
         {
-            textInvalid.Text = text;
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-            if (CanSave)
-            {
-                CheckWeather();
-            }
+                textInvalid.Text = text;
+                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+                if (CanSave && !timer.IsEnabled)
+                {
+                    CheckWeather();
+                }
         }
 
         private void CheckWeather()
@@ -142,8 +158,7 @@ namespace DefaultModules.Wpf
 
         private void UpdateImage()
         {
-            // excessive?
-            if (ConnectedToInternet()) 
+            if (ConnectedToInternet())
             {
                 BitmapImage bi = new BitmapImage();
                 bi.BeginInit();
@@ -154,7 +169,7 @@ namespace DefaultModules.Wpf
             }
             else
             {
-                TextChanged("Not connected to the Internet");
+                TextChanged("Cannot connect to the Internet");
             }
         }
 
@@ -166,12 +181,23 @@ namespace DefaultModules.Wpf
             int desc;
             try
             {
-                return InternetGetConnectedState(out desc, 0);
+                if (InternetGetConnectedState(out desc, 0))
+                {
+                    if (timer.IsEnabled)
+                    {
+                        timer.Stop();
+                        VerifyFields();
+                    }
+                    return true;
+                }
             }
-            catch
+            catch { }
+
+            if (!timer.IsEnabled)
             {
-                return false;
+                timer.Start();
             }
+            return false;
         }
     }
 }

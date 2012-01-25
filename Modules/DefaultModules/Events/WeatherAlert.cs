@@ -89,40 +89,27 @@ namespace DefaultModules.Events
                 // Retrieve XML document  
                 XmlTextReader reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + zipCode.Replace(" ", "%20"));
                 reader.WhitespaceHandling = WhitespaceHandling.Significant;
-                bool valid = false;
 
-                // test url validity
-                try
+                reader.ReadToFollowing("temp_f");
+                int temp = Convert.ToInt32(reader.GetAttribute("data"));
+
+                bool isBelowOrAbove = (checkBelow && temp >= temperature) || (!checkBelow && temp <= temperature);
+
+                // if below desired temperature and watching for below, trigger
+                // if above desired temperature and watching for abovem trigger
+                if (isBelowOrAbove)
                 {
-                    valid = reader.Read();
-                }
-                catch
-                {
-                    ErrorLog.AddError(ErrorType.Failure, Strings.Internet_InvalidUrl);
-                }
-
-                if (valid)
-                {
-                    reader.ReadToFollowing("temp_f");
-                    int temp = Convert.ToInt32(reader.GetAttribute("data"));
-
-                    bool isBelowOrAbove = (checkBelow && temp >= temperature) || (!checkBelow && temp <= temperature);
-
-                    // if below desired temperature and watching for below, trigger
-                    // if above desired temperature and watching for abovem trigger
-                    if (isBelowOrAbove)
+                    if (!hasPassed)
                     {
-                        if (!hasPassed)
-                        {
-                            hasPassed = true;
-                            Trigger();
-                        }
-                        else if (temp == temperature)
-                        {
-                            hasPassed = false;
-                        }
+                        hasPassed = true;
+                        Trigger();
+                    }
+                    else if (temp == temperature)
+                    {
+                        hasPassed = false;
                     }
                 }
+
             }
             else if (internetFlag)
             {
@@ -137,7 +124,14 @@ namespace DefaultModules.Events
         private static bool ConnectedToInternet()
         {
             int desc;
-            return InternetGetConnectedState(out desc, 0);
+            try
+            {
+                return InternetGetConnectedState(out desc, 0);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
