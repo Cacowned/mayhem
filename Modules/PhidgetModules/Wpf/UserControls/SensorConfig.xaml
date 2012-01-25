@@ -1,0 +1,17 @@
+﻿<src:WpfConfiguration x:Class="PhidgetModules.Wpf.UserControls.SensorConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             xmlns:common="clr-namespace:PhidgetModules.Wpf.UserControls"
+             Width="400">
+    
+    <StackPanel>
+        <common:SensorData x:Name="SensorDataBox" Margin="0,0,0,20" />
+
+        <ContentControl Name="sensorControl" Width="400" />
+        
+        <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1" Visibility="Collapsed" />
+        <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" Style="{StaticResource ConfigErrorMessage}" Name="phidgetAttached" Grid.Column="1" Grid.Row="1" Visibility="Visible">Plug in a phidget interface kit.</TextBlock>
+    </StackPanel>
+    
+</src:WpfConfiguration>
