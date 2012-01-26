@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using System.Xml;
 using MayhemWpf.UserControls;
-using System.Windows.Threading;
 
 namespace DefaultModules.Wpf
 {
@@ -14,7 +14,6 @@ namespace DefaultModules.Wpf
         private string city;
         private string icon;
         private DispatcherTimer timer;
-        private bool hasNetLastChecked;
 
         public string ZipCodeProp
         {
@@ -47,7 +46,6 @@ namespace DefaultModules.Wpf
             ZipCodeProp = zipcode;
             TempProp = temp;
             CheckAbove = checks;
-            hasNetLastChecked = false;
 
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 2);
