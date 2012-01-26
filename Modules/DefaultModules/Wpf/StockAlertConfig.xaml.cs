@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
-using MayhemWpf.UserControls;
 using System.Xml;
+using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
@@ -87,8 +86,6 @@ namespace DefaultModules.Wpf
         {
             StockSymbolProp = StockSymbol.Text;
             StockPriceProp = Math.Round(Convert.ToDouble(StockPrice.Text), 2);
-            // explicitly test, check if saves propper value
-            // QueryParamProp = (bool)LastTrade.IsChecked ? "k1" : "b2";
             WatchAboveProp = (bool)Above.IsChecked;
         }
 
@@ -101,8 +98,6 @@ namespace DefaultModules.Wpf
         private void VerifyFields()
         {
             string error = "Invalid";
-
-            
 
             double price = 0.0;
             bool isNumber = StockPrice.Text.Length > 0 && double.TryParse(StockPrice.Text, out price);
@@ -154,14 +149,11 @@ namespace DefaultModules.Wpf
             //stockData.ReadToFollowing("company");
             string companyName = stockData.GetAttribute("data");
 
-            //string readTo = AskingProp ? "asking" : "last";
-
             // get current stock price
             stockData.ReadToFollowing("last");
             string currentPrice = stockData.GetAttribute("data");
 
             StockName.Text = String.Format("{0} - ${1}", companyName, currentPrice);
-            //StockNamePrice.Text = "$" + currentPrice;
         }
 
         [DllImport("wininet.dll")]
