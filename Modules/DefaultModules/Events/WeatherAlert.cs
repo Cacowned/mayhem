@@ -77,6 +77,8 @@ namespace DefaultModules.Events
         protected override void OnDisabled(DisabledEventArgs e)
         {
             timer.Stop();
+            // when turned off then off again, will check for passing weather point
+            hasPassed = false;
         }
         #endregion
 
