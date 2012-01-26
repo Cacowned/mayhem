@@ -26,7 +26,7 @@ namespace DefaultModules.Wpf
             private set;
         }
 
-        public string QueryParamProp
+        public bool ChangeProp
         {
             get;
             private set;
@@ -46,11 +46,11 @@ namespace DefaultModules.Wpf
             }
         }
 
-        public StockAlertConfig(string stockSymbol, double stockPrice, string queryParam, bool abovePrice)
+        public StockAlertConfig(string stockSymbol, double stockPrice, bool changeParam, bool abovePrice)
         {
             StockSymbolProp = stockSymbol;
             StockPriceProp = stockPrice;
-            QueryParamProp = queryParam;
+            ChangeProp = changeParam;
             WatchAboveProp = abovePrice;
 
             timer = new DispatcherTimer();
@@ -64,13 +64,13 @@ namespace DefaultModules.Wpf
         {
             StockSymbol.Text = StockSymbolProp;
             StockPrice.Text = StockPriceProp.ToString();
-            if (QueryParamProp.Equals("k1"))
+            if (!ChangeProp)
             {
                 LastTrade.IsChecked = true;
             }
             else
             {
-                Asking.IsChecked = true;
+                Change.IsChecked = true;
             }
 
             if (WatchAboveProp)
@@ -102,10 +102,15 @@ namespace DefaultModules.Wpf
         {
             string error = "Invalid";
 
-            double price;
-            bool isAboveZero = StockPrice.Text.Length > 0 && double.TryParse(StockPrice.Text, out price) && (price > 0);
+            
 
-            error += isAboveZero ? "" : " price";
+            double price = 0.0;
+            bool isNumber = StockPrice.Text.Length > 0 && double.TryParse(StockPrice.Text, out price);
+
+            // if checking trades, want positive numbers only, otherwise true
+            bool posPrice = (bool)LastTrade.IsChecked ? (price > 0) : true;
+
+            error += isNumber && posPrice ? "" : " price";
             error += IsValidStock() ? "" : " stock symbol";
 
             CanSave = error.Equals("Invalid");
@@ -116,19 +121,15 @@ namespace DefaultModules.Wpf
         {
             if (ConnectedToInternet() && StockSymbol.Text.Length > 0)
             {
-                /* switched to google api because it's MUCH faster
-                WebClient wc = new WebClient();
-                string query = String.Format("http://finance.yahoo.com/d/quotes.csv?s={0}&f=s{1}", StockSymbol.Text, QueryParamProp);
-                //query = "http://finance.yahoo.com/d/quotes.csv?s=RHT+MSFT&f=sb2b3jk";
-                 */
-                stockData = new XmlTextReader(String.Format("http://www.google.com/ig/api?stock=" + StockSymbol.Text));
-                //MessageBox.Show(query);
-                //string file = wc.DownloadString(query);
-                //string[] parts = file.Split(new Char[] { '\n' });
-                //MessageBox.Show(file.Trim());
+                stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + StockSymbol.Text);
 
-                StockName.Text = "";
-
+                // check that there is xml data
+                stockData.ReadToFollowing("company");
+                if (stockData.GetAttribute("data").Equals(""))
+                {
+                    StockName.Text = "Stock";
+                    return false;
+                }
                 return true;
             }
             return false;
@@ -138,6 +139,10 @@ namespace DefaultModules.Wpf
         {
             textInvalid.Text = text;
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            if (textInvalid.Visibility == Visibility.Visible)
+            {
+                StockName.Text = "Stock";
+            }
             if (CanSave && !timer.IsEnabled)
             {
                 CheckStock();
@@ -146,7 +151,17 @@ namespace DefaultModules.Wpf
 
         private void CheckStock()
         {
+            //stockData.ReadToFollowing("company");
+            string companyName = stockData.GetAttribute("data");
 
+            //string readTo = AskingProp ? "asking" : "last";
+
+            // get current stock price
+            stockData.ReadToFollowing("last");
+            string currentPrice = stockData.GetAttribute("data");
+
+            StockName.Text = String.Format("{0} - ${1}", companyName, currentPrice);
+            //StockNamePrice.Text = "$" + currentPrice;
         }
 
         [DllImport("wininet.dll")]
@@ -189,9 +204,10 @@ namespace DefaultModules.Wpf
             }
         }
 
-        private void UpdateQuery(object sender, RoutedEventArgs e)
+        private void UpdateAsking(object sender, RoutedEventArgs e)
         {
-            QueryParamProp = (bool)LastTrade.IsChecked ? "k1" : "b2";
+            ChangeProp = !(bool)LastTrade.IsChecked;
+            VerifyFields();
         }
     }
 }

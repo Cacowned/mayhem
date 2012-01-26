@@ -24,7 +24,7 @@ namespace DefaultModules.Events
         private double stockPrice;
 
         [DataMember]
-        private string queryParam;
+        private bool changeParam;
 
         [DataMember]
         private bool abovePrice;
@@ -38,35 +38,34 @@ namespace DefaultModules.Events
             var config = (StockAlertConfig)configurationControl;
             stockSymbol = config.StockSymbolProp;
             stockPrice  = config.StockPriceProp;
-            queryParam  = config.QueryParamProp;
+            changeParam  = config.ChangeProp;
             abovePrice  = config.WatchAboveProp;
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new StockAlertConfig(stockSymbol, stockPrice, queryParam, abovePrice); }
+            get { return new StockAlertConfig(stockSymbol, stockPrice, changeParam, abovePrice); }
         }
 
         public string GetConfigString()
         {
             string above_below = abovePrice ? "above " : "below ";
-            //above_below += stockPrice;
-            return String.Format("Watching {0} for {1} ${2}", stockSymbol, above_below, stockPrice);
-            //return String.Format("Watching {0} for {1}F", stockSymbol, above_below);
+            string change = changeParam ? "change " : "last trade ";
+            return String.Format("{0} for {1} {2} ${3}", stockSymbol, change, above_below, stockPrice);
         }
 
         protected override void OnLoadDefaults()
         {
             stockSymbol = "MSFT";
             stockPrice = 32.05;
-            queryParam = "k1";
+            changeParam = false;
             abovePrice = false;
         }
 
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 1, 0);
+            timer.Interval = new TimeSpan(0, 0, 10);
             timer.Tick += CheckStock;
             hasPassed = false;
         }
@@ -84,6 +83,7 @@ namespace DefaultModules.Events
         protected override void OnDisabled(DisabledEventArgs e)
         {
             timer.Stop();
+            hasPassed = false;
         }
         #endregion
 
@@ -94,12 +94,27 @@ namespace DefaultModules.Events
             {
                 internetFlag = true;
                 // Retrieve XML document  
-                WebClient wc = new WebClient();
-                string file = wc.DownloadString("http://finance.yahoo.com/d/quotes.csv?s=RHT+MSFT&f=sb2b3jk");
-                string[] parts = file.Split(new Char[] { '\n' });
+                XmlTextReader stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + stockSymbol);
 
+                string readTo = changeParam ? "change" : "last";
+                stockData.ReadToFollowing(readTo);
+                double livePrice = Double.Parse(stockData.GetAttribute("data"));
 
-                // logic for when to Trigger()
+                // if the stock is above the watching price and user wants to trigger above
+                // OR
+                // if stock is below watching price and the user wants to trigger below
+                // stock price > 0 for all non-negative testing
+                if (stockPrice > 0 && ((abovePrice && livePrice >= stockPrice) || (!abovePrice && livePrice <= stockPrice)) ||
+                   ((abovePrice && livePrice <= stockPrice) || (!abovePrice && livePrice >= stockPrice)))
+                {
+                    // logic for when to Trigger()
+                    // trigger once when passed, that's it
+                    if (!hasPassed)
+                    {
+                        hasPassed = true;
+                        Trigger();
+                    }
+                }
             }
             else if (internetFlag)
             {
