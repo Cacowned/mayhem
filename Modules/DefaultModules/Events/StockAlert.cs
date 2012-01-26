@@ -8,7 +8,6 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Net;
 
 namespace DefaultModules.Events
 {
@@ -37,9 +36,9 @@ namespace DefaultModules.Events
         {
             var config = (StockAlertConfig)configurationControl;
             stockSymbol = config.StockSymbolProp;
-            stockPrice  = config.StockPriceProp;
-            changeParam  = config.ChangeProp;
-            abovePrice  = config.WatchAboveProp;
+            stockPrice = config.StockPriceProp;
+            changeParam = config.ChangeProp;
+            abovePrice = config.WatchAboveProp;
         }
 
         public WpfConfiguration ConfigurationControl
