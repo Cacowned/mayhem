@@ -123,6 +123,9 @@
   <data name="Internet_InvalidUrl" xml:space="preserve">
     <value>Invalid url</value>
   </data>
+  <data name="Internet_NotConnected" xml:space="preserve">
+    <value>There is no Internet connection; {0} event will start when Internet is detected.</value>
+  </data>
   <data name="OpenUrl_ConfigString" xml:space="preserve">
     <value>Url: "{0}"</value>
   </data>
@@ -144,9 +147,6 @@
   <data name="RunProgram_FileNotFound" xml:space="preserve">
     <value>The application does not exist at the specified location.</value>
   </data>
-  <data name="StockAlert_Internet_NotConnected" xml:space="preserve">
-    <value>There is no Internet connection, stock event will start when Internet is detected.</value>
-  </data>
   <data name="TextToSpeech_ConfigString" xml:space="preserve">
     <value>Message: "{0}"</value>
   </data>
@@ -164,8 +164,5 @@
   </data>
   <data name="Timer_ConfigString" xml:space="preserve">
     <value>{0} hours, {1} minutes, {2} seconds</value>
-  </data>
-  <data name="WeatherAlert_Internet_NotConnected" xml:space="preserve">
-    <value>There is no Internet connection, weather event will start when Internet is detected.</value>
   </data>
 </root>
