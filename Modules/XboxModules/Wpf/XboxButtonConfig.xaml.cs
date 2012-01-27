@@ -26,8 +26,6 @@ namespace XboxModules.Wpf
         public static readonly DependencyProperty ButtonsDownTextProperty =
             DependencyProperty.Register("ButtonsDownText", typeof(string), typeof(XboxButtonConfig), new UIPropertyMetadata(string.Empty));
 
-        private bool shouldCheckValidity;
-
         public XboxButtonConfig(Buttons buttons)
         {
             ButtonsToSave = buttons;
@@ -53,7 +51,7 @@ namespace XboxModules.Wpf
 
             UpdateButtonsDown();
 
-            shouldCheckValidity = true;
+			Instance_OnStatusChanged(buttons.Status);
         }
 
         private void Instance_OnButtonDown(Buttons button)
@@ -90,11 +88,6 @@ namespace XboxModules.Wpf
             {
                 ButtonsDownText = ButtonsToSave.ButtonString();
                 CanSave = ButtonsToSave != 0;
-
-                if (shouldCheckValidity)
-                {
-                    textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-                }
             });
         }
 
