@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Windows.Threading;
 using System.Xml;
+using DefaultModules.LowLevel;
 using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
@@ -64,7 +64,7 @@ namespace DefaultModules.Events
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 30);
+            timer.Interval = new TimeSpan(0, 1, 0);
             timer.Tick += CheckStock;
             hasPassed = false;
         }
@@ -72,9 +72,9 @@ namespace DefaultModules.Events
         #region Timer
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (!ConnectedToInternet())
+            if (!Utilities.ConnectedToInternet())
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
+                ErrorLog.AddError(ErrorType.Warning, Strings.WeatherAlert_Internet_NotConnected);
             }
             timer.Start();
         }
@@ -89,52 +89,42 @@ namespace DefaultModules.Events
         private void CheckStock(object sender, EventArgs e)
         {
             // Test for internet connection
-            if (ConnectedToInternet())
+            if (Utilities.ConnectedToInternet())
             {
                 internetFlag = true;
-                // Retrieve XML document  
-                XmlTextReader stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + stockSymbol);
-
-                string readTo = changeParam ? "change" : "last";
-                stockData.ReadToFollowing(readTo);
-                double livePrice = Double.Parse(stockData.GetAttribute("data"));
-
-                // if the stock is above the watching price and user wants to trigger above
-                // OR
-                // if stock is below watching price and the user wants to trigger below
-                // stock price > 0 for all non-negative testing
-                if (stockPrice > 0 && ((abovePrice && livePrice >= stockPrice) || (!abovePrice && livePrice <= stockPrice)) ||
-                   ((abovePrice && livePrice <= stockPrice) || (!abovePrice && livePrice >= stockPrice)))
+                try
                 {
-                    // logic for when to Trigger()
-                    // trigger once when passed, that's it
-                    if (!hasPassed)
+                    // Retrieve XML document  
+                    using (XmlReader stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + stockSymbol))
                     {
-                        hasPassed = true;
-                        Trigger();
+
+                        string readTo = changeParam ? "change" : "last";
+                        stockData.ReadToFollowing(readTo);
+                        double livePrice = Double.Parse(stockData.GetAttribute("data"));
+
+                        // if the stock is above the watching price and user wants to trigger above
+                        // OR
+                        // if stock is below watching price and the user wants to trigger below
+                        // stock price > 0 for all non-negative testing
+                        if (stockPrice > 0 && ((abovePrice && livePrice >= stockPrice) || (!abovePrice && livePrice <= stockPrice)) ||
+                           ((abovePrice && livePrice <= stockPrice) || (!abovePrice && livePrice >= stockPrice)))
+                        {
+                            // logic for when to Trigger()
+                            // trigger once when passed, that's it
+                            if (!hasPassed)
+                            {
+                                hasPassed = true;
+                                Trigger();
+                            }
+                        }
                     }
                 }
+                catch { }
             }
             else if (internetFlag)
             {
                 internetFlag = false;
-                ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
-            }
-        }
-
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
-
-        private static bool ConnectedToInternet()
-        {
-            int desc;
-            try
-            {
-                return InternetGetConnectedState(out desc, 0);
-            }
-            catch
-            {
-                return false;
+                ErrorLog.AddError(ErrorType.Warning, Strings.WeatherAlert_Internet_NotConnected);
             }
         }
     }

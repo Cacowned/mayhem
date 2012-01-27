@@ -9,10 +9,6 @@ namespace DefaultModules.Wpf
 {
     public partial class StockAlertConfig : WpfConfiguration
     {
-
-        private DispatcherTimer timer;
-        private XmlTextReader stockData;
-
         public string StockSymbolProp
         {
             get;
@@ -44,6 +40,9 @@ namespace DefaultModules.Wpf
                 return "Stock Alert";
             }
         }
+
+        private DispatcherTimer timer;
+        private XmlReader stockData;
 
         public StockAlertConfig(string stockSymbol, double stockPrice, bool changeParam, bool abovePrice)
         {
@@ -116,16 +115,22 @@ namespace DefaultModules.Wpf
         {
             if (ConnectedToInternet() && StockSymbol.Text.Length > 0)
             {
-                stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + StockSymbol.Text);
-
-                // check that there is xml data
-                stockData.ReadToFollowing("company");
-                if (stockData.GetAttribute("data").Equals(""))
+                try
                 {
-                    StockName.Text = "Stock";
-                    return false;
+                    using (stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + StockSymbol.Text))
+                    {
+
+                        // check that there is xml data
+                        stockData.ReadToFollowing("company");
+                        if (stockData.GetAttribute("data").Equals(""))
+                        {
+                            StockName.Text = "Stock";
+                            return false;
+                        }
+                        return true;
+                    }
                 }
-                return true;
+                catch { }
             }
             return false;
         }
@@ -146,7 +151,6 @@ namespace DefaultModules.Wpf
 
         private void CheckStock()
         {
-            //stockData.ReadToFollowing("company");
             string companyName = stockData.GetAttribute("data");
 
             // get current stock price
@@ -154,6 +158,27 @@ namespace DefaultModules.Wpf
             string currentPrice = stockData.GetAttribute("data");
 
             StockName.Text = String.Format("{0} - ${1}", companyName, currentPrice);
+        }
+
+
+
+        private void Stock_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (!timer.IsEnabled)
+            {
+                VerifyFields();
+            }
+            else
+            {
+                StockSymbol.Text = "Stock";
+                TextChanged("Cannot connect to the Internet");
+            }
+        }
+
+        private void UpdateAsking(object sender, RoutedEventArgs e)
+        {
+            ChangeProp = !(bool)LastTrade.IsChecked;
+            VerifyFields();
         }
 
         [DllImport("wininet.dll")]
@@ -181,25 +206,6 @@ namespace DefaultModules.Wpf
                 timer.Start();
             }
             return false;
-        }
-
-        private void Stock_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            if (!timer.IsEnabled)
-            {
-                VerifyFields();
-            }
-            else
-            {
-                StockSymbol.Text = "Stock";
-                TextChanged("Cannot connect to the Internet");
-            }
-        }
-
-        private void UpdateAsking(object sender, RoutedEventArgs e)
-        {
-            ChangeProp = !(bool)LastTrade.IsChecked;
-            VerifyFields();
         }
     }
 }
