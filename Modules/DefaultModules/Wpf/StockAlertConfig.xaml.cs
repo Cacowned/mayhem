@@ -97,17 +97,23 @@ namespace DefaultModules.Wpf
         private void VerifyFields()
         {
             string error = "Invalid";
+            if (ConnectedToInternet())
+            {
+                double price = 0.0;
+                bool isNumber = StockPrice.Text.Length > 0 && double.TryParse(StockPrice.Text, out price);
 
-            double price = 0.0;
-            bool isNumber = StockPrice.Text.Length > 0 && double.TryParse(StockPrice.Text, out price);
+                // if checking trades, want positive numbers only, otherwise true
+                bool posPrice = (bool)LastTrade.IsChecked ? (price > 0) : true;
 
-            // if checking trades, want positive numbers only, otherwise true
-            bool posPrice = (bool)LastTrade.IsChecked ? (price > 0) : true;
+                error += isNumber && posPrice ? "" : " price";
+                error += IsValidStock() ? "" : " stock symbol";
 
-            error += isNumber && posPrice ? "" : " price";
-            error += IsValidStock() ? "" : " stock symbol";
-
-            CanSave = error.Equals("Invalid");
+                CanSave = error.Equals("Invalid");
+            }
+            else
+            {
+                error = "Cannot connect to the Internet";
+            }
             TextChanged(error);
         }
 
