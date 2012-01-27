@@ -105,8 +105,8 @@ namespace DefaultModules.Wpf
                 // if checking trades, want positive numbers only, otherwise true
                 bool posPrice = (bool)LastTrade.IsChecked ? (price > 0) : true;
 
-                error += isNumber && posPrice ? "" : " price";
-                error += IsValidStock() ? "" : " stock symbol";
+                error += isNumber && posPrice ? string.Empty : " price";
+                error += IsValidStock() ? string.Empty : " stock symbol";
 
                 CanSave = error.Equals("Invalid");
             }
@@ -114,6 +114,7 @@ namespace DefaultModules.Wpf
             {
                 error = "Cannot connect to the Internet";
             }
+
             TextChanged(error);
         }
 
@@ -127,15 +128,19 @@ namespace DefaultModules.Wpf
 
                     // check that there is xml data
                     stockData.ReadToFollowing("company");
-                    if (stockData.GetAttribute("data").Equals(""))
+                    if (stockData.GetAttribute("data").Equals(string.Empty))
                     {
                         StockName.Text = "Stock";
                         return false;
                     }
+
                     return true;
                 }
-                catch { }
+                catch
+                {
+                }
             }
+
             return false;
         }
 
@@ -147,6 +152,7 @@ namespace DefaultModules.Wpf
             {
                 StockName.Text = "Stock";
             }
+
             if (CanSave && !timer.IsEnabled)
             {
                 CheckStock();
@@ -164,8 +170,6 @@ namespace DefaultModules.Wpf
             StockName.Text = String.Format("{0} - ${1}", companyName, currentPrice);
             stockData.Close();
         }
-
-
 
         private void Stock_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
@@ -201,15 +205,19 @@ namespace DefaultModules.Wpf
                         timer.Stop();
                         VerifyFields();
                     }
+
                     return true;
                 }
             }
-            catch { }
+            catch
+            {
+            }
 
             if (!timer.IsEnabled)
             {
                 timer.Start();
             }
+
             return false;
         }
     }

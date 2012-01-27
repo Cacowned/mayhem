@@ -64,7 +64,7 @@ namespace DefaultModules.Events
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 10);
+            timer.Interval = new TimeSpan(0, 1, 0);
             timer.Tick += CheckStock;
             hasPassed = false;
         }
@@ -74,8 +74,9 @@ namespace DefaultModules.Events
         {
             if (!Utilities.ConnectedToInternet())
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.StockAlert_Internet_NotConnected);
+                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Stock"));
             }
+
             timer.Start();
         }
 
@@ -105,7 +106,7 @@ namespace DefaultModules.Events
                         // OR
                         // if stock is below watching price and the user wants to trigger below
                         // stock price > 0 for all non-negative testing
-                        if (stockPrice > 0 && ((abovePrice && livePrice >= stockPrice) || (!abovePrice && livePrice <= stockPrice)) ||
+                        if ((stockPrice > 0 && ((abovePrice && livePrice >= stockPrice) || (!abovePrice && livePrice <= stockPrice))) ||
                            ((abovePrice && livePrice <= stockPrice) || (!abovePrice && livePrice >= stockPrice)))
                         {
                             // logic for when to Trigger()
@@ -118,12 +119,14 @@ namespace DefaultModules.Events
                         }
                     }
                 }
-                catch { }
+                catch
+                {
+                }
             }
             else if (internetFlag)
             {
                 internetFlag = false;
-                ErrorLog.AddError(ErrorType.Warning, Strings.StockAlert_Internet_NotConnected);
+                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Stock"));
             }
         }
     }
