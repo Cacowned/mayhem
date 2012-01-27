@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
 using System.Xml;
@@ -97,7 +96,7 @@ namespace DefaultModules.Wpf
         private void VerifyFields()
         {
             string error = "Invalid";
-            if (ConnectedToInternet())
+            if (!timer.IsEnabled)
             {
                 double price = 0.0;
                 bool isNumber = StockPrice.Text.Length > 0 && double.TryParse(StockPrice.Text, out price);
@@ -106,7 +105,7 @@ namespace DefaultModules.Wpf
                 bool posPrice = (bool)LastTrade.IsChecked ? (price > 0) : true;
 
                 error += isNumber && posPrice ? string.Empty : " price";
-                error += IsValidStock() ? string.Empty : " stock symbol";
+                error += StockSymbol.Text.Length > 0 && IsValidStock() ? string.Empty : " stock symbol";
 
                 CanSave = error.Equals("Invalid");
             }
@@ -120,25 +119,22 @@ namespace DefaultModules.Wpf
 
         private bool IsValidStock()
         {
-            if (ConnectedToInternet() && StockSymbol.Text.Length > 0)
+            try
             {
-                try
-                {
-                    stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + StockSymbol.Text);
+                stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + StockSymbol.Text);
 
-                    // check that there is xml data
-                    stockData.ReadToFollowing("company");
-                    if (stockData.GetAttribute("data").Equals(string.Empty))
-                    {
-                        StockName.Text = "Stock";
-                        return false;
-                    }
-
-                    return true;
-                }
-                catch
+                // check that there is xml data
+                stockData.ReadToFollowing("company");
+                if (stockData.GetAttribute("data").Equals(string.Empty))
                 {
+                    StockName.Text = "Stock";
+                    return false;
                 }
+
+                return true;
+            }
+            catch
+            {
             }
 
             return false;
@@ -148,14 +144,14 @@ namespace DefaultModules.Wpf
         {
             textInvalid.Text = text;
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-            if (textInvalid.Visibility == Visibility.Visible)
-            {
-                StockName.Text = "Stock";
-            }
 
             if (CanSave && !timer.IsEnabled)
             {
                 CheckStock();
+            }
+            else
+            {
+                StockName.Text = "Stock";
             }
         }
 
@@ -173,7 +169,7 @@ namespace DefaultModules.Wpf
 
         private void Stock_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (!timer.IsEnabled)
+            if (ConnectedToInternet())
             {
                 VerifyFields();
             }
@@ -190,24 +186,18 @@ namespace DefaultModules.Wpf
             VerifyFields();
         }
 
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
-
         private bool ConnectedToInternet()
         {
-            int desc;
             try
             {
-                if (InternetGetConnectedState(out desc, 0))
+                System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+                if (timer.IsEnabled)
                 {
-                    if (timer.IsEnabled)
-                    {
-                        timer.Stop();
-                        VerifyFields();
-                    }
-
-                    return true;
+                    timer.Stop();
+                    VerifyFields();
                 }
+
+                return true;
             }
             catch
             {

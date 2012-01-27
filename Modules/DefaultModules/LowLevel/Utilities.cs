@@ -11,9 +11,6 @@ namespace DefaultModules.LowLevel
         [DllImport("user32.dll")]
         public static extern int MapVirtualKey(uint uCode, MapVirtualKeyMapTypes uMapType);
 
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
-
         public const int KEYEVENTF_KEYUP = 0x2;
 
         public enum MapVirtualKeyMapTypes : uint
@@ -61,10 +58,10 @@ namespace DefaultModules.LowLevel
 
         public static bool ConnectedToInternet()
         {
-            int desc;
             try
             {
-                return InternetGetConnectedState(out desc, 0);
+                System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+                return true;
             }
             catch
             {

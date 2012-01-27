@@ -73,9 +73,7 @@ namespace DefaultModules.Wpf
                 Below.IsChecked = true;
             }
 
-            // done when text fields are set above
-            // VerifyFields();
-            UpdateImage();
+            // Must-have for when text is not changed from xaml form
         }
 
         public override void OnSave()
@@ -85,16 +83,21 @@ namespace DefaultModules.Wpf
             CheckAbove = (bool)Above.IsChecked;
         }
 
+        public override void OnCancel()
+        {
+            timer.Stop();
+        }
+
         private void VerifyFields()
         {
             string error = "Invalid";
-            if (ConnectedToInternet())
+            if (!timer.IsEnabled)
             {
                 int temp;
                 bool isTemp = int.TryParse(Temperature.Text, out temp) && (temp < 150 && temp > -50);
 
                 error += isTemp ? string.Empty : " temperature";
-                error += IsValidXML() ? string.Empty : " zip code or city name";
+                error += ZipCode.Text.Length > 0 && IsValidXML() ? string.Empty : " zip code or city name";
 
                 CanSave = error.Equals("Invalid");
             }
@@ -108,7 +111,7 @@ namespace DefaultModules.Wpf
 
         private bool IsValidXML()
         {
-            if (ConnectedToInternet() && ZipCode.Text.Length > 0)
+            if (!timer.IsEnabled)
             {
                 try
                 {
@@ -138,7 +141,7 @@ namespace DefaultModules.Wpf
 
         private void TempZip_TextChanged(object sender, RoutedEventArgs e)
         {
-            if (!timer.IsEnabled)
+            if (ConnectedToInternet())
             {
                 VerifyFields();
             }
@@ -166,13 +169,15 @@ namespace DefaultModules.Wpf
             reader.ReadToFollowing("icon");
             icon = reader.GetAttribute("data");
 
+            reader.Close();
+
             ZipCity.Text = city;
             UpdateImage();
         }
 
         private void UpdateImage()
         {
-            if (ConnectedToInternet())
+            try
             {
                 BitmapImage bi = new BitmapImage();
                 bi.BeginInit();
@@ -181,8 +186,9 @@ namespace DefaultModules.Wpf
 
                 WeatherIcon.Source = bi;
             }
-            else
+            catch
             {
+                CanSave = false;
                 TextChanged("Cannot connect to the Internet");
             }
         }
@@ -192,19 +198,16 @@ namespace DefaultModules.Wpf
 
         private bool ConnectedToInternet()
         {
-            int desc;
             try
             {
-                if (InternetGetConnectedState(out desc, 0))
+                System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+                if (timer.IsEnabled)
                 {
-                    if (timer.IsEnabled)
-                    {
-                        timer.Stop();
-                        VerifyFields();
-                    }
-
-                    return true;
+                    timer.Stop();
+                    VerifyFields();
                 }
+
+                return true;
             }
             catch
             {
