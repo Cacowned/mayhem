@@ -11,6 +11,9 @@ namespace DefaultModules.LowLevel
         [DllImport("user32.dll")]
         public static extern int MapVirtualKey(uint uCode, MapVirtualKeyMapTypes uMapType);
 
+        [DllImport("wininet.dll")]
+        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
+
         public const int KEYEVENTF_KEYUP = 0x2;
 
         public enum MapVirtualKeyMapTypes : uint
@@ -55,9 +58,6 @@ namespace DefaultModules.LowLevel
             keybd_event((byte)key, (byte)MapVirtualKey(key, 0), 0, UIntPtr.Zero);
             keybd_event((byte)key, (byte)MapVirtualKey(key, 0), KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
-
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
 
         public static bool ConnectedToInternet()
         {
