@@ -64,7 +64,7 @@ namespace DefaultModules.Events
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 1, 0);
+            timer.Interval = new TimeSpan(0, 0, 10);
             timer.Tick += CheckStock;
             hasPassed = false;
         }
@@ -74,7 +74,7 @@ namespace DefaultModules.Events
         {
             if (!Utilities.ConnectedToInternet())
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.WeatherAlert_Internet_NotConnected);
+                ErrorLog.AddError(ErrorType.Warning, Strings.StockAlert_Internet_NotConnected);
             }
             timer.Start();
         }
@@ -123,7 +123,7 @@ namespace DefaultModules.Events
             else if (internetFlag)
             {
                 internetFlag = false;
-                ErrorLog.AddError(ErrorType.Warning, Strings.WeatherAlert_Internet_NotConnected);
+                ErrorLog.AddError(ErrorType.Warning, Strings.StockAlert_Internet_NotConnected);
             }
         }
     }
