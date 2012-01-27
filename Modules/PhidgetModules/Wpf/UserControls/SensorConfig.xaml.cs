@@ -91,7 +91,6 @@ namespace PhidgetModules.Wpf.UserControls
             Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
             {
                 phidgetAttached.Visibility = visible;
-
             }));
         }
 
@@ -112,12 +111,12 @@ namespace PhidgetModules.Wpf.UserControls
         private void Revalidate()
         {
             string text = Sensor.GetErrorString();
-            isValid = String.IsNullOrEmpty(text);
+            isValid = string.IsNullOrEmpty(text);
 
             if (shouldCheckValidity)
             {
                 textInvalid.Text = text;
-                textInvalid.Visibility = String.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
+				textInvalid.Visibility = string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
 
                 CheckCanSave();
             }

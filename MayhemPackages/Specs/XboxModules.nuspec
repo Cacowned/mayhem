@@ -10,6 +10,7 @@
 Supports the Xbox Controller (wired or wireless). The wireless controller needs to be turned on in order to function. Also, the Windows Xbox controller driver must be installed (which should happen automatically).
 Requires the XNA Framework v4.0. The XNA installer can be found here: http://www.microsoft.com/download/en/details.aspx?id=20914
 </description>
+    <summary>This Xbox Controller event triggers on a specified combination of Xbox controller buttons.</summary>
     <copyright>Copyright © Outercurve 2011</copyright>
     <tags>Xbox, Controller, Remote</tags>
     <dependencies>

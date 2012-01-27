@@ -60,11 +60,11 @@ namespace Mayhem
 				catch (Exception ex)
 				{
 					// TODO: This should be a better message
-					// MessageBox.Show(ex.Message);
 					packageManager.Logger.Log(MessageLevel.Error, "An unknown error occurred.");
 					Debug.WriteLine(ex.Message);
 					success = false;
 				}
+
 				// toggle the buttons so we can do something now.
 				Dispatcher.Invoke((Action)delegate
 				{
@@ -77,8 +77,6 @@ namespace Mayhem
 
 					buttonClose.IsEnabled = true;
 					buttonClose.Visibility = Visibility.Visible;
-
-
 				});
 			});
 		}

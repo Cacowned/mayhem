@@ -4,9 +4,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows;
 using MayhemCore;
+using MayhemOpenCVWrapper;
 using OpenCVDLL;
 using Point = System.Drawing.Point;
-using MayhemOpenCVWrapper;
 
 namespace VisionModules.Components
 {

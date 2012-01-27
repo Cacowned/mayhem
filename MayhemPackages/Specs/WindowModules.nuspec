@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WindowModules</id>
@@ -37,6 +37,7 @@ Restore - Restores the window - When maximized or minimized, returns the window 
 Send Keys - Sends the specified key combination to the window. To send a sequence of keys, use multiple Send Keys.
 
 Wait - Waits the specified number of milliseconds before sending the next command. This is often useful in allowing a window to process previous commands before proceeding.</description>
+    <summary>Send a sequence of commands to a window.</summary>
     <copyright>Copyright © Outercurve 2011</copyright>
     <tags>Windows, Resize, Move, Minimize, Maximize, Taskbar, System Tray</tags>
     <dependencies>

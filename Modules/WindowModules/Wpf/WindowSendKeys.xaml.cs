@@ -66,6 +66,7 @@ namespace WindowModules.Wpf
                     str += " + " + key.ToString();
                 }
             }
+
             textBlockKeys.Text = str;
         }
 

@@ -85,7 +85,7 @@ namespace DefaultModules.Events
                 try
                 {
                     // Retrieve XML document  
-                    using (XmlReader reader = new XmlTextReader("http://www.google.com/ig/api?weather="))
+                    using (XmlReader reader = new XmlTextReader(feedUrl))
                     {
                         /*
                         reader.ReadToFollowing("temp_f");
