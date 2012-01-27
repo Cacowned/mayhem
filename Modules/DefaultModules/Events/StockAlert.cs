@@ -76,6 +76,7 @@ namespace DefaultModules.Events
             {
                 ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Stock"));
             }
+
             timer.Start();
         }
 
@@ -105,7 +106,7 @@ namespace DefaultModules.Events
                         // OR
                         // if stock is below watching price and the user wants to trigger below
                         // stock price > 0 for all non-negative testing
-                        if (stockPrice > 0 && ((abovePrice && livePrice >= stockPrice) || (!abovePrice && livePrice <= stockPrice)) ||
+                        if ((stockPrice > 0 && ((abovePrice && livePrice >= stockPrice) || (!abovePrice && livePrice <= stockPrice))) ||
                            ((abovePrice && livePrice <= stockPrice) || (!abovePrice && livePrice >= stockPrice)))
                         {
                             // logic for when to Trigger()
@@ -118,7 +119,9 @@ namespace DefaultModules.Events
                         }
                     }
                 }
-                catch { }
+                catch
+                {
+                }
             }
             else if (internetFlag)
             {

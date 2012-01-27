@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Windows.Threading;
+using System.Xml;
+using DefaultModules.LowLevel;
+using DefaultModules.Resources;
+using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using System.Windows.Threading;
 using MayhemWpf.UserControls;
-using System.Runtime.InteropServices;
-using DefaultModules.Resources;
-using System.Xml;
-using DefaultModules.Wpf;
-using DefaultModules.LowLevel;
 
 namespace DefaultModules.Events
 {
@@ -27,6 +23,11 @@ namespace DefaultModules.Events
         private DispatcherTimer timer;
         private bool internetFlag;
 
+        public WpfConfiguration ConfigurationControl
+        {
+            get { return new FeedAlertConfig(); }
+        }
+
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var config = (FeedAlertConfig)configurationControl;
@@ -35,11 +36,6 @@ namespace DefaultModules.Events
             temperature = config.TempProp;
             checkBelow = config.CheckAbove;
              * */
-        }
-
-        public WpfConfiguration ConfigurationControl
-        {
-            get { return new FeedAlertConfig(); }
         }
 
         public string GetConfigString()
@@ -67,12 +63,14 @@ namespace DefaultModules.Events
             {
                 ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
             }
+
             timer.Start();
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
             timer.Stop();
+
             // when turned off then off again, will check for passing weather point
             hasPassed = false;
         }
@@ -87,7 +85,7 @@ namespace DefaultModules.Events
                 try
                 {
                     // Retrieve XML document  
-                    using (XmlReader reader = new XmlTextReader("http://www.google.com/ig/api?weather=" ))
+                    using (XmlReader reader = new XmlTextReader("http://www.google.com/ig/api?weather="))
                     {
                         /*
                         reader.ReadToFollowing("temp_f");
