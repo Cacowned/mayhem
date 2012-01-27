@@ -10,8 +10,6 @@ namespace DebugModules.Wpf
     /// </summary>
     public partial class AppendLineConfig : WpfConfiguration
     {
-        private bool shouldCheckVisibility = false;
-
         public string Line
         {
             get;

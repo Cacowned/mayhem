@@ -88,14 +88,20 @@ namespace DefaultModules.Wpf
         private void VerifyFields()
         {
             string error = "Invalid";
+            if (ConnectedToInternet())
+            {
+                int temp;
+                bool isTemp = int.TryParse(Temperature.Text, out temp) && (temp < 150 && temp > -50);
 
-            int temp;
-            bool isTemp = int.TryParse(Temperature.Text, out temp) && (temp < 150 && temp > -50);
+                error += isTemp ? "" : " temperature";
+                error += IsValidXML() ? "" : " zip code or city name";
 
-            error += isTemp ? "" : " temperature";
-            error += IsValidXML() ? "" : " zip code or city name";
-
-            CanSave = error.Equals("Invalid");
+                CanSave = error.Equals("Invalid");
+            }
+            else
+            {
+                error = "Cannot connect to the Internet";
+            }
             TextChanged(error);
         }
 
