@@ -17,7 +17,6 @@ namespace PhoneServerHelper
             InitializeComponent();
 
             // Open the port in the firewall
-
             Type type = Type.GetTypeFromProgID("HNetCfg.FWOpenPort");
             INetFwOpenPort port = Activator.CreateInstance(type) as INetFwOpenPort;
 
@@ -32,7 +31,6 @@ namespace PhoneServerHelper
             ports.Add(port);
 
             // Add the ACL
-
             string name = WindowsIdentity.GetCurrent().Name;
             SecurityIdentity sid = SecurityIdentity.SecurityIdentityFromName(name);
             string acl = "D:(A;;GA;;;" + sid + ")";
