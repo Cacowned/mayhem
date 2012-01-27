@@ -74,7 +74,7 @@ namespace DefaultModules.Events
         {
             if (!Utilities.ConnectedToInternet())
             {
-                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "stock"));
+                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Stock"));
             }
             timer.Start();
         }
@@ -123,7 +123,7 @@ namespace DefaultModules.Events
             else if (internetFlag)
             {
                 internetFlag = false;
-                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "stock"));
+                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Stock"));
             }
         }
     }
