@@ -79,6 +79,15 @@ namespace DefaultModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no Internet connection; {0} Alert event will start when Internet is detected..
+        /// </summary>
+        internal static string Internet_NotConnected {
+            get {
+                return ResourceManager.GetString("Internet_NotConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Url: &quot;{0}&quot;.
         /// </summary>
         internal static string OpenUrl_ConfigString {
@@ -142,15 +151,6 @@ namespace DefaultModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no Internet connection, stock event will start when Internet is detected..
-        /// </summary>
-        internal static string StockAlert_Internet_NotConnected {
-            get {
-                return ResourceManager.GetString("StockAlert_Internet_NotConnected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Message: &quot;{0}&quot;.
         /// </summary>
         internal static string TextToSpeech_ConfigString {
@@ -201,15 +201,6 @@ namespace DefaultModules.Resources {
         internal static string Timer_ConfigString {
             get {
                 return ResourceManager.GetString("Timer_ConfigString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There is no Internet connection, weather event will start when Internet is detected..
-        /// </summary>
-        internal static string WeatherAlert_Internet_NotConnected {
-            get {
-                return ResourceManager.GetString("WeatherAlert_Internet_NotConnected", resourceCulture);
             }
         }
     }
