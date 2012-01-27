@@ -1,11 +1,10 @@
-﻿using System;
+﻿using System.Globalization;
 using System.Runtime.Serialization;
 using System.Speech.Recognition;
+using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using DefaultModules.Wpf;
-using System.Globalization;
 
 namespace DefaultModules.Events
 {
