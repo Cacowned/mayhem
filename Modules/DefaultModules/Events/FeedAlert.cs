@@ -65,7 +65,7 @@ namespace DefaultModules.Events
         {
             if (!Utilities.ConnectedToInternet())
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.WeatherAlert_Internet_NotConnected);
+                ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
             }
             timer.Start();
         }
@@ -117,7 +117,7 @@ namespace DefaultModules.Events
             else if (internetFlag)
             {
                 internetFlag = false;
-                ErrorLog.AddError(ErrorType.Warning, Strings.WeatherAlert_Internet_NotConnected);
+                ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
             }
         }
     }
