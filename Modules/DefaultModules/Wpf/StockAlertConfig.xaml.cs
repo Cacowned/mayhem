@@ -169,7 +169,7 @@ namespace DefaultModules.Wpf
             }
             else
             {
-                StockSymbol.Text = "Stock";
+                StockName.Text = "Stock";
                 TextChanged("Cannot connect to the Internet");
             }
         }
