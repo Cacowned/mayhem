@@ -28,7 +28,7 @@
 
         <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="3" Margin="20,0,0,0">Above / Below:</TextBlock>
         <RadioButton Name="Above" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="3" >Above</RadioButton>
-        <RadioButton Name="Below" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="3" Margin="0,0,20,0">Below</RadioButton>
+        <RadioButton Name="Below" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="3" Margin="16,0,0,0">Below</RadioButton>
 
         <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="4" Margin="20,0,0,0">What to watch:</TextBlock>
         <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Center" />

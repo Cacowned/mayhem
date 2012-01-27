@@ -103,19 +103,23 @@ namespace DefaultModules.Wpf
         {
             if (ConnectedToInternet() && ZipCode.Text.Length > 0)
             {
-                reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + ZipCode.Text.Replace(" ", "%20"));
+                try
+                {
+                    reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + ZipCode.Text.Replace(" ", "%20"));
 
-                // check that there is xml data
-                for (int i = 0; i < 4; i++)
-                {
-                    reader.Read();
+                    // check that there is xml data
+                    for (int i = 0; i < 4; i++)
+                    {
+                        reader.Read();
+                    }
+                    if (reader.Name.Equals("problem_cause"))
+                    {
+                        ZipCity.Text = "City";
+                        return false;
+                    }
+                    return true;
                 }
-                if (reader.Name.Equals("problem_cause"))
-                {
-                    ZipCity.Text = "City";
-                    return false;
-                }
-                return true;
+                catch { }
             }
             return false;
         }
