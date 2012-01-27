@@ -55,5 +55,21 @@ namespace DefaultModules.LowLevel
             keybd_event((byte)key, (byte)MapVirtualKey(key, 0), 0, UIntPtr.Zero);
             keybd_event((byte)key, (byte)MapVirtualKey(key, 0), KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
+
+        [DllImport("wininet.dll")]
+        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
+
+        public static bool ConnectedToInternet()
+        {
+            int desc;
+            try
+            {
+                return InternetGetConnectedState(out desc, 0);
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

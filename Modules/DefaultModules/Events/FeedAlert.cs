@@ -11,22 +11,17 @@ using System.Runtime.InteropServices;
 using DefaultModules.Resources;
 using System.Xml;
 using DefaultModules.Wpf;
+using DefaultModules.LowLevel;
 
 namespace DefaultModules.Events
 {
     [DataContract]
-    [MayhemModule("RSS Feed Alert", "Monitors changes in temperature")]
+    [MayhemModule("RSS Feed Alert", "Triggers when feed updates")]
 
     public class FeedAlert : EventBase, IWpfConfigurable
     {
         [DataMember]
-        private string zipCode;
-
-        [DataMember]
-        private int temperature;
-
-        [DataMember]
-        private bool checkBelow;
+        private string feedUrl;
 
         private bool hasPassed;
         private DispatcherTimer timer;
@@ -54,9 +49,7 @@ namespace DefaultModules.Events
 
         protected override void OnLoadDefaults()
         {
-            zipCode = "98105";
-            temperature = 32;
-            checkBelow = true;
+            feedUrl = "http://feeds.nytimes.com/nyt/rss/HomePage";
         }
 
         protected override void OnAfterLoad()
@@ -70,9 +63,9 @@ namespace DefaultModules.Events
         #region Timer
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (!ConnectedToInternet())
+            if (!Utilities.ConnectedToInternet())
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
+                ErrorLog.AddError(ErrorType.Warning, Strings.WeatherAlert_Internet_NotConnected);
             }
             timer.Start();
         }
@@ -88,54 +81,43 @@ namespace DefaultModules.Events
         private void CheckFeed(object sender, EventArgs e)
         {
             // Test for internet connection
-            if (ConnectedToInternet())
+            if (Utilities.ConnectedToInternet())
             {
                 internetFlag = true;
-                // Retrieve XML document  
-                XmlTextReader reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + zipCode.Replace(" ", "%20"));
-                reader.WhitespaceHandling = WhitespaceHandling.Significant;
-
-                reader.ReadToFollowing("temp_f");
-                int temp = Convert.ToInt32(reader.GetAttribute("data"));
-
-                bool isBelowOrAbove = (checkBelow && temp >= temperature) || (!checkBelow && temp <= temperature);
-
-                // if below desired temperature and watching for below, trigger
-                // if above desired temperature and watching for abovem trigger
-                if (isBelowOrAbove)
+                try
                 {
-                    if (!hasPassed)
+                    // Retrieve XML document  
+                    using (XmlReader reader = new XmlTextReader("http://www.google.com/ig/api?weather=" ))
                     {
-                        hasPassed = true;
-                        Trigger();
-                    }
-                    else if (temp == temperature)
-                    {
-                        hasPassed = false;
+                        /*
+                        reader.ReadToFollowing("temp_f");
+                        int temp = Convert.ToInt32(reader.GetAttribute("data"));
+
+                        bool isBelowOrAbove = (checkBelow && temp >= temperature) || (!checkBelow && temp <= temperature);
+
+                        // if below desired temperature and watching for below, trigger
+                        // if above desired temperature and watching for abovem trigger
+                        if (isBelowOrAbove)
+                        {
+                            if (!hasPassed)
+                            {
+                                hasPassed = true;
+                                Trigger();
+                            }
+                            else if (temp == temperature)
+                            {
+                                hasPassed = false;
+                            }
+                        }
+                         */
                     }
                 }
-
+                catch { }
             }
             else if (internetFlag)
             {
                 internetFlag = false;
-                ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
-            }
-        }
-
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
-
-        private static bool ConnectedToInternet()
-        {
-            int desc;
-            try
-            {
-                return InternetGetConnectedState(out desc, 0);
-            }
-            catch
-            {
-                return false;
+                ErrorLog.AddError(ErrorType.Warning, Strings.WeatherAlert_Internet_NotConnected);
             }
         }
     }

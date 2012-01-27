@@ -8,6 +8,7 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using DefaultModules.LowLevel;
 
 namespace DefaultModules.Events
 {
@@ -67,9 +68,9 @@ namespace DefaultModules.Events
         #region Timer
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (!ConnectedToInternet())
+            if (!Utilities.ConnectedToInternet())
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
+                ErrorLog.AddError(ErrorType.Warning, Strings.WeatherAlert_Internet_NotConnected);
             }
             timer.Start();
         }
@@ -85,7 +86,7 @@ namespace DefaultModules.Events
         private void CheckWeather(object sender, EventArgs e)
         {
             // Test for internet connection
-            if (ConnectedToInternet())
+            if (Utilities.ConnectedToInternet())
             {
                 internetFlag = true;
                 // Retrieve XML document  
@@ -116,23 +117,7 @@ namespace DefaultModules.Events
             else if (internetFlag)
             {
                 internetFlag = false;
-                ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
-            }
-        }
-
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
-
-        private static bool ConnectedToInternet()
-        {
-            int desc;
-            try
-            {
-                return InternetGetConnectedState(out desc, 0);
-            }
-            catch
-            {
-                return false;
+                ErrorLog.AddError(ErrorType.Warning, Strings.WeatherAlert_Internet_NotConnected);
             }
         }
     }

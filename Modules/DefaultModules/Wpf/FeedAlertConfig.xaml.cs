@@ -11,7 +11,7 @@ namespace DefaultModules.Wpf
     {
 
         private DispatcherTimer timer;
-        private XmlTextReader stockData;
+        private XmlTextReader feedData;
 
         public override string Title
         {
@@ -49,18 +49,18 @@ namespace DefaultModules.Wpf
         private void VerifyFields()
         {
             string error = "Invalid";
-            IsValidStock();
+            IsValidFeed();
             CanSave = error.Equals("Invalid");
             TextChanged(error);
         }
 
-        private bool IsValidStock()
+        private bool IsValidFeed()
         {
             if (ConnectedToInternet())// && StockSymbol.Text.Length > 0)
             {
-                stockData = new XmlTextReader("http://www.npr.org/rss/rss.php?id=1012");
+                feedData = new XmlTextReader("http://www.npr.org/rss/rss.php?id=1012");
                 XmlDocument rssDoc = new XmlDocument();
-                rssDoc.Load(stockData);
+                rssDoc.Load(feedData);
 
                 MessageBox.Show(rssDoc.ChildNodes.Count.ToString());
 
@@ -103,11 +103,11 @@ namespace DefaultModules.Wpf
         private void CheckStock()
         {
             //stockData.ReadToFollowing("company");
-            string companyName = stockData.GetAttribute("data");
+            string companyName = feedData.GetAttribute("data");
 
             // get current stock price
-            stockData.ReadToFollowing("last");
-            string currentPrice = stockData.GetAttribute("data");
+            feedData.ReadToFollowing("last");
+            string currentPrice = feedData.GetAttribute("data");
 
             FeedName.Text = String.Format("{0} - ${1}", companyName, currentPrice);
         }
