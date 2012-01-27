@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Windows.Threading;
 using System.Xml;
+using DefaultModules.LowLevel;
 using DefaultModules.Resources;
 using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using DefaultModules.LowLevel;
 
 namespace DefaultModules.Events
 {
@@ -72,12 +71,14 @@ namespace DefaultModules.Events
             {
                 ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Weather"));
             }
+
             timer.Start();
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
             timer.Stop();
+
             // when turned off then off again, will check for passing weather point
             hasPassed = false;
         }
@@ -115,7 +116,9 @@ namespace DefaultModules.Events
                         }
                     }
                 }
-                catch { }
+                catch
+                {
+                }
             }
             else if (internetFlag)
             {

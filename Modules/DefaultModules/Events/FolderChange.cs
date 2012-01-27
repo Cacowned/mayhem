@@ -6,9 +6,6 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Windows.Media;
-using System.Globalization;
-using System.Windows;
 
 namespace DefaultModules.Events
 {

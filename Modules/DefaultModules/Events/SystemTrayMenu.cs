@@ -1,14 +1,13 @@
 ﻿using System;
-using System.IO;
+using System.Drawing;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Windows.Forms;
+using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using DefaultModules.Wpf;
-using System.Drawing;
 
 namespace DefaultModules.Events
 {

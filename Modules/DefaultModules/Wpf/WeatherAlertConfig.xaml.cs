@@ -93,8 +93,8 @@ namespace DefaultModules.Wpf
                 int temp;
                 bool isTemp = int.TryParse(Temperature.Text, out temp) && (temp < 150 && temp > -50);
 
-                error += isTemp ? "" : " temperature";
-                error += IsValidXML() ? "" : " zip code or city name";
+                error += isTemp ? string.Empty : " temperature";
+                error += IsValidXML() ? string.Empty : " zip code or city name";
 
                 CanSave = error.Equals("Invalid");
             }
@@ -102,6 +102,7 @@ namespace DefaultModules.Wpf
             {
                 error = "Cannot connect to the Internet";
             }
+
             TextChanged(error);
         }
 
@@ -118,15 +119,20 @@ namespace DefaultModules.Wpf
                     {
                         reader.Read();
                     }
+
                     if (reader.Name.Equals("problem_cause"))
                     {
                         ZipCity.Text = "City";
                         return false;
                     }
+
                     return true;
                 }
-                catch { }
+                catch
+                {
+                }
             }
+
             return false;
         }
 
@@ -145,12 +151,12 @@ namespace DefaultModules.Wpf
 
         private void TextChanged(string text)
         {
-                textInvalid.Text = text;
-                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-                if (CanSave && !timer.IsEnabled)
-                {
-                    CheckWeather();
-                }
+            textInvalid.Text = text;
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            if (CanSave && !timer.IsEnabled)
+            {
+                CheckWeather();
+            }
         }
 
         private void CheckWeather()
@@ -196,15 +202,19 @@ namespace DefaultModules.Wpf
                         timer.Stop();
                         VerifyFields();
                     }
+
                     return true;
                 }
             }
-            catch { }
+            catch
+            {
+            }
 
             if (!timer.IsEnabled)
             {
                 timer.Start();
             }
+
             return false;
         }
     }
