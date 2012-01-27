@@ -117,18 +117,16 @@ namespace DefaultModules.Wpf
             {
                 try
                 {
-                    using (stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + StockSymbol.Text))
-                    {
+                    stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + StockSymbol.Text);
 
-                        // check that there is xml data
-                        stockData.ReadToFollowing("company");
-                        if (stockData.GetAttribute("data").Equals(""))
-                        {
-                            StockName.Text = "Stock";
-                            return false;
-                        }
-                        return true;
+                    // check that there is xml data
+                    stockData.ReadToFollowing("company");
+                    if (stockData.GetAttribute("data").Equals(""))
+                    {
+                        StockName.Text = "Stock";
+                        return false;
                     }
+                    return true;
                 }
                 catch { }
             }
@@ -158,6 +156,7 @@ namespace DefaultModules.Wpf
             string currentPrice = stockData.GetAttribute("data");
 
             StockName.Text = String.Format("{0} - ${1}", companyName, currentPrice);
+            stockData.Close();
         }
 
 

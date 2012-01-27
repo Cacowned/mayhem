@@ -97,7 +97,6 @@ namespace DefaultModules.Events
                     // Retrieve XML document  
                     using (XmlReader stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + stockSymbol))
                     {
-
                         string readTo = changeParam ? "change" : "last";
                         stockData.ReadToFollowing(readTo);
                         double livePrice = Double.Parse(stockData.GetAttribute("data"));
