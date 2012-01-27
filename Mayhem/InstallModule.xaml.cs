@@ -18,8 +18,6 @@ namespace Mayhem
 			set;
 		}
 
-
-
 		public InstallModule(IPackage package)
 		{
 			if (!UriParser.IsKnownScheme("pack"))

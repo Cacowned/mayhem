@@ -6,7 +6,7 @@
     <authors>Eli White, Jay Meistrich</authors>
     <owners>Microsoft</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Package description</description>
+    <description>Required for WPF Styles and for modules to provide configuration windows.</description>
     <copyright>Copyright © Outercurve 2011</copyright>
     <tags>Developer</tags>
     <dependencies>

@@ -6,28 +6,14 @@
     <authors>Eli White</authors>
     <owners>Outercurve</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>These are the default modules for Mayhem.  These basic events and reactions work without additional hardware or software.
+    <description>These modules interact with Office 2010 applications. You must have Microsoft Office 2010 installed for these to function. For Outlook Email, you must have a working email account.
 Events
-Folder Change – Triggers when the filenames or number of files in the specified folder is changed. This includes an option to check subfolders.
-Keypress – Triggers when the specified key or key combination is pressed. This works transparently in the background, independent of which application is in the foreground.
-Timer – Triggers repeatedly at the specified interval.
-
-Reactions
-Lock Workstation – Put the computer into the Windows lock state
-Media controls – Send the Media Next Item, Play/Pause or Previous Item command to all open Windows on your computer. This works with Windows Media Player, iTunes, VLC, or any other player which takes standard input.
-Open Website – Opens your default browser to the specified URL.
-Play Sound – Plays a sound file. It supports wav, wma, and mp3 format.
-Run Program – Equivalent to the Run command. Can be used to launch files or programs.
-Screenshot – Takes a picture of the entire desktop and saves it to the specified folder in jpg format. Pictures will be named with the time the picture was taken.
-Text to Speech – Speaks the specified text using a synthesized voice.
- 
-These modules interact with Office 2010 applications. You must have Microsoft Office 2010 installed for these to function. For Outlook Email, you must have a working email account.
-Events
-Outlook Email – Triggers when an email is received in Outlook. Outlook must be running, but does not need to be in the foreground.
+Outlook New Mail – Triggers when an email is received in Outlook. Outlook must be running, but does not need to be in the foreground.
 Outlook Reminder – Triggers when an Outlook Reminder appears in your calendar. Outlook must be running, but does not need to be in the foreground.
 
 Reactions
 PowerPoint Commands – Sends the Next Slide or Previous Slide Command as specified. If multiple instances of PowerPoint are running, it only sends the command to the first instance.</description>
+    <summary>These are the default modules for Mayhem. These basic events and reactions work without additional hardware or software.</summary>
     <copyright>Copyright © Outercurve 2011</copyright>
     <tags>Outlook, Powerpoint, Email, Reminder, Slides, Next, Previous</tags>
     <dependencies>
