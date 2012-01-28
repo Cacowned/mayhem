@@ -13,8 +13,7 @@ namespace DefaultModules.Events
 {
     [DataContract]
     [MayhemModule("RSS Feed Alert", "Triggers when feed updates")]
-
-    public class FeedAlert : EventBase, IWpfConfigurable
+    internal class FeedAlert : EventBase, IWpfConfigurable
     {
         [DataMember]
         private string feedUrl;
