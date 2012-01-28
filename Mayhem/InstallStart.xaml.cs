@@ -46,7 +46,7 @@ namespace Mayhem
 					// Create a package manager to install and resolve dependencies
 					packageManager.InstallPackage("DefaultModules");
 
-					packageManager.Logger.Log(MessageLevel.Info, "Set up successfully. Click OK to start Mayhem.");
+					packageManager.Logger.Log(MessageLevel.Info, "Set up successfully. Start Mayhem!");
 
 					success = true;
 				}
