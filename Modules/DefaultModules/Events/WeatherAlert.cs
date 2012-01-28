@@ -13,8 +13,7 @@ namespace DefaultModules.Events
 {
     [DataContract]
     [MayhemModule("Weather Alert", "Monitors changes in temperature")]
-
-    public class WeatherAlert : EventBase, IWpfConfigurable
+	internal class WeatherAlert : EventBase, IWpfConfigurable
     {
         [DataMember]
         private string zipCode;
