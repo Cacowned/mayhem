@@ -35,19 +35,7 @@ namespace Mayhem
 				// Get the package file
 				string installPath;
 
-				// if we are running as a click once application
-				if (ApplicationDeployment.IsNetworkDeployed)
-				{
-					//installPath = Path.Combine(ApplicationDeployment.CurrentDeployment.DataDirectory, "Packages");
-					
-					// Use the user's documents folder:
-					installPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem", "Packages");
-
-				}
-				else
-				{
-					installPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages");
-				}
+				installPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem", "Packages");
 
 				return installPath;
 			}
@@ -58,11 +46,22 @@ namespace Mayhem
 			get
 			{
 				List<string> locations = new List<string>();
+
 				// Add the local location
-				locations.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages"));
-				
+				string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Packages");
+				if (Directory.Exists(path))
+				{
+					locations.Add(path);
+				}
+
 				// Add the user document's folder
-				locations.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem", "Packages"));
+				path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem", "Packages");
+				if (Directory.Exists(path))
+				{
+					locations.Add(path);
+				}
+				
+				return locations.ToArray();
 			}
 		}
 
@@ -73,20 +72,8 @@ namespace Mayhem
 				// Get the package file
 				string settingsPath;
 
-				// if we are running as a click once application
-				if (ApplicationDeployment.IsNetworkDeployed)
-				{
-					//installPath = Path.Combine(ApplicationDeployment.CurrentDeployment.DataDirectory, "Packages");
-
-					// Use the user's documents folder:
-					settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem", "settings.xml");
-
-				}
-				else
-				{
-					settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
-				}
-
+				settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem", "settings.xml");
+			
 				return settingsPath;
 			}
 		}

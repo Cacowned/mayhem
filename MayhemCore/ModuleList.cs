@@ -47,7 +47,7 @@ namespace MayhemCore
 
 			if ((nowTime - lastUpdated).TotalMilliseconds > 30)
 			{
-				FindTypes(location);
+				FindTypes(location, clear: true);
 				lastUpdated = nowTime;
 			}
 		}

@@ -20,7 +20,7 @@ namespace Mayhem
 	public partial class MainWindow : Window
 	{
 		private readonly AutoResetEvent waitForSave;
-		private readonly string filename;
+		private readonly string settingsFile;
 		private readonly MayhemEntry mayhem;
 
 		private ModuleType eventType;
@@ -40,7 +40,7 @@ namespace Mayhem
 
 		public MainWindow()
 		{
-			filename = MayhemNuget.SettingsPath;
+			settingsFile = MayhemNuget.SettingsPath;
 			waitForSave = new AutoResetEvent(false);
 
 			Application.Current.Exit += Application_Exit;
@@ -57,15 +57,13 @@ namespace Mayhem
 			mayhem = MayhemEntry.Instance;
 			mayhem.SetConfigurationType(typeof(IWpfConfigurable));
 
-			string directory = MayhemNuget.InstallPath;
+			string[] directories = MayhemNuget.InstallPaths;
 
-			// Scan for modules in the module directory
-			bool foundModules = mayhem.EventList.ScanModules(directory);
-			foundModules &= mayhem.ReactionList.ScanModules(directory);
-			if (!foundModules)
+			foreach (string directory in directories)
 			{
-				// TODO: Do something user-friendly here
-				throw new Exception("No modules!");
+				// Scan for modules in the module directory
+				mayhem.EventList.ScanModules(directory, false);
+				mayhem.ReactionList.ScanModules(directory, false);
 			}
 
 			InitializeComponent();
@@ -73,9 +71,9 @@ namespace Mayhem
 
 		public void Load()
 		{
-			if (File.Exists(filename))
+			if (File.Exists(settingsFile))
 			{
-				using (FileStream stream = new FileStream(filename, FileMode.Open))
+				using (FileStream stream = new FileStream(settingsFile, FileMode.Open))
 				{
 					try
 					{
@@ -107,7 +105,7 @@ namespace Mayhem
 		{
 			try
 			{
-				using (FileStream stream = new FileStream(filename, FileMode.Create))
+				using (FileStream stream = new FileStream(settingsFile, FileMode.Create))
 				{
 					MayhemEntry.Instance.ConnectionList.Serialize(stream);
 				}

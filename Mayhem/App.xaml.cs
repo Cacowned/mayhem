@@ -65,33 +65,6 @@ namespace Mayhem
 				Directory.CreateDirectory(MayhemNuget.InstallPath);
 			}
 
-			LoadDependencies();
-			bool containsCore = false;
-			foreach (string dependency in dependencies.Keys)
-			{
-				if (dependency.Contains("MayhemCore"))
-				{
-					containsCore = true;
-					break;
-				}
-			}
-
-			if (!containsCore)
-			{
-				InstallStart window = new InstallStart();
-
-				if (window.ShowDialog() == true)
-				{
-					// Installation was a success
-					// So lets restart with the new modules
-					Process.Start(Assembly.GetEntryAssembly().Location);
-				}
-
-				// Close the application 
-				Shutdown();
-				return;
-			}
-
 			if (e.Args.Any())
 			{
 				if (e.Args.Contains("-installupdates"))
@@ -142,6 +115,34 @@ namespace Mayhem
 				ThreadPool.QueueUserWorkItem(CheckForUpdates);
 			}
 
+
+			LoadDependencies();
+			bool containsCore = false;
+			foreach (string dependency in dependencies.Keys)
+			{
+				if (dependency.Contains("MayhemCore"))
+				{
+					containsCore = true;
+					break;
+				}
+			}
+
+			if (!containsCore)
+			{
+				InstallStart window = new InstallStart();
+
+				if (window.ShowDialog() == true)
+				{
+					// Installation was a success
+					// So lets restart with the new modules
+					Process.Start(Assembly.GetEntryAssembly().Location);
+				}
+
+				// Close the application 
+				Shutdown();
+				return;
+			}
+/*
 			FileSystemWatcher fileWatcher = new FileSystemWatcher(MayhemNuget.InstallPath);
 			fileWatcher.IncludeSubdirectories = true;
 			fileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
@@ -152,7 +153,7 @@ namespace Mayhem
 			fileWatcher.EnableRaisingEvents = true;
 
 			lastUpdated = DateTime.Now;
-
+			*/
 			// Load the correct dependency assemblies
 			LoadDependencies();
 
@@ -173,7 +174,7 @@ namespace Mayhem
 				OutputException(e.InnerException, indent + 1);
 			}
 		}
-
+		/*
 		private void UpdateDependencies(object source, FileSystemEventArgs e)
 		{
 			var nowTime = DateTime.Now;
@@ -186,7 +187,7 @@ namespace Mayhem
 
 				lastUpdated = nowTime;
 			}
-		}
+		}*/
 
 		private void LoadDependencies()
 		{
