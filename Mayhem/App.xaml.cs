@@ -8,6 +8,9 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using NuGet;
+using System.Collections.Specialized;
+using System.Web;
+using System.Net;
 
 namespace Mayhem
 {
@@ -23,6 +26,19 @@ namespace Mayhem
 			dependencies = new Dictionary<string, Assembly>();
 		}
 
+		private NameValueCollection GetQueryStringParameters()
+		{
+			NameValueCollection nameValueTable = new NameValueCollection();
+
+			if (ApplicationDeployment.IsNetworkDeployed && ApplicationDeployment.CurrentDeployment.ActivationUri != null)
+			{
+				string queryString = ApplicationDeployment.CurrentDeployment.ActivationUri.Query;
+				nameValueTable = System.Web.HttpUtility.ParseQueryString(queryString);
+			}
+
+			return nameValueTable;
+		}
+
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			// TODO: Hack, if we are network deployed, restart as regular executable
@@ -30,10 +46,10 @@ namespace Mayhem
 			{
 				string arguments = string.Empty;
 
-				var args = AppDomain.CurrentDomain.SetupInformation.ActivationArguments;
-				if (args.ActivationData != null && args.ActivationData.Length > 0)
+				var query = GetQueryStringParameters();
+				if (query["addon"] != null)
 				{
-					arguments = string.Join(" ", args.ActivationData);
+					arguments = query["addon"];
 				}
 
 				Process.Start(Assembly.GetEntryAssembly().Location, arguments);
@@ -42,13 +58,13 @@ namespace Mayhem
 			}
 
 			Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
-			
+
 			// if we don't have a packages folder, create it.
 			if (!Directory.Exists(MayhemNuget.InstallPath))
 			{
 				Directory.CreateDirectory(MayhemNuget.InstallPath);
 			}
-			
+
 			LoadDependencies();
 			bool containsCore = false;
 			foreach (string dependency in dependencies.Keys)
@@ -93,7 +109,20 @@ namespace Mayhem
 				{
 					LoadDependencies();
 					string packageFile = e.Args[0];
-					var zipFile = new ZipPackage(packageFile);
+					
+					ZipPackage zipFile;
+					try
+					{
+						zipFile = new ZipPackage(packageFile);
+					}
+					catch (ArgumentException)
+					{
+						// It's likely a URL, try to read it as a stream
+						WebRequest req = WebRequest.Create(e.Args[0]);
+						WebResponse response = req.GetResponse();
+						Stream stream = response.GetResponseStream();
+						zipFile = new ZipPackage(stream);
+					}
 
 					InstallModule window = new InstallModule(zipFile);
 
@@ -161,23 +190,26 @@ namespace Mayhem
 
 		private void LoadDependencies()
 		{
-			string[] files = Directory.GetFiles(MayhemNuget.InstallPath, "*.dll", SearchOption.AllDirectories);
-			foreach (string file in files)
+			foreach (string location in MayhemNuget.InstallPaths)
 			{
-				try
+				string[] files = Directory.GetFiles(location, "*.dll", SearchOption.AllDirectories);
+				foreach (string file in files)
 				{
-					Assembly assembly = Assembly.LoadFrom(file);
-
-					// If we haven't already added it.
-					// This is in the case that we happen to have two copies of the same
-					// package installed (Visual Studio and NuGet version for example)
-					if (!dependencies.ContainsKey(assembly.FullName))
+					try
 					{
-						dependencies.Add(assembly.FullName, assembly);
+						Assembly assembly = Assembly.LoadFrom(file);
+
+						// If we haven't already added it.
+						// This is in the case that we happen to have two copies of the same
+						// package installed (Visual Studio and NuGet version for example)
+						if (!dependencies.ContainsKey(assembly.FullName))
+						{
+							dependencies.Add(assembly.FullName, assembly);
+						}
 					}
-				}
-				catch
-				{
+					catch
+					{
+					}
 				}
 			}
 
