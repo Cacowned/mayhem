@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Deployment.Application;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -24,6 +25,22 @@ namespace Mayhem
 
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
+			// TODO: Hack, if we are network deployed, restart as regular executable
+			if (ApplicationDeployment.IsNetworkDeployed)
+			{
+				string arguments = string.Empty;
+
+				var args = AppDomain.CurrentDomain.SetupInformation.ActivationArguments;
+				if (args.ActivationData != null && args.ActivationData.Length > 0)
+				{
+					arguments = string.Join(" ", args.ActivationData);
+				}
+
+				Process.Start(Assembly.GetEntryAssembly().Location, arguments);
+				Shutdown();
+				return;
+			}
+
 			Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 			
 			// if we don't have a packages folder, create it.
@@ -51,7 +68,7 @@ namespace Mayhem
 				{
 					// Installation was a success
 					// So lets restart with the new modules
-					Process.Start("Mayhem.exe");
+					Process.Start(Assembly.GetEntryAssembly().Location);
 				}
 
 				// Close the application 
@@ -64,7 +81,7 @@ namespace Mayhem
 				if (e.Args.Contains("-installupdates"))
 				{
 					CheckForUpdates(true);
-					Process.Start("Mayhem.exe");
+					Process.Start(Assembly.GetEntryAssembly().Location);
 					Shutdown();
 					return;
 				}
@@ -172,9 +189,9 @@ namespace Mayhem
 			if (wantsUpdates)
 			{
 				if (Environment.GetCommandLineArgs().Contains("-localrepo"))
-					Process.Start("Mayhem.exe", "-installupdates -localrepo");
+					Process.Start(Assembly.GetEntryAssembly().Location, "-installupdates -localrepo");
 				else
-					Process.Start("Mayhem.exe", "-installupdates");
+					Process.Start(Assembly.GetEntryAssembly().Location, "-installupdates");
 			}
 		}
 

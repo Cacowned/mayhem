@@ -37,7 +37,7 @@ namespace Mayhem
 				// if we are running as a click once application
 				if (ApplicationDeployment.IsNetworkDeployed)
 				{
-					installPath = ApplicationDeployment.CurrentDeployment.DataDirectory;
+					installPath = Path.Combine(ApplicationDeployment.CurrentDeployment.DataDirectory, "Packages");
 				}
 				else
 				{
