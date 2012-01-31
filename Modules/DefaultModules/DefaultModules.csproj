@@ -37,6 +37,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CoreAudioApi">
+      <HintPath>..\References\CoreAudioApi.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -61,6 +64,7 @@
     <Compile Include="Reactions\LockWorkstation.cs" />
     <Compile Include="Reactions\OpenUrl.cs" />
     <Compile Include="Reactions\Screenshot.cs" />
+    <Compile Include="Reactions\VolumeMute.cs" />
     <Compile Include="Resources\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
