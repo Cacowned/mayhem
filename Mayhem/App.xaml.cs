@@ -51,6 +51,14 @@ namespace Mayhem
 				{
 					arguments = query["addon"];
 				}
+				else
+				{
+					var args = AppDomain.CurrentDomain.SetupInformation.ActivationArguments;
+					if (args.ActivationData != null && args.ActivationData.Length > 0)
+					{
+						arguments = string.Join(" ", args.ActivationData);
+					}
+				}
 
 				Process.Start(Assembly.GetEntryAssembly().Location, arguments);
 				Shutdown();
