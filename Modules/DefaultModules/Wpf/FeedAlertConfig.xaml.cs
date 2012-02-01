@@ -11,7 +11,14 @@ namespace DefaultModules.Wpf
     {
 
         private DispatcherTimer timer;
-        private XmlTextReader feedData;
+        private string feedName;
+        private XmlNode channelNode;
+
+        public string UrlProp
+        {
+            get;
+            private set;
+        }
 
         public override string Title
         {
@@ -21,8 +28,10 @@ namespace DefaultModules.Wpf
             }
         }
 
-        public FeedAlertConfig()
+        public FeedAlertConfig(string url)
         {
+            UrlProp = url;
+
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 2);
             //timer.Tick += CheckInternet;
@@ -32,12 +41,12 @@ namespace DefaultModules.Wpf
 
         public override void OnLoad()
         {
-            //StockSymbol.Text = StockSymbolProp;
+            RSSUrl.Text = UrlProp;
         }
 
         public override void OnSave()
         {
-           // StockSymbolProp = StockSymbol.Text;
+            UrlProp = RSSUrl.Text;
         }
 
         private void CheckInternet(object sender, EventArgs e)
@@ -49,86 +58,98 @@ namespace DefaultModules.Wpf
         private void VerifyFields()
         {
             string error = "Invalid";
-            IsValidFeed();
+            error += RSSUrl.Text.Length > 0 && IsValidFeed() ? String.Empty : " feed url";
             CanSave = error.Equals("Invalid");
             TextChanged(error);
         }
 
+        // Verify that the feed is a valid xml rss feed containting a rss, channel, and item tag
         private bool IsValidFeed()
         {
-            if (ConnectedToInternet())// && StockSymbol.Text.Length > 0)
+            if (!timer.IsEnabled)
             {
-                feedData = new XmlTextReader("http://www.npr.org/rss/rss.php?id=1012");
-                XmlDocument rssDoc = new XmlDocument();
-                rssDoc.Load(feedData);
-
-                MessageBox.Show(rssDoc.ChildNodes.Count.ToString());
-
-                for (int i = 0; i < rssDoc.ChildNodes.Count; i++)
+                try
                 {
-                    if (rssDoc.ChildNodes[i].Name == "rss")
+                    using (XmlReader feedData = new XmlTextReader("http://www.npr.org/rss/rss.php?id=1012"))
                     {
-                        MessageBox.Show(rssDoc.ChildNodes[i].InnerText);
+
+                        XmlDocument rssDoc = new XmlDocument();
+                        XmlNode rssNode = rssDoc.ChildNodes[0];
+                        channelNode = rssDoc.ChildNodes[0];
+
+                        rssDoc.Load(feedData);
+
+                        for (int i = 0; i < rssDoc.ChildNodes.Count; i++)
+                        {
+                            if (rssDoc.ChildNodes[i].Name == "rss")
+                            {
+                                rssNode = rssDoc.ChildNodes[i];
+                            }
+                        }
+
+                        for (int i = 0; i < rssNode.ChildNodes.Count; i++)
+                        {
+                            if (rssNode.ChildNodes[i].Name == "channel")
+                            {
+                                channelNode = rssNode.ChildNodes[i];
+                            }
+                        }
+
+                        for (int i = 0; i < channelNode.ChildNodes.Count; i++)
+                        {
+                            if (channelNode.ChildNodes[i].Name == "item")
+                            {
+                                return true;
+                            }
+                        }
+
+                        return false;
                     }
-                    
                 }
-                /*
-                // check that there is xml data
-                stockData.ReadToFollowing("company");
-                if (stockData.GetAttribute("data").Equals(""))
+                catch
                 {
-                    StockName.Text = "Stock";
-                    return false;
                 }
-                 */
-                return true;
             }
             return false;
+        }
+
+        private void URL_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (ConnectedToInternet())
+            {
+                VerifyFields();
+            }
+            else
+            {
+                FeedName.Text = "Feed Source";
+                TextChanged("Cannot connect to the Internet");
+            }
         }
 
         private void TextChanged(string text)
         {
             textInvalid.Text = text;
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-            if (textInvalid.Visibility == Visibility.Visible)
+            FeedCatergory.Visibility = CanSave ? Visibility.Visible : Visibility.Collapsed;
+
+            if (CanSave)
             {
-                FeedName.Text = "Feed";
-            }
-            if (CanSave && !timer.IsEnabled)
-            {
-                //CheckStock();
+                FeedName.Text = channelNode["generator"].InnerText.ToString();
+                FeedCatergory.Text = channelNode["title"].InnerText.ToString();
             }
         }
-
-        private void CheckStock()
-        {
-            //stockData.ReadToFollowing("company");
-            string companyName = feedData.GetAttribute("data");
-
-            // get current stock price
-            feedData.ReadToFollowing("last");
-            string currentPrice = feedData.GetAttribute("data");
-
-            FeedName.Text = String.Format("{0} - ${1}", companyName, currentPrice);
-        }
-
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
 
         private bool ConnectedToInternet()
         {
-            int desc;
             try
             {
-                if (InternetGetConnectedState(out desc, 0))
+                System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+                if (timer.IsEnabled)
                 {
-                    if (timer.IsEnabled)
-                    {
-                        timer.Stop();
-                        VerifyFields();
-                    }
-                    return true;
+                    timer.Stop();
+                    VerifyFields();
                 }
+                return true;
             }
             catch { }
 
@@ -139,22 +160,6 @@ namespace DefaultModules.Wpf
             return false;
         }
 
-        private void Stock_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            if (!timer.IsEnabled)
-            {
-                VerifyFields();
-            }
-            else
-            {
-                FeedName.Text = "Stock";
-                TextChanged("Cannot connect to the Internet");
-            }
-        }
 
-        private void URL_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-
-        }
     }
 }

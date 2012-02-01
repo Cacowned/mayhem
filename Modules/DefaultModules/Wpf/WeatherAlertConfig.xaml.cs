@@ -1,5 +1,12 @@
-﻿using System;
+﻿// This is the configuration file for the WeatherAlert event
+// The event is explained in WeatherAlert.cs, the configuration
+// file checks for valid zip code, city name, and temperature fields.
+
+using System;
+using System.IO;
+using System.Net;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -10,7 +17,7 @@ namespace DefaultModules.Wpf
 {
     public partial class WeatherAlertConfig : WpfConfiguration
     {
-        private XmlTextReader reader;
+        private XmlReader reader;
         private string city;
         private string icon;
         private DispatcherTimer timer;
@@ -72,8 +79,6 @@ namespace DefaultModules.Wpf
             {
                 Below.IsChecked = true;
             }
-
-            // Must-have for when text is not changed from xaml form
         }
 
         public override void OnSave()
@@ -83,18 +88,15 @@ namespace DefaultModules.Wpf
             CheckAbove = (bool)Above.IsChecked;
         }
 
-        public override void OnCancel()
-        {
-            timer.Stop();
-        }
-
+        // Verifies that the entered zip code, city name, and temperature to watch are valid
+        // and within range (-80 -> 180 deg F for temp)
         private void VerifyFields()
         {
             string error = "Invalid";
             if (!timer.IsEnabled)
             {
                 int temp;
-                bool isTemp = int.TryParse(Temperature.Text, out temp) && (temp < 150 && temp > -50);
+                bool isTemp = int.TryParse(Temperature.Text, out temp) && (temp < 180 && temp > -80);
 
                 error += isTemp ? string.Empty : " temperature";
                 error += ZipCode.Text.Length > 0 && IsValidXML() ? string.Empty : " zip code or city name";
@@ -109,36 +111,52 @@ namespace DefaultModules.Wpf
             TextChanged(error);
         }
 
+        // If there is an Internet connection, verifies that the xml is valid, I.E. the entered zip
+        // code or city name returns valid xml
         private bool IsValidXML()
         {
             if (!timer.IsEnabled)
             {
                 try
                 {
-                    reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + ZipCode.Text.Replace(" ", "%20"));
-
-                    // check that there is xml data
-                    for (int i = 0; i < 4; i++)
+                    // get the xml data
+                    string url = "http://www.google.com/ig/api?weather=" + ZipCode.Text.Replace(" ", "%20");
+                    WebRequest webRequest = WebRequest.Create(url);
+                    using (WebResponse webResponse = webRequest.GetResponse())
                     {
-                        reader.Read();
-                    }
+                        using (Stream responseStream = webResponse.GetResponseStream())
+                        {
+                            StreamReader s = new StreamReader(responseStream, Encoding.GetEncoding(1252));
+                            XmlReader r = XmlReader.Create(s);
 
-                    if (reader.Name.Equals("problem_cause"))
-                    {
-                        ZipCity.Text = "City";
-                        return false;
+                            // check that there is xml data
+                            for (int i = 0; i < 4; i++)
+                            {
+                                r.Read();
+                            }
+
+                            if (r.Name.Equals("problem_cause"))
+                            {
+                                ZipCity.Text = "City";
+                                return false;
+                            }
+
+                            this.reader = r;
+                        }
                     }
 
                     return true;
                 }
-                catch
+                catch (Exception e)
                 {
+                    MessageBox.Show(e.ToString());
                 }
             }
 
             return false;
         }
 
+        // Bucket handler for when the zip code and temperature fields are changed
         private void TempZip_TextChanged(object sender, RoutedEventArgs e)
         {
             if (ConnectedToInternet())
@@ -152,6 +170,9 @@ namespace DefaultModules.Wpf
             }
         }
 
+        // Bucket function for whenever text is changed, this is passed a string.
+        // If the user can not save, the error string is displayed, otherwise they 
+        // can save.
         private void TextChanged(string text)
         {
             textInvalid.Text = text;
@@ -162,19 +183,32 @@ namespace DefaultModules.Wpf
             }
         }
 
+        // Pulls the city name and icon link from the xml
+        // If there is any xml encoding issues, they are caught here
+        // and the user is not allowed to save.
         private void CheckWeather()
         {
-            reader.ReadToFollowing("city");
-            city = reader.GetAttribute("data");
-            reader.ReadToFollowing("icon");
-            icon = reader.GetAttribute("data");
+            try
+            {
+                reader.ReadToFollowing("city");
+                city = reader.GetAttribute("data");
+                reader.ReadToFollowing("icon");
+                icon = reader.GetAttribute("data");
 
-            reader.Close();
+                reader.Close();
 
-            ZipCity.Text = city;
-            UpdateImage();
+                ZipCity.Text = city;
+                UpdateImage();
+            }
+            catch
+            {
+                CanSave = false;
+                TextChanged("Invalid characters in returned data for " + ZipCode.Text);
+            }
         }
 
+        // Grabs the weather icon using the url from the xml returned
+        // by the weather service
         private void UpdateImage()
         {
             try
@@ -193,6 +227,10 @@ namespace DefaultModules.Wpf
             }
         }
 
+        // Checks if there is a current Internet connection, if there is not
+        // starts a timer that checks every 2 seconds, and when Internet is
+        // again connected, checks for valid text fields
+        #region CheckInternet
         [DllImport("wininet.dll")]
         private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
 
@@ -220,5 +258,6 @@ namespace DefaultModules.Wpf
 
             return false;
         }
+        #endregion
     }
 }
