@@ -1,5 +1,17 @@
-﻿using System;
+﻿// This event allows the user to enter a zip code or city name
+// and a temperature in deg F. They can choose to select event to 
+// Trigger() when the current temperature drops below or rises above
+// the user-entered temperature. If the current temperature is already
+// below the user-entered temperature, in the case they want the event
+// to trigger when the current temperature drops below, it will trigger
+// on the first call, and not after that unless the event is reset
+// (switched off/on or created anew).
+
+using System;
+using System.IO;
+using System.Net;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Windows.Threading;
 using System.Xml;
 using DefaultModules.LowLevel;
@@ -13,7 +25,8 @@ namespace DefaultModules.Events
 {
     [DataContract]
     [MayhemModule("Weather Alert", "Monitors changes in temperature")]
-	internal class WeatherAlert : EventBase, IWpfConfigurable
+
+    public class WeatherAlert : EventBase, IWpfConfigurable
     {
         [DataMember]
         private string zipCode;
@@ -25,9 +38,12 @@ namespace DefaultModules.Events
         private bool checkBelow;
 
         private bool hasPassed;
-        private DispatcherTimer timer;
         private bool internetFlag;
+        private DispatcherTimer timer;
+        private WebRequest webRequest;
 
+        // Store all the variables from the configuration dialog into
+        // local data members
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var config = (WeatherAlertConfig)configurationControl;
@@ -41,6 +57,7 @@ namespace DefaultModules.Events
             get { return new WeatherAlertConfig(zipCode, temperature, checkBelow); }
         }
 
+        // returns "Watching {zip code or city name} for {above or below X}F"
         public string GetConfigString()
         {
             string above_below = checkBelow ? "above " : "below ";
@@ -48,6 +65,8 @@ namespace DefaultModules.Events
             return String.Format("Watching {0} for {1}F", zipCode, above_below);
         }
 
+        // Default city of Seattle WA with a temperature of 32F and a bool
+        // to trigger when the temperature drops below 32
         protected override void OnLoadDefaults()
         {
             zipCode = "98105";
@@ -55,14 +74,20 @@ namespace DefaultModules.Events
             checkBelow = true;
         }
 
+        // Initialize timer, reset temperature trigger, links the webRequest to the zipCode
+        // entered in the configuration dialog
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 1, 0);
             timer.Tick += CheckWeather;
             hasPassed = false;
+
+            webRequest = WebRequest.Create("http://www.google.com/ig/api?weather=" + zipCode.Replace(" ", "%20"));
         }
 
+        // Starts the timer, already set to an interval of 1 minute
+        // when the temperature is reached or passed, trigger event once
         #region Timer
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -91,26 +116,34 @@ namespace DefaultModules.Events
                 internetFlag = true;
                 try
                 {
-                    // Retrieve XML document  
-                    using (XmlReader reader = new XmlTextReader("http://www.google.com/ig/api?weather=" + zipCode.Replace(" ", "%20")))
+                    // get the xml data
+                    using (WebResponse webResponse = webRequest.GetResponse())
                     {
-                        reader.ReadToFollowing("temp_f");
-                        int temp = Convert.ToInt32(reader.GetAttribute("data"));
-
-                        bool isBelowOrAbove = (checkBelow && temp >= temperature) || (!checkBelow && temp <= temperature);
-
-                        // if below desired temperature and watching for below, trigger
-                        // if above desired temperature and watching for abovem trigger
-                        if (isBelowOrAbove)
+                        using (Stream responseStream = webResponse.GetResponseStream())
                         {
-                            if (!hasPassed)
+                            // Used to crash on "Paris" because of encoding issues, now using 
+                            // Western-European windows encoding
+                            StreamReader s = new StreamReader(responseStream, Encoding.GetEncoding(1252));
+                            XmlReader r = XmlReader.Create(s);
+
+                            r.ReadToFollowing("temp_f");
+                            int temp = Convert.ToInt32(r.GetAttribute("data"));
+
+                            bool isBelowOrAbove = (checkBelow && temp >= temperature) || (!checkBelow && temp <= temperature);
+
+                            // if below desired temperature and watching for below, trigger
+                            // if above desired temperature and watching for abovem trigger
+                            if (isBelowOrAbove)
                             {
-                                hasPassed = true;
-                                Trigger();
-                            }
-                            else if (temp == temperature)
-                            {
-                                hasPassed = false;
+                                if (!hasPassed)
+                                {
+                                    hasPassed = true;
+                                    Trigger();
+                                }
+                                else if (temp == temperature)
+                                {
+                                    hasPassed = false;
+                                }
                             }
                         }
                     }

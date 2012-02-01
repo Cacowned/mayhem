@@ -13,7 +13,8 @@ namespace DefaultModules.Events
 {
     [DataContract]
     [MayhemModule("RSS Feed Alert", "Triggers when feed updates")]
-    internal class FeedAlert : EventBase, IWpfConfigurable
+
+    public class FeedAlert : EventBase, IWpfConfigurable
     {
         [DataMember]
         private string feedUrl;
@@ -24,17 +25,13 @@ namespace DefaultModules.Events
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new FeedAlertConfig(); }
+            get { return new FeedAlertConfig(feedUrl); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var config = (FeedAlertConfig)configurationControl;
-            /*
-            zipCode = config.ZipCodeProp;
-            temperature = config.TempProp;
-            checkBelow = config.CheckAbove;
-             * */
+            feedUrl = config.UrlProp;
         }
 
         public string GetConfigString()
