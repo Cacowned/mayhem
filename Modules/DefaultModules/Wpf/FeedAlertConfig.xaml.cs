@@ -26,6 +26,12 @@ namespace DefaultModules.Wpf
             private set;
         }
 
+        public bool TriggerEveryProp
+        {
+            get;
+            private set;
+        }
+
         public override string Title
         {
             get
@@ -34,9 +40,10 @@ namespace DefaultModules.Wpf
             }
         }
 
-        public FeedAlertConfig(string url)
+        public FeedAlertConfig(string url, bool triggerEvery)
         {
             UrlProp = url;
+            TriggerEveryProp = triggerEvery;
 
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 2);
@@ -48,12 +55,14 @@ namespace DefaultModules.Wpf
         public override void OnLoad()
         {
             RSSUrl.Text = UrlProp;
+            TriggerEvery.IsChecked = TriggerEveryProp;
         }
 
         public override void OnSave()
         {
             UrlProp = RSSUrl.Text;
             FeedTitleProp = FeedCatergory.Text;
+            TriggerEveryProp = (bool)TriggerEvery.IsChecked;
         }
 
         private void CheckInternet(object sender, EventArgs e)

@@ -25,6 +25,9 @@ namespace DefaultModules.Events
         [DataMember]
         private string feedTitle;
 
+        [DataMember]
+        private bool triggerEvery;
+
         // Does not store any data from the configuration
         // Stores the "latest" feed item title to compare
         // against and check for updates
@@ -36,7 +39,7 @@ namespace DefaultModules.Events
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new FeedAlertConfig(feedUrl); }
+            get { return new FeedAlertConfig(feedUrl, triggerEvery); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
@@ -44,6 +47,7 @@ namespace DefaultModules.Events
             var config = (FeedAlertConfig)configurationControl;
             feedUrl = config.UrlProp;
             feedTitle = config.FeedTitleProp;
+            triggerEvery = config.TriggerEveryProp;
         }
 
         public string GetConfigString()
@@ -55,6 +59,7 @@ namespace DefaultModules.Events
         {
             feedUrl = "http://feeds.nytimes.com/nyt/rss/HomePage";
             feedData = String.Empty;
+            triggerEvery = true;
         }
 
         protected override void OnAfterLoad()
@@ -105,9 +110,9 @@ namespace DefaultModules.Events
 
                             if (feedData == String.Empty)
                                 feedData = tempFeedData;
-                            else if (!tempFeedData.Equals(feedData)) // && !hasUpdated)
+                            else if (!tempFeedData.Equals(feedData) && triggerEvery || !tempFeedData.Equals(feedData) &&  !hasUpdated)
                             {
-                                // hasUpdated = true;
+                                hasUpdated = true;
                                 Trigger();
                             }
                         }
