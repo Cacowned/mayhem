@@ -13,111 +13,47 @@ namespace MayhemCore
 	{
 		private readonly List<Type> allTypes;
 
-		private string location;
-
-		private DateTime lastUpdated;
-
 		protected ModuleList()
 		{
 			allTypes = new List<Type>();
 		}
 
-		internal bool ScanModules(string path, bool clear = true)
+		internal void TryAdd(Assembly assembly)
 		{
-			location = path;
-
-			FileSystemWatcher fileWatcher = new FileSystemWatcher(location);
-			fileWatcher.IncludeSubdirectories = true;
-			fileWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
-			fileWatcher.Changed += UpdateDependencies;
-			fileWatcher.Created += UpdateDependencies;
-			fileWatcher.Deleted += UpdateDependencies;
-			fileWatcher.Renamed += UpdateDependencies;
-			fileWatcher.EnableRaisingEvents = true;
-
-			lastUpdated = DateTime.Now;
-
-			// Load up all the types of things that we want in the application root
-			return FindTypes(location, clear);
-		}
-
-		private void UpdateDependencies(object source, FileSystemEventArgs e)
-		{
-			var nowTime = DateTime.Now;
-
-			if ((nowTime - lastUpdated).TotalMilliseconds > 30)
+			try
 			{
-				FindTypes(location, clear: true);
-				lastUpdated = nowTime;
-			}
-		}
-
-		/// <summary>
-		/// Find all the types that exist in DLLs specified by path
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns></returns>
-		private bool FindTypes(string path, bool clear)
-		{
-			if (string.IsNullOrEmpty(path))
-			{
-				throw new ArgumentNullException(path, "The given path is null or empty");
-			}
-
-			// Clear this of all the modules
-			if (clear)
-			{
-				Clear();
-			}
-
-			if (!Directory.Exists(path))
-				return false;
-
-			string[] pluginFiles = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
-
-			// Go through each dll file
-			foreach (string pluginFile in pluginFiles)
-			{
-				// load it
-				string pathFile = Path.Combine(path, pluginFile);
-				try
+				if (assembly != null)
 				{
-					Assembly assembly = Assembly.LoadFrom(pathFile);
-
-					if (assembly != null)
+					// Go through all the public classes in the assembly
+					foreach (Type type in assembly.GetExportedTypes())
 					{
-						// Go through all the public classes in the assembly
-						foreach (Type type in assembly.GetExportedTypes())
+						// If it's parent class is the type we want
+						// and it implements the correct moduleType
+						if (type.IsSubclassOf(typeof(T)) && !type.IsAbstract)
 						{
-							// If it's parent class is the type we want
-							// and it implements the correct moduleType
-							if (type.IsSubclassOf(typeof(T)) && !type.IsAbstract)
+							object[] attList = type.GetCustomAttributes(typeof(MayhemModuleAttribute), true);
+							if (attList.Length > 0)
 							{
-								object[] attList = type.GetCustomAttributes(typeof(MayhemModuleAttribute), true);
-								if (attList.Length > 0)
-								{
-									MayhemModuleAttribute att = attList[0] as MayhemModuleAttribute;
+								MayhemModuleAttribute att = attList[0] as MayhemModuleAttribute;
 
-									// Add it to our final list
-									Add(new ModuleType(type, att.Name, att.Description));
-								}
-								else
-								{
-									// TODO: Do something to tell the developer the module has an error
-									// throw new Exception("Module does not have MayhemModuleAttribute attribute set:\n" + type.FullName);
-								}
+								// Add it to our final list
+								Add(new ModuleType(type, att.Name, att.Description));
 							}
-
-							allTypes.Add(type);
+							else
+							{
+								// TODO: Do something to tell the developer the module has an error
+								// throw new Exception("Module does not have MayhemModuleAttribute attribute set:\n" + type.FullName);
+							}
 						}
+
+						allTypes.Add(type);
 					}
 				}
-				catch
-				{
-				}
 			}
-
-			return true;
+			catch
+			{
+				// Swallow
+			}
 		}
 
 		internal Type[] GetAllTypesInModules()

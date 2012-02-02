@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Deployment.Application;
 using System.IO;
 using System.Linq;
 using NuGet;
 using System.Collections.Generic;
 
-namespace Mayhem
+namespace Updater
 {
 	public class MayhemNuget
 	{
@@ -32,6 +31,7 @@ namespace Mayhem
 		{
 			get
 			{
+				//installPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem", "Packages");
 				return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\");
 			}
 		}
