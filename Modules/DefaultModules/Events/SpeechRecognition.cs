@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.Speech.Recognition;
 using DefaultModules.Wpf;
@@ -17,10 +18,21 @@ namespace DefaultModules.Events
 
 		private SpeechRecognitionEngine engine;
 
-		protected override void OnAfterLoad()
+		protected override void OnEnabling(EnablingEventArgs e)
 		{
 			engine = new SpeechRecognitionEngine(new CultureInfo("en-US"));
-			engine.SetInputToDefaultAudioDevice();
+			
+			try
+			{
+				engine.SetInputToDefaultAudioDevice();
+			}
+			catch(InvalidOperationException)
+			{
+				ErrorLog.AddError(ErrorType.Failure, "No microphone is connected");
+				e.Cancel = true;
+				return;
+			}
+
 			engine.SpeechRecognized += RecognitionEngine_SpeechRecognized;
 
 			if (!string.IsNullOrEmpty(phrase))
@@ -28,10 +40,7 @@ namespace DefaultModules.Events
 				Grammar grammar = new Grammar(new GrammarBuilder(phrase));
 				engine.LoadGrammar(grammar);
 			}
-		}
 
-		protected override void OnEnabling(EnablingEventArgs e)
-		{
 			engine.RecognizeAsync(RecognizeMode.Multiple);
 		}
 
@@ -49,10 +58,6 @@ namespace DefaultModules.Events
 		{
 			var config = configurationControl as SpeechRecognitionConfig;
 			phrase = config.Phrase;
-
-			Grammar grammar = new Grammar(new GrammarBuilder(phrase));
-			engine.UnloadAllGrammars();
-			engine.LoadGrammar(grammar);
 		}
 
 		public string GetConfigString()
@@ -62,7 +67,7 @@ namespace DefaultModules.Events
 
 		private void RecognitionEngine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
-			Logger.WriteLine("Said: "+e.Result.Text+", with "+e.Result.Confidence+" confidence");
+			Logger.WriteLine("Said: " + e.Result.Text + ", with " + e.Result.Confidence + " confidence");
 			if (e.Result.Confidence > .85)
 			{
 				Trigger();
