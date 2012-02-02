@@ -11,7 +11,8 @@
             <ColumnDefinition Width="95"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
+            <RowDefinition Height="22" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="25" />
             <RowDefinition Height="25" />
             <RowDefinition Height="26" />
@@ -19,20 +20,22 @@
         </Grid.RowDefinitions>
 
         <TextBlock Name="ZipCity" HorizontalAlignment="Center" Style="{StaticResource ConfigLabel}" Grid.ColumnSpan="3" Grid.Row="0" FontWeight="Bold" FontSize="15">City</TextBlock>
-        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Zip Code or City Name</TextBlock>
-        <TextBox Name="ZipCode" TextChanged="TempZip_TextChanged" Grid.Column="1" Grid.Row="1" />
+        <TextBlock Name="TempInfo" HorizontalAlignment="Center" Style="{StaticResource ConfigLabel}" Grid.ColumnSpan="3" Grid.Row="1" FontSize="13">Current Temperature: N/A</TextBlock>
+        
+        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">Zip Code or City Name</TextBlock>
+        <TextBox Name="ZipCode" TextChanged="TempZip_TextChanged" Grid.Column="1" Grid.Row="2" />
         
         
-        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">Temperature (F)</TextBlock>
-        <TextBox Name="Temperature" TextChanged="TempZip_TextChanged" Grid.Column="1" Grid.Row="2" />
+        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="3">Temperature (F)</TextBlock>
+        <TextBox Name="Temperature" TextChanged="TempZip_TextChanged" Grid.Column="1" Grid.Row="3" />
         
-        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="3">Trigger above or below</TextBlock>
-        <RadioButton Name="Above" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="3">Above</RadioButton>
-        <RadioButton Name="Below" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="3">Below</RadioButton>
+        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="4">Trigger above or below</TextBlock>
+        <RadioButton Name="Above" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="4" Margin="0,4,0,0">Above</RadioButton>
+        <RadioButton Name="Below" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="4" Margin="0,4,0,0">Below</RadioButton>
         
-        <Image Name="WeatherIcon" Source="http://www.google.com/ig/images/weather/chance_of_rain.gif" Grid.Column="2" Grid.RowSpan="3" Height="75" Grid.Row="1" />
+        <Image Name="WeatherIcon" Source="http://www.google.com/ig/images/weather/chance_of_rain.gif" Grid.Column="2" Grid.RowSpan="3" Height="75" Grid.Row="2" />
         
-        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
         
     </Grid>
 </src:WpfConfiguration>

@@ -138,6 +138,7 @@ namespace DefaultModules.Wpf
                             if (r.Name.Equals("problem_cause"))
                             {
                                 ZipCity.Text = "City";
+                                TempInfo.Text = "Current Temperature: N/A";
                                 return false;
                             }
 
@@ -192,12 +193,15 @@ namespace DefaultModules.Wpf
             {
                 reader.ReadToFollowing("city");
                 city = reader.GetAttribute("data");
+                reader.ReadToFollowing("temp_f");
+                string currentTemp = reader.GetAttribute("data");
                 reader.ReadToFollowing("icon");
                 icon = reader.GetAttribute("data");
 
                 reader.Close();
 
                 ZipCity.Text = city;
+                TempInfo.Text = String.Format("Current Temperature: {0}F", currentTemp);
                 UpdateImage();
             }
             catch
