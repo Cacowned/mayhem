@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Windows.Threading;
 using System.Xml;
 using DefaultModules.LowLevel;
@@ -19,9 +22,17 @@ namespace DefaultModules.Events
         [DataMember]
         private string feedUrl;
 
-        private bool hasPassed;
+        [DataMember]
+        private string feedTitle;
+
+        // Does not store any data from the configuration
+        // Stores the "latest" feed item title to compare
+        // against and check for updates
+        [DataMember]
+        private string feedData;
+
+        private bool hasUpdated;
         private DispatcherTimer timer;
-        private bool internetFlag;
 
         public WpfConfiguration ConfigurationControl
         {
@@ -32,24 +43,26 @@ namespace DefaultModules.Events
         {
             var config = (FeedAlertConfig)configurationControl;
             feedUrl = config.UrlProp;
+            feedTitle = config.FeedTitleProp;
         }
 
         public string GetConfigString()
         {
-            return "configuring the feeds of this world... alert";
+            return String.Format("Watching {0} feed", feedTitle);
         }
 
         protected override void OnLoadDefaults()
         {
             feedUrl = "http://feeds.nytimes.com/nyt/rss/HomePage";
+            feedData = String.Empty;
         }
 
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 1, 0);
+            timer.Interval = new TimeSpan(0, 0, 3);
             timer.Tick += CheckFeed;
-            hasPassed = false;
+            hasUpdated = false;
         }
 
         #region Timer
@@ -68,7 +81,7 @@ namespace DefaultModules.Events
             timer.Stop();
 
             // when turned off then off again, will check for passing weather point
-            hasPassed = false;
+            hasUpdated = false;
         }
         #endregion
 
@@ -77,41 +90,56 @@ namespace DefaultModules.Events
             // Test for internet connection
             if (Utilities.ConnectedToInternet())
             {
-                internetFlag = true;
                 try
                 {
-                    // Retrieve XML document  
-                    using (XmlReader reader = new XmlTextReader(feedUrl))
+                    WebRequest webRequest = WebRequest.Create(feedUrl);
+                    using (WebResponse webResponse = webRequest.GetResponse())
                     {
-                        /*
-                        reader.ReadToFollowing("temp_f");
-                        int temp = Convert.ToInt32(reader.GetAttribute("data"));
-
-                        bool isBelowOrAbove = (checkBelow && temp >= temperature) || (!checkBelow && temp <= temperature);
-
-                        // if below desired temperature and watching for below, trigger
-                        // if above desired temperature and watching for abovem trigger
-                        if (isBelowOrAbove)
+                        using (Stream responseStream = webResponse.GetResponseStream())
                         {
-                            if (!hasPassed)
+                            StreamReader s = new StreamReader(responseStream, Encoding.GetEncoding(1252));
+                            XmlDocument rssDoc = new XmlDocument();
+                            rssDoc.Load(s);
+
+                            string tempFeedData = GetTitles(rssDoc);
+
+                            if (feedData == String.Empty)
+                                feedData = tempFeedData;
+                            else if (!tempFeedData.Equals(feedData)) // && !hasUpdated)
                             {
-                                hasPassed = true;
+                                // hasUpdated = true;
                                 Trigger();
                             }
-                            else if (temp == temperature)
-                            {
-                                hasPassed = false;
-                            }
                         }
-                         */
                     }
                 }
-                catch { }
+                catch
+                {
+                }
             }
-            else if (internetFlag)
+            else
             {
-                internetFlag = false;
                 ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
+            }
+        }
+
+        // recursive helper method that parses all Title Values from RSS feed of item elements
+        // combined all the titles together because rss some RSS feeds do not update linerally
+        // i.e. the second item could update with the first item unchanged
+        private string GetTitles(XmlNode node)
+        {
+            if (node.Name == "item")
+                return node.FirstChild.InnerText;
+            else
+            {
+                string builder = String.Empty;
+                for (int i = 0; i < node.ChildNodes.Count; i++)
+                {
+                    if (node.ChildNodes[i].ChildNodes.Count > 0 && node.ChildNodes[i].FirstChild.NodeType != XmlNodeType.Text)
+                        builder += GetTitles(node.ChildNodes[i]) + " ";
+                }
+
+                return builder;
             }
         }
     }

@@ -11,17 +11,15 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
-            <RowDefinition />
             <RowDefinition Height="25" />
             <RowDefinition />
         </Grid.RowDefinitions>
         
         <TextBlock Name="FeedCatergory" HorizontalAlignment="Center" Style="{StaticResource ConfigLabel}" Grid.Row="0" Grid.ColumnSpan="2" FontSize="15" FontWeight="Bold">Feed Category</TextBlock>
-        <TextBlock Name="FeedName" HorizontalAlignment="Center" Style="{StaticResource ConfigLabel}" Grid.Row="1" Grid.ColumnSpan="2" FontSize="13" >Feed Source</TextBlock>
         
-        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2" >RSS Feed Url:</TextBlock>
-        <TextBox Name="RSSUrl" TextChanged="URL_TextChanged" Grid.Column="1" Grid.Row="2" />
+        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1" >RSS Feed Url:</TextBlock>
+        <TextBox Name="RSSUrl" TextChanged="URL_TextChanged" Grid.Column="1" Grid.Row="1" />
 
-        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
     </Grid>
 </src:WpfConfiguration>

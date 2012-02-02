@@ -1,20 +1,26 @@
 ﻿using System;
+using System.IO;
+using System.Net;
+using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using System.Xml;
 using MayhemWpf.UserControls;
-using System.Runtime.InteropServices;
 
 namespace DefaultModules.Wpf
 {
     public partial class FeedAlertConfig : WpfConfiguration
     {
-
         private DispatcherTimer timer;
-        private string feedName;
         private XmlNode channelNode;
 
         public string UrlProp
+        {
+            get;
+            private set;
+        }
+
+        public string FeedTitleProp
         {
             get;
             private set;
@@ -34,7 +40,7 @@ namespace DefaultModules.Wpf
 
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 2);
-            //timer.Tick += CheckInternet;
+            timer.Tick += CheckInternet;
 
             InitializeComponent();
         }
@@ -47,6 +53,7 @@ namespace DefaultModules.Wpf
         public override void OnSave()
         {
             UrlProp = RSSUrl.Text;
+            FeedTitleProp = FeedCatergory.Text;
         }
 
         private void CheckInternet(object sender, EventArgs e)
@@ -70,46 +77,58 @@ namespace DefaultModules.Wpf
             {
                 try
                 {
-                    using (XmlReader feedData = new XmlTextReader("http://www.npr.org/rss/rss.php?id=1012"))
+                    string url = RSSUrl.Text;
+                    WebRequest webRequest = WebRequest.Create(url);
+                    using (WebResponse webResponse = webRequest.GetResponse())
                     {
-
-                        XmlDocument rssDoc = new XmlDocument();
-                        XmlNode rssNode = rssDoc.ChildNodes[0];
-                        channelNode = rssDoc.ChildNodes[0];
-
-                        rssDoc.Load(feedData);
-
-                        for (int i = 0; i < rssDoc.ChildNodes.Count; i++)
+                        using (Stream responseStream = webResponse.GetResponseStream())
                         {
-                            if (rssDoc.ChildNodes[i].Name == "rss")
-                            {
-                                rssNode = rssDoc.ChildNodes[i];
-                            }
-                        }
+                            StreamReader s = new StreamReader(responseStream, Encoding.GetEncoding(1252));
+                            XmlDocument rssDoc = new XmlDocument();
+                            XmlNode rssNode = rssDoc.ChildNodes[0];
+                            channelNode = rssDoc.ChildNodes[0];
 
-                        for (int i = 0; i < rssNode.ChildNodes.Count; i++)
-                        {
-                            if (rssNode.ChildNodes[i].Name == "channel")
-                            {
-                                channelNode = rssNode.ChildNodes[i];
-                            }
-                        }
+                            rssDoc.Load(s);
 
-                        for (int i = 0; i < channelNode.ChildNodes.Count; i++)
-                        {
-                            if (channelNode.ChildNodes[i].Name == "item")
+                            for (int i = 0; i < rssDoc.ChildNodes.Count; i++)
                             {
-                                return true;
+                                if (rssDoc.ChildNodes[i].Name == "rss")
+                                {
+                                    rssNode = rssDoc.ChildNodes[i];
+                                }
                             }
-                        }
 
-                        return false;
+                            if (rssNode != rssDoc.ChildNodes[0])
+                            {
+                                for (int i = 0; i < rssNode.ChildNodes.Count; i++)
+                                {
+                                    if (rssNode.ChildNodes[i].Name == "channel")
+                                    {
+                                        channelNode = rssNode.ChildNodes[i];
+                                    }
+                                }
+                            }
+
+                            if (channelNode != rssDoc.ChildNodes[0])
+                            {
+                                for (int i = 0; i < channelNode.ChildNodes.Count; i++)
+                                {
+                                    if (channelNode.ChildNodes[i].Name == "item")
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+
+                            return false;
+                        }
                     }
                 }
                 catch
                 {
                 }
             }
+
             return false;
         }
 
@@ -121,7 +140,6 @@ namespace DefaultModules.Wpf
             }
             else
             {
-                FeedName.Text = "Feed Source";
                 TextChanged("Cannot connect to the Internet");
             }
         }
@@ -134,7 +152,6 @@ namespace DefaultModules.Wpf
 
             if (CanSave)
             {
-                FeedName.Text = channelNode["generator"].InnerText.ToString();
                 FeedCatergory.Text = channelNode["title"].InnerText.ToString();
             }
         }
@@ -149,17 +166,19 @@ namespace DefaultModules.Wpf
                     timer.Stop();
                     VerifyFields();
                 }
+
                 return true;
             }
-            catch { }
+            catch
+            {
+            }
 
             if (!timer.IsEnabled)
             {
                 timer.Start();
             }
+
             return false;
         }
-
-
     }
 }
