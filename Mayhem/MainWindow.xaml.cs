@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
+using System.Reflection;
 
 namespace Mayhem
 {
@@ -38,7 +39,7 @@ namespace Mayhem
 		public static readonly DependencyProperty ErrorsProperty =
 			DependencyProperty.Register("Errors", typeof(ObservableCollection<MayhemError>), typeof(MainWindow), new UIPropertyMetadata(new ObservableCollection<MayhemError>()));
 
-		public MainWindow()
+		public MainWindow(App app)
 		{
 			settingsFile = MayhemNuget.SettingsPath;
 			waitForSave = new AutoResetEvent(false);
@@ -54,19 +55,25 @@ namespace Mayhem
 			dict.Source = uri;
 			Application.Current.Resources.MergedDictionaries.Add(dict);
 
+			app.DependenciesUpdated += new App.DependenciesUpdatedHandler(app_DependenciesUpdated);
 			mayhem = MayhemEntry.Instance;
 			mayhem.SetConfigurationType(typeof(IWpfConfigurable));
 
-			string[] directories = MayhemNuget.InstallPaths;
-
-			foreach (string directory in directories)
-			{
-				// Scan for modules in the module directory
-				mayhem.EventList.ScanModules(directory, false);
-				mayhem.ReactionList.ScanModules(directory, false);
-			}
-
 			InitializeComponent();
+		}
+
+		private void app_DependenciesUpdated(object sender, DependenciesEventArgs e)
+		{
+			mayhem.EventList.Clear();
+			mayhem.ReactionList.Clear();
+
+			foreach (Assembly assembly in e.Assemblies)
+			{
+				mayhem.EventList.TryAdd(assembly);
+				mayhem.ReactionList.TryAdd(assembly);
+				//mayhem.EventList.ScanModules(MayhemNuget.InstallPath, false);
+				//mayhem.ReactionList.ScanModules(MayhemNuget.InstallPath, false);
+			}
 		}
 
 		public void Load()
