@@ -5,7 +5,7 @@ GOTO FAIL
 )
 mkdir tmp\%~1\lib\net40
 copy specs\%~1.nuspec tmp\%~1
-robocopy "..\bin\Packages\%~1" "tmp\%~1\lib\net40" /MIR /XF *.pdb >nul
+robocopy "..\bin\%~1" "tmp\%~1\lib\net40" /MIR /XF *.pdb >nul
 cd tmp\%~1
 ..\..\nuget pack
 mkdir Packages
