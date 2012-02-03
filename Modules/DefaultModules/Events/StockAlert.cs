@@ -8,6 +8,10 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Net;
+using System.Net.Cache;
+using System.IO;
+using System.Text;
 
 namespace DefaultModules.Events
 {
@@ -95,26 +99,38 @@ namespace DefaultModules.Events
                 internetFlag = true;
                 try
                 {
-                    // Retrieve XML document  
-                    using (XmlReader stockData = new XmlTextReader("http://www.google.com/ig/api?stock=" + stockSymbol))
-                    {
-                        string readTo = changeParam ? "change" : "last";
-                        stockData.ReadToFollowing(readTo);
-                        double livePrice = Double.Parse(stockData.GetAttribute("data"));
+                    // Retrieve XML document 
+                    string url = "http://www.google.com/ig/api?stock=" + stockSymbol;
 
-                        // if the stock is above the watching price and user wants to trigger above
-                        // OR
-                        // if stock is below watching price and the user wants to trigger below
-                        // stock price > 0 for all non-negative testing
-                        if ((stockPrice > 0 && ((abovePrice && livePrice >= stockPrice) || (!abovePrice && livePrice <= stockPrice))) ||
-                           ((abovePrice && livePrice <= stockPrice) || (!abovePrice && livePrice >= stockPrice)))
+                    WebRequest webRequest = WebRequest.Create(url);
+                    HttpRequestCachePolicy noCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+                    webRequest.CachePolicy = noCachePolicy;
+
+                    using (WebResponse webResponse = webRequest.GetResponse())
+                    {
+                        using (Stream responseStream = webResponse.GetResponseStream())
                         {
-                            // logic for when to Trigger()
-                            // trigger once when passed, that's it
-                            if (!hasPassed)
+                            StreamReader s = new StreamReader(responseStream, Encoding.GetEncoding(1252));
+                            XmlReader stockData = XmlTextReader.Create(s);
+
+                            string readTo = changeParam ? "change" : "last";
+                            stockData.ReadToFollowing(readTo);
+                            double livePrice = Double.Parse(stockData.GetAttribute("data"));
+
+                            // if the stock is above the watching price and user wants to trigger above
+                            // OR
+                            // if stock is below watching price and the user wants to trigger below
+                            // stock price > 0 for all non-negative testing
+                            if ((stockPrice > 0 && ((abovePrice && livePrice >= stockPrice) || (!abovePrice && livePrice <= stockPrice))) ||
+                               ((abovePrice && livePrice <= stockPrice) || (!abovePrice && livePrice >= stockPrice)))
                             {
-                                hasPassed = true;
-                                Trigger();
+                                // logic for when to Trigger()
+                                // trigger once when passed, that's it
+                                if (!hasPassed)
+                                {
+                                    hasPassed = true;
+                                    Trigger();
+                                }
                             }
                         }
                     }
