@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DefaultModules</id>
+    <version>1.0</version>
+    <authors>Eli White, Jay Meistrich</authors>
+    <owners>Outercurve</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>These are the default modules for Mayhem. These basic events and reactions work without additional hardware or software.
+Events
+Folder Change – Triggers when the filenames or number of files in the specified folder is changed. This includes an option to check subfolders.
+Keypress – Triggers when the specified key or key combination is pressed. This works transparently in the background, independent of which application is in the foreground.
+Timer – Triggers repeatedly at the specified interval.
+System Tray Menu - This allows a user to manually trigger an event from a Mayhem icon in the System Tray. Multiple System Tray Menu events can be running simultaneously, and the user can select among them from a list via the single Mayhem icon.
+
+
+Reactions
+Lock Workstation – Puts the computer into the Windows lock state
+Media controls – Sends the Media Next Item, Play/Pause or Previous Item command to all open Windows on your computer. This works with Windows Media Player, iTunes, VLC, or any other player which takes standard input.
+Open Website – Opens your default browser to the specified URL.
+Play Sound – Plays a sound file. It supports wav, wma, and mp3 format.
+Run Program – Equivalent to the Run command. Can be used to launch files or programs.
+Screenshot – Takes a picture of the entire desktop and saves it to the specified folder in jpg format. Pictures will be named with the time the picture was taken.
+Text to Speech – Speaks the specified text using a synthesized voice.</description>
+    <summary>These are the default modules for Mayhem. These basic events and reactions work without additional hardware or software.</summary>
+    <copyright>Copyright © Outercurve 2011</copyright>
+    <tags>Folder Change, Key Press, Timer, Lock Workstation, Next Item, Pause, Play, Last Item, Open Website, Play Sound, Run Program, Screenshot, Text to Speech</tags>
+    <dependencies>
+      <dependency id="MayhemCore" version="1.0" />
+      <dependency id="MayhemWpf" version="1.0" />
+    </dependencies>
+  </metadata>
+</package>

@@ -1,0 +1,27 @@
+﻿<src:WpfConfiguration x:Class="X10Modules.Wpf.InsteonX10ReactionConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             Width="400">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Vertical">
+                <Label>Select COM port on which an Insteon modem is connected:</Label>
+                <StackPanel Margin="5 5 0 0" Orientation="Horizontal">
+                    <Label> Com port</Label>
+                    <ComboBox Name="deviceList" Width="180"></ComboBox>
+                    <Button Margin="10 0 0 0" Click="Button_Click">Test Reaction!</Button>
+                </StackPanel>
+                <StackPanel Margin="5 5 0 5" Orientation="Horizontal">
+                    <Label>House ID</Label>
+                    <ComboBox Width="60" Name="houseID"></ComboBox>
+                    <Label>Unit ID</Label>
+                    <ComboBox Name="unitID" Width="60"></ComboBox>
+                    <Label>Command</Label>
+                    <ComboBox Name="commandID" Width="100"></ComboBox>
+                </StackPanel>
+               
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</src:WpfConfiguration>
