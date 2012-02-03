@@ -20,6 +20,7 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Net.Cache;
 
 namespace DefaultModules.Events
 {
@@ -79,7 +80,7 @@ namespace DefaultModules.Events
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 1, 0);
+            timer.Interval = new TimeSpan(0, 0, 3);
             timer.Tick += CheckWeather;
             hasPassed = false;
 
@@ -119,12 +120,14 @@ namespace DefaultModules.Events
                     // get the xml data
                     using (WebResponse webResponse = webRequest.GetResponse())
                     {
+                        HttpRequestCachePolicy noCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+                        webRequest.CachePolicy = noCachePolicy;
                         using (Stream responseStream = webResponse.GetResponseStream())
                         {
                             // Used to crash on "Paris" because of encoding issues, now using 
                             // Western-European windows encoding
                             StreamReader s = new StreamReader(responseStream, Encoding.GetEncoding(1252));
-                            XmlReader r = XmlReader.Create(s);
+                            XmlReader r = XmlTextReader.Create(s);
 
                             r.ReadToFollowing("temp_f");
                             int temp = Convert.ToInt32(r.GetAttribute("data"));
