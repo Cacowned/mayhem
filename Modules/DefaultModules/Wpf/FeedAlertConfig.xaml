@@ -12,7 +12,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
             <RowDefinition />
         </Grid.RowDefinitions>
         
@@ -21,10 +20,6 @@
         <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1" >RSS Feed Url:</TextBlock>
         <TextBox Name="RSSUrl" TextChanged="URL_TextChanged" Grid.Column="1" Grid.Row="1" />
 
-        <CheckBox Name="TriggerEvery" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="2" Margin="0,4,0,0" Grid.ColumnSpan="2">
-            <TextBlock HorizontalAlignment="Center" Style="{StaticResource ConfigLabel}" Grid.Row="2" Grid.ColumnSpan="2">Trigger On Every Update?</TextBlock>
-        </CheckBox>
-
-        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
     </Grid>
 </src:WpfConfiguration>
