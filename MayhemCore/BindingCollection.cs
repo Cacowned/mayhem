@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading;
+using System;
 
 namespace MayhemCore
 {
@@ -63,7 +64,14 @@ namespace MayhemCore
 
         internal void OnCollectionChangedInternal(NotifyCollectionChangedEventArgs e)
         {
-            base.OnCollectionChanged(e);
+			try
+			{
+				base.OnCollectionChanged(e);
+			}
+			catch(InvalidOperationException)
+			{
+				// swallow. TODO: FIX THIS!
+			}
         }
     }
 }
