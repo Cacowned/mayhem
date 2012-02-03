@@ -11,6 +11,8 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.Windows.Forms;
+using System.Net.Cache;
 
 namespace DefaultModules.Events
 {
@@ -25,21 +27,17 @@ namespace DefaultModules.Events
         [DataMember]
         private string feedTitle;
 
-        [DataMember]
-        private bool triggerEvery;
-
         // Does not store any data from the configuration
         // Stores the "latest" feed item title to compare
         // against and check for updates
         [DataMember]
         private string feedData;
 
-        private bool hasUpdated;
         private DispatcherTimer timer;
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new FeedAlertConfig(feedUrl, triggerEvery); }
+            get { return new FeedAlertConfig(feedUrl); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
@@ -47,7 +45,8 @@ namespace DefaultModules.Events
             var config = (FeedAlertConfig)configurationControl;
             feedUrl = config.UrlProp;
             feedTitle = config.FeedTitleProp;
-            triggerEvery = config.TriggerEveryProp;
+            // reset state if feed url has changed, don't want it to trigger
+            feedData = "";
         }
 
         public string GetConfigString()
@@ -59,15 +58,13 @@ namespace DefaultModules.Events
         {
             feedUrl = "http://feeds.nytimes.com/nyt/rss/HomePage";
             feedData = String.Empty;
-            triggerEvery = true;
         }
 
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 3);
+            timer.Interval = new TimeSpan(0, 0, 10);
             timer.Tick += CheckFeed;
-            hasUpdated = false;
         }
 
         #region Timer
@@ -77,16 +74,12 @@ namespace DefaultModules.Events
             {
                 ErrorLog.AddError(ErrorType.Warning, Strings.Internet_NotConnected);
             }
-
             timer.Start();
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
             timer.Stop();
-
-            // when turned off then off again, will check for passing weather point
-            hasUpdated = false;
         }
         #endregion
 
@@ -98,6 +91,8 @@ namespace DefaultModules.Events
                 try
                 {
                     WebRequest webRequest = WebRequest.Create(feedUrl);
+                    HttpRequestCachePolicy noCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+                    webRequest.CachePolicy = noCachePolicy;
                     using (WebResponse webResponse = webRequest.GetResponse())
                     {
                         using (Stream responseStream = webResponse.GetResponseStream())
@@ -107,12 +102,13 @@ namespace DefaultModules.Events
                             rssDoc.Load(s);
 
                             string tempFeedData = GetTitles(rssDoc);
+                            //MessageBox.Show(tempFeedData);
 
                             if (feedData == String.Empty)
                                 feedData = tempFeedData;
-                            else if (!tempFeedData.Equals(feedData) && triggerEvery || !tempFeedData.Equals(feedData) &&  !hasUpdated)
+                            else if (!tempFeedData.Equals(feedData))
                             {
-                                hasUpdated = true;
+                                feedData = tempFeedData;
                                 Trigger();
                             }
                         }
