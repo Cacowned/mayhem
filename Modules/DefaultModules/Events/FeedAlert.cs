@@ -56,7 +56,7 @@ namespace DefaultModules.Events
 
         protected override void OnLoadDefaults()
         {
-            feedUrl = "http://feeds.nytimes.com/nyt/rss/HomePage";
+            feedUrl = "http://uwthetaxi.com/rss/myfeed.rss";
             feedData = String.Empty;
         }
 
