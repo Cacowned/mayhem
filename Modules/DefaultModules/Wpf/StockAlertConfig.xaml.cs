@@ -185,7 +185,8 @@ namespace DefaultModules.Wpf
             }
             else
             {
-                StockName.Text = "Stock";
+                StockName.Text = "Stock Name";
+                CurrentStockPrice.Text = "Stock Price";
                 TextChanged("Cannot connect to the Internet");
             }
         }
