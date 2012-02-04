@@ -21,6 +21,7 @@ using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using System.Net.Cache;
+using System.Windows.Forms;
 
 namespace DefaultModules.Events
 {
@@ -41,7 +42,9 @@ namespace DefaultModules.Events
         private bool hasPassed;
         private bool internetFlag;
         private DispatcherTimer timer;
-        private WebRequest webRequest;
+
+        // number of degrees temp must re-pass to enable triggering again
+        private static int OFFSET = 1;
 
         // Store all the variables from the configuration dialog into
         // local data members
@@ -83,8 +86,6 @@ namespace DefaultModules.Events
             timer.Interval = new TimeSpan(0, 0, 3);
             timer.Tick += CheckWeather;
             hasPassed = false;
-
-            webRequest = WebRequest.Create("http://www.google.com/ig/api?weather=" + zipCode.Replace(" ", "%20"));
         }
 
         // Starts the timer, already set to an interval of 1 minute
@@ -96,16 +97,14 @@ namespace DefaultModules.Events
             {
                 ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Weather"));
             }
-
+            // when turned off then off again, will check for passing weather point
+            hasPassed = false;
             timer.Start();
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
             timer.Stop();
-
-            // when turned off then off again, will check for passing weather point
-            hasPassed = false;
         }
         #endregion
 
@@ -118,6 +117,7 @@ namespace DefaultModules.Events
                 try
                 {
                     // get the xml data
+                    WebRequest webRequest = WebRequest.Create("http://www.google.com/ig/api?weather=" + zipCode.Replace(" ", "%20"));
                     using (WebResponse webResponse = webRequest.GetResponse())
                     {
                         HttpRequestCachePolicy noCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
@@ -125,7 +125,7 @@ namespace DefaultModules.Events
                         using (Stream responseStream = webResponse.GetResponseStream())
                         {
                             // Used to crash on "Paris" because of encoding issues, now using 
-                            // Western-European windows encoding
+                            // Western-European Windows encoding
                             StreamReader s = new StreamReader(responseStream, Encoding.GetEncoding(1252));
                             XmlReader r = XmlTextReader.Create(s);
 
@@ -138,12 +138,13 @@ namespace DefaultModules.Events
                             // if above desired temperature and watching for abovem trigger
                             if (isBelowOrAbove)
                             {
+                                bool reset = (temp == temperature + OFFSET) && checkBelow || (temp == temperature - OFFSET);
                                 if (!hasPassed)
                                 {
                                     hasPassed = true;
                                     Trigger();
                                 }
-                                else if (temp == temperature)
+                                else if (reset)
                                 {
                                     hasPassed = false;
                                 }
@@ -151,8 +152,9 @@ namespace DefaultModules.Events
                         }
                     }
                 }
-                catch
+                catch (Exception ee)
                 {
+                    MessageBox.Show(ee.ToString());
                 }
             }
             else if (internetFlag)

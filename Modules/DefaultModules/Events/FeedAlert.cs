@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Cache;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Windows.Threading;
@@ -11,8 +12,6 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Windows.Forms;
-using System.Net.Cache;
 
 namespace DefaultModules.Events
 {
@@ -102,7 +101,6 @@ namespace DefaultModules.Events
                             rssDoc.Load(s);
 
                             string tempFeedData = GetTitles(rssDoc);
-                            //MessageBox.Show(tempFeedData);
 
                             if (feedData == String.Empty)
                                 feedData = tempFeedData;
