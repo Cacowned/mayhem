@@ -32,9 +32,14 @@ namespace DefaultModules.Events
         [DataMember]
         private bool abovePrice;
 
+        [DataMember]
+        private bool triggerEvery;
+
         private bool hasPassed;
         private DispatcherTimer timer;
         private bool internetFlag;
+        // the amount of "buffer" that the price has to go passed to re-enable trigger
+        private static double PRICE_OFFSET = 1.0;
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
@@ -43,11 +48,12 @@ namespace DefaultModules.Events
             stockPrice = config.StockPriceProp;
             changeParam = config.ChangeProp;
             abovePrice = config.WatchAboveProp;
+            triggerEvery = config.TriggerEveryProp;
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new StockAlertConfig(stockSymbol, stockPrice, changeParam, abovePrice); }
+            get { return new StockAlertConfig(stockSymbol, stockPrice, changeParam, abovePrice, triggerEvery); }
         }
 
         public string GetConfigString()
@@ -63,6 +69,7 @@ namespace DefaultModules.Events
             stockPrice = 32.05;
             changeParam = false;
             abovePrice = false;
+            triggerEvery = true;
         }
 
         protected override void OnAfterLoad()
@@ -125,11 +132,17 @@ namespace DefaultModules.Events
                                ((abovePrice && livePrice <= stockPrice) || (!abovePrice && livePrice >= stockPrice)))
                             {
                                 // logic for when to Trigger()
-                                // trigger once when passed, that's it
+                                // trigger once when passed, then trigger again once barrier has been reset
+                                // ELSE IF
+                                // trigger on every pass AND the stock price is at a "reset point" enables ability to trigger on re-pass of point
                                 if (!hasPassed)
                                 {
                                     hasPassed = true;
                                     Trigger();
+                                }
+                                else if (triggerEvery && (abovePrice && livePrice >= stockPrice + PRICE_OFFSET) || (!abovePrice && livePrice <= stockPrice - PRICE_OFFSET))
+                                {
+                                    hasPassed = false;
                                 }
                             }
                         }

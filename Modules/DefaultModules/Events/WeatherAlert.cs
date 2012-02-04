@@ -138,7 +138,7 @@ namespace DefaultModules.Events
                             // if above desired temperature and watching for abovem trigger
                             if (isBelowOrAbove)
                             {
-                                bool reset = (temp == temperature + OFFSET) && checkBelow || (temp == temperature - OFFSET);
+                                bool reset = (temp == temperature + OFFSET) && checkBelow || (temp == temperature - OFFSET) && !checkBelow;
                                 if (!hasPassed)
                                 {
                                     hasPassed = true;
