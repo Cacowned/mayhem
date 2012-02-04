@@ -32,6 +32,12 @@ namespace DefaultModules.Wpf
             private set;
         }
 
+        public bool TriggerEveryProp
+        {
+            get;
+            private set;
+        }
+
         public override string Title
         {
             get
@@ -43,12 +49,13 @@ namespace DefaultModules.Wpf
         private DispatcherTimer timer;
         private XmlReader stockData;
 
-        public StockAlertConfig(string stockSymbol, double stockPrice, bool changeParam, bool abovePrice)
+        public StockAlertConfig(string stockSymbol, double stockPrice, bool changeParam, bool abovePrice, bool alwaysTrigger)
         {
             StockSymbolProp = stockSymbol;
             StockPriceProp = stockPrice;
             ChangeProp = changeParam;
             WatchAboveProp = abovePrice;
+            TriggerEveryProp = alwaysTrigger;
 
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 2);
@@ -78,6 +85,7 @@ namespace DefaultModules.Wpf
             {
                 Below.IsChecked = true;
             }
+            TriggerEvery_Check.IsChecked = TriggerEveryProp;
         }
 
         public override void OnSave()
@@ -85,6 +93,7 @@ namespace DefaultModules.Wpf
             StockSymbolProp = StockSymbol.Text;
             StockPriceProp = Math.Round(Convert.ToDouble(StockPrice.Text), 2);
             WatchAboveProp = (bool)Above.IsChecked;
+            TriggerEveryProp = (bool)TriggerEvery_Check.IsChecked;
         }
 
         private void CheckInternet(object sender, EventArgs e)
@@ -163,7 +172,8 @@ namespace DefaultModules.Wpf
             stockData.ReadToFollowing("last");
             string currentPrice = stockData.GetAttribute("data");
 
-            StockName.Text = String.Format("{0} - ${1}", companyName, currentPrice);
+            StockName.Text = companyName;
+            CurrentStockPrice.Text = "$" + currentPrice;
             stockData.Close();
         }
 
