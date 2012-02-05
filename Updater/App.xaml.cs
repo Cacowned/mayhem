@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using NuGet;
-using System.IO;
-using System.ComponentModel;
 
 namespace Updater
 {
@@ -15,10 +15,14 @@ namespace Updater
 		{
 			string root = @"..\..";
 
+			if (e.Args.Length > 0) {
+				root = e.Args[0];
+			}
+
 			try
 			{
-				PackageManager manager = MayhemNuget.PackageManager;
-				//manager.InstallPackage("Mayhem");
+				PackageManager manager = new PackageManager(MayhemNuget.Repository, root);
+				manager.InstallPackage("Mayhem");
 				//manager.InstallPackage("DebugModules");
 
 				List<IPackage> packagesLocal = manager.LocalRepository.GetPackages().ToList();
