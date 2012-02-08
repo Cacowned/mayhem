@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Deployment.Application;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,11 +7,6 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using NuGet;
-using System.Collections.Specialized;
-using System.Web;
-using System.Net;
-using MayhemCore;
-using MayhemWpf.ModuleTypes;
 
 namespace Mayhem
 {
@@ -24,7 +18,7 @@ namespace Mayhem
 
 		private DateTime lastUpdated;
 
-		
+
 		public delegate void DependenciesUpdatedHandler(object sender, DependenciesEventArgs e);
 		public event DependenciesUpdatedHandler DependenciesUpdated;
 
@@ -37,9 +31,11 @@ namespace Mayhem
 		{
 			Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
+			//MessageBox.Show("Foo");
+
 			if (e.Args.Any())
 			{
-				//LoadDependencies();
+				LoadDependencies();
 				string packageFile = e.Args[0];
 
 				ZipPackage zipFile = new ZipPackage(packageFile);
@@ -77,32 +73,26 @@ namespace Mayhem
 			string[] files = Directory.GetFiles(MayhemNuget.InstallPath, "*.dll", SearchOption.AllDirectories);
 			foreach (string file in files)
 			{
-				// Don't load the Updater. It has to remain unlocked.
-				DirectoryInfo info = Directory.GetParent(file).Parent;
-				string name = info.Name;
-				if (name != "Updater" && !name.StartsWith("Updater."))
+				try
 				{
-					try
-					{
-						Assembly assembly = Assembly.LoadFrom(file);
+					Assembly assembly = Assembly.LoadFrom(file);
 
-						// If we haven't already added it.
-						// This is in the case that we happen to have two copies of the same
-						// package installed (Visual Studio and NuGet version for example)
-						if (!dependencies.ContainsKey(assembly.FullName))
-						{
-							dependencies.Add(assembly.FullName, assembly);
-
-							// Scan for modules in the module directory
-						}
-					}
-					catch
+					// If we haven't already added it.
+					// This is in the case that we happen to have two copies of the same
+					// package installed (Visual Studio and NuGet version for example)
+					if (!dependencies.ContainsKey(assembly.FullName))
 					{
+						dependencies.Add(assembly.FullName, assembly);
+
+						// Scan for modules in the module directory
 					}
+				}
+				catch
+				{
 				}
 			}
 			AnnounceDependencies();
-			
+
 			AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 		}
 
@@ -129,40 +119,41 @@ namespace Mayhem
 				List<IPackage> updates = manager.SourceRepository.GetUpdates(packagesLocal).ToList();
 				if (updates.Count > 0)
 				{
+					var updaterManager = new PackageManager(MayhemNuget.Repository, MayhemNuget.AppDataFolder);
 					// If we have the updater
-					if (manager.LocalRepository.Exists("Updater"))
+					if (updaterManager.LocalRepository.Exists("Updater"))
 					{
-						IPackage updater = manager.LocalRepository.FindPackage("Updater");
+						IPackage updater = updaterManager.LocalRepository.FindPackage("Updater");
 						List<IPackage> packages = new List<IPackage>();
 						packages.Add(updater);
 
 						// check it for updates
-						updates = manager.SourceRepository.GetUpdates(packages).ToList();
+						updates = updaterManager.SourceRepository.GetUpdates(packages).ToList();
 
 						foreach (IPackage package in updates)
 						{
 							// and install it if it has any
-							manager.UpdatePackage(package, updateDependencies: true);
+							updaterManager.UpdatePackage(package, updateDependencies: true);
 						}
 					}
 					else
 					{
 						// otherwise, install the updater
-						manager.InstallPackage("Updater");
+						updaterManager.InstallPackage("Updater");
 					}
 
 					Dispatcher.Invoke((Action)delegate
 					{
 						if (MessageBox.Show("Updates are available. Would you like to update?", "Mayhem Updates", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
 						{
-							string[] directories = Directory.GetDirectories(@"..\..\", "Updater.*");
-							if (directories.Length == 0 || !File.Exists(Path.Combine(directories[directories.Length-1], "content", "Updater.exe")))
+							string[] directories = Directory.GetDirectories(MayhemNuget.AppDataFolder, "Updater.*");
+							if (directories.Length == 0 || !File.Exists(Path.Combine(directories[directories.Length - 1], "content", "Updater.exe")))
 							{
 								MessageBox.Show("Error: Unable to find the updater!");
 							}
 							else
 							{
-								Process.Start(Path.Combine(directories[directories.Length-1], "content", "Updater.exe"));
+								Process.Start(Path.Combine(directories[directories.Length - 1], "content", "Updater.exe"), "\"" + MayhemNuget.InstallPath + "\"");
 								Shutdown();
 							}
 						}
