@@ -1,0 +1,48 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>WindowModules</id>
+    <version>1.0</version>
+    <authors>Jay Meistrich</authors>
+    <owners>Outercurve</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Send a sequence of commands to a window. 
+
+Events
+
+None
+
+Reactions
+
+Window Sequence - This reaction sends a sequence of commands to manipulate an open window. This can be useful for moving a window to the foreground, moving it from one monitor to another, sending a window a specific command, etc.
+
+To setup a Window Sequence, you choose the Application,and the Wisndow Title by clicking on that window. This automatically fills these fields. The checkboxes determine where the commands are sent. If Application is selected, the commands are sent to the most recently visited window of that application. If the Window Title is selected, the commands are sent to the window with that name.
+
+Any number of commands can be sent to a window. The commands available are:
+
+Bring to front - Brings the window to the top
+
+Close - Closes the window
+
+Maximize - Maximizes the window
+
+Minimize - Minimizes the window
+
+Move - Move to a specified location
+
+Resize - Resize to a specified size
+
+Restore - Restores the window - When maximized or minimized, returns the window to the size it was previously.
+
+Send Keys - Sends the specified key combination to the window. To send a sequence of keys, use multiple Send Keys.
+
+Wait - Waits the specified number of milliseconds before sending the next command. This is often useful in allowing a window to process previous commands before proceeding.</description>
+    <summary>Send a sequence of commands to a window.</summary>
+    <copyright>Copyright © Outercurve 2011</copyright>
+    <tags>Windows, Resize, Move, Minimize, Maximize, Taskbar, System Tray</tags>
+    <dependencies>
+      <dependency id="MayhemCore" version="1.0" />
+      <dependency id="MayhemWpf" version="1.0" />
+    </dependencies>
+  </metadata>
+</package>
