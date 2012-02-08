@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using NuGet;
+using System.Security.Principal;
+using System.ComponentModel;
 
 namespace Mayhem
 {
@@ -27,31 +29,61 @@ namespace Mayhem
 			dependencies = new Dictionary<string, Assembly>();
 		}
 
+		private static void RunElevated(string fileName, string arguments = "")
+		{
+			//MessageBox.Show("Run: " + fileName); 
+			ProcessStartInfo processInfo = new ProcessStartInfo();
+			processInfo.Verb = "runas";
+			processInfo.FileName = fileName;
+			processInfo.Arguments = arguments;
+
+			try
+			{
+				Process.Start(processInfo);
+			}
+			catch (Win32Exception)
+			{
+				//Do nothing. Probably the user canceled the UAC window 
+			}
+		}
+
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
-			//MessageBox.Show("Foo");
-
-			if (e.Args.Any())
+			if (e.Args.Length == 1)
 			{
-				LoadDependencies();
-				string packageFile = e.Args[0];
+				// One argument, it's a file location
 
-				ZipPackage zipFile = new ZipPackage(packageFile);
+				WindowsPrincipal pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
 
-				InstallModule window = new InstallModule(zipFile);
-
-				if (window.ShowDialog() == true)
+				if (!pricipal.IsInRole(WindowsBuiltInRole.Administrator))
 				{
-					// Installation was a success
+					string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+
+					RunElevated(Path.Combine(path, "Mayhem.exe"), e.Args[0]);
+				}
+				else
+				{
+					LoadDependencies();
+
+					string packageFile = e.Args[0];
+
+					ZipPackage zipFile = new ZipPackage(packageFile);
+
+					InstallModule window = new InstallModule(zipFile);
+
+					if (window.ShowDialog() == true)
+					{
+						// Installation was a success
+					}
 				}
 
 				// Close the application 
 				Shutdown();
 				return;
 			}
-			
+
 			ThreadPool.QueueUserWorkItem(CheckForUpdates);
 
 			FileWatcher watcher = new FileWatcher(MayhemNuget.InstallPath, LoadDependencies);
