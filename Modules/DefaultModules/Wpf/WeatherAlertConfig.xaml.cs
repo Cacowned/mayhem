@@ -1,8 +1,4 @@
-﻿// This is the configuration file for the WeatherAlert event
-// The event is explained in WeatherAlert.cs, the configuration
-// file checks for valid zip code, city name, and temperature fields.
-
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -15,6 +11,11 @@ using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
+    /// <summary>
+    /// This is the configuration file for the WeatherAlert event
+    /// The event is explained in WeatherAlert.cs, the configuration
+    /// file checks for valid zip code, city name, and temperature fields.
+    /// </summary>
     public partial class WeatherAlertConfig : WpfConfiguration
     {
         private XmlReader reader;
@@ -88,8 +89,10 @@ namespace DefaultModules.Wpf
             CheckAbove = (bool)Above.IsChecked;
         }
 
-        // Verifies that the entered zip code, city name, and temperature to watch are valid
-        // and within range (-80 -> 180 deg F for temp)
+        /// <summary>
+        /// Verifies that the entered zip code, city name, and temperature to watch are valid
+        /// and within range (-80 -> 180 deg F for temp)
+        /// </summary>
         private void VerifyFields()
         {
             string error = "Invalid";
@@ -111,8 +114,11 @@ namespace DefaultModules.Wpf
             TextChanged(error);
         }
 
-        // If there is an Internet connection, verifies that the xml is valid, I.E. the entered zip
-        // code or city name returns valid xml
+        /// <summary>
+        /// If there is an Internet connection, verifies that the xml is valid, I.E. the entered zip
+        /// code or city name returns valid xml
+        /// </summary>
+        /// <returns>true if the xml is valid</returns>
         private bool IsValidXML()
         {
             if (!timer.IsEnabled)
@@ -157,7 +163,9 @@ namespace DefaultModules.Wpf
             return false;
         }
 
-        // Bucket handler for when the zip code and temperature fields are changed
+        /// <summary>
+        /// Bucket handler for when the zip code and temperature fields are changed
+        /// </summary>
         private void TempZip_TextChanged(object sender, RoutedEventArgs e)
         {
             if (ConnectedToInternet())
@@ -171,9 +179,11 @@ namespace DefaultModules.Wpf
             }
         }
 
-        // Bucket function for whenever text is changed, this is passed a string.
-        // If the user can not save, the error string is displayed, otherwise they 
-        // can save.
+        /// <summary>
+        /// Bucket function for whenever text is changed, this is passed a string.
+        /// If the user can not save, the error string is displayed, otherwise they can save.
+        /// </summary>
+        /// <param name="text">The error text to display if fields are not valid</param>
         private void TextChanged(string text)
         {
             textInvalid.Text = text;
@@ -184,9 +194,11 @@ namespace DefaultModules.Wpf
             }
         }
 
-        // Pulls the city name and icon link from the xml
-        // If there is any xml encoding issues, they are caught here
-        // and the user is not allowed to save.
+        /// <summary>
+        /// Pulls the city name and icon link from the xml
+        /// If there is any xml encoding issues, they are caught here
+        /// and the user is not allowed to save.
+        /// </summary>
         private void CheckWeather()
         {
             try
@@ -211,8 +223,10 @@ namespace DefaultModules.Wpf
             }
         }
 
-        // Grabs the weather icon using the url from the xml returned
-        // by the weather service
+        /// <summary>
+        /// Grabs the weather icon using the url from the xml returned
+        /// by the weather service
+        /// </summary>
         private void UpdateImage()
         {
             try
@@ -231,9 +245,11 @@ namespace DefaultModules.Wpf
             }
         }
 
-        // Checks if there is a current Internet connection, if there is not
-        // starts a timer that checks every 2 seconds, and when Internet is
-        // again connected, checks for valid text fields
+        /// <summary>
+        /// Checks if there is a current Internet connection, if there is not
+        /// starts a timer that checks every 2 seconds, and when Internet is
+        /// again connected, checks for valid text fields
+        /// </summary>
         #region CheckInternet
         [DllImport("wininet.dll")]
         private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
