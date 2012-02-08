@@ -1,4 +1,8 @@
-﻿using System;
+﻿// This is the configuration file for the FeedAlert event
+// The event is explained in FeedAlert.cs, the configuration
+// file checks for a valid RSS feed URL.
+
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -34,6 +38,7 @@ namespace DefaultModules.Wpf
             }
         }
 
+        // Takes an URL as a string
         public FeedAlertConfig(string url)
         {
             UrlProp = url;
@@ -56,12 +61,13 @@ namespace DefaultModules.Wpf
             FeedTitleProp = FeedCatergory.Text;
         }
 
+        // Didn't want to add overloads to ConnectedToInternet()
         private void CheckInternet(object sender, EventArgs e)
         {
-            // don't want to add overloads to ConnectedToInternet()
             ConnectedToInternet();
         }
 
+        // Veryify the that RSS URL field is longer than 0, calls IsValidFeed
         private void VerifyFields()
         {
             string error = "Invalid";
@@ -115,6 +121,7 @@ namespace DefaultModules.Wpf
                                 {
                                     if (channelNode.ChildNodes[i].Name == "item")
                                     {
+                                        // Have found all thee RSS, channel, and item tags
                                         return true;
                                     }
                                 }
@@ -133,6 +140,8 @@ namespace DefaultModules.Wpf
             return false;
         }
 
+        // Triggered when the RSS URL text field is changed, if there is no Internet connection
+        // display "Cannot connect to the Internet"
         private void URL_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (ConnectedToInternet())
@@ -145,6 +154,8 @@ namespace DefaultModules.Wpf
             }
         }
 
+        // Shows / hides the error message dependant on wether the RSS URL is valid
+        // if valid, grabs the title of the RSS and displays it
         private void TextChanged(string text)
         {
             textInvalid.Text = text;
@@ -157,6 +168,7 @@ namespace DefaultModules.Wpf
             }
         }
 
+        // Checks for an Internet connection
         private bool ConnectedToInternet()
         {
             try

@@ -10,8 +10,10 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Cache;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using System.Xml;
 using DefaultModules.LowLevel;
@@ -20,8 +22,6 @@ using DefaultModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Net.Cache;
-using System.Windows.Forms;
 
 namespace DefaultModules.Events
 {
@@ -83,7 +83,7 @@ namespace DefaultModules.Events
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 3);
+            timer.Interval = new TimeSpan(0, 2, 0);
             timer.Tick += CheckWeather;
             hasPassed = false;
         }
@@ -108,6 +108,7 @@ namespace DefaultModules.Events
         }
         #endregion
 
+        // Grabs the current weather information for the city / zipcode being watched
         private void CheckWeather(object sender, EventArgs e)
         {
             // Test for internet connection

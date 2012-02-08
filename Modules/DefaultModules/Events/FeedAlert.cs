@@ -1,4 +1,7 @@
-﻿using System;
+﻿// This module allows a user to enter an URL for a RSS feed
+// and will trigger when that feed has been updated.
+
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
@@ -48,21 +51,24 @@ namespace DefaultModules.Events
             feedData = "";
         }
 
+        // Watching {Tile of feed} feed
         public string GetConfigString()
         {
             return String.Format("Watching {0} feed", feedTitle);
         }
 
+        // Default feed URL is the new york times home page
         protected override void OnLoadDefaults()
         {
-            feedUrl = "http://uwthetaxi.com/rss/myfeed.rss";
+            feedUrl = "http://feeds.nytimes.com/nyt/rss/HomePage";
             feedData = String.Empty;
         }
 
+        // Start the feed checking timer, checks once every two minutes
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 10);
+            timer.Interval = new TimeSpan(0, 2, 0);
             timer.Tick += CheckFeed;
         }
 
@@ -82,6 +88,7 @@ namespace DefaultModules.Events
         }
         #endregion
 
+        // Checks if there are any changes to the RSS feed that is being watched
         private void CheckFeed(object sender, EventArgs e)
         {
             // Test for internet connection
@@ -91,6 +98,7 @@ namespace DefaultModules.Events
                 {
                     WebRequest webRequest = WebRequest.Create(feedUrl);
                     HttpRequestCachePolicy noCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+                    // otherwise stores xml info in the cache
                     webRequest.CachePolicy = noCachePolicy;
                     using (WebResponse webResponse = webRequest.GetResponse())
                     {

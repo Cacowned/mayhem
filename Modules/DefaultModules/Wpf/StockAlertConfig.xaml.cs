@@ -1,4 +1,7 @@
-﻿using System;
+﻿// This is the configuration dialog responsible for error-checking
+// and user-specified information-gaterhing used in conjunction with StockAlert.cs
+
+using System;
 using System.Windows;
 using System.Windows.Threading;
 using System.Xml;
@@ -49,6 +52,12 @@ namespace DefaultModules.Wpf
         private DispatcherTimer timer;
         private XmlReader stockData;
 
+        // Takes: 
+        // string -> stock symbol
+        // double -> stock price
+        // bool   -> true if watching for change in price, false if watching stock price (no delta)
+        // bool   -> wether to watch above or below target price / change
+        // bool   -> trigger once or every time
         public StockAlertConfig(string stockSymbol, double stockPrice, bool changeParam, bool abovePrice, bool alwaysTrigger)
         {
             StockSymbolProp = stockSymbol;
@@ -85,6 +94,7 @@ namespace DefaultModules.Wpf
             {
                 Below.IsChecked = true;
             }
+
             TriggerEvery_Check.IsChecked = TriggerEveryProp;
         }
 
@@ -96,12 +106,14 @@ namespace DefaultModules.Wpf
             TriggerEveryProp = (bool)TriggerEvery_Check.IsChecked;
         }
 
+        // Didn't want to add overloads to ConnectedToInternet()
         private void CheckInternet(object sender, EventArgs e)
         {
-            // don't want to add overloads to ConnectedToInternet()
             ConnectedToInternet();
         }
 
+        // Check that the stock price length is over 0 (not blank) and that it is a number
+        // positive if checking last trade, pos or neg if checking change in price
         private void VerifyFields()
         {
             string error = "Invalid";
@@ -126,6 +138,8 @@ namespace DefaultModules.Wpf
             TextChanged(error);
         }
 
+        // The api returns xml but no company name if the stock does not exist,
+        // returns true if the stock exitst
         private bool IsValidStock()
         {
             try
@@ -164,6 +178,7 @@ namespace DefaultModules.Wpf
             }
         }
 
+        // Parses xml for current price and company name
         private void CheckStock()
         {
             string companyName = stockData.GetAttribute("data");
@@ -177,6 +192,7 @@ namespace DefaultModules.Wpf
             stockData.Close();
         }
 
+        // If the stock name is changed, verify fields and update 
         private void Stock_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (ConnectedToInternet())
@@ -191,12 +207,14 @@ namespace DefaultModules.Wpf
             }
         }
 
+        // When the asking price is changed
         private void UpdateAsking(object sender, RoutedEventArgs e)
         {
             ChangeProp = !(bool)LastTrade.IsChecked;
             VerifyFields();
         }
 
+        // Checks for an internet connection
         private bool ConnectedToInternet()
         {
             try
