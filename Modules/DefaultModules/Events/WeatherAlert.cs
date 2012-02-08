@@ -1,13 +1,4 @@
-﻿// This event allows the user to enter a zip code or city name
-// and a temperature in deg F. They can choose to select event to 
-// Trigger() when the current temperature drops below or rises above
-// the user-entered temperature. If the current temperature is already
-// below the user-entered temperature, in the case they want the event
-// to trigger when the current temperature drops below, it will trigger
-// on the first call, and not after that unless the event is reset
-// (switched off/on or created anew).
-
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
@@ -28,6 +19,16 @@ namespace DefaultModules.Events
     [DataContract]
     [MayhemModule("Weather Alert", "Monitors changes in temperature")]
 
+    /// <summary>
+    /// This event allows the user to enter a zip code or city name
+    /// and a temperature in deg F. They can choose to select event to 
+    /// Trigger() when the current temperature drops below or rises above
+    /// the user-entered temperature. If the current temperature is already
+    /// below the user-entered temperature, in the case they want the event
+    /// to trigger when the current temperature drops below, it will trigger
+    /// on the first call, and not after that unless the event is reset
+    /// (switched off/on or created anew).
+    /// <summary>
     public class WeatherAlert : EventBase, IWpfConfigurable
     {
         [DataMember]
@@ -46,8 +47,6 @@ namespace DefaultModules.Events
         // number of degrees temp must re-pass to enable triggering again
         private static int OFFSET = 1;
 
-        // Store all the variables from the configuration dialog into
-        // local data members
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var config = (WeatherAlertConfig)configurationControl;
@@ -61,7 +60,7 @@ namespace DefaultModules.Events
             get { return new WeatherAlertConfig(zipCode, temperature, checkBelow); }
         }
 
-        // returns "Watching {zip code or city name} for {above or below X}F"
+        /// <returns>"Watching {zip code or city name} for {above or below X}F"</returns>
         public string GetConfigString()
         {
             string above_below = checkBelow ? "above " : "below ";
@@ -69,8 +68,10 @@ namespace DefaultModules.Events
             return String.Format("Watching {0} for {1}F", zipCode, above_below);
         }
 
-        // Default city of Seattle WA with a temperature of 32F and a bool
-        // to trigger when the temperature drops below 32
+        /// <summary>
+        /// Default city of Seattle WA with a temperature of 32F and a bool
+        /// to trigger when the temperature drops below 32
+        /// </summary>
         protected override void OnLoadDefaults()
         {
             zipCode = "98105";
@@ -78,8 +79,10 @@ namespace DefaultModules.Events
             checkBelow = true;
         }
 
-        // Initialize timer, reset temperature trigger, links the webRequest to the zipCode
-        // entered in the configuration dialog
+        /// <summary>
+        /// Initialize timer, reset temperature trigger, links the webRequest to the zipCode
+        /// entered in the configuration dialog
+        /// </summary>
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
@@ -88,8 +91,10 @@ namespace DefaultModules.Events
             hasPassed = false;
         }
 
-        // Starts the timer, already set to an interval of 1 minute
-        // when the temperature is reached or passed, trigger event once
+        /// <summary>
+        /// Starts the timer, already set to an interval of 1 minute
+        /// when the temperature is reached or passed, trigger event once
+        /// </summary>
         #region Timer
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -97,6 +102,7 @@ namespace DefaultModules.Events
             {
                 ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Weather"));
             }
+
             // when turned off then off again, will check for passing weather point
             hasPassed = false;
             timer.Start();
@@ -108,7 +114,9 @@ namespace DefaultModules.Events
         }
         #endregion
 
-        // Grabs the current weather information for the city / zipcode being watched
+        /// <summary>
+        /// Grabs the current weather information for the city / zipcode being watched
+        /// </summary>
         private void CheckWeather(object sender, EventArgs e)
         {
             // Test for internet connection
@@ -139,7 +147,7 @@ namespace DefaultModules.Events
                             // if above desired temperature and watching for abovem trigger
                             if (isBelowOrAbove)
                             {
-                                bool reset = (temp == temperature + OFFSET) && checkBelow || (temp == temperature - OFFSET) && !checkBelow;
+                                bool reset = ((temp == temperature + OFFSET) && checkBelow) || ((temp == temperature - OFFSET) && !checkBelow);
                                 if (!hasPassed)
                                 {
                                     hasPassed = true;

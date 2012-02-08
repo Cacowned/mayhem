@@ -56,6 +56,10 @@ namespace DefaultModules.LowLevel
             keybd_event((byte)key, (byte)MapVirtualKey(key, 0), KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
 
+        /// <summary>
+        /// Checks if there is a current Internet connection
+        /// </summary>
+        /// <returns>true if there is a current Internet connection</returns>
         public static bool ConnectedToInternet()
         {
             try

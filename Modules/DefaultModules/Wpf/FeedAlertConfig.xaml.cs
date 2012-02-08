@@ -1,8 +1,4 @@
-﻿// This is the configuration file for the FeedAlert event
-// The event is explained in FeedAlert.cs, the configuration
-// file checks for a valid RSS feed URL.
-
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -13,6 +9,11 @@ using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
+    /// <summary>
+    /// This is the configuration file for the FeedAlert event
+    /// The event is explained in FeedAlert.cs, the configuration
+    /// file checks for a valid RSS feed URL.
+    /// </summary>
     public partial class FeedAlertConfig : WpfConfiguration
     {
         private DispatcherTimer timer;
@@ -38,7 +39,7 @@ namespace DefaultModules.Wpf
             }
         }
 
-        // Takes an URL as a string
+        /// <param name="url">RSS URL as a string</param>
         public FeedAlertConfig(string url)
         {
             UrlProp = url;
@@ -61,13 +62,17 @@ namespace DefaultModules.Wpf
             FeedTitleProp = FeedCatergory.Text;
         }
 
-        // Didn't want to add overloads to ConnectedToInternet()
+        /// <summary>
+        /// Didn't want to add overloads to ConnectedToInternet()
+        /// </summary>
         private void CheckInternet(object sender, EventArgs e)
         {
             ConnectedToInternet();
         }
 
-        // Veryify the that RSS URL field is longer than 0, calls IsValidFeed
+        /// <summary>
+        /// Veryify the that RSS URL field is longer than 0, calls IsValidFeed
+        /// </summary>
         private void VerifyFields()
         {
             string error = "Invalid";
@@ -76,7 +81,10 @@ namespace DefaultModules.Wpf
             TextChanged(error);
         }
 
-        // Verify that the feed is a valid xml rss feed containting a rss, channel, and item tag
+        /// <summary>
+        /// Verify that the feed is a valid xml rss feed containting a rss, channel, and item tag
+        /// </summary>
+        /// <returns>true if the feed is valid, false if not</returns>
         private bool IsValidFeed()
         {
             if (!timer.IsEnabled)
@@ -140,8 +148,10 @@ namespace DefaultModules.Wpf
             return false;
         }
 
-        // Triggered when the RSS URL text field is changed, if there is no Internet connection
-        // display "Cannot connect to the Internet"
+        /// <summary>
+        /// Triggered when the RSS URL text field is changed, if there is no Internet connection
+        /// display "Cannot connect to the Internet"
+        /// </summary>
         private void URL_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (ConnectedToInternet())
@@ -154,8 +164,10 @@ namespace DefaultModules.Wpf
             }
         }
 
-        // Shows / hides the error message dependant on wether the RSS URL is valid
-        // if valid, grabs the title of the RSS and displays it
+        /// <summary>
+        /// Shows / hides the error message dependant on wether the RSS URL is valid
+        /// if valid, grabs the title of the RSS and displays it
+        /// </summary>
         private void TextChanged(string text)
         {
             textInvalid.Text = text;
@@ -168,7 +180,10 @@ namespace DefaultModules.Wpf
             }
         }
 
-        // Checks for an Internet connection
+        /// <summary>
+        /// Checks for an Internet connection
+        /// </summary>
+        /// <returns>true if there is a current Internet connection</returns>
         private bool ConnectedToInternet()
         {
             try
