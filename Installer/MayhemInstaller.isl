@@ -1874,7 +1874,7 @@
 		<col def="S255">ProgId_</col>
 		<col def="S64">MIME_</col>
 		<col def="s38">Feature_</col>
-		<row><td>mayhem</td><td>Mayhem.exe</td><td/><td/><td>AlwaysInstall</td></row>
+		<row><td>mayhem</td><td>Mayhem.exe</td><td>mayhem.file</td><td/><td>AlwaysInstall</td></row>
 	</table>
 
 	<table name="Feature">
@@ -4481,6 +4481,7 @@ QwBEAF8AUgBPAE0AAQBFAHgAcAByAGUAcwBzAA==
 		<col def="S72">Icon_</col>
 		<col def="I2">IconIndex</col>
 		<col def="I4">ISAttributes</col>
+		<row><td>mayhem.file</td><td/><td/><td>Mayhem Package File</td><td/><td/><td/></row>
 	</table>
 
 	<table name="Property">
@@ -4856,7 +4857,7 @@ QwBEAF8AUgBPAE0AAQBFAHgAcAByAGUAcwBzAA==
 		<col def="I2">Sequence</col>
 		<col def="L255">Command</col>
 		<col def="L255">Argument</col>
-		<row><td>mayhem</td><td>Open</td><td/><td/><td>"%1"</td></row>
+		<row><td>mayhem</td><td>Open</td><td/><td>&amp;Install with Mayhem</td><td>"%1"</td></row>
 	</table>
 
 	<table name="_Validation">

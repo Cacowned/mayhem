@@ -63,16 +63,16 @@ namespace Mayhem
 					{
 						packageManager.InstallPackage(Package, ignoreDependencies: false);
 						packageManager.Logger.Log(MessageLevel.Info, "Finished installing. You may now close this window.");
-
-						Dispatcher.Invoke((Action)delegate
-						{
-							buttonClose.IsEnabled = true;
-						});
 					}
-					catch (WebException exception)
+					catch (WebException)
 					{
 						packageManager.Logger.Log(MessageLevel.Error, "Could not connect to server.");
 					}
+
+					Dispatcher.Invoke((Action)delegate
+					{
+						buttonClose.IsEnabled = true;
+					});
 				});
 			}
 			catch (Exception ex)
