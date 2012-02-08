@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Deployment.Application;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +11,6 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using System.Reflection;
 
 namespace Mayhem
 {

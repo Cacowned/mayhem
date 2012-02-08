@@ -32,15 +32,7 @@ namespace Updater
 			get
 			{
 				//installPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem", "Packages");
-				return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\");
-			}
-		}
-
-		public static string SettingsPath
-		{
-			get
-			{
-				return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", "settings.xml");
+				return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..");
 			}
 		}
 
