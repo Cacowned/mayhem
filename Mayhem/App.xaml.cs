@@ -31,7 +31,6 @@ namespace Mayhem
 
 		private static void RunElevated(string fileName, string arguments = "")
 		{
-			//MessageBox.Show("Run: " + fileName); 
 			ProcessStartInfo processInfo = new ProcessStartInfo();
 			processInfo.Verb = "runas";
 			processInfo.FileName = fileName;
@@ -50,6 +49,8 @@ namespace Mayhem
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+			//MessageBox.Show("Attach");
 
 			if (e.Args.Length == 1)
 			{

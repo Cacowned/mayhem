@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using NuGet;
 
@@ -48,9 +49,9 @@ namespace Updater
 					}
 				}
 			}
-			catch (Exception erf)
+			catch (WebException)
 			{
-				Debug.WriteLine(erf);
+				MessageBox.Show("Server is unavailable. Please try again later.");
 			}
 
 			try
