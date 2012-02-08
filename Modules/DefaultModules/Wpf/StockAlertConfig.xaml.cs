@@ -1,7 +1,4 @@
-﻿// This is the configuration dialog responsible for error-checking
-// and user-specified information-gaterhing used in conjunction with StockAlert.cs
-
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Threading;
 using System.Xml;
@@ -9,6 +6,10 @@ using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
 {
+    /// <summary>
+    /// This is the configuration dialog responsible for error-checking
+    /// and user-specified information-gaterhing used in conjunction with StockAlert.cs
+    /// </summary>
     public partial class StockAlertConfig : WpfConfiguration
     {
         public string StockSymbolProp
@@ -52,12 +53,14 @@ namespace DefaultModules.Wpf
         private DispatcherTimer timer;
         private XmlReader stockData;
 
-        // Takes: 
-        // string -> stock symbol
-        // double -> stock price
-        // bool   -> true if watching for change in price, false if watching stock price (no delta)
-        // bool   -> wether to watch above or below target price / change
-        // bool   -> trigger once or every time
+        /// <summary>
+        /// Creates the configuration dialog for StockAlert
+        /// </summary>
+        /// <param name="stockSymbol">stock symbol</param>
+        /// <param name="stockPrice">stock price</param>
+        /// <param name="changeParam">true if watching for change in price, false if watching stock price (no delta)</param>
+        /// <param name="abovePrice">whether to watch above or below target price / change</param>
+        /// <param name="alwaysTrigger">trigger once or every time</param>
         public StockAlertConfig(string stockSymbol, double stockPrice, bool changeParam, bool abovePrice, bool alwaysTrigger)
         {
             StockSymbolProp = stockSymbol;
@@ -112,8 +115,10 @@ namespace DefaultModules.Wpf
             ConnectedToInternet();
         }
 
-        // Check that the stock price length is over 0 (not blank) and that it is a number
-        // positive if checking last trade, pos or neg if checking change in price
+        /// <summary>
+        /// Check that the stock price length is over 0 (not blank) and that it is a number
+        /// positive if checking last trade, pos or neg if checking change in price
+        /// </summary>
         private void VerifyFields()
         {
             string error = "Invalid";
@@ -138,8 +143,10 @@ namespace DefaultModules.Wpf
             TextChanged(error);
         }
 
-        // The api returns xml but no company name if the stock does not exist,
-        // returns true if the stock exitst
+        /// <summary>
+        /// The api returns xml but no company name if the stock does not exist,
+        /// returns true if the stock exitst
+        /// </summary>
         private bool IsValidStock()
         {
             try
@@ -178,7 +185,9 @@ namespace DefaultModules.Wpf
             }
         }
 
-        // Parses xml for current price and company name
+        /// <summary>
+        /// Parses xml for current price and company name
+        /// </summary>
         private void CheckStock()
         {
             string companyName = stockData.GetAttribute("data");
@@ -192,7 +201,9 @@ namespace DefaultModules.Wpf
             stockData.Close();
         }
 
-        // If the stock name is changed, verify fields and update 
+        /// <summary>
+        /// If the stock name is changed, verify fields and update 
+        /// </summary>
         private void Stock_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (ConnectedToInternet())
@@ -207,14 +218,19 @@ namespace DefaultModules.Wpf
             }
         }
 
-        // When the asking price is changed
+        /// <summary>
+        /// When the asking price is changed
+        /// </summary>
         private void UpdateAsking(object sender, RoutedEventArgs e)
         {
             ChangeProp = !(bool)LastTrade.IsChecked;
             VerifyFields();
         }
 
-        // Checks for an internet connection
+        /// <summary>
+        /// Checks for an internet connection
+        /// </summary>
+        /// <returns>true if there is a current Internet connection</returns>
         private bool ConnectedToInternet()
         {
             try

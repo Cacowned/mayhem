@@ -1,7 +1,4 @@
-﻿// This module allows a user to enter an URL for a RSS feed
-// and will trigger when that feed has been updated.
-
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
@@ -21,6 +18,10 @@ namespace DefaultModules.Events
     [DataContract]
     [MayhemModule("RSS Feed Alert", "Triggers when feed updates")]
 
+    /// <summary>
+    /// This module allows a user to enter an URL for a RSS feed
+    /// and will trigger when that feed has been updated.
+    /// </summary>
     public class FeedAlert : EventBase, IWpfConfigurable
     {
         [DataMember]
@@ -51,20 +52,26 @@ namespace DefaultModules.Events
             feedData = "";
         }
 
-        // Watching {Tile of feed} feed
+        /// <summary>
+        /// Watching {Tile of feed} feed
+        /// </summary>
         public string GetConfigString()
         {
             return String.Format("Watching {0} feed", feedTitle);
         }
 
-        // Default feed URL is the new york times home page
+        /// <summary>
+        /// Default feed URL is the new york times home page
+        /// </summary>
         protected override void OnLoadDefaults()
         {
             feedUrl = "http://feeds.nytimes.com/nyt/rss/HomePage";
             feedData = String.Empty;
         }
 
-        // Start the feed checking timer, checks once every two minutes
+        /// <summary>
+        /// Start the feed checking timer, checks once every two minutes
+        /// </summary>
         protected override void OnAfterLoad()
         {
             timer = new DispatcherTimer();
@@ -88,7 +95,9 @@ namespace DefaultModules.Events
         }
         #endregion
 
-        // Checks if there are any changes to the RSS feed that is being watched
+        /// <summary>
+        /// Checks if there are any changes to the RSS feed that is being watched
+        /// </summary>
         private void CheckFeed(object sender, EventArgs e)
         {
             // Test for internet connection
@@ -130,9 +139,13 @@ namespace DefaultModules.Events
             }
         }
 
-        // recursive helper method that parses all Title Values from RSS feed of item elements
-        // combined all the titles together because rss some RSS feeds do not update linerally
-        // i.e. the second item could update with the first item unchanged
+        /// <summary>
+        /// recursive helper method that parses all Title Values from RSS feed of item elements
+        /// combined all the titles together because rss some RSS feeds do not update linerally
+        /// i.e. the second item could update with the first item unchanged
+        /// </summary>
+        /// <param name="node">The xml document to get all title tags of</param> 
+        /// <returns>the contents of the tile elements as a string</returns>
         private string GetTitles(XmlNode node)
         {
             if (node.Name == "item")

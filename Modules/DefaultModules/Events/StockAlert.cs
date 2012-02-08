@@ -1,10 +1,4 @@
-﻿// This module allows a user to enter a stock symbol
-// trigger price, and allows them to choose if they 
-// want an event to trigger when that price is passed while going down
-// or passed while going up. The user can also specify a change in price (delta)
-// to watch and wether to trigger when the delta is more or less than they specify.
-
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
@@ -24,6 +18,13 @@ namespace DefaultModules.Events
     [DataContract]
     [MayhemModule("Stock Alert", "Monitors changes in stock prices")]
 
+    /// <summary>
+    /// This module allows a user to enter a stock symbol
+    /// trigger price, and allows them to choose if they 
+    /// want an event to trigger when that price is passed while going down
+    /// or passed while going up. The user can also specify a change in price (delta)
+    /// to watch and wether to trigger when the delta is more or less than they specify.
+    /// <summary>
     public class StockAlert : EventBase, IWpfConfigurable
     {
         [DataMember]
@@ -63,7 +64,9 @@ namespace DefaultModules.Events
             get { return new StockAlertConfig(stockSymbol, stockPrice, changeParam, abovePrice, triggerEvery); }
         }
 
-        // {Stock symbol} for {change or last trade} {above or below} ${price}
+        /// <summary>
+        /// {Stock symbol} for {change or last trade} {above or below} ${price}
+        /// </summary>
         public string GetConfigString()
         {
             string above_below = abovePrice ? "above " : "below ";
@@ -71,9 +74,11 @@ namespace DefaultModules.Events
             return String.Format("{0} for {1} {2} ${3}", stockSymbol, change, above_below, stockPrice);
         }
 
-        // Default stock Microsoft, price of 32.05
-        // watching below, not watching delta and trigger on
-        // every pass is true
+        /// <summary>
+        /// Default stock Microsoft, price of 32.05
+        /// watching below, not watching delta and trigger on
+        /// every pass is true
+        /// </summary>
         protected override void OnLoadDefaults()
         {
             stockSymbol = "MSFT";
@@ -109,8 +114,10 @@ namespace DefaultModules.Events
         }
         #endregion
 
-        // Retrieve the stock price or delta (change in price)
-        // depending on what the user specified to watch for
+        /// <summary>
+        /// Retrieve the stock price or delta (change in price)
+        /// depending on what the user specified to watch for
+        /// </summary>
         private void CheckStock(object sender, EventArgs e)
         {
             // Test for internet connection
