@@ -58,6 +58,7 @@ namespace Mayhem
 				WindowsPrincipal pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
 				
 				string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+				string currentFolder = Environment.CurrentDirectory;
 
 				if (!pricipal.IsInRole(WindowsBuiltInRole.Administrator))
 				{
@@ -68,7 +69,7 @@ namespace Mayhem
 					if (e.Args[0] == "-install")
 					{
 						if (!FileAssociation.IsAssociated(".mayhem"))
-							FileAssociation.Associate(".mayhem", "mayhem.package", "mayhem package", "Mayhem.ico", "Mayhem.exe");
+							FileAssociation.Associate(".mayhem", "mayhem.package", "mayhem package", Path.Combine(currentFolder, "Mayhem.ico"), Path.Combine(currentFolder, "Mayhem.exe"));
 					}
 					else
 					{
@@ -88,7 +89,7 @@ namespace Mayhem
 					}
 				}
 
-				// Close the application 
+				// Close the application a
 				Shutdown();
 				return;
 			}
