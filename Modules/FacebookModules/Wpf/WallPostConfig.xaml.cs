@@ -28,7 +28,7 @@ namespace FacebookModules.Wpf
 
         private const string appId = "156845751071300";
         private string[] extendedPermissions = new[] { "user_about_me", "offline_access" };
-        private Facebook.FacebookAPI api;
+        private Facebook.FacebookOAuthResult result;
 
         public WallPostConfig()
         {
@@ -48,7 +48,6 @@ namespace FacebookModules.Wpf
             TokenProp = "AAACOpn9G8kQBAGwVp51kgtSJx9DaZA9A3afryspA4Gpsz2EFt8EQWd2vx0aSpvehH6jZC8TeuHNMFNZBia61MeM7VDKSuoZD";
             // otherwise make this null or blank, to check in CS file
 
-            api = new Facebook.FacebookAPI(TokenProp);
             LoginAttempt();
 
             //webBrowser.Visibility = Visibility;
@@ -95,9 +94,11 @@ namespace FacebookModules.Wpf
         /// </summary>
         private void LoadUser()
         {
-            JSONObject me = api.Get("/me");
-            string uId = me.Dictionary["id"].String;
-            User_Info.Text = me.Dictionary["name"].String;
+            var fb = new FacebookClient(TokenProp);
+
+            dynamic result = fb.Get("/me");
+            var uId = result.id;
+            User_Info.Text = result.name;
 
             BitmapImage bi = new BitmapImage();
             bi.BeginInit();

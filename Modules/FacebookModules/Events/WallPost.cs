@@ -1,15 +1,13 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
+using System.Windows.Threading;
 using Facebook;
+using FacebookModules.LowLevel;
+using FacebookModules.Resources;
+using FacebookModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Windows.Forms;
-using System.Windows.Media.Imaging;
-using FacebookModules.Wpf;
-using System.Windows.Threading;
-using System;
-using FacebookModules.LowLevel;
-using FacebookModules.Resources;
 
 namespace FacebookModules.Events
 {
@@ -22,7 +20,9 @@ namespace FacebookModules.Events
 
         private DispatcherTimer timer;
 
-        private Facebook.FacebookAPI api;
+        //private Facebook.FacebookAPI api;
+        private Facebook.FacebookOAuthResult api;
+
         private string userName;
         private string postId;
 
@@ -32,7 +32,7 @@ namespace FacebookModules.Events
 
         protected override void OnAfterLoad()
         {
-            api = new Facebook.FacebookAPI(token);
+            //api = new Facebook.FacebookAPI(token);
             postId = null;
 
             timer = new DispatcherTimer();
@@ -48,8 +48,12 @@ namespace FacebookModules.Events
         {
             if (Utilities.ConnectedToInternet())
             {
-                JSONObject me = api.Get("/me/feed");
-                string latestPostId = me.Dictionary["data"].Array[0].Dictionary["id"].String;
+                var fb = new FacebookClient(api.AccessToken);
+
+                dynamic result = fb.Get("/me/feed");
+                var name = result.name;
+
+                string latestPostId =  ""; // result....;
 
                 if (postId == null)
                     postId = latestPostId;
