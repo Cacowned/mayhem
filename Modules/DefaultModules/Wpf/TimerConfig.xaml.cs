@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 using MayhemWpf.UserControls;
 
 namespace DefaultModules.Wpf
@@ -41,9 +42,9 @@ namespace DefaultModules.Wpf
 
 		public override void OnLoad()
 		{
-			HoursBox.Text = Hours.ToString();
-			MinutesBox.Text = Minutes.ToString();
-			SecondsBox.Text = Seconds.ToString();
+			HoursBox.Text = Hours.ToString(CultureInfo.InvariantCulture);
+			MinutesBox.Text = Minutes.ToString(CultureInfo.InvariantCulture);
+			SecondsBox.Text = Seconds.ToString(CultureInfo.InvariantCulture);
 
 			shouldCheckValidity = true;
 		}
