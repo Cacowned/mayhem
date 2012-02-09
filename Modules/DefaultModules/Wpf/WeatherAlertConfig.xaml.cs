@@ -251,9 +251,6 @@ namespace DefaultModules.Wpf
         /// again connected, checks for valid text fields
         /// </summary>
         #region CheckInternet
-        [DllImport("wininet.dll")]
-        private static extern bool InternetGetConnectedState(out int desciption, int reservedValue);
-
         private bool ConnectedToInternet()
         {
             try
