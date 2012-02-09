@@ -35,7 +35,6 @@
         
         <Image Name="WeatherIcon" Source="http://www.google.com/ig/images/weather/chance_of_rain.gif" Grid.Column="2" Grid.RowSpan="3" Height="75" Grid.Row="2" />
         
-        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
-        
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Center" />
     </Grid>
 </src:WpfConfiguration>
