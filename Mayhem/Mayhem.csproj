@@ -108,6 +108,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FileAssociation.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="InstallStart.xaml.cs">
       <DependentUpon>InstallStart.xaml</DependentUpon>

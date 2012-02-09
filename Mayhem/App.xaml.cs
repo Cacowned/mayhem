@@ -54,29 +54,37 @@ namespace Mayhem
 
 			if (e.Args.Length == 1)
 			{
-				// One argument, it's a file location
-
+				// If we have a parameter, restart in admin mode if we aren't already
 				WindowsPrincipal pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+				
+				string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
 
 				if (!pricipal.IsInRole(WindowsBuiltInRole.Administrator))
 				{
-					string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
-
 					RunElevated(Path.Combine(path, "Mayhem.exe"), e.Args[0]);
 				}
 				else
 				{
-					LoadDependencies();
-
-					string packageFile = e.Args[0];
-
-					ZipPackage zipFile = new ZipPackage(packageFile);
-
-					InstallModule window = new InstallModule(zipFile);
-
-					if (window.ShowDialog() == true)
+					if (e.Args[0] == "-install")
 					{
-						// Installation was a success
+						if (!FileAssociation.IsAssociated(".mayhem"))
+							FileAssociation.Associate(".mayhem", "mayhem.package", "mayhem package", "Mayhem.ico", "Mayhem.exe");
+					}
+					else
+					{
+						// it's a file location
+						LoadDependencies();
+
+						string packageFile = e.Args[0];
+
+						ZipPackage zipFile = new ZipPackage(packageFile);
+
+						InstallModule window = new InstallModule(zipFile);
+
+						if (window.ShowDialog() == true)
+						{
+							// Installation was a success
+						}
 					}
 				}
 
@@ -86,8 +94,6 @@ namespace Mayhem
 			}
 
 			ThreadPool.QueueUserWorkItem(CheckForUpdates);
-
-			FileWatcher watcher = new FileWatcher(MayhemNuget.InstallPath, LoadDependencies);
 
 			// Load the correct dependency assemblies
 			LoadDependencies();
