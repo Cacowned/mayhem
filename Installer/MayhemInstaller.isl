@@ -341,23 +341,23 @@
 		<col def="S0">ISDotNetInstallerArgsCommit</col>
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
-		<row><td>DefaultModules.dll</td><td>{00A21E82-D522-4AD2-A463-CD8BF3DDB47B}</td><td>NET40</td><td>2</td><td/><td>defaultmodules.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT</td><td>{E1D40114-6D7D-4BF9-A353-60AE9FC0E9A2}</td><td>DEFAULTMODULES.1.0</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{D3431885-7927-458C-A77B-F860AB3E7BDA}</td><td>LIB</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT10</td><td>{D98BFA44-BAE6-40E0-9FB7-DCA83F7EF439}</td><td>NET402</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>DefaultModules.dll</td><td>{FAAB1384-9E48-4FFA-BBE1-78CA28B09B7C}</td><td>NET40</td><td>2</td><td/><td>defaultmodules.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT</td><td>{A1529F60-F108-445F-BA6C-43131FE51697}</td><td>DEFAULTMODULES.1.0</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{19EDEC26-57C8-4CF5-B701-E99A89CCA8E1}</td><td>LIB</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT10</td><td>{116C3537-F0AF-4033-92F1-164E159BE6E0}</td><td>NET402</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT11</td><td>{81FB37E3-926D-411C-905B-33F522BCEEFA}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{2FD7483F-9005-42CF-9096-1CE91836DB1D}</td><td>NET40</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT3</td><td>{803989BF-CBF8-4EC3-B9BC-8520F71EDC43}</td><td>MAYHEM1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT4</td><td>{CDECCD99-3989-4E16-8D8E-256A04017A3B}</td><td>CONTENT</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT5</td><td>{E97938FC-6156-4522-B3C2-47F500C2410A}</td><td>MAYHEMCORE.1.0</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT6</td><td>{D283D778-8FF8-4E3F-9D9E-88A40D4DCBD4}</td><td>LIB1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT7</td><td>{D3555933-32F7-4492-87BB-89615EBC49F4}</td><td>NET401</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT8</td><td>{43B433BB-74C5-4193-A95A-4F6D91424BE0}</td><td>MAYHEMWPF.1.0</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT9</td><td>{920A7BCD-1608-443E-96F9-75339CDDDA29}</td><td>LIB2</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Mayhem.exe</td><td>{C8E02DEB-2E07-4AE4-8F48-C9DF79757809}</td><td>CONTENT</td><td>2</td><td/><td>mayhem.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>MayhemCore.dll</td><td>{5BA10F41-C038-4DC6-9F40-49075C3FB1A7}</td><td>NET401</td><td>2</td><td/><td>mayhemcore.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>MayhemWpf.dll</td><td>{246ED05E-4ABD-419D-ABD4-B933943016C8}</td><td>NET402</td><td>2</td><td/><td>mayhemwpf.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>NuGet.Core.dll</td><td>{DE255F2C-E8FB-43CB-B86D-FAC5FE330D86}</td><td>CONTENT</td><td>2</td><td/><td>nuget.core.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{8F2DDFD7-009A-4ECE-8370-1AF03A5A50ED}</td><td>NET40</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT3</td><td>{9DE59947-5FBC-4E25-A2FE-F140C7CA66CF}</td><td>MAYHEM1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT4</td><td>{49BACB30-2DEE-4AF9-B7C2-B7F4190837E8}</td><td>CONTENT</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT5</td><td>{AA962921-8C92-49BF-9C94-43235CDFB7E4}</td><td>MAYHEMCORE.1.0</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT6</td><td>{6CE8AB9C-B840-4B61-AB3A-EBFF29206A65}</td><td>LIB1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT7</td><td>{30052963-1D4F-48AA-892F-06750F47C95F}</td><td>NET401</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT8</td><td>{CA594C90-CE47-4A88-95AD-841D0313C2BC}</td><td>MAYHEMWPF.1.0</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT9</td><td>{A64C150B-1FE4-4ECA-9B5F-AF1369E53BF1}</td><td>LIB2</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>Mayhem.exe</td><td>{9EC42AA7-A5C2-4BD6-8209-8EC0269F5224}</td><td>CONTENT</td><td>2</td><td/><td>mayhem.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>MayhemCore.dll</td><td>{CBDE5682-FAF3-44E5-9514-932DB3424BE6}</td><td>NET401</td><td>2</td><td/><td>mayhemcore.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>MayhemWpf.dll</td><td>{B81412BC-D6FC-42DC-B7F3-4DF59BACF6D4}</td><td>NET402</td><td>2</td><td/><td>mayhemwpf.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>NuGet.Core.dll</td><td>{A1939204-39CB-4E46-B21D-EBAD38EFCCA1}</td><td>CONTENT</td><td>2</td><td/><td>nuget.core.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
 	<table name="Condition">
@@ -1091,6 +1091,7 @@
 		<row><td>ISSelfRegisterFinalize</td><td>1</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterFinalize</td><td/><td/></row>
 		<row><td>ISUnSelfRegisterFiles</td><td>3073</td><td>ISSELFREG.DLL</td><td>ISUnSelfRegisterFiles</td><td/><td/></row>
 		<row><td>LaunchProgramFileFromSetupCompleteSuccess</td><td>1</td><td>NewBinary19</td><td>LaunchProgram</td><td/><td/></row>
+		<row><td>NewCustomAction2</td><td>2</td><td/><td/><td/><td/></row>
 		<row><td>SetARPINSTALLLOCATION</td><td>51</td><td>ARPINSTALLLOCATION</td><td>[INSTALLDIR]</td><td/><td/></row>
 		<row><td>SetAllUsersProfileNT</td><td>51</td><td>ALLUSERSPROFILE</td><td>[%SystemRoot]\Profiles\All Users</td><td/><td/></row>
 		<row><td>ShowMsiLog</td><td>226</td><td>SystemFolder</td><td>[SystemFolder]notepad.exe "[MsiLogFileLocation]"</td><td/><td>Shows Property-driven MSI Log</td></row>
@@ -1874,7 +1875,7 @@
 		<col def="S255">ProgId_</col>
 		<col def="S64">MIME_</col>
 		<col def="s38">Feature_</col>
-		<row><td>mayhem</td><td>Mayhem.exe</td><td>mayhem.file</td><td/><td>AlwaysInstall</td></row>
+		<row><td>mayhem</td><td>ISX_DEFAULTCOMPONENT11</td><td>ext1.File</td><td/><td>AlwaysInstall</td></row>
 	</table>
 
 	<table name="Feature">
@@ -1927,16 +1928,16 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
-		<row><td>defaultmodules.1.0.nupkg</td><td>ISX_DEFAULTCOMPONENT</td><td>DEFAUL~1.NUP|DefaultModules.1.0.nupkg</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\DefaultModules.1.0\DefaultModules.1.0.nupkg</td><td>1</td><td/></row>
-		<row><td>defaultmodules.dll</td><td>DefaultModules.dll</td><td>DEFAUL~1.DLL|DefaultModules.dll</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\DefaultModules.1.0\lib\net40\DefaultModules.dll</td><td>1</td><td/></row>
-		<row><td>mayhem.1.0.16.nupkg</td><td>ISX_DEFAULTCOMPONENT3</td><td>MAYHEM~1.NUP|Mayhem.1.0.16.nupkg</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\Mayhem\Mayhem.1.0.16.nupkg</td><td>1</td><td/></row>
-		<row><td>mayhem.exe</td><td>Mayhem.exe</td><td>Mayhem.exe</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\Mayhem\content\Mayhem.exe</td><td>1</td><td/></row>
-		<row><td>mayhem.ico</td><td>ISX_DEFAULTCOMPONENT4</td><td>Mayhem.ico</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\Mayhem\content\Mayhem.ico</td><td>1</td><td/></row>
-		<row><td>mayhemcore.1.0.nupkg</td><td>ISX_DEFAULTCOMPONENT5</td><td>MAYHEM~1.NUP|MayhemCore.1.0.nupkg</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\MayhemCore.1.0\MayhemCore.1.0.nupkg</td><td>1</td><td/></row>
-		<row><td>mayhemcore.dll</td><td>MayhemCore.dll</td><td>MAYHEM~1.DLL|MayhemCore.dll</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\MayhemCore.1.0\lib\net40\MayhemCore.dll</td><td>1</td><td/></row>
-		<row><td>mayhemwpf.1.0.nupkg</td><td>ISX_DEFAULTCOMPONENT8</td><td>MAYHEM~1.NUP|MayhemWpf.1.0.nupkg</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\MayhemWpf.1.0\MayhemWpf.1.0.nupkg</td><td>1</td><td/></row>
-		<row><td>mayhemwpf.dll</td><td>MayhemWpf.dll</td><td>MAYHEM~1.DLL|MayhemWpf.dll</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\MayhemWpf.1.0\lib\net40\MayhemWpf.dll</td><td>1</td><td/></row>
-		<row><td>nuget.core.dll</td><td>NuGet.Core.dll</td><td>NUGETC~1.DLL|NuGet.Core.dll</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\Mayhem\content\NuGet.Core.dll</td><td>1</td><td/></row>
+		<row><td>defaultmodules.1.0.nupkg</td><td>ISX_DEFAULTCOMPONENT</td><td>DEFAUL~1.NUP|DefaultModules.1.0.nupkg</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\release\DefaultModules.1.0\DefaultModules.1.0.nupkg</td><td>1</td><td/></row>
+		<row><td>defaultmodules.dll</td><td>DefaultModules.dll</td><td>DEFAUL~1.DLL|DefaultModules.dll</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\release\DefaultModules.1.0\lib\net40\DefaultModules.dll</td><td>1</td><td/></row>
+		<row><td>mayhem.1.0.19.nupkg</td><td>ISX_DEFAULTCOMPONENT3</td><td>MAYHEM~1.NUP|Mayhem.1.0.19.nupkg</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\release\Mayhem\Mayhem.1.0.19.nupkg</td><td>1</td><td/></row>
+		<row><td>mayhem.exe</td><td>Mayhem.exe</td><td>Mayhem.exe</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\release\Mayhem\content\Mayhem.exe</td><td>1</td><td/></row>
+		<row><td>mayhem.ico</td><td>ISX_DEFAULTCOMPONENT4</td><td>Mayhem.ico</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\release\Mayhem\content\Mayhem.ico</td><td>1</td><td/></row>
+		<row><td>mayhemcore.1.0.nupkg</td><td>ISX_DEFAULTCOMPONENT5</td><td>MAYHEM~1.NUP|MayhemCore.1.0.nupkg</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\release\MayhemCore.1.0\MayhemCore.1.0.nupkg</td><td>1</td><td/></row>
+		<row><td>mayhemcore.dll</td><td>MayhemCore.dll</td><td>MAYHEM~1.DLL|MayhemCore.dll</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\release\MayhemCore.1.0\lib\net40\MayhemCore.dll</td><td>1</td><td/></row>
+		<row><td>mayhemwpf.1.0.nupkg</td><td>ISX_DEFAULTCOMPONENT8</td><td>MAYHEM~1.NUP|MayhemWpf.1.0.nupkg</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\release\MayhemWpf.1.0\MayhemWpf.1.0.nupkg</td><td>1</td><td/></row>
+		<row><td>mayhemwpf.dll</td><td>MayhemWpf.dll</td><td>MAYHEM~1.DLL|MayhemWpf.dll</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\release\MayhemWpf.1.0\lib\net40\MayhemWpf.dll</td><td>1</td><td/></row>
+		<row><td>nuget.core.dll</td><td>NuGet.Core.dll</td><td>NUGETC~1.DLL|NuGet.Core.dll</td><td>0</td><td/><td/><td/><td>1</td><td>G:\Users\Eli\Desktop\release\Mayhem\content\NuGet.Core.dll</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">
@@ -2193,23 +2194,23 @@
 		<col def="S0">FTPLocation</col>
 		<col def="S0">HTTPLocation</col>
 		<col def="S0">Miscellaneous</col>
-		<row><td>DefaultModules.dll</td><td/><td/><td>_D5CF4AEA_8D06_4DAB_9459_85BA7B98342A_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_6B685161_EF81_45D9_9BDE_ADC18C9A969D_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_60ECC93E_7183_445B_AB44_8D10507A76FE_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT10</td><td/><td/><td>_CBCFFA69_0769_4E67_B906_5E819C90C55C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>DefaultModules.dll</td><td/><td/><td>_624AA056_A264_4AD3_8C1E_626659237590_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_32DC5843_B5E2_41CD_B261_3F91EAB54CF9_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_1DA77691_2091_4D15_9D16_332612CC8DE0_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT10</td><td/><td/><td>_72B9D448_0B12_43ED_A9AC_B111E16CB802_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT11</td><td/><td/><td>_F54E1B2F_A49A_4ECE_9D4C_1AE95A371D7C_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_A5F82258_BDFA_4C66_A99D_166658A9F88E_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT3</td><td/><td/><td>_E3208FC8_47F8_402F_A662_BC5FE2226B33_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT4</td><td/><td/><td>_7A06B32B_3590_47C5_A272_FFDC9568D28F_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT5</td><td/><td/><td>_5A2C0ED3_E190_4C1A_95DC_5DA635C21C5B_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT6</td><td/><td/><td>_2337EF1A_5A68_43BC_86F4_A30B83A6D6E8_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT7</td><td/><td/><td>_41976DC7_2034_49DA_869E_A93A767918EE_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT8</td><td/><td/><td>_DCBE8EA7_37BC_4931_8870_87F245DB97C1_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT9</td><td/><td/><td>_724D88B3_1E35_4F04_A1A6_9F495DEFCD75_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Mayhem.exe</td><td/><td/><td>_E17482DA_6DD7_4BF9_B057_715FFEDCA74E_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>MayhemCore.dll</td><td/><td/><td>_82689337_2325_4CEA_BA21_642A55A6EB18_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>MayhemWpf.dll</td><td/><td/><td>_9652A0DE_D603_4DD5_A1DA_93A2D372D9AD_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>NuGet.Core.dll</td><td/><td/><td>_E7038B9A_D172_43E9_A06F_B9B12F9A340C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_E71473E0_9321_4177_AFDD_AC639BD4EA25_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT3</td><td/><td/><td>_998DB578_B03F_48C7_B22E_DAA3CAAB4EF8_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT4</td><td/><td/><td>_80A14C38_4283_47C2_9832_3D20D2513C4B_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT5</td><td/><td/><td>_011BC930_BF6E_46DE_83FF_BD8B21798926_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT6</td><td/><td/><td>_ACD8FFA5_8FC9_4299_8758_60C1C415F6DF_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT7</td><td/><td/><td>_B3F16645_04A9_4D69_9ABD_01DC3CBB68EB_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT8</td><td/><td/><td>_F1EB0A41_2771_4111_B94F_A642774A161A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT9</td><td/><td/><td>_4711E3A6_F815_426E_AAD4_4E321F72709C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>Mayhem.exe</td><td/><td/><td>_8ACE622D_FF42_45E6_98DB_63FB4E7C1787_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>MayhemCore.dll</td><td/><td/><td>_8D46212A_9EF6_41F4_AF6A_7C10C3D33DCE_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>MayhemWpf.dll</td><td/><td/><td>_4793A209_4B47_4525_824E_75152205FDEC_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>NuGet.Core.dll</td><td/><td/><td>_D99131DA_05CB_43F3_9C66_E0E62BB2321D_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="ISCustomActionReference">
@@ -3940,8 +3941,11 @@
 		<row><td>ID_STRING5</td><td>1033</td><td>Mayhem.exe</td><td>0</td><td/><td>153146967</td></row>
 		<row><td>ID_STRING6</td><td>1033</td><td>Mayhem</td><td>0</td><td/><td>689968524</td></row>
 		<row><td>ID_STRING7</td><td>1033</td><td>Mayhem</td><td>0</td><td/><td>689982860</td></row>
+		<row><td>ID_STRING8</td><td>1033</td><td>Mayhem</td><td>0</td><td/><td>1092626737</td></row>
+		<row><td>ID_STRING9</td><td>1033</td><td>Mayhem</td><td>0</td><td/><td>1092647217</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>1033</td><td>This feature will remain uninstalled.</td><td>0</td><td/><td>153101815</td></row>
 		<row><td>NEW_STRING1</td><td>1033</td><td>mayhem</td><td>0</td><td/><td>287365152</td></row>
+		<row><td>NEW_STRING2</td><td>1033</td><td>mayhem</td><td>0</td><td/><td>1092628817</td></row>
 	</table>
 
 	<table name="ISTargetImage">
@@ -4047,8 +4051,10 @@
 		<row><td>Mayhem.exe_628E75689448403A9A2233005876D55A.exe</td><td/><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\Mayhem\content\Mayhem.exe</td><td>0</td></row>
 		<row><td>Mayhem.exe_85D812A84E08462CA744862C95050B6B.exe</td><td/><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\Mayhem.1.0.9\content\Mayhem.exe</td><td>0</td></row>
 		<row><td>Mayhem.exe_AE70E733B627463DA3DC1BFA99D74999.exe</td><td/><td>G:\Users\Eli\Desktop\Add\Mayhem\content\Mayhem.exe</td><td>0</td></row>
+		<row><td>NewShortcut1_713B4124AA344B99949B9E37DC40820E.exe</td><td/><td>G:\Users\Eli\Desktop\release\Mayhem\content\Mayhem.exe</td><td>0</td></row>
 		<row><td>NewShortcut1_F4DE2472230E41FA867EF57304383417.exe</td><td/><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\Mayhem\content\Mayhem.exe</td><td>0</td></row>
 		<row><td>NewShortcut2_37F16EA0235C47F4920214A55A4A9D2E.exe</td><td/><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\bin\Mayhem\content\Mayhem.exe</td><td>0</td></row>
+		<row><td>NewShortcut2_4B361D290FBA49CC9164BA4A0E197BC7.exe</td><td/><td>G:\Users\Eli\Desktop\release\Mayhem\content\Mayhem.exe</td><td>0</td></row>
 		<row><td>_4AA3A730_4F69_4F7C_8D81_3C264391227C</td><td/><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\Mayhem\Mayhem.ico</td><td>0</td></row>
 		<row><td>_C102DE48_A214_4DA9_85CB_369F42D4E887</td><td/><td>G:\Users\Eli\Desktop\MayhemDev\Mayhem\Mayhem\Mayhem.ico</td><td>0</td></row>
 	</table>
@@ -4182,7 +4188,7 @@ QwBEAF8AUgBPAE0AAQBFAHgAcAByAGUAcwBzAA==
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{30CA77F2-566F-4310-922E-A066ED0ED369}</td></row>
 		<row><td>ISUSSignature</td><td>{E02A6336-6256-4233-A67B-36B9DA8DF9BC}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewRealSetupDesign,viewSetupDesign,viewSetupTypes,viewUpgradePaths,viewUpdateService,viewFileExtensions,viewUI,viewBillboards,viewTextMessages,viewSystemSearch,viewInstallScriptStd,viewRelease,viewDesignPatches,viewXMLConfig,viewAppV,viewAppFiles,viewFeatureFiles,viewObjects,viewDependencies,viewCE,viewShortcuts,viewRegistry,viewIniFiles,viewTextFiles,viewEnvironmentVariables,viewVRoots,viewSQLServer,viewComponentServices,viewCustomActions,viewISToday</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewRealSetupDesign,viewSetupDesign,viewSetupTypes,viewUpgradePaths,viewUpdateService,viewFileExtensions,viewUI,viewBillboards,viewTextMessages,viewSystemSearch,viewInstallScriptStd,viewRelease,viewDesignPatches,viewXMLConfig,viewAppV,viewAppFiles,viewFeatureFiles,viewObjects,viewDependencies,viewCE,viewShortcuts,viewRegistry,viewIniFiles,viewTextFiles,viewEnvironmentVariables,viewVRoots,viewSQLServer,viewComponentServices,viewCustomActions,viewISToday,viewSupportFiles</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>
@@ -4217,6 +4223,7 @@ QwBEAF8AUgBPAE0AAQBFAHgAcAByAGUAcwBzAA==
 		<row><td>LaunchConditions</td><td>Not Installed</td><td>410</td><td>LaunchConditions</td><td/></row>
 		<row><td>MaintenanceWelcome</td><td>Installed And Not RESUME And Not Preselected And Not PATCH</td><td>1230</td><td>MaintenanceWelcome</td><td/></row>
 		<row><td>MigrateFeatureStates</td><td/><td>1200</td><td>MigrateFeatureStates</td><td/></row>
+		<row><td>NewCustomAction2</td><td>Not Installed</td><td>1206</td><td/><td/></row>
 		<row><td>PatchWelcome</td><td>Installed And PATCH And Not IS_MAJOR_UPGRADE</td><td>1205</td><td>Patch Panel</td><td/></row>
 		<row><td>RMCCPSearch</td><td>Not CCP_SUCCESS And CCP_TEST</td><td>600</td><td>RMCCPSearch</td><td/></row>
 		<row><td>ResolveSource</td><td>Not Installed</td><td>990</td><td>ResolveSource</td><td/></row>
@@ -4481,7 +4488,7 @@ QwBEAF8AUgBPAE0AAQBFAHgAcAByAGUAcwBzAA==
 		<col def="S72">Icon_</col>
 		<col def="I2">IconIndex</col>
 		<col def="I4">ISAttributes</col>
-		<row><td>mayhem.file</td><td/><td/><td>Mayhem Package File</td><td/><td/><td/></row>
+		<row><td>ext1.File</td><td/><td/><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="Property">
@@ -4639,7 +4646,7 @@ QwBEAF8AUgBPAE0AAQBFAHgAcAByAGUAcwBzAA==
 		<col def="L255">FileName</col>
 		<col def="s72">DirProperty</col>
 		<col def="i2">InstallMode</col>
-		<row><td>NewShortcut1</td><td>Mayhem.exe</td><td/><td>mayhem</td><td>2</td></row>
+		<row><td>NewShortcut2</td><td>Mayhem.exe</td><td/><td>mayhem</td><td>2</td></row>
 	</table>
 
 	<table name="RemoveIniFile">
@@ -4725,8 +4732,8 @@ QwBEAF8AUgBPAE0AAQBFAHgAcAByAGUAcwBzAA==
 		<col def="S255">ISComments</col>
 		<col def="S255">ISShortcutName</col>
 		<col def="I4">ISAttributes</col>
-		<row><td>NewShortcut1</td><td>mayhem</td><td>##ID_STRING6##</td><td>Mayhem.exe</td><td>[INSTALLDIR]Mayhem\content\Mayhem.exe</td><td/><td/><td/><td>NewShortcut1_F4DE2472230E41FA867EF57304383417.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>NewShortcut2</td><td>DesktopFolder</td><td>##ID_STRING7##</td><td>Mayhem.exe</td><td>[INSTALLDIR]Mayhem\content\Mayhem.exe</td><td/><td/><td/><td>NewShortcut2_37F16EA0235C47F4920214A55A4A9D2E.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>NewShortcut1</td><td>DesktopFolder</td><td>##ID_STRING8##</td><td>Mayhem.exe</td><td>[INSTALLDIR]Mayhem\content\Mayhem.exe</td><td/><td/><td/><td>NewShortcut1_713B4124AA344B99949B9E37DC40820E.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>NewShortcut2</td><td>mayhem</td><td>##ID_STRING9##</td><td>Mayhem.exe</td><td>[INSTALLDIR]Mayhem\content\Mayhem.exe</td><td/><td/><td/><td>NewShortcut2_4B361D290FBA49CC9164BA4A0E197BC7.exe</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="Signature">
@@ -4857,7 +4864,7 @@ QwBEAF8AUgBPAE0AAQBFAHgAcAByAGUAcwBzAA==
 		<col def="I2">Sequence</col>
 		<col def="L255">Command</col>
 		<col def="L255">Argument</col>
-		<row><td>mayhem</td><td>Open</td><td/><td>&amp;Install with Mayhem</td><td>"%1"</td></row>
+		<row><td>mayhem</td><td>open</td><td/><td>&amp;Install with Mayhem</td><td/></row>
 	</table>
 
 	<table name="_Validation">
