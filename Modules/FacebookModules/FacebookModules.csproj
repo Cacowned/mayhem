@@ -37,9 +37,6 @@
     <Reference Include="Facebook">
       <HintPath>..\..\packages\Facebook.5.4.1.0\lib\net40-client\Facebook.dll</HintPath>
     </Reference>
-    <Reference Include="FacebookAPI">
-      <HintPath>..\References\FacebookAPI.dll</HintPath>
-    </Reference>
     <Reference Include="MayhemCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
