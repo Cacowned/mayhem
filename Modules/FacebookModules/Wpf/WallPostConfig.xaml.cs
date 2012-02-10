@@ -28,7 +28,7 @@ namespace FacebookModules.Wpf
 
         private const string appId = "156845751071300";
         private string[] extendedPermissions = new[] { "user_about_me", "offline_access" };
-        private Facebook.FacebookOAuthResult result;
+       // private Facebook.FacebookOAuthResult result;
 
         public WallPostConfig()
         {

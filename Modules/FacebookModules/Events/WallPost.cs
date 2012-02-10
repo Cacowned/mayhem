@@ -12,15 +12,13 @@ using MayhemWpf.UserControls;
 namespace FacebookModules.Events
 {
     [DataContract]
-    [MayhemModule("Facebook", "Walls post Facebook app.")]
-    public class WallPost : EventBase, IWpfConfigurable
+    [MayhemModule("Facebook", "Watches for new wall posts")]
+    public class WallPost : FacebookEventBase, IWpfConfigurable
     {
         [DataMember]
         private string token;
 
         private DispatcherTimer timer;
-
-        //private Facebook.FacebookAPI api;
         private Facebook.FacebookOAuthResult api;
 
         private string userName;
@@ -48,12 +46,11 @@ namespace FacebookModules.Events
         {
             if (Utilities.ConnectedToInternet())
             {
-                var fb = new FacebookClient(api.AccessToken);
-
+                var fb = new FacebookClient(token); //api.AccessToken);
                 dynamic result = fb.Get("/me/feed");
-                var name = result.name;
 
-                string latestPostId =  ""; // result....;
+                // get the id of the most recent wall post
+                string latestPostId = result.data[0].id;
 
                 if (postId == null)
                     postId = latestPostId;
