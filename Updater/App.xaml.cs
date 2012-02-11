@@ -14,6 +14,7 @@ namespace Updater
 	{
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
+			//MessageBox.Show("Attach");
 			string root = @"..\..";
 
 			if (e.Args.Length > 0) {
@@ -23,7 +24,7 @@ namespace Updater
 			try
 			{
 				PackageManager manager = new PackageManager(MayhemNuget.Repository, root);
-				manager.InstallPackage("Mayhem");
+				//manager.InstallPackage("Mayhem");
 				//manager.InstallPackage("DebugModules");
 
 				List<IPackage> packagesLocal = manager.LocalRepository.GetPackages().ToList();
@@ -38,7 +39,11 @@ namespace Updater
 						if (package.Id == "Mayhem")
 						{
 							if (Directory.Exists(Path.Combine(root, "Mayhem")))
+							{
+								// We have to do this to unlock the directory
+								Directory.SetCurrentDirectory(root);
 								Directory.Delete(Path.Combine(root, "Mayhem"), true);
+							}
 
 							string[] directories = Directory.GetDirectories(root, package.Id+"."+package.Version);
 
