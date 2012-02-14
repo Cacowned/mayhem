@@ -16,8 +16,6 @@ namespace Mayhem
 	{
 		private readonly Dictionary<string, Assembly> dependencies;
 
-		private bool wantsUpdates;
-
 		private DateTime lastUpdated;
 
 
