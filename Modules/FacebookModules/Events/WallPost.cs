@@ -13,25 +13,27 @@ namespace FacebookModules.Events
 {
     [DataContract]
     [MayhemModule("Facebook", "Watches for new wall posts")]
-    public class WallPost : FacebookEventBase, IWpfConfigurable
+    public class PostOnWall : FacebookEventBase, IWpfConfigurable
     {
         [DataMember]
         private string token;
 
-        private DispatcherTimer timer;
-        private Facebook.FacebookOAuthResult api;
-
+        [DataMember]
         private string userName;
-        private string postId;
 
-        protected override void OnLoadDefaults()
-        {
-        }
+        private DispatcherTimer timer;
+
+        private string postId;
+        private FacebookClient fb;
 
         protected override void OnAfterLoad()
         {
-            //api = new Facebook.FacebookAPI(token);
             postId = null;
+
+            if (token != null)
+            {
+                fb = new FacebookClient(token);
+            }
 
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 5);
@@ -46,15 +48,16 @@ namespace FacebookModules.Events
         {
             if (Utilities.ConnectedToInternet())
             {
-                var fb = new FacebookClient(token); //api.AccessToken);
                 dynamic result = fb.Get("/me/feed");
 
                 // get the id of the most recent wall post
                 string latestPostId = result.data[0].id;
 
                 if (postId == null)
+                {
                     postId = latestPostId;
-                else if (!latestPostId.Equals(postId) || true)
+                }
+                else if (!latestPostId.Equals(postId)) // remove later TRUE for testing
                 {
                     postId = latestPostId;
                     Trigger();
@@ -87,19 +90,26 @@ namespace FacebookModules.Events
         /// <returns>Watching {User Name}'s wall for new posts</returns>
         public string GetConfigString()
         {
-            return String.Format("Watching {0}'s wall for new posts", userName);
+            return String.Format("Watching {0}'s wall", userName);
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = (WallPostConfig)configurationControl;
+            var config = (FacebookConfig)configurationControl;
             token = config.TokenProp;
-            userName = config.UserNameProp;
+
+            fb = new FacebookClient(token);
+
+            if (userName == null)
+            {
+                dynamic res = fb.Get("/me");
+                userName = res.name;
+            }
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new WallPostConfig(); }
+            get { return new FacebookConfig(token); }
         }
     }
 }
