@@ -6,31 +6,40 @@ using KinectModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using Microsoft.Research.Kinect.Audio;
+using Microsoft.Kinect;
 using Microsoft.Speech.AudioFormat;
 using Microsoft.Speech.Recognition;
 
 namespace KinectModules.Events
 {
-    [DataContract]
-    [MayhemModule("Kinect Speech Recognition", "Triggers when a phrase is heard")]
-    public class KinectSpeech : EventBase, IWpfConfigurable
-    {
-        [DataMember]
-        private string phrase;
+	[DataContract]
+	[MayhemModule("Kinect Speech Recognition", "Triggers when a phrase is heard")]
+	public class KinectSpeech : EventBase, IWpfConfigurable
+	{
+		[DataMember]
+		private string phrase;
 
-        private SpeechRecognitionEngine engine;
+		private KinectSensor sensor;
 
-        private KinectAudioSource source;
+		private SpeechRecognitionEngine engine;
 
-        private Stream stream;
+		private Stream stream;
 
-        protected override void OnEnabling(EnablingEventArgs e)
-        {
-			source = new KinectAudioSource();
-			source.FeatureMode = true;
-			source.AutomaticGainControl = false;
-			source.SystemMode = SystemMode.OptibeamArrayOnly;
+		protected override void OnEnabling(EnablingEventArgs e)
+		{
+			sensor = (from sensorToCheck in KinectSensor.KinectSensors where sensorToCheck.Status == KinectStatus.Connected select sensorToCheck).FirstOrDefault();
+			if (sensor == null)
+			{
+				ErrorLog.AddError(ErrorType.Failure, "Kinect not pluged in");
+				e.Cancel = true;
+				return;
+			}
+
+			sensor.Start();
+
+			KinectAudioSource source = sensor.AudioSource;
+			source.EchoCancellationMode = EchoCancellationMode.None;
+			source.AutomaticGainControlEnabled = false;
 
 			RecognizerInfo ri = GetKinectRecognizer();
 
@@ -44,7 +53,6 @@ namespace KinectModules.Events
 			try
 			{
 				engine = new SpeechRecognitionEngine(ri.Id);
-				engine.SpeechRecognized += RecognitionEngine_SpeechRecognized;
 			}
 			catch
 			{
@@ -52,52 +60,59 @@ namespace KinectModules.Events
 				e.Cancel = true;
 				return;
 			}
+
+			var choices = new Choices();
+			choices.Add(phrase);
+
+			var gb = new GrammarBuilder { Culture = ri.Culture };
+			gb.Append(choices);
+
+
+			Grammar grammar = new Grammar(gb);
 			
-			if (!string.IsNullOrEmpty(phrase))
+			engine.LoadGrammar(grammar);
+			engine.SpeechRecognized += RecognitionEngine_SpeechRecognized;
+
+
+			stream = source.Start();
+			engine.SetInputToAudioStream(stream,
+					new SpeechAudioFormatInfo(
+						EncodingFormat.Pcm, 16000, 16, 1,
+						32000, 2, null));
+
+			engine.RecognizeAsync(RecognizeMode.Multiple);
+		}
+
+		protected override void OnDisabled(DisabledEventArgs e)
+		{
+			engine.RecognizeAsyncCancel();
+			sensor.Stop();
+		}
+
+		public WpfConfiguration ConfigurationControl
+		{
+			get { return new KinectSpeechConfig(phrase); }
+		}
+
+		public void OnSaved(WpfConfiguration configurationControl)
+		{
+			var config = configurationControl as KinectSpeechConfig;
+			phrase = config.Phrase;
+		}
+
+		public string GetConfigString()
+		{
+			return phrase;
+		}
+
+		private void RecognitionEngine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+		{
+			Logger.WriteLine("Said: " + e.Result.Text + ", with " + e.Result.Confidence + " confidence");
+			if (e.Result.Confidence > .85)
 			{
-				Grammar grammar = new Grammar(new GrammarBuilder(phrase));
-				engine.LoadGrammar(grammar);
+				Trigger();
 			}
-
-            stream = source.Start();
-            engine.SetInputToAudioStream(stream,
-                    new SpeechAudioFormatInfo(
-                        EncodingFormat.Pcm, 16000, 16, 1,
-                        32000, 2, null));
-
-            engine.RecognizeAsync(RecognizeMode.Multiple);
-        }
-
-        protected override void OnDisabled(DisabledEventArgs e)
-        {
-            engine.RecognizeAsyncCancel();
-            source.Stop();
-        }
-
-        public WpfConfiguration ConfigurationControl
-        {
-            get { return new KinectSpeechConfig(phrase); }
-        }
-
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            var config = configurationControl as KinectSpeechConfig;
-            phrase = config.Phrase;
-        }
-
-        public string GetConfigString()
-        {
-            return phrase;
-        }
-
-        private void RecognitionEngine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
-        {
-            //This first release of the Kinect language pack doesn't have a reliable confidence model, so 
-            //we don't use e.Result.Confidence here.
-
-            Logger.WriteLine("Said: " + e.Result.Text);
-            Trigger();
-        }
+		}
 
 		private static RecognizerInfo GetKinectRecognizer()
 		{
@@ -109,5 +124,5 @@ namespace KinectModules.Events
 			};
 			return SpeechRecognitionEngine.InstalledRecognizers().Where(matchingFunc).FirstOrDefault();
 		}
-    }
+	}
 }

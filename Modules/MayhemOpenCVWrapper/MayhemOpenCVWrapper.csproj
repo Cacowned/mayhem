@@ -34,6 +34,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MayhemCore">
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="OpenCVDLL">
       <HintPath>..\References\OpenCVDLL.dll</HintPath>
     </Reference>
@@ -86,13 +90,6 @@
     <None Include="tbb.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
-      <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
-      <Name>MayhemCore</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\haarcascade_frontalface_default.xml">
