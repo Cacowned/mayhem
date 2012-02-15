@@ -1,0 +1,25 @@
+﻿<src:WpfConfiguration x:Class="DefaultModules.Wpf.FeedAlertConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf" 
+             MinWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"  />
+            <ColumnDefinition MinWidth="220" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Name="FeedCatergory" HorizontalAlignment="Center" Style="{StaticResource ConfigLabel}" Grid.Row="0" Grid.ColumnSpan="2" FontSize="15" FontWeight="Bold">Feed Category</TextBlock>
+        
+        <TextBlock HorizontalAlignment="Left" Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1" >RSS Feed Url:</TextBlock>
+        <TextBox Name="RSSUrl" TextChanged="URL_TextChanged" Grid.Column="1" Grid.Row="1" />
+
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+    </Grid>
+</src:WpfConfiguration>
