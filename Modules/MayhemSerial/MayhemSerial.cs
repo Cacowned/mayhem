@@ -105,6 +105,9 @@ namespace MayhemSerial
                 // -------- new name detected
                 if (!ConnectionNames.Contains(name))
                 {
+
+					// This method to check for valid ports is taken from:
+					// http://stackoverflow.com/questions/195483/c-sharp-check-if-a-com-serial-port-is-already-open
                     SafeFileHandle hFile = CreateFile(@"\\.\" + name, -1073741824, 0, IntPtr.Zero, 3, DwFlagsAndAttributes, IntPtr.Zero);
                     if (!hFile.IsInvalid)
                     {
