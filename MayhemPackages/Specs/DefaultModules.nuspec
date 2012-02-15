@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>DefaultModules</id>
-    <version>1.0</version>
+    <version>1.0.5</version>
     <authors>Eli White, Jay Meistrich</authors>
     <owners>Outercurve</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,9 +18,9 @@ Reactions
 Lock Workstation – Puts the computer into the Windows lock state
 Media controls – Sends the Media Next Item, Play/Pause or Previous Item command to all open Windows on your computer. This works with Windows Media Player, iTunes, VLC, or any other player which takes standard input.
 Open Website – Opens your default browser to the specified URL.
-Play Sound – Plays a sound file. It supports wav, wma, and mp3 format.
+Play Sound – Plays a sound file (wav, wma, and mp3 format are supported.)
 Run Program – Equivalent to the Run command. Can be used to launch files or programs.
-Screenshot – Takes a picture of the entire desktop and saves it to the specified folder in jpg format. Pictures will be named with the time the picture was taken.
+Screenshot – Takes a picture of the entire desktop and saves it to the specified folder in jpg format. Pictures will be named with the time and date the picture was taken.
 Text to Speech – Speaks the specified text using a synthesized voice.</description>
     <summary>These are the default modules for Mayhem. These basic events and reactions work without additional hardware or software.</summary>
     <copyright>Copyright © Outercurve 2011</copyright>

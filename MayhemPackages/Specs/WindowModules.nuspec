@@ -8,15 +8,13 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Send a sequence of commands to a window. 
 
-Events
-
-None
+Events (none)
 
 Reactions
 
 Window Sequence - This reaction sends a sequence of commands to manipulate an open window. This can be useful for moving a window to the foreground, moving it from one monitor to another, sending a window a specific command, etc.
 
-To setup a Window Sequence, you choose the Application,and the Wisndow Title by clicking on that window. This automatically fills these fields. The checkboxes determine where the commands are sent. If Application is selected, the commands are sent to the most recently visited window of that application. If the Window Title is selected, the commands are sent to the window with that name.
+To setup a Window Sequence, you choose the application and the window title by clicking on that window. This automatically fills both fields. The checkboxes determine where the commands are sent. If application is selected, the commands are sent to the most recently visited window of that application. If the window title is selected, the commands are sent to the window with that name.
 
 Any number of commands can be sent to a window. The commands available are:
 
