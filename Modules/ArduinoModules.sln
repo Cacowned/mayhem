@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoModules", "..\Modules\ArduinoModules\ArduinoModules.csproj", "{2BC67C14-10D8-48C1-B1E3-B9C06EFD7029}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemSerial", "..\Modules\MayhemSerial\MayhemSerial.csproj", "{EB69EA74-75DB-4171-858A-B4BC4F6857E6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BC67C14-10D8-48C1-B1E3-B9C06EFD7029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BC67C14-10D8-48C1-B1E3-B9C06EFD7029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BC67C14-10D8-48C1-B1E3-B9C06EFD7029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BC67C14-10D8-48C1-B1E3-B9C06EFD7029}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB69EA74-75DB-4171-858A-B4BC4F6857E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB69EA74-75DB-4171-858A-B4BC4F6857E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB69EA74-75DB-4171-858A-B4BC4F6857E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB69EA74-75DB-4171-858A-B4BC4F6857E6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
