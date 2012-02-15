@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\..\MayhemRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>..\..\bin\PhidgetModules\</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accessibility">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="MayhemCore">
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+    </Reference>
+    <Reference Include="MayhemWpf">
+      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+    </Reference>
     <Reference Include="Phidget21.NET">
       <HintPath>..\References\Phidget21.NET.dll</HintPath>
     </Reference>
@@ -170,23 +180,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
-      <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
-      <Name>MayhemCore</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
-      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
-      <Name>MayhemWpf</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="phidget21.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
