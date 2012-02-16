@@ -4,15 +4,15 @@ using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using Facebook;
 using FacebookModules.LowLevel;
+using FacebookModules.Wpf.UserControls;
 using MayhemWpf.UserControls;
 
 namespace FacebookModules.Wpf
 {
 
-    public partial class FacebookConfig : WpfConfiguration
+    public partial class FacebookConfigDebug : WpfConfiguration
     {
         public string TokenProp
         {
@@ -21,12 +21,20 @@ namespace FacebookModules.Wpf
         }
 
         private const string appId = "249936281752098";
-        private string[] extendedPermissions = new[] { "offline_access" };
+        private string[] extendedPermissions = new[] { "publish_stream", "offline_access" };
+        Uri loginUrl;
+        public FacebookConfigControl ControlItem { get; private set; }
 
-        public FacebookConfig(string token)
+        public FacebookConfigDebug(string token, FacebookConfigControl control)
         {
             TokenProp = token;
+            this.ControlItem = control;
             InitializeComponent();
+        }
+
+        public override void OnSave()
+        {
+            ControlItem.OnSave();
         }
 
         public override string Title
@@ -39,17 +47,12 @@ namespace FacebookModules.Wpf
 
         public override void OnLoad()
         {
-            CanSave = false;
-            if (TokenProp == null)
-            {
-                browserContainer.Visibility = Visibility.Visible;
-                LoginAttempt();
-            }
-            else
-            {
-                // TODO
-                // test the current token to make sure it's still valid
-            }
+            facebookControl.Content = ControlItem;
+
+
+            webBrowser.Navigate("www.facebook.com");
+            LoginAttempt();
+            CanSave = true;
         }
 
         /// <summary>
@@ -75,7 +78,7 @@ namespace FacebookModules.Wpf
                     parameters["scope"] = scope.ToString();
                 }
 
-                Uri loginUrl = oauth.GetLoginUrl(parameters);
+                loginUrl = oauth.GetLoginUrl(parameters);
                 webBrowser.Navigate(loginUrl);
             }
             else
@@ -111,7 +114,7 @@ namespace FacebookModules.Wpf
         /// </summary>
         private void webBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
-            browserContainer.Visibility = Visibility.Collapsed;
+
             FacebookOAuthResult result = null;
             if (FacebookOAuthResult.TryParse(e.Url, out result))
             {
@@ -120,7 +123,11 @@ namespace FacebookModules.Wpf
 
             if (result != null)
                 LoadUser();
-            CanSave = result != null;
+        }
+
+        private void Login_Clicked(object sender, RoutedEventArgs e)
+        {
+            webBrowser.Navigate(loginUrl);
         }
     }
 }
