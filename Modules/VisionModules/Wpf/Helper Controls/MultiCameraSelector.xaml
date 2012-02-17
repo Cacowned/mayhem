@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="VisionModules.Wpf.MultiCameraSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             Width="400" Unloaded="OnClosing">
+    <Grid>
+        <StackPanel>
+            <ItemsControl  BorderThickness="0" Name="camera_preview_panel" Width="400" MaxHeight="200" ItemsSource="{Binding ElementName=root, Path=camera_previews}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel  Name="camera_preview_panel_itemsPanel"  IsItemsHost="True" Width="400"  MaxHeight="200" ItemWidth="133" ItemHeight="99"></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border  Background="{Binding}" Padding="0" x:Name="bborder" Width="133" Height="99" BorderThickness="2" BorderBrush="Transparent" Cursor="Hand" MouseLeftButtonUp="bborder_MouseLeftButtonUp" Loaded="bborder_Loaded" Unloaded="bborder_Unloaded">
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <TextBlock Margin="5 0 5 0" TextWrapping="Wrap"  Height="47" Width="390">Click drop down list below to select a camera or click one of the preview images above.</TextBlock>
+            <ComboBox Name="deviceList" SelectionChanged="deviceList_SelectionChanged" />
+        </StackPanel>
+    </Grid>
+</UserControl>
