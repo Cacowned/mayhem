@@ -21,7 +21,7 @@ namespace FacebookModules.Wpf
         }
 
         private const string appId = "249936281752098";
-        private string[] extendedPermissions = new[] { "publish_stream", "offline_access", "read_mailbox" };
+        private string[] extendedPermissions = new[] { "publish_stream", "read_mailbox", "read_stream" };
         Uri loginUrl;
         public FacebookConfigControl ControlItem { get; private set; }
 
@@ -41,7 +41,7 @@ namespace FacebookModules.Wpf
         {
             get
             {
-                return "FaceBook";
+                return "Facebook";
             }
         }
 
