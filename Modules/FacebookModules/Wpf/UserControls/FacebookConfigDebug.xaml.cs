@@ -28,13 +28,15 @@ namespace FacebookModules.Wpf
         public FacebookConfigDebug(string token, FacebookConfigControl control)
         {
             TokenProp = token;
-            this.ControlItem = control;
+            if (control != null)
+                this.ControlItem = control;
             InitializeComponent();
         }
 
         public override void OnSave()
         {
-            ControlItem.OnSave();
+            if (ControlItem != null)
+                ControlItem.OnSave();
         }
 
         public override string Title
