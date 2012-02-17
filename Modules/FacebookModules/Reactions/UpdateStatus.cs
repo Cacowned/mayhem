@@ -36,9 +36,8 @@ namespace FacebookModules.Reactions
                 {
                     fb.Post("/me/feed", statusArgs);
                 }
-                catch (Exception e)
+                catch
                 {
-                    //
                     // duplicate status posted
                 }
             }
