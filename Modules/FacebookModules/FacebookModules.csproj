@@ -64,6 +64,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\Message.cs" />
+    <Compile Include="Events\Notification.cs" />
     <Compile Include="Events\WallPost.cs" />
     <Compile Include="FacebookEventBase.cs" />
     <Compile Include="LowLevel\Utilities.cs" />
