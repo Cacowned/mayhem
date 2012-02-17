@@ -21,7 +21,7 @@ namespace FacebookModules.Wpf
         }
 
         private const string appId = "249936281752098";
-        private string[] extendedPermissions = new[] { "publish_stream", "offline_access" };
+        private string[] extendedPermissions = new[] { "publish_stream", "offline_access", "read_mailbox" };
         Uri loginUrl;
         public FacebookConfigControl ControlItem { get; private set; }
 
@@ -48,7 +48,6 @@ namespace FacebookModules.Wpf
         public override void OnLoad()
         {
             facebookControl.Content = ControlItem;
-
 
             webBrowser.Navigate("www.facebook.com");
             LoginAttempt();
