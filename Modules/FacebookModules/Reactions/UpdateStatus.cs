@@ -82,7 +82,7 @@ namespace FacebookModules.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new FacebookConfigDebug(token, new StatusConfig()); }
+            get { return new FacebookConfigDebug(token, "Status Update", new StatusConfig()); }
         }
     }
 }
