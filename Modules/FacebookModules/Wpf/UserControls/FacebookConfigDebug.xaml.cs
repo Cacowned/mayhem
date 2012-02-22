@@ -8,6 +8,7 @@ using Facebook;
 using FacebookModules.LowLevel;
 using FacebookModules.Wpf.UserControls;
 using MayhemWpf.UserControls;
+using System.Threading;
 
 namespace FacebookModules.Wpf
 {
@@ -22,12 +23,17 @@ namespace FacebookModules.Wpf
 
         private const string appId = "249936281752098";
         private string[] extendedPermissions = new[] { "publish_stream", "read_mailbox", "read_stream" };
+        private string title;
+        
+        // for debug
         Uri loginUrl;
         public FacebookConfigControl ControlItem { get; private set; }
 
-        public FacebookConfigDebug(string token, FacebookConfigControl control)
+
+        public FacebookConfigDebug(string token, string title, FacebookConfigControl control)
         {
             TokenProp = token;
+            this.title = title;
             if (control != null)
                 this.ControlItem = control;
             InitializeComponent();
@@ -43,7 +49,7 @@ namespace FacebookModules.Wpf
         {
             get
             {
-                return "Facebook";
+                return "Facebook - " + title;
             }
         }
 
@@ -51,7 +57,6 @@ namespace FacebookModules.Wpf
         {
             facebookControl.Content = ControlItem;
 
-            webBrowser.Navigate("www.facebook.com");
             LoginAttempt();
             CanSave = true;
         }
@@ -107,6 +112,8 @@ namespace FacebookModules.Wpf
             bi.EndInit();
 
             Profile.Source = bi;
+
+            webBrowser.Navigate("www.facebook.com");
         }
 
         /// <summary>

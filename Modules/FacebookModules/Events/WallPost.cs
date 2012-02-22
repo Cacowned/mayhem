@@ -20,10 +20,15 @@ namespace FacebookModules.Events
         /// </summary>
         public override string WhatToCheck
         {
-            get
-            {
-                return "/me/feed";
-            }
+            get { return "/me/feed"; }
+        }
+
+        /// <summary>
+        /// Sets the title as "Facebook - Wall Post"
+        /// </summary>
+        public override string Title
+        {
+            get { return "Wall Post"; }
         }
 
         /// <summary>

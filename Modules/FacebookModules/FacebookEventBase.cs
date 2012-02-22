@@ -28,10 +28,11 @@ namespace FacebookModules
         public string postId;
 
         public abstract string WhatToCheck { get; }
+        public abstract string Title { get; }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new FacebookConfigDebug(token, null); }
+            get { return new FacebookConfigDebug(token, Title, null); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)

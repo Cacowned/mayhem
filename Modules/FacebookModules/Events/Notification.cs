@@ -27,6 +27,14 @@ namespace FacebookModules.Events
         }
 
         /// <summary>
+        /// Sets the title as "Facebook - Notification"
+        /// </summary>
+        public override string Title
+        {
+            get { return "Notification"; }
+        }
+
+        /// <summary>
         /// The configuration string
         /// </summary>
         /// <returns>Watching {User Name}'s wall for new posts</returns>
