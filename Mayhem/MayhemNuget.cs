@@ -95,7 +95,13 @@ namespace Mayhem
 		{
 			get
 			{
-				return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem");
+				string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem");
+				if (!Directory.Exists(path))
+				{
+					Directory.CreateDirectory(path);
+				}
+
+				return path;
 			}
 		}
 
