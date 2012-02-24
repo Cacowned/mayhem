@@ -13,8 +13,15 @@ namespace FacebookModules.Wpf
             private set;
         }
 
+        public bool CanSave
+        {
+            get;
+            private set;
+        }
+
         public StatusConfig()
         {
+            CanSave = true;
             InitializeComponent();
         }
 
@@ -29,6 +36,11 @@ namespace FacebookModules.Wpf
         public override void OnSave()
         {
             StatusProp = statusText.Text;
+        }
+
+        private void StatusText_Changed(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            CanSave = statusText.Text.Length > 0;
         }
     }
 }
