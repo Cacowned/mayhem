@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>DefaultModules</id>
-    <version>1.0.5</version>
-    <authors>Eli White, Jay Meistrich</authors>
+    <version>1.0.0</version>
+    <authors>Eli White, Jay Meistrich, Will Beebe</authors>
     <owners>Outercurve</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>These are the default modules for Mayhem. These basic events and reactions work without additional hardware or software.

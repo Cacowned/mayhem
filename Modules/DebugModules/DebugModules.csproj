@@ -35,6 +35,14 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="MayhemCore">
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MayhemWpf">
+      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework">
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -71,18 +79,6 @@
     <Compile Include="Wpf\AppendLineConfig.xaml.cs">
       <DependentUpon>AppendLineConfig.xaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
-      <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
-      <Name>MayhemCore</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
-      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
-      <Name>MayhemWpf</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Wpf\DebugMessageConfig.xaml">
