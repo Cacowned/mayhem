@@ -17,6 +17,6 @@
         </Grid.RowDefinitions>
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" HorizontalAlignment="Right" Margin="0,2,10,0">Status To Post:</TextBlock>
-        <TextBox Name="statusText" Grid.Column="1"></TextBox>
+        <TextBox Name="statusText" Grid.Column="1" TextChanged="StatusText_Changed"></TextBox>
     </Grid>
 </common:FacebookConfigControl>

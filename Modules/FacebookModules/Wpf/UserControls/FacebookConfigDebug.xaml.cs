@@ -93,7 +93,6 @@ namespace FacebookModules.Wpf
             }
         }
 
-
         /// <summary>
         /// Gets the profile picture and name for the current user and displays it
         /// in the dialog

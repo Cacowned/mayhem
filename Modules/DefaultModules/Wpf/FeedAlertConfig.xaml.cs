@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using System.Xml;
@@ -184,11 +185,13 @@ namespace DefaultModules.Wpf
         /// Checks for an Internet connection
         /// </summary>
         /// <returns>true if there is a current Internet connection</returns>
+        #region CheckInternet
         private bool ConnectedToInternet()
         {
             try
             {
-                System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+                // check Internet connection (ping google w/ 650ms timeout
+                CallWithTimeout(MakeRequest, 650);
                 if (timer.IsEnabled)
                 {
                     timer.Stop();
@@ -208,5 +211,42 @@ namespace DefaultModules.Wpf
 
             return false;
         }
+
+        /// <summary>
+        /// Make a request to google.com
+        /// </summary>
+        private static void MakeRequest()
+        {
+            System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+        }
+
+        /// <summary>
+        /// A method that will trigger a "timeout" error to be used when running a method with a 
+        /// specific timout trigger
+        /// </summary>
+        /// <param name="action">The method being run</param>
+        /// <param name="timeout">The timeout in milliseconds</param>
+        public static void CallWithTimeout(Action action, int timeout)
+        {
+            Thread threadToKill = null;
+            Action wrappedAction = () =>
+            {
+                threadToKill = Thread.CurrentThread;
+                action();
+            };
+
+            IAsyncResult result = wrappedAction.BeginInvoke(null, null);
+            if (result.AsyncWaitHandle.WaitOne(timeout))
+            {
+                wrappedAction.EndInvoke(result);
+                //throw new TimeoutException();
+            }
+            else
+            {
+                threadToKill.Abort();
+                throw new TimeoutException();
+            }
+        }
+        #endregion
     }
 }
