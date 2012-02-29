@@ -28,7 +28,7 @@ namespace FacebookModules.Wpf
         // for debug
         Uri loginUrl;
         public FacebookConfigControl ControlItem { get; private set; }
-
+   
 
         public FacebookConfigDebug(string token, string title, FacebookConfigControl control)
         {
@@ -55,10 +55,15 @@ namespace FacebookModules.Wpf
 
         public override void OnLoad()
         {
-            facebookControl.Content = ControlItem;
-
+            if (ControlItem != null)
+            {
+                facebookControl.Content = ControlItem;
+                ControlItem.OnRevalidate += Revalidate;
+                ControlItem.OnLoad();
+            }
             LoginAttempt();
-            CanSave = true;
+
+            Revalidate();
         }
 
         /// <summary>
@@ -112,6 +117,7 @@ namespace FacebookModules.Wpf
 
             Profile.Source = bi;
 
+            // remove after debug
             webBrowser.Navigate("www.facebook.com");
         }
 
@@ -132,9 +138,13 @@ namespace FacebookModules.Wpf
                 LoadUser();
         }
 
-        private void Login_Clicked(object sender, RoutedEventArgs e)
+        private void Revalidate()
         {
-            webBrowser.Navigate(loginUrl);
+            // get sensor stuff
+            if (TokenProp != null && ControlItem != null)
+            {
+                CanSave = ControlItem.CanSave;
+            }
         }
     }
 }
