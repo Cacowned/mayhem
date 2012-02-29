@@ -1,10 +1,13 @@
 ﻿using FacebookModules.Wpf.UserControls;
+using System.Windows;
+using System.Runtime.Serialization;
 
 namespace FacebookModules.Wpf
 {
     /// <summary>
     /// Interaction logic for StatusConfig.xaml
-    /// </summary>
+    /// </summary> 
+    [DataContract]
     public partial class StatusConfig : FacebookConfigControl
     {
         public string StatusProp
@@ -13,16 +16,15 @@ namespace FacebookModules.Wpf
             private set;
         }
 
-        public bool CanSave
+        public StatusConfig(string myStatus)
         {
-            get;
-            private set;
+            StatusProp = myStatus;
+            InitializeComponent();
         }
 
-        public StatusConfig()
+        public override void OnLoad()
         {
-            CanSave = true;
-            InitializeComponent();
+            statusText.Text = StatusProp;
         }
 
         public override string Title
@@ -41,6 +43,7 @@ namespace FacebookModules.Wpf
         private void StatusText_Changed(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             CanSave = statusText.Text.Length > 0;
+            Validate();
         }
     }
 }
