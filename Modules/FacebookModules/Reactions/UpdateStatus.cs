@@ -22,8 +22,12 @@ namespace FacebookModules.Reactions
 
         [DataMember]
         private string userName;
-        private FacebookClient fb;
+
+        [DataMember]
         private string myStatus;
+
+        private FacebookClient fb;
+        
 
         public override void Perform()
         {
@@ -45,6 +49,11 @@ namespace FacebookModules.Reactions
             {
                 ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook"));
             }
+        }
+
+        protected override void OnLoadDefaults()
+        {
+            myStatus = "";
         }
 
         protected override void OnLoadFromSaved()
@@ -82,7 +91,7 @@ namespace FacebookModules.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new FacebookConfigDebug(token, "Status Update", new StatusConfig()); }
+            get { return new FacebookConfigDebug(token, "Status Update", new StatusConfig(myStatus)); }
         }
     }
 }
