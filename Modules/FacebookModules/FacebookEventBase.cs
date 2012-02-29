@@ -97,8 +97,6 @@ namespace FacebookModules
         {
             if (token != null)
                 timer.Start();
-            else
-                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook"));
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
