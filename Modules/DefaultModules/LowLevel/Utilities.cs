@@ -57,6 +57,7 @@ namespace DefaultModules.LowLevel
             keybd_event((byte)key, (byte)MapVirtualKey(key, 0), KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
 
+        #region Check Internet Connection
         /// <summary>
         /// Checks if there is a current Internet connection
         /// </summary>
@@ -65,8 +66,8 @@ namespace DefaultModules.LowLevel
         {
             try
             {
-                // Make a request with a two second timeout
-                CallWithTimeout(MakeRequest, 2000);
+                // Make a request with a 640ms timeout
+                CallWithTimeout(MakeRequest, 640);
                 return true;
             }
             catch
@@ -110,5 +111,6 @@ namespace DefaultModules.LowLevel
                 throw new TimeoutException();
             }
         }
+#endregion
     }
 }

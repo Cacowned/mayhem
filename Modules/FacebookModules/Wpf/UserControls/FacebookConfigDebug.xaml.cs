@@ -62,9 +62,8 @@ namespace FacebookModules.Wpf
                 ControlItem.OnRevalidate += Revalidate;
                 ControlItem.OnLoad();
             }
-            LoginAttempt();
 
-            
+            LoginAttempt();
         }
 
         /// <summary>
@@ -95,7 +94,9 @@ namespace FacebookModules.Wpf
             }
             else
             {
+                CanSave = false;
                 textInvalid.Text = "Cannot connect to Internet";
+                textInvalid.Visibility = Visibility.Visible;
             }
         }
 
