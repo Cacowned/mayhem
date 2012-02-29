@@ -13,7 +13,7 @@ using Microsoft.Speech.Recognition;
 namespace KinectModules.Events
 {
 	[DataContract]
-	[MayhemModule("Kinect Speech Recognition", "Triggers when a phrase is heard")]
+	[MayhemModule("Kinect: Speech Recognition", "Triggers when a phrase is heard")]
 	public class KinectSpeech : EventBase, IWpfConfigurable
 	{
 		[DataMember]

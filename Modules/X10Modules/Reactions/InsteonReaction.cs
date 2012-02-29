@@ -15,7 +15,7 @@ namespace X10Modules.Reactions
     /// Mayhem Reaction that can send command to Insteon Devices
     /// </summary>
     [DataContract]
-    [MayhemModule("InsteonReaction", "Triggers Insteon Commands")]
+    [MayhemModule("Insteon", "Triggers Insteon Commands")]
     public class InsteonReaction : ReactionBase, IWpfConfigurable
     {
         [DataMember]

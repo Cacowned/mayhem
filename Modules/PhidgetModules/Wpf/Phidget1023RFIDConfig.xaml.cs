@@ -40,7 +40,7 @@ namespace PhidgetModules.Wpf
         {
             get
             {
-                return "Phidget - Rfid";
+                return "Phidget: Rfid";
             }
         }
 

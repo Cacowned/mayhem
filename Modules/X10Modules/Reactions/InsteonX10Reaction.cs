@@ -12,7 +12,7 @@ namespace X10Modules.Reactions
     /// X10 Mayhem Reaction for Insteon Modules -- can be used to control X10 devices on the power line
     /// </summary>
     [DataContract]
-    [MayhemModule("X10Reaction", "Triggers X10 Commands")]
+    [MayhemModule("X10", "Triggers X10 Commands")]
     public class InsteonX10Reaction : ReactionBase, IWpfConfigurable
     {
         [DataMember]

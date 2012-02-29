@@ -39,7 +39,7 @@ namespace PhidgetModules.Wpf
         {
             get
             {
-                return "Phidget - IR Transmit";
+                return "Phidget: IR Transmit";
             }
         }
 

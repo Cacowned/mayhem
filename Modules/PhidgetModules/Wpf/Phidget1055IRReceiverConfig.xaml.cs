@@ -33,7 +33,7 @@ namespace PhidgetModules.Wpf
 		{
 			get
 			{
-				return "Phidget - IR Receiver";
+				return "Phidget: IR Receiver";
 			}
 		}
 

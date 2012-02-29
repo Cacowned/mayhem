@@ -20,7 +20,7 @@ namespace KinectModules.Wpf
 
         public override string Title
         {
-            get { return "Speech Recognition"; }
+            get { return "Kinect: Speech Recognition"; }
         }
 
         public override void OnLoad()
