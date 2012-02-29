@@ -61,7 +61,7 @@ namespace PhidgetModules.Wpf
         {
             get
             {
-                return "Phidget - Sound";
+                return "Phidget: Sound";
             }
         }
     }

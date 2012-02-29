@@ -37,7 +37,7 @@ namespace PhidgetModules.Wpf
         {
             get
             {
-                return "Phidget - Proxmiity";
+                return "Phidget: Proxmiity";
             }
         }
     }

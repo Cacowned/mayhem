@@ -35,7 +35,7 @@ namespace PhidgetModules.Wpf
         {
             get
             {
-                return "Phidget - IR Distance";
+                return "Phidget: IR Distance";
             }
         }
 

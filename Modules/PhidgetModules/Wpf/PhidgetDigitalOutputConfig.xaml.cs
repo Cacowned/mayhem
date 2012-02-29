@@ -95,7 +95,7 @@ namespace PhidgetModules.Wpf
         {
             get
             {
-                return "Phidget - Digital Output";
+                return "Phidget: Digital Output";
             }
         }
     }

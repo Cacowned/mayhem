@@ -39,7 +39,7 @@ namespace PhidgetModules.Wpf
         {
             get
             {
-                return "Phidget - Adv. Servo";
+                return "Phidget: Adv. Servo";
             }
         }
 

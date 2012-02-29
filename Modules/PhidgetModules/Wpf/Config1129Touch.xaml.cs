@@ -23,7 +23,7 @@ namespace PhidgetModules.Wpf
         {
             get
             {
-                return "Phidget - Touch";
+                return "Phidget: Touch";
             }
         }
         

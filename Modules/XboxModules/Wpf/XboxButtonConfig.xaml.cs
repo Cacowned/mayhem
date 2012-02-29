@@ -36,7 +36,7 @@ namespace XboxModules.Wpf
 
         public override string Title
         {
-            get { return "Xbox Button"; }
+            get { return "Xbox Controller: Button"; }
         }
 
         public override void OnLoad()

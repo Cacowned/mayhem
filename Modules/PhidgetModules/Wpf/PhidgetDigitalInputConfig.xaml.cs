@@ -61,7 +61,7 @@ namespace PhidgetModules.Wpf
         {
             get
             {
-                return "Phidget - Digital Input";
+                return "Phidget: Digital Input";
             }
         }
     }

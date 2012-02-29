@@ -20,7 +20,7 @@ namespace DebugModules.Wpf
 
         public override string Title
         {
-            get { return "Debug Message"; }
+            get { return "Debug: Message"; }
         }
 
         public override void OnLoad()
