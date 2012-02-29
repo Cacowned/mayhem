@@ -22,7 +22,7 @@ namespace FacebookModules.Wpf
         }
 
         private const string appId = "249936281752098";
-        private string[] extendedPermissions = new[] { "publish_stream", "read_mailbox", "read_stream" };
+        private string[] extendedPermissions = new[] { "publish_stream", "read_mailbox", "read_stream", "manage_notifications" };
         private string title;
         
         // for debug
@@ -55,6 +55,7 @@ namespace FacebookModules.Wpf
 
         public override void OnLoad()
         {
+            CanSave = false;
             if (ControlItem != null)
             {
                 facebookControl.Content = ControlItem;
@@ -63,7 +64,7 @@ namespace FacebookModules.Wpf
             }
             LoginAttempt();
 
-            Revalidate();
+            
         }
 
         /// <summary>
@@ -117,6 +118,9 @@ namespace FacebookModules.Wpf
 
             Profile.Source = bi;
 
+            // for login success
+            CanSave = true;
+            Revalidate();
             // remove after debug
             webBrowser.Navigate("www.facebook.com");
         }
