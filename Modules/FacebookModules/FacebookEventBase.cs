@@ -42,11 +42,8 @@ namespace FacebookModules
 
             fb = new FacebookClient(token);
 
-            if (userName == null)
-            {
-                dynamic res = fb.Get("/me");
-                userName = res.name;
-            }
+            dynamic res = fb.Get("/me");
+            userName = res.name;
         }
 
         protected override void OnAfterLoad()
@@ -73,17 +70,28 @@ namespace FacebookModules
             {
                 dynamic result = fb.Get(WhatToCheck);
 
-                // get the id of the most recent wall post
-                string latestPostId = result.data[0].id;
-
-                if (postId == null)
+                // get the id of the most recent post
+                string latestPostId = string.Empty;
+                if (!(WhatToCheck.Equals("/me/notifications") && result.Values.Count == 2))
                 {
-                    postId = latestPostId;
+                    latestPostId = result.data[0].id;
                 }
-                else if (!latestPostId.Equals(postId)) // remove later TRUE for testing
+                else
                 {
-                    postId = latestPostId;
-                    Trigger();
+                    postId = "[]";
+                }
+
+                if (!latestPostId.Equals(string.Empty))
+                {
+                    if (postId == null)
+                    {
+                        postId = latestPostId;
+                    }
+                    else if (!latestPostId.Equals(postId))
+                    {
+                        postId = latestPostId;
+                        Trigger();
+                    }
                 }
             }
             else

@@ -31,7 +31,7 @@ namespace FacebookModules.Wpf
         {
             get
             {
-                return "Facebook - Status Update";
+                return "Facebook: Status Update";
             }
         }
 

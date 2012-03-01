@@ -12,7 +12,7 @@ using MayhemWpf.UserControls;
 namespace FacebookModules.Events
 {
     [DataContract]
-    [MayhemModule("Facebook", "Watches for new wall posts")]
+    [MayhemModule("Facebook: Wall Post", "Watches for new wall posts")]
     public class WallPost : FacebookEventBase, IWpfConfigurable
     {
         /// <summary>

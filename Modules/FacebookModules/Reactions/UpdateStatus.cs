@@ -14,7 +14,7 @@ using FacebookModules.Wpf.UserControls;
 namespace FacebookModules.Reactions
 {
     [DataContract]
-    [MayhemModule("Facebook", "Updates your Facebook status")]
+    [MayhemModule("Facebook: Status Update", "Updates your Facebook status")]
     public class UpdateStatus : ReactionBase, IWpfConfigurable
     {
         [DataMember]
