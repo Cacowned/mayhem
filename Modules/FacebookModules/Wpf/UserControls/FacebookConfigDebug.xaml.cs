@@ -49,7 +49,7 @@ namespace FacebookModules.Wpf
         {
             get
             {
-                return "Facebook - " + title;
+                return "Facebook: " + title;
             }
         }
 

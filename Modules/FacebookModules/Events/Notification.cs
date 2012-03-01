@@ -12,7 +12,7 @@ using MayhemWpf.UserControls;
 namespace FacebookModules.Events
 {
     [DataContract]
-    [MayhemModule("Facebook", "Watches for new notifications")]
+    [MayhemModule("Facebook: Notification", "Watches for new notifications")]
     public class Notification : FacebookEventBase, IWpfConfigurable
     {
         /// <summary>
