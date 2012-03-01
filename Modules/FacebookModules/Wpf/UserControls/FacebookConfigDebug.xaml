@@ -30,7 +30,8 @@
         <Image Name="Profile" Source="http://profile.ak.fbcdn.net/hprofile-ak-snc4/50502_102849331815_4985514_n.jpg" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Width="50" HorizontalAlignment="Left"></Image>
 
         <ContentControl Name="facebookControl" Width="460" Grid.Row="3" Grid.ColumnSpan="2"/>
-        
-        <TextBlock Name="textInvalid" Style="{StaticResource ConfigErrorMessage}" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+        <TextBox Grid.Row="4" HorizontalAlignment="Left">ydcnmlx_rosenthalsen_1329341643@tfbnw.net</TextBox>
+        <TextBox Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center">123456</TextBox>
+        <TextBlock Name="textInvalid" Style="{StaticResource ConfigErrorMessage}" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
     </Grid>
 </src:WpfConfiguration>
