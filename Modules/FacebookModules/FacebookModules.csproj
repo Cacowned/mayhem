@@ -83,9 +83,6 @@
     <Compile Include="Wpf\UserControls\FacebookConfigDebug.xaml.cs">
       <DependentUpon>FacebookConfigDebug.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\FacebookConfig.xaml.cs">
-      <DependentUpon>FacebookConfig.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -99,10 +96,6 @@
     <Page Include="Wpf\UserControls\FacebookConfigDebug.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Wpf\FacebookConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

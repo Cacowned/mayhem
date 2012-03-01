@@ -22,7 +22,7 @@ namespace FacebookModules.Wpf
         }
 
         private const string appId = "249936281752098";
-        private string[] extendedPermissions = new[] { "publish_stream", "read_mailbox", "read_stream", "manage_notifications" };
+        private string[] extendedPermissions = new[] { "publish_stream", "read_mailbox", "read_stream", "manage_notifications", "offline_access" };
         private string title;
         
         // for debug
