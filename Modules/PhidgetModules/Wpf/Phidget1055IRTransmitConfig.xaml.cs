@@ -3,6 +3,7 @@ using System.Windows.Threading;
 using MayhemWpf.UserControls;
 using Phidgets;
 using Phidgets.Events;
+using MayhemCore;
 
 namespace PhidgetModules.Wpf
 {
@@ -48,9 +49,21 @@ namespace PhidgetModules.Wpf
             ir.Learn += ir_Learn;
             ir.Attach += ir_Attach;
             ir.Detach += ir_Detach;
+        	ir.Code += ir_Code;
+
+			if(ir.Attached)
+			{
+				ir_Attach(null, null);
+			}
         }
 
         #region Phidget Event Handlers
+		
+		private void ir_Code(object sender, IRCodeEventArgs e)
+		{
+			Logger.WriteLine("Code");
+		}
+
         private void ir_Learn(object sender, IRLearnEventArgs e)
         {
             Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
@@ -84,5 +97,6 @@ namespace PhidgetModules.Wpf
             ir.Attach -= ir_Attach;
             ir.Detach -= ir_Detach;
         }
-    }
+
+	}
 }

@@ -260,10 +260,11 @@ namespace MayhemCore
 
         internal void SetConfigString()
         {
-            if (this is IConfigurable)
-            {
-                ConfigString = ((IConfigurable)this).GetConfigString();
-            }
+        	var configurable = this as IConfigurable;
+        	if (configurable != null)
+        	{
+        		ConfigString = configurable.GetConfigString();
+        	}
         }
     }
 }

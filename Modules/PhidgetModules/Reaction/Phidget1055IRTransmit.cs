@@ -9,13 +9,13 @@ namespace PhidgetModules.Reaction
 {
     [DataContract]
     [MayhemModule("Phidget: IR Transmit", "Sends an IR code")]
-	internal class Phidget1055IrTransmit : ReactionBase, IWpfConfigurable
+	public class Phidget1055IrTransmit : ReactionBase, IWpfConfigurable
     {
         // This is the code and code information that we will transmit
-        [DataMember]
+        //[DataMember]
         private IRCode code;
 
-        [DataMember]
+        //[DataMember]
         private IRCodeInfo codeInfo;
 
         private IR ir;

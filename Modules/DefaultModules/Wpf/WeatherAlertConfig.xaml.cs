@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -71,7 +72,7 @@ namespace DefaultModules.Wpf
         public override void OnLoad()
         {
             ZipCode.Text = ZipCodeProp;
-            Temperature.Text = TempProp.ToString();
+            Temperature.Text = TempProp.ToString(CultureInfo.InvariantCulture);
             if (CheckAbove)
             {
                 Above.IsChecked = true;
@@ -148,7 +149,7 @@ namespace DefaultModules.Wpf
                                 return false;
                             }
 
-                            this.reader = r;
+                            reader = r;
                         }
                     }
 
@@ -282,7 +283,7 @@ namespace DefaultModules.Wpf
         /// </summary>
         private static void MakeRequest()
         {
-            System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+            IPHostEntry obj = Dns.GetHostEntry("www.google.com");
         }
 
         /// <summary>

@@ -47,9 +47,9 @@ namespace DefaultModules.Events
         private bool internetFlag;
 
         // the amount of "buffer" that the price has to go passed to re-enable trigger
-        private static double PRICE_OFFSET = 1.0;
+    	private const double PriceOffset = 1.0;
 
-        public void OnSaved(WpfConfiguration configurationControl)
+    	public void OnSaved(WpfConfiguration configurationControl)
         {
             var config = (StockAlertConfig)configurationControl;
             stockSymbol = config.StockSymbolProp;
@@ -69,9 +69,9 @@ namespace DefaultModules.Events
         /// </summary>
         public string GetConfigString()
         {
-            string above_below = abovePrice ? "above " : "below ";
+            string aboveBelow = abovePrice ? "above " : "below ";
             string change = changeParam ? "change " : "last trade ";
-            return String.Format("{0} for {1} {2} ${3}", stockSymbol, change, above_below, stockPrice);
+            return String.Format("{0} for {1} {2} ${3}", stockSymbol, change, aboveBelow, stockPrice);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace DefaultModules.Events
                         using (Stream responseStream = webResponse.GetResponseStream())
                         {
                             StreamReader s = new StreamReader(responseStream, Encoding.GetEncoding(1252));
-                            XmlReader stockData = XmlTextReader.Create(s);
+                            XmlReader stockData = XmlReader.Create(s);
 
                             string readTo = changeParam ? "change" : "last";
                             stockData.ReadToFollowing(readTo);
@@ -160,7 +160,7 @@ namespace DefaultModules.Events
                                     hasPassed = true;
                                     Trigger();
                                 }
-                                else if ((triggerEvery && (abovePrice && livePrice >= stockPrice + PRICE_OFFSET)) || (!abovePrice && livePrice <= stockPrice - PRICE_OFFSET))
+                                else if ((triggerEvery && (abovePrice && livePrice >= stockPrice + PriceOffset)) || (!abovePrice && livePrice <= stockPrice - PriceOffset))
                                 {
                                     hasPassed = false;
                                 }

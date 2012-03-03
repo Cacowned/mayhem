@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 
@@ -11,8 +8,6 @@ namespace Mayhem
 	public class FileWatcher
 	{
 		private FileSystemWatcher watcher;
-
-		private string location;
 
 		private DateTime lastUpdated;
 
@@ -41,7 +36,7 @@ namespace Mayhem
 			if ((nowTime - lastUpdated).TotalMilliseconds > 30)
 			{
 				lastUpdated = nowTime;
-				this.hook();
+				hook();
 			}
 		}
 

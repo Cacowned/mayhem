@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -177,7 +178,7 @@ namespace DefaultModules.Wpf
 
             if (CanSave)
             {
-                FeedCatergory.Text = channelNode["title"].InnerText.ToString();
+                FeedCatergory.Text = channelNode["title"].InnerText;
             }
         }
 
@@ -217,7 +218,7 @@ namespace DefaultModules.Wpf
         /// </summary>
         private static void MakeRequest()
         {
-            System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+            IPHostEntry obj = Dns.GetHostEntry("www.google.com");
         }
 
         /// <summary>

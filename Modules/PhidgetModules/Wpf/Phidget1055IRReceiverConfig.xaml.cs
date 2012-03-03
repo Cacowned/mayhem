@@ -42,6 +42,11 @@ namespace PhidgetModules.Wpf
 			Ir.Code += ir_Code;
 			Ir.Attach += ir_Attach;
 			Ir.Detach += ir_Detach;
+
+			if (Ir.Attached)
+			{
+				ir_Attach(null, null);
+			}
 		}
 
 		#region Phidget Event Handlers

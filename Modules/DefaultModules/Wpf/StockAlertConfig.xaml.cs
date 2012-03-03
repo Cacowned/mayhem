@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using System.Xml;
 using MayhemWpf.UserControls;
+using System.Net;
 
 namespace DefaultModules.Wpf
 {
@@ -80,7 +82,7 @@ namespace DefaultModules.Wpf
         public override void OnLoad()
         {
             StockSymbol.Text = StockSymbolProp;
-            StockPrice.Text = StockPriceProp.ToString();
+            StockPrice.Text = StockPriceProp.ToString(CultureInfo.InvariantCulture);
             if (!ChangeProp)
             {
                 LastTrade.IsChecked = true;
@@ -264,7 +266,7 @@ namespace DefaultModules.Wpf
         /// </summary>
         private static void MakeRequest()
         {
-            System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+            IPHostEntry obj = Dns.GetHostEntry("www.google.com");
         }
 
         /// <summary>

@@ -90,11 +90,11 @@ namespace DefaultModules.Events
 			string conf = string.Empty;
 			int pathLength = folderToMonitor.Length;
 
-			const int Cutoff = 11;
+			const int cutoff = 11;
 
 			string substr;
-			if (pathLength >= Cutoff)
-				substr = folderToMonitor.Substring(pathLength - Cutoff, Cutoff);
+			if (pathLength >= cutoff)
+				substr = folderToMonitor.Substring(pathLength - cutoff, cutoff);
 			else
 				substr = folderToMonitor;
 			conf += "..." + substr;

@@ -10,11 +10,11 @@ namespace DefaultModules.Reactions
 		public override void Perform()
 		{
 			MMDeviceEnumerator devEnum = new MMDeviceEnumerator();
-			MMDevice m_device = null;
+			MMDevice device;
 			
 			try
 			{
-				m_device = devEnum.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia);
+				device = devEnum.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia);
 			}
 			catch (COMException)
 			{
@@ -22,7 +22,7 @@ namespace DefaultModules.Reactions
 				return;
 			}
 
-			m_device.AudioEndpointVolume.Mute = !m_device.AudioEndpointVolume.Mute;
+			device.AudioEndpointVolume.Mute = !device.AudioEndpointVolume.Mute;
 		}
 	}
 }

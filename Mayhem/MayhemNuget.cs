@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Deployment.Application;
 using System.IO;
 using System.Linq;
 using NuGet;
-using System.Collections.Generic;
-using System.Security;
-using System.Security.Permissions;
 
 namespace Mayhem
 {
 	public class MayhemNuget
 	{
 
-		private static bool? canWrite = null;
+		private static bool? canWrite;
 
 		public static string WriteDir
 		{
@@ -53,14 +49,13 @@ namespace Mayhem
 				{
 					return localPath;
 				}
-				else
+				
+				if (!Directory.Exists(appData))
 				{
-					if (!Directory.Exists(appData))
-					{
-						Directory.CreateDirectory(appData);
-					}
-					return appData;
+					Directory.CreateDirectory(appData);
 				}
+
+				return appData;
 			}
 		}
 
@@ -120,7 +115,7 @@ namespace Mayhem
 			get
 			{
 				if (manager == null)
-					manager = new PackageManager(MayhemNuget.Repository, MayhemNuget.InstallPath);
+					manager = new PackageManager(Repository, InstallPath);
 
 				return manager;
 			}
