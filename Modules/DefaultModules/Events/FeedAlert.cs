@@ -17,7 +17,6 @@ namespace DefaultModules.Events
 {
     [DataContract]
     [MayhemModule("RSS Feed Alert", "Triggers when feed updates")]
-
     /// <summary>
     /// This module allows a user to enter an URL for a RSS feed
     /// and will trigger when that feed has been updated.
@@ -150,17 +149,15 @@ namespace DefaultModules.Events
         {
             if (node.Name == "item")
                 return node.FirstChild.InnerText;
-            else
-            {
-                string builder = String.Empty;
-                for (int i = 0; i < node.ChildNodes.Count; i++)
-                {
-                    if (node.ChildNodes[i].ChildNodes.Count > 0 && node.ChildNodes[i].FirstChild.NodeType != XmlNodeType.Text)
-                        builder += GetTitles(node.ChildNodes[i]) + " ";
-                }
+        	
+			string builder = String.Empty;
+        	for (int i = 0; i < node.ChildNodes.Count; i++)
+        	{
+        		if (node.ChildNodes[i].ChildNodes.Count > 0 && node.ChildNodes[i].FirstChild.NodeType != XmlNodeType.Text)
+        			builder += GetTitles(node.ChildNodes[i]) + " ";
+        	}
 
-                return builder;
-            }
+        	return builder;
         }
     }
 }

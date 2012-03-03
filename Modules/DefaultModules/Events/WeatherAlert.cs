@@ -45,9 +45,9 @@ namespace DefaultModules.Events
         private DispatcherTimer timer;
 
         // number of degrees temp must re-pass to enable triggering again
-        private static int OFFSET = 1;
+    	private const int Offset = 1;
 
-        public void OnSaved(WpfConfiguration configurationControl)
+    	public void OnSaved(WpfConfiguration configurationControl)
         {
             var config = (WeatherAlertConfig)configurationControl;
             zipCode = config.ZipCodeProp;
@@ -63,9 +63,9 @@ namespace DefaultModules.Events
         /// <returns>"Watching {zip code or city name} for {above or below X}F"</returns>
         public string GetConfigString()
         {
-            string above_below = checkBelow ? "above " : "below ";
-            above_below += temperature;
-            return String.Format("Watching {0} for {1}F", zipCode, above_below);
+            string aboveBelow = checkBelow ? "above " : "below ";
+            aboveBelow += temperature;
+            return String.Format("Watching {0} for {1}F", zipCode, aboveBelow);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace DefaultModules.Events
                             // Used to crash on "Paris" because of encoding issues, now using 
                             // Western-European Windows encoding
                             StreamReader s = new StreamReader(responseStream, Encoding.GetEncoding(1252));
-                            XmlReader r = XmlTextReader.Create(s);
+                            XmlReader r = XmlReader.Create(s);
 
                             r.ReadToFollowing("temp_f");
                             int temp = Convert.ToInt32(r.GetAttribute("data"));
@@ -147,7 +147,7 @@ namespace DefaultModules.Events
                             // if above desired temperature and watching for abovem trigger
                             if (isBelowOrAbove)
                             {
-                                bool reset = ((temp == temperature + OFFSET) && checkBelow) || ((temp == temperature - OFFSET) && !checkBelow);
+                                bool reset = ((temp == temperature + Offset) && checkBelow) || ((temp == temperature - Offset) && !checkBelow);
                                 if (!hasPassed)
                                 {
                                     hasPassed = true;

@@ -9,7 +9,7 @@ namespace PhidgetModules.Reaction
 {
     [DataContract]
     [MayhemModule("Phidget: Adv. Servo", "Controls a servo")]
-	internal class Phidget1066AdvServo : ReactionBase, IWpfConfigurable
+	public class Phidget1066AdvServo : ReactionBase, IWpfConfigurable
     {
         // Instance of the servo class
         private static AdvancedServo advServo;
@@ -59,6 +59,8 @@ namespace PhidgetModules.Reaction
             // TODO: This should be configurable
             if (advServo.servos.Count >= 1)
             {
+				advServo.servos[0].Engaged = true;
+				advServo.servos[0].SpeedRamping = false;
                 advServo.servos[0].Position = position;
             }
         }

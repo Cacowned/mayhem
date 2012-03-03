@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using NuGet;
-using System.Collections.Generic;
 
 namespace Updater
 {
@@ -43,7 +42,7 @@ namespace Updater
 			get
 			{
 				if (manager == null)
-					manager = new PackageManager(MayhemNuget.Repository, MayhemNuget.InstallPath);
+					manager = new PackageManager(Repository, InstallPath);
 
 				return manager;
 			}

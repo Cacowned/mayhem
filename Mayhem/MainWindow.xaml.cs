@@ -54,7 +54,7 @@ namespace Mayhem
 			dict.Source = uri;
 			Application.Current.Resources.MergedDictionaries.Add(dict);
 
-			app.DependenciesUpdated += new App.DependenciesUpdatedHandler(app_DependenciesUpdated);
+			app.DependenciesUpdated += app_DependenciesUpdated;
 			mayhem = MayhemEntry.Instance;
 			mayhem.SetConfigurationType(typeof(IWpfConfigurable));
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -81,7 +82,7 @@ namespace DefaultModules.LowLevel
         /// </summary>
         private static void MakeRequest()
         {
-            System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+            IPHostEntry obj = Dns.GetHostEntry("www.google.com");
         }
 
         /// <summary>

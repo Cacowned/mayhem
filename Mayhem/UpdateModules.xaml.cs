@@ -54,7 +54,7 @@ namespace Mayhem
 							buttonClose.IsEnabled = true;
 						});
 					}
-					catch (WebException exception)
+					catch (WebException)
 					{
 						packageManager.Logger.Log(MessageLevel.Error, "Could not connect to server.");
 					}

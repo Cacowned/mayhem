@@ -45,6 +45,7 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
+        	CanSave = true;
             foreach (string servoType in Enum.GetNames(typeof(ServoServo.ServoType)))
             {
                 //stop here
