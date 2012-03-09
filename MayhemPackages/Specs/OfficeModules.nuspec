@@ -13,7 +13,7 @@ Outlook Reminder – Triggers when an Outlook Reminder appears in your calendar.
 
 Reactions
 PowerPoint Commands – Sends the Next Slide or Previous Slide Command as specified. If multiple instances of PowerPoint are running, it only sends the command to the first instance.</description>
-    <summary>These are the default modules for Mayhem. These basic events and reactions work without additional hardware or software.</summary>
+    <summary>These modules interact with Office 2010.</summary>
     <copyright>Copyright © Outercurve 2011</copyright>
     <tags>Outlook, Powerpoint, Email, Reminder, Slides, Next, Previous</tags>
     <dependencies>
