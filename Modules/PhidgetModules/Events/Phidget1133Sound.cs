@@ -14,7 +14,7 @@ namespace PhidgetModules.Events
     {
         public WpfConfiguration ConfigurationControl
         {
-            get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1133Sound(TopValue, Increasing)); }
+            get { return new SensorConfig(Index, ConvertToString, new Config1133Sound(TopValue, Increasing)); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)

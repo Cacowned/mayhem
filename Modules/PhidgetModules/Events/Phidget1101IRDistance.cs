@@ -13,7 +13,7 @@ namespace PhidgetModules.Events
 	{
 		public WpfConfiguration ConfigurationControl
 		{
-			get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1101IrDistance(TopValue, BottomValue)); }
+			get { return new SensorConfig(Index, ConvertToString, new Config1101IrDistance(TopValue, BottomValue)); }
 		}
 
 		public void OnSaved(WpfConfiguration configurationControl)

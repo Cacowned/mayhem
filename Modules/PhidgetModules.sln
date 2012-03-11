@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhidgetModules", "PhidgetModules\PhidgetModules.csproj", "{2BAE1E42-8103-43DB-B9E6-5828B45FE746}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{24DD381F-FC86-4E64-ADE3-E4697C0FA167}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		PhidgetModules.vsmdi = PhidgetModules.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhidgetTest", "PhidgetTest\PhidgetTest.csproj", "{E82B01C2-4376-4DF9-A9CD-EAF311DF2A7A}"
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = PhidgetModules.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -13,6 +25,10 @@ Global
 		{2BAE1E42-8103-43DB-B9E6-5828B45FE746}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BAE1E42-8103-43DB-B9E6-5828B45FE746}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BAE1E42-8103-43DB-B9E6-5828B45FE746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82B01C2-4376-4DF9-A9CD-EAF311DF2A7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82B01C2-4376-4DF9-A9CD-EAF311DF2A7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82B01C2-4376-4DF9-A9CD-EAF311DF2A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82B01C2-4376-4DF9-A9CD-EAF311DF2A7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

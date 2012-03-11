@@ -4,6 +4,7 @@ using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using Phidgets;
+using System;
 
 namespace PhidgetModules.Reaction
 {
@@ -27,11 +28,6 @@ namespace PhidgetModules.Reaction
 			outputType = DigitalOutputType.Toggle;
 		}
 
-		protected override void OnAfterLoad()
-		{
-			ifKit = InterfaceFactory.Interface;
-		}
-
 		public WpfConfiguration ConfigurationControl
 		{
 			get { return new PhidgetDigitalOutputConfig(ifKit, index, outputType); }
@@ -41,6 +37,25 @@ namespace PhidgetModules.Reaction
 		{
 			index = ((PhidgetDigitalOutputConfig)configurationControl).Index;
 			outputType = ((PhidgetDigitalOutputConfig)configurationControl).OutputType;
+		}
+
+		protected override void OnEnabling(EnablingEventArgs e)
+		{
+			try
+			{
+				ifKit = PhidgetManager.Get<InterfaceKit>();
+			}
+			catch (InvalidOperationException)
+			{
+				ErrorLog.AddError(ErrorType.Failure, "The interface kit is not attached");
+				e.Cancel = true;
+				return;
+			}
+		}
+
+		protected override void OnDisabled(DisabledEventArgs e)
+		{
+			PhidgetManager.Release<InterfaceKit>(ref ifKit);
 		}
 
 		public string GetConfigString()

@@ -23,8 +23,6 @@ namespace PhidgetModules.Events
 
 		protected override void OnAfterLoad()
 		{
-			ir = InterfaceFactory.Ir;
-
 			gotCode = ir_Code;
 		}
 
@@ -64,15 +62,24 @@ namespace PhidgetModules.Events
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
+			try
+			{
+				ir = PhidgetManager.Get<IR>();
+			}
+			catch (InvalidOperationException)
+			{
+				ErrorLog.AddError(ErrorType.Failure, "The IR Phidget is not attached");
+				e.Cancel = true;
+				return;
+			}
+
 			ir.Code += gotCode;
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			if (ir != null)
-			{
-				ir.Code -= gotCode;
-			}
+			ir.Code -= gotCode;
+			PhidgetManager.Release<IR>(ref ir);
 		}
 	}
 }

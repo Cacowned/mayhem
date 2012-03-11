@@ -4,6 +4,7 @@ using MayhemWpf.UserControls;
 using Phidgets;
 using Phidgets.Events;
 using MayhemCore;
+using System;
 
 namespace PhidgetModules.Wpf
 {
@@ -28,7 +29,6 @@ namespace PhidgetModules.Wpf
 
         public Phidget1055IrTransmitConfig(IRCode code, IRCodeInfo codeInfo)
         {
-            ir = InterfaceFactory.Ir;
             Code = code;
             CodeInfo = codeInfo;
 
@@ -46,6 +46,12 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
+			try
+			{
+				ir = PhidgetManager.Get<IR>(throwIfNotAttached: false);
+			}
+			catch (InvalidOperationException) { }
+
             ir.Learn += ir_Learn;
             ir.Attach += ir_Attach;
             ir.Detach += ir_Detach;
@@ -96,6 +102,9 @@ namespace PhidgetModules.Wpf
             ir.Learn -= ir_Learn;
             ir.Attach -= ir_Attach;
             ir.Detach -= ir_Detach;
+			ir.Code -= ir_Code;
+
+			PhidgetManager.Release<IR>(ref ir);
         }
 
 	}

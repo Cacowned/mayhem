@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -8,92 +9,100 @@ using Phidgets.Events;
 
 namespace PhidgetModules.Events
 {
-    [DataContract]
-    [MayhemModule("Phidget: Digital Input", "Triggers on a digital input")]
-    internal class DigitalInput : EventBase, IWpfConfigurable
-    {
-        // Which index do we want to be looking at?
-        [DataMember]
-        private int index;
+	[DataContract]
+	[MayhemModule("Phidget: Digital Input", "Triggers on a digital input")]
+	internal class DigitalInput : EventBase, IWpfConfigurable
+	{
+		// Which index do we want to be looking at?
+		[DataMember]
+		private int index;
 
-        // Toggle when it goes on, or when it goes off?
-        [DataMember]
-        private bool onWhenOn;
+		// Toggle when it goes on, or when it goes off?
+		[DataMember]
+		private bool onWhenOn;
 
-        // The interface kit we are using for the sensors
-        private InterfaceKit ifKit;
+		// The interface kit we are using for the sensors
+		private InterfaceKit ifKit;
 
-        private InputChangeEventHandler inputChangeHandler;
+		private InputChangeEventHandler inputChangeHandler;
 
-        protected override void OnLoadDefaults()
-        {
-            index = 0;
-            onWhenOn = true;
-        }
+		protected override void OnLoadDefaults()
+		{
+			index = 0;
+			onWhenOn = true;
+		}
 
-        protected override void OnAfterLoad()
-        {
-            ifKit = InterfaceFactory.Interface;
-            inputChangeHandler = InputChanged;
-        }
+		protected override void OnAfterLoad()
+		{
+			inputChangeHandler = InputChanged;
+		}
 
-        public WpfConfiguration ConfigurationControl
-        {
-            get { return new PhidgetDigitalInputConfig(ifKit, index, onWhenOn); }
-        }
+		public WpfConfiguration ConfigurationControl
+		{
+			get { return new PhidgetDigitalInputConfig(ifKit, index, onWhenOn); }
+		}
 
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            index = ((PhidgetDigitalInputConfig)configurationControl).Index;
-            onWhenOn = ((PhidgetDigitalInputConfig)configurationControl).OnWhenOn;
-        }
+		public void OnSaved(WpfConfiguration configurationControl)
+		{
+			index = ((PhidgetDigitalInputConfig)configurationControl).Index;
+			onWhenOn = ((PhidgetDigitalInputConfig)configurationControl).OnWhenOn;
+		}
 
-        public string GetConfigString()
-        {
-            string type = "turns on";
-            if (!onWhenOn)
-            {
-                type = "turns off";
-            }
+		public string GetConfigString()
+		{
+			string type = "turns on";
+			if (!onWhenOn)
+			{
+				type = "turns off";
+			}
 
-            return string.Format("Triggers when input #{0} {1}", index, type);
-        }
+			return string.Format("Triggers when input #{0} {1}", index, type);
+		}
 
-        // The input has changed, do the work here
-        protected void InputChanged(object sender, InputChangeEventArgs ex)
-        {
-            // If e.CurrentValue is true, then it used to be false.
-            // Trigger when appropriate
+		// The input has changed, do the work here
+		protected void InputChanged(object sender, InputChangeEventArgs ex)
+		{
+			// If e.CurrentValue is true, then it used to be false.
+			// Trigger when appropriate
 
-            // We are dealing with the right input
-            if (ex.Index == index)
-            {
-                // If its true and we turn on when it turns on
-                // then trigger
-                if (ex.Value && onWhenOn)
-                {
-                    Trigger();
-                }
-                else if (!ex.Value && !onWhenOn)
-                {
-                    // otherwise, if it its off, and we trigger
-                    // when it turns off, then trigger
-                    Trigger();
-                }
-            }
-        }
+			// We are dealing with the right input
+			if (ex.Index == index)
+			{
+				// If its true and we turn on when it turns on
+				// then trigger
+				if (ex.Value && onWhenOn)
+				{
+					Trigger();
+				}
+				else if (!ex.Value && !onWhenOn)
+				{
+					// otherwise, if it its off, and we trigger
+					// when it turns off, then trigger
+					Trigger();
+				}
+			}
+		}
 
-        protected override void OnEnabling(EnablingEventArgs e)
-        {
-            ifKit.InputChange += inputChangeHandler;
-        }
+		protected override void OnEnabling(EnablingEventArgs e)
+		{
+			try
+			{
+				ifKit = PhidgetManager.Get<InterfaceKit>();
+			}
+			catch (InvalidOperationException)
+			{
+				ErrorLog.AddError(ErrorType.Failure, "The Phidget interface kit is not attached");
+				e.Cancel = true;
+				return;
+			}
 
-        protected override void OnDisabled(DisabledEventArgs e)
-        {
-            if (ifKit != null)
-            {
-                ifKit.InputChange -= inputChangeHandler;
-            }
-        }
-    }
+			ifKit.InputChange += inputChangeHandler;
+		}
+
+		protected override void OnDisabled(DisabledEventArgs e)
+		{
+			ifKit.InputChange -= inputChangeHandler;
+			PhidgetManager.Release<InterfaceKit>(ref ifKit);
+		}
+	}
 }
