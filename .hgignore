@@ -18,3 +18,7 @@ glob:*.rej
 StyleCop.Cache
 _ReSharper.*
 publish/
+PhidgetModules.vsmdi
+MayhemInstaller/
+TestResults/
+Modules/TraceAndTestImpact.testsettings

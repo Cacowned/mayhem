@@ -3,6 +3,7 @@ using System.Windows.Threading;
 using MayhemWpf.UserControls;
 using Phidgets;
 using Phidgets.Events;
+using System;
 
 namespace PhidgetModules.Wpf
 {
@@ -22,7 +23,6 @@ namespace PhidgetModules.Wpf
 
 		public Phidget1055IrReceiverConfig(IRCode code)
 		{
-			Ir = InterfaceFactory.Ir;
 			Code = code;
 
 			DataContext = this;
@@ -39,6 +39,12 @@ namespace PhidgetModules.Wpf
 
 		public override void OnLoad()
 		{
+			try
+			{
+				Ir = PhidgetManager.Get<IR>(throwIfNotAttached: false);
+			}
+			catch (InvalidOperationException) { }
+
 			Ir.Code += ir_Code;
 			Ir.Attach += ir_Attach;
 			Ir.Detach += ir_Detach;
@@ -81,6 +87,8 @@ namespace PhidgetModules.Wpf
 			Ir.Code -= ir_Code;
 			Ir.Attach -= ir_Attach;
 			Ir.Detach -= ir_Detach;
+
+			PhidgetManager.Release<IR>(ref Ir);
 		}
 	}
 }

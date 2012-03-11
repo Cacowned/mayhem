@@ -112,7 +112,10 @@ namespace Mayhem
 				}
 				catch
 				{
-					ErrorLog.AddError(ErrorType.Failure, "Error closing " + configuration.Name + "'s configuration");
+					Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+					{
+						ErrorLog.AddError(ErrorType.Failure, "Error closing " + configuration.Name + "'s configuration");
+					}));
 				}
 			});
 			((MainWindow)Application.Current.MainWindow).Save();
@@ -130,7 +133,10 @@ namespace Mayhem
 				}
 				catch
 				{
-					ErrorLog.AddError(ErrorType.Failure, "Error cancelling " + configuration.Name + "'s configuration");
+					Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+					{
+						ErrorLog.AddError(ErrorType.Failure, "Error cancelling " + configuration.Name + "'s configuration");
+					}));
 				}
 			});
 			DialogResult = false;

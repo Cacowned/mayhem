@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -10,22 +11,13 @@ namespace PhidgetModules.Events
 {
     [DataContract]
     [MayhemModule("Phidget: Rfid", "Triggers with a certain Rfid Tag")]
-    internal class Phidget1023Rfid : EventBase, IWpfConfigurable
+    public class Phidget1023Rfid : EventBase, IWpfConfigurable
     {
         // This is the tag we are watching for
         [DataMember]
         private string tag;
 
         private RFID rfid;
-
-		// count the number of connections to the rfid
-		private static int counter;
-
-        protected override void OnAfterLoad()
-        {
-            rfid = InterfaceFactory.Rfid;
-			counter++;
-        }
 
         public WpfConfiguration ConfigurationControl
         {
@@ -60,26 +52,26 @@ namespace PhidgetModules.Events
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
+			try
+			{
+				rfid = PhidgetManager.Get<RFID>();
+			}
+			catch (InvalidOperationException)
+			{
+				ErrorLog.AddError(ErrorType.Failure, "The RFID receiver is not attached");
+				e.Cancel = true;
+				return;
+			}
+			
             rfid.Tag += RfidTag;
             rfid.TagLost += LostRfidTag;
         }
 
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            if (rfid != null)
-            {
-                rfid.Tag -= RfidTag;
-                rfid.TagLost -= LostRfidTag;
-
-				if (!e.IsConfiguring)
-				{
-					counter--;
-					if (counter == 0)
-					{
-						InterfaceFactory.CloseRfid();
-					}
-				}
-            }
+			rfid.Tag -= RfidTag;
+			rfid.TagLost -= LostRfidTag;
+			PhidgetManager.Release<RFID>(ref rfid);
         }
     }
 }

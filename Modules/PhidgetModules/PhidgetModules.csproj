@@ -22,7 +22,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\..\MayhemRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>..\..\bin\PhidgetModules\</NoWarn>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,9 +39,11 @@
     </Reference>
     <Reference Include="MayhemCore">
       <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MayhemWpf">
       <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Phidget21.NET">
       <HintPath>..\References\Phidget21.NET.dll</HintPath>
@@ -62,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Events\DigitalInput.cs" />
     <Compile Include="Events\Phidget1023Rfid.cs" />
+    <Compile Include="Events\Phidget1045Temperature.cs" />
     <Compile Include="Events\Phidget1055IrReceiver.cs" />
     <Compile Include="Events\Phidget1101IrDistance.cs" />
     <Compile Include="Events\Phidget1103IRReflective.cs" />
@@ -69,8 +73,11 @@
     <Compile Include="Events\Phidget1127Light.cs" />
     <Compile Include="Events\Phidget1129Touch.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="InterfaceFactory.cs" />
     <Compile Include="OnOffSensorEventBase.cs" />
+    <Compile Include="PhidgetManager.cs" />
+    <Compile Include="Wpf\Phidget1045TemperatureConfig.xaml.cs">
+      <DependentUpon>Phidget1045TemperatureConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\UserControls\PhidgetConfigControl.cs" />
     <Compile Include="RangeSensorEventBase.cs" />
     <Compile Include="Reaction\DigitalOutput.cs" />
@@ -124,6 +131,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Wpf\Phidget1045TemperatureConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wpf\Phidget1055IrTransmitConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -180,6 +191,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="phidget21.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

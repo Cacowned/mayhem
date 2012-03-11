@@ -31,7 +31,7 @@ namespace PhidgetModules.Events
 
 		public WpfConfiguration ConfigurationControl
 		{
-			get { return new SensorConfig(IfKit, Index, ConvertToString, new Config1103IrReflective(OnTurnOn)); }
+			get { return new SensorConfig(Index, ConvertToString, new Config1103IrReflective(OnTurnOn)); }
 		}
 
 		public void OnSaved(WpfConfiguration configurationControl)
