@@ -2,6 +2,7 @@
 using MayhemCore;
 using Phidgets;
 using Phidgets.Events;
+using System;
 
 namespace PhidgetModules
 {
@@ -36,14 +37,29 @@ namespace PhidgetModules
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			ifKit = PhidgetManager.Get<InterfaceKit>();
+			if (!e.WasConfiguring)
+			{
+				try
+				{
+					ifKit = PhidgetManager.Get<InterfaceKit>();
+				}
+				catch (InvalidOperationException)
+				{
+					ErrorLog.AddError(ErrorType.Failure, "The Phidget interface kit is not attached");
+					e.Cancel = true;
+					return;
+				}
+			}
 			ifKit.SensorChange += handler;
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
 			ifKit.SensorChange -= handler;
-			PhidgetManager.Release<InterfaceKit>(ref ifKit);
+			if (!e.IsConfiguring)
+			{
+				PhidgetManager.Release<InterfaceKit>(ref ifKit);
+			}
 		}
 	}
 }

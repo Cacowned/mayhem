@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using MayhemCore;
 using MayhemWpf.UserControls;
 using Phidgets;
+using Phidgets.Events;
+using System.Windows.Threading;
 
 namespace PhidgetModules.Wpf
 {
@@ -17,18 +19,17 @@ namespace PhidgetModules.Wpf
     /// </summary>
     public partial class Phidget1066AdvServoConfig : WpfConfiguration
     {
-        public int Index { get; private set; }
+		private AdvancedServo servo;
 
-        public AdvancedServo AdvServo { get; private set; }
+        public int Index { get; private set; }
 
         public ServoServo.ServoType ServoType { get; private set; }
 
         public double Position { get; private set; }
 
-        public Phidget1066AdvServoConfig(AdvancedServo servo, int index, ServoServo.ServoType servoType, double position)
+        public Phidget1066AdvServoConfig(int index, ServoServo.ServoType servoType, double position)
         {
             Index = index;
-            AdvServo = servo;
             ServoType = servoType;
             Position = position;
 
@@ -45,6 +46,11 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
+			servo = PhidgetManager.Get<AdvancedServo>(false);
+			servo.Attach += servo_Attach;
+			servo.Detach += servo_Detach;
+
+
         	CanSave = true;
             foreach (string servoType in Enum.GetNames(typeof(ServoServo.ServoType)))
             {
@@ -63,23 +69,59 @@ namespace PhidgetModules.Wpf
             }
 
             PositionSlider.Value = Position;
+
+			SetAttached();
         }
+
+		private void servo_Attach(object sender, AttachEventArgs e)
+		{
+			SetAttached();
+		}
+
+		private void servo_Detach(object sender, DetachEventArgs e)
+		{
+			SetAttached();
+		}
+
+		private void SetAttached()
+		{
+			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+			{
+				if (servo.Attached)
+				{
+					Invalid.Visibility = Visibility.Collapsed;
+				}
+				else
+				{
+					Invalid.Visibility = Visibility.Visible;
+				}
+			}));
+		}
+
+
+		public override void OnClosing()
+		{
+			servo.Attach -= servo_Attach;
+			servo.Detach -= servo_Detach;
+
+			PhidgetManager.Release<AdvancedServo>(ref servo);
+		}
 
         private void TypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (AdvServo.servos.Count > 0)
+            if (servo.servos.Count > 0)
             {
                 try
                 {
-                    AdvServo.servos[Index].Type = (ServoServo.ServoType)Enum.Parse(typeof(ServoServo.ServoType), TypeComboBox.SelectedItem.ToString());
+                    servo.servos[Index].Type = (ServoServo.ServoType)Enum.Parse(typeof(ServoServo.ServoType), TypeComboBox.SelectedItem.ToString());
                 }
                 catch (Exception erf)
                 {
                     Logger.WriteLine("Phidget1066AdvServoConfig: " + erf);
                 }
 
-                PositionSlider.Maximum = AdvServo.servos[Index].PositionMax;
-                PositionSlider.Minimum = AdvServo.servos[Index].PositionMin;
+				PositionSlider.Maximum = servo.servos[Index].PositionMax;
+				PositionSlider.Minimum = servo.servos[Index].PositionMin;
 
                 PositionSlider.Value = Position;
             }

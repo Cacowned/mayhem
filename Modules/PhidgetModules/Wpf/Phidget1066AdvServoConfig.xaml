@@ -27,7 +27,7 @@
                 <Slider Name="PositionSlider" ValueChanged="PositionSlider_ValueChanged" />
             </DockPanel>
 
-            <!--<TextBlock Style="{StaticResource ConfigErrorMessage}" Name="Invalid" Text="Can't find the Servo controller" Grid.Column="1" Grid.Row="3" Visibility="Visible" />-->
+            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="Invalid" Text="Can't find the Servo controller" Grid.Column="1" Grid.Row="3" Visibility="Visible" />
         </Grid>
             
             
