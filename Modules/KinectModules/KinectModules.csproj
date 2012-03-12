@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="MayhemCore">
       <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
@@ -64,11 +64,16 @@
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="UIAutomationTypes" />
-    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsBase">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\SpeechRecognition.cs" />
+    <Compile Include="KinectAudioStreamManager.cs" />
+    <Compile Include="KinectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpeechRecognitionManager.cs" />
     <Compile Include="Wpf\KinectSpeechConfig.xaml.cs">
       <DependentUpon>KinectSpeechConfig.xaml</DependentUpon>
     </Compile>
