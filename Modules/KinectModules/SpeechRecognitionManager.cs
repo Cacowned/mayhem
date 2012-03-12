@@ -14,8 +14,7 @@ namespace KinectModules
 		private static Stream stream;
 		private static SpeechRecognitionEngine engine;
 		private static RecognizerInfo recognizer;
-
-
+		
 		// Pairs the phrase with a set of all the "event handlers" tied to it
 		private static Dictionary<string, List<Action<SpeechRecognizedEventArgs>>> recognitions;
 
@@ -51,7 +50,7 @@ namespace KinectModules
 						EncodingFormat.Pcm, 16000, 16, 1,
 						32000, 2, null));
 
-					engine.RecognizeAsync();
+					//engine.RecognizeAsync();
 				}
 				catch (Exception e)
 				{
@@ -131,9 +130,14 @@ namespace KinectModules
 			if (recognitions.Count == 0)
 			{
 				engine.RecognizeAsyncCancel();
+				engine.SpeechRecognized -= SpeechRecognized;
+				engine = null;
+				KinectAudioStreamManager.Release(ref stream);
 			}
-
-			ResetGrammar();
+			else
+			{
+				ResetGrammar();
+			}
 		}
 
 		private static RecognizerInfo GetKinectRecognizer()
