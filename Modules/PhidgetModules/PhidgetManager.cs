@@ -10,22 +10,11 @@ namespace PhidgetModules
 		private static Dictionary<Type, Phidget> openTypes;
 		private static Dictionary<Type, int> counts;
 
-
-		private static Stack<string> stack;
-
-		private static List<string> opens;
-		private static List<string> closes;
-
 		// Flyweight the different Phidget types
 		static PhidgetManager()
 		{
 			openTypes = new Dictionary<Type, Phidget>();
 			counts = new Dictionary<Type, int>();
-
-			opens = new List<string>();
-			closes = new List<string>();
-
-			stack = new Stack<string>();
 		}
 
 		public static T Get<T>(bool throwIfNotAttached = true) where T : Phidget, new()
@@ -42,7 +31,7 @@ namespace PhidgetModules
 				sensor.open();
 				try
 				{
-					sensor.waitForAttachment(500);
+					sensor.waitForAttachment(200);
 				}
 				catch (PhidgetException)
 				{
@@ -63,10 +52,6 @@ namespace PhidgetModules
 				throw new InvalidOperationException("No Phidget with the type " + type.ToString() + " is attached");
 			}
 
-			StackTrace trace = new StackTrace();
-			opens.Add(trace.GetFrame(1).GetMethod().DeclaringType.Name+": "+trace.GetFrame(1).GetMethod().Name);
-			stack.Push(trace.GetFrame(1).GetMethod().DeclaringType.Name + ": " + trace.GetFrame(1).GetMethod().Name);
-
 			IncrementCount(type);
 
 			// Return the object
@@ -84,7 +69,6 @@ namespace PhidgetModules
 			{
 				counts[type]++;
 			}
-
 		}
 
 		public static void Release<T>(ref T phidget) where T : Phidget
@@ -103,10 +87,6 @@ namespace PhidgetModules
 				{
 					throw new InvalidOperationException("Get must be called for the phidget device before Release");
 				}
-
-				StackTrace trace = new StackTrace();
-				closes.Add(trace.GetFrame(1).GetMethod().DeclaringType.Name + ": " + trace.GetFrame(1).GetMethod().Name);
-				stack.Pop();
 
 				// Decrement the type
 				counts[type]--;
