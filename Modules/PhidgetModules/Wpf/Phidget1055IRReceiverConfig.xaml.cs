@@ -39,11 +39,7 @@ namespace PhidgetModules.Wpf
 
 		public override void OnLoad()
 		{
-			try
-			{
-				Ir = PhidgetManager.Get<IR>(throwIfNotAttached: false);
-			}
-			catch (InvalidOperationException) { }
+			Ir = PhidgetManager.Get<IR>(throwIfNotAttached: false);
 
 			Ir.Code += ir_Code;
 			Ir.Attach += ir_Attach;

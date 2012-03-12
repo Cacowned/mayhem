@@ -18,13 +18,7 @@ namespace PhidgetModules.Events
 		private IRCode code;
 
 		private IR ir;
-		private IRCodeEventHandler gotCode;
 		private DateTime lastSignal;
-
-		protected override void OnAfterLoad()
-		{
-			gotCode = ir_Code;
-		}
 
 		public WpfConfiguration ConfigurationControl
 		{
@@ -44,6 +38,12 @@ namespace PhidgetModules.Events
 		// When we receive a code
 		private void ir_Code(object sender, IRCodeEventArgs e)
 		{
+			if (code == null)
+			{
+				ErrorLog.AddError(ErrorType.Failure, "No code is set, please reconfigure");
+				return;
+			}
+
 			// If the data matches,
 			// Do we care about the number of times it was repeated?
 			if (code.Data.SequenceEqual(e.Code.Data))
@@ -62,24 +62,33 @@ namespace PhidgetModules.Events
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			try
+			// If we weren't just configuring, open the sensor
+			if (!e.WasConfiguring)
 			{
-				ir = PhidgetManager.Get<IR>();
-			}
-			catch (InvalidOperationException)
-			{
-				ErrorLog.AddError(ErrorType.Failure, "The IR Phidget is not attached");
-				e.Cancel = true;
-				return;
+				try
+				{
+					ir = PhidgetManager.Get<IR>();
+				}
+				catch (InvalidOperationException)
+				{
+					ErrorLog.AddError(ErrorType.Failure, "The IR Phidget is not attached");
+					e.Cancel = true;
+					return;
+				}
 			}
 
-			ir.Code += gotCode;
+			ir.Code += ir_Code;
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			ir.Code -= gotCode;
-			PhidgetManager.Release<IR>(ref ir);
+			ir.Code -= ir_Code;
+
+			// only release if we aren't going into the configuration menu
+			if (!e.IsConfiguring)
+			{
+				PhidgetManager.Release<IR>(ref ir);
+			}
 		}
 	}
 }

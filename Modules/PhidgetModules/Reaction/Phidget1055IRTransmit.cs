@@ -28,27 +28,36 @@ namespace PhidgetModules.Reaction
 
 		public void OnSaved(WpfConfiguration configurationControl)
 		{
-			code = ((Phidget1055IrTransmitConfig)configurationControl).Code;
-			codeInfo = ((Phidget1055IrTransmitConfig)configurationControl).CodeInfo;
+			var config = configurationControl as Phidget1055IrTransmitConfig;
+			code = config.Code;
+			codeInfo = config.CodeInfo;
 		}
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			try
+			// If we weren't just configuring, open the sensor
+			if (!e.WasConfiguring)
 			{
-				ir = PhidgetManager.Get<IR>();
-			}
-			catch (InvalidOperationException)
-			{
-				ErrorLog.AddError(ErrorType.Failure, "The IR Phidget is not attached");
-				e.Cancel = true;
-				return;
+				try
+				{
+					ir = PhidgetManager.Get<IR>();
+				}
+				catch (InvalidOperationException)
+				{
+					ErrorLog.AddError(ErrorType.Failure, "The IR Phidget is not attached");
+					e.Cancel = true;
+					return;
+				}
 			}
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			PhidgetManager.Release<IR>(ref ir);
+			// only release if we aren't going into the configuration menu
+			if (!e.IsConfiguring)
+			{
+				PhidgetManager.Release<IR>(ref ir);
+			}
 		}
 
 		public string GetConfigString()
@@ -58,6 +67,12 @@ namespace PhidgetModules.Reaction
 
 		public override void Perform()
 		{
+			if (!ir.Attached)
+			{
+				ErrorLog.AddError(ErrorType.Failure, "The Phidget IR transmitter is not attached");
+				return;
+			}
+
 			if (code != null && codeInfo != null)
 			{
 				ir.transmit(code, codeInfo);
