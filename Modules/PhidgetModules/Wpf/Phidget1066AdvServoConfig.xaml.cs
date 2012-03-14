@@ -48,10 +48,7 @@ namespace PhidgetModules.Wpf
         {
 			servo = PhidgetManager.Get<AdvancedServo>(false);
 			servo.Attach += servo_Attach;
-			servo.Detach += servo_Detach;
 
-
-        	CanSave = true;
             foreach (string servoType in Enum.GetNames(typeof(ServoServo.ServoType)))
             {
                 //stop here
@@ -81,17 +78,13 @@ namespace PhidgetModules.Wpf
 			SetAttached();
 		}
 
-		private void servo_Detach(object sender, DetachEventArgs e)
-		{
-			SetAttached();
-		}
-
 		private void SetAttached()
 		{
 			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
 			{
 				if (servo.Attached)
 				{
+					CanSave = true;
 					Invalid.Visibility = Visibility.Collapsed;
 				}
 				else
@@ -105,7 +98,6 @@ namespace PhidgetModules.Wpf
 		public override void OnClosing()
 		{
 			servo.Attach -= servo_Attach;
-			servo.Detach -= servo_Detach;
 
 			PhidgetManager.Release<AdvancedServo>(ref servo);
 		}
