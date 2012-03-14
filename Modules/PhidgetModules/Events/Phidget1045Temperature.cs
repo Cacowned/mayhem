@@ -45,7 +45,7 @@ namespace PhidgetModules.Events
 				}
 				catch (InvalidOperationException)
 				{
-					ErrorLog.AddError(ErrorType.Failure, "The temperature sensor is not attached");
+					ErrorLog.AddError(ErrorType.Failure, "The Phidget temperature sensor is not attached");
 					e.Cancel = true;
 					return;
 				}

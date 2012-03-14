@@ -52,7 +52,7 @@ namespace PhidgetModules.Reaction
 				}
 				catch (InvalidOperationException)
 				{
-					ErrorLog.AddError(ErrorType.Failure, "There is no Phidget servo attached");
+					ErrorLog.AddError(ErrorType.Failure, "The Phidget servo controller is not attached");
 					e.Cancel = true;
 					return;
 				}
@@ -60,11 +60,11 @@ namespace PhidgetModules.Reaction
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
-		{
+		{	
 			// only release if we aren't going into the configuration menu
 			if (!e.IsConfiguring)
 			{
-				PhidgetManager.Release<AdvancedServo>(ref advServo);
+				PhidgetManager.Release(ref advServo);
 			}
 		}
 
