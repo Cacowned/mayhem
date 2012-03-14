@@ -46,9 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MayhemSerial.cs" />
-    <Compile Include="MayhemSerialSettings.cs" />
+    <Compile Include="SerialSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ISerialPortDataListener.cs" />
+    <Compile Include="SerialPortManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
