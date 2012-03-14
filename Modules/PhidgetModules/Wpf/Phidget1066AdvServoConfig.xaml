@@ -7,8 +7,8 @@
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" />
-                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="110" />
+                <ColumnDefinition Width="290" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -23,7 +23,7 @@
 
             <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Move To Position:</TextBlock>
             <DockPanel Grid.Column="1" Grid.Row="1">
-                <TextBlock Name="PositionText" Width="40" DockPanel.Dock="Right" IsEnabled="False" TextAlignment="Center" />
+                <TextBlock Name="PositionText" Width="30" DockPanel.Dock="Right" IsEnabled="False" TextAlignment="Center" />
                 <Slider Name="PositionSlider" ValueChanged="PositionSlider_ValueChanged" />
             </DockPanel>
 
