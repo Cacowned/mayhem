@@ -18,18 +18,7 @@ namespace MayhemSerial
     {
         private const int VerbosityLevel = 0;
 
-        public const int DwFlagsAndAttributes = 0x40000000;
-
         private readonly Dictionary<string, SerialPort> connections;
-
-        // sharing of datareceivedevent --> must write the data to a shared buffer and give a copy to the listeners
-        // otherwise the modules will preemt each other in consuming the Serial read buffer
-        // handlers
-        private readonly SerialDataReceivedEventHandler serialReceived;
-        private readonly SerialErrorReceivedEventHandler serialError;
-        private readonly EventHandler serialDisposed;
-
-        private string[] serialPortNames;
 
         private byte[] rxBuf = new byte[4096];
 
@@ -75,9 +64,6 @@ namespace MayhemSerial
             allowWrite = true;
             connections = new Dictionary<string, SerialPort>();
 
-            serialReceived = DataReceived;
-            serialError = ErrorReceived;
-            serialDisposed = Disposed;
             UpdatePortList();
         }
 
@@ -86,7 +72,7 @@ namespace MayhemSerial
         /// </summary>
         public void UpdatePortList()
         {
-            serialPortNames = SerialPort.GetPortNames();
+            string[] serialPortNames = SerialPort.GetPortNames();
 
             // check for validity of names in the list --> remove non-existant ports
             foreach (string name in ConnectionNames)
@@ -108,6 +94,7 @@ namespace MayhemSerial
 
 					// This method to check for valid ports is taken from:
 					// http://stackoverflow.com/questions/195483/c-sharp-check-if-a-com-serial-port-is-already-open
+					const int DwFlagsAndAttributes = 0x40000000;
                     SafeFileHandle hFile = CreateFile(@"\\.\" + name, -1073741824, 0, IntPtr.Zero, 3, DwFlagsAndAttributes, IntPtr.Zero);
                     if (!hFile.IsInvalid)
                     {
@@ -144,13 +131,13 @@ namespace MayhemSerial
 
                 if (port.IsOpen)
                 {
-                    port.DataReceived -= serialReceived;
-                    port.ErrorReceived -= serialError;
-                    port.Disposed -= serialDisposed;
+					port.DataReceived -= DataReceived;
+					port.ErrorReceived -= ErrorReceived;
+					port.Disposed -= Disposed;
 
-                    port.DataReceived += serialReceived;
-                    port.ErrorReceived += serialError;
-                    port.Disposed += serialDisposed;
+					port.DataReceived += DataReceived;
+					port.ErrorReceived += ErrorReceived;
+					port.Disposed += Disposed;
 
                     connections[portName] = port;
 
@@ -413,6 +400,11 @@ namespace MayhemSerial
 
         //--------------------------------
         #region data received and other callbacks
+		// sharing of datareceivedevent --> must write the data to a shared buffer and give a copy to the listeners
+		// otherwise the modules will preemt each other in consuming the Serial read buffer
+		// handlers
+
+
         /// <summary>
         /// Main Callback when new data has been received by a serial port
         /// Notifies any attached delegates of then new data in the receive buffer
