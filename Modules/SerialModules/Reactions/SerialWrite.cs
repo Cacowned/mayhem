@@ -20,7 +20,7 @@ namespace SerialModules.Reactions
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			manager.ConnectPort("COM6", settings, RecievedData);
+			manager.ConnectPort("COM6", settings, null);
 		}
 
 		public override void Perform()
@@ -30,7 +30,7 @@ namespace SerialModules.Reactions
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			manager.ReleasePort("COM6", RecievedData);
+			manager.ReleasePort("COM6", null);
 		}
 
 		private void RecievedData(byte[] bytes, int numBytes)
