@@ -133,6 +133,7 @@ namespace MayhemSerial
 					portHandlers.Add(port, handlers);
 
 					port.DataReceived += DataReceived;
+					port.Disposed += Disposed;
 					// TODO: Do we need to handle the Disposed event?
 
 				}
@@ -168,12 +169,22 @@ namespace MayhemSerial
 
 			if (portHandlers[port].Count == 0)
 			{
-				// We have no more handlers for this port, remove it from everything
-				port.Close();
-				portHandlers.Remove(port);
-				portSettings.Remove(portName);
-				ports.Remove(portName);
+				Remove(portName);
 			}
+		}
+
+		private void Remove(string portName)
+		{
+			SerialPort port = ports[portName];
+
+			// We have no more handlers for this port, remove it from everything
+			port.DataReceived -= DataReceived;
+			port.Disposed -= Disposed;
+			port.Close();
+
+			portHandlers.Remove(port);
+			portSettings.Remove(portName);
+			ports.Remove(portName);
 		}
 
 		public void Write(string portName, string message)
@@ -218,5 +229,11 @@ namespace MayhemSerial
 			}
 		}
 
+
+		private void Disposed(object sender, EventArgs e)
+		{
+			SerialPort disposedPort = sender as SerialPort;
+			Remove(disposedPort.PortName);
+		}
 	}
 }
