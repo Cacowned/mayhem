@@ -70,6 +70,9 @@ namespace PhidgetModules.Wpf
 
             PositionSlider.Value = Position;
 
+			// Set the text (this doesn't get called if position was 0)
+        	PositionSlider_ValueChanged(null, null);
+
 			SetAttached();
         }
 
