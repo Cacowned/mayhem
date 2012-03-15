@@ -73,6 +73,7 @@
     <Compile Include="Events\Phidget1127Light.cs" />
     <Compile Include="Events\Phidget1129Touch.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="InterfaceKitType.cs" />
     <Compile Include="OnOffSensorEventBase.cs" />
     <Compile Include="PhidgetManager.cs" />
     <Compile Include="Wpf\Phidget1045TemperatureConfig.xaml.cs">
@@ -117,8 +118,8 @@
     <Compile Include="SensorEventBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueSensorEventBase.cs" />
-    <Compile Include="Wpf\PhidgetDigitalInputConfig.xaml.cs">
-      <DependentUpon>PhidgetDigitalInputConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\ConfigDigitalInput.xaml.cs">
+      <DependentUpon>ConfigDigitalInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\PhidgetDigitalOutputConfig.xaml.cs">
       <DependentUpon>PhidgetDigitalOutputConfig.xaml</DependentUpon>
@@ -175,7 +176,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\PhidgetDigitalInputConfig.xaml">
+    <Page Include="Wpf\ConfigDigitalInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

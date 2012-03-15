@@ -19,18 +19,11 @@ namespace PhidgetModules
 			get;
 			set;
 		}
-
-		private SensorChangeEventHandler handler;
-
+		
 		protected override void OnLoadDefaults()
 		{
 			// Default to first index
 			Index = 0;
-		}
-
-		protected override void OnAfterLoad()
-		{
-			handler = SensorChange;
 		}
 
 		protected abstract void SensorChange(object sender, SensorChangeEventArgs ex);
@@ -50,12 +43,12 @@ namespace PhidgetModules
 					return;
 				}
 			}
-			ifKit.SensorChange += handler;
+			ifKit.SensorChange += SensorChange;
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			ifKit.SensorChange -= handler;
+			ifKit.SensorChange -= SensorChange;
 			if (!e.IsConfiguring)
 			{
 				PhidgetManager.Release<InterfaceKit>(ref ifKit);
