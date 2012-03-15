@@ -12,16 +12,15 @@ namespace PhidgetModules.Wpf
     /// </summary>
     public partial class PhidgetDigitalOutputConfig : WpfConfiguration
     {
-        public int Index { get; set; }
+    	private InterfaceKit ifKit;
 
-        public InterfaceKit IfKit { get; set; }
+		public int Index { get; set; }
 
         public DigitalOutputType OutputType { get; set; }
 
-        public PhidgetDigitalOutputConfig(InterfaceKit ifKit, int index, DigitalOutputType outputType)
+        public PhidgetDigitalOutputConfig(int index, DigitalOutputType outputType)
         {
             Index = index;
-            IfKit = ifKit;
 
             OutputType = outputType;
 
@@ -30,7 +29,9 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
-            IfKit.Attach += ifKit_Attach;
+        	ifKit = PhidgetManager.Get<InterfaceKit>(throwIfNotAttached: false);
+
+            ifKit.Attach += ifKit_Attach;
             PopulateOutputs();
 
             OutputBox.SelectedIndex = Index;
@@ -48,6 +49,11 @@ namespace PhidgetModules.Wpf
             }
         }
 
+		public override void OnClosing()
+		{
+			PhidgetManager.Release(ref ifKit);
+		}
+
         private void ifKit_Attach(object sender, AttachEventArgs e)
         {
             PopulateOutputs();
@@ -55,13 +61,13 @@ namespace PhidgetModules.Wpf
 
         private void PopulateOutputs()
         {
-            if (IfKit.Attached)
+			if (ifKit.Attached)
             {
                 Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
                 {
                     CanSave = true;
 
-                    for (int i = 0; i < IfKit.outputs.Count; i++)
+					for (int i = 0; i < ifKit.outputs.Count; i++)
                     {
                         OutputBox.Items.Add(i);
                     }

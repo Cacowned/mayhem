@@ -6,12 +6,13 @@ using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using Phidgets;
 using Phidgets.Events;
+using PhidgetModules.Wpf.UserControls;
 
 namespace PhidgetModules.Events
 {
 	[DataContract]
 	[MayhemModule("Phidget: Digital Input", "Triggers on a digital input")]
-	internal class DigitalInput : EventBase, IWpfConfigurable
+	public class DigitalInput : EventBase, IWpfConfigurable
 	{
 		// Which index do we want to be looking at?
 		[DataMember]
@@ -23,44 +24,51 @@ namespace PhidgetModules.Events
 
 		// The interface kit we are using for the sensors
 		private InterfaceKit ifKit;
-
-		private InputChangeEventHandler inputChangeHandler;
-
+		
 		protected override void OnLoadDefaults()
 		{
 			index = 0;
 			onWhenOn = true;
 		}
 
-		protected override void OnAfterLoad()
-		{
-			inputChangeHandler = InputChanged;
-		}
-
 		public WpfConfiguration ConfigurationControl
 		{
-			get { return new PhidgetDigitalInputConfig(ifKit, index, onWhenOn); }
+			get
+			{
+				return new SensorConfig(index, ConvertToString, new ConfigDigitalInput(onWhenOn), InterfaceKitType.Input);
+			}
+		}
+
+		public string ConvertToString(int value)
+		{
+			if (value != 0)
+				return "Pressed";
+
+			return "Released";
 		}
 
 		public void OnSaved(WpfConfiguration configurationControl)
 		{
-			index = ((PhidgetDigitalInputConfig)configurationControl).Index;
-			onWhenOn = ((PhidgetDigitalInputConfig)configurationControl).OnWhenOn;
+			SensorConfig sensor = configurationControl as SensorConfig;
+			ConfigDigitalInput config = sensor.Sensor as ConfigDigitalInput;
+
+			index = sensor.Index;
+			onWhenOn = config.OnWhenOn;
 		}
 
 		public string GetConfigString()
 		{
-			string type = "turns on";
+			string type = "pressed";
 			if (!onWhenOn)
 			{
-				type = "turns off";
+				type = "released";
 			}
 
 			return string.Format("Triggers when input #{0} {1}", index, type);
 		}
 
 		// The input has changed, do the work here
-		protected void InputChanged(object sender, InputChangeEventArgs ex)
+		private void InputChange(object sender, InputChangeEventArgs ex)
 		{
 			// If e.CurrentValue is true, then it used to be false.
 			// Trigger when appropriate
@@ -85,24 +93,29 @@ namespace PhidgetModules.Events
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			try
+			if (!e.WasConfiguring)
 			{
-				ifKit = PhidgetManager.Get<InterfaceKit>();
+				try
+				{
+					ifKit = PhidgetManager.Get<InterfaceKit>();
+				}
+				catch (InvalidOperationException)
+				{
+					ErrorLog.AddError(ErrorType.Failure, "The Phidget interface kit is not attached");
+					e.Cancel = true;
+					return;
+				}
 			}
-			catch (InvalidOperationException)
-			{
-				ErrorLog.AddError(ErrorType.Failure, "The Phidget interface kit is not attached");
-				e.Cancel = true;
-				return;
-			}
-
-			ifKit.InputChange += inputChangeHandler;
+			ifKit.InputChange += InputChange;
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			ifKit.InputChange -= inputChangeHandler;
-			PhidgetManager.Release<InterfaceKit>(ref ifKit);
+			ifKit.InputChange -= InputChange;
+			if (!e.IsConfiguring)
+			{
+				PhidgetManager.Release<InterfaceKit>(ref ifKit);
+			}
 		}
 	}
 }
