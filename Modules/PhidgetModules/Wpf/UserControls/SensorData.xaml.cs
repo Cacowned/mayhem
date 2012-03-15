@@ -24,6 +24,12 @@ namespace PhidgetModules.Wpf.UserControls
 			set;
 		}
 
+		public InterfaceKitType InterfaceKitType
+		{
+			get;
+			set;
+		}
+
 		private InterfaceKit IfKit;
 
 		public SensorData()
@@ -40,18 +46,41 @@ namespace PhidgetModules.Wpf.UserControls
 		{
 			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
 			{
-				for (int i = 0; i < IfKit.sensors.Count; i++)
+				if (InterfaceKitType == InterfaceKitType.Input)
 				{
-					SensorBox.Items.Add(i);
+					for (int i = 0; i < IfKit.inputs.Count; i++)
+					{
+						SensorBox.Items.Add(i);
+					}
+
+
+					if (IfKit.sensors.Count > 0)
+					{
+						// We want to start with some data.
+						// this is kinda a hack. Pass 0 for false,
+						// anything else for true
+						int value = 0;
+						if (IfKit.inputs[Index])
+							value = 1;
+
+						SetString(Convertor(value));
+					}
+				}
+				else if (InterfaceKitType == InterfaceKitType.Sensor)
+				{
+					for (int i = 0; i < IfKit.sensors.Count; i++)
+					{
+						SensorBox.Items.Add(i);
+					}
+
+					if (IfKit.sensors.Count > 0)
+					{
+						// We want to start with some data.
+						SetString(Convertor(IfKit.sensors[Index].Value));
+					}
 				}
 
 				SensorBox.SelectedIndex = Index;
-
-				if (IfKit.sensors.Count > 0)
-				{
-					// We want to start with some data.
-					SetString(Convertor(IfKit.sensors[Index].Value));
-				}
 			}));
 		}
 
@@ -60,7 +89,11 @@ namespace PhidgetModules.Wpf.UserControls
 			IfKit = PhidgetManager.Get<InterfaceKit>(false);
 
 			IfKit.Attach += IfKit_Attach;
-			IfKit.SensorChange += SensorChange;
+
+			if (InterfaceKitType == InterfaceKitType.Input)
+				IfKit.InputChange += InputChange;
+			else if (InterfaceKitType == InterfaceKitType.Sensor)
+				IfKit.SensorChange += SensorChange;
 
 			if (IfKit.Attached)
 			{
@@ -71,7 +104,12 @@ namespace PhidgetModules.Wpf.UserControls
 		private void UserControl_Unloaded(object sender, RoutedEventArgs e)
 		{
 			IfKit.Attach -= IfKit_Attach;
-			IfKit.SensorChange -= SensorChange;
+
+			if (InterfaceKitType == InterfaceKitType.Input)
+				IfKit.InputChange -= InputChange;
+			else if (InterfaceKitType == InterfaceKitType.Sensor)
+				IfKit.SensorChange -= SensorChange;
+
 			PhidgetManager.Release<InterfaceKit>(ref IfKit);
 		}
 
@@ -83,6 +121,24 @@ namespace PhidgetModules.Wpf.UserControls
 				if (e.Index == Index && Convertor != null)
 				{
 					SetString(Convertor(e.Value));
+				}
+			}));
+		}
+
+		private void InputChange(object sender, InputChangeEventArgs e)
+		{
+			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
+			{
+				// We only care about the index we are looking at.
+				if (e.Index == Index && Convertor != null)
+				{
+					// this is kinda a hack. Pass 0 for false,
+					// anything else for true
+					int value = 0;
+					if (IfKit.inputs[Index])
+						value = 1;
+
+					SetString(Convertor(value));
 				}
 			}));
 		}

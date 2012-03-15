@@ -1,4 +1,4 @@
-﻿<common:PhidgetConfigControl x:Class="PhidgetModules.Wpf.Config1129Touch"
+﻿<common:PhidgetConfigControl x:Class="PhidgetModules.Wpf.ConfigDigitalInput"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:common="clr-namespace:PhidgetModules.Wpf.UserControls"
@@ -6,16 +6,15 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
-        </Grid.RowDefinitions>
-
+		</Grid.RowDefinitions>
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Trigger When:</TextBlock>
         <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Orientation="Vertical">
-            <RadioButton Name="OnWhenOn" GroupName="OnWhenOn" Content="Goes On" IsChecked="True" />
-            <RadioButton Name="OnWhenOff" GroupName="OnWhenOn" Content="Turns Off" />
+            <RadioButton Name="GoesOnRadio" GroupName="TriggerOn" Content="Becomes Pressed" IsChecked="True" />
+            <RadioButton Name="TurnsOffRadio" GroupName="TriggerOn" Content="Becomes Released" />
         </StackPanel>
-    </Grid>
+	</Grid>
 </common:PhidgetConfigControl>

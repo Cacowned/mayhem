@@ -30,32 +30,40 @@ namespace PhidgetModules.Reaction
 
 		public WpfConfiguration ConfigurationControl
 		{
-			get { return new PhidgetDigitalOutputConfig(ifKit, index, outputType); }
+			get { return new PhidgetDigitalOutputConfig(index, outputType); }
 		}
 
 		public void OnSaved(WpfConfiguration configurationControl)
 		{
-			index = ((PhidgetDigitalOutputConfig)configurationControl).Index;
-			outputType = ((PhidgetDigitalOutputConfig)configurationControl).OutputType;
+			var config = configurationControl as PhidgetDigitalOutputConfig;
+
+			index = config.Index;
+			outputType = config.OutputType;
 		}
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			try
+			if (!e.WasConfiguring)
 			{
-				ifKit = PhidgetManager.Get<InterfaceKit>();
-			}
-			catch (InvalidOperationException)
-			{
-				ErrorLog.AddError(ErrorType.Failure, "The interface kit is not attached");
-				e.Cancel = true;
-				return;
+				try
+				{
+					ifKit = PhidgetManager.Get<InterfaceKit>();
+				}
+				catch (InvalidOperationException)
+				{
+					ErrorLog.AddError(ErrorType.Failure, "The interface kit is not attached");
+					e.Cancel = true;
+					return;
+				}
 			}
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			PhidgetManager.Release<InterfaceKit>(ref ifKit);
+			if (!e.IsConfiguring)
+			{
+				PhidgetManager.Release<InterfaceKit>(ref ifKit);
+			}
 		}
 
 		public string GetConfigString()
