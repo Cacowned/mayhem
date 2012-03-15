@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using MayhemCore;
 using MayhemSerial;
+using System;
 
 namespace SerialModules.Events
 {
@@ -21,12 +22,18 @@ namespace SerialModules.Events
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			manager.ConnectPort("COM7", settings, RecievedData);
+			if (!e.WasConfiguring)
+			{
+				manager.ConnectPort("COM7", settings, RecievedData);
+			}
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			manager.ReleasePort("COM7", RecievedData);
+			if (!e.IsConfiguring)
+			{
+				manager.ReleasePort("COM7", RecievedData);
+			}
 		}
 
 		private void RecievedData(byte[] bytes, int numBytes) 

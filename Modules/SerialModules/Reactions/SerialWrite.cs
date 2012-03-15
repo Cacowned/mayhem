@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemSerial;
+using System.Text;
 
 namespace SerialModules.Reactions
 {
@@ -15,29 +16,30 @@ namespace SerialModules.Reactions
 		protected override void OnAfterLoad()
 		{
 			manager = SerialPortManager.Instance;
-			settings = new SerialSettings(9600, Parity.Even, StopBits.One, 8);
+			settings = new SerialSettings(19200, Parity.None, StopBits.One, 8);
 		}
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			manager.ConnectPort("COM6", settings, null);
+			manager.ConnectPort("COM3", settings, null);
 		}
 
 		public override void Perform()
 		{
-			manager.Write("COM6", "Foo");
+			byte[] buffer = new byte[] { 0x02, 0x62, 0x15, 0xf3, 0x89, 0x00, 0x14, 0x00 };
+			manager.Write("COM3", buffer, buffer.Length);
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			manager.ReleasePort("COM6", null);
+			manager.ReleasePort("COM3", null);
 		}
 
 		private void RecievedData(byte[] bytes, int numBytes)
 		{
-			//string str = Encoding.UTF8.GetString(bytes);
+			string str = Encoding.UTF8.GetString(bytes);
 
-			//Logger.WriteLine(str);
+			Logger.WriteLine(str);
 		}
 	}
 }

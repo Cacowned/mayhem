@@ -4,6 +4,11 @@ using System.IO.Ports;
 using System.Linq;
 using System.Threading;
 using System.Collections.ObjectModel;
+using Microsoft.Win32.SafeHandles;
+using System.Runtime.InteropServices;
+using System.IO;
+using System.Text;
+using System.Diagnostics;
 
 namespace MayhemSerial
 {
@@ -16,6 +21,26 @@ namespace MayhemSerial
 		 * TODO: Why do we need the int on the Action that tells them how long the array is?
 		 * It makes sense in non managed languages, but for us, why don't we just pass the 
 		 *  array and then the user can call .length on it?
+		 *  
+		 * READ!!!!!
+		 * While working through this, I came across a lot of the issues that people have
+		 * been complaining about since .NET 2.0 regarding shutting down serial ports.
+		 * I have tried tons of different solutions from these pages:
+		 * http://connect.microsoft.com/VisualStudio/feedback/details/140018/serialport-crashes-after-disconnect-of-usb-com-port
+		 * http://connect.microsoft.com/VisualStudio/feedback/details/426766/net-serialport-and-ftdi-usb-driver-unauthorizedaccessexception
+		 * http://www.vbforums.com/showthread.php?t=558000
+		 * http://social.msdn.microsoft.com/Forums/en-US/vblanguage/thread/7843cc2b-c460-40bd-882f-c562bff11a0a/
+		 * 
+		 * The best looking solution was found on this page:
+		 * http://zachsaw.blogspot.com/2010/07/serialport-ioexception-workaround-in-c.html
+		 * ^^ This page seems to be linked to in almost all of the above threads.
+		 * Perhaps I wasn't doing it right, but I couldn't get any of these solutions to solve the problem.
+		 * 
+		 * 
+		 * The solution that I finally was able to get to work is from here:
+		 * http://social.msdn.microsoft.com/forums/en-US/Vsexpressvcs/thread/ce8ce1a3-64ed-4f26-b9ad-e2ff1d3be0a5/
+		 * All I had to do was call the port.close method on a different thread.
+		 * 
 		 */
 
 		// Pairs the port to a list of handlers for that data.
@@ -48,6 +73,7 @@ namespace MayhemSerial
 			portHandlers = new Dictionary<SerialPort, List<Action<byte[], int>>>();
 			ports = new Dictionary<string, SerialPort>();
 			portSettings = new Dictionary<string, SerialSettings>();
+			//safeHandles = new Dictionary<string, SafeFileHandle>();
 		}
 		#endregion
 
@@ -112,7 +138,6 @@ namespace MayhemSerial
 			}
 			else
 			{
-				// We haven't seen this port before
 				SerialPort port = new SerialPort(portName,
 												settings.BaudRate,
 												settings.Parity,
@@ -133,8 +158,6 @@ namespace MayhemSerial
 					portHandlers.Add(port, handlers);
 
 					port.DataReceived += DataReceived;
-					port.Disposed += Disposed;
-					// TODO: Do we need to handle the Disposed event?
 
 				}
 				else
@@ -169,7 +192,9 @@ namespace MayhemSerial
 
 			if (portHandlers[port].Count == 0)
 			{
-				Remove(portName);
+				// You have to close on a different thread, see note above.
+				Thread CloseDown = new Thread(() => Remove(portName));
+				CloseDown.Start();
 			}
 		}
 
@@ -179,9 +204,12 @@ namespace MayhemSerial
 
 			// We have no more handlers for this port, remove it from everything
 			port.DataReceived -= DataReceived;
-			port.Disposed -= Disposed;
-			port.Close();
 
+			if (port.IsOpen)
+			{
+				port.Close();	
+			}
+			
 			portHandlers.Remove(port);
 			portSettings.Remove(portName);
 			ports.Remove(portName);
@@ -213,11 +241,17 @@ namespace MayhemSerial
 
 		private void DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
+			/*
+			 * TODO: NOTE: We seem to recieve messages broken into two or more DataRecieved events.
+			 * The fix: Keep a buffer, and after 100ms of not recieving any new data
+			 * we publish it to our listeners
+			 */
+			//int unixTime = (int)(DateTime.UtcNow - new DateTime(2012, 3, 13)).TotalMilliseconds;
+
 			SerialPort port = sender as SerialPort;
 
 			// In order to make sure that the different handlers don't use up
 			// all the data, lets read it all here, and then pass a read only version around
-
 			int numBytes = port.BytesToRead;
 			byte[] input = new byte[numBytes];
 			port.Read(input, 0, numBytes);
@@ -225,15 +259,12 @@ namespace MayhemSerial
 			// Go through every data handler
 			foreach (Action<byte[], int> action in portHandlers[port])
 			{
-				ThreadPool.QueueUserWorkItem(o => action((byte[])input.Clone(), numBytes));
+				// Skip the null handlers.
+				if (action != null)
+				{
+					ThreadPool.QueueUserWorkItem(o => action((byte[])input.Clone(), numBytes));
+				}
 			}
-		}
-
-
-		private void Disposed(object sender, EventArgs e)
-		{
-			SerialPort disposedPort = sender as SerialPort;
-			Remove(disposedPort.PortName);
 		}
 	}
 }
