@@ -1,0 +1,23 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>OfficeModules</id>
+    <version>1.0.0</version>
+    <authors>Eli White</authors>
+    <owners>Outercurve</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>These modules interact with Office 2010 applications. You must have Microsoft Office 2010 installed for these to function. For Outlook Email, you must have a working email account.
+Events
+Outlook New Mail – Triggers when an email is received in Outlook. Outlook must be running, but does not need to be in the foreground.
+Outlook Reminder – Triggers when an Outlook Reminder appears in your calendar. Outlook must be running, but does not need to be in the foreground.
+
+Reactions
+PowerPoint Commands – Sends the Next Slide or Previous Slide Command as specified. If multiple instances of PowerPoint are running, it only sends the command to the first instance.</description>
+    <summary>These modules interact with Office 2010.</summary>
+    <copyright>Copyright © Outercurve 2011</copyright>
+    <tags>Outlook, Powerpoint, Email, Reminder, Slides, Next, Previous</tags>
+    <dependencies>
+      <dependency id="MayhemCore" version="1.0" />
+    </dependencies>
+  </metadata>
+</package>

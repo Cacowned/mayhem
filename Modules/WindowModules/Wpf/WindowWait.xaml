@@ -1,0 +1,9 @@
+﻿<UserControl x:Class="WindowModules.Wpf.WindowWait"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="0,5,0,5">
+        <TextBlock FontSize="14" VerticalAlignment="Center" Margin="0,0,0,0">Wait for:</TextBlock>
+        <TextBox Name="textPauseMs" Margin="70,0,0,0" FontSize="14" Width="50" HorizontalAlignment="Left" />
+        <TextBlock FontSize="14" VerticalAlignment="Center" Margin="130,0,0,0">milleseconds</TextBlock>
+    </Grid>
+</UserControl>
