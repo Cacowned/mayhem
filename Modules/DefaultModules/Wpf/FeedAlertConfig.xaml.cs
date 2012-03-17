@@ -95,6 +95,8 @@ namespace DefaultModules.Wpf
                 {
                     string url = RSSUrl.Text;
                     WebRequest webRequest = WebRequest.Create(url);
+                    // set timeout to 600ms
+                    webRequest.Timeout = 600;
                     using (WebResponse webResponse = webRequest.GetResponse())
                     {
                         using (Stream responseStream = webResponse.GetResponseStream())
@@ -143,7 +145,7 @@ namespace DefaultModules.Wpf
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.ToString());
+                    TextChanged("Invalid URL");
                 }
             }
 

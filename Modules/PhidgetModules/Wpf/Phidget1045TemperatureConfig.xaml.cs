@@ -56,7 +56,7 @@ namespace PhidgetModules.Wpf
 			}));
 		}
 
-		private void sensor_Attach(object sender, Phidgets.Events.AttachEventArgs e)
+		private void sensor_Attach(object sender, AttachEventArgs e)
 		{
 			SetAttached();
 		}
@@ -68,7 +68,7 @@ namespace PhidgetModules.Wpf
 
 		private void SetAttached()
 		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
 			{
 				if (sensor.Attached)
 				{
@@ -112,7 +112,7 @@ namespace PhidgetModules.Wpf
 				error = string.Empty;
 			}
 
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
 			{
 				textInvalid.Text = error;
 				if (error == string.Empty)
