@@ -95,6 +95,12 @@ namespace MayhemCore
 
         private void EnableOnThread(EnablingEventArgs e, Action actionOnComplete)
         {
+			// TODO: There was a problem with enabled connections deserializing, failing
+			// to enable, but still appearing enabled.
+			// Setting this to false here seems to have fixed it, but I believe it is a
+			// race condition that is happening.
+			IsEnabled = false;
+
             if (!Event.IsEnabled)
             {
                 // Enable the event
@@ -104,14 +110,7 @@ namespace MayhemCore
             // If the event is not enabled we don't try to enable the reaction
             if (Event.IsEnabled && !Reaction.IsEnabled)
             {
-                try
-                {
-                    Reaction.Enable(e);
-                }
-                catch
-                {
-                    ErrorLog.AddError(ErrorType.Failure, "Error enabling " + Reaction.Name);
-                }
+                Reaction.Enable(e);
 
                 if (!Reaction.IsEnabled)
                 {

@@ -26,12 +26,16 @@ namespace PhidgetModules.Wpf.UserControls
 
 		private bool isAttached;
 
-		public SensorConfig(int index, Func<int, string> conversion, PhidgetConfigControl control)
+		private InterfaceKitType type;
+
+		public SensorConfig(int index, Func<int, string> conversion, PhidgetConfigControl control, InterfaceKitType type = InterfaceKitType.Sensor)
 		{
 			Index = index;
 			Convertor = conversion;
 
 			Sensor = control;
+
+			this.type = type;
 
 			InitializeComponent();
 		}
@@ -48,6 +52,7 @@ namespace PhidgetModules.Wpf.UserControls
 		{
 			IfKit = PhidgetManager.Get<InterfaceKit>(throwIfNotAttached: false);
 
+			SensorDataBox.InterfaceKitType = type;
 			SensorDataBox.Index = Index;
 			SensorDataBox.Convertor = Convertor;
 
@@ -60,7 +65,9 @@ namespace PhidgetModules.Wpf.UserControls
 
 			// If we have detected sensors already, then we are attached but haven't triggered
 			// attached event
-			if (IfKit.sensors.Count > 0)
+			if (type == InterfaceKitType.Input && IfKit.inputs.Count > 0)
+				isAttached = true;
+			else if (type == InterfaceKitType.Sensor && IfKit.sensors.Count > 0)
 				isAttached = true;
 
 			Revalidate();
