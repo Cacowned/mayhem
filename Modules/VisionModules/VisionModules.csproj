@@ -37,12 +37,10 @@
       <HintPath>References\AviFile.dll</HintPath>
     </Reference>
     <Reference Include="MayhemCore">
-      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>packages\MayhemCore.1.0.0\lib\net40\MayhemCore.dll</HintPath>
     </Reference>
     <Reference Include="MayhemWpf">
-      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>packages\MayhemWpf.1.0.0\lib\net40\MayhemWpf.dll</HintPath>
     </Reference>
     <Reference Include="OpenCVDLL">
       <HintPath>..\References\OpenCVDLL.dll</HintPath>
@@ -133,7 +131,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
