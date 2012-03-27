@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\VisionModules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -104,7 +104,7 @@
     <ProjectReference Include="..\MayhemOpenCVWrapper\MayhemOpenCVWrapper.csproj">
       <Project>{B04222E3-9FC3-4827-A40F-8AE68CABB834}</Project>
       <Name>MayhemOpenCVWrapper</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

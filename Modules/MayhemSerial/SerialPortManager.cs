@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Threading;
-using System.Collections.ObjectModel;
-using Microsoft.Win32.SafeHandles;
-using System.Runtime.InteropServices;
-using System.IO;
-using System.Text;
-using System.Diagnostics;
 
 namespace MayhemSerial
 {
@@ -55,16 +49,17 @@ namespace MayhemSerial
 		#region Singleton
 		// We are using a singleton here because it will have many methods
 		// more than just get/release like in the other managers.
-		private static SerialPortManager _instance;
+		private static SerialPortManager instance;
 		public static SerialPortManager Instance
 		{
 			get
 			{
-				if (_instance == null)
+				if (instance == null)
 				{
-					_instance = new SerialPortManager();
+					instance = new SerialPortManager();
 				}
-				return _instance;
+
+				return instance;
 			}
 		}
 
@@ -73,7 +68,6 @@ namespace MayhemSerial
 			portHandlers = new Dictionary<SerialPort, List<Action<byte[], int>>>();
 			ports = new Dictionary<string, SerialPort>();
 			portSettings = new Dictionary<string, SerialSettings>();
-			//safeHandles = new Dictionary<string, SafeFileHandle>();
 		}
 		#endregion
 
@@ -87,7 +81,7 @@ namespace MayhemSerial
 			}
 		}
 
-		public string[] AllPorts
+		public static string[] AllPorts
 		{
 			get
 			{
@@ -138,11 +132,12 @@ namespace MayhemSerial
 			}
 			else
 			{
-				SerialPort port = new SerialPort(portName,
-												settings.BaudRate,
-												settings.Parity,
-												settings.DataBits,
-												settings.StopBits);
+				SerialPort port = new SerialPort(
+					portName,
+					settings.BaudRate,
+					settings.Parity,
+					settings.DataBits,
+					settings.StopBits);
 
 				// TODO: This could very well throw an exception, but we want to only
 				// deal with the ones we have to, so we will deal with them when they come up
@@ -157,8 +152,7 @@ namespace MayhemSerial
 					handlers.Add(action);
 					portHandlers.Add(port, handlers);
 
-					port.DataReceived += DataReceived;
-
+					port.DataReceived += this.DataReceived;
 				}
 				else
 				{
@@ -193,8 +187,8 @@ namespace MayhemSerial
 			if (portHandlers[port].Count == 0)
 			{
 				// You have to close on a different thread, see note above.
-				Thread CloseDown = new Thread(() => Remove(portName));
-				CloseDown.Start();
+				Thread closeDown = new Thread(() => this.Remove(portName));
+				closeDown.Start();
 			}
 		}
 
@@ -203,13 +197,13 @@ namespace MayhemSerial
 			SerialPort port = ports[portName];
 
 			// We have no more handlers for this port, remove it from everything
-			port.DataReceived -= DataReceived;
+			port.DataReceived -= this.DataReceived;
 
 			if (port.IsOpen)
 			{
-				port.Close();	
+				port.Close();
 			}
-			
+
 			portHandlers.Remove(port);
 			portSettings.Remove(portName);
 			ports.Remove(portName);
@@ -242,11 +236,10 @@ namespace MayhemSerial
 		private void DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
 			/*
-			 * TODO: NOTE: We seem to recieve messages broken into two or more DataRecieved events.
-			 * The fix: Keep a buffer, and after 100ms of not recieving any new data
-			 * we publish it to our listeners
+			 * NOTE: We seem to recieve messages broken into two or more DataRecieved events.
+			 * The fix: Wait 100 milliseconds, THEN read the data.
 			 */
-			//int unixTime = (int)(DateTime.UtcNow - new DateTime(2012, 3, 13)).TotalMilliseconds;
+			Thread.Sleep(100);
 
 			SerialPort port = sender as SerialPort;
 
