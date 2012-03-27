@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="SerialModules.Wpf.PortSelector"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+			 Loaded="UserControl_Loaded"
+			 Width="400">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="100" />
+			<ColumnDefinition Width="300" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+
+		<TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Port:</TextBlock>
+		<StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+			<ComboBox Width="220" Name="PortBox" />
+			<Button Width="80" Click="RefreshPorts_Click">Refresh</Button>
+		</StackPanel>
+
+		<TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Baud Rate:</TextBlock>
+		<TextBox Name="BaudBox" Grid.Column="1" Grid.Row="1" TextChanged="BaudBox_TextChanged"  />
+
+		<TextBlock HorizontalAlignment="Center" Margin="0,0,0,5" Style="{StaticResource ConfigErrorMessage}" Name="invalidRate" Grid.Column="1" Grid.Row="2" Visibility="Collapsed">Invalid Baud Rate</TextBlock>
+		
+		<TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="3">Parity:</TextBlock>
+		<ComboBox Name="ParityBox" Grid.Column="1" Grid.Row="3" />
+
+		<TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="4">Stop Bits:</TextBlock>
+		<ComboBox Name="StopBitsBox" Grid.Column="1" Grid.Row="4" />
+
+		<TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="5">Data Bits:</TextBlock>
+		<TextBox Name="DataBitsBox" Grid.Column="1" Grid.Row="5" TextChanged="DataBitsBox_TextChanged" />
+
+		<TextBlock HorizontalAlignment="Center" Style="{StaticResource ConfigErrorMessage}" Name="invalidBits" Grid.Column="1" Grid.Row="6" Visibility="Collapsed">Invalid Data Bits</TextBlock>
+	</Grid>
+</UserControl>

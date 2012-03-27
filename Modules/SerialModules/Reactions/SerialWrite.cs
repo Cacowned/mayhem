@@ -2,44 +2,83 @@
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemSerial;
-using System.Text;
+using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
+using SerialModules.Wpf;
 
 namespace SerialModules.Reactions
 {
 	[DataContract]
 	[MayhemModule("Serial Write", "Writes Serially")]
-	public class SerialWrite : ReactionBase
+	public class SerialWrite : ReactionBase, IWpfConfigurable
 	{
-		SerialPortManager manager;
-		SerialSettings settings;
+		private SerialPortManager manager;
+
+		[DataMember]
+		private SerialSettings settings;
+
+		[DataMember]
+		private string port;
+
+		[DataMember]
+		private string phrase;
+
+		protected override void OnLoadDefaults()
+		{
+			this.port = "COM1";
+			this.phrase = string.Empty;
+			this.settings = new SerialSettings(9600, Parity.Even, StopBits.One, 8);
+		}
 
 		protected override void OnAfterLoad()
 		{
-			manager = SerialPortManager.Instance;
-			settings = new SerialSettings(19200, Parity.None, StopBits.One, 8);
+			this.manager = SerialPortManager.Instance;
 		}
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			manager.ConnectPort("COM3", settings, null);
-		}
-
-		public override void Perform()
-		{
-			byte[] buffer = new byte[] { 0x02, 0x62, 0x15, 0xf3, 0x89, 0x00, 0x14, 0x00 };
-			manager.Write("COM3", buffer, buffer.Length);
+			this.manager.ConnectPort(this.port, this.settings, action: null);
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			manager.ReleasePort("COM3", null);
+			this.manager.ReleasePort(this.port, action: null);
 		}
 
-		private void RecievedData(byte[] bytes, int numBytes)
+		public override void Perform()
 		{
-			string str = Encoding.UTF8.GetString(bytes);
-
-			Logger.WriteLine(str);
+			this.manager.Write(this.port, this.phrase);
 		}
+
+		#region IWpfConfigurable
+		public WpfConfiguration ConfigurationControl
+		{
+			get
+			{
+				return new SerialWriteConfig(this.port, this.settings, this.phrase);
+			}
+		}
+
+		public void OnSaved(WpfConfiguration configurationControl)
+		{
+			var config = configurationControl as SerialWriteConfig;
+			this.port = config.Selector.PortName;
+			this.settings = config.Selector.Settings;
+
+			this.phrase = config.Phrase;
+		}
+
+		public string GetConfigString()
+		{
+			string shortPhrase = this.phrase;
+
+			if (shortPhrase.Length > 10)
+			{
+				shortPhrase = string.Format("{0}...", shortPhrase.Substring(0, 10));
+			}
+
+			return string.Format("Writing '{0}' to {1}", shortPhrase, this.port);
+		}
+		#endregion
 	}
 }
