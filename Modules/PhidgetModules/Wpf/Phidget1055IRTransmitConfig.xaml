@@ -7,7 +7,7 @@
         <StackPanel>
             <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Press the button on the remote control that we will retransmit.</TextBlock>
             <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding Code}" />
-            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReciever" Text="Can't find the IR Transceiver" HorizontalAlignment="Center" Visibility="Visible"  />
+            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReciever" Text="Plug in the Phidget IR Transceiver." HorizontalAlignment="Center" Visibility="Visible"  />
         </StackPanel>
     </Grid>
 </src:WpfConfiguration>
