@@ -60,7 +60,10 @@ namespace DefaultModules.Events
 
 		protected override void OnDeleted()
 		{
-			engine.Dispose();
+			if (engine != null)
+			{
+				engine.Dispose();
+			}
 		}
 
 		public WpfConfiguration ConfigurationControl
