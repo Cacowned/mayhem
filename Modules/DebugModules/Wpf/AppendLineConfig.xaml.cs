@@ -64,7 +64,7 @@ namespace DebugModules.Wpf
         private void Browse_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new OpenFileDialog();
-            dlg.Filter = "txt files (*.txt)|*.txt";
+            dlg.Filter = "txt files (*.txt)|*.txt|log files (*.log)|*.log";
             dlg.FileName = File;
             dlg.DefaultExt = ".txt";
 
