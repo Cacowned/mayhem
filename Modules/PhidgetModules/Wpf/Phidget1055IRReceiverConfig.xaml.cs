@@ -16,7 +16,7 @@ namespace PhidgetModules.Wpf
 			get { return (IRCode)GetValue(CodeProperty); }
 			set { SetValue(CodeProperty, value); }
 		}
-			
+
 		// Using a DependencyProperty as the backing store for Code.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty CodeProperty =
 			DependencyProperty.Register("Code", typeof(IRCode), typeof(Phidget1055IrReceiverConfig), new UIPropertyMetadata(null));
@@ -45,10 +45,7 @@ namespace PhidgetModules.Wpf
 			Ir.Attach += ir_Attach;
 			Ir.Detach += ir_Detach;
 
-			if (Ir.Attached)
-			{
-				ir_Attach(null, null);
-			}
+			CheckCanSave();
 		}
 
 		#region Phidget Event Handlers
@@ -61,20 +58,30 @@ namespace PhidgetModules.Wpf
 			}));
 		}
 
-		private void ir_Attach(object sender, AttachEventArgs e)
+		private void CheckCanSave()
 		{
 			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
 			{
-				NoReciever.Visibility = Visibility.Collapsed;
+				if (Ir.Attached)
+				{
+					NoReciever.Visibility = Visibility.Collapsed;
+				}
+				else
+				{
+					NoReciever.Visibility = Visibility.Visible;
+					CanSave = false;
+				}
 			}));
+		}
+
+		private void ir_Attach(object sender, AttachEventArgs e)
+		{
+			CheckCanSave();
 		}
 
 		private void ir_Detach(object sender, DetachEventArgs e)
 		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-			{
-				NoReciever.Visibility = Visibility.Visible;
-			}));
+			CheckCanSave();
 		}
 		#endregion
 

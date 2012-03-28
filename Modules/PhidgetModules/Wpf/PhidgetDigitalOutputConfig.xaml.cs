@@ -32,6 +32,8 @@ namespace PhidgetModules.Wpf
         	ifKit = PhidgetManager.Get<InterfaceKit>(throwIfNotAttached: false);
 
             ifKit.Attach += ifKit_Attach;
+			ifKit.Detach += ifKit_Detach;
+
             PopulateOutputs();
 
             OutputBox.SelectedIndex = Index;
@@ -57,7 +59,22 @@ namespace PhidgetModules.Wpf
         private void ifKit_Attach(object sender, AttachEventArgs e)
         {
             PopulateOutputs();
+
+			CheckCanSave();
         }
+
+		private void ifKit_Detach(object sender, DetachEventArgs e)
+		{
+			CheckCanSave();
+		}
+
+		private void CheckCanSave()
+		{
+			if (ifKit.Attached)
+			{
+				// We need to have an error message
+			}
+		}
 
         private void PopulateOutputs()
         {

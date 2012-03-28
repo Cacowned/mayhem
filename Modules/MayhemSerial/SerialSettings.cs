@@ -1,28 +1,34 @@
-﻿using System.IO.Ports;
-using System;
+﻿using System;
+using System.IO.Ports;
+using System.Runtime.Serialization;
 
 namespace MayhemSerial
 {
+	[DataContract]
 	public class SerialSettings
 	{
+		[DataMember]
 		public int BaudRate
 		{
 			get;
 			private set;
 		}
 
+		[DataMember]
 		public Parity Parity
 		{
 			get;
 			private set;
 		}
 
+		[DataMember]
 		public StopBits StopBits
 		{
 			get;
 			private set;
 		}
 
+		[DataMember]
 		public int DataBits
 		{
 			get;
@@ -31,21 +37,25 @@ namespace MayhemSerial
 
 		public SerialSettings(int baudRate, Parity parity, StopBits stopBits, int dataBits)
 		{
-			BaudRate = baudRate;
-			Parity = parity;
-			StopBits = stopBits;
-			DataBits = dataBits;
+			this.BaudRate = baudRate;
+			this.Parity = parity;
+			this.StopBits = stopBits;
+			this.DataBits = dataBits;
 		}
 
 		#region Overriding Equals and related items
 		public override bool Equals(object obj)
 		{
 			if (obj == null)
+			{
 				return false;
+			}
 
 			SerialSettings other = obj as SerialSettings;
 			if (other == null)
+			{
 				return false;
+			}
 
 			return Equals(other);
 		}
@@ -53,23 +63,25 @@ namespace MayhemSerial
 		public bool Equals(SerialSettings obj)
 		{
 			if (obj == null)
+			{
 				return false;
+			}
 
-			return BaudRate == obj.BaudRate &&
-					Parity == obj.Parity &&
-					StopBits == obj.StopBits &&
-					DataBits == obj.DataBits;
+			return this.BaudRate == obj.BaudRate &&
+					this.Parity == obj.Parity &&
+					this.StopBits == obj.StopBits &&
+					this.DataBits == obj.DataBits;
 		}
 
 		public override int GetHashCode()
 		{
-			return BaudRate ^ Parity.GetHashCode() ^ StopBits.GetHashCode() ^ DataBits;
+			return this.BaudRate ^ this.Parity.GetHashCode() ^ this.StopBits.GetHashCode() ^ this.DataBits;
 		}
 
 		public static bool operator ==(SerialSettings a, SerialSettings b)
 		{
 			// If both are null, or both are same instance, return true.
-			if (Object.ReferenceEquals(a, b))
+			if (object.ReferenceEquals(a, b))
 			{
 				return true;
 			}

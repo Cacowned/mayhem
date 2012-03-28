@@ -57,8 +57,31 @@
     <Compile Include="Events\SerialListen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reactions\SerialWrite.cs" />
+    <Compile Include="Wpf\SerialWriteConfig.xaml.cs">
+      <DependentUpon>SerialWriteConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\PortSelector.xaml.cs">
+      <DependentUpon>PortSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\SerialListenConfig.xaml.cs">
+      <DependentUpon>SerialListenConfig.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Page Include="Wpf\SerialWriteConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\PortSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\SerialListenConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

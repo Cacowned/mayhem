@@ -64,28 +64,16 @@
     <Compile Include="Insteon\InsteonCommands\InsteonResponseCommand.cs" />
     <Compile Include="Insteon\InsteonCommands\InsteonStandardMessage.cs" />
     <Compile Include="Insteon\InsteonUsbModemSerialSettings.cs" />
-    <Compile Include="Insteon\X10CommandCode.cs" />
-    <Compile Include="Insteon\X10Controller.cs" />
-    <Compile Include="Insteon\X10HouseCode.cs" />
-    <Compile Include="Insteon\X10UnitCode.cs" />
     <Compile Include="Reactions\InsteonReaction.cs" />
-    <Compile Include="Reactions\InsteonX10Reaction.cs" />
     <Compile Include="Insteon\InsteonControllerBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wpf\InsteonReactionConfig.xaml.cs">
       <DependentUpon>InsteonReactionConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\InsteonX10ReactionConfig.xaml.cs">
-      <DependentUpon>InsteonX10ReactionConfig.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Page Include="Wpf\InsteonReactionConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wpf\InsteonX10ReactionConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

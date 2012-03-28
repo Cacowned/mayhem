@@ -23,9 +23,7 @@ namespace PhidgetModules.Wpf.UserControls
 		private bool shouldCheckValidity;
 
 		private bool isValid;
-
-		private bool isAttached;
-
+		
 		private InterfaceKitType type;
 
 		public SensorConfig(int index, Func<int, string> conversion, PhidgetConfigControl control, InterfaceKitType type = InterfaceKitType.Sensor)
@@ -62,13 +60,7 @@ namespace PhidgetModules.Wpf.UserControls
 			sensorControl.Content = Sensor;
 
 			IfKit.Attach += ifKit_Attach;
-
-			// If we have detected sensors already, then we are attached but haven't triggered
-			// attached event
-			if (type == InterfaceKitType.Input && IfKit.inputs.Count > 0)
-				isAttached = true;
-			else if (type == InterfaceKitType.Sensor && IfKit.sensors.Count > 0)
-				isAttached = true;
+			IfKit.Detach += IfKit_Detach;
 
 			Revalidate();
 
@@ -76,7 +68,7 @@ namespace PhidgetModules.Wpf.UserControls
 
 			CheckCanSave();
 		}
-
+		
 		public override void OnSave()
 		{
 			Index = SensorDataBox.Index;
@@ -90,10 +82,10 @@ namespace PhidgetModules.Wpf.UserControls
 			PhidgetManager.Release<InterfaceKit>(ref IfKit);
 		}
 
-		private void SetAttachedMessage(bool attached)
+		private void SetAttachedMessage()
 		{
 			Visibility visible = Visibility.Visible;
-			if (attached)
+			if (IfKit.Attached)
 				visible = Visibility.Collapsed;
 
 			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
@@ -104,15 +96,18 @@ namespace PhidgetModules.Wpf.UserControls
 
 		private void CheckCanSave()
 		{
-			CanSave = isAttached && isValid;
+			CanSave = IfKit.Attached && isValid;
 
-			SetAttachedMessage(isAttached);
+			SetAttachedMessage();
 		}
 
 		private void ifKit_Attach(object sender, AttachEventArgs e)
 		{
-			isAttached = true;
+			CheckCanSave();
+		}
 
+		private void IfKit_Detach(object sender, DetachEventArgs e)
+		{
 			CheckCanSave();
 		}
 

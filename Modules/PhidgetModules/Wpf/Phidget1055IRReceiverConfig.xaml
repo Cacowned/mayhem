@@ -7,7 +7,7 @@
         <StackPanel>
             <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Send the IR Code to watch for.</TextBlock>
             <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding Code}" />
-            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReciever" Text="Can't find the IR Reciever" HorizontalAlignment="Center" Visibility="Visible"  />
+            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReciever" Text="Plug in a Phidget IR Receiver." HorizontalAlignment="Center" Visibility="Visible"  />
         </StackPanel>
     </Grid>
 </src:WpfConfiguration>
