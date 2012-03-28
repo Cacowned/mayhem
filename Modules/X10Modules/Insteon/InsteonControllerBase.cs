@@ -10,7 +10,7 @@ namespace X10Modules.Insteon
     /// </summary>
     public class InsteonControllerBase : ISerialPortDataListener, IDisposable
     {
-        protected static MayhemSerialPortMgr MSerial
+        protected static SerialPortManager SerialManager
         {
             get;
             private set;
@@ -58,7 +58,7 @@ namespace X10Modules.Insteon
             MSerial = MayhemSerialPortMgr.Instance;
         }
 
-        protected InsteonControllerBase(string serialPortname)
+        protected InsteonControllerBase(string portname)
         {
             ParseBuf = new byte[1024];
             waitAck = new AutoResetEvent(false);

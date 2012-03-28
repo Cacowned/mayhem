@@ -20,7 +20,16 @@ namespace DefaultModules.Events
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			engine = new SpeechRecognitionEngine(new CultureInfo("en-US"));
+			try
+			{
+				engine = new SpeechRecognitionEngine(CultureInfo.CurrentCulture);
+			}
+			catch
+			{
+				ErrorLog.AddError(ErrorType.Failure, "Unable to start up the Speech Recognition Engine");
+				e.Cancel = true;
+				return;
+			}
 			
 			try
 			{
@@ -47,6 +56,14 @@ namespace DefaultModules.Events
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
 			engine.RecognizeAsyncCancel();
+		}
+
+		protected override void OnDeleted()
+		{
+			if (engine != null)
+			{
+				engine.Dispose();
+			}
 		}
 
 		public WpfConfiguration ConfigurationControl
