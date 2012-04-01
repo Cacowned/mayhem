@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace MayhemCore
 {
@@ -16,6 +17,7 @@ namespace MayhemCore
         /// </summary>
         /// <param name="error">The error type for this error</param>
         /// <param name="message">The error message text</param>
+		[MethodImpl(MethodImplOptions.Synchronized)]
         public static void AddError(ErrorType error, string message)
         {
             MayhemError err = new MayhemError(error, message);
