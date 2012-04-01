@@ -34,14 +34,14 @@
     <Reference Include="MayhemCore">
       <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
     </Reference>
-    <Reference Include="MayhemSerial">
-      <HintPath>..\..\bin\MayhemSerial\MayhemSerial.dll</HintPath>
-    </Reference>
     <Reference Include="MayhemWpf">
       <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SerialManager">
+      <HintPath>..\..\bin\SerialManager\SerialManager.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />

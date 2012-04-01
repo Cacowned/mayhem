@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO.Ports;
+﻿using System.IO.Ports;
 using System.Runtime.Serialization;
 
-namespace MayhemSerial
+namespace SerialManager
 {
 	[DataContract]
 	public class SerialSettings

@@ -3,7 +3,8 @@ using System.IO.Ports;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using MayhemSerial;
+using SerialManager;
+using System.Collections.Generic;
 
 namespace SerialModules.Wpf
 {
@@ -56,7 +57,11 @@ namespace SerialModules.Wpf
 			ParityBox.ItemsSource = Enum.GetNames(typeof(Parity));
 			ParityBox.SelectedValue = Enum.GetName(typeof(Parity), this.Settings.Parity);
 
-			StopBitsBox.ItemsSource = Enum.GetNames(typeof(StopBits));
+			List<string> stopBits = Enum.GetNames(typeof(StopBits)).ToList();
+			// remove the option "none"
+			stopBits.Remove("None");
+
+			StopBitsBox.ItemsSource = stopBits;
 			StopBitsBox.SelectedValue = Enum.GetName(typeof(StopBits), this.Settings.StopBits);
 
 			DataBitsBox.Text = this.Settings.DataBits.ToString();
@@ -113,7 +118,7 @@ namespace SerialModules.Wpf
 			bool tempCanSave = false;
 
 			int baud = 0;
-			if (!int.TryParse(BaudBox.Text, out baud))
+			if (!int.TryParse(BaudBox.Text, out baud) || baud <= 0)
 			{
 				invalidRate.Visibility = Visibility.Visible;
 				tempCanSave = false;
@@ -125,7 +130,7 @@ namespace SerialModules.Wpf
 			}
 
 			int dataBits = 0;
-			if (!int.TryParse(DataBitsBox.Text, out dataBits))
+			if (!int.TryParse(DataBitsBox.Text, out dataBits) || dataBits < 5 || dataBits > 8)
 			{
 				invalidBits.Visibility = Visibility.Visible;
 				tempCanSave = false;
