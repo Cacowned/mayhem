@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using MayhemSerial;
+using SerialManager;
 using MayhemWpf.UserControls;
 
 namespace SerialModules.Wpf

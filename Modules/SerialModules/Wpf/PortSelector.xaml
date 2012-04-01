@@ -39,6 +39,6 @@
 		<TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="5">Data Bits:</TextBlock>
 		<TextBox Name="DataBitsBox" Grid.Column="1" Grid.Row="5" TextChanged="DataBitsBox_TextChanged" />
 
-		<TextBlock HorizontalAlignment="Center" Style="{StaticResource ConfigErrorMessage}" Name="invalidBits" Grid.Column="1" Grid.Row="6" Visibility="Collapsed">Invalid Data Bits</TextBlock>
+		<TextBlock HorizontalAlignment="Center" Style="{StaticResource ConfigErrorMessage}" Name="invalidBits" Grid.Column="1" Grid.Row="6" Visibility="Collapsed">Data Bits must be between 5 and 8</TextBlock>
 	</Grid>
 </UserControl>

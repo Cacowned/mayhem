@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 
-namespace MayhemSerial
+namespace SerialManager
 {
 	public class SerialPortManager
 	{
@@ -93,7 +95,8 @@ namespace MayhemSerial
 			}
 		}
 
-		public void ConnectPort(string portName, SerialSettings settings, Action<byte[], int> action)
+		[MethodImpl(MethodImplOptions.Synchronized)]
+		public void ConnectPort(string portName, SerialSettings settings, Action<byte[], int> action = null)
 		{
 			// Do some parameter checking
 			if (string.IsNullOrWhiteSpace(portName))
@@ -119,7 +122,7 @@ namespace MayhemSerial
 				if (portSettings[portName] != settings)
 				{
 					// Settings don't match
-					throw new InvalidOperationException(string.Format("The port {0} has already been opened with different settings", portName));
+					throw new InvalidOperationException(string.Format("The port {0} has already been opened with different settings.", portName));
 				}
 				else
 				{
@@ -162,7 +165,8 @@ namespace MayhemSerial
 			}
 		}
 
-		public void ReleasePort(string portName, Action<byte[], int> action)
+		[MethodImpl(MethodImplOptions.Synchronized)]
+		public void ReleasePort(string portName, Action<byte[], int> action = null)
 		{
 			// Do some parameter checking
 			if (string.IsNullOrWhiteSpace(portName))
@@ -192,6 +196,7 @@ namespace MayhemSerial
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		private void Remove(string portName)
 		{
 			SerialPort port = ports[portName];
@@ -209,6 +214,7 @@ namespace MayhemSerial
 			ports.Remove(portName);
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void Write(string portName, string message)
 		{
 			if (!ports.ContainsKey(portName))
@@ -221,6 +227,7 @@ namespace MayhemSerial
 			port.Write(message);
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void Write(string portName, byte[] buffer, int length)
 		{
 			if (!ports.ContainsKey(portName))
@@ -233,6 +240,7 @@ namespace MayhemSerial
 			port.Write(buffer, 0, length);
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		private void DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
 			/*
@@ -249,15 +257,35 @@ namespace MayhemSerial
 			byte[] input = new byte[numBytes];
 			port.Read(input, 0, numBytes);
 
+			List<Action<byte[], int>> handlers = portHandlers[port];
+
+			/*
+			 * NOTE: Okay, big frustration solved. We have to use the Parallel library instead
+			 * of a foreach with QueueUserWorkItem inside of it because QueueUserWorkItem
+			 * will reuse the same value from the foreach loop in every iteration, thus
+			 * not actually doing the foreach properly.
+			 * This is all discussed in this thread: http://stackoverflow.com/questions/616634/using-anonymous-delegates-with-net-threadpool-queueuserworkitem
+			 */
+
 			// Go through every data handler
-			foreach (Action<byte[], int> action in portHandlers[port])
+			Parallel.ForEach(handlers, action =>
+			{
+				if (action != null)
+				{
+					action((byte[])input.Clone(), numBytes);
+				}
+			});
+
+			/*
+			DON't DO THIS:
+			foreach (Action<byte[], int> action in handlers)
 			{
 				// Skip the null handlers.
 				if (action != null)
 				{
 					ThreadPool.QueueUserWorkItem(o => action((byte[])input.Clone(), numBytes));
 				}
-			}
+			}*/
 		}
 	}
 }

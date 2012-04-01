@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemSerial", "MayhemSerial\MayhemSerial.csproj", "{EB69EA74-75DB-4171-858A-B4BC4F6857E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialManager", "SerialManager\SerialManager.csproj", "{EB69EA74-75DB-4171-858A-B4BC4F6857E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
