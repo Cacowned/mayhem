@@ -224,7 +224,11 @@ namespace SerialManager
 
 			SerialPort port = ports[portName];
 
-			port.Write(message);
+			// See comments in the other write method.
+			if (port.IsOpen)
+			{
+				port.Write(message);
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.Synchronized)]
@@ -236,8 +240,13 @@ namespace SerialManager
 			}
 
 			SerialPort port = ports[portName];
-
-			port.Write(buffer, 0, length);
+			
+			// We have to verify that the port is open here if we try to write
+			if (port.IsOpen)
+			{
+				port.Write(buffer, 0, length);
+			}
+			// TODO: If it isn't open, we probably should do something about closing it?
 		}
 
 		[MethodImpl(MethodImplOptions.Synchronized)]
