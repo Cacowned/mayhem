@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,9 @@ using System.Drawing;
 using System.Collections.ObjectModel;
 using MayhemWebCamWrapper;
 using MayhemVisionModules.Wpf;
+using System.IO;
+using System.Threading;
+using System.Windows.Threading;
 
 
 namespace MayhemVisionModules.Wpf
@@ -35,74 +39,85 @@ namespace MayhemVisionModules.Wpf
             //refresh the camera list on construction...
             WebcamManager.CleanUp();
             RefreshCameraList();
-  
+            StartHardwareScan();
         }
-    
+
         public void RefreshCameraList()
         {
             WebcamManager.UpdateCameraList();
             numberConnectedCameras = WebcamManager.NumberConnectedCameras();
             cameraPreviews = new ObservableCollection<ImageViewer>();
-            cameras = new List<WebCam>();
+            mainView = new ObservableCollection<ImageViewer>();
             selectedCameraIndex = -1;
             int numAvailableCameras = 0;
             //populate the camera list and find the one that is available and set it as current selection...
             for (int i = 0; i < numberConnectedCameras; i++)
             {
-                cameras.Add(WebcamManager.GetCamera(i));
-                cameras[i].Width = captureWidth;
-                cameras[i].Height = captureHeight;
-                try
+                if (WebcamManager.StartCamera(i, captureWidth, captureHeight))
                 {
-                    cameras[i].Start();
+                    ImageViewer viewer = new ImageViewer();
+                    viewer.ViewerWidth = previewWidth;
+                    viewer.ViewerHeight = previewHeight;
+                    viewer.ViewerTranslateX = 0.25*previewWidth;
+                    viewer.TopTitle = WebcamManager.GetCamera(i).WebCamName;
+                    viewer.SetImageSource(WebcamManager.GetCamera(i));
+                    cameraPreviews.Add(viewer);
+                    ++numAvailableCameras;
                 }
-                catch (Exception)
-                {
-                    cameras[i].Stop();
-                    continue;
-                }
-                finally
-                {
-                }
-                ImageViewer viewer = new ImageViewer();
-                viewer.AddImageSource(cameras[i]);
-                viewer.ViewerWidth = previewWidth;
-                viewer.ViewerHeight = previewHeight;
-                //viewer.Title.Text = cameras[i].WebCamName;
-                cameraPreviews.Add(viewer);
-                ++numAvailableCameras;
             }
-            camera_selection_panel.Width = previewWidth * numAvailableCameras;
-            camera_selection_panel.Height = previewHeight;
+            ImageViewer selectedView = new ImageViewer();
+            selectedView.ViewerWidth = captureWidth;
+            selectedView.ViewerHeight = captureHeight;
+            selectedView.TopTitle = WebcamManager.GetCamera(0).WebCamName;
+            selectedView.SetImageSource(WebcamManager.GetCamera(0));
+            mainView.Add(selectedView);
+
             camera_selection_panel.ItemsSource = cameraPreviews;
-            for (int i = 0; i < cameras.Count; i++)
+            main_view.ItemsSource = mainView;
+            
+            //release inactive cameras so that they can be made available to other processes...
+            WebcamManager.ReleaseInactiveCameras();
+        }
+
+        private delegate void OneParameterDelegate();
+
+        public void StartHardwareScan()
+        {
+            
+            ScanThread = new Thread(ScanforHardwareChange);
+            ScanThread.SetApartmentState(ApartmentState.STA);
+            ScanThread.Start();
+        }
+
+        private void ScanforHardwareChange()
+        {
+            while (!stopScanThread)
             {
-                if (cameras[i].Subsribers.Count == 0)
+                Thread.Sleep(1);
+                if (DllImport.IsAnyCameraConnectedOrDisconnected())
                 {
-                    cameras[i].Stop();
-                    DllImport.StopWebCam(cameras[i].WebCamID);
+                    CloseAll();
+                    Dispatcher.BeginInvoke(new OneParameterDelegate(RefreshCameraList), null);
                 }
             }
         }
 
-
         public void CloseAll()
         {
-            foreach (WebCam cam in cameras)
-            {
-                cam.Stop();
-
-            }
             WebcamManager.CleanUp();
         }
 
         private void OnExit(object sender, EventArgs e)
         {
+            stopScanThread = true;
+            ScanThread.Join();
             CloseAll();
         }
 
+        private volatile bool stopScanThread;
+        private Thread ScanThread;
+        public ObservableCollection<ImageViewer> mainView;
         public ObservableCollection<ImageViewer> cameraPreviews; //the WebCam class is implemented as an image source!
-        public List<WebCam> cameras;
         private int selectedCameraIndex;// the camera currently selected
         private int numberConnectedCameras; //the number of cameras detected (includes those that are busy with other appplications as well)
         //dimensions of the capture

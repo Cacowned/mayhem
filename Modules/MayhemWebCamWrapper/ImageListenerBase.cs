@@ -42,7 +42,7 @@ namespace MayhemWebCamWrapper
                 ImagerHeight = c.Height;
                 HasImageSource = true;
                 SubscribedImagers.Add(c);
-                c.Subsribers.Add(this);
+                c.Subscribers.Add(this);
             }
         }
 
@@ -59,7 +59,7 @@ namespace MayhemWebCamWrapper
                 ImagerHeight = 0;
                 HasImageSource = false;
                 SubscribedImagers.Remove(c);
-                c.Subsribers.Remove(this);
+                c.Subscribers.Remove(this);
             }
         }
 
