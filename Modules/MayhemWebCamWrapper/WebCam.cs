@@ -26,7 +26,7 @@ namespace MayhemWebCamWrapper
         //constructors...
         public WebCam(int captureWidth=640, int captureHeight=480)
         {
-            Subsribers = new List<ImageListenerBase>();
+            Subscribers = new List<ImageListenerBase>();
             _index = -1;
             _name = "No camera detected";
             _isavailable = false;
@@ -36,7 +36,7 @@ namespace MayhemWebCamWrapper
 
         public WebCam(string name, int index, bool isavailable)
         {
-            Subsribers = new List<ImageListenerBase>();
+            Subscribers = new List<ImageListenerBase>();
             _name = name;
             _index = index;
             _isavailable = isavailable;
@@ -132,18 +132,19 @@ namespace MayhemWebCamWrapper
         System.Diagnostics.Stopwatch timer = System.Diagnostics.Stopwatch.StartNew();
         double _framesProcessed;
         float _frameRate;
-        IntPtr section;
-        IntPtr map { get; set; }
-        byte[] rawBuffer;
+        private byte[] rawBuffer;
+
+        public byte[] ImageBuffer
+        {
+            get { return rawBuffer; }
+        }
+
 
         void SetBuffer()
         {
             rawBuffer = null;
             rawBuffer = new byte[_width * _height * 3];
-            uint numpixels = (uint)(_width * _height * PixelFormats.Bgr24.BitsPerPixel / 8);
-            section = CreateFileMapping(new IntPtr(-1), IntPtr.Zero, 0x04, 0, numpixels, null);
-            map = MapViewOfFile(section, 0xF001F, 0, 0, numpixels);
-            BitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromMemorySection(section, _width, _height, PixelFormats.Bgr24, _width * PixelFormats.Bgr24.BitsPerPixel / 8, 0) as InteropBitmap;
+         
         }
         void ComputeFrameRate()
         {
@@ -157,17 +158,12 @@ namespace MayhemWebCamWrapper
             }
         }
 
-        public override InteropBitmap ImageAsBitmap()
-        {
-            return BitmapSource;
-        }
-
         public override event ImageUpdateHandler OnImageUpdated;
         void OnBitmapReady(object sender, EventArgs e)
         {
             if (OnImageUpdated != null)
             {
-                OnImageUpdated(this, new EventArgs());
+               OnImageUpdated(this, new EventArgs());
             }
         }
 
@@ -180,12 +176,8 @@ namespace MayhemWebCamWrapper
                 //1. get the byte buffer from the webcam 
                 if (DllImport.GrabFrameWebcam(_index, rawBuffer, _width, _height))
                 {
-                    //2. populate the bitmap 
-                    populateBitMap(rawBuffer, _width * _height * 3);
-                    //3. invalidate the mapped video memory pointed to by bitmap (this will force a refresh of the wpf render)
-                    //4. signal that the mapped video memory is ready with a new buffer, causing the 'Source' to refresh with the new buffer...
+                    // signal that the mapped video memory is ready with a new buffer, causing the 'Source' to refresh with the new buffer...
                     OnBitmapReady(this, null);
-                   
                     Thread.Sleep(30); //increasing this will reduce the CPU load... reducing this is not recommended, as buffers will overlap
                 }
             }
@@ -210,34 +202,11 @@ namespace MayhemWebCamWrapper
                 return false;
             }
         }
-        void populateBitMap(byte[] data, int len)
-        {
-
-            if (_width != default(int) && _height != default(int))
-            {
-                Marshal.Copy(data, 0, map, len);
-            }
-        }
+        
         public void Dispose()
         {
             Stop();
         }
     
-        //-----------------------------------------------------------------------------------------------------------------------------
-        //cruft required for mapping received byte buffers from camera as interopbitmap instances
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern IntPtr CreateFileMapping(IntPtr hFile, IntPtr lpFileMappingAttributes, uint flProtect, uint dwMaximumSizeHigh, uint dwMaximumSizeLow, string lpName);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern IntPtr MapViewOfFile(IntPtr hFileMappingObject, uint dwDesiredAccess, uint dwFileOffsetHigh, uint dwFileOffsetLow, uint dwNumberOfBytesToMap);
-
-        [DllImport("Kernel32.dll", EntryPoint = "RtlMoveMemory")]
-        private static extern void CopyMemory(IntPtr Destination, IntPtr Source, int Length);
-
-
-        //-----------------------------------------------------------------------------------------------------------------------------
-
-        public InteropBitmap BitmapSource;
- 
     }
 }

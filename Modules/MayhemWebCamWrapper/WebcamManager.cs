@@ -31,6 +31,7 @@ namespace MayhemWebCamWrapper
         {
             CleanUp();
         }
+
         public static void UpdateCameraList()
         {
             DllImport.RefreshWebcams();
@@ -53,13 +54,60 @@ namespace MayhemWebCamWrapper
             int numberCameras = WebcamManager.NumberConnectedCameras();
             for (int i = 0; i < numberCameras; i++)
             {
-                WebCam camera = WebcamManager.GetCamera(i);
-                camera.Stop();
+                StopCamera(i);
             }
+        }
+
+        public static bool StartCamera(int index, int CaptureWidth, int CaptureHeight)
+        {
+            int numberCameras = WebcamManager.NumberConnectedCameras();
+            if (index > -1 && index < numberCameras)
+            {
+                WebCam camera = WebcamManager.GetCamera(index);
+                camera.Width = CaptureWidth;
+                camera.Height = CaptureHeight;
+                try
+                {
+                    camera.Start();
+                }
+                catch (Exception)
+                {
+                    camera.Stop();
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public static void StopCamera(int index)
+        {
+            int numberCameras = WebcamManager.NumberConnectedCameras();
+            if (index > -1 && index < numberCameras)
+            {
+                WebCam camera = WebcamManager.GetCamera(index);
+                for (int i=0; i<camera.Subscribers.Count; i++)
+                {
+                    ImageListenerBase l = camera.Subscribers[i];
+                    l.UnregisterForImages(camera);
+                }
+                camera.Subscribers.Clear();
+                camera.Stop();
+                DllImport.StopWebCam(camera.WebCamID);
+            }
+        }
+
+        public static void ReleaseInactiveCameras()
+        {
+            int numberCameras = WebcamManager.NumberConnectedCameras();
             for (int i = 0; i < numberCameras; i++)
             {
                 WebCam camera = WebcamManager.GetCamera(i);
-                DllImport.StopWebCam(camera.WebCamID);
+               if (camera.Subscribers.Count == 0)
+                {
+                    camera.Stop();
+                    DllImport.StopWebCam(camera.WebCamID);
+                }
             }
         }
 

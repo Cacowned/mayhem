@@ -57,12 +57,6 @@ namespace MayhemWebCamWrapper
         public abstract event ImageUpdateHandler OnImageUpdated;
 
         /// <summary>
-        /// Retrieve the byte byffer from the camera as an interopbitmap 
-        /// </summary>
-        /// <returns>Bitmap containing the camera image</returns>
-        public abstract InteropBitmap ImageAsBitmap();
-
-        /// <summary>
         /// Starts the camera and delivery of image update events
         /// </summary>
         public abstract void Start();
@@ -78,7 +72,7 @@ namespace MayhemWebCamWrapper
         /// List of subscribers
         /// </summary>
     
-        public List<ImageListenerBase> Subsribers;
+        public List<ImageListenerBase> Subscribers;
     }
 
 }

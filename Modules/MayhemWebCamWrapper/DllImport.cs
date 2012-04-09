@@ -19,6 +19,9 @@ namespace MayhemWebCamWrapper
         public extern static int GetNumberOfConnectedWebCams();
 
         [DllImport("WebCamLib.dll")]
+        public extern static bool IsAnyCameraConnectedOrDisconnected();
+
+        [DllImport("WebCamLib.dll")]
         public extern static IntPtr GetWebCamName(int index);
 
         [DllImport("WebCamLib.dll")]

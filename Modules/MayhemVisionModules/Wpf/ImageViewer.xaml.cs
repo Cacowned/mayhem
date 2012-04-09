@@ -35,11 +35,11 @@ namespace MayhemVisionModules.Wpf
             ViewerSkewX = 0;
             ViewerSkewY = 0;
             ViewerTranslateX = 0;
-            ViewerTranslateY = 100;
+            ViewerTranslateY = 0;
             ViewerUpdated = false;
         }
 
-        public void AddImageSource(ImagerBase c)
+        public void SetImageSource(ImagerBase c)
         {
             if (ImageSource.SubscribedImagers.Count > 0)
             {
@@ -126,18 +126,22 @@ namespace MayhemVisionModules.Wpf
                 }
             }
         }
+
         public double ViewerOrientation
         {
-            get { return _viewOrientation; }
+            get {  return (_viewOrientation); }
             set 
             {
                 if (_viewOrientation != value)
                 {
                     _viewOrientation = Convert.ToDouble(value);
-                    NotifyPropertyChanged("RenderOrientation");
+                    NotifyPropertyChanged("ViewerOrientation");
                 }
             }
         }
+
+
+
         public double ViewerScaleX
         {
             get { return _viewScaleX; }
@@ -174,6 +178,7 @@ namespace MayhemVisionModules.Wpf
                 }
             }
         }
+        
         public double ViewerSkewY
         {
             get { return _viewSkewY; }
@@ -187,6 +192,35 @@ namespace MayhemVisionModules.Wpf
             }
         }
 
+        public string TopTitle
+        {
+            get { return _topTitle; }
+            set
+            {
+                if (_topTitle != value)
+                {
+                    _topTitle = Convert.ToString(value);
+                    NotifyPropertyChanged("TopTitle");
+                }
+            }
+        }
+
+
+        public string BottomTitle
+        {
+            get { return _bottomTitle; }
+            set
+            {
+                if (_bottomTitle != value)
+                {
+                    _bottomTitle = Convert.ToString(value);
+                    NotifyPropertyChanged("BottomTitle");
+                }
+            }
+        }
+
+        private string _topTitle;
+        private string _bottomTitle;
         private bool _viewUpdate;
         private double _viewHeight;
         private double _viewWidth;
