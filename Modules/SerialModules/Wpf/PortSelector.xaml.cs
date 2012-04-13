@@ -60,6 +60,7 @@ namespace SerialModules.Wpf
 			List<string> stopBits = Enum.GetNames(typeof(StopBits)).ToList();
 			// remove the option "none"
 			stopBits.Remove("None");
+			stopBits.Remove("OnePointFive");
 
 			StopBitsBox.ItemsSource = stopBits;
 			StopBitsBox.SelectedValue = Enum.GetName(typeof(StopBits), this.Settings.StopBits);
@@ -130,7 +131,7 @@ namespace SerialModules.Wpf
 			}
 
 			int dataBits = 0;
-			if (!int.TryParse(DataBitsBox.Text, out dataBits) || dataBits < 5 || dataBits > 8)
+			if (!int.TryParse(DataBitsBox.Text, out dataBits) || dataBits < 7 || dataBits > 8)
 			{
 				invalidBits.Visibility = Visibility.Visible;
 				tempCanSave = false;
@@ -138,7 +139,8 @@ namespace SerialModules.Wpf
 			else
 			{
 				invalidBits.Visibility = Visibility.Collapsed;
-				tempCanSave = true && tempCanSave;
+				// We don't need to set tempCanSave again because we could only get here if it passed the first one
+				// so it will still be true
 			}
 
 			this.CanSave = tempCanSave;
