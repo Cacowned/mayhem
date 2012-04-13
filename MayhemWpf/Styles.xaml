@@ -36,7 +36,7 @@
 		<Setter Property="Fill" Value="#FF151515"/>
 		<Setter Property="Opacity" Value="0"/>
 	</Style>
-	
+
 	<Style x:Key="BackgroundGradient" TargetType="{x:Type Panel}">
 		<Setter Property="Background">
 			<Setter.Value>
@@ -62,14 +62,10 @@
 					</Setter.Value>
 				</Setter>
 			</Style>
-		</Style.Resources>
-	</Style>
 
-	<!-- This is exactly the same as the one for TextBoxes. You can't apply the same style globally to 
-		multiple types?
-	-->
-	<Style TargetType="Grid">
-		<Style.Resources>
+			<!-- This is exactly the same as the one for TextBoxes. You can't apply the same style globally to 
+				multiple types?
+			-->
 			<Style TargetType="{x:Type PasswordBox}">
 				<Setter Property="Margin" Value="0,5,0,0" />
 				<Setter Property="BorderBrush">
@@ -130,6 +126,6 @@
 		<Setter Property="MinHeight" Value="35" />
 		<Setter Property="TextAlignment" Value="Center" />
 		<Setter Property="FontWeight" Value="Bold" />
-		
+
 	</Style>
 </ResourceDictionary>
