@@ -14,12 +14,12 @@ namespace WindowModules
 
 		private static WindowActionInfo actionInfo;
 
-		public static void Find(WindowActionInfo windowInfo, WindowActionResult actionOnResult)
+		public static int Find(WindowActionInfo windowInfo, WindowActionResult actionOnResult)
 		{
 			actionInfo = windowInfo;
 			action = actionOnResult;
 
-			Native.EnumWindows(Report, 0);
+			return Native.EnumWindows(Report, 0);
 		}
 
 		private static bool CheckWindow(IntPtr hwnd)
