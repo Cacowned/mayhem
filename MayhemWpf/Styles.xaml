@@ -1,115 +1,135 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style x:Key="ModuleNameStyle">
-        <Setter Property="Control.FontSize" Value="14.667" />
-        <Setter Property="Control.FontWeight" Value="Bold" />
-    </Style>
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Style x:Key="ModuleNameStyle">
+		<Setter Property="Control.FontSize" Value="14.667" />
+		<Setter Property="Control.FontWeight" Value="Bold" />
+	</Style>
 
-    <Style TargetType="{x:Type Panel}" x:Key="HeaderBackground">
-        <Setter Property="Background">
-            <Setter.Value>
-                <RadialGradientBrush>
-                    <GradientStop Color="#C3C6CC"/>
-                    <GradientStop Color="#9D9FA5" Offset="1"/>
-                </RadialGradientBrush>
-            </Setter.Value>
-        </Setter>
-    </Style>
+	<Style TargetType="{x:Type Panel}" x:Key="HeaderBackground">
+		<Setter Property="Background">
+			<Setter.Value>
+				<RadialGradientBrush>
+					<GradientStop Color="#C3C6CC"/>
+					<GradientStop Color="#9D9FA5" Offset="1"/>
+				</RadialGradientBrush>
+			</Setter.Value>
+		</Setter>
+	</Style>
 
-    <Style TargetType="{x:Type TextBlock}" x:Key="HeaderText">
-        <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="VerticalAlignment" Value="Center" />
+	<Style TargetType="{x:Type TextBlock}" x:Key="HeaderText">
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="VerticalAlignment" Value="Center" />
 
-        <Setter Property="FontSize" Value="28.333" />
-        <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="White" />
+		<Setter Property="FontSize" Value="28.333" />
+		<Setter Property="FontWeight" Value="Bold" />
+		<Setter Property="Foreground" Value="White" />
 
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect ShadowDepth="0" BlurRadius="13"/>
-            </Setter.Value>
-        </Setter>
-    </Style>
+		<Setter Property="Effect">
+			<Setter.Value>
+				<DropShadowEffect ShadowDepth="0" BlurRadius="13"/>
+			</Setter.Value>
+		</Setter>
+	</Style>
 
-    <!-- Used to grey out a Window -->
-    <Style x:Key="UserControlOverlayRectangleStyle" TargetType="{x:Type Rectangle}">
-        <Setter Property="Fill" Value="#FF151515"/>
-        <Setter Property="Opacity" Value="0"/>
-    </Style>
-    
-    <Style x:Key="BackgroundGradient" TargetType="{x:Type Panel}">
-        <Setter Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#C3C6CC" Offset="0"/>
-                    <GradientStop Color="#9D9FA5 " Offset="1"/>
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-    </Style>
+	<!-- Used to grey out a Window -->
+	<Style x:Key="UserControlOverlayRectangleStyle" TargetType="{x:Type Rectangle}">
+		<Setter Property="Fill" Value="#FF151515"/>
+		<Setter Property="Opacity" Value="0"/>
+	</Style>
+	
+	<Style x:Key="BackgroundGradient" TargetType="{x:Type Panel}">
+		<Setter Property="Background">
+			<Setter.Value>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="#C3C6CC" Offset="0"/>
+					<GradientStop Color="#9D9FA5 " Offset="1"/>
+				</LinearGradientBrush>
+			</Setter.Value>
+		</Setter>
+	</Style>
 
-    <Style TargetType="Grid">
-        <Style.Resources>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="0,5,0,0" />
-                <Setter Property="BorderBrush">
-                    <Setter.Value>
-                        <LinearGradientBrush EndPoint="0,20" MappingMode="Absolute" StartPoint="0,0">
-                            <GradientStop Color="#FFABADB3" Offset="0.05"/>
-                            <GradientStop Color="#FFE2E3EA" Offset="0.07"/>
-                            <GradientStop Color="#FF33373B" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </Style.Resources>
-    </Style>
+	<Style TargetType="Grid">
+		<Style.Resources>
+			<Style TargetType="{x:Type TextBox}">
+				<Setter Property="Margin" Value="0,5,0,0" />
+				<Setter Property="BorderBrush">
+					<Setter.Value>
+						<LinearGradientBrush EndPoint="0,20" MappingMode="Absolute" StartPoint="0,0">
+							<GradientStop Color="#FFABADB3" Offset="0.05"/>
+							<GradientStop Color="#FFE2E3EA" Offset="0.07"/>
+							<GradientStop Color="#FF33373B" Offset="1"/>
+						</LinearGradientBrush>
+					</Setter.Value>
+				</Setter>
+			</Style>
+		</Style.Resources>
+	</Style>
 
-    <Style TargetType="{x:Type Control}">
-        <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
+	<!-- This is exactly the same as the one for TextBoxes. You can't apply the same style globally to 
+		multiple types?
+	-->
+	<Style TargetType="Grid">
+		<Style.Resources>
+			<Style TargetType="{x:Type PasswordBox}">
+				<Setter Property="Margin" Value="0,5,0,0" />
+				<Setter Property="BorderBrush">
+					<Setter.Value>
+						<LinearGradientBrush EndPoint="0,20" MappingMode="Absolute" StartPoint="0,0">
+							<GradientStop Color="#FFABADB3" Offset="0.05"/>
+							<GradientStop Color="#FFE2E3EA" Offset="0.07"/>
+							<GradientStop Color="#FF33373B" Offset="1"/>
+						</LinearGradientBrush>
+					</Setter.Value>
+				</Setter>
+			</Style>
+		</Style.Resources>
+	</Style>
 
-    <Style TargetType="{x:Type Button}" x:Key="EventButton">
-        <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="Foreground" Value="White" />
-        <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid>
-                        <Rectangle Fill="{TemplateBinding Background}" />
-                        <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Cursor" Value="Hand" />
-    </Style>
+	<Style TargetType="{x:Type Control}">
+		<Setter Property="VerticalAlignment" Value="Center" />
+	</Style>
+
+	<Style TargetType="{x:Type Button}" x:Key="EventButton">
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="FontWeight" Value="Bold" />
+		<Setter Property="FontSize" Value="14" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Grid>
+						<Rectangle Fill="{TemplateBinding Background}" />
+						<ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Cursor" Value="Hand" />
+	</Style>
 
 
-    <!-- This is the label that shows up in the configuration user controls to label rows -->
-    <Style TargetType="FrameworkElement" x:Key="ConfigLabel">
-        <Setter Property="HorizontalAlignment" Value="Right" />
-        <Setter Property="VerticalAlignment" Value="Center" />
+	<!-- This is the label that shows up in the configuration user controls to label rows -->
+	<Style TargetType="FrameworkElement" x:Key="ConfigLabel">
+		<Setter Property="HorizontalAlignment" Value="Right" />
+		<Setter Property="VerticalAlignment" Value="Center" />
 
-        <Setter Property="Margin" Value="0,0,10,0" />
-    </Style>
+		<Setter Property="Margin" Value="0,0,10,0" />
+	</Style>
 
-    <!-- Error messages on config windows -->
-    <Style TargetType="{x:Type TextBlock}" x:Key="ConfigErrorMessage">
-        <Setter Property="Foreground" Value="#EF0000" />
-        <Setter Property="Visibility" Value="Collapsed" />
-    </Style>
+	<!-- Error messages on config windows -->
+	<Style TargetType="{x:Type TextBlock}" x:Key="ConfigErrorMessage">
+		<Setter Property="Foreground" Value="#EF0000" />
+		<Setter Property="Visibility" Value="Collapsed" />
+	</Style>
 
-    <!-- Big text on a config window. Things like KeyPress and Xbox Controller -->
-    <Style TargetType="{x:Type TextBlock}" x:Key="ConfigBigText">
-        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
-        <Setter Property="Margin" Value="0,25,0,0" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="MinHeight" Value="35" />
-        <Setter Property="TextAlignment" Value="Center" />
-        <Setter Property="FontWeight" Value="Bold" />
-        
-    </Style>
+	<!-- Big text on a config window. Things like KeyPress and Xbox Controller -->
+	<Style TargetType="{x:Type TextBlock}" x:Key="ConfigBigText">
+		<Setter Property="TextWrapping" Value="WrapWithOverflow" />
+		<Setter Property="Margin" Value="0,25,0,0" />
+		<Setter Property="FontSize" Value="14" />
+		<Setter Property="MinHeight" Value="35" />
+		<Setter Property="TextAlignment" Value="Center" />
+		<Setter Property="FontWeight" Value="Bold" />
+		
+	</Style>
 </ResourceDictionary>
