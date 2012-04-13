@@ -57,11 +57,30 @@ namespace PhidgetModules.Wpf
             ir.Detach += ir_Detach;
         	ir.Code += ir_Code;
 
-			if(ir.Attached)
-			{
-				ir_Attach(null, null);
-			}
+        	CheckCanSave();
         }
+
+		private void CheckCanSave()
+		{
+			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
+			{
+				if (ir.Attached)
+				{
+					// Only enable saving if we have a code already
+					if (Code != null && CodeInfo != null)
+					{
+						CanSave = true;
+					}
+
+					NoReciever.Visibility = Visibility.Collapsed;
+				}
+				else
+				{
+					NoReciever.Visibility = Visibility.Visible;
+					CanSave = false;
+				}
+			}));
+		}
 
         #region Phidget Event Handlers
 		
@@ -82,18 +101,12 @@ namespace PhidgetModules.Wpf
 
         private void ir_Attach(object sender, AttachEventArgs e)
         {
-            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-            {
-                NoReciever.Visibility = Visibility.Collapsed;
-            }));
+			CheckCanSave();
         }
 
         private void ir_Detach(object sender, DetachEventArgs e)
         {
-            Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-            {
-                NoReciever.Visibility = Visibility.Visible;
-            }));
+			CheckCanSave();
         }
         #endregion
 
@@ -104,8 +117,7 @@ namespace PhidgetModules.Wpf
             ir.Detach -= ir_Detach;
 			ir.Code -= ir_Code;
 
-			PhidgetManager.Release<IR>(ref ir);
+			PhidgetManager.Release(ref ir);
         }
-
 	}
 }
