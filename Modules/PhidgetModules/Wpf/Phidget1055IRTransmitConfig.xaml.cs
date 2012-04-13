@@ -13,7 +13,7 @@ namespace PhidgetModules.Wpf
     /// </summary>
     public partial class Phidget1055IrTransmitConfig : WpfConfiguration
     {
-        protected IR ir;
+        protected IR Ir;
 
         public IRCode Code
         {
@@ -46,16 +46,12 @@ namespace PhidgetModules.Wpf
 
         public override void OnLoad()
         {
-			try
-			{
-				ir = PhidgetManager.Get<IR>(throwIfNotAttached: false);
-			}
-			catch (InvalidOperationException) { }
+			Ir = PhidgetManager.Get<IR>(throwIfNotAttached: false);
 
-            ir.Learn += ir_Learn;
-            ir.Attach += ir_Attach;
-            ir.Detach += ir_Detach;
-        	ir.Code += ir_Code;
+            Ir.Learn += ir_Learn;
+            Ir.Attach += ir_Attach;
+            Ir.Detach += ir_Detach;
+        	Ir.Code += ir_Code;
 
         	CheckCanSave();
         }
@@ -64,7 +60,7 @@ namespace PhidgetModules.Wpf
 		{
 			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
 			{
-				if (ir.Attached)
+				if (Ir.Attached)
 				{
 					// Only enable saving if we have a code already
 					if (Code != null && CodeInfo != null)
@@ -112,12 +108,12 @@ namespace PhidgetModules.Wpf
 
         public override void OnClosing()
         {
-            ir.Learn -= ir_Learn;
-            ir.Attach -= ir_Attach;
-            ir.Detach -= ir_Detach;
-			ir.Code -= ir_Code;
+            Ir.Learn -= ir_Learn;
+            Ir.Attach -= ir_Attach;
+            Ir.Detach -= ir_Detach;
+			Ir.Code -= ir_Code;
 
-			PhidgetManager.Release(ref ir);
+			PhidgetManager.Release(ref Ir);
         }
 	}
 }
