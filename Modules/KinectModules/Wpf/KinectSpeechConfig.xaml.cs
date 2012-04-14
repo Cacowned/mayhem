@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
+using System.Timers;
 
 namespace KinectModules.Wpf
 {
@@ -11,6 +13,10 @@ namespace KinectModules.Wpf
             get;
             private set;
         }
+
+    	private Timer timer;
+
+    	private bool textValid;
 
         public KinectSpeechConfig(string phrase)
         {
@@ -26,7 +32,36 @@ namespace KinectModules.Wpf
         public override void OnLoad()
         {
             PhraseTextBox.Text = Phrase;
+        	timer = new Timer(500);
+			timer.Elapsed += timer_Elapsed;
+        	timer.Start();
         }
+
+		public override void OnClosing()
+		{
+			timer.Stop();
+		}
+
+		public void timer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			Dispatcher.BeginInvoke(new Action(() =>
+			{
+				if (KinectManager.IsKinectAttached())
+				{
+					kinectAttached.Visibility = Visibility.Collapsed;
+
+					if (textValid)
+					{
+						CanSave = true;
+					}
+				}
+				else
+				{
+					kinectAttached.Visibility = Visibility.Visible;
+					CanSave = false;
+				}
+			}));
+		}
 
         public override void OnSave()
         {
@@ -35,14 +70,14 @@ namespace KinectModules.Wpf
 
         private void CheckValidity()
         {
-            CanSave = PhraseTextBox.Text.Trim().Length > 0;
+            textValid = PhraseTextBox.Text.Trim().Length > 0;
         }
 
         private void PhraseText_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CheckValidity();
+        	CheckValidity();
 
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+			textInvalid.Visibility = textValid ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }
