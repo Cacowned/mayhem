@@ -59,11 +59,13 @@ namespace PhidgetModules.Wpf
 		private void sensor_Attach(object sender, AttachEventArgs e)
 		{
 			SetAttached();
+			CheckCanSave();
 		}
 
 		private void sensor_Detach(object sender, DetachEventArgs e)
 		{
 			SetAttached();
+			CheckCanSave();
 		}
 
 		private void SetAttached()

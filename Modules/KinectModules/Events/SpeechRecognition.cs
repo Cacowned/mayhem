@@ -57,8 +57,9 @@ namespace KinectModules.Events
 		private void Recognized(SpeechRecognizedEventArgs e)
 		{
 			Logger.WriteLine("Said: " + e.Result.Text + ", with " + e.Result.Confidence + " confidence");
-			if (e.Result.Confidence > .5)
+			if (e.Result.Confidence > .8)
 			{
+				Logger.WriteLine("Triggered");
 				Trigger();
 			}
 		}

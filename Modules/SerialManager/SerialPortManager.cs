@@ -48,6 +48,8 @@ namespace SerialManager
 		// Pairs the name of the port with the settings used for that port
 		private static Dictionary<string, SerialSettings> portSettings;
 
+		private static object locker;
+
 		#region Singleton
 		// We are using a singleton here because it will have many methods
 		// more than just get/release like in the other managers.
@@ -70,6 +72,8 @@ namespace SerialManager
 			portHandlers = new Dictionary<SerialPort, List<Action<byte[], int>>>();
 			ports = new Dictionary<string, SerialPort>();
 			portSettings = new Dictionary<string, SerialSettings>();
+
+			locker = new object();
 		}
 		#endregion
 
@@ -214,39 +218,44 @@ namespace SerialManager
 			ports.Remove(portName);
 		}
 
-		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void Write(string portName, string message)
 		{
-			if (!ports.ContainsKey(portName))
+			lock(locker)
 			{
-				throw new ArgumentException("The given port is not open", "portName");
-			}
+				if (!ports.ContainsKey(portName))
+				{
+					throw new ArgumentException("The given port is not open", "portName");
+				}
 
-			SerialPort port = ports[portName];
+				SerialPort port = ports[portName];
 
-			// See comments in the other write method.
-			if (port.IsOpen)
-			{
-				port.Write(message);
+				// See comments in the other write method.
+				if (port.IsOpen)
+				{
+					port.Write(message);
+				}
+				Thread.Sleep(110);
 			}
 		}
 
-		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void Write(string portName, byte[] buffer, int length)
 		{
-			if (!ports.ContainsKey(portName))
+			lock (locker)
 			{
-				throw new ArgumentException("The given port is not open", "portName");
-			}
+				if (!ports.ContainsKey(portName))
+				{
+					throw new ArgumentException("The given port is not open", "portName");
+				}
 
-			SerialPort port = ports[portName];
-			
-			// We have to verify that the port is open here if we try to write
-			if (port.IsOpen)
-			{
-				port.Write(buffer, 0, length);
+				SerialPort port = ports[portName];
+
+				// We have to verify that the port is open here if we try to write
+				if (port.IsOpen)
+				{
+					port.Write(buffer, 0, length);
+				}
+				Thread.Sleep(110);
 			}
-			// TODO: If it isn't open, we probably should do something about closing it?
 		}
 
 		[MethodImpl(MethodImplOptions.Synchronized)]

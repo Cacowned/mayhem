@@ -51,7 +51,7 @@ namespace PhidgetModules.Wpf
 		#region Phidget Event Handlers
 		private void ir_Code(object sender, IRCodeEventArgs e)
 		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
 			{
 				CanSave = true;
 				Code = e.Code;
@@ -60,10 +60,16 @@ namespace PhidgetModules.Wpf
 
 		private void CheckCanSave()
 		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
 			{
 				if (Ir.Attached)
 				{
+					// Only enable saving if we have a code already
+					if (Code != null)
+					{
+						CanSave = true;
+					}
+
 					NoReciever.Visibility = Visibility.Collapsed;
 				}
 				else
@@ -91,7 +97,7 @@ namespace PhidgetModules.Wpf
 			Ir.Attach -= ir_Attach;
 			Ir.Detach -= ir_Detach;
 
-			PhidgetManager.Release<IR>(ref Ir);
+			PhidgetManager.Release(ref Ir);
 		}
 	}
 }
