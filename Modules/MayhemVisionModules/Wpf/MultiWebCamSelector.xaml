@@ -5,14 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:visionmods="clr-namespace:MayhemVisionModules.Wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="800" MinHeight="960" MinWidth="640">
+             d:DesignHeight="800" d:DesignWidth="800"
+             SizeChanged="Selector_SizeChanged"
+             Width="Auto" Height="Auto">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="640" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ItemsControl Grid.Row="0" Name="main_view">
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="Auto" Height="Auto">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel HorizontalAlignment="Center" IsItemsHost="True"></WrapPanel>
@@ -21,11 +30,20 @@
         </ItemsControl>
 
         <ItemsControl Grid.Row="1" Name="camera_selection_panel">
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="Auto" Height="Auto">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel HorizontalAlignment="Center" IsItemsHost="True"></WrapPanel>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
+
+
     </Grid>
 </UserControl>

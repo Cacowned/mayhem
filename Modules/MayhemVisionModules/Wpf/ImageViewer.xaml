@@ -9,16 +9,21 @@
              d:DesignHeight="640" d:DesignWidth="480" MinHeight="15" MinWidth="20">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width= "{Binding ViewerBorderThicknessX}" />
             <ColumnDefinition Width="{Binding ViewerWidth}" />
+            <ColumnDefinition Width="{Binding ViewerBorderThicknessX}" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding ViewerBorderThicknessY}" />
             <RowDefinition Height="20" />
             <RowDefinition Height="{Binding ViewerHeight}" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="{Binding ViewerBorderThicknessY}" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" HorizontalAlignment="Center"  x:Name="TopTitleString" Text="{Binding TopTitle}"></TextBlock>
-        <TextBlock Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" x:Name="BottomTitleString" Text="{Binding BottomTitle}"></TextBlock>
-        <visionmods:ImageRenderer Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ImageSource" Width="{Binding ViewerWidth}" Height="{Binding ViewerHeight}" MinWidth="20" MinHeight="15">
+        <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="{Binding ViewerBorderColor}" MinWidth="20" MinHeight="15" x:Name="RenderBorder" Width="{Binding (ViewerWidth+ViewerBorderThicknessX)}" Height="{Binding (ViewerHeight+ViewerBorderThicknessY)}"></Border>
+        <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"  x:Name="TopTitleString" Text="{Binding TopTitle}"></TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" x:Name="BottomTitleString" Text="{Binding BottomTitle}"></TextBlock>
+        <visionmods:ImageRenderer Grid.Row="2" Grid.Column ="1" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ImageSource" Width="{Binding ViewerWidth}" Height="{Binding ViewerHeight}" MinWidth="80" MinHeight="15">
             <visionmods:ImageRenderer.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform x:Name="RenderScaleTransform" ScaleX="{Binding ViewerScaleX}" ScaleY="{Binding ViewerScaleY}"/>
