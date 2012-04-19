@@ -36,6 +36,9 @@ namespace MayhemVisionModules.Wpf
             ViewerSkewY = 0;
             ViewerTranslateX = 0;
             ViewerTranslateY = 0;
+            ViewerBorderThicknessX = 20+10;
+            ViewerBorderThicknessY = 10;
+            ViewerBorderColor = "Beige";
             ViewerUpdated = false;
         }
 
@@ -60,14 +63,6 @@ namespace MayhemVisionModules.Wpf
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
-            if (property == "ViewerWidth" || property == "ViewerHeight" || property == "ViewerUpdate")
-            {
-                //scale image accordingly
-                double scaleX = ViewerWidth / ImageSource.ImagerWidth;
-                double scaleY = ViewerHeight / ImageSource.ImagerHeight;
-                ViewerScaleX = double.IsNaN(scaleX) ? 1 : (scaleX == 0) ? 1 : scaleX;
-                ViewerScaleY = double.IsNaN(scaleY) ? 1 : (scaleY == 0) ? 1 : scaleY;
-            }
         }
 
         public bool ViewerUpdated
@@ -140,8 +135,6 @@ namespace MayhemVisionModules.Wpf
             }
         }
 
-
-
         public double ViewerScaleX
         {
             get { return _viewScaleX; }
@@ -154,6 +147,7 @@ namespace MayhemVisionModules.Wpf
                 }
             }
         }
+
         public double ViewerScaleY
         {
             get { return _viewScaleY; }
@@ -166,6 +160,8 @@ namespace MayhemVisionModules.Wpf
                 }
             }
         }
+
+     
         public double ViewerSkewX
         {
             get { return _viewSkewX; }
@@ -188,6 +184,45 @@ namespace MayhemVisionModules.Wpf
                 {
                     _viewSkewY = Convert.ToDouble(value);
                     NotifyPropertyChanged("ViewerSkewY");
+                }
+            }
+        }
+
+        public double ViewerBorderThicknessX
+        {
+            get { return _viewBorderThicknessX; }
+            set
+            {
+                if (_viewBorderThicknessX != value)
+                {
+                    _viewBorderThicknessX = Convert.ToDouble(value);
+                    NotifyPropertyChanged("ViewerBorderThicknessX");
+                }
+            }
+        }
+
+        public double ViewerBorderThicknessY
+        {
+            get { return _viewBorderThicknessY; }
+            set
+            {
+                if (_viewBorderThicknessY != value)
+                {
+                    _viewBorderThicknessY = Convert.ToDouble(value);
+                    NotifyPropertyChanged("ViewerBorderThicknessY");
+                }
+            }
+        }
+
+        public string ViewerBorderColor
+        {
+            get { return _viewBorderColor; }
+            set
+            {
+                if (_viewBorderColor != value)
+                {
+                    _viewBorderColor = Convert.ToString(value);
+                    NotifyPropertyChanged("ViewerBorderColor");
                 }
             }
         }
@@ -231,5 +266,9 @@ namespace MayhemVisionModules.Wpf
         private double _viewSkewY;
         private double _viewTranslateX;
         private double _viewTranslateY;
+        private double _viewBorderThicknessX;
+        private double _viewBorderThicknessY;
+        private string _viewBorderColor;
+       
     }
 }
