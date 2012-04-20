@@ -77,9 +77,11 @@ namespace PhidgetModules.Wpf.UserControls
 
 		public override void OnClosing()
 		{
+			Sensor.OnRevalidate -= Revalidate;
 			IfKit.Attach -= ifKit_Attach;
+			IfKit.Detach -= IfKit_Detach;
 
-			PhidgetManager.Release<InterfaceKit>(ref IfKit);
+			PhidgetManager.Release(ref IfKit);
 		}
 
 		private void SetAttachedMessage()
