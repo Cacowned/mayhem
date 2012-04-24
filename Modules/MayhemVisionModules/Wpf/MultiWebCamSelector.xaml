@@ -24,7 +24,7 @@
             </ItemsControl.Template>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel HorizontalAlignment="Center" IsItemsHost="True"></WrapPanel>
+                    <WrapPanel HorizontalAlignment="Center" IsItemsHost="True" Width="Auto" Height="Auto"></WrapPanel>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

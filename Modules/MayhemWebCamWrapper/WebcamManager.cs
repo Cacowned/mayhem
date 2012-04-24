@@ -21,15 +21,29 @@ namespace MayhemWebCamWrapper
 {
     public class WebcamManager : System.Windows.Controls.TextBlock, IDisposable
     {
-        public WebcamManager()
+        public static void StartServiceIfNeeded()
         {
-            DllImport.RefreshWebcams();
-            System.Windows.Application.Current.Exit += WebCamManagerCleanup;
+            if (!_serviceStarted)
+            {
+                UpdateCameraList();
+                _serviceStarted = true;
+            }
         }
-       
-        private void WebCamManagerCleanup(object sender, EventArgs e)
+
+        public static void RestartService()
         {
-            CleanUp();
+            if (_serviceStarted)
+                CleanUp();
+            _serviceStarted = false;
+            UpdateCameraList();
+            _serviceStarted = true;
+        }
+
+        public static void TerminateService()
+        {
+            if (_serviceStarted)
+                CleanUp();
+            _serviceStarted = false;
         }
 
         public static void UpdateCameraList()
@@ -41,8 +55,9 @@ namespace MayhemWebCamWrapper
             for (int i = 0; i < _numdetectedCameras; i++)
             {
                 string cameraName = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(DllImport.GetWebCamName(i));
+                string cameraPath = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(DllImport.GetWebCamPath(i));
                 bool isAvailable = DllImport.IsWebCamAvailable(i);
-                WebCam camera = new WebCam(cameraName, i, isAvailable);
+                WebCam camera = new WebCam(cameraName, cameraPath, i, isAvailable);
 
                 _detectedCameras.Add(camera);
                 _availableFlags.Add(isAvailable);
@@ -70,8 +85,9 @@ namespace MayhemWebCamWrapper
                 {
                     camera.Start();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    System.Windows.Forms.MessageBox.Show(e.ToString());
                     camera.Stop();
                     return false;
                 }
@@ -118,7 +134,7 @@ namespace MayhemWebCamWrapper
             if (index < 0 || index > _numdetectedCameras - 1)
             {
                 //MessageBox.Show("Invalid camera index specified", "Webcam Acquisition Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                WebCam camera = new WebCam("", -1, false);
+                WebCam camera = new WebCam(default(String), default(String), -1, false);
                 return camera;
             }
             else
@@ -135,6 +151,7 @@ namespace MayhemWebCamWrapper
         private static List<WebCam> _detectedCameras;
         private static List<bool> _availableFlags;
         private static int _numdetectedCameras;
+        private static bool _serviceStarted;
     }
 
 }

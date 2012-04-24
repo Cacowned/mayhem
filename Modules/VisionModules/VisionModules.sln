@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisionModules", "VisionModules.csproj", "{40B64A39-4ADD-492C-994A-9C28B4E59A88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemOpenCVWrapper", "..\MayhemOpenCVWrapper\MayhemOpenCVWrapper.csproj", "{B04222E3-9FC3-4827-A40F-8AE68CABB834}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{40B64A39-4ADD-492C-994A-9C28B4E59A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40B64A39-4ADD-492C-994A-9C28B4E59A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40B64A39-4ADD-492C-994A-9C28B4E59A88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04222E3-9FC3-4827-A40F-8AE68CABB834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04222E3-9FC3-4827-A40F-8AE68CABB834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04222E3-9FC3-4827-A40F-8AE68CABB834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04222E3-9FC3-4827-A40F-8AE68CABB834}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

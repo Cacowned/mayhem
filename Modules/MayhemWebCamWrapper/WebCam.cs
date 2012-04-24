@@ -29,15 +29,17 @@ namespace MayhemWebCamWrapper
             Subscribers = new List<ImageListenerBase>();
             _index = -1;
             _name = "No camera detected";
+            _path = default(String);
             _isavailable = false;
             _width = captureWidth;
             _height = captureHeight;
         }
 
-        public WebCam(string name, int index, bool isavailable)
+        public WebCam(string name, string path, int index, bool isavailable)
         {
             Subscribers = new List<ImageListenerBase>();
             _name = name;
+            _path = path;
             _index = index;
             _isavailable = isavailable;
             _width = 640;
@@ -51,22 +53,21 @@ namespace MayhemWebCamWrapper
             if (IsAvailable())
             {
                 Stop();
-                if (_height != default(int) && _width != default(int))
+                if (_height == default(int) || _width == default(int))
                 {
-                    BitmapReady += OnBitmapReady;
-                    SetBuffer();
-                    if (worker == null)
-                    {
-                        stopSignal = new ManualResetEvent(false);
-                        worker = new Thread(RunWorker);
-                        worker.Start();
-                    }
+                    _height = 480;
+                    _width = 640;
                 }
-                else
+
+                BitmapReady += OnBitmapReady;
+                SetBuffer();
+                if (worker == null)
                 {
-                    string str = "Invalid dimensions for " + _name;
-                    throw new ImageException(str);
+                    stopSignal = new ManualResetEvent(false);
+                    worker = new Thread(RunWorker);
+                    worker.Start();
                 }
+              
             }
             else
             {
@@ -98,6 +99,12 @@ namespace MayhemWebCamWrapper
         {
             get { return _name; }
         }
+
+        public string WebCamPath
+        {
+            get { return _path; }
+        }
+
         public override int Width
         {
             get { return _width; }
@@ -121,6 +128,7 @@ namespace MayhemWebCamWrapper
         //-----------------------------------------------------------------------------------------------------------------------------
         //Members:
         private string _name;
+        private string _path;
         private int _index;
         private bool _isavailable;
         Thread worker;
@@ -196,8 +204,7 @@ namespace MayhemWebCamWrapper
                 {
                     if (worker.Join(0) == false)
                         return true;
-
-                    Release();
+                    //Release();
                 }
                 return false;
             }
