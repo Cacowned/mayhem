@@ -38,7 +38,7 @@ namespace MayhemVisionModules.Wpf
             ViewerTranslateY = 0;
             ViewerBorderThicknessX = 20+10;
             ViewerBorderThicknessY = 10;
-            ViewerBorderColor = "Beige";
+            ViewerBorderColor = "Transparent";
             ViewerUpdated = false;
         }
 

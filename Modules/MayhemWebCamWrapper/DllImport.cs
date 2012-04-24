@@ -25,6 +25,9 @@ namespace MayhemWebCamWrapper
         public extern static IntPtr GetWebCamName(int index);
 
         [DllImport("WebCamLib.dll")]
+        public extern static IntPtr GetWebCamPath(int index);
+
+        [DllImport("WebCamLib.dll")]
         public extern static bool IsWebCamAvailable(int index);
 
         [DllImport("WebCamLib.dll")]
