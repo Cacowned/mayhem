@@ -35,7 +35,6 @@ namespace FacebookModules.Reactions
             {
                 var statusArgs = new SortedDictionary<string, string>();
                 statusArgs["message"] = myStatus;
-
                 try
                 {
                     fb.Post("/me/feed", statusArgs);
