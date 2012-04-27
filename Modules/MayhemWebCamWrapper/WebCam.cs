@@ -59,10 +59,11 @@ namespace MayhemWebCamWrapper
                     _width = 640;
                 }
 
-                BitmapReady += OnBitmapReady;
-                SetBuffer();
                 if (worker == null)
                 {
+                    BitmapReady += OnBitmapReady;
+                    SetBuffer();
+                
                     stopSignal = new ManualResetEvent(false);
                     worker = new Thread(RunWorker);
                     worker.Start();

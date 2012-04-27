@@ -27,7 +27,7 @@ namespace MayhemVisionModules.Wpf
     /// <summary>
     /// Interaction logic for MultiWebCamSelector.xaml
     /// </summary>
-    public partial class MultiWebCamSelector : UserControl
+    public partial class MultiWebCamSelector : UserControl, IDisposable
     {
         public MultiWebCamSelector()
         {
@@ -53,12 +53,26 @@ namespace MayhemVisionModules.Wpf
             mainViewHeight = 480;
             //refresh the camera list on construction...
             RefreshCameraList();
-            StartHardwareScan();
+            WebcamManager.StartHardwareScanner();
+            WebcamManager.RegisterForHardwareChanges(OnCameraConnected, OnCameraDisconnected);
+        }
+
+        public void OnCameraConnected(object sender, WebcamHardwareScannerEventArgs e)
+        {
+            RefreshCameraList();
+       //     Dispatcher.BeginInvoke(new OneParameterDelegate(RefreshCameraList), null);
+        }
+
+        public void OnCameraDisconnected(object sender, WebcamHardwareScannerEventArgs e)
+        {
+            MessageBox.Show("Here");
+            RefreshCameraList();
+       //     Dispatcher.BeginInvoke(new OneParameterDelegate(RefreshCameraList), null);
         }
 
         public void RefreshCameraList()
         {
-            WebcamManager.StartServiceIfNeeded();
+            WebcamManager.RestartService();
             numberConnectedCameras = WebcamManager.NumberConnectedCameras();
             cameraPreviews = new ObservableCollection<ImageViewer>();
             mainView = new ObservableCollection<ImageViewer>();
@@ -104,28 +118,7 @@ namespace MayhemVisionModules.Wpf
 
         private delegate void OneParameterDelegate();
 
-        public void StartHardwareScan()
-        {
-            
-            ScanThread = new Thread(ScanforHardwareChange);
-            ScanThread.SetApartmentState(ApartmentState.STA);
-            ScanThread.Start();
-        }
-
-        private void ScanforHardwareChange()
-        {
-            while (!stopScanThread)
-            {
-                Thread.Sleep(5);
-                if (DllImport.IsAnyCameraConnectedOrDisconnected())
-                {
-                   WebcamManager.CleanUp();
-                   Dispatcher.BeginInvoke(new OneParameterDelegate(RefreshCameraList), null);
-                }
-            }
-        }
-
-
+       
         private void Viewer_MouseEnter(object sender, MouseEventArgs e)
         {
             ImageViewer viewer = sender as ImageViewer;
@@ -171,8 +164,6 @@ namespace MayhemVisionModules.Wpf
 
         public void Cleanup()
         {
-            stopScanThread = true;
-            ScanThread.Join();
             foreach (ImageViewer viewer in cameraPreviews)
             {
                 for (int i = 0; i < viewer.ImageSource.SubscribedImagers.Count; i++)
@@ -184,6 +175,7 @@ namespace MayhemVisionModules.Wpf
                     viewer.ImageSource.UnregisterForImages(viewer.ImageSource.SubscribedImagers[i]);
             }
             WebcamManager.ReleaseInactiveCameras();
+            WebcamManager.UnregisterForHardwareChanges(OnCameraConnected, OnCameraDisconnected);
         }
 
         private void OnExit(object sender, EventArgs e)
@@ -191,8 +183,11 @@ namespace MayhemVisionModules.Wpf
             Cleanup();
         }
 
-        private volatile bool stopScanThread;
-        private Thread ScanThread;
+        public void Dispose()
+        {
+            Cleanup();
+        }
+
         public ObservableCollection<ImageViewer> mainView;
         public ObservableCollection<ImageViewer> cameraPreviews; //the WebCam class is implemented as an image source!
         private int selectedCameraIndex;// the camera currently selected

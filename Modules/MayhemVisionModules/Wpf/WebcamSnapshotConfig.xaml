@@ -13,8 +13,6 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -24,29 +22,21 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch">
             <Label> Save to Location: </Label>
-            <TextBox Margin="5 0 0 0" Name="textBox_SaveLocation" MinWidth="640" MaxWidth="640" TextChanged="TextBoxSaveLocationChanged"></TextBox>
-            <Button Name="button_SaveLocationButton" Click="ButtonSaveLocationClick" Margin="5 0 0 0">Browse</Button> 
+            <TextBox Margin="5 0 0 0" Name="textBox_SaveLocation" MinWidth="640" MaxWidth="640" TextChanged="TextBoxSaveLocationChanged" VerticalAlignment="Center"></TextBox>
+            <Button Name="button_SaveLocationButton" Click="ButtonSaveLocationClick" Margin="5 0 0 0" VerticalAlignment="Center">Browse</Button> 
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label> File Name Prefix: </Label>
             <TextBox Margin="6 0 0 0" Name="textBox_fileNamePrefix" MinWidth="640" MaxWidth="640" TextChanged="TextBoxFilenamePrefix_TextChanged" VerticalAlignment="Center">Mayhem</TextBox>
         </StackPanel>
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Label> Capture Width: </Label>
-            <TextBox Margin="15 0 0 0" MinWidth="50" MaxWidth="50" Name="textBox_CaptureWidth" TextChanged="TextBoxCaptureWidth_Changed">640</TextBox>
+        <StackPanel Grid.Row="3" VerticalAlignment="Center">
+            <CheckBox IsChecked="True" Name="chkBoxShowPreview" VerticalAlignment="Center"> Show Preivew</CheckBox>
         </StackPanel>
-        <StackPanel Grid.Row="4" Orientation="Horizontal">
-            <Label>Capture Height:</Label>
-            <TextBox Margin="12 0 0 0"  MinWidth="50" MaxWidth="50" Name="textBox_CaptureHeight" TextChanged="TextBoxCaptureHeight_Changed">480</TextBox>
+        <StackPanel Grid.Row="4" VerticalAlignment="Center">
+            <CheckBox IsChecked="True" Name="chkBoxPlayShutterSound" VerticalAlignment="Center"> Play Shutter Sound</CheckBox>
         </StackPanel>
-        <StackPanel Grid.Row="5">
-            <CheckBox IsChecked="True" Name="chkBoxShowPreview"> Show Preivew</CheckBox>
-        </StackPanel>
-        <StackPanel Grid.Row="6">
-            <CheckBox IsChecked="True" Name="chkBoxPlayShutterSound"> Play Shutter Sound</CheckBox>
-        </StackPanel>
-        <StackPanel Grid.Row="7" Orientation="Horizontal">
-            <TextBlock FontStyle="Italic" Margin="5 0 0 0" MinWidth="240" MaxWidth="240"  Name="textInvalid">File location is invalid</TextBlock>
+        <StackPanel Grid.Row="5" Orientation="Horizontal">
+            <TextBlock FontStyle="Italic" Margin="5 0 0 0" MinWidth="240" MaxWidth="240"  Name="textInvalid" VerticalAlignment="Center">File location is invalid</TextBlock>
         </StackPanel>
         <!--<TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="4">File location is invalid</TextBlock>-->
     </Grid>

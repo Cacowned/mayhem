@@ -35,18 +35,6 @@ namespace MayhemVisionModules.Wpf
             private set;
         }
 
-        public int CaptureWidth
-        {
-            get;
-            private set;
-        }
-
-        public int CaptureHeight
-        {
-            get;
-            private set;
-        }
-
         public string SelectedCameraPath
         {
             get { return camera_selector.GetSelectedCameraPath();}
@@ -85,16 +73,17 @@ namespace MayhemVisionModules.Wpf
             camera_selector.InitSelector();
         }
        
-        public WebcamSnapshotConfig(string folderLocation, string fileNamePrefix, int captureWidth, int captureHeight, string selectedCameraPath, bool showPreview, bool playShutterSound)
+        public WebcamSnapshotConfig(string folderLocation, string fileNamePrefix, string selectedCameraPath, bool showPreview, bool playShutterSound)
         {
-            SaveLocation = folderLocation;
-            FilenamePrefix = fileNamePrefix;
-            CaptureWidth = captureWidth;
-            CaptureHeight = captureHeight;
+            InitializeComponent();
+
+            SaveLocation = textBox_SaveLocation.Text = folderLocation;
+            FilenamePrefix = textBox_fileNamePrefix.Text = fileNamePrefix;
             SelectedCameraPath = selectedCameraPath;
             ShowPreview = showPreview;
             PlayShutterSound = playShutterSound;
-            InitializeComponent();
+            chkBoxShowPreview.IsChecked = showPreview;
+            chkBoxPlayShutterSound.IsChecked = playShutterSound;
             camera_selector.InitSelector();
         }
 
@@ -102,8 +91,6 @@ namespace MayhemVisionModules.Wpf
         {
             textBox_SaveLocation.Text = SaveLocation;
             textBox_fileNamePrefix.Text = FilenamePrefix;
-            textBox_CaptureWidth.Text = CaptureWidth.ToString();
-            textBox_CaptureHeight.Text = CaptureHeight.ToString();
             chkBoxPlayShutterSound.IsChecked = PlayShutterSound;
             chkBoxShowPreview.IsChecked = ShowPreview;
 
@@ -172,8 +159,6 @@ namespace MayhemVisionModules.Wpf
         {
             SaveLocation = textBox_SaveLocation.Text;
             FilenamePrefix = textBox_fileNamePrefix.Text;
-            CaptureWidth = Int16.Parse(textBox_CaptureWidth.Text);
-            CaptureHeight = Int16.Parse(textBox_CaptureHeight.Text);
             SelectedCameraPath = camera_selector.GetSelectedCameraPath();
             ShowPreview = chkBoxShowPreview.IsChecked.HasValue && chkBoxShowPreview.IsChecked.Value;
             PlayShutterSound = chkBoxPlayShutterSound.IsChecked.HasValue && chkBoxPlayShutterSound.IsChecked.Value;
