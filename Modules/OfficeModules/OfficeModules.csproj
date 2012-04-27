@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MayhemCore">
-      <HintPath>..\..\bin\Mayhem\content\MayhemCore.dll</HintPath>
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />

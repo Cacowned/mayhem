@@ -34,6 +34,9 @@
     <Reference Include="MayhemCore">
       <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
     </Reference>
+    <Reference Include="MayhemSerial">
+      <HintPath>..\SerialManager\bin\Debug\MayhemSerial.dll</HintPath>
+    </Reference>
     <Reference Include="MayhemWpf">
       <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
     </Reference>
@@ -80,13 +83,6 @@
     <Compile Include="Wpf\Helpers\StretchPropertyExt.cs" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\MayhemSerial\MayhemSerial.csproj">
-      <Project>{EB69EA74-75DB-4171-858A-B4BC4F6857E6}</Project>
-      <Name>MayhemSerial</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <Page Include="Wpf\ArduinoDigitalWriteConfig.xaml">
       <SubType>Designer</SubType>

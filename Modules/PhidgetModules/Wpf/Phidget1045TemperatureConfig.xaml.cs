@@ -59,11 +59,13 @@ namespace PhidgetModules.Wpf
 		private void sensor_Attach(object sender, AttachEventArgs e)
 		{
 			SetAttached();
+			CheckCanSave();
 		}
 
 		private void sensor_Detach(object sender, DetachEventArgs e)
 		{
 			SetAttached();
+			CheckCanSave();
 		}
 
 		private void SetAttached()
@@ -94,26 +96,28 @@ namespace PhidgetModules.Wpf
 		public override void OnClosing()
 		{
 			sensor.Attach -= sensor_Attach;
-			PhidgetManager.Release<TemperatureSensor>(ref sensor);
+			sensor.Detach -= sensor_Detach;
+			sensor.TemperatureChange -= sensor_TemperatureChange;
+			PhidgetManager.Release(ref sensor);
 		}
 
 		private void CheckCanSave()
 		{
-			string error;
-
-			double topValue;
-
-			if (!(double.TryParse(textBoxTopValue.Text, out topValue) && (topValue >= 0 && topValue <= 100)))
-			{
-				error = "Invalid Top Value";
-			}
-			else
-			{
-				error = string.Empty;
-			}
-
 			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
 			{
+				string error;
+
+				double topValue;
+
+				if (!(double.TryParse(textBoxTopValue.Text, out topValue) && (topValue >= 0 && topValue <= 100)))
+				{
+					error = "Invalid Top Value";
+				}
+				else
+				{
+					error = string.Empty;
+				}
+
 				textInvalid.Text = error;
 				if (error == string.Empty)
 				{
@@ -123,11 +127,11 @@ namespace PhidgetModules.Wpf
 				{
 					textInvalid.Visibility = Visibility.Visible;
 				}
+
+				TopValue = topValue;
+
+				CanSave = (sensor.Attached && error == string.Empty);
 			}));
-
-			TopValue = topValue;
-
-			CanSave = (sensor.Attached && error == string.Empty);
 		}
 
 		public override string Title

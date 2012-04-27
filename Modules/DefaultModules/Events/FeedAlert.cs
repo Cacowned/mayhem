@@ -29,6 +29,12 @@ namespace DefaultModules.Events
         [DataMember]
         private string feedTitle;
 
+        [DataMember] 
+        private bool requireProxy;
+
+        [DataMember] 
+        private string[] proxySettings;
+
         // Does not store any data from the configuration
         // Stores the "latest" feed item title to compare
         // against and check for updates
@@ -39,7 +45,7 @@ namespace DefaultModules.Events
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new FeedAlertConfig(feedUrl); }
+            get { return new FeedAlertConfig(feedUrl, requireProxy, proxySettings); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
@@ -47,6 +53,9 @@ namespace DefaultModules.Events
             var config = (FeedAlertConfig)configurationControl;
             feedUrl = config.UrlProp;
             feedTitle = config.FeedTitleProp;
+            requireProxy = config.RequireProxy;
+            proxySettings = config.ProxySettingsProp;
+
             // reset state if feed url has changed, don't want it to trigger
             feedData = "";
         }
@@ -66,6 +75,8 @@ namespace DefaultModules.Events
         {
             feedUrl = "http://feeds.nytimes.com/nyt/rss/HomePage";
             feedData = String.Empty;
+            requireProxy = false;
+            proxySettings = new string[3];
         }
 
         /// <summary>
@@ -106,6 +117,15 @@ namespace DefaultModules.Events
                 {
                     WebRequest webRequest = WebRequest.Create(feedUrl);
                     HttpRequestCachePolicy noCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+
+                    if(requireProxy)
+                    {
+                        webRequest.Proxy = WebRequest.DefaultWebProxy;
+                        // USER, PASS, DOMAIN
+                        webRequest.Credentials = new NetworkCredential(proxySettings[0], proxySettings[1], proxySettings[2]);
+                        webRequest.Proxy.Credentials = new NetworkCredential(proxySettings[0], proxySettings[1], proxySettings[2]);
+                    }
+
                     // otherwise stores xml info in the cache
                     webRequest.CachePolicy = noCachePolicy;
                     using (WebResponse webResponse = webRequest.GetResponse())
