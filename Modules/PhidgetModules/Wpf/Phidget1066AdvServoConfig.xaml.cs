@@ -9,15 +9,7 @@ using System.Windows.Threading;
 
 namespace PhidgetModules.Wpf
 {
-    /*
-     * TODO: Make this configuration window more robust. For example, it should enable
-     * and disable things when they servo controller is plugged in.
-     */
-
-    /// <summary>
-    /// Interaction logic for Phidget1066AdvServoConfig.xaml
-    /// </summary>
-    public partial class Phidget1066AdvServoConfig : WpfConfiguration
+	public partial class Phidget1066AdvServoConfig : WpfConfiguration
     {
 		private AdvancedServo servo;
 
@@ -48,6 +40,7 @@ namespace PhidgetModules.Wpf
         {
 			servo = PhidgetManager.Get<AdvancedServo>(false);
 			servo.Attach += servo_Attach;
+			servo.Detach += servo_Detach;
 
             foreach (string servoType in Enum.GetNames(typeof(ServoServo.ServoType)))
             {
@@ -78,6 +71,11 @@ namespace PhidgetModules.Wpf
 			SetAttached();
 		}
 
+		private void servo_Detach(object sender, DetachEventArgs e)
+		{
+			SetAttached();
+		}
+
 		private void SetAttached()
 		{
 			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
@@ -89,6 +87,7 @@ namespace PhidgetModules.Wpf
 				}
 				else
 				{
+					CanSave = false;
 					Invalid.Visibility = Visibility.Visible;
 				}
 			}));

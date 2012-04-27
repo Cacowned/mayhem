@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\VisionModules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -37,10 +37,12 @@
       <HintPath>References\AviFile.dll</HintPath>
     </Reference>
     <Reference Include="MayhemCore">
-      <HintPath>packages\MayhemCore.1.0.0\lib\net40\MayhemCore.dll</HintPath>
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MayhemWpf">
-      <HintPath>packages\MayhemWpf.1.0.0\lib\net40\MayhemWpf.dll</HintPath>
+      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="OpenCVDLL">
       <HintPath>..\References\OpenCVDLL.dll</HintPath>
@@ -102,7 +104,7 @@
     <ProjectReference Include="..\MayhemOpenCVWrapper\MayhemOpenCVWrapper.csproj">
       <Project>{B04222E3-9FC3-4827-A40F-8AE68CABB834}</Project>
       <Name>MayhemOpenCVWrapper</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -131,9 +133,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

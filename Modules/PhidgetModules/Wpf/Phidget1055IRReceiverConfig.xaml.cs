@@ -16,7 +16,7 @@ namespace PhidgetModules.Wpf
 			get { return (IRCode)GetValue(CodeProperty); }
 			set { SetValue(CodeProperty, value); }
 		}
-			
+
 		// Using a DependencyProperty as the backing store for Code.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty CodeProperty =
 			DependencyProperty.Register("Code", typeof(IRCode), typeof(Phidget1055IrReceiverConfig), new UIPropertyMetadata(null));
@@ -45,36 +45,49 @@ namespace PhidgetModules.Wpf
 			Ir.Attach += ir_Attach;
 			Ir.Detach += ir_Detach;
 
-			if (Ir.Attached)
-			{
-				ir_Attach(null, null);
-			}
+			CheckCanSave();
 		}
 
 		#region Phidget Event Handlers
 		private void ir_Code(object sender, IRCodeEventArgs e)
 		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
+			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
 			{
 				CanSave = true;
 				Code = e.Code;
 			}));
 		}
 
+		private void CheckCanSave()
+		{
+			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
+			{
+				if (Ir.Attached)
+				{
+					// Only enable saving if we have a code already
+					if (Code != null)
+					{
+						CanSave = true;
+					}
+
+					NoReciever.Visibility = Visibility.Collapsed;
+				}
+				else
+				{
+					NoReciever.Visibility = Visibility.Visible;
+					CanSave = false;
+				}
+			}));
+		}
+
 		private void ir_Attach(object sender, AttachEventArgs e)
 		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-			{
-				NoReciever.Visibility = Visibility.Collapsed;
-			}));
+			CheckCanSave();
 		}
 
 		private void ir_Detach(object sender, DetachEventArgs e)
 		{
-			Dispatcher.Invoke(DispatcherPriority.Normal, (System.Action)(() =>
-			{
-				NoReciever.Visibility = Visibility.Visible;
-			}));
+			CheckCanSave();
 		}
 		#endregion
 
@@ -84,7 +97,7 @@ namespace PhidgetModules.Wpf
 			Ir.Attach -= ir_Attach;
 			Ir.Detach -= ir_Detach;
 
-			PhidgetManager.Release<IR>(ref Ir);
+			PhidgetManager.Release(ref Ir);
 		}
 	}
 }

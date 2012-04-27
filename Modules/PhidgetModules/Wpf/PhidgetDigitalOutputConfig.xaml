@@ -11,7 +11,8 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
-        </Grid.RowDefinitions>
+			<RowDefinition />
+		</Grid.RowDefinitions>
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Output:</TextBlock>
         <ComboBox Name="OutputBox" Grid.Column="1" Grid.Row="0" SelectionChanged="OutputBox_SelectionChanged" />
@@ -22,5 +23,7 @@
             <ComboBoxItem>Turn On</ComboBoxItem>
             <ComboBoxItem>Turn Off</ComboBoxItem>
         </ComboBox>
-    </Grid>
+
+		<TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" Style="{StaticResource ConfigErrorMessage}" Name="phidgetAttached" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Visibility="Visible">Plug in a Phidget interface kit.</TextBlock>
+	</Grid>
 </src:WpfConfiguration>

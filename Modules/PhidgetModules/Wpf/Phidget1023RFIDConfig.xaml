@@ -6,6 +6,6 @@
     <StackPanel>
         <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Please touch a tag to the RFID reader.</TextBlock>
         <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding TagId}" />
-        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReader" Text="Can't find the RFID reader" HorizontalAlignment="Center" Visibility="Visible" />
+		<TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReader" Text="Plug in a Phidget RFID reader." HorizontalAlignment="Center" Visibility="Visible" />
     </StackPanel>
 </src:WpfConfiguration>

@@ -41,23 +41,30 @@ namespace PhidgetModules.Wpf
 
         public override string GetErrorString()
         {
-            double topValue;
-            double bottomValue;
+        	double topValue;
+        	double bottomValue;
 
-            if (!double.TryParse(textBoxTopValue.Text, out topValue) && topValue >= 0)
-            {
-                return "You must enter a valid number for the top of the range";
-            }
+        	bool topCorrect = true;
+        	bool bottomCorrect = true;
 
-            if (!double.TryParse(textBoxBottomValue.Text, out bottomValue) && bottomValue >= 0)
-            {
-                return "You must enter a valid number for the bottom of the range";
-            }
+        	if (!double.TryParse(textBoxTopValue.Text, out topValue) && topValue >= 0)
+        		topCorrect = false;
 
-            if (bottomValue > topValue)
-            {
-                return "The bottom of the range must be lower than the top of the range";
-            }
+        	if (!double.TryParse(textBoxBottomValue.Text, out bottomValue) && bottomValue >= 0)
+        		bottomCorrect = false;
+
+        	// Error Messages
+        	if (!topCorrect && !bottomCorrect)
+        		return "You must enter a valid number for the top and bottom of the range";
+
+        	if (!topCorrect)
+        		return "You must enter a valid number for the top of the range";
+
+        	if (!bottomCorrect)
+        		return "You must enter a valid number for the bottom of the range";
+
+        	if (bottomValue >= topValue)
+        		return "The bottom of the range must be lower than the top of the range";
 
             TopValue = topValue;
             BottomValue = bottomValue;

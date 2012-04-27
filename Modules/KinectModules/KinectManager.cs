@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.Kinect;
@@ -16,23 +17,30 @@ namespace KinectModules
 			count = 0;
 		}
 
+		public static bool IsKinectAttached()
+		{
+			// Select the (a?) Kinect that is plugged in
+			sensor = (from sensorToCheck in KinectSensor.KinectSensors
+					  where sensorToCheck.Status == KinectStatus.Connected
+					  select sensorToCheck)
+					  .FirstOrDefault();
+
+			// If there is nothing plugged in
+			return sensor != null;
+		}
+
 		public static KinectSensor Get()
 		{
 			if (sensor == null)
 			{
-				// Select the (a?) Kinect that is plugged in
-				sensor = (from sensorToCheck in KinectSensor.KinectSensors
-						  where sensorToCheck.Status == KinectStatus.Connected
-						  select sensorToCheck)
-						  .FirstOrDefault();
-
 				// If there is nothing plugged in
-				if (sensor == null)
+				if (!IsKinectAttached())
 				{
 					throw new InvalidOperationException("No Kinect Attached");
 				}
 
 				// Let's start the sensor
+				Debug.Assert(sensor != null);
 				sensor.Start();
 			}
 			else

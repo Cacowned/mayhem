@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Collections.ObjectModel;
-using Microsoft.Win32.SafeHandles;
-using System.Runtime.InteropServices;
-using System.IO;
-using System.Text;
-using System.Diagnostics;
+using System.Threading.Tasks;
 
-namespace MayhemSerial
+namespace SerialManager
 {
 	public class SerialPortManager
 	{
@@ -52,19 +48,22 @@ namespace MayhemSerial
 		// Pairs the name of the port with the settings used for that port
 		private static Dictionary<string, SerialSettings> portSettings;
 
+		private static object locker;
+
 		#region Singleton
 		// We are using a singleton here because it will have many methods
 		// more than just get/release like in the other managers.
-		private static SerialPortManager _instance;
+		private static SerialPortManager instance;
 		public static SerialPortManager Instance
 		{
 			get
 			{
-				if (_instance == null)
+				if (instance == null)
 				{
-					_instance = new SerialPortManager();
+					instance = new SerialPortManager();
 				}
-				return _instance;
+
+				return instance;
 			}
 		}
 
@@ -73,7 +72,8 @@ namespace MayhemSerial
 			portHandlers = new Dictionary<SerialPort, List<Action<byte[], int>>>();
 			ports = new Dictionary<string, SerialPort>();
 			portSettings = new Dictionary<string, SerialSettings>();
-			//safeHandles = new Dictionary<string, SafeFileHandle>();
+
+			locker = new object();
 		}
 		#endregion
 
@@ -87,7 +87,7 @@ namespace MayhemSerial
 			}
 		}
 
-		public string[] AllPorts
+		public static string[] AllPorts
 		{
 			get
 			{
@@ -99,7 +99,8 @@ namespace MayhemSerial
 			}
 		}
 
-		public void ConnectPort(string portName, SerialSettings settings, Action<byte[], int> action)
+		[MethodImpl(MethodImplOptions.Synchronized)]
+		public void ConnectPort(string portName, SerialSettings settings, Action<byte[], int> action = null)
 		{
 			// Do some parameter checking
 			if (string.IsNullOrWhiteSpace(portName))
@@ -125,7 +126,7 @@ namespace MayhemSerial
 				if (portSettings[portName] != settings)
 				{
 					// Settings don't match
-					throw new InvalidOperationException(string.Format("The port {0} has already been opened with different settings", portName));
+					throw new InvalidOperationException(string.Format("The port {0} has already been opened with different settings.", portName));
 				}
 				else
 				{
@@ -138,11 +139,12 @@ namespace MayhemSerial
 			}
 			else
 			{
-				SerialPort port = new SerialPort(portName,
-												settings.BaudRate,
-												settings.Parity,
-												settings.DataBits,
-												settings.StopBits);
+				SerialPort port = new SerialPort(
+					portName,
+					settings.BaudRate,
+					settings.Parity,
+					settings.DataBits,
+					settings.StopBits);
 
 				// TODO: This could very well throw an exception, but we want to only
 				// deal with the ones we have to, so we will deal with them when they come up
@@ -157,8 +159,7 @@ namespace MayhemSerial
 					handlers.Add(action);
 					portHandlers.Add(port, handlers);
 
-					port.DataReceived += DataReceived;
-
+					port.DataReceived += this.DataReceived;
 				}
 				else
 				{
@@ -168,7 +169,8 @@ namespace MayhemSerial
 			}
 		}
 
-		public void ReleasePort(string portName, Action<byte[], int> action)
+		[MethodImpl(MethodImplOptions.Synchronized)]
+		public void ReleasePort(string portName, Action<byte[], int> action = null)
 		{
 			// Do some parameter checking
 			if (string.IsNullOrWhiteSpace(portName))
@@ -193,23 +195,24 @@ namespace MayhemSerial
 			if (portHandlers[port].Count == 0)
 			{
 				// You have to close on a different thread, see note above.
-				Thread CloseDown = new Thread(() => Remove(portName));
-				CloseDown.Start();
+				Thread closeDown = new Thread(() => this.Remove(portName));
+				closeDown.Start();
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		private void Remove(string portName)
 		{
 			SerialPort port = ports[portName];
 
 			// We have no more handlers for this port, remove it from everything
-			port.DataReceived -= DataReceived;
+			port.DataReceived -= this.DataReceived;
 
 			if (port.IsOpen)
 			{
-				port.Close();	
+				port.Close();
 			}
-			
+
 			portHandlers.Remove(port);
 			portSettings.Remove(portName);
 			ports.Remove(portName);
@@ -217,36 +220,52 @@ namespace MayhemSerial
 
 		public void Write(string portName, string message)
 		{
-			if (!ports.ContainsKey(portName))
+			lock(locker)
 			{
-				throw new ArgumentException("The given port is not open", "portName");
+				if (!ports.ContainsKey(portName))
+				{
+					throw new ArgumentException("The given port is not open", "portName");
+				}
+
+				SerialPort port = ports[portName];
+
+				// See comments in the other write method.
+				if (port.IsOpen)
+				{
+					port.Write(message);
+				}
+				Thread.Sleep(110);
 			}
-
-			SerialPort port = ports[portName];
-
-			port.Write(message);
 		}
 
 		public void Write(string portName, byte[] buffer, int length)
 		{
-			if (!ports.ContainsKey(portName))
+			lock (locker)
 			{
-				throw new ArgumentException("The given port is not open", "portName");
+				if (!ports.ContainsKey(portName))
+				{
+					throw new ArgumentException("The given port is not open", "portName");
+				}
+
+				SerialPort port = ports[portName];
+
+				// We have to verify that the port is open here if we try to write
+				if (port.IsOpen)
+				{
+					port.Write(buffer, 0, length);
+				}
+				Thread.Sleep(110);
 			}
-
-			SerialPort port = ports[portName];
-
-			port.Write(buffer, 0, length);
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		private void DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
 			/*
-			 * TODO: NOTE: We seem to recieve messages broken into two or more DataRecieved events.
-			 * The fix: Keep a buffer, and after 100ms of not recieving any new data
-			 * we publish it to our listeners
+			 * NOTE: We seem to recieve messages broken into two or more DataRecieved events.
+			 * The fix: Wait 100 milliseconds, THEN read the data.
 			 */
-			//int unixTime = (int)(DateTime.UtcNow - new DateTime(2012, 3, 13)).TotalMilliseconds;
+			Thread.Sleep(100);
 
 			SerialPort port = sender as SerialPort;
 
@@ -256,15 +275,35 @@ namespace MayhemSerial
 			byte[] input = new byte[numBytes];
 			port.Read(input, 0, numBytes);
 
+			List<Action<byte[], int>> handlers = portHandlers[port];
+
+			/*
+			 * NOTE: Okay, big frustration solved. We have to use the Parallel library instead
+			 * of a foreach with QueueUserWorkItem inside of it because QueueUserWorkItem
+			 * will reuse the same value from the foreach loop in every iteration, thus
+			 * not actually doing the foreach properly.
+			 * This is all discussed in this thread: http://stackoverflow.com/questions/616634/using-anonymous-delegates-with-net-threadpool-queueuserworkitem
+			 */
+
 			// Go through every data handler
-			foreach (Action<byte[], int> action in portHandlers[port])
+			Parallel.ForEach(handlers, action =>
+			{
+				if (action != null)
+				{
+					action((byte[])input.Clone(), numBytes);
+				}
+			});
+
+			/*
+			DON't DO THIS:
+			foreach (Action<byte[], int> action in handlers)
 			{
 				// Skip the null handlers.
 				if (action != null)
 				{
 					ThreadPool.QueueUserWorkItem(o => action((byte[])input.Clone(), numBytes));
 				}
-			}
+			}*/
 		}
 	}
 }
