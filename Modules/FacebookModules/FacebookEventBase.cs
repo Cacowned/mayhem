@@ -23,9 +23,13 @@ namespace FacebookModules
         [DataMember]
         public string userName;
 
+        public string postId;
+        public int commentLength;
+
         public FacebookClient fb;
         public DispatcherTimer timer;
-        public string postId;
+        
+        public bool connected;
 
         public abstract string WhatToCheck { get; }
         public abstract string Title { get; }
@@ -48,7 +52,6 @@ namespace FacebookModules
 
         protected override void OnAfterLoad()
         {
-            postId = null;
 
             if (token != null)
             {
@@ -58,6 +61,8 @@ namespace FacebookModules
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 5);
             timer.Tick += CheckFacebook;
+
+            commentLength = -1;
         }
 
         /// <summary>
@@ -68,13 +73,30 @@ namespace FacebookModules
         {
             if (Utilities.ConnectedToInternet())
             {
+                connected = true;
                 dynamic result = fb.Get(WhatToCheck);
 
                 // get the id of the most recent post
                 string latestPostId = string.Empty;
+                int latestComments = 0;
                 if (!(WhatToCheck.Equals("/me/notifications") && result.Values.Count == 2))
                 {
-                    latestPostId = result.data[0].id;
+                    try
+                    {
+                        try
+                        {
+                            latestComments = result.data[0].comments.data[0].Count;
+                        }
+                        catch
+                        {
+                            // only one message in the feed
+                        }
+                        latestPostId = result.data[0].id;
+                    }
+                    catch
+                    {
+                        // emtpy inbox
+                    }
                 }
                 else
                 {
@@ -83,20 +105,31 @@ namespace FacebookModules
 
                 if (!latestPostId.Equals(string.Empty))
                 {
-                    if (postId == null)
+                    // get the id of the first post
+                    if (postId == null || (commentLength == -1 && WhatToCheck.Equals("/me/inbox")))
                     {
                         postId = latestPostId;
+                        try
+                        {
+                            commentLength = result.data[0].comments.data[0].Count;
+                        }catch
+                        {
+                            
+                        }
                     }
-                    else if (!latestPostId.Equals(postId))
+                    else if (!latestPostId.Equals(postId) || (WhatToCheck.Equals("/me/inbox") && commentLength != latestComments))
                     {
                         postId = latestPostId;
+                        commentLength = latestComments;
                         Trigger();
                     }
                 }
             }
             else
             {
-                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook"));
+                if (connected)
+                    ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook"));
+                connected = false;
             }
         }
 

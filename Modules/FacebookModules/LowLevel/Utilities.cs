@@ -28,6 +28,7 @@ namespace FacebookModules.LowLevel
         /// </summary>
         private static void MakeRequest()
         {
+            // TODO this happens every time once net has been disabled
             System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
         }
 
