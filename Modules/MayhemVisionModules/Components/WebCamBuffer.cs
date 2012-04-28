@@ -71,7 +71,7 @@ namespace MayhemVisionModules.Components
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.ToString());
+                //MessageBox.Show(ex.ToString());
             }
             finally
             {
@@ -114,6 +114,14 @@ namespace MayhemVisionModules.Components
                     }, null);
                 }
             }
+        }
+
+        public void ClearBuffer()
+        {
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
+            {
+                loopBuffer.Clear();
+            }, null);
         }
 
         public System.Drawing.Bitmap GetLastBufferedItem()

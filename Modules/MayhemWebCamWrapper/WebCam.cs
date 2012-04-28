@@ -70,11 +70,11 @@ namespace MayhemWebCamWrapper
                 }
               
             }
-            else
-            {
-                string str = "Another process is using " + _name;
-                throw new ImageException(str);
-            }
+          //  else
+          //  {
+           //     string str = "Another process is using " + _name;
+            //    throw new ImageException(str);
+           // }
         }
         public override void Stop()
         {
@@ -205,7 +205,7 @@ namespace MayhemWebCamWrapper
                 {
                     if (worker.Join(0) == false)
                         return true;
-                    //Release();
+                    Release();
                 }
                 return false;
             }

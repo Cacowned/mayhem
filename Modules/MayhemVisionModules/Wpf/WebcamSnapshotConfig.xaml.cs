@@ -73,7 +73,7 @@ namespace MayhemVisionModules.Wpf
             camera_selector.InitSelector();
         }
        
-        public WebcamSnapshotConfig(string folderLocation, string fileNamePrefix, string selectedCameraPath, bool showPreview, bool playShutterSound)
+        public WebcamSnapshotConfig(string folderLocation, string fileNamePrefix, bool showPreview, bool playShutterSound)
         {
             InitializeComponent();
 

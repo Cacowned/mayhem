@@ -19,8 +19,7 @@ using MayhemVisionModules.Wpf;
 using System.IO;
 using System.Threading;
 using System.Windows.Threading;
-
-
+using MadWizard.WinUSBNet;
 
 namespace MayhemVisionModules.Wpf
 {
@@ -34,40 +33,46 @@ namespace MayhemVisionModules.Wpf
             InitializeComponent();
             Dispatcher.ShutdownStarted += OnExit;
 
-            captureWidth = 640;  //the size of the capture...
-            captureHeight = 480;
-            previewWidth = 160; //the size of the preview windows
-            previewHeight = 120;
-            mainViewWidth = 640;
-            mainViewHeight = 480;
+            captureWidth = 320;  //the size of the capture...
+            captureHeight = 240;
+            previewWidth = 80; //the size of the preview windows
+            previewHeight = 60;
+            mainViewWidth = 320;
+            mainViewHeight = 240;
             //refresh the camera list on construction...
         }
 
         public void InitSelector()
         {
-            captureWidth = 640;  //the size of the capture...
-            captureHeight = 480;
-            previewWidth = 160; //the size of the preview windows
-            previewHeight = 120;
-            mainViewWidth = 640;
-            mainViewHeight = 480;
+            captureWidth = 320;  //the size of the capture...
+            captureHeight = 240;
+            previewWidth = 80; //the size of the preview windows
+            previewHeight = 60;
+            mainViewWidth = 320;
+            mainViewHeight = 240;
             //refresh the camera list on construction...
             RefreshCameraList();
-            WebcamManager.StartHardwareScanner();
-            WebcamManager.RegisterForHardwareChanges(OnCameraConnected, OnCameraDisconnected);
+            WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
+            WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
         }
 
-        public void OnCameraConnected(object sender, WebcamHardwareScannerEventArgs e)
+
+
+        public void OnCameraConnected(object sender, USBEvent e)
         {
-            RefreshCameraList();
-       //     Dispatcher.BeginInvoke(new OneParameterDelegate(RefreshCameraList), null);
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
+            {
+                Thread.Sleep(30);
+                RefreshCameraList();
+            }, null);
         }
 
-        public void OnCameraDisconnected(object sender, WebcamHardwareScannerEventArgs e)
+        public void OnCameraDisconnected(object sender, USBEvent e)
         {
-            MessageBox.Show("Here");
-            RefreshCameraList();
-       //     Dispatcher.BeginInvoke(new OneParameterDelegate(RefreshCameraList), null);
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
+            {
+                RefreshCameraList();
+            }, null);
         }
 
         public void RefreshCameraList()
@@ -84,14 +89,14 @@ namespace MayhemVisionModules.Wpf
             {
                 if (WebcamManager.StartCamera(i, captureWidth, captureHeight))
                 {
-                    if (selectedCameraIndex == -1)
-                        selectedCameraIndex = i;
                     ImageViewer viewer = new ImageViewer();
                     viewer.ViewerWidth = previewWidth;
                     viewer.ViewerHeight = previewHeight;
                     viewer.TopTitle = WebcamManager.GetCamera(i).WebCamName;
-                    if (viewer.TopTitle == selectedCameraName)
+                    if (viewer.TopTitle == selectedCameraName || selectedCameraIndex == -1)
+                    {
                         selectedCameraIndex = i;
+                    }
                     viewer.MouseEnter += Viewer_MouseEnter;
                     viewer.MouseLeave += Viewer_MouseLeave;
                     viewer.PreviewMouseLeftButtonUp += Viewer_MouseLeftButtonUp;
@@ -101,6 +106,12 @@ namespace MayhemVisionModules.Wpf
                     ++numAvailableCameras;
                 }
             }
+
+            
+            cameraPreviews[cameraList.IndexOf(selectedCameraIndex)].ViewerBorderColor = "LightGreen";
+            cameraPreviews[cameraList.IndexOf(selectedCameraIndex)].ViewerWidth = previewHeight + 16;
+            cameraPreviews[cameraList.IndexOf(selectedCameraIndex)].ViewerHeight = cameraPreviews[cameraList.IndexOf(selectedCameraIndex)].ViewerWidth * 3 / 4;
+
             ImageViewer selectedView = new ImageViewer();
             selectedView.ViewerWidth = mainViewWidth;
             selectedView.ViewerHeight = mainViewHeight;
@@ -111,6 +122,7 @@ namespace MayhemVisionModules.Wpf
 
             camera_selection_panel.ItemsSource = cameraPreviews;
             main_view.ItemsSource = mainView;
+
             
             //release inactive cameras so that they can be made available to other processes...
             WebcamManager.ReleaseInactiveCameras();
@@ -121,29 +133,46 @@ namespace MayhemVisionModules.Wpf
        
         private void Viewer_MouseEnter(object sender, MouseEventArgs e)
         {
-            ImageViewer viewer = sender as ImageViewer;
-            viewer.ViewerBorderColor = "LightGreen";
-            viewer.ViewerWidth = previewHeight+16;
-            viewer.ViewerHeight = viewer.ViewerWidth*3/4;
+            ImageViewer mouseViewer = sender as ImageViewer;
+            int index = cameraPreviews.IndexOf(mouseViewer);
+            if (index != selectedCameraIndex)
+            {
+                mouseViewer.ViewerWidth = previewWidth;
+                mouseViewer.ViewerHeight = previewHeight;
+            }
         }
 
         private void Viewer_MouseLeave(object sender, MouseEventArgs e)
         {
-            ImageViewer viewer = sender as ImageViewer;
-            viewer.ViewerBorderColor = "Transparent";
-            viewer.ViewerWidth = previewWidth;
-            viewer.ViewerHeight = previewHeight;
-           
+            ImageViewer mouseViewer = sender as ImageViewer;
+            int index = cameraPreviews.IndexOf(mouseViewer);
+            if (index != selectedCameraIndex)
+            {
+                mouseViewer.ViewerWidth = previewWidth;
+                mouseViewer.ViewerHeight = previewHeight;
+            }
         }
 
  
         private void Viewer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ImageViewer viewer = sender as ImageViewer;
-            selectedCameraIndex = cameraPreviews.IndexOf(viewer);
-            mainView[0].TopTitle = WebcamManager.GetCamera(cameraList[selectedCameraIndex]).WebCamName;
-            mainView[0].SetImageSource(WebcamManager.GetCamera(cameraList[selectedCameraIndex]));
-            selectedCameraName = mainView[0].TopTitle;
+            ImageViewer mouseViewer = sender as ImageViewer;
+            int index = cameraList[cameraPreviews.IndexOf(mouseViewer)];
+            if (index != selectedCameraIndex)
+            {
+                cameraPreviews[cameraList.IndexOf(selectedCameraIndex)].ViewerBorderColor = "Transparent";
+                cameraPreviews[cameraList.IndexOf(selectedCameraIndex)].ViewerWidth = previewWidth;
+                cameraPreviews[cameraList.IndexOf(selectedCameraIndex)].ViewerHeight = previewHeight;
+
+                mouseViewer.ViewerBorderColor = "LightGreen";
+                mouseViewer.ViewerWidth = previewHeight + 16;
+                mouseViewer.ViewerHeight = mouseViewer.ViewerWidth * 3 / 4;
+                selectedCameraIndex = cameraList[cameraPreviews.IndexOf(mouseViewer)];
+
+                mainView[0].TopTitle = WebcamManager.GetCamera(selectedCameraIndex).WebCamName;
+                mainView[0].SetImageSource(WebcamManager.GetCamera(selectedCameraIndex));
+                selectedCameraName = mainView[0].TopTitle;
+            }
         }
 
         //This returns the unique identifier for the connected camera
@@ -175,7 +204,8 @@ namespace MayhemVisionModules.Wpf
                     viewer.ImageSource.UnregisterForImages(viewer.ImageSource.SubscribedImagers[i]);
             }
             WebcamManager.ReleaseInactiveCameras();
-            WebcamManager.UnregisterForHardwareChanges(OnCameraConnected, OnCameraDisconnected);
+            WebcamManager.UnregisterWebcamConnectionEvent(OnCameraConnected);
+            WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
         }
 
         private void OnExit(object sender, EventArgs e)
@@ -199,6 +229,7 @@ namespace MayhemVisionModules.Wpf
         //dimensions of the previews
         private int previewWidth;
         private int previewHeight;
+
         //dimensions of the main camera view
         private int mainViewWidth;
         private int mainViewHeight;
