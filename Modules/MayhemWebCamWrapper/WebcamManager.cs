@@ -16,8 +16,10 @@ using System.ComponentModel;
 using System.IO;
 using System.Drawing.Imaging;
 using Microsoft.Win32.SafeHandles;
-using Microsoft.Win32;  
-
+using Microsoft.Win32;
+using System.Text.RegularExpressions;
+//using usbnet api from http://winusbnet.googlecode.com
+using MadWizard.WinUSBNet;
 
 
 namespace MayhemWebCamWrapper
@@ -26,15 +28,14 @@ namespace MayhemWebCamWrapper
     /// Hidden Form which we use to receive Windows messages about connected camera hardware changes...
     /// modified from http://www.codeproject.com/KB/system/DriveDetector
     /// </summary>
+    ///
+
     internal class WebCamHardwareScannerForm : Form
     {
         private Label label1;
-        private WebCamHardwareScanner mScanner = null;
         
-
-        public WebCamHardwareScannerForm(WebCamHardwareScanner scanner)
+        public WebCamHardwareScannerForm()
         {
-            mScanner = scanner;
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.ShowInTaskbar = false;
@@ -55,19 +56,7 @@ namespace MayhemWebCamWrapper
             this.Visible = false;
         }
 
-        protected override void WndProc(ref Message m)
-        {
-
-            /// <summary>
-            /// This function receives all the windows messages for this window (form).
-            /// </summary>
-            base.WndProc(ref m);
-            if (mScanner != null)
-            {
-                mScanner.WndProc(ref m);
-            }
-        }
-
+      
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
@@ -94,110 +83,57 @@ namespace MayhemWebCamWrapper
     }
 
     /// <summary>
-    /// Our class for passing in custom arguments to our event handlers 
-    /// 
-    /// </summary>
-    public class WebcamHardwareScannerEventArgs : EventArgs
-    {
-
-
-        public WebcamHardwareScannerEventArgs(string cameraName, string cameraPath)
-        {
-            CameraName = cameraName;
-            CameraPath = cameraPath;
-        }
-
-        /// <summary>
-        /// Get/Set the value indicating that the event should be cancelled 
-        /// Only in QueryRemove handler.
-        /// </summary>
-        public string CameraName;
-        public string CameraPath;
-    }
-
-    // Delegate for event handler to handle the device events 
-    public delegate void WebcamHardwareScannerEventHandler(Object sender, WebcamHardwareScannerEventArgs e);
-
-    /// <summary>
     /// Detects insertion or removal of webcams.
     /// </summary>
-    class WebCamHardwareScanner : IDisposable
+    internal class WebCamHardwareScanner : IDisposable
     {
-        
+
         public WebCamHardwareScanner()
         {
-            WebCamHardwareScannerForm frm = new WebCamHardwareScannerForm(this);
-            IntPtr deviceEventHandle;
-            Win32.DEV_BROADCAST_DEVICEINTERFACE devBroadCastDeviceInterface = new Win32.DEV_BROADCAST_DEVICEINTERFACE();
-            IntPtr devBroadCastDeviceInterfaceBuffer = IntPtr.Zero;
-            Int32 size = 0;
-
-            size = Marshal.SizeOf(devBroadCastDeviceInterface);
-            devBroadCastDeviceInterface.dbcc_size = size;
-            devBroadCastDeviceInterface.dbcc_devicetype = Win32.DBT_DEVTYP_DEVICEINTERFACE;
-            devBroadCastDeviceInterface.dbcc_reserved = 0;
-            devBroadCastDeviceInterfaceBuffer = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(devBroadCastDeviceInterface, devBroadCastDeviceInterfaceBuffer, true);
-            deviceEventHandle = Win32.RegisterDeviceNotification(frm.Handle, devBroadCastDeviceInterfaceBuffer, Win32.DEVICE_NOTIFY_WINDOW_HANDLE | Win32.DEVICE_NOTIFY_ALL_INTERFACE_CLASSES);
+            WebCamHardwareScannerForm frm = new WebCamHardwareScannerForm();
+            Guid webcamGUID = new Guid("6994ad05-93ef-11d0-a3cc-00a0c9223196");
+            notifier = new USBNotifier(frm, webcamGUID);
             frm.Show();
         }
 
-        public event WebcamHardwareScannerEventHandler OnWebcamConnected = null;
-        public event WebcamHardwareScannerEventHandler OnWebcamDisconnected = null;
+        public void RegisterWebcamArrivalEvent(USBEventHandler onArrival)
+        {
+            if (notifier != null && onArrival != null)
+                notifier.Arrival += onArrival;
+        }
 
+        public void UnregisterWebcamArrivalEvent(USBEventHandler onArrival)
+        {
+            if (notifier != null && onArrival != null)
+                notifier.Arrival -= onArrival;
+        }
+
+        public void RegisterWebcamRemovalEvent(USBEventHandler onRemoval)
+        {
+            if (notifier != null && onRemoval != null)
+                notifier.Removal += onRemoval;
+        }
+
+        public void UnregisterWebcamRemovalEvent(USBEventHandler onRemoval)
+        {
+            if (notifier != null && onRemoval != null)
+                notifier.Removal -= onRemoval;
+        }
+
+      
+        private USBNotifier notifier = null;
         public void Dispose()
         {
+            if (notifier != null)
+                notifier.Dispose();
         }
 
-        #region WindowProc
-        /// <summary>
-        /// Message handler which must be called from client form.
-        /// Processes Windows messages and calls event handlers. 
-        /// /// </summary>
-        public void WndProc(ref Message m)
-        {
-            Win32.DEV_BROADCAST_DEVICEINTERFACE devType;
-            char c;
-
-            if (m.Msg == Win32.WM_DEVICECHANGE)
-            {
-                //we got a hardware change notification...
-                //check if this is related to a usb webcam...
-                devType = (Win32.DEV_BROADCAST_DEVICEINTERFACE)Marshal.PtrToStructure(m.LParam, typeof(Win32.DEV_BROADCAST_DEVICEINTERFACE));
-                if (string.Equals(devType.dbcc_classguid.ToString(), Win32.KSCATEGORY_VIDEO.ToString()))
-                {
-                    string cameraPath = devType.dbcc_name;
-                    string cameraName = Win32.GetDeviceName(devType);
-                    switch (m.WParam.ToInt32())
-                    {
-                        //a new hardware device has been connected and is ready for use...
-
-                        case Win32.DBT_DEVICEARRIVAL:
-                            {
-                                if (OnWebcamConnected != null)
-                                    OnWebcamConnected(this, new WebcamHardwareScannerEventArgs(cameraName, cameraPath));
-                                break;
-                            }
-                        //hardware device has been removed...
-                        case Win32.DBT_DEVICEREMOVECOMPLETE:
-                            {
-                                if (OnWebcamDisconnected != null)
-                                    OnWebcamDisconnected(this, new  WebcamHardwareScannerEventArgs(cameraName, cameraPath));
-                                break;
-                            }
-                    }
-                }
-            }
-        }
-        #endregion
-
-        
     }
 
-    
     public class WebcamManager : IDisposable
     {
         private static WebCamHardwareScanner _scanner = null;
+        
 
         public static void StartHardwareScanner()
         {
@@ -208,26 +144,8 @@ namespace MayhemWebCamWrapper
             }
         }
 
-        public static void RegisterForHardwareChanges(WebcamHardwareScannerEventHandler cameraConnected, WebcamHardwareScannerEventHandler cameraDisconnected)
-        {
-            if (_scanner != null)
-            {
-                _scanner.OnWebcamConnected -= cameraConnected;
-                _scanner.OnWebcamConnected += cameraConnected;
-                _scanner.OnWebcamDisconnected -= cameraDisconnected;
-                _scanner.OnWebcamDisconnected += cameraDisconnected;
-            }
-        }
-
-        public static void UnregisterForHardwareChanges(WebcamHardwareScannerEventHandler cameraConnected, WebcamHardwareScannerEventHandler cameraDisconnected)
-        {
-            if (_scanner != null)
-            {
-                _scanner.OnWebcamConnected -= new WebcamHardwareScannerEventHandler(cameraConnected);
-                _scanner.OnWebcamDisconnected -= new WebcamHardwareScannerEventHandler(cameraDisconnected);
-            }
-        }
-
+    
+    
         public static string[] GetDeviceInfoFromPath(string path)
         {
             string[] Parts = path.Split('#');
@@ -243,6 +161,7 @@ namespace MayhemWebCamWrapper
         {
             if (!_serviceStarted)
             {
+                StartHardwareScanner();
                 UpdateCameraList();
                 _serviceStarted = true;
             }
@@ -253,8 +172,7 @@ namespace MayhemWebCamWrapper
             if (_serviceStarted)
                 CleanUp();
             _serviceStarted = false;
-            UpdateCameraList();
-            _serviceStarted = true;
+            StartServiceIfNeeded();
         }
 
     
@@ -263,6 +181,36 @@ namespace MayhemWebCamWrapper
             if (_serviceStarted)
                 CleanUp();
             _serviceStarted = false;
+            _scanner.Dispose();
+        }
+
+        public static bool IsServiceRestartRequired()
+        {
+            return ( DllImport.IsAnyCameraConnectedOrDisconnected() || NumberConnectedCameras() == 0);
+        }
+
+        public static void RegisterWebcamConnectionEvent(USBEventHandler onArrival)
+        {
+            if (_scanner != null)
+                _scanner.RegisterWebcamArrivalEvent(onArrival);
+        }
+
+        public static void UnregisterWebcamConnectionEvent(USBEventHandler onArrival)
+        {
+            if (_scanner != null)
+                _scanner.UnregisterWebcamArrivalEvent(onArrival);
+        }
+
+        public static void RegisterWebcamRemovalEvent(USBEventHandler onRemoval)
+        {
+            if (_scanner != null)
+                _scanner.RegisterWebcamRemovalEvent(onRemoval);
+        }
+
+        public static void UnregisterWebcamRemovalEvent(USBEventHandler onRemoval)
+        {
+            if (_scanner != null)
+                _scanner.UnregisterWebcamRemovalEvent(onRemoval);
         }
 
         private static void UpdateCameraList()
@@ -374,79 +322,4 @@ namespace MayhemWebCamWrapper
         private static bool _scannerStarted;
     }
 
-    internal class Win32
-    {
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern IntPtr RegisterDeviceNotification(IntPtr hRecipient, IntPtr NotificationFilter, Int32 Flags);
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct DEV_BROADCAST_DEVICEINTERFACE
-        {
-            public int dbcc_size;
-            public int dbcc_devicetype;
-            public int dbcc_reserved;
-            public Guid dbcc_classguid;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)] 
-            public string dbcc_name;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct DEV_BROADCAST_HDR
-        {
-            public int dbcc_size;
-            public int dbcc_devicetype;
-            public int dbcc_reserved;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct DEV_BROADCAST_HANDLE
-        {
-            public int dbch_size;
-            public int dbch_devicetype;
-            public int dbch_reserved;
-            public IntPtr dbch_handle;
-            public IntPtr dbch_hdevnotify;
-            public Guid dbch_eventguid;
-            public long dbch_nameoffset;
-            public byte dbch_data;
-            public byte dbch_data1;
-        }
-
-        public static string GetDeviceName(DEV_BROADCAST_DEVICEINTERFACE dvi)
-        {
-            string[] Parts = dvi.dbcc_name.Split('#');
-            if (Parts.Length >= 3)
-            {
-                string DevType = Parts[0].Substring(Parts[0].IndexOf(@"?\") + 2);
-                string DeviceInstanceId = Parts[1];
-                string DeviceUniqueID = Parts[2];
-                string RegPath = @"SYSTEM\CurrentControlSet\Enum\" + DevType + "\\" + DeviceInstanceId + "\\" + DeviceUniqueID;
-                RegistryKey key = Registry.LocalMachine.OpenSubKey(RegPath);
-                if (key != null)
-                {
-                    object result = key.GetValue("FriendlyName");
-                    if (result != null)
-                        return result.ToString();
-                    result = key.GetValue("DeviceDesc");
-                    if (result != null)
-                        return result.ToString();
-                }
-            }
-            return String.Empty;
-        } 
-
-
-        #region Win32Const
-        public static Guid KSCATEGORY_VIDEO = new Guid("6994ad05-93ef-11d0-a3cc-00a0c9223196");
-        public const int DEVICE_NOTIFY_WINDOW_HANDLE = 0;
-        public const int DEVICE_NOTIFY_SERVICE_HANDLE = 1;
-        public const int DEVICE_NOTIFY_ALL_INTERFACE_CLASSES = 4;
-        public const int DBT_DEVTYP_DEVICEINTERFACE = 5;
-        public const int DBT_DEVTYP_HANDLE = 6;
-        public const int WM_DEVICECHANGE = 0x0219;
-        public const int DBT_DEVICEARRIVAL = 0x8000; // system detected a new device
-        public const int DBT_DEVICEQUERYREMOVE = 0x8001;   // Preparing to remove (any program can disable the removal)
-        public const int DBT_DEVICEREMOVECOMPLETE = 0x8004; // removed 
-        #endregion
-    }
 }
