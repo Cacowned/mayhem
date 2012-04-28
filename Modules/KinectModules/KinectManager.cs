@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.Kinect;
+using System.Runtime.CompilerServices;
 
 namespace KinectModules
 {
@@ -29,6 +30,7 @@ namespace KinectModules
 			return sensor != null;
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public static KinectSensor Get()
 		{
 			if (sensor == null)
@@ -57,6 +59,7 @@ namespace KinectModules
 			return sensor;
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public static void Release(ref KinectSensor sensor)
 		{
 			// If we are already 0 or below, something is wrong.

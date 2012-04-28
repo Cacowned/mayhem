@@ -84,6 +84,7 @@
     <Compile Include="Reactions\PlaySound.cs" />
     <Compile Include="Reactions\RunProgram.cs" />
     <Compile Include="Reactions\TextToSpeech.cs" />
+    <Compile Include="SpeechRecognitionManager.cs" />
     <Compile Include="Wpf\StockAlertConfig.xaml.cs">
       <DependentUpon>StockAlertConfig.xaml</DependentUpon>
     </Compile>

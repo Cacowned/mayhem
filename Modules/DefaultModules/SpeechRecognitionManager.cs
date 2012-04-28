@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Speech.Recognition;
+using System.Globalization;
 using System.IO;
-using Microsoft.Speech.AudioFormat;
+using System.Speech.Recognition;
 using System.Threading;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
-namespace KinectModules
+namespace DefaultModules
 {
 	public static class SpeechRecognitionManager
 	{
-		private static Stream stream;
 		private static SpeechRecognitionEngine engine;
-		private static RecognizerInfo recognizer;
-		
-		// Pairs the phrase with a set of all the "event handlers" tied to it
 		private static Dictionary<string, List<Action<SpeechRecognizedEventArgs>>> recognitions;
 
 		static SpeechRecognitionManager()
@@ -31,36 +25,9 @@ namespace KinectModules
 			// If this is the first phrase to listen for
 			if (recognitions.Count == 0)
 			{
-				// Do some setup.
-				stream = KinectAudioStreamManager.Get();
-
-				recognizer = GetKinectRecognizer();
-
-				// Something went wrong
-				if (recognizer == null)
-				{
-					KinectAudioStreamManager.Release(ref stream);
-					throw new InvalidOperationException("Unable to find a Kinect Speech Recognizer");
-				}
-
-				try
-				{
-					engine = new SpeechRecognitionEngine(recognizer.Id);
-					engine.SpeechRecognized += SpeechRecognized;
-
-					engine.SetInputToAudioStream(stream,
-					new SpeechAudioFormatInfo(
-						EncodingFormat.Pcm, 16000, 16, 1,
-						32000, 2, null));
-
-					//engine.RecognizeAsync();
-				}
-				catch (Exception e)
-				{
-					KinectAudioStreamManager.Release(ref stream);
-					// rethrow
-					throw e;
-				}
+				engine = new SpeechRecognitionEngine(CultureInfo.CurrentCulture);
+				engine.SetInputToDefaultAudioDevice();
+				engine.SpeechRecognized += SpeechRecognized;
 			}
 
 			// Add our phrase
@@ -95,8 +62,8 @@ namespace KinectModules
 				choices.Add(key);
 			}
 
-			var gb = new GrammarBuilder { Culture = GetKinectRecognizer().Culture };
-			gb.Append(choices);
+
+			var gb = new GrammarBuilder(choices);
 
 			Grammar grammar = new Grammar(gb);
 
@@ -136,23 +103,12 @@ namespace KinectModules
 				engine.RecognizeAsyncCancel();
 				engine.SpeechRecognized -= SpeechRecognized;
 				engine = null;
-				KinectAudioStreamManager.Release(ref stream);
+				engine.Dispose();
 			}
 			else
 			{
 				ResetGrammar();
 			}
-		}
-
-		private static RecognizerInfo GetKinectRecognizer()
-		{
-			Func<RecognizerInfo, bool> matchingFunc = r =>
-			{
-				string value;
-				r.AdditionalInfo.TryGetValue("Kinect", out value);
-				return "True".Equals(value, StringComparison.InvariantCultureIgnoreCase) && "en-US".Equals(r.Culture.Name, StringComparison.InvariantCultureIgnoreCase);
-			};
-			return SpeechRecognitionEngine.InstalledRecognizers().Where(matchingFunc).FirstOrDefault();
 		}
 
 		private static void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
@@ -162,8 +118,8 @@ namespace KinectModules
 				throw new InvalidOperationException("No Key exists with that spoken text");
 			}
 
-
 			var handlers = recognitions[e.Result.Text];
+
 			Parallel.ForEach(handlers, action =>
 			{
 				if (action != null)
@@ -174,11 +130,3 @@ namespace KinectModules
 		}
 	}
 }
-
-/*
-SpeechRecognitionManager.Recognize("foo", Recognize);
-
-SpeechRecognitionManager.Recognize("bar", Recognize2);
-
-SpeechRecognitionManager.CancelRecognize("foo", Recognize);
-*/
