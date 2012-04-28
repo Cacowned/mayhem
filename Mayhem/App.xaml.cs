@@ -97,6 +97,8 @@ namespace Mayhem
 			// Load the correct dependency assemblies
 			LoadDependencies();
 
+			FileWatcher watcher = new FileWatcher(MayhemNuget.InstallPath, LoadDependencies);
+
 			MainWindow main = new MainWindow(this);
 			Current.MainWindow = main;
 

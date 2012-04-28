@@ -102,8 +102,8 @@ namespace DefaultModules
 			{
 				engine.RecognizeAsyncCancel();
 				engine.SpeechRecognized -= SpeechRecognized;
-				engine = null;
 				engine.Dispose();
+				engine = null;
 			}
 			else
 			{
