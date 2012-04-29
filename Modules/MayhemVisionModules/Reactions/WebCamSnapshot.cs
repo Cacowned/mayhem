@@ -18,6 +18,7 @@ using System.Runtime.CompilerServices;
 using MadWizard.WinUSBNet;
 using System.Windows.Threading;
 using System.Threading;
+using System.IO;
 
 
 namespace MayhemVisionModules.Reactions
@@ -80,7 +81,7 @@ namespace MayhemVisionModules.Reactions
                 return -1;
             }
             int index = -1;
-            if (selectedCameraPath == default(string))
+            if (selectedCameraPath == default(string) && IsEnabled)
             {
                 ErrorLog.AddError(ErrorType.Message, "No webcam configuration. Defaulting to first available webcam.");
                 for (int i = 0; i < numberConnectedCameras; i++)
@@ -134,7 +135,7 @@ namespace MayhemVisionModules.Reactions
                     }
                 }
 
-                if (!selectedCameraFound && numberConnectedCameras > 0)
+                if (!selectedCameraFound && numberConnectedCameras > 0 && IsEnabled)
                 {
                     ErrorLog.AddError(ErrorType.Failure, "The originally selected camera is not available.");
                 }
@@ -305,7 +306,7 @@ namespace MayhemVisionModules.Reactions
                     //save image
                     if (playShutterSound)
                     {
-                        SoundPlayer shutterSound = new SoundPlayer("C:\\Program Files (x86)\\Outercurve\\Mayhem\\VisionModules\\lib\\camera1.wav");
+                        SoundPlayer shutterSound = new SoundPlayer(Properties.Resources.shutterSound);
                         shutterSound.Play();
                     }
 

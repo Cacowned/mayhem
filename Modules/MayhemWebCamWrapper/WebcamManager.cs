@@ -33,9 +33,13 @@ namespace MayhemWebCamWrapper
     internal class WebCamHardwareScannerForm : Form
     {
         private Label label1;
-        
+
         public WebCamHardwareScannerForm()
         {
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.FormBorderStyle = FormBorderStyle.None;
             this.Load += new System.EventHandler(this.Load_Form);
             this.Activated += new EventHandler(this.Form_Activated);
@@ -49,9 +53,13 @@ namespace MayhemWebCamWrapper
         private void Form_Activated(object sender, EventArgs e)
         {
             this.Visible = false;
+            this.SendToBack();
+            int pWnd = FindWindow("Progman", null);
+            int tWnd = this.Handle.ToInt32();
+            SetParent(tWnd, pWnd);
         }
 
-      
+
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
@@ -76,7 +84,15 @@ namespace MayhemWebCamWrapper
 
         }
 
-      }
+        [DllImport("User32.dll")]
+        static extern Int32 FindWindow(String lpClassName, String lpWindowName);
+
+        [DllImport("user32.dll")]
+        static extern int SetParent(int hWndChild, int hWndNewParent);
+
+     
+
+    }
 
     /// <summary>
     /// Detects insertion or removal of webcams.
@@ -116,7 +132,7 @@ namespace MayhemWebCamWrapper
                 notifier.Removal -= onRemoval;
         }
 
-      
+
         private USBNotifier notifier = null;
         public void Dispose()
         {
@@ -129,7 +145,7 @@ namespace MayhemWebCamWrapper
     public class WebcamManager : IDisposable
     {
         private static WebCamHardwareScanner _scanner = null;
-        
+
 
         public static void StartHardwareScanner()
         {
@@ -140,8 +156,8 @@ namespace MayhemWebCamWrapper
             }
         }
 
-    
-    
+
+
         public static string[] GetDeviceInfoFromPath(string path)
         {
             string[] Parts = path.Split('#');
@@ -151,7 +167,7 @@ namespace MayhemWebCamWrapper
             }
             return Parts;
         }
-        
+
 
         public static void StartServiceIfNeeded()
         {
@@ -171,7 +187,7 @@ namespace MayhemWebCamWrapper
             StartServiceIfNeeded();
         }
 
-    
+
         public static void TerminateService()
         {
             if (_serviceStarted)
@@ -182,7 +198,7 @@ namespace MayhemWebCamWrapper
 
         public static bool IsServiceRestartRequired()
         {
-            return ( DllImport.IsAnyCameraConnectedOrDisconnected() || NumberConnectedCameras() == 0);
+            return (DllImport.IsAnyCameraConnectedOrDisconnected() || NumberConnectedCameras() == 0);
         }
 
         public static void RegisterWebcamConnectionEvent(USBEventHandler onArrival)
@@ -265,7 +281,7 @@ namespace MayhemWebCamWrapper
             if (index > -1 && index < numberCameras)
             {
                 WebCam camera = WebcamManager.GetCamera(index);
-                for (int i=0; i<camera.Subscribers.Count; i++)
+                for (int i = 0; i < camera.Subscribers.Count; i++)
                 {
                     ImageListenerBase l = camera.Subscribers[i];
                     l.UnregisterForImages(camera);
@@ -282,7 +298,7 @@ namespace MayhemWebCamWrapper
             for (int i = 0; i < numberCameras; i++)
             {
                 WebCam camera = WebcamManager.GetCamera(i);
-               if (camera.Subscribers.Count == 0)
+                if (camera.Subscribers.Count == 0)
                 {
                     camera.Stop();
                     DllImport.StopWebCam(camera.WebCamID);
@@ -291,7 +307,7 @@ namespace MayhemWebCamWrapper
         }
 
         public static int NumberConnectedCameras() { return _numdetectedCameras; }
-        
+
         public static WebCam GetCamera(int index)
         {
             if (index < 0 || index > _numdetectedCameras - 1)
