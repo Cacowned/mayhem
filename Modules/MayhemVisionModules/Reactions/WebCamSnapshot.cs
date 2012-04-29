@@ -311,8 +311,9 @@ namespace MayhemVisionModules.Reactions
 
                     if (showPreview)
                     {
-                        //   BitmapImage preview = new BitmapImage(new Uri(savedPath));
-
+                        ImagePopup popup = new ImagePopup();
+                        popup.ShowPopup(1000, savedPath);
+                        popup = null;
                     }
                 }
             }

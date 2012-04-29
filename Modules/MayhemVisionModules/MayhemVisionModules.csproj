@@ -66,6 +66,9 @@
     <Compile Include="Wpf\CoverFlowControl.xaml.cs">
       <DependentUpon>CoverFlowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\ImagePopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Wpf\ImageViewer.xaml.cs">
       <DependentUpon>ImageViewer.xaml</DependentUpon>
     </Compile>

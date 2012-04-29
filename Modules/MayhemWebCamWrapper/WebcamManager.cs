@@ -36,10 +36,6 @@ namespace MayhemWebCamWrapper
         
         public WebCamHardwareScannerForm()
         {
-            this.MinimizeBox = false;
-            this.MaximizeBox = false;
-            this.ShowInTaskbar = false;
-            this.ShowIcon = false;
             this.FormBorderStyle = FormBorderStyle.None;
             this.Load += new System.EventHandler(this.Load_Form);
             this.Activated += new EventHandler(this.Form_Activated);
@@ -48,7 +44,6 @@ namespace MayhemWebCamWrapper
         private void Load_Form(object sender, EventArgs e)
         {
             InitializeComponent();
-            this.Size = new System.Drawing.Size(5, 5);
         }
 
         private void Form_Activated(object sender, EventArgs e)
@@ -67,20 +62,21 @@ namespace MayhemWebCamWrapper
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(314, 13);
+            this.label1.Size = new System.Drawing.Size(245, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "This is invisible form. To see code click View Code";
             // 
-            // DetectorForm
+            // WebCamHardwareScannerForm
             // 
             this.ClientSize = new System.Drawing.Size(360, 80);
             this.Controls.Add(this.label1);
-            this.Name = "DetectorForm";
+            this.Name = "WebCamHardwareScannerForm";
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
-    }
+
+      }
 
     /// <summary>
     /// Detects insertion or removal of webcams.
