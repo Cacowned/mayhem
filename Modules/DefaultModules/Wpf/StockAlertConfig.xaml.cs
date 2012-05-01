@@ -133,8 +133,21 @@ namespace DefaultModules.Wpf
                 // if checking trades, want positive numbers only, otherwise true
                 bool posPrice = (bool)LastTrade.IsChecked ? (price > 0) : true;
 
-                error += isNumber && posPrice ? string.Empty : " price";
-                error += StockSymbol.Text.Length > 0 && IsValidStock() ? string.Empty : " stock symbol";
+				bool badPrice = !(isNumber && posPrice);
+				bool badSymbol = !(StockSymbol.Text.Length > 0 && IsValidStock());
+
+				if (badPrice && badSymbol)
+				{
+					error += " price and stock symbol";
+				}
+				else if (badPrice)
+				{
+					error += " price";
+				}
+				else if (badSymbol)
+				{
+					error += " symbol";
+				}
 
                 CanSave = error.Equals("Invalid");
             }
