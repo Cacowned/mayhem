@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Speech.Recognition;
 using DefaultModules.Wpf;
 using MayhemCore;
@@ -16,13 +14,12 @@ namespace DefaultModules.Events
 		[DataMember]
 		private string phrase;
 
-		private SpeechRecognitionEngine engine;
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
 			try
 			{
-				engine = new SpeechRecognitionEngine(CultureInfo.CurrentCulture);
+				SpeechRecognitionManager.Recognize(phrase, Recognized);
 			}
 			catch
 			{
@@ -30,45 +27,19 @@ namespace DefaultModules.Events
 				e.Cancel = true;
 				return;
 			}
-			
-			try
-			{
-				engine.SetInputToDefaultAudioDevice();
-			}
-			catch(InvalidOperationException)
-			{
-				ErrorLog.AddError(ErrorType.Failure, "No microphone is connected");
-				e.Cancel = true;
-				return;
-			}
-
-			engine.SpeechRecognized += RecognitionEngine_SpeechRecognized;
-
-			if (!string.IsNullOrEmpty(phrase))
-			{
-				Grammar grammar = new Grammar(new GrammarBuilder(phrase));
-				engine.LoadGrammar(grammar);
-			}
-
-			engine.RecognizeAsync(RecognizeMode.Multiple);
 		}
 
 		protected override void OnDisabled(DisabledEventArgs e)
 		{
-			engine.RecognizeAsyncCancel();
-		}
-
-		protected override void OnDeleted()
-		{
-			if (engine != null)
-			{
-				engine.Dispose();
-			}
+			SpeechRecognitionManager.CancelRecognize(phrase, Recognized);
 		}
 
 		public WpfConfiguration ConfigurationControl
 		{
-			get { return new SpeechRecognitionConfig(phrase); }
+			get
+			{
+				return new SpeechRecognitionConfig(phrase);
+			}
 		}
 
 		public void OnSaved(WpfConfiguration configurationControl)
@@ -82,7 +53,7 @@ namespace DefaultModules.Events
 			return phrase;
 		}
 
-		private void RecognitionEngine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+		private void Recognized(SpeechRecognizedEventArgs e)
 		{
 			Logger.WriteLine("Said: " + e.Result.Text + ", with " + e.Result.Confidence + " confidence");
 			if (e.Result.Confidence > .85)
