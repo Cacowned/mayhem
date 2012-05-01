@@ -116,6 +116,8 @@
     <Content Include="camera1.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\CamerabusyIcon.bmp" />
+    <Content Include="Wpf\webcambusy.bmp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

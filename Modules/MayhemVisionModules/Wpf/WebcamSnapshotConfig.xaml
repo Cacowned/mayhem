@@ -17,8 +17,11 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <StackPanel>
-            <visionmods:MultiWebCamSelector x:Name="camera_selector"></visionmods:MultiWebCamSelector>
+        <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Center">
+            <Label> Click on a thumbnail to select a webcam: </Label>
+            <!--<Border BorderThickness="3" BorderBrush="LightGray" CornerRadius="3" AllowDrop="True">-->
+                <visionmods:MultiWebCamSelector x:Name="camera_selector"></visionmods:MultiWebCamSelector>
+            <!--</Border>-->
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch">
             <Label> Save to Location: </Label>
@@ -30,7 +33,7 @@
             <TextBox Margin="6 0 0 0" Name="textBox_fileNamePrefix" MinWidth="640" MaxWidth="640" TextChanged="TextBoxFilenamePrefix_TextChanged" VerticalAlignment="Center">Mayhem</TextBox>
         </StackPanel>
         <StackPanel Grid.Row="3" VerticalAlignment="Center">
-            <CheckBox IsChecked="True" Name="chkBoxShowPreview" VerticalAlignment="Center"> Show Preivew</CheckBox>
+            <CheckBox IsChecked="True" Name="chkBoxShowPreview" VerticalAlignment="Center"> Show Preview</CheckBox>
         </StackPanel>
         <StackPanel Grid.Row="4" VerticalAlignment="Center">
             <CheckBox IsChecked="True" Name="chkBoxPlayShutterSound" VerticalAlignment="Center"> Play Shutter Sound</CheckBox>

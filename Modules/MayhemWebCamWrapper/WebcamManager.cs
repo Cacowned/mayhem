@@ -181,6 +181,7 @@ namespace MayhemWebCamWrapper
 
         public static void RestartService()
         {
+
             if (_serviceStarted)
                 CleanUp();
             _serviceStarted = false;

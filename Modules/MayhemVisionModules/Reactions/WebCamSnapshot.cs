@@ -271,19 +271,24 @@ namespace MayhemVisionModules.Reactions
             selectedCameraName = config.SelectedCameraName;
             showPreview = config.ShowPreview;
             playShutterSound = config.PlayShutterSound;
-            if (WebcamManager.IsServiceRestartRequired())
-                WebcamManager.RestartService();
-            selectedCameraIndex = LookforSelectedCamera();
-            if (selectedCameraIndex != -1 && selectedCameraConnected)
+            if (selectedCameraPath != null && selectedCameraName != null)
             {
-                WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
-                WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
-                if (webcambuffer != null)
+                if (WebcamManager.IsServiceRestartRequired())
+                    WebcamManager.RestartService();
+                selectedCameraIndex = LookforSelectedCamera();
+                if (selectedCameraIndex != -1 && selectedCameraConnected)
+                {
+                    WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
+                    WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
+                    if (webcambuffer != null)
+                        ReleasePreviousBuffers();
                     ReleasePreviousBuffers();
-                ReleasePreviousBuffers();
-                webcambuffer.RegisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+                    webcambuffer.RegisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+                }
+                WebcamManager.ReleaseInactiveCameras();
             }
-            WebcamManager.ReleaseInactiveCameras();     
+            else
+                selectedCameraIndex = -1;
         }
 
         protected override void OnDeleted()

@@ -11,10 +11,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <!--<RowDefinition Height="Auto" />-->
         </Grid.RowDefinitions>
 
-        <ItemsControl Grid.Row="0" Name="main_view">
+        <!--<ItemsControl Grid.Row="0" Name="main_view">
             <ItemsControl.Template>
                 <ControlTemplate>
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="Auto" Height="Auto">
@@ -27,9 +27,9 @@
                     <WrapPanel HorizontalAlignment="Center" IsItemsHost="True" Width="Auto" Height="Auto"></WrapPanel>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-        </ItemsControl>
+        </ItemsControl>-->
 
-        <ItemsControl Grid.Row="1" Name="camera_selection_panel">
+        <ItemsControl Grid.Row="0" Name="camera_selection_panel">
             <ItemsControl.Template>
                 <ControlTemplate>
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="Auto" Height="Auto">
