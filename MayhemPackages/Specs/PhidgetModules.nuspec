@@ -3,15 +3,56 @@
   <metadata>
     <id>PhidgetModules</id>
     <version>1.0.0</version>
-    <authors>Microsoft</authors>
-    <owners>Microsoft</owners>
+    <authors>Eli White</authors>
+    <owners>The Outercurve Foundation</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Package description</description>
-    <copyright>Copyright © Microsoft 2011</copyright>
-    <tags>Tag1 Tag2</tags>
+    <summary>
+	Support for a wide variety of Phidgets devices, including various sensors, servo motor controller, and digital I/O.
+    </summary>
+    <description>
+	Phidgets are a set of "plug and play" building blocks for low cost USB sensing and control from your PC. You can learn more about Phidgets at:
+
+http://www.phidgets.com/
+
+Most Phidgets sensors plug into an I/O board, which then connects to the PC via a single USB cable.
+
+The currently supported I/O board is the 1018_2 PhidgetInterfaceKit 8/8/8:
+
+http://www.phidgets.com/products.php?category=0&amp;product_id=1018_2
+
+Currently, only one interface kit may be used at a time. Because Phidgets do not self-report, you must specify which port a sensor is connected to.
+
+
+Event
+
+The Phidgets event includes using the digital inputs on the I/O board, as well as the following sensors:
+
+1106_0 - Force Sensor	http://www.phidgets.com/products.php?category=3&amp;product_id=1106_0
+1101_0 - IR Distance Adapter	http://www.phidgets.com/products.php?category=2&amp;product_id=1101_0	with a 3522_0 - Sharp Distance Sensor 2Y0A02 (20-150cm)	http://www.phidgets.com/products.php?product_id=3522
+1127_0 - Precision Light Sensor http://www.phidgets.com/products.php?category=6&amp;product_id=1127_0
+1103_1 - IR Reflective Sensor 10cm	http://www.phidgets.com/products.php?category=2&amp;product_id=1103_1	
+1133_0 - Sound Sensor	http://www.phidgets.com/products.php?category=6&amp;product_id=1133_0
+1124_0 - IR Temperature Sensor	http://www.phidgets.com/products.php?category=6&amp;product_id=1045_0
+1129_0 - Touch Sensor	http://www.phidgets.com/products.php?category=4&amp;product_id=1129_0
+
+
+Reactions
+
+There are two Phidgets reactions:
+
+Setting the level of a digital output on the I/O board
+
+Driving a servo motor to a specified position using a:
+
+1066_0 - PhidgetAdvancedServo 1-Motor	http://www.phidgets.com/products.php?category=11&amp;product_id=1066_0  used with an appropriate servo motor (&lt;450mA – see the Phidgets site for details))
+
+Note: this board has a separate USB connection, and does not use an I/O board. Currently, only one servo controller can be used at a time.
+    </description>
+    <copyright>Copyright © Outercurve 2012</copyright>
+    <tags>Phidget Touch Sensor Hardware Temperature Automation Home</tags>
     <dependencies>
-      <dependency id="MayhemCore" version="1.0" />
-      <dependency id="MayhemWpf" version="1.0" />
+      <dependency id="MayhemCore" version="1.0.0" />
+      <dependency id="MayhemWpf" version="1.0.0" />
     </dependencies>
   </metadata>
 </package>
