@@ -99,7 +99,7 @@ namespace MayhemCore
 			// to enable, but still appearing enabled.
 			// Setting this to false here seems to have fixed it, but I believe it is a
 			// race condition that is happening.
-			IsEnabled = false;
+			//IsEnabled = false;
 
             if (!Event.IsEnabled)
             {

@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Kinect;
 using System.IO;
 using Microsoft.Speech.Recognition;
+using System.Runtime.CompilerServices;
 
 namespace KinectModules
 {
@@ -16,6 +17,7 @@ namespace KinectModules
 		private static KinectAudioSource source;
 		private static int count;
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public static Stream Get()
 		{
 			if (count == 0)
@@ -35,6 +37,7 @@ namespace KinectModules
 			return stream;
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public static void Release(ref Stream stream)
 		{
 			if (count <= 0)

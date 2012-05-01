@@ -24,7 +24,8 @@ namespace Mayhem
 			watcher.Created += Hook;
 			watcher.Deleted += Hook;
 			watcher.Renamed += Hook;
-			watcher.EnableRaisingEvents = true;
+
+			Enable();
 
 			lastUpdated = DateTime.Now;
 		}
