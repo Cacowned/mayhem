@@ -32,8 +32,11 @@ The Phidgets event includes using the digital inputs on the I/O board, as well a
 1127_0 - Precision Light Sensor http://www.phidgets.com/products.php?category=6&amp;product_id=1127_0
 1103_1 - IR Reflective Sensor 10cm	http://www.phidgets.com/products.php?category=2&amp;product_id=1103_1	
 1133_0 - Sound Sensor	http://www.phidgets.com/products.php?category=6&amp;product_id=1133_0
-1124_0 - IR Temperature Sensor	http://www.phidgets.com/products.php?category=6&amp;product_id=1045_0
 1129_0 - Touch Sensor	http://www.phidgets.com/products.php?category=4&amp;product_id=1129_0
+
+In addition to these, there is one sensor with its own USB port which is supported:
+
+1045_0 - PhidgetTemperatureSensor IR http://www.phidgets.com/products.php?category=6&amp;product_id=1045_0
 
 
 Reactions
