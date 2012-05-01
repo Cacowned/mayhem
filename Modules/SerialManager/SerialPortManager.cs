@@ -230,6 +230,20 @@ namespace SerialManager
 				SerialPort port = ports[portName];
 
 				// See comments in the other write method.
+				if (!port.IsOpen)
+				{
+					// This is needed to attempt to reattach if they unplug, then replug in
+					// the com port.
+					try
+					{
+						port.Open();
+					}
+					catch
+					{
+						// This will throw if they unplug the cable, then try to trigger.
+					}
+				}
+
 				if (port.IsOpen)
 				{
 					port.Write(message);
@@ -250,6 +264,20 @@ namespace SerialManager
 				SerialPort port = ports[portName];
 
 				// We have to verify that the port is open here if we try to write
+				if (!port.IsOpen)
+				{
+					// This is needed to attempt to reattach if they unplug, then replug in
+					// the com port.
+					try
+					{
+						port.Open();
+					}
+					catch
+					{
+						// This will throw if they unplug the cable, then try to trigger.
+					}
+				}
+
 				if (port.IsOpen)
 				{
 					port.Write(buffer, 0, length);
