@@ -5,6 +5,7 @@ namespace FacebookModules.LowLevel
     public static class Utilities
     {
         #region Check Internet Connection
+        private static bool passed;
         /// <summary>
         /// Checks if there is a current Internet connection
         /// </summary>
@@ -15,12 +16,11 @@ namespace FacebookModules.LowLevel
             {
                 // Make a request with a 640ms timeout
                 CallWithTimeout(MakeRequest, 640);
-                return true;
             }
             catch
             {
-                return false;
             }
+            return passed;
         }
 
         /// <summary>
@@ -29,7 +29,14 @@ namespace FacebookModules.LowLevel
         private static void MakeRequest()
         {
             // TODO this happens every time once net has been disabled
-            System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+            try
+            {
+                System.Net.IPHostEntry obj = System.Net.Dns.GetHostEntry("www.google.com");
+                passed = true;
+            } catch
+            {
+                passed = false;
+            }
         }
 
         /// <summary>

@@ -28,8 +28,8 @@ namespace FacebookModules
 
         public FacebookClient fb;
         public DispatcherTimer timer;
-        
-        public bool connected;
+
+        public bool showError;
 
         public abstract string WhatToCheck { get; }
         public abstract string Title { get; }
@@ -63,6 +63,7 @@ namespace FacebookModules
             timer.Tick += CheckFacebook;
 
             commentLength = -1;
+            showError = true; // change var name
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace FacebookModules
         {
             if (Utilities.ConnectedToInternet())
             {
-                connected = true;
+                showError = true;
                 dynamic result = fb.Get(WhatToCheck);
 
                 // get the id of the most recent post
@@ -112,9 +113,10 @@ namespace FacebookModules
                         try
                         {
                             commentLength = result.data[0].comments.data[0].Count;
-                        }catch
+                        }
+                        catch
                         {
-                            
+
                         }
                     }
                     else if (!latestPostId.Equals(postId) || (WhatToCheck.Equals("/me/inbox") && commentLength != latestComments))
@@ -125,11 +127,10 @@ namespace FacebookModules
                     }
                 }
             }
-            else
+            else if (showError)
             {
-                if (connected)
-                    ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook"));
-                connected = false;
+                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook"));
+                showError = false;
             }
         }
 
