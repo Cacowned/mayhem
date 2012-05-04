@@ -146,7 +146,7 @@ namespace DefaultModules.Wpf
 				}
 				else if (badSymbol)
 				{
-					error += " symbol";
+					error += " stock symbol";
 				}
 
                 CanSave = error.Equals("Invalid");
