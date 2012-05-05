@@ -8,12 +8,20 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{8F5D6C03-303F-4E19-B396-0B9198056910}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mayhem", "Mayhem\Mayhem.csproj", "{0538D384-4C18-4ADC-A235-30C1B1C29AD0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26} = {3EB92BD2-D5F4-46D5-A771-41617EAD2F26}
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565} = {D52362F0-D67B-4FC2-925D-DCF2B7384565}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemWpf", "MayhemWpf\MayhemWpf.csproj", "{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateModules", "Modules\TemplateModules\TemplateModules.csproj", "{B94FDED3-00F2-43F0-9298-111273721BA4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{4A56621A-3527-42FD-B119-C509D9903B8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemVisionModules", "Modules\MayhemVisionModules\MayhemVisionModules.csproj", "{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemWebCamWrapper", "Modules\MayhemWebCamWrapper\MayhemWebCamWrapper.csproj", "{D52362F0-D67B-4FC2-925D-DCF2B7384565}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +107,30 @@ Global
 		{4A56621A-3527-42FD-B119-C509D9903B8E}.Release|Win32.ActiveCfg = Release|x86
 		{4A56621A-3527-42FD-B119-C509D9903B8E}.Release|x86.ActiveCfg = Release|x86
 		{4A56621A-3527-42FD-B119-C509D9903B8E}.Release|x86.Build.0 = Release|x86
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Release|Win32.ActiveCfg = Release|Any CPU
+		{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}.Release|x86.ActiveCfg = Release|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Release|Win32.ActiveCfg = Release|Any CPU
+		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
