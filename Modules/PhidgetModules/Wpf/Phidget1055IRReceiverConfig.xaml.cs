@@ -4,6 +4,7 @@ using MayhemWpf.UserControls;
 using Phidgets;
 using Phidgets.Events;
 using System;
+using PhidgetModules.LowLevel;
 
 namespace PhidgetModules.Wpf
 {
@@ -11,17 +12,17 @@ namespace PhidgetModules.Wpf
 	{
 		protected IR Ir;
 
-		public IRCode Code
+		public MayhemIRCode Code
 		{
-			get { return (IRCode)GetValue(CodeProperty); }
+			get { return (MayhemIRCode)GetValue(CodeProperty); }
 			set { SetValue(CodeProperty, value); }
 		}
 
 		// Using a DependencyProperty as the backing store for Code.  This enables animation, styling, binding, etc...
 		public static readonly DependencyProperty CodeProperty =
-			DependencyProperty.Register("Code", typeof(IRCode), typeof(Phidget1055IrReceiverConfig), new UIPropertyMetadata(null));
+			DependencyProperty.Register("Code", typeof(MayhemIRCode), typeof(Phidget1055IrReceiverConfig), new UIPropertyMetadata(null));
 
-		public Phidget1055IrReceiverConfig(IRCode code)
+		public Phidget1055IrReceiverConfig(MayhemIRCode code)
 		{
 			Code = code;
 
@@ -54,7 +55,7 @@ namespace PhidgetModules.Wpf
 			Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
 			{
 				CanSave = true;
-				Code = e.Code;
+				Code = new MayhemIRCode(e.Code);
 			}));
 		}
 
