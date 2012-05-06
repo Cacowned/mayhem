@@ -86,7 +86,7 @@ namespace MayhemVisionModules.Wpf
 
         public void OnCameraConnected(object sender, USBEvent e)
         {
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (SendOrPostCallback)delegate
             {
                 Thread.Sleep(30);
                 RefreshCameraList();
@@ -95,7 +95,7 @@ namespace MayhemVisionModules.Wpf
 
         public void OnCameraDisconnected(object sender, USBEvent e)
         {
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (SendOrPostCallback)delegate
             {
                 RefreshCameraList();
             }, null);
@@ -137,6 +137,7 @@ namespace MayhemVisionModules.Wpf
                     else
                     {
                         viewer.ImageSource.Source = loadBitmap(Properties.Resources.CamBusyIcon);
+                        viewer.BottomTitle = "This webcam is already busy";
                     }
                     cameraList.Add(i);
                     cameraPreviews.Add(viewer);
@@ -299,7 +300,7 @@ namespace MayhemVisionModules.Wpf
             //main_view.MaxHeight = mainViewHeight + 120;
             //main_view.MaxWidth = mainViewWidth + 120;
 
-            camera_selection_panel.MaxHeight = previewHeight+60;
+            camera_selection_panel.MaxHeight = ActualHeight;
             camera_selection_panel.MaxWidth = ActualWidth;
         }
      }

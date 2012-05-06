@@ -32,7 +32,7 @@
         <ItemsControl Grid.Row="0" Name="camera_selection_panel">
             <ItemsControl.Template>
                 <ControlTemplate>
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="Auto" Height="Auto">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" Width="Auto" Height="Auto">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>
