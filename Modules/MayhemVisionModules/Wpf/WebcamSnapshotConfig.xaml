@@ -4,7 +4,7 @@
                       xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf" 
                       xmlns:visionmods="clr-namespace:MayhemVisionModules.Wpf"
                       Name="root"
-                      Width="800" Height="Auto">
+                      Width="500" Height="Auto">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,22 +15,22 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="500"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Center">
             <Label> Click on a thumbnail to select a webcam: </Label>
             <!--<Border BorderThickness="3" BorderBrush="LightGray" CornerRadius="3" AllowDrop="True">-->
-                <visionmods:MultiWebCamSelector x:Name="camera_selector"></visionmods:MultiWebCamSelector>
+                <visionmods:MultiWebCamSelector x:Name="camera_selector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="200"></visionmods:MultiWebCamSelector>
             <!--</Border>-->
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch">
             <Label> Save to Location: </Label>
-            <TextBox Margin="5 0 0 0" Name="textBox_SaveLocation" MinWidth="640" MaxWidth="640" TextChanged="TextBoxSaveLocationChanged" VerticalAlignment="Center"></TextBox>
+            <TextBox Margin="5 0 0 0" Name="textBox_SaveLocation" MinWidth="340" MaxWidth="340" TextChanged="TextBoxSaveLocationChanged" VerticalAlignment="Center"></TextBox>
             <Button Name="button_SaveLocationButton" Click="ButtonSaveLocationClick" Margin="5 0 0 0" VerticalAlignment="Center">Browse</Button> 
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label> File Name Prefix: </Label>
-            <TextBox Margin="6 0 0 0" Name="textBox_fileNamePrefix" MinWidth="640" MaxWidth="640" TextChanged="TextBoxFilenamePrefix_TextChanged" VerticalAlignment="Center">Mayhem</TextBox>
+            <TextBox Margin="6 0 0 0" Name="textBox_fileNamePrefix" MinWidth="390" MaxWidth="390" TextChanged="TextBoxFilenamePrefix_TextChanged" VerticalAlignment="Center">Mayhem</TextBox>
         </StackPanel>
         <StackPanel Grid.Row="3" VerticalAlignment="Center">
             <CheckBox IsChecked="True" Name="chkBoxShowPreview" VerticalAlignment="Center"> Show Preview</CheckBox>
