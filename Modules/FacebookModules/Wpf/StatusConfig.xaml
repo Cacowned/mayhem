@@ -1,0 +1,22 @@
+﻿<common:FacebookConfigControl x:Class="FacebookModules.Wpf.StatusConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:common="clr-namespace:FacebookModules.Wpf.UserControls"
+                      
+             mc:Ignorable="d" 
+             Width="460">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" HorizontalAlignment="Right" Margin="0,2,10,0">Status To Post:</TextBlock>
+        <TextBox Name="statusText" Grid.Column="1" TextChanged="StatusText_Changed"></TextBox>
+    </Grid>
+</common:FacebookConfigControl>
