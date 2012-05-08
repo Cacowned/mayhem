@@ -32,10 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MayhemCore">
-      <HintPath>packages\MayhemCore.1.0.0\lib\net40\MayhemCore.dll</HintPath>
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
     </Reference>
     <Reference Include="MayhemWpf">
-      <HintPath>packages\MayhemWpf.1.0.0\lib\net40\MayhemWpf.dll</HintPath>
+      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -60,7 +60,6 @@
     <Compile Include="Components\BitmapTimeStamp.cs" />
     <Compile Include="Components\IBufferingImager.cs" />
     <Compile Include="Components\WebCamBuffer.cs" />
-    <Compile Include="Components\WebcamMotionDetection.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -109,9 +108,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="camera1.wav">

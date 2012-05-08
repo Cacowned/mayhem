@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemVisionModules", "MayhemVisionModules.csproj", "{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemVisionModules", "MayhemVisionModules\MayhemVisionModules.csproj", "{3EB92BD2-D5F4-46D5-A771-41617EAD2F26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemWebCamWrapper", "..\MayhemWebCamWrapper\MayhemWebCamWrapper.csproj", "{D52362F0-D67B-4FC2-925D-DCF2B7384565}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemWebCamWrapper", "MayhemWebCamWrapper\MayhemWebCamWrapper.csproj", "{D52362F0-D67B-4FC2-925D-DCF2B7384565}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemWebCamTest", "..\..\..\MayhemWebCamTest\MayhemWebCamTest.csproj", "{192D1FB8-CC40-452F-A508-10EF2D7CB623}"
 EndProject

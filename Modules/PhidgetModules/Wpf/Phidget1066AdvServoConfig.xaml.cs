@@ -97,6 +97,7 @@ namespace PhidgetModules.Wpf
 		public override void OnClosing()
 		{
 			servo.Attach -= servo_Attach;
+            servo.Detach -= servo_Detach;
 
 			PhidgetManager.Release<AdvancedServo>(ref servo);
 		}
