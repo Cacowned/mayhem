@@ -112,6 +112,8 @@ namespace MayhemVisionModules.Wpf
             cameraList = new List<int>();
             selectedCameraIndex = -1;
             int numAvailableCameras = 0;
+            
+                    
             //populate the camera list and find the one that is available and set it as current selection...
             for (int i = 0; i < numberConnectedCameras; i++)
             {
@@ -121,7 +123,6 @@ namespace MayhemVisionModules.Wpf
                     viewer.ViewerWidth = previewWidth;
                     viewer.ViewerHeight = previewHeight;
                     viewer.TopTitle = WebcamManager.GetCamera(i).WebCamName;
-                    
                     if (WebcamManager.StartCamera(i, captureWidth, captureHeight))
                     {
                         if (viewer.TopTitle == selectedCameraName || selectedCameraIndex == -1)
