@@ -152,7 +152,6 @@ namespace FacebookModules.Wpf
                     textInvalid.Text = "Cannot log in, please accept \"Mayhem\" when prompted to above.";
                     textInvalid.Visibility = Visibility.Visible;
                 }
-                
             }
         }
 
