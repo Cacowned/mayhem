@@ -86,7 +86,7 @@ namespace FacebookModules
                     {
                         try
                         {
-                            latestComments = result.data[0].comments.data[0].Count;
+                            latestComments = result.data[0].comments.data.Count;
                         }
                         catch
                         {
@@ -112,7 +112,7 @@ namespace FacebookModules
                         postId = latestPostId;
                         try
                         {
-                            commentLength = result.data[0].comments.data[0].Count;
+                            commentLength = result.data[0].comments.data.Count;
                         }
                         catch
                         {
