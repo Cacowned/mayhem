@@ -129,14 +129,21 @@ namespace FacebookModules
                             Trigger();
                         }
                     }
-                }catch
+                }
+                catch
                 {
-                    // minimize
-                    ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook " + Title));
-                    showError = false;
+                    InternetError();
                 }
             }
-            else if (showError)
+            else
+            {
+                InternetError();
+            }
+        }
+
+        private void InternetError()
+        {
+            if (showError)
             {
                 ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook " + Title));
                 showError = false;
