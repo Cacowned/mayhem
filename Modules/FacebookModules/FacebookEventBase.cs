@@ -74,62 +74,78 @@ namespace FacebookModules
         {
             if (Utilities.ConnectedToInternet())
             {
-                showError = true;
-                dynamic result = fb.Get(WhatToCheck);
-
-                // get the id of the most recent post
-                string latestPostId = string.Empty;
-                int latestComments = 0;
-                if (!(WhatToCheck.Equals("/me/notifications") && result.Values.Count == 2))
+                try
                 {
-                    try
+                    showError = true;
+                    dynamic result = fb.Get(WhatToCheck);
+
+                    // get the id of the most recent post
+                    string latestPostId = string.Empty;
+                    int latestComments = 0;
+                    if (!(WhatToCheck.Equals("/me/notifications") && result.Values.Count == 2))
                     {
                         try
                         {
-                            latestComments = result.data[0].comments.data[0].Count;
+                            try
+                            {
+                                latestComments = result.data[0].comments.data.Count;
+                            }
+                            catch
+                            {
+                                // only one message in the feed
+                            }
+                            latestPostId = result.data[0].id;
                         }
                         catch
                         {
-                            // only one message in the feed
+                            // emtpy inbox
                         }
-                        latestPostId = result.data[0].id;
                     }
-                    catch
+                    else
                     {
-                        // emtpy inbox
+                        postId = "[]";
+                    }
+
+                    if (!latestPostId.Equals(string.Empty))
+                    {
+                        // get the id of the first post
+                        if (postId == null || (commentLength == -1 && WhatToCheck.Equals("/me/inbox")))
+                        {
+                            postId = latestPostId;
+                            try
+                            {
+                                commentLength = result.data[0].comments.data.Count;
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                        else if (!latestPostId.Equals(postId) ||
+                                 (WhatToCheck.Equals("/me/inbox") && commentLength != latestComments))
+                        {
+                            postId = latestPostId;
+                            commentLength = latestComments;
+                            Trigger();
+                        }
                     }
                 }
-                else
+                catch
                 {
-                    postId = "[]";
-                }
-
-                if (!latestPostId.Equals(string.Empty))
-                {
-                    // get the id of the first post
-                    if (postId == null || (commentLength == -1 && WhatToCheck.Equals("/me/inbox")))
-                    {
-                        postId = latestPostId;
-                        try
-                        {
-                            commentLength = result.data[0].comments.data[0].Count;
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                    else if (!latestPostId.Equals(postId) || (WhatToCheck.Equals("/me/inbox") && commentLength != latestComments))
-                    {
-                        postId = latestPostId;
-                        commentLength = latestComments;
-                        Trigger();
-                    }
+                    InternetError();
                 }
             }
-            else if (showError)
+            else
             {
-                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook"));
+                InternetError();
+            }
+        }
+
+        private void InternetError()
+        {
+            if (showError)
+            {
+                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook " + Title));
                 showError = false;
             }
         }

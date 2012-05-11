@@ -24,11 +24,11 @@ namespace FacebookModules.Wpf
         private const string appId = "249936281752098";
         private string[] extendedPermissions = new[] { "publish_stream", "read_mailbox", "read_stream", "manage_notifications", "offline_access" };
         private string title;
-        
+
         // for debug
         Uri loginUrl;
         public FacebookConfigControl ControlItem { get; private set; }
-   
+
 
         public FacebookConfigDebug(string token, string title, FacebookConfigControl control)
         {
@@ -140,7 +140,19 @@ namespace FacebookModules.Wpf
             }
 
             if (result != null)
-                LoadUser();
+            {
+                try
+                {
+                    new FacebookClient(TokenProp);
+                    LoadUser();
+                }
+                catch
+                {
+                    CanSave = false;
+                    textInvalid.Text = "Cannot log in, please accept \"Mayhem\" when prompted to above.";
+                    textInvalid.Visibility = Visibility.Visible;
+                }
+            }
         }
 
         private void Revalidate()

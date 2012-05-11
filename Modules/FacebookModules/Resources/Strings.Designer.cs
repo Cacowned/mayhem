@@ -61,7 +61,7 @@ namespace FacebookModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no Internet connection; {0} Alert event will start when Internet is detected..
+        ///   Looks up a localized string similar to There is no Internet connection; {0} event will start when Internet is detected..
         /// </summary>
         internal static string Internet_NotConnected {
             get {
