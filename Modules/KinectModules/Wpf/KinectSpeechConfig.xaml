@@ -1,0 +1,25 @@
+﻿<src:WpfConfiguration x:Class="KinectModules.Wpf.KinectSpeechConfig"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+			 Width="400">
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="100" />
+			<ColumnDefinition Width="300" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+
+		<TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Listen for Phrase:</TextBlock>
+		<TextBox Name="PhraseTextBox" Grid.Column="1" Grid.Row="0" TextChanged="PhraseText_TextChanged" />
+
+		<TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1">Phrase is invalid</TextBlock>
+
+		<TextBlock Style="{StaticResource ConfigErrorMessage}" HorizontalAlignment="Center" Name="kinectAttached" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0">Plug in a Kinect</TextBlock>
+	</Grid>
+</src:WpfConfiguration>
