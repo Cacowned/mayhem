@@ -46,7 +46,7 @@ namespace FacebookModules.Reactions
             }
             else
             {
-                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook"));
+                ErrorLog.AddError(ErrorType.Warning, String.Format(Strings.Internet_NotConnected, "Facebook Status"));
             }
         }
 
