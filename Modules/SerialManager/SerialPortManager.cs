@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace SerialManager
 {
@@ -49,6 +50,8 @@ namespace SerialManager
 		private static Dictionary<string, SerialSettings> portSettings;
 
 		private static object locker;
+
+		private static System.Timers.Timer timer;
 
 		#region Singleton
 		// We are using a singleton here because it will have many methods
@@ -167,6 +170,14 @@ namespace SerialManager
 					port.Close();
 				}
 			}
+
+			if (timer == null)
+			{
+				timer = new System.Timers.Timer();
+				timer.Interval = 1000;
+				timer.Elapsed += RecheckPorts;
+				timer.Start();
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.Synchronized)]
@@ -216,6 +227,32 @@ namespace SerialManager
 			portHandlers.Remove(port);
 			portSettings.Remove(portName);
 			ports.Remove(portName);
+
+			if (ports.Count == 0)
+			{
+				// we have no more open ports, lets end the timer
+				timer.Stop();
+			}
+		}
+
+		private void RecheckPorts(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			// They may have unplugged and then plugged in the ports, we need to recheck
+			// to make sure they are all open.
+			foreach (SerialPort port in ports.Values)
+			{
+				if (!port.IsOpen)
+				{
+					try
+					{
+						port.Open();
+					}
+					catch
+					{
+						Debug.WriteLine("Unable to open port: " + port.PortName);
+					}
+				}
+			}
 		}
 
 		public void Write(string portName, string message)
