@@ -5,19 +5,20 @@ using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using Phidgets;
 using System;
+using PhidgetModules.LowLevel;
 
 namespace PhidgetModules.Reaction
 {
 	[DataContract]
 	[MayhemModule("Phidget: IR Transmit", "Sends an IR code")]
-	internal class Phidget1055IrTransmit : ReactionBase, IWpfConfigurable
+	public class Phidget1055IrTransmit : ReactionBase, IWpfConfigurable
 	{
 		// This is the code and code information that we will transmit
-		//[DataMember]
-		private IRCode code;
+		[DataMember]
+		private MayhemIRCode code;
 
-		//[DataMember]
-		private IRCodeInfo codeInfo;
+		[DataMember]
+		private MayhemIRCodeInfo codeInfo;
 
 		private IR ir;
 
@@ -75,7 +76,7 @@ namespace PhidgetModules.Reaction
 
 			if (code != null && codeInfo != null)
 			{
-				ir.transmit(code, codeInfo);
+				ir.transmit(code.IRCode, codeInfo.IRCodeInfo);
 				ir.transmitRepeat();
 			}
 		}
