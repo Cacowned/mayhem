@@ -7,6 +7,7 @@ using MayhemWpf.UserControls;
 using PhidgetModules.Wpf;
 using Phidgets;
 using Phidgets.Events;
+using PhidgetModules.LowLevel;
 
 namespace PhidgetModules.Events
 {
@@ -14,8 +15,8 @@ namespace PhidgetModules.Events
 	[MayhemModule("Phidget: IR Receiver", "Triggers when it sees a certain IR code")]
 	internal class Phidget1055IrReceiver : EventBase, IWpfConfigurable
 	{
-		//[DataMember]
-		private IRCode code;
+		[DataMember]
+		private MayhemIRCode code;
 
 		private IR ir;
 		private DateTime lastSignal;
