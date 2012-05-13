@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>PhidgetModules</id>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <authors>Eli White</authors>
     <owners>The Outercurve Foundation</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,42 +14,118 @@
 
 http://www.phidgets.com/
 
-Most Phidgets sensors plug into an I/O board, which then connects to the PC via a single USB cable.
+Most Phidgets devices plug into an I/O board, which then connects to the PC via a single USB cable. Others use a direct USB connection.
 
-The currently supported I/O board is the 1018_2 PhidgetInterfaceKit 8/8/8:
+The currently supported I/O board is the:
 
-http://www.phidgets.com/products.php?category=0&amp;product_id=1018_2
+ 1018_2 PhidgetInterfaceKit 8/8/8: http://www.phidgets.com/products.php?product_id=1018_2
 
-Currently, only one interface kit may be used at a time. Because Phidgets do not self-report, you must specify which port a sensor is connected to.
+Currently, only one interface kit may be used at a time. When using an I/O board, you must specify which port a sensor is connected to.
 
 
-Event
+Events
 
-The Phidgets event includes using the digital inputs on the I/O board, as well as the following sensors:
 
-1106_0 - Force Sensor	http://www.phidgets.com/products.php?category=3&amp;product_id=1106_0
-1101_0 - IR Distance Adapter	http://www.phidgets.com/products.php?category=2&amp;product_id=1101_0	with a 3522_0 - Sharp Distance Sensor 2Y0A02 (20-150cm)	http://www.phidgets.com/products.php?product_id=3522
-1127_0 - Precision Light Sensor http://www.phidgets.com/products.php?category=6&amp;product_id=1127_0
-1103_1 - IR Reflective Sensor 10cm	http://www.phidgets.com/products.php?category=2&amp;product_id=1103_1	
-1133_0 - Sound Sensor	http://www.phidgets.com/products.php?category=6&amp;product_id=1133_0
-1129_0 - Touch Sensor	http://www.phidgets.com/products.php?category=4&amp;product_id=1129_0
+Phidgets: IR Receive
 
-In addition to these, there is one sensor with its own USB port which is supported:
+Triggers when a specified IR code is received. The code is specified by shining the desired code at the Phidgets module.
 
-1045_0 - PhidgetTemperatureSensor IR http://www.phidgets.com/products.php?category=6&amp;product_id=1045_0
+Requires:
+1055_0 - PhidgetIR  http://www.phidgets.com/products.php?product_id=1055_0
+
+
+Phidgets: Temperature
+
+Triggers when the specified temperature is reached from the specified direction.
+
+1045_0 - PhidgetTemperatureSensor IR http://www.phidgets.com/products.php?product_id=1045_0
+
+
+Phidgets: Digital Input
+
+Triggers when the specified digital input changes to the specified state. Phidgets digital inputs are designed to have a physical switch connected from the input to ground. ”Pressed” indicates that an input is connected to ground. “Released” indicates that the input is either disconnected, or driven high (e.g. 5V). The inputs have 15kohm resistive pull-ups to 5V. Raw value indicates the current state of the input.
+
+Requires:
+1018_2 PhidgetInterfaceKit 8/8/8: http://www.phidgets.com/products.php?product_id=1018_2
+
+
+The following events use sensors that are connected to the PC via the I/O board. In each case, the input must be specified. The raw value indicates the current reading.
+
+
+Phidgets: Force Sensor
+
+Triggers when the force goes above or below a specified value.
+
+Requires:
+1106_0 - Force Sensor    http://www.phidgets.com/products.php?product_id=1106_0
+
+
+Phidgets: IR Distance
+
+Triggers when the sensor detects an object entering the specified range.
+
+Requires:
+1101_0 - IR Distance Adapter      http://www.phidgets.com/products.php?product_id=1101_0
+3522_0 - Sharp Distance Sensor 2Y0A02 (20-150cm)      http://www.phidgets.com/products.php?product_id=3522
+
+
+Phidgets: Light Sensor
+
+Triggers when the light level crosses a specified level in a specified direction (going above, or going below the threshold).
+
+Requires:
+1127_0 - Precision Light Sensor http://www.phidgets.com/products.php?product_id=1127_0
+
+
+Phidgets: Proximity Sensor
+
+Triggers when an object comes within or goes outside of the 0-10cm range of the IR reflective sensor.
+
+Requires:
+1103_1 - IR Reflective Sensor 10cm          http://www.phidgets.com/products.php?product_id=1103_1                
+
+
+Phidgets: Sound Sensor
+
+Triggers when the ambient noise level goes above or below a specified level.
+
+Requires:
+1133_0 - Sound Sensor  http://www.phidgets.com/products.php?product_id=1133_0
+
+
+Phidgets: Touch Sensor
+
+Triggers when touched or released.
+
+Requires:
+1129_0 - Touch Sensor  http://www.phidgets.com/products.php?product_id=1129_0
 
 
 Reactions
 
-There are two Phidgets reactions:
+Phidgets: Adv. Servo
 
-Setting the level of a digital output on the I/O board
+Moves a servo motor to a specified position. Note: Driving multiple servos is not currently supported.
 
-Driving a servo motor to a specified position using a:
+Requires:
+1066_0 - PhidgetAdvancedServo 1-Motor http://www.phidgets.com/products.php?product_id=1066_0  used with an appropriate servo motor (450mA – see the Phidgets site for details)
 
-1066_0 - PhidgetAdvancedServo 1-Motor	http://www.phidgets.com/products.php?category=11&amp;product_id=1066_0  used with an appropriate servo motor (&lt;450mA – see the Phidgets site for details))
 
-Note: this board has a separate USB connection, and does not use an I/O board. Currently, only one servo controller can be used at a time.
+Phidgets: Digital Output
+
+Set a specified digital output to high, low, or to toggle (flip the current state).
+
+Requires:
+1018_2 PhidgetInterfaceKit 8/8/8: http://www.phidgets.com/products.php?product_id=1018_2
+
+
+Phidgets: IR Transmit
+
+Send the specified IR code. The IR code is learned by shining the desired code at the Phidgets module.
+
+Requires:
+1055_0 - PhidgetIR  http://www.phidgets.com/products.php?product_id=1055_0
+
     </description>
     <copyright>Copyright © Outercurve 2012</copyright>
     <tags>Phidget Touch Sensor Hardware Temperature Automation Home</tags>
