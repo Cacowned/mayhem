@@ -1,0 +1,16 @@
+﻿<Window x:Class="Mayhem.UpdateModules"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		Title="Update Modules" Width="400" ResizeMode="NoResize" SizeToContent="Height" Background="#ddd">
+	<StackPanel Margin="5">
+		<TextBlock TextWrapping="WrapWithOverflow">There are new versions of some installed addons. Would you like to update now or later?</TextBlock>
+		<ListBox Margin="5,10,5,10" Height="100" Name="listBox1" />
+		<Grid HorizontalAlignment="Center">
+			<StackPanel Name="stackPanelDefaultButtons" Orientation="Horizontal">
+				<Button Name="buttonUpdate" Click="Update_Click">Update Now</Button>
+				<Button Name="buttonCancel" Margin="10,0,0,0" Click="Cancel_Click">Update Later</Button>
+			</StackPanel>
+			<Button Name="buttonClose" Click="Close_Click" Visibility="Hidden">Close</Button>
+		</Grid>
+	</StackPanel>
+</Window>
