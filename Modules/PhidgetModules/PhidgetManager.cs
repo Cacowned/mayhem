@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Phidgets;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace PhidgetModules
 {
@@ -17,6 +18,7 @@ namespace PhidgetModules
 			counts = new Dictionary<Type, int>();
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public static T Get<T>(bool throwIfNotAttached = true) where T : Phidget, new()
 		{
 			// Get the Phidget type
@@ -43,7 +45,7 @@ namespace PhidgetModules
 						throw new InvalidOperationException("No Phidget with the type " + type.ToString() + " is attached");
 					}
 				}
-				
+
 				openTypes.Add(type, sensor);
 			}
 
@@ -59,7 +61,7 @@ namespace PhidgetModules
 		}
 
 		private static void IncrementCount(Type type)
-		 {
+		{
 			// Increment the count in the dictionary
 			if (!counts.ContainsKey(type))
 			{
@@ -71,6 +73,7 @@ namespace PhidgetModules
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public static void Release<T>(ref T phidget) where T : Phidget
 		{
 			Type type = typeof(T);
