@@ -1,0 +1,13 @@
+﻿<src:WpfConfiguration x:Class="PhidgetModules.Wpf.Phidget1055IrTransmitConfig"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             Width="400">
+    <Grid>
+        <StackPanel>
+            <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow">Press the button on the remote control that we will retransmit.</TextBlock>
+            <TextBlock Style="{StaticResource ConfigBigText}" Text="{Binding Code}" />
+            <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="NoReciever" Text="Plug in the Phidget IR Transceiver." HorizontalAlignment="Center" Visibility="Visible"  />
+        </StackPanel>
+    </Grid>
+</src:WpfConfiguration>
