@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\FeedAlert.cs" />
+    <Compile Include="Events\ProgramDetect.cs" />
     <Compile Include="Events\StockAlert.cs" />
     <Compile Include="Events\FolderChange.cs" />
     <Compile Include="Events\SpeechRecognition.cs" />

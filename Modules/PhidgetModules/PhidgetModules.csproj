@@ -75,6 +75,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InterfaceKitType.cs" />
     <Compile Include="LowLevel\MayhemIRCode.cs" />
+    <Compile Include="LowLevel\MayhemIRCodeInfo.cs" />
     <Compile Include="OnOffSensorEventBase.cs" />
     <Compile Include="PhidgetManager.cs" />
     <Compile Include="Wpf\Phidget1045TemperatureConfig.xaml.cs">

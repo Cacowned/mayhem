@@ -65,5 +65,12 @@ namespace PhidgetModules.LowLevel
 		{
 			IRCode = new IRCode(data, bitCount);
 		}
+
+		public override string ToString()
+		{
+			string hex = BitConverter.ToString(data);
+			return hex.Replace("-", "");
+
+		}
 	}
 }
