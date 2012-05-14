@@ -60,6 +60,7 @@
     <Compile Include="Components\BitmapTimeStamp.cs" />
     <Compile Include="Components\IBufferingImager.cs" />
     <Compile Include="Components\WebCamBuffer.cs" />
+    <Compile Include="Events\WebcamMotionDetection.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -81,6 +82,12 @@
       <DependentUpon>MultiWebCamSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\ImageRenderer.cs" />
+    <Compile Include="Wpf\WebCamMotionDetectionConfig.xaml.cs">
+      <DependentUpon>WebCamMotionDetectionConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WebCamROISelector.xaml.cs">
+      <DependentUpon>WebCamROISelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\WebcamSnapshotConfig.xaml.cs">
       <DependentUpon>WebcamSnapshotConfig.xaml</DependentUpon>
     </Compile>
@@ -104,6 +111,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Wpf\WebCamMotionDetectionConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\WebCamROISelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wpf\WebcamSnapshotConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -123,6 +138,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(TargetDir)*.* "C:\Program Files (x86)\Outercurve\Mayhem\VisionModules\lib" /C /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

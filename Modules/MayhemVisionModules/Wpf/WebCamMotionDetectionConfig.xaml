@@ -1,0 +1,28 @@
+﻿<src:WpfConfiguration x:Class="MayhemVisionModules.Wpf.WebCamMotionDetectionConfig"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
+                      xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf" 
+                      xmlns:visionmods="clr-namespace:MayhemVisionModules.Wpf"
+                      Name="root"
+                      Width="500" Height="Auto">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Center">
+            <visionmods:WebCamROISelector x:Name="camera_roi_selector" HorizontalAlignment="Center" VerticalAlignment="Center"></visionmods:WebCamROISelector>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
+            <Label>Click on a thumbnail to select a webcam:</Label>
+            <visionmods:MultiWebCamSelector x:Name="camera_selector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="200"></visionmods:MultiWebCamSelector>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock FontStyle="Italic" Margin="5 0 0 0" MinWidth="240" MaxWidth="240"  Name="textInvalid" VerticalAlignment="Center">File location is invalid</TextBlock>
+        </StackPanel>
+    </Grid>
+</src:WpfConfiguration>

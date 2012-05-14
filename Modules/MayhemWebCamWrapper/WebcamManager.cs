@@ -307,6 +307,64 @@ namespace MayhemWebCamWrapper
             }
         }
 
+        public enum CAMERA_PROPERTY
+        {
+            CAMERA_FOCUS = 0,
+            CAMERA_EXPOSURE,
+            CAMERA_ZOOM
+        };
+
+        public static bool GetCurrentPropertyValue(int cameraindex, CAMERA_PROPERTY prop, ref long val)
+        {
+            int numberCameras = WebcamManager.NumberConnectedCameras();
+            if (cameraindex > -1 && cameraindex < numberCameras)
+            {
+                return DllImport.GetCurrentPropertyValue(cameraindex, Convert.ToInt32(prop), ref val);
+            }
+            return false;
+  
+        }
+
+        public static bool GetDefaultPropertyValue(int cameraindex, CAMERA_PROPERTY prop, ref long val)
+        {
+            int numberCameras = WebcamManager.NumberConnectedCameras();
+            if (cameraindex > -1 && cameraindex < numberCameras)
+                return DllImport.GetDefaultPropertyValue(cameraindex, Convert.ToInt32(prop), ref val);
+            return false;
+        }
+
+        public static bool GetMinPropertyValue(int cameraindex, CAMERA_PROPERTY prop, ref long val)
+        {
+            int numberCameras = WebcamManager.NumberConnectedCameras();
+            if (cameraindex > -1 && cameraindex < numberCameras)
+                return DllImport.GetMinPropertyValue(cameraindex, Convert.ToInt32(prop), ref val);
+            return false;
+        }
+
+        public static bool GetMaxPropertyValue(int cameraindex, CAMERA_PROPERTY prop, ref long val)
+        {
+            int numberCameras = WebcamManager.NumberConnectedCameras();
+            if (cameraindex > -1 && cameraindex < numberCameras)
+                return DllImport.GetMaxPropertyValue(cameraindex, Convert.ToInt32(prop), ref val);
+            return false;
+        }
+
+        public static bool SetPropertyValueManual(int cameraindex, CAMERA_PROPERTY prop, long val = -1)
+        {
+            int numberCameras = WebcamManager.NumberConnectedCameras();
+            if (cameraindex > -1 && cameraindex < numberCameras)
+                return DllImport.SetPropertyValue(cameraindex, Convert.ToInt32(prop), ref val);
+            return false;
+        }
+
+        public static bool SetPropertyValueAuto(int cameraindex, CAMERA_PROPERTY prop)
+        {
+            int numberCameras = WebcamManager.NumberConnectedCameras();
+            if (cameraindex > -1 && cameraindex < numberCameras)
+                return DllImport.SetPropertyValueAuto(cameraindex, Convert.ToInt32(prop));
+            return false;
+        }
+
         public static int NumberConnectedCameras() { return _numdetectedCameras; }
 
         public static WebCam GetCamera(int index)

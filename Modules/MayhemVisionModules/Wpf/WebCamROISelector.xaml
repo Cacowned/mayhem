@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="MayhemVisionModules.Wpf.WebCamROISelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:visionmods="clr-namespace:MayhemVisionModules.Wpf"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0">Select an ROI:</TextBlock>
+        <Canvas Grid.Row="1" Width="320" Height="240" VerticalAlignment="Center" MouseMove="ROI_MouseMove"  MouseDown="ROI_MouseDown" MouseUp="ROI_MouseUp">
+            <visionmods:ImageViewer x:Name="Image_Viewer" VerticalAlignment="Center" ViewerWidth="320" ViewerHeight="240">
+                    </visionmods:ImageViewer>
+            <Rectangle x:Name="ROI" Stroke="#FFF1133E" Width="160" Height="120" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="30" Canvas.Top="30"/>
+        </Canvas>
+        <StackPanel Grid.Row="2" VerticalAlignment="Center">
+            <TextBlock>Adjust camera focus: </TextBlock>
+            <Slider x:Name="Focus_Slider" Margin="0,10,0,0" Minimum="{Binding FocusMinimum}" Maximum="{Binding FocusMaximum}" TickFrequency="{Binding FocusStep}"  IsSnapToTickEnabled="True" ValueChanged="Focus_ValueChanged"></Slider>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" VerticalAlignment="Center">
+            <TextBlock>Adjust camera zoom:</TextBlock>
+            <Slider x:Name="Zoom_Slider" Margin="0,10,0,0" Minimum="{Binding ZoomMinimum}" Maximum="{Binding ZoomMaximum}" TickFrequency="{Binding ZoomStep}" IsSnapToTickEnabled="True" ValueChanged="Zoom_ValueChanged"></Slider>
+        </StackPanel>
+    </Grid>
+</UserControl>

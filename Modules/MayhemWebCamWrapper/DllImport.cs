@@ -45,6 +45,26 @@ namespace MayhemWebCamWrapper
         [DllImport("WebCamLib.dll")]
         public extern static bool ConfigureCameraProperties(int cameraindex);
 
+        
+        //programatically setting the camera properties...
+        //prop = 0 for focus, prop = 1 for exposure, prop = 2 for zoom
+        [DllImport("WebCamLib.dll")]
+        public extern static bool GetCurrentPropertyValue(int cameraindex, int prop, ref long val);
+
+        [DllImport("WebCamLib.dll")]
+	    public extern static bool GetDefaultPropertyValue(int cameraindex, int prop, ref long val);
+
+        [DllImport("WebCamLib.dll")]
+	    public extern static bool GetMinPropertyValue(int cameraindex, int prop, ref long val);
+
+        [DllImport("WebCamLib.dll")]
+	    public extern static bool GetMaxPropertyValue(int cameraindex, int prop, ref long val);
+
+        [DllImport("WebCamLib.dll")]
+        public extern static bool SetPropertyValue(int cameraindex, int prop, ref long val);
+	    
+        [DllImport("WebCamLib.dll")]
+	    public extern static bool SetPropertyValueAuto(int cameraindex, int prop);
        
     }
 }
