@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
+using System.Runtime.Serialization;
+using System.Threading;
+using DisplayWindowModule.Resources;
+using DisplayWindowModuleWpf.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
-using System.Runtime.Serialization;
 using MayhemWpf.UserControls;
-using DisplayWindowModuleWpf.Wpf;
-using System.Globalization;
-using DisplayWindowModule.Resources;
-using System.Windows;
-using System.Windows.Threading;
-using System.Threading;
 
 namespace DisplayWindowModuleWpf.Reactions
 {
@@ -19,6 +13,20 @@ namespace DisplayWindowModuleWpf.Reactions
     [MayhemModule("Display Window", "Displays a message")]
     public class DisplayWindow : ReactionBase, IWpfConfigurable
     {
+        [DataMember]
+        public string Message
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public int Seconds
+        {
+            get;
+            private set;
+        }
+
         private void CreateWindow()
         {
             try
@@ -46,20 +54,6 @@ namespace DisplayWindowModuleWpf.Reactions
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.DisplayWindow_CantPerformReaction);
             }            
-        }
-
-        [DataMember]
-        public string Message
-        {
-            get;
-            set;
-        }
-
-        [DataMember]
-        public int Seconds
-        {
-            get;
-            private set;
         }
 
         public WpfConfiguration ConfigurationControl

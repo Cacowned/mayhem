@@ -1,24 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MayhemWpf.UserControls;
-using System.Globalization;
 using DisplayWindowModule.Resources;
+using MayhemWpf.UserControls;
 
 namespace DisplayWindowModuleWpf.Wpf
 {
     public partial class DisplayWindowConfig : WpfConfiguration
     {
+        public string Message
+        {
+            get;
+            private set;
+        }
+
+        public int Seconds
+        {
+            get;
+            private set;
+        }
+
         public DisplayWindowConfig(string message, int seconds)
         {
             Message = message;
@@ -32,18 +33,6 @@ namespace DisplayWindowModuleWpf.Wpf
             {
                 return Strings.DisplayWindow_Title;
             }
-        }
-
-        public string Message
-        {
-            get;
-            private set;
-        }
-
-        public int Seconds
-        {
-            get;
-            private set;
         }
 
         public override void OnLoad()
