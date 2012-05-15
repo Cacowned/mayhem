@@ -121,7 +121,7 @@
     <value>The window could not be created.</value>
   </data>
   <data name="DisplayWindow_CantPerformReaction" xml:space="preserve">
-    <value>The reaction could not be performed</value>
+    <value>The reaction could not be performed.</value>
   </data>
   <data name="DisplayWindow_ConfigString" xml:space="preserve">
     <value>Message: {0}.</value>
@@ -136,7 +136,7 @@
     <value>The number of seconds is invalid.</value>
   </data>
   <data name="DisplayWindow_Seconds_GreaterThanZero" xml:space="preserve">
-    <value>The number of sencods can't be 0.</value>
+    <value>The number of seconds can't be 0.</value>
   </data>
   <data name="DisplayWindow_Title" xml:space="preserve">
     <value>Display Window</value>

@@ -58,8 +58,22 @@ namespace DisplayWindowModuleWpf.Wpf
 
             SecondsBox.Text = Seconds.ToString(CultureInfo.InvariantCulture);
 
-            CheckValidityMessage();
-            CheckValiditySeconds();
+            //we need to check if the message and the number of seconds are setted correctly
+            string errorString = CheckValidityMessage();
+            
+            if (!errorString.Equals(string.Empty))
+            {
+                textInvalid.Text = errorString;
+                textInvalid.Visibility = Visibility.Visible;
+                return;
+            }
+            
+            errorString = CheckValiditySeconds();
+
+            if (!errorString.Equals(string.Empty))
+                textInvalid.Text = errorString;
+
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public override void OnSave()
