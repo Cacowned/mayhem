@@ -4,25 +4,28 @@
                       xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf" 
                       xmlns:visionmods="clr-namespace:MayhemVisionModules.Wpf"
                       Name="root"
-                      Width="500" Height="Auto">
+                      Width="550" Height="Auto">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="500"/>
+            <ColumnDefinition Width="550"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Center">
+        <StackPanel x:Name="ROIPanel" Grid.Row="0" Orientation="Vertical" VerticalAlignment="Center" Visibility="Collapsed">
             <visionmods:WebCamROISelector x:Name="camera_roi_selector" HorizontalAlignment="Center" VerticalAlignment="Center"></visionmods:WebCamROISelector>
         </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
-            <Label>Click on a thumbnail to select a webcam:</Label>
+        <StackPanel x:Name="SelectorPanel" Grid.Row="0" Orientation="Vertical" VerticalAlignment="Center" Visibility="Visible">
+            <Label FontWeight="Bold" HorizontalAlignment="Center">Select a webcam</Label>
             <visionmods:MultiWebCamSelector x:Name="camera_selector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="200"></visionmods:MultiWebCamSelector>
         </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <TextBlock FontStyle="Italic" Margin="5 0 0 0" MinWidth="240" MaxWidth="240"  Name="textInvalid" VerticalAlignment="Center">File location is invalid</TextBlock>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="ButtonState" Click="Button_Clicked" Width="200" Margin="0,5,0,0">Configure motion detector >> </Button>
         </StackPanel>
+        <!--<StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock FontStyle="Italic" Margin="5 0 0 0" MinWidth="240" MaxWidth="240"  Name="textInvalid" VerticalAlignment="Center">File location is invalid</TextBlock>
+        </StackPanel>-->
     </Grid>
 </src:WpfConfiguration>

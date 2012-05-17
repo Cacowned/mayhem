@@ -56,6 +56,8 @@ namespace MayhemVisionModules.Wpf
 
         public MultiWebCamSelector()
         {
+            DataContext = this;
+            
             InitializeComponent();
             Dispatcher.ShutdownStarted += OnExit;
 
@@ -70,6 +72,8 @@ namespace MayhemVisionModules.Wpf
 
         public void InitSelector()
         {
+            DataContext = this;
+           
             captureWidth = 320;  //the size of the capture...
             captureHeight = 240;
             previewWidth = 80; //the size of the preview windows
@@ -77,9 +81,8 @@ namespace MayhemVisionModules.Wpf
             mainViewWidth = 320;
             mainViewHeight = 240;
             //refresh the camera list on construction...
+            ShowWaitingPanel();
             RefreshCameraList();
-            WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
-            WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
         }
 
 
@@ -101,19 +104,49 @@ namespace MayhemVisionModules.Wpf
             }, null);
         }
 
+        private void RefreshCameraList()
+        {
+            ShowWaitingPanel();
+            ThreadStart start = delegate()
+            {
+                Dispatcher.Invoke(DispatcherPriority.Normal,
+                                  new Action(UpdatePanel));
+            };
+            new Thread(start).Start();
+            
+        }
 
-        public void RefreshCameraList()
+        private void ShowWaitingPanel()
+        {
+            ImageViewer viewer = new ImageViewer();
+            viewer.ViewerWidth = previewWidth;
+            viewer.ViewerHeight = previewHeight;
+            cameraPreviews.Clear();
+            cameraPreviews.Add(viewer);
+            cameraPreviews[0].ImageSource.Source = loadBitmap(Properties.Resources.Cam);
+            viewer.TopTitle = "Please wait";
+            viewer.BottomTitle = "Loading webcams";
+        }
+       
+        private void UpdatePanel()
         {
             if (WebcamManager.IsServiceRestartRequired())
                 WebcamManager.RestartService();
+
+            if (!callbacksRegistered)
+            {
+                WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
+                WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
+                callbacksRegistered = true;
+            }
+        
             numberConnectedCameras = WebcamManager.NumberConnectedCameras();
-            cameraPreviews = new ObservableCollection<ImageViewer>();
-            //mainView = new ObservableCollection<ImageViewer>();
+            
             cameraList = new List<int>();
             selectedCameraIndex = -1;
             int numAvailableCameras = 0;
-            
-                    
+
+            cameraPreviews.Clear(); //remove previous viewers
             //populate the camera list and find the one that is available and set it as current selection...
             for (int i = 0; i < numberConnectedCameras; i++)
             {
@@ -151,17 +184,6 @@ namespace MayhemVisionModules.Wpf
                 cameraPreviews[cameraList.IndexOf(selectedCameraIndex)].ViewerWidth = previewHeight + 16;
                 cameraPreviews[cameraList.IndexOf(selectedCameraIndex)].ViewerHeight = cameraPreviews[cameraList.IndexOf(selectedCameraIndex)].ViewerWidth * 3 / 4;
             }
-            //ImageViewer selectedView = new ImageViewer();
-            //selectedView.ViewerWidth = mainViewWidth;
-            //selectedView.ViewerHeight = mainViewHeight;
-            //selectedView.ViewerBorderColor = "Transparent";
-            //selectedView.TopTitle = WebcamManager.GetCamera(selectedCameraIndex).WebCamName;
-            //selectedView.SetImageSource(WebcamManager.GetCamera(selectedCameraIndex));
-            ////mainView.Add(selectedView);
-
-            camera_selection_panel.ItemsSource = cameraPreviews;
-            //main_view.ItemsSource = mainView;
-
             
             //release inactive cameras so that they can be made available to other processes...
             WebcamManager.ReleaseInactiveCameras();
@@ -264,7 +286,10 @@ namespace MayhemVisionModules.Wpf
         }
 
         //public ObservableCollection<ImageViewer> mainView;
-        public ObservableCollection<ImageViewer> cameraPreviews; //the WebCam class is implemented as an image source!
+        private ObservableCollection<ImageViewer> cameraPreviews = new ObservableCollection<ImageViewer>(); //the WebCam class is implemented as an image source!
+        public ObservableCollection<ImageViewer> CameraPreviews { get { return cameraPreviews; } }
+        private bool callbacksRegistered = false;
+        
         private int selectedCameraIndex;// the camera currently selected
         private string selectedCameraName;
         private int numberConnectedCameras; //the number of cameras detected (includes those that are busy with other appplications as well)

@@ -75,6 +75,9 @@
     <Content Include="opencv_imgproc220.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="opencv_video220.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="WebCamLib.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
