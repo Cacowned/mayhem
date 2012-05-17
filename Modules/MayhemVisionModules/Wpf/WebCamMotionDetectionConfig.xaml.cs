@@ -22,15 +22,35 @@ namespace MayhemVisionModules.Wpf
     /// <summary>
     /// Interaction logic for WebCamMotionDetectionConfig.xaml
     /// </summary>
-    public partial class WebCamMotionDetectionConfig : WpfConfiguration, INotifyPropertyChanged
+    public partial class WebCamMotionDetectionConfig : WpfConfiguration
     {
     
         public WebCamMotionDetectionConfig()
         {
             InitializeComponent();
+            SelectedCameraIndex = -1;
+            _selectedState = false;
             camera_selector.InitSelector();
-            SelectedCameraIndex = camera_selector.GetSelectedCameraIndex();
-            camera_roi_selector.SetImageSource(1);
+        }
+
+        public WebCamMotionDetectionConfig(int cameraFocus, int cameraZoom, float percentageThresh, float timeThresh, int differenceThresh, int roix, int roiy, int roiwidth, int roiheight)
+        {
+            InitializeComponent();
+
+            PercentageThresh = percentageThresh;
+            DiffThresh = differenceThresh;
+            TimeThresh = timeThresh;
+            RoiX = roix;
+            RoiY = roiy;
+            RoiWidth = roiwidth;
+            RoiHeight = roiheight;
+            CameraZoom = cameraZoom;
+            CameraFocus = cameraFocus;
+            camera_roi_selector.SetSliderValues(cameraFocus, cameraZoom, percentageThresh, timeThresh, differenceThresh);
+            camera_roi_selector.SetROI(roix, roiy, roiwidth, roiheight);
+            SelectedCameraIndex = -1;
+            _selectedState = false;
+            camera_selector.InitSelector();
         }
 
         public override void OnClosing()
@@ -39,38 +59,70 @@ namespace MayhemVisionModules.Wpf
             camera_selector.Cleanup();
         }
 
-        
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string property)
+        public override void OnLoad()
         {
-            if (PropertyChanged != null)
+            camera_roi_selector.SetSliderValues(CameraFocus, CameraZoom, PercentageThresh, TimeThresh, DiffThresh); 
+            CanSave = true;
+        }
+
+        public override void OnSave()
+        {
+            PercentageThresh = (float)camera_roi_selector.CurrentPercentage;
+            DiffThresh = (int)camera_roi_selector.CurrentDifference;
+            TimeThresh = (float)camera_roi_selector.CurrentTime;
+            RoiX = camera_roi_selector.RoiX;
+            RoiY = camera_roi_selector.RoiY;
+            RoiWidth = camera_roi_selector.RoiWidth;
+            RoiHeight = camera_roi_selector.RoiHeight;
+            CameraFocus = camera_roi_selector.CurrentFocus;
+            CameraZoom = camera_roi_selector.CurrentZoom;
+            SelectedCameraPath = camera_selector.GetSelectedCameraPath();
+            SelectedCameraName = camera_selector.GetSelectedCameraName();
+            SelectedCameraIndex = camera_selector.GetSelectedCameraIndex();
+        }
+
+       
+        private void Button_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (!_selectedState)
             {
-                System.Windows.MessageBox.Show("Changed = " + SelectedCameraIndex.ToString());
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-                if (property == "SelectedCameraIndex")
+                SelectedCameraIndex = camera_selector.GetSelectedCameraIndex();
+                SelectedCameraName = WebcamManager.GetCamera(SelectedCameraIndex).WebCamName;
+                SelectedCameraPath = WebcamManager.GetCamera(SelectedCameraIndex).WebCamPath;
+                if (SelectedCameraIndex > -1 && SelectedCameraIndex < WebcamManager.NumberConnectedCameras())
                 {
-                    if (SelectedCameraIndex > -1)
-                    {
-                        camera_roi_selector.SetImageSource(SelectedCameraIndex);
-                    }
+                    camera_roi_selector.SetImageSource(SelectedCameraIndex);
                 }
+                SelectorPanel.Visibility = Visibility.Collapsed;
+                ROIPanel.Visibility = Visibility.Visible;
+                ButtonState.Content = "<< Select another camera";
+            }
+            else
+            {
+                ROIPanel.Visibility = Visibility.Collapsed;
+                camera_roi_selector.CleanUp();
+                SelectorPanel.Visibility = Visibility.Visible;
+                ButtonState.Content = "Configure motion detector >>";
+            }
+            _selectedState = !_selectedState;
+        }
+
+        public override string Title
+        {
+            get
+            {
+                return "Motion Detection";
             }
         }
 
-        public int SelectedCameraIndex
-        {
-            get { return _selectedCameraIndex; }
-            set
-            {
-                if (_selectedCameraIndex != value)
-                {
-                    _selectedCameraIndex = Convert.ToInt32(value);
-                    NotifyPropertyChanged("SelectedCameraIndex");
-                }
-            }
-        }
 
-
-        private int _selectedCameraIndex;
+        public int SelectedCameraIndex;
+        public string SelectedCameraName;
+        public string SelectedCameraPath;
+        public int RoiX, RoiY, RoiWidth, RoiHeight;
+        public float PercentageThresh, TimeThresh;
+        public int DiffThresh;
+        public int CameraFocus, CameraZoom;
+        private bool _selectedState;
     }
 }

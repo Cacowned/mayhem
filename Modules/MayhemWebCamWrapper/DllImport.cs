@@ -65,6 +65,6 @@ namespace MayhemWebCamWrapper
 	    
         [DllImport("WebCamLib.dll")]
 	    public extern static bool SetPropertyValueAuto(int cameraindex, int prop);
-       
+
     }
 }
