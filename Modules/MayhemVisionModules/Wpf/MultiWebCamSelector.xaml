@@ -11,25 +11,13 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <!--<RowDefinition Height="Auto" />-->
         </Grid.RowDefinitions>
 
-        <!--<ItemsControl Grid.Row="0" Name="main_view">
-            <ItemsControl.Template>
-                <ControlTemplate>
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="Auto" Height="Auto">
-                        <ItemsPresenter />
-                    </ScrollViewer>
-                </ControlTemplate>
-            </ItemsControl.Template>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel HorizontalAlignment="Center" IsItemsHost="True" Width="Auto" Height="Auto"></WrapPanel>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>-->
-
-        <ItemsControl Grid.Row="0" Name="camera_selection_panel">
+        <ItemsControl Grid.Row="0" Name="camera_selection_panel" ItemsSource="{Binding CameraPreviews}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type visionmods:ImageViewer}">
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
             <ItemsControl.Template>
                 <ControlTemplate>
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" Width="Auto" Height="Auto">

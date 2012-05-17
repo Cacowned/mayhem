@@ -93,25 +93,25 @@ namespace MayhemVisionModules.Components
                 loopBufferLastUpdate = DateTime.Now;
                 if (loopBuffer.Count < loopBufferMaxLength)
                 {
-                    Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
-                    {
+                    //Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
+                   // {
                         if (ImagerWidth != default(double) && ImagerHeight != default(double))
                         {
                             loopBuffer.Enqueue(new BitmapTimeStamp(ImageAsBitmap(camera.ImageBuffer)));
                         }
-                    }, null);
+                   // }, null);
                 }
                 else
                 {
                     BitmapTimeStamp destroyMe = loopBuffer.Dequeue();
                     destroyMe.Dispose();
-                    Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
-                    {
+                    //Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
+                    //{
                         if (ImagerWidth != default(double) && ImagerHeight != default(double))
                         {
                             loopBuffer.Enqueue(new BitmapTimeStamp(ImageAsBitmap(camera.ImageBuffer)));
                         }
-                    }, null);
+                    //}, null);
                 }
             }
         }
