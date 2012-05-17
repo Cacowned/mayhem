@@ -21,20 +21,15 @@ using System.Threading;
 using System.IO;
 
 
-namespace MayhemVisionModules.Reactions
+
+namespace MayhemVisionModules.Events
 {
     [DataContract]
-    [MayhemModule("Webcam Snapshot", "Save a snapshot from a webcam")] 
-    public class WebCamSnapshot : ReactionBase, IWpfConfigurable
+    [MayhemModule("Motion Detection", "Triggers when a webcam detects motion")] 
+    public class WebcamMotionDetection : EventBase, IWpfConfigurable
     {
         [DataMember]
         private string selectedCameraPath; //this is the selected camera
-
-        [DataMember]
-        private string folderLocation;
-
-        [DataMember]
-        private string fileNamePrefix;
 
         [DataMember]
         private string selectedCameraName;
@@ -43,28 +38,52 @@ namespace MayhemVisionModules.Reactions
         private int selectedCameraIndex;
 
         [DataMember]
+        private bool selectedCameraConnected;
+
+        [DataMember]
         private int captureWidth;
 
         [DataMember]
         private int captureHeight;
 
         [DataMember]
-        private bool showPreview;
+        private float percentageSensitivity;
 
         [DataMember]
-        private bool playShutterSound;
+        private int differenceThreshold;
 
         [DataMember]
-        private bool selectedCameraConnected;
+        private float timeThreshold;
 
-        private WebCamBuffer webcambuffer; //this registers to obtain images from the configured webcam
+        [DataMember]
+        private int roiX;
 
-        private bool callbacksRegistered = false;
+        [DataMember]
+        private int roiY;
 
-        ~WebCamSnapshot()
+        [DataMember]
+        private int roiWidth;
+
+        [DataMember]
+        private int roiHeight;
+
+        [DataMember]
+        private int camerafocus;
+
+        [DataMember]
+        private int camerazoom;
+
+        private WebCamMotionDetector motionDetector; //this registers to provide motion detector triggers
+
+        bool callbacksRegistered = false;
+
+        ~WebcamMotionDetection()
         {
-            if (selectedCameraIndex != -1 && selectedCameraConnected)
-                webcambuffer.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+            if (selectedCameraIndex != -1 && selectedCameraConnected && motionDetector != null)
+            {
+                ReleasePreviousDetectors();
+                motionDetector.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+            }
             WebcamManager.ReleaseInactiveCameras();
             if (callbacksRegistered)
             {
@@ -72,6 +91,11 @@ namespace MayhemVisionModules.Reactions
                 WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
                 callbacksRegistered = false;
             }
+        }
+
+        private void WebCamMotionDetected(object o, EventArgs a)
+        {
+            Trigger();
         }
 
         protected int LookforSelectedCamera(bool force = false)
@@ -126,13 +150,13 @@ namespace MayhemVisionModules.Reactions
             }
         }
 
-        protected void ReleasePreviousBuffers()
+        protected void ReleasePreviousDetectors()
         {
-            if (webcambuffer != null && selectedCameraIndex != -1)
+            if (motionDetector != null && selectedCameraIndex != -1)
             {
-                for (int i = 0; i < webcambuffer.SubscribedImagers.Count; i++)
-                    webcambuffer.UnregisterForImages(webcambuffer.SubscribedImagers[i]);
-                webcambuffer.ClearBuffer();
+                for (int i = 0; i < motionDetector.SubscribedImagers.Count; i++)
+                    motionDetector.UnregisterForImages(motionDetector.SubscribedImagers[i]);
+                motionDetector.Clear();
             }
         }
 
@@ -147,7 +171,7 @@ namespace MayhemVisionModules.Reactions
                 {
                     Logger.WriteLine("Selected camera reconnected");
                     ErrorLog.AddError(ErrorType.Message, "Selected camera has been reconnected");
-                    webcambuffer.RegisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+                    motionDetector.RegisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
                     WebcamManager.ReleaseInactiveCameras();
                 }
 
@@ -161,60 +185,39 @@ namespace MayhemVisionModules.Reactions
             if (string.Compare(changedParts[1], selectedParts[1], true) == 0 && string.Compare(changedParts[2], selectedParts[2], true) == 0)
             {
                 selectedCameraConnected = false;
-                ReleasePreviousBuffers();
+                ReleasePreviousDetectors();
                 WebcamManager.ReleaseInactiveCameras();
                 Logger.WriteLine("Selected camera disconnected");
                 ErrorLog.AddError(ErrorType.Warning, "Selected camera has been disconnected");
             }
         }
 
-       
-       
+        
         protected override void OnLoadDefaults()
         {
-            webcambuffer = new WebCamBuffer();
-            folderLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-            fileNamePrefix = "Mayhem";
             captureWidth = 640;
             captureHeight = 480;
-            showPreview = true;
-            playShutterSound = true;
-       
+            percentageSensitivity = 5;
+            differenceThreshold = 30;
+            timeThreshold = 1;
+            roiX = 0;
+            roiY = 0;
+            roiWidth = 640;
+            roiHeight = 480;
+            camerafocus = 0;
+            camerazoom = 1;
         }
 
         protected override void OnLoadFromSaved()
         {
-            webcambuffer = new WebCamBuffer();
             captureWidth = 640;
             captureHeight = 480;
-        }
-
-        void InitializeSnapshot(int cameraindex)
-        {
-            Thread thread = new Thread(() =>
-            {
-                if (webcambuffer != null)
-                    ReleasePreviousBuffers();
-                try
-                {
-                    ReleasePreviousBuffers();
-                    webcambuffer = new WebCamBuffer();
-                    webcambuffer.RegisterForImages(WebcamManager.GetCamera(cameraindex));
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.ToString());
-                }
-                Thread.Sleep(30);
-                WebcamManager.ReleaseInactiveCameras();
-            });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
         }
 
 
         protected override void OnAfterLoad()
         {
+
             selectedCameraIndex = LookforSelectedCamera();
             if (selectedCameraIndex != -1 && selectedCameraConnected)
             {
@@ -226,10 +229,9 @@ namespace MayhemVisionModules.Reactions
                     WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
                     callbacksRegistered = true;
                 }
-                //look for the selected camera
-                InitializeSnapshot(selectedCameraIndex);
+                InitializeMotionDetection(selectedCameraIndex);
             }
-           
+ 
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -237,7 +239,14 @@ namespace MayhemVisionModules.Reactions
         {
             if (!e.IsConfiguring)
             {
-                ReleasePreviousBuffers();
+                motionDetector.MotionDetected -= WebCamMotionDetected;
+                ReleasePreviousDetectors();
+                if (selectedCameraIndex != -1)
+                {
+                    WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS);
+                    WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM);
+                }
+
                 WebcamManager.ReleaseInactiveCameras();
                 if (callbacksRegistered)
                 {
@@ -245,8 +254,38 @@ namespace MayhemVisionModules.Reactions
                     WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
                     callbacksRegistered = false;
                 }
-
             }
+        }
+
+        void InitializeMotionDetection(int cameraindex)
+        {
+            Thread thread = new Thread(() =>
+            {
+                if (motionDetector != null)
+                    ReleasePreviousDetectors();
+                try
+                {
+                    WebcamManager.SetPropertyValueManual(cameraindex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS, camerafocus);
+                    WebcamManager.SetPropertyValueManual(cameraindex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM, camerazoom);
+                    motionDetector = new WebCamMotionDetector();
+                    motionDetector.SelectedCameraIndex = cameraindex;
+                    motionDetector.MotionAreaPercentageSensitivity = percentageSensitivity;
+                    motionDetector.TimeSensitivity = timeThreshold;
+                    motionDetector.MotionDiffSensitivity = differenceThreshold;
+                    motionDetector.RegisterForImages(WebcamManager.GetCamera(cameraindex));
+                    motionDetector.MotionDetected += WebCamMotionDetected;
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.ToString());
+                }
+
+                Thread.Sleep(30);
+                WebcamManager.ReleaseInactiveCameras();
+           
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -256,32 +295,37 @@ namespace MayhemVisionModules.Reactions
             {
                 if (WebcamManager.IsServiceRestartRequired())
                     WebcamManager.RestartService();
+                if (!callbacksRegistered)
+                {
+                    WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
+                    WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
+                    callbacksRegistered = true;
+                }
                 //look for the selected camera
                 selectedCameraIndex = LookforSelectedCamera(true);
                 if (selectedCameraIndex != -1 && selectedCameraConnected)
                 {
-                    if (!callbacksRegistered)
-                    {
-                        WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
-                        WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
-                        callbacksRegistered = true;
-                    }
-                    InitializeSnapshot(selectedCameraIndex);
+                    InitializeMotionDetection(selectedCameraIndex);
                 }
             }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            WebcamSnapshotConfig config = configurationControl as WebcamSnapshotConfig;
-            folderLocation = config.SaveLocation;
-            fileNamePrefix = config.FilenamePrefix;
+            WebCamMotionDetectionConfig config = configurationControl as WebCamMotionDetectionConfig;
             captureWidth = 640;
             captureHeight = 480;
             selectedCameraPath = config.SelectedCameraPath;
             selectedCameraName = config.SelectedCameraName;
-            showPreview = config.ShowPreview;
-            playShutterSound = config.PlayShutterSound;
+            percentageSensitivity = config.PercentageThresh;
+            differenceThreshold = config.DiffThresh;
+            timeThreshold = config.TimeThresh;
+            roiX = config.RoiX;
+            roiY = config.RoiY;
+            roiWidth = config.RoiWidth;
+            roiHeight = config.RoiHeight;
+            camerafocus = config.CameraFocus;
+            camerazoom = config.CameraZoom;
 
             if (WebcamManager.IsServiceRestartRequired())
                 WebcamManager.RestartService();
@@ -295,14 +339,22 @@ namespace MayhemVisionModules.Reactions
             selectedCameraIndex = LookforSelectedCamera();
             if (selectedCameraIndex != -1 && selectedCameraConnected)
             {
-                InitializeSnapshot(selectedCameraIndex);
+                InitializeMotionDetection(selectedCameraIndex);
             }
         }
 
         protected override void OnDeleted()
         {
-            if (selectedCameraIndex != -1)
-                webcambuffer.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+            if (motionDetector != null && selectedCameraIndex != -1)
+            {
+                motionDetector.MotionDetected -= WebCamMotionDetected;
+                if (selectedCameraIndex != -1)
+                    motionDetector.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+                ReleasePreviousDetectors();
+                WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS);
+                WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM);
+
+            }
             WebcamManager.ReleaseInactiveCameras();
             if (callbacksRegistered)
             {
@@ -312,81 +364,21 @@ namespace MayhemVisionModules.Reactions
             }
         }
 
-        public override void Perform()
-        {
-            if (selectedCameraIndex != -1 && selectedCameraConnected)
-            {
-                Bitmap image = webcambuffer.GetLastBufferedItem();
-                if (image != null)
-                {
-                    string savedPath = SaveImage(image);
-                    //save image
-                    if (playShutterSound)
-                    {
-                        SoundPlayer shutterSound = new SoundPlayer(Properties.Resources.shutterSound);
-                        shutterSound.Play();
-                    }
-
-                    if (showPreview)
-                    {
-                        ImagePopup popup = new ImagePopup();
-                        popup.ShowPopup(1000, savedPath);
-                        popup = null;
-                    }
-                }
-            }
-            else
-            {
-                ReleasePreviousBuffers();
-                WebcamManager.ReleaseInactiveCameras();
-                ErrorLog.AddError(ErrorType.Failure, "Webcam snapshot is disabled because selected camera was not found");
-            }
-        }
-
-        public string SaveImage(Bitmap image)
-        {
-            Logger.WriteLine("SaveImage");
-            DateTime now = DateTime.Now;
-            string filename = fileNamePrefix + "_" +
-                                now.Year.ToString("D2") + "-" +
-                                now.Month.ToString("D2") + "-" +
-                                now.Day.ToString("D2") + "_" +
-                                now.Hour.ToString("D2") + "-" +
-                                now.Minute.ToString("D2") + "-" +
-                                now.Second.ToString("D2") + ".jpg";
-            string path = folderLocation + "\\" + filename;
-            Logger.WriteLine("saving file to " + path);
-            try
-            {
-                image.Save(path, ImageFormat.Jpeg);
-                ErrorLog.AddError(ErrorType.Message, "Picture saved to: " + path);
-            }
-            catch
-            {
-                Logger.WriteLine("Exception while saving picture");
-                ErrorLog.AddError(ErrorType.Failure, "Could not save a picture to: " + path);
-            }
-            finally
-            {
-                // VERY important! 
-                image.Dispose();
-            }
-            return path; 
-        }
+        
+       
 
         public WpfConfiguration ConfigurationControl
         {
             get
             {
-                if (webcambuffer != null)
-                    ReleasePreviousBuffers();
+                if (motionDetector!= null)
+                    ReleasePreviousDetectors();
                 WebcamManager.ReleaseInactiveCameras();
-                WebcamSnapshotConfig config = new WebcamSnapshotConfig(folderLocation, fileNamePrefix,showPreview, playShutterSound);
+                WebCamMotionDetectionConfig config = new WebCamMotionDetectionConfig(camerafocus, camerazoom, percentageSensitivity, timeThreshold, differenceThreshold, roiX, roiY, roiWidth, roiHeight);
                 return config;
             }
         }
 
-       
         public string GetConfigString()
         {
             return string.Format("\"{0}\" ", selectedCameraName);
