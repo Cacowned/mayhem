@@ -43,6 +43,8 @@ namespace MayhemVisionModules.Wpf
   
         }
 
+        
+
         public void CleanUp()
         {
             if (_selectedCameraIndex > -1)

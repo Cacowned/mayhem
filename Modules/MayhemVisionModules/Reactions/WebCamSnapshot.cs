@@ -235,15 +235,19 @@ namespace MayhemVisionModules.Reactions
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            if (!e.IsConfiguring)
+            //if (!e.IsConfiguring)
             {
-                ReleasePreviousBuffers();
-                WebcamManager.ReleaseInactiveCameras();
-                if (callbacksRegistered)
+                if (webcambuffer != null && selectedCameraIndex != -1)
                 {
-                    WebcamManager.UnregisterWebcamConnectionEvent(OnCameraConnected);
-                    WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
-                    callbacksRegistered = false;
+                    webcambuffer.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+                    ReleasePreviousBuffers();
+                    WebcamManager.ReleaseInactiveCameras();
+                    if (callbacksRegistered)
+                    {
+                        WebcamManager.UnregisterWebcamConnectionEvent(OnCameraConnected);
+                        WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
+                        callbacksRegistered = false;
+                    }
                 }
 
             }
@@ -252,7 +256,7 @@ namespace MayhemVisionModules.Reactions
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (!e.WasConfiguring)
+            //if (!e.WasConfiguring)
             {
                 if (WebcamManager.IsServiceRestartRequired())
                     WebcamManager.RestartService();
@@ -282,35 +286,24 @@ namespace MayhemVisionModules.Reactions
             selectedCameraName = config.SelectedCameraName;
             showPreview = config.ShowPreview;
             playShutterSound = config.PlayShutterSound;
-
-            if (WebcamManager.IsServiceRestartRequired())
-                WebcamManager.RestartService();
-            if (!callbacksRegistered)
-            {
-                WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
-                WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
-                callbacksRegistered = true;
-            }
-            //look for the selected camera
-            selectedCameraIndex = LookforSelectedCamera();
-            if (selectedCameraIndex != -1 && selectedCameraConnected)
-            {
-                InitializeSnapshot(selectedCameraIndex);
-            }
         }
 
         protected override void OnDeleted()
         {
-            if (selectedCameraIndex != -1)
-                webcambuffer.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
-            WebcamManager.ReleaseInactiveCameras();
-            if (callbacksRegistered)
+
+            if (webcambuffer != null && selectedCameraIndex != -1)
             {
-                WebcamManager.UnregisterWebcamConnectionEvent(OnCameraConnected);
-                WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
-                callbacksRegistered = false;
+                webcambuffer.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+                ReleasePreviousBuffers();
+                WebcamManager.ReleaseInactiveCameras();
+                if (callbacksRegistered)
+                {
+                    WebcamManager.UnregisterWebcamConnectionEvent(OnCameraConnected);
+                    WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
+                    callbacksRegistered = false;
+                }
             }
-        }
+       }
 
         public override void Perform()
         {

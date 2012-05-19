@@ -20,6 +20,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Threading;
 using MadWizard.WinUSBNet;
+using System.ComponentModel;
 
 
 namespace MayhemVisionModules.Wpf
@@ -29,11 +30,63 @@ namespace MayhemVisionModules.Wpf
     /// <summary>
     /// Interaction logic for MultiWebCamSelector.xaml
     /// </summary>
-    public partial class MultiWebCamSelector : UserControl, IDisposable
+    public partial class MultiWebCamSelector : UserControl, IDisposable, INotifyPropertyChanged
     {
 
         [System.Runtime.InteropServices.DllImport("gdi32")]
         static extern int DeleteObject(IntPtr o);
+
+        
+
+        public delegate void CameraSelectorEventHandler(object sender, EventArgs e);
+        
+        //other user controls can register to these...
+        private bool camerasReady = false;
+        public event CameraSelectorEventHandler CamerasReady;
+        public event CameraSelectorEventHandler CamerasNotReady;
+
+        public bool CameraReadiness
+        {
+            get { return camerasReady; }
+            set
+            {
+                //if (camerasReady != value)
+                {
+                    camerasReady = value;
+                    NotifyPropertyChanged("CameraReadiness");
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            if (property == "CameraReadiness")
+            {
+                if (camerasReady)
+                {
+                    OnCamerasReady(EventArgs.Empty);
+                }
+                else
+                {
+                    OnCamerasNotReady(EventArgs.Empty);
+                }
+            }
+        }
+
+        protected virtual void OnCamerasReady(EventArgs e)
+        {
+            if (CamerasReady != null)
+                CamerasReady(this, e);
+        }
+
+        protected virtual void OnCamerasNotReady(EventArgs e)
+        {
+            if (CamerasNotReady != null)
+                CamerasNotReady(this, e);
+        }
 
         public static BitmapSource loadBitmap(System.Drawing.Bitmap source)
         {
@@ -94,10 +147,12 @@ namespace MayhemVisionModules.Wpf
                 Thread.Sleep(30);
                 RefreshCameraList();
             }, null);
+            CameraReadiness = true;
         }
 
         public void OnCameraDisconnected(object sender, USBEvent e)
         {
+            CameraReadiness = false;
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (SendOrPostCallback)delegate
             {
                 RefreshCameraList();
@@ -118,6 +173,7 @@ namespace MayhemVisionModules.Wpf
 
         private void ShowWaitingPanel()
         {
+            CameraReadiness = false;
             ImageViewer viewer = new ImageViewer();
             viewer.ViewerWidth = previewWidth;
             viewer.ViewerHeight = previewHeight;
@@ -187,6 +243,7 @@ namespace MayhemVisionModules.Wpf
             
             //release inactive cameras so that they can be made available to other processes...
             WebcamManager.ReleaseInactiveCameras();
+            CameraReadiness = true;
         }
 
         private delegate void OneParameterDelegate();

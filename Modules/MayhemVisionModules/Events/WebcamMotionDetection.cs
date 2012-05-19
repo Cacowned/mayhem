@@ -237,25 +237,26 @@ namespace MayhemVisionModules.Events
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            if (!e.IsConfiguring)
+            //if (!e.IsConfiguring)
             {
-                motionDetector.MotionDetected -= WebCamMotionDetected;
-                ReleasePreviousDetectors();
-                if (selectedCameraIndex != -1)
+                if (motionDetector != null && selectedCameraIndex != -1)
                 {
+                    motionDetector.MotionDetected -= WebCamMotionDetected;
+                    motionDetector.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+                    ReleasePreviousDetectors();
                     WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS);
                     WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM);
-                }
-
-                WebcamManager.ReleaseInactiveCameras();
-                if (callbacksRegistered)
-                {
-                    WebcamManager.UnregisterWebcamConnectionEvent(OnCameraConnected);
-                    WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
-                    callbacksRegistered = false;
+                    WebcamManager.ReleaseInactiveCameras();
+                    if (callbacksRegistered)
+                    {
+                        WebcamManager.UnregisterWebcamConnectionEvent(OnCameraConnected);
+                        WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
+                        callbacksRegistered = false;
+                    }
                 }
             }
         }
+
 
         void InitializeMotionDetection(int cameraindex)
         {
@@ -265,14 +266,19 @@ namespace MayhemVisionModules.Events
                     ReleasePreviousDetectors();
                 try
                 {
+                    ReleasePreviousDetectors();
                     WebcamManager.SetPropertyValueManual(cameraindex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS, camerafocus);
                     WebcamManager.SetPropertyValueManual(cameraindex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM, camerazoom);
                     motionDetector = new WebCamMotionDetector();
+                    motionDetector.RegisterForImages(WebcamManager.GetCamera(cameraindex));
                     motionDetector.SelectedCameraIndex = cameraindex;
                     motionDetector.MotionAreaPercentageSensitivity = percentageSensitivity;
                     motionDetector.TimeSensitivity = timeThreshold;
+                    motionDetector.RoiX = roiX;
+                    motionDetector.RoiY = roiY;
+                    motionDetector.RoiWidth = roiWidth;
+                    motionDetector.RoiHeight = roiHeight;
                     motionDetector.MotionDiffSensitivity = differenceThreshold;
-                    motionDetector.RegisterForImages(WebcamManager.GetCamera(cameraindex));
                     motionDetector.MotionDetected += WebCamMotionDetected;
                 }
                 catch (Exception err)
@@ -291,7 +297,7 @@ namespace MayhemVisionModules.Events
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (!e.WasConfiguring)
+          //  if (!e.WasConfiguring)
             {
                 if (WebcamManager.IsServiceRestartRequired())
                     WebcamManager.RestartService();
@@ -310,6 +316,7 @@ namespace MayhemVisionModules.Events
             }
         }
 
+
         public void OnSaved(WpfConfiguration configurationControl)
         {
             WebCamMotionDetectionConfig config = configurationControl as WebCamMotionDetectionConfig;
@@ -317,6 +324,7 @@ namespace MayhemVisionModules.Events
             captureHeight = 480;
             selectedCameraPath = config.SelectedCameraPath;
             selectedCameraName = config.SelectedCameraName;
+            selectedCameraIndex = config.SelectedCameraIndex;
             percentageSensitivity = config.PercentageThresh;
             differenceThreshold = config.DiffThresh;
             timeThreshold = config.TimeThresh;
@@ -327,20 +335,6 @@ namespace MayhemVisionModules.Events
             camerafocus = config.CameraFocus;
             camerazoom = config.CameraZoom;
 
-            if (WebcamManager.IsServiceRestartRequired())
-                WebcamManager.RestartService();
-            if (!callbacksRegistered)
-            {
-                WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
-                WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
-                callbacksRegistered = true;
-            }
-            //look for the selected camera
-            selectedCameraIndex = LookforSelectedCamera();
-            if (selectedCameraIndex != -1 && selectedCameraConnected)
-            {
-                InitializeMotionDetection(selectedCameraIndex);
-            }
         }
 
         protected override void OnDeleted()
@@ -348,19 +342,17 @@ namespace MayhemVisionModules.Events
             if (motionDetector != null && selectedCameraIndex != -1)
             {
                 motionDetector.MotionDetected -= WebCamMotionDetected;
-                if (selectedCameraIndex != -1)
-                    motionDetector.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
+                motionDetector.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
                 ReleasePreviousDetectors();
                 WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS);
                 WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM);
-
-            }
-            WebcamManager.ReleaseInactiveCameras();
-            if (callbacksRegistered)
-            {
-                WebcamManager.UnregisterWebcamConnectionEvent(OnCameraConnected);
-                WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
-                callbacksRegistered = false;
+                WebcamManager.ReleaseInactiveCameras();
+                if (callbacksRegistered)
+                {
+                    WebcamManager.UnregisterWebcamConnectionEvent(OnCameraConnected);
+                    WebcamManager.UnregisterWebcamRemovalEvent(OnCameraDisconnected);
+                    callbacksRegistered = false;
+                }
             }
         }
 

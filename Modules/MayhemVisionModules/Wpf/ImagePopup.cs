@@ -18,6 +18,8 @@ namespace MayhemVisionModules.Wpf
             this.FormBorderStyle = FormBorderStyle.None;
             this.TopMost = true;
             this.ShowInTaskbar = false;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
         }
 
         public void ShowPopup(int millisecondTimeout, string filename)
@@ -32,7 +34,7 @@ namespace MayhemVisionModules.Wpf
             }
         }
 
-        public void ShowPopup(int millisecondTimeout, Bitmap bmp)
+        /*public void ShowPopup(int millisecondTimeout, Bitmap bmp)
         {
             if (bmp != null)
             {
@@ -42,6 +44,6 @@ namespace MayhemVisionModules.Wpf
                 Thread.Sleep(millisecondTimeout);
                 this.Close();
             }
-        }
+        }*/
     }
 }
