@@ -70,6 +70,8 @@ namespace MayhemVisionModules.Wpf
         public WebcamSnapshotConfig()
         {
             InitializeComponent();
+            camera_selector.CamerasReady += OnSelectorCamerasReady;
+            camera_selector.CamerasNotReady += OnSelectorCamerasNotReady;
             camera_selector.InitSelector();
         }
        
@@ -84,6 +86,8 @@ namespace MayhemVisionModules.Wpf
             PlayShutterSound = playShutterSound;
             chkBoxShowPreview.IsChecked = showPreview;
             chkBoxPlayShutterSound.IsChecked = playShutterSound;
+            camera_selector.CamerasReady += OnSelectorCamerasReady;
+            camera_selector.CamerasNotReady += OnSelectorCamerasNotReady;
             camera_selector.InitSelector();
         }
 
@@ -93,10 +97,16 @@ namespace MayhemVisionModules.Wpf
             textBox_fileNamePrefix.Text = FilenamePrefix;
             chkBoxPlayShutterSound.IsChecked = PlayShutterSound;
             chkBoxShowPreview.IsChecked = ShowPreview;
+        }
 
+        private void OnSelectorCamerasReady(object o, EventArgs a)
+        {
             CheckValidity();
+        }
 
-            CanSave = true;
+        private void OnSelectorCamerasNotReady(object o, EventArgs a)
+        {
+            CanSave = false;
         }
 
         public override string Title

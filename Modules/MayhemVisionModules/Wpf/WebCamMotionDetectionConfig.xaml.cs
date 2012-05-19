@@ -30,6 +30,8 @@ namespace MayhemVisionModules.Wpf
             InitializeComponent();
             SelectedCameraIndex = -1;
             _selectedState = false;
+            camera_selector.CamerasReady += OnSelectorCamerasReady;
+            camera_selector.CamerasNotReady += OnSelectorCamerasNotReady;
             camera_selector.InitSelector();
         }
 
@@ -50,7 +52,28 @@ namespace MayhemVisionModules.Wpf
             camera_roi_selector.SetROI(roix, roiy, roiwidth, roiheight);
             SelectedCameraIndex = -1;
             _selectedState = false;
+            camera_selector.CamerasReady += OnSelectorCamerasReady;
+            camera_selector.CamerasNotReady += OnSelectorCamerasNotReady;
             camera_selector.InitSelector();
+        }
+
+        ~WebCamMotionDetectionConfig()
+        {
+            camera_selector.CamerasReady -= OnSelectorCamerasReady;
+            camera_selector.CamerasNotReady -= OnSelectorCamerasNotReady;
+        }
+
+        private void OnSelectorCamerasReady(object o, EventArgs a)
+        {
+            ButtonState.IsEnabled = true;
+            CanSave = true;
+
+        }
+
+        private void OnSelectorCamerasNotReady(object o, EventArgs a)
+        {
+            ButtonState.IsEnabled = false;
+            CanSave = false;
         }
 
         public override void OnClosing()
@@ -62,7 +85,6 @@ namespace MayhemVisionModules.Wpf
         public override void OnLoad()
         {
             camera_roi_selector.SetSliderValues(CameraFocus, CameraZoom, PercentageThresh, TimeThresh, DiffThresh); 
-            CanSave = true;
         }
 
         public override void OnSave()
