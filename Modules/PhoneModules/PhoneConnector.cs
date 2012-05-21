@@ -190,7 +190,7 @@ namespace PhoneModules
             string pathOfHelper = Path.Combine(fi.DirectoryName, "PhoneServerHelper.exe");
             if (File.Exists(pathOfHelper))
             {
-                MessageBox.Show("Mayhem will automatically configure your network settings. Say yes.", "Mayhem Phone Modules");
+                MessageBox.Show("Mayhem will automatically configure your network settings. Click OK.", "Mayhem Phone Modules");
 
                 Process p = Process.Start(new ProcessStartInfo(pathOfHelper));
                 p.WaitForExit();
