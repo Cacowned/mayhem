@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="DecreaseVolume.cs" />
     <Compile Include="IncreaseVolume.cs" />
+    <Compile Include="MuteVolume.cs" />
     <Compile Include="SetVolume.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetVolumeConfig.xaml.cs">
