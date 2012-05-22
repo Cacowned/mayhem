@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Text;
 
 namespace SocketModules.LowLevel
 {
@@ -45,6 +43,7 @@ namespace SocketModules.LowLevel
 			{
 				len = (int)UInt16.MaxValue;
 			}
+
 			ioStream.WriteByte((byte)(len / 256));
 			ioStream.WriteByte((byte)(len & 255));
 			ioStream.Write(outBuffer, 0, len);

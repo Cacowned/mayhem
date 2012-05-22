@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO.Pipes;
+using System.Runtime.CompilerServices;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using MayhemCore;
-using System.IO.Pipes;
-using System.Security.Principal;
-using System.Runtime.CompilerServices;
 
 namespace SocketModules
 {
@@ -45,7 +43,8 @@ namespace SocketModules
 				shouldStart = true;
 			}
 
-			if (!handlers.ContainsKey(phrase)) {
+			if (!handlers.ContainsKey(phrase))
+			{
 				handlers[phrase] = new List<Action>();
 				handlers[phrase].Add(action);
 			}
@@ -62,7 +61,7 @@ namespace SocketModules
 		{
 			if (!handlers.ContainsKey(phrase))
 			{
-				throw new InvalidOperationException(phrase+" is not currently being listened for.");
+				throw new InvalidOperationException(phrase + " is not currently being listened for.");
 			}
 
 			handlers[phrase].Remove(action);
@@ -117,6 +116,7 @@ namespace SocketModules
 									action();
 								});
 							}
+
 							Logger.WriteLine(string.Format("Server thread[{0}] finished.", servers[j].ManagedThreadId));
 							servers[j] = null;
 						}
@@ -139,7 +139,7 @@ namespace SocketModules
 			Parallel.ForEach(servers, server =>
 			{
 				NamedPipeClientStream pipeClient =
-				new NamedPipeClientStream(".", "testpipe",
+				new NamedPipeClientStream(".", "mayhemSocketPipeName",
 					PipeDirection.Out, PipeOptions.None,
 					TokenImpersonationLevel.Impersonation);
 

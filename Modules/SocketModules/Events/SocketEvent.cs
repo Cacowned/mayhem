@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Runtime.Serialization;
 using MayhemCore;
-using System.Net.Sockets;
-using System.Diagnostics;
-using System.Net;
-using System.Threading;
-using System.IO.Pipes;
-using System.IO;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using SocketModules.Wpf;
-using System.Runtime.Serialization;
 
 namespace SocketModules.Events
 {
 	[DataContract]
-	[MayhemModule("Socket Event", "Socket Description")]
+	[MayhemModule("Socket Event", "Trigger this event using the SocketApp executable")]
 	public class SocketEvent : EventBase, IWpfConfigurable
 	{
 		[DataMember]
