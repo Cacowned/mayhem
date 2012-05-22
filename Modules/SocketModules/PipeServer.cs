@@ -16,7 +16,7 @@ namespace SocketModules
 		public void DoWork()
 		{
 			NamedPipeServerStream pipeServer =
-					new NamedPipeServerStream("testpipe", PipeDirection.InOut, maxThreads);
+					new NamedPipeServerStream("mayhemSocketPipeName", PipeDirection.InOut, maxThreads);
 
 			int threadId = Thread.CurrentThread.ManagedThreadId;
 

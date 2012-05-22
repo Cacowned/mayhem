@@ -1,9 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.IO.Pipes;
 using System.Security.Principal;
 using System.Text;
-using System.Threading;
-using System.IO;
 
 namespace SocketApp
 {
@@ -25,7 +24,6 @@ namespace SocketApp
 					{
 						break;
 					}
-
 					else
 					{
 						Write(message);
@@ -41,7 +39,7 @@ namespace SocketApp
 		private static void Write(string message)
 		{
 			NamedPipeClientStream pipeClient =
-				new NamedPipeClientStream(".", "testpipe",
+				new NamedPipeClientStream(".", "mayhemSocketPipeName",
 					PipeDirection.InOut, PipeOptions.None,
 					TokenImpersonationLevel.Impersonation);
 
@@ -73,6 +71,7 @@ namespace SocketApp
 				{
 					len = (int)UInt16.MaxValue;
 				}
+
 				ioStream.WriteByte((byte)(len / 256));
 				ioStream.WriteByte((byte)(len & 255));
 				ioStream.Write(outBuffer, 0, len);
