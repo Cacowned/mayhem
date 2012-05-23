@@ -46,8 +46,9 @@ namespace SocketModules
 			if (!handlers.ContainsKey(phrase))
 			{
 				handlers[phrase] = new List<Action>();
-				handlers[phrase].Add(action);
 			}
+
+			handlers[phrase].Add(action);
 
 			if (shouldStart)
 			{
