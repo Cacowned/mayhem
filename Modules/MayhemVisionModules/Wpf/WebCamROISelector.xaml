@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="MayhemVisionModules.Wpf.WebCamROISelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:visionmods="clr-namespace:MayhemVisionModules.Wpf"
+             xmlns:computervision="clr-namespace:MayhemVisionModules.Components"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="300"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"></ColumnDefinition>
+            <ColumnDefinition Width="250"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+         <Label Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.RowSpan="2" Margin="0,8,0,0"  FontWeight="Bold">Click (left mouse button) and drag towards bottom right to select a smaller region </Label>
+        <Canvas Grid.Row="1" Width="320" Height="240" VerticalAlignment="Center" Grid.ColumnSpan="2" MouseMove="ROI_MouseMove"  MouseDown="ROI_MouseDown" MouseUp="ROI_MouseUp">
+            <computervision:WebCamMotionDetector x:Name="Image_Viewer" VerticalAlignment="Center" Width="320" Height="240" Visibility="Visible"></computervision:WebCamMotionDetector>
+            <visionmods:ImageRenderer x:Name="Image_Viewer_Orig" VerticalAlignment="Center" Width="320" Height="240" Visibility="Collapsed"></visionmods:ImageRenderer>
+            <Rectangle x:Name="ROI" Stroke="Green" StrokeThickness="5"  Width="320" Height="240" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="0" Canvas.Top="0" Canvas.Right="320" Canvas.Bottom="240"/>
+        </Canvas>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-10,0,0">
+            <RadioButton Grid.Row="2" Grid.Column="0" Width="150" Checked="Original_Checked">Source image</RadioButton>
+            <RadioButton Grid.Row="2" Grid.Column="1" Width="150" IsChecked="True" Checked="Motion_HistoryChecked" >Motion history</RadioButton>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center"  Orientation="Vertical">
+            <Label FontWeight="Bold">Configure Camera Settings</Label>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center">Set Focus:</TextBlock>
+                <Slider x:Name="Focus_Slider" Width="110" Margin="10,0,0,0" Minimum="{Binding FocusMinimum}" Maximum="{Binding FocusMaximum}" TickFrequency="{Binding FocusStep}"  IsSnapToTickEnabled="True" ValueChanged="Focus_ValueChanged"></Slider>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center">Set Zoom:</TextBlock>
+                <Slider x:Name="Zoom_Slider" Width="110" Margin="10,5,0,0" Minimum="{Binding ZoomMinimum}" Maximum="{Binding ZoomMaximum}" TickFrequency="{Binding ZoomStep}" IsSnapToTickEnabled="True" ValueChanged="Zoom_ValueChanged"></Slider>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Grid.Column="1"  Orientation="Vertical" HorizontalAlignment="Center">
+            <Label FontWeight="Bold">Motion Detector Sensitivity</Label>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center">Motion Size :</TextBlock>
+                <Slider x:Name="Percentage_Slider" Width="110" Margin="42,0,0,0" Minimum="0" Maximum="100" TickFrequency="1"  IsSnapToTickEnabled="True" ValueChanged="Percentage_ValueChanged"></Slider>
+            </StackPanel>
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center">Background Diff:</TextBlock>
+                <Slider x:Name="Difference_Slider" Width="110" Margin="22,5,0,0" Minimum="0" Maximum="255" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="Difference_ValueChanged"></Slider>
+            </StackPanel>
+
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center">Motion Memory:</TextBlock>
+                <Slider x:Name="Time_Slider" Width="110" Margin="21,5,0,0" Minimum="1" Maximum="30" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="Time_ValueChanged"></Slider>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

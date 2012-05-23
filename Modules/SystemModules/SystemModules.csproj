@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D52362F0-D67B-4FC2-925D-DCF2B7384565}</ProjectGuid>
+    <ProjectGuid>{B05B7113-FA50-4A7B-AB22-04154327CA62}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MayhemWebCamWrapper</RootNamespace>
-    <AssemblyName>MayhemWebCamWrapper</AssemblyName>
+    <RootNamespace>SystemModules</RootNamespace>
+    <AssemblyName>SystemModules</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\SystemModules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,17 +31,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Windows.Design.Extensibility, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Windows.Design.Interaction, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="CoreAudioApi">
+      <HintPath>..\References\CoreAudioApi.dll</HintPath>
+    </Reference>
+    <Reference Include="MayhemCore">
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MayhemWpf">
+      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.Activities" />
-    <Reference Include="System.Activities.Presentation" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,49 +54,22 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WinUSBNet, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\WinUSBNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageListener.cs" />
-    <Compile Include="ImageListenerBase.cs" />
-    <Compile Include="DllImport.cs" />
-    <Compile Include="ImagerBase.cs" />
+    <Compile Include="DecreaseVolume.cs" />
+    <Compile Include="IncreaseVolume.cs" />
+    <Compile Include="MuteVolume.cs" />
+    <Compile Include="SetVolume.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebCam.cs" />
-    <Compile Include="WebcamManager.cs">
-      <SubType>Form</SubType>
+    <Compile Include="SetVolumeConfig.xaml.cs">
+      <DependentUpon>SetVolumeConfig.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="opencv_core220.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="opencv_highgui220.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="opencv_imgproc220.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="opencv_video220.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WebCamLib.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WinUSBNet.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WinUSBNet.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="WebcamManager.resx">
-      <DependentUpon>WebcamManager.cs</DependentUpon>
-    </EmbeddedResource>
+    <Page Include="SetVolumeConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
