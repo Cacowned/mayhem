@@ -117,11 +117,44 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Excel_ApplicationNotFound" xml:space="preserve">
+    <value>Excel application not found.</value>
+  </data>
+  <data name="Excel_CantSaveCharts" xml:space="preserve">
+    <value>The charts from the current workbook could not be saved.</value>
+  </data>
+  <data name="Excel_NoActiveWorkbook" xml:space="preserve">
+    <value>No workbook is currently active.</value>
+  </data>
+  <data name="General_CantOpenFile" xml:space="preserve">
+    <value>The file can't be opened.</value>
+  </data>
+  <data name="General_DirectoryNotFound" xml:space="preserve">
+    <value>The directory doesn't exist.</value>
+  </data>
+  <data name="General_DirectorySaveConfigString" xml:space="preserve">
+    <value>Directory: {0}.</value>
+  </data>
+  <data name="General_FileFormatNotValid" xml:space="preserve">
+    <value>The path must reference a .txt file.</value>
+  </data>
+  <data name="General_FileLocationInvalid" xml:space="preserve">
+    <value>File location is invalid</value>
+  </data>
+  <data name="General_FileNotFound" xml:space="preserve">
+    <value>The file doesn't exist.</value>
+  </data>
   <data name="Outlook_ApplicationNotFound" xml:space="preserve">
-    <value>Unable to find the open Outlook application.</value>
+    <value>Outlook application not found.</value>
   </data>
   <data name="PowerPoint_ApplicationNotFound" xml:space="preserve">
-    <value>Unable to find the open PowerPoint application.</value>
+    <value>PowerPoint application not found.</value>
+  </data>
+  <data name="PowerPoint_CantChangeSlidesFirst" xml:space="preserve">
+    <value>Can't go to the first slide.</value>
+  </data>
+  <data name="PowerPoint_CantChangeSlidesLast" xml:space="preserve">
+    <value>Can't go to the last slide.</value>
   </data>
   <data name="PowerPoint_CantChangeSlidesNext" xml:space="preserve">
     <value>Can't go to the next slide.</value>
@@ -129,10 +162,70 @@
   <data name="PowerPoint_CantChangeSlidesPrevious" xml:space="preserve">
     <value>Can't go to the previous slide.</value>
   </data>
+  <data name="PowerPoint_CantClosePresentation" xml:space="preserve">
+    <value>Unable to close the active presentation.</value>
+  </data>
+  <data name="PowerPoint_CantCloseSideShow" xml:space="preserve">
+    <value>Unable to close the slideshow.</value>
+  </data>
+  <data name="PowerPoint_CantCreateFile" xml:space="preserve">
+    <value>The file couldn't be created.</value>
+  </data>
+  <data name="PowerPoint_CantExitPresentation" xml:space="preserve">
+    <value>Can't close the presentation.</value>
+  </data>
+  <data name="PowerPoint_CantExitSlideShow" xml:space="preserve">
+    <value>Can't close the slideshow.</value>
+  </data>
+  <data name="PowerPoint_CantExportNotes" xml:space="preserve">
+    <value>Can't export the notes of the slides.</value>
+  </data>
+  <data name="PowerPoint_CantExportText" xml:space="preserve">
+    <value>Can't export the text from the slides.</value>
+  </data>
+  <data name="PowerPoint_CantSavePictures" xml:space="preserve">
+    <value>The pictures from the current slide could not be saved.</value>
+  </data>
+  <data name="PowerPoint_CantStartSlideShow" xml:space="preserve">
+    <value>The slideshow can't be started.</value>
+  </data>
+  <data name="PowerPoint_ExportConfigString" xml:space="preserve">
+    <value>File path: {0}.</value>
+  </data>
   <data name="PowerPoint_MoreThanOneWindow" xml:space="preserve">
     <value>More than one slideshow window detected, using the last opened one.</value>
   </data>
+  <data name="PowerPoint_NoActivePresentation" xml:space="preserve">
+    <value>An active presentation doesn't exists.</value>
+  </data>
+  <data name="PowerPoint_NoFileSelected" xml:space="preserve">
+    <value>No file is selected.</value>
+  </data>
+  <data name="PowerPoint_NoNotes" xml:space="preserve">
+    <value>The selected presentation doesn't have notes.</value>
+  </data>
+  <data name="PowerPoint_NoSlideSelected" xml:space="preserve">
+    <value>No slide is currently selected.</value>
+  </data>
+  <data name="PowerPoint_NoSlideShowWindow" xml:space="preserve">
+    <value>You must be in a slideshow view to save pictures.</value>
+  </data>
+  <data name="PowerPoint_NoText" xml:space="preserve">
+    <value>The selected presentation doesn't contain text.</value>
+  </data>
   <data name="PowerPoint_NoWindowCantChange" xml:space="preserve">
     <value>You must be in a slideshow view to change slide.</value>
+  </data>
+  <data name="Word_ApplicationNotFound" xml:space="preserve">
+    <value>Unable to find the opened Word application.</value>
+  </data>
+  <data name="Word_CantSavePictures" xml:space="preserve">
+    <value>The pictures from the current document could not be saved.</value>
+  </data>
+  <data name="Word_NoActiveDocument" xml:space="preserve">
+    <value>No document is currently active.</value>
+  </data>
+  <data name="Word_NoPicturesInDocument" xml:space="preserve">
+    <value>No pictures found in the current document.</value>
   </data>
 </root>

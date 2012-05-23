@@ -6,7 +6,7 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions
 {
-    [MayhemModule("PowerPoint: Last Slide", "Navigates to the previous slide")]
+    [MayhemModule("PowerPoint: Previous Slide", "Navigates to the previous slide")]
     public class PptPrevSlide : ReactionBase
     {
         private OPowerPoint.Application app;
