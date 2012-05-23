@@ -8,7 +8,7 @@ namespace OfficeModules.Events
 {
     public class PptActivePresentationChanged : EventBase
     {
-        [MayhemModule("PowerPoint: Active Presentation changed", "Triggers when the active presentation has changed")]
+        [MayhemModule("PowerPoint: Active Presentation Changed", "Triggers when the active presentation has changed")]
         public class PptOpenPresentation : EventBase
         {
             OPowerPoint.Application powerPoint;
@@ -35,7 +35,7 @@ namespace OfficeModules.Events
                 }
                 catch
                 {
-                    ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_ApplicationNotFound);
+                    ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
                     e.Cancel = true;
                 }
             }

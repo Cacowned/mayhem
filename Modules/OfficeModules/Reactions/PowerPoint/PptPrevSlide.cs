@@ -31,7 +31,7 @@ namespace OfficeModules.Reactions
 
 				if (windows == 0)
 				{
-					ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_NoWindowCantChange);
+                    ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_NoWindowCantChange);
 				}
 				else
 				{
@@ -46,7 +46,7 @@ namespace OfficeModules.Reactions
 			}
 			catch (Exception e)
 			{
-				ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_CantChangeSlidesPrevious);
+                ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantChangeSlidesPrevious);
 				Logger.Write(e);
 			}
 			finally
