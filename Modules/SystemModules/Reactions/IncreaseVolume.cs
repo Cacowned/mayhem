@@ -4,7 +4,7 @@ using MayhemCore;
 
 namespace SystemModules.Reactions
 {
-	[MayhemModule("Increase Volume", "Increases the master volume level")]
+	[MayhemModule("Volume: Increase", "Increases the master volume level")]
 	public class IncreaseVolume : ReactionBase
 	{
 		public override void Perform()
