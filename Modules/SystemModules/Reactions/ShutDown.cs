@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
@@ -13,14 +12,9 @@ namespace SystemModules.Reactions
     public class Shutdown : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private bool forceShutDown
-        {
-            get;
-            set; 
-        }
+        private bool forceShutDown;
         public override void Perform()
         {
-            Application.Exit(); //experienced instances of unsaved settings before shutdown crashing mayhem after startup. Adding this to save settings.
             if (forceShutDown)
             {
                 Process.Start("shutdown", "/s /f /t 0");
@@ -40,7 +34,7 @@ namespace SystemModules.Reactions
         }
         public void OnSaved(WpfConfiguration configurationControl)
         {
-             forceShutDown = ((ShutDownWarning)configurationControl)._forceShutDown;
+             forceShutDown = ((ShutDownWarning)configurationControl).ForceShutDown;
         }
     }
 }

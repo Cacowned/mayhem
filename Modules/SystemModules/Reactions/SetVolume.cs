@@ -1,9 +1,9 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using CoreAudioApi;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Runtime.InteropServices;
 
 namespace SystemModules.Reactions
 {
