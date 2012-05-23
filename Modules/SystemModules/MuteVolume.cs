@@ -1,17 +1,18 @@
-﻿using CoreAudioApi;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using CoreAudioApi;
 using MayhemCore;
-using System.Runtime.InteropServices;
 
-namespace DefaultModules.Reactions
+namespace SystemModules
 {
-	[MayhemModule("Volume: Mute", "Mutes / unmutes the default audio device")]
-	public class VolumeMute : ReactionBase
+	[MayhemModule("Mute Volume", "Mutes / unmutes the default audio device")]
+	public class MuteVolume : ReactionBase
 	{
 		public override void Perform()
 		{
 			MMDeviceEnumerator devEnum = new MMDeviceEnumerator();
 			MMDevice device;
-			
+
 			try
 			{
 				device = devEnum.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia);

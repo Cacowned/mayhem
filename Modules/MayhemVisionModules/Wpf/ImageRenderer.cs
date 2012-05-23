@@ -43,15 +43,30 @@ namespace MayhemVisionModules.Wpf
             }
         }
 
+        public void SetImageSource(ImagerBase c)
+        {
+            if (SubscribedImagers.Count > 0)
+            {
+                RemoveImageSource(SubscribedImagers[0]);
+            }
+            RegisterForImages(c);
+        }
+
+        public void RemoveImageSource(ImagerBase c)
+        {
+            UnregisterForImages(c);
+        }
+
        
         public override void UpdateFrame(object sender, EventArgs e)
         {
             WebCam camera = sender as WebCam;
+            populateBitMap(camera.ImageBuffer, (int)(ImagerWidth * ImagerHeight * 3));
+                    
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
             {
                 if (ImagerWidth != default(double) && ImagerHeight != default(double))
                 {
-                    populateBitMap(camera.ImageBuffer, (int)(ImagerWidth * ImagerHeight * 3));
                     BitmapSource.Invalidate();
                     GC.Collect(); //this is due to a bug in InteropBitmap which causes memory leaks for 24 bit bitmaps... MS: FIX IT!
                 }

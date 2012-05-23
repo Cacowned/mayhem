@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemVisionModules", "Mayh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemWebCamWrapper", "MayhemWebCamWrapper\MayhemWebCamWrapper.csproj", "{D52362F0-D67B-4FC2-925D-DCF2B7384565}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MayhemWebCamTest", "..\..\..\MayhemWebCamTest\MayhemWebCamTest.csproj", "{192D1FB8-CC40-452F-A508-10EF2D7CB623}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,16 +35,6 @@ Global
 		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D52362F0-D67B-4FC2-925D-DCF2B7384565}.Release|x86.ActiveCfg = Release|Any CPU
-		{192D1FB8-CC40-452F-A508-10EF2D7CB623}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{192D1FB8-CC40-452F-A508-10EF2D7CB623}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{192D1FB8-CC40-452F-A508-10EF2D7CB623}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{192D1FB8-CC40-452F-A508-10EF2D7CB623}.Debug|x86.ActiveCfg = Debug|x86
-		{192D1FB8-CC40-452F-A508-10EF2D7CB623}.Debug|x86.Build.0 = Debug|x86
-		{192D1FB8-CC40-452F-A508-10EF2D7CB623}.Release|Any CPU.ActiveCfg = Release|x86
-		{192D1FB8-CC40-452F-A508-10EF2D7CB623}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{192D1FB8-CC40-452F-A508-10EF2D7CB623}.Release|Mixed Platforms.Build.0 = Release|x86
-		{192D1FB8-CC40-452F-A508-10EF2D7CB623}.Release|x86.ActiveCfg = Release|x86
-		{192D1FB8-CC40-452F-A508-10EF2D7CB623}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,17 @@
+﻿<src:WpfConfiguration x:Class="SystemModules.SetVolumeConfig"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+		xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+		Width="300">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="100" />
+			<ColumnDefinition Width="200" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Volume:</TextBlock>
+		<Slider Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Left"  Name="VolumeSlider" VerticalAlignment="Top" Width="200" Maximum="100" />
+	</Grid>
+</src:WpfConfiguration>
