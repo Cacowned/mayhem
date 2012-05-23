@@ -3,7 +3,7 @@ using MayhemCore;
 
 namespace SystemModules.Reactions
 {
-    [MayhemModule("Hibernate", "Forces an immediate hibernate")]
+    [MayhemModule("Power: Hibernate", "Forces an immediate hibernate")]
     public class Hibernate : ReactionBase
     {
         public override void Perform()

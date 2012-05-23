@@ -8,7 +8,7 @@ using SystemModules.Wpf;
 namespace SystemModules.Reactions
 {
     [DataContract]
-    [MayhemModule("Shut Down", "Shuts the computer Down")]
+    [MayhemModule("Power: Shut Down", "Shuts the computer Down")]
     public class Shutdown : ReactionBase, IWpfConfigurable
     {
         [DataMember]

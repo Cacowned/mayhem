@@ -3,7 +3,7 @@ using MayhemCore;
 
 namespace SystemModules.Reactions
 {
-    [MayhemModule("Sleep", "Forces an immediate suspension to low power state")]
+    [MayhemModule("Power: Sleep", "Forces an immediate suspension to low power state")]
     public class Sleep : ReactionBase
     {
         public override void Perform()

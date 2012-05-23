@@ -5,7 +5,7 @@ using MayhemCore;
 
 namespace SystemModules.Reactions
 {
-	[MayhemModule("Mute Volume", "Mutes / unmutes the default audio device")]
+	[MayhemModule("Volume: Mute", "Mutes / Unmutes the default audio device")]
 	public class MuteVolume : ReactionBase
 	{
 		public override void Perform()

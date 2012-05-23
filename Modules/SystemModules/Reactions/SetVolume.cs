@@ -8,7 +8,7 @@ using MayhemWpf.UserControls;
 namespace SystemModules.Reactions
 {
 	[DataContract]
-	[MayhemModule("Set Volume", "Sets the master volume level")]
+	[MayhemModule("Volume: Set", "Sets the master volume level")]
 	public class SetVolume : ReactionBase, IWpfConfigurable
 	{
 		[DataMember]
