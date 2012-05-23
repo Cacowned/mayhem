@@ -41,7 +41,7 @@ namespace OfficeModules.Reactions
             }
             catch (Exception e)
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_CantStartSlideShow);
+                ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantStartSlideShow);
                 Logger.Write(e);
             }
             finally

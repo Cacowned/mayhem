@@ -31,7 +31,7 @@ namespace OfficeModules.Reactions
 
                 if (presentations == 0)
                 {
-                    ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_NoActivePresentation);
+                    ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_NoActivePresentation);
                 }
                 else
                 {
@@ -40,7 +40,7 @@ namespace OfficeModules.Reactions
             }
             catch (Exception e)
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_CantClosePresentation);
+                ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantClosePresentation);
                 Logger.Write(e);
             }
             finally

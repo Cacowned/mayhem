@@ -13,7 +13,7 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 namespace OfficeModules.Reactions.PowerPoint
 {
     [DataContract]
-    [MayhemModule("PowerPoint: Export text", "Exports the text of the slides from the active presentation")]
+    [MayhemModule("PowerPoint: Export Text", "Exports the text of the slides from the active presentation")]
     public class PptExportText : ReactionBase, IWpfConfigurable
     {
         private OPowerPoint.Application app;
@@ -23,21 +23,17 @@ namespace OfficeModules.Reactions.PowerPoint
         /// The path of the file were the notes would be saved
         /// </summary>
         [DataMember]
-		private string FileName
-		{
-			get;
-			set;
-		}	
+        private string fileName;	
 
 		public void OnSaved(WpfConfiguration configurationControl)
 		{
 			var pptExportConfig = configurationControl as PowerPointExportConfig;
-			FileName = pptExportConfig.Filename;
+			fileName = pptExportConfig.Filename;
 		}
 
 		protected override void OnEnabling(EnablingEventArgs e)
 		{
-			if (!File.Exists(FileName))
+			if (!File.Exists(fileName))
 			{
 				ErrorLog.AddError(ErrorType.Failure, Strings.General_FileNotFound);
 				e.Cancel = true;
@@ -46,11 +42,11 @@ namespace OfficeModules.Reactions.PowerPoint
 
         public override void Perform()
         {
-    		if (File.Exists(FileName))
+    		if (File.Exists(fileName))
 			{
 				try
 				{
-                    FileStream stream = File.Open(FileName, FileMode.Create);
+                    FileStream stream = File.Open(fileName, FileMode.Create);
                     streamWriter = new StreamWriter(stream);                   					
 				}
 				catch(Exception ex)
@@ -104,7 +100,7 @@ namespace OfficeModules.Reactions.PowerPoint
             }
             catch (Exception e)
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_CantExportText);
+                ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantExportText);
                 Logger.Write(e);
             }
             finally
@@ -117,7 +113,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new PowerPointExportConfig(FileName); }
+            get { return new PowerPointExportConfig(fileName); }
         }
 
         #endregion
@@ -126,7 +122,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.PowerPoint_ExportConfigString, Path.GetFileName(FileName));
+            return string.Format(CultureInfo.CurrentCulture, Strings.PowerPoint_ExportConfigString, Path.GetFileName(fileName));
         }
 
         #endregion

@@ -14,24 +14,16 @@ namespace DisplayWindowModuleWpf.Reactions
     public class DisplayWindow : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        public string Message
-        {
-            get;
-            set;
-        }
+        private string message;
 
         [DataMember]
-        public int Seconds
-        {
-            get;
-            private set;
-        }
+        private int seconds;
 
         private void CreateWindow()
         {
             try
             {
-                MessagWindow msgWindow = new MessagWindow(Message, Seconds);
+                MessagWindow msgWindow = new MessagWindow(message, seconds);
                 msgWindow.ShowDialog();               
             }
             catch 
@@ -58,7 +50,7 @@ namespace DisplayWindowModuleWpf.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new DisplayWindowConfig(Message, Seconds); }
+            get { return new DisplayWindowConfig(message, seconds); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
@@ -68,13 +60,13 @@ namespace DisplayWindowModuleWpf.Reactions
             if (config == null)
                 return;
 
-            Message = config.Message;
-            Seconds = config.Seconds;
+            message = config.Message;
+            seconds = config.Seconds;
         }
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.DisplayWindow_ConfigString, Message);
+            return string.Format(CultureInfo.CurrentCulture, Strings.DisplayWindow_ConfigString, message);
         }
     }
 }

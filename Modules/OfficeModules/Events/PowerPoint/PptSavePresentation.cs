@@ -32,7 +32,7 @@ namespace OfficeModules.Events.PowerPoint
             }
             catch
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_ApplicationNotFound);
+                ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
                 e.Cancel = true;
             }
         }

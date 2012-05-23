@@ -32,7 +32,7 @@ namespace OfficeModules.Events
             }
             catch
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.Outlook_ApplicationNotFound);
+                ErrorLog.AddError(ErrorType.Failure, Strings.Outlook_ApplicationNotFound);
                 e.Cancel = true;
             }
         }

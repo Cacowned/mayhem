@@ -16,7 +16,7 @@ namespace OfficeModules.Wpf
         {
             InitializeComponent();
 
-             Filename = filename;
+            Filename = filename;
         }
 
         public string Filename
@@ -27,7 +27,7 @@ namespace OfficeModules.Wpf
 
         public override string Title
         {
-            get { return "Save pictures"; }
+            get { return "Save Pictures"; }
         }
 
         public override void OnLoad()
@@ -45,25 +45,18 @@ namespace OfficeModules.Wpf
         {
             string text = LocationBox.Text;
 
-            CanSave = true;
-
-            do
+            if (text.Length == 0)
             {
-                if (text.Length == 0)
-                {
-                    textInvalid.Text = Strings.General_FileLocationInvalid;
-                    CanSave = false;
-                    break;
-                }
-
+                textInvalid.Text = Strings.General_FileLocationInvalid;
+                CanSave = false;
+            }
+            else
                 if (!Directory.Exists(text))
                 {
                     //the directory doesn't exists
                     textInvalid.Text = Strings.General_DirectoryNotFound;
                     CanSave = false;
-                    break;
                 }
-            } while (false);
 
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
@@ -81,8 +74,7 @@ namespace OfficeModules.Wpf
 
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CheckValidity();            
+            CheckValidity();
         }
-    
     }
 }

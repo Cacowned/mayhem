@@ -17,27 +17,23 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 namespace OfficeModules.Reactions.PowerPoint
 {
     [DataContract]
-    [MayhemModule("PowerPoint: Save pictures", "Saves the pictures from the current slide")]
+    [MayhemModule("PowerPoint: Save Pictures", "Saves the pictures from the current slide")]
     public class PptSavePicturesSlide : ReactionBase, IWpfConfigurable
     {
         private OPowerPoint.Application app;
 
         [DataMember]
-        private string FileName
-        {
-            get;
-            set;
-        }
+        private string fileName;
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var pptSavePicturesConfig = configurationControl as PowerPointSavePicturesConfig;
-            FileName = pptSavePicturesConfig.Filename;
+            fileName = pptSavePicturesConfig.Filename;
         }
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            if (!Directory.Exists(FileName))
+            if (!Directory.Exists(fileName))
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.General_DirectoryNotFound);
                 e.Cancel = true;
@@ -46,7 +42,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
         public override void Perform()
         {
-            if (!Directory.Exists(FileName))
+            if (!Directory.Exists(fileName))
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.General_DirectoryNotFound);
                 return;
@@ -75,7 +71,7 @@ namespace OfficeModules.Reactions.PowerPoint
                 else
                     if (activePresentation.SlideShowWindow == null)
                     {
-                        ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_NoSlideShowWindow);
+                        ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_NoSlideShowWindow);
                     }
                     else
                     {
@@ -84,7 +80,7 @@ namespace OfficeModules.Reactions.PowerPoint
                         //verify if slide is not null
                         if (slide == null)
                         {
-                            ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_NoSlideSelected);
+                            ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_NoSlideSelected);
                         }
                         else
                         {
@@ -111,7 +107,7 @@ namespace OfficeModules.Reactions.PowerPoint
             }
             catch (Exception e)
             {
-                ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_NoSlideShowWindow);
+                ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_NoSlideShowWindow);
                 Logger.Write(e);
             }
             finally
@@ -145,7 +141,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
                             BitmapSource image = Clipboard.GetImage();
 
-                            FileStream stream = new FileStream(FileName + "\\pic" + count + ".jpg", FileMode.Create);
+                            FileStream stream = new FileStream(fileName + "\\pic" + count + ".jpg", FileMode.Create);
                             JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 
                             encoder.Frames.Add(BitmapFrame.Create(image));
@@ -167,7 +163,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new PowerPointSavePicturesConfig(FileName); }
+            get { return new PowerPointSavePicturesConfig(fileName); }
         }
 
         #endregion
@@ -176,7 +172,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.General_DirectorySaveConfigString, Path.GetFullPath(FileName));
+            return string.Format(CultureInfo.CurrentCulture, Strings.General_DirectorySaveConfigString, Path.GetFullPath(fileName));
         }
 
         #endregion

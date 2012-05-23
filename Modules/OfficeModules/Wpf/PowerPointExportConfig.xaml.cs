@@ -27,7 +27,6 @@ namespace OfficeModules.Wpf
             Filename = filename;
         }
 
-
         public override string Title
         {
             get { return "Export"; }
@@ -50,38 +49,33 @@ namespace OfficeModules.Wpf
 
             CanSave = true;
 
-            do
+            if (text.Length == 0)
             {
-                if (text.Length == 0)
-                {
-                    textInvalid.Text = Strings.General_FileLocationInvalid;
-                    CanSave = false;
-                    break;
-                }
-
-                //the file is not a text file
+                textInvalid.Text = Strings.General_FileLocationInvalid;
+                CanSave = false;
+            }
+            else
                 if (!text.EndsWith(".txt"))
                 {
+                    //the file is not a text file
                     textInvalid.Text = Strings.General_FileFormatNotValid;
                     CanSave = false;
-                    break;
                 }
+                else
+                    if (!File.Exists(text))
+                    {
+                        //the file doesn't exists
+                        textInvalid.Text = Strings.General_FileNotFound;
+                        CanSave = false;
+                    }
 
-                if (!File.Exists(text))
-                {
-                    //the file doesn't exists
-                    textInvalid.Text = Strings.General_FileNotFound;
-                    CanSave = false;
-                    break;
-                }
-            } while (false);
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
         // Browse for file
         private void Browse_File_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new OpenFileDialog();       
+            var dlg = new OpenFileDialog();
 
             dlg.FileName = Filename;
             dlg.DefaultExt = ".txt";
@@ -123,8 +117,7 @@ namespace OfficeModules.Wpf
 
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CheckValidity();            
+            CheckValidity();
         }
     }
-    
 }

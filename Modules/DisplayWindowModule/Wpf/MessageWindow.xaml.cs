@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Media.Animation;
 
 namespace DisplayWindowModuleWpf
@@ -12,7 +14,7 @@ namespace DisplayWindowModuleWpf
         private bool isFadeOutStoryboardCompleted = false;
         private bool isFadeOutStoryboardStarted = false;
         private Storyboard fadeOutStoryboard = new Storyboard();
-        private System.Windows.Forms.Timer timer;
+        private Timer timer;
         private int seconds;
         
         public MessagWindow(String message, int sec)
@@ -45,7 +47,7 @@ namespace DisplayWindowModuleWpf
             Top = SystemParameters.WorkArea.Height - this.Height;
         }
 
-        private void MyWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MyWindow_Closing(object sender, CancelEventArgs e)
         {
             if (!isFadeOutStoryboardCompleted && !isFadeOutStoryboardStarted)
             {
@@ -60,7 +62,7 @@ namespace DisplayWindowModuleWpf
         {
             this.Topmost = true;
 
-            timer = new System.Windows.Forms.Timer();
+            timer = new Timer();
             timer.Interval = seconds * 1000; //transforming seconds in miliseconds
             timer.Tick += new EventHandler(Timer_Tick);
             timer.Start();
@@ -69,10 +71,13 @@ namespace DisplayWindowModuleWpf
         //is triggered when we should close the window, so we stop the timer
         public void Timer_Tick(object sender, EventArgs e)
         {
-            timer.Stop();
-            timer.Dispose();
+            if (timer != null)
+            {
+                timer.Stop();
+                timer.Dispose();
 
-            this.Close();
+                this.Close();
+            }
         }
     }
 }
