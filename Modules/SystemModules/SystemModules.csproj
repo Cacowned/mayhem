@@ -72,7 +72,7 @@
     <Compile Include="Wpf\SetVolumeConfig.xaml.cs">
       <DependentUpon>SetVolumeConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Reactions\Suspend.cs" />
+    <Compile Include="Reactions\Sleep.cs" />
     <Compile Include="Wpf\ShutDownWarning.xaml.cs">
       <DependentUpon>ShutDownWarning.xaml</DependentUpon>
     </Compile>

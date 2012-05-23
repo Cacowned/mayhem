@@ -7,7 +7,7 @@ namespace SystemModules.Wpf
     /// </summary>
     public partial class ShutDownWarning : WpfConfiguration
     {
-        public bool _forceShutDown 
+        public bool ForceShutDown 
         { 
             get;
             private set;
@@ -16,7 +16,7 @@ namespace SystemModules.Wpf
         {
             InitializeComponent();
             CanSave = true;
-            this._forceShutDown = forceShutDown;
+            this.ForceShutDown = forceShutDown;
         }
         public override string Title
         {
@@ -25,11 +25,11 @@ namespace SystemModules.Wpf
         public override void OnLoad()
         {
             WarningBox.Text = SystemModules.Resources.Strings.Shutdown_ForceWarning;
-            EnableForceCheckBox.IsChecked = _forceShutDown;
+            EnableForceCheckBox.IsChecked = ForceShutDown;
         }
         public override void OnSave()
         {
-            this._forceShutDown = (bool)EnableForceCheckBox.IsChecked;
+            this.ForceShutDown = (bool)EnableForceCheckBox.IsChecked;
         }
     }
 }
