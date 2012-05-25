@@ -30,7 +30,10 @@ namespace SystemModules.Reactions
         }
         public string GetConfigString()
         {
-            return null;
+            if (forceShutDown)
+                return "Enforced Shutdown";
+            else
+                return "Safe Shutdown";
         }
         public void OnSaved(WpfConfiguration configurationControl)
         {
