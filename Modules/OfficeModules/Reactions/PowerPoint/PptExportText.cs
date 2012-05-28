@@ -16,52 +16,46 @@ namespace OfficeModules.Reactions.PowerPoint
     [MayhemModule("PowerPoint: Export Text", "Exports the text of the slides from the active presentation")]
     public class PptExportText : ReactionBase, IWpfConfigurable
     {
-        private OPowerPoint.Application app;
-        private StreamWriter streamWriter = null;
-
         /// <summary>
         /// The path of the file were the notes would be saved
         /// </summary>
         [DataMember]
-        private string fileName;	
+        private string fileName;
 
-		public void OnSaved(WpfConfiguration configurationControl)
-		{
-			var pptExportConfig = configurationControl as PowerPointExportConfig;
-			fileName = pptExportConfig.Filename;
-		}
+        private OPowerPoint.Application app;
+        private StreamWriter streamWriter = null;
 
-		protected override void OnEnabling(EnablingEventArgs e)
-		{
-			if (!File.Exists(fileName))
-			{
-				ErrorLog.AddError(ErrorType.Failure, Strings.General_FileNotFound);
-				e.Cancel = true;
-			}
-		}		
+        protected override void OnEnabling(EnablingEventArgs e)
+        {
+            if (!File.Exists(fileName))
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.General_FileNotFound);
+                e.Cancel = true;
+            }
+        }
 
         public override void Perform()
         {
-    		if (File.Exists(fileName))
-			{
-				try
-				{
+            if (File.Exists(fileName))
+            {
+                try
+                {
                     FileStream stream = File.Open(fileName, FileMode.Create);
-                    streamWriter = new StreamWriter(stream);                   					
-				}
-				catch(Exception ex)
-				{
-					ErrorLog.AddError(ErrorType.Failure, Strings.General_CantOpenFile);
+                    streamWriter = new StreamWriter(stream);
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.General_CantOpenFile);
                     Logger.WriteLine(ex);
 
                     return;
-				}
-			}
-			else
-			{
-				ErrorLog.AddError(ErrorType.Failure, Strings.General_FileNotFound);
+                }
+            }
+            else
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.General_FileNotFound);
                 return;
-			}
+            }
 
             try
             {
@@ -93,15 +87,15 @@ namespace OfficeModules.Reactions.PowerPoint
                                 if (shape.TextFrame.HasText == Microsoft.Office.Core.MsoTriState.msoTrue)
                                     streamWriter.WriteLine(shape.TextFrame.TextRange.Text);
                         }
-                    }                    
+                    }
                 }
 
                 streamWriter.Close();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantExportText);
-                Logger.Write(e);
+                Logger.Write(ex);
             }
             finally
             {
@@ -114,6 +108,13 @@ namespace OfficeModules.Reactions.PowerPoint
         public WpfConfiguration ConfigurationControl
         {
             get { return new PowerPointExportConfig(fileName); }
+        }
+
+        public void OnSaved(WpfConfiguration configurationControl)
+        {
+            var pptExportConfig = configurationControl as PowerPointExportConfig;
+
+            fileName = pptExportConfig.Filename;
         }
 
         #endregion

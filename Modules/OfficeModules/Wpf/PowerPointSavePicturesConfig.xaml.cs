@@ -7,18 +7,8 @@ using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
-    /// <summary>
-    /// Interaction logic for PowerPointSavePicturesConfig.xaml
-    /// </summary>
     public partial class PowerPointSavePicturesConfig : WpfConfiguration
     {
-        public PowerPointSavePicturesConfig(string filename)
-        {
-            InitializeComponent();
-
-            Filename = filename;
-        }
-
         public string Filename
         {
             get;
@@ -30,9 +20,17 @@ namespace OfficeModules.Wpf
             get { return "Save Pictures"; }
         }
 
+        public PowerPointSavePicturesConfig(string filename)
+        {
+            InitializeComponent();
+
+            Filename = filename;
+        }
+
         public override void OnLoad()
         {
             LocationBox.Text = Filename;
+
             CheckValidity();
         }
 
@@ -53,7 +51,7 @@ namespace OfficeModules.Wpf
             else
                 if (!Directory.Exists(text))
                 {
-                    //the directory doesn't exists
+                    // The directory doesn't exists
                     textInvalid.Text = Strings.General_DirectoryNotFound;
                     CanSave = false;
                 }
@@ -61,7 +59,6 @@ namespace OfficeModules.Wpf
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        // Browse for folder
         private void Browse_Folder_Click(object sender, RoutedEventArgs e)
         {
             var dlgFolder = new FolderBrowserDialog();

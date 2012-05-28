@@ -38,10 +38,10 @@ namespace OfficeModules.Reactions
                     app.ActivePresentation.Close();
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantClosePresentation);
-                Logger.Write(e);
+                Logger.Write(ex);
             }
             finally
             {

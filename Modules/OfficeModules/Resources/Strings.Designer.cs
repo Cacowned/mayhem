@@ -70,6 +70,15 @@ namespace OfficeModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to check compatibility..
+        /// </summary>
+        internal static string Excel_CantCheckCompatibility {
+            get {
+                return ResourceManager.GetString("Excel_CantCheckCompatibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The charts from the current workbook could not be saved..
         /// </summary>
         internal static string Excel_CantSaveCharts {
@@ -138,6 +147,105 @@ namespace OfficeModules.Resources {
         internal static string General_FileNotFound {
             get {
                 return ResourceManager.GetString("General_FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lync application not found..
+        /// </summary>
+        internal static string Lync_ApplicationNotFound {
+            get {
+                return ResourceManager.GetString("Lync_ApplicationNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The combo box can&apos;t be empty..
+        /// </summary>
+        internal static string Lync_ComboBoxNoItems {
+            get {
+                return ResourceManager.GetString("Lync_ComboBoxNoItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The User Id is invalid..
+        /// </summary>
+        internal static string Lync_InvalidUserId {
+            get {
+                return ResourceManager.GetString("Lync_InvalidUserId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No user is currently logged in..
+        /// </summary>
+        internal static string Lync_NotLoggedIn {
+            get {
+                return ResourceManager.GetString("Lync_NotLoggedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No contact with the selected user id exists in your groups..
+        /// </summary>
+        internal static string Lync_NoUserId {
+            get {
+                return ResourceManager.GetString("Lync_NoUserId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Lync reaction could not be performed..
+        /// </summary>
+        internal static string Lync_ReactionCouldntPerform {
+            get {
+                return ResourceManager.GetString("Lync_ReactionCouldntPerform", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User id: {0}..
+        /// </summary>
+        internal static string Lync_SelectUserConfigString {
+            get {
+                return ResourceManager.GetString("Lync_SelectUserConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Id: {0}, Status: {1}.
+        /// </summary>
+        internal static string Lync_StatusChangedConfigString {
+            get {
+                return ResourceManager.GetString("Lync_StatusChangedConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location: {0}..
+        /// </summary>
+        internal static string Lync_UpdateLocationConfigString {
+            get {
+                return ResourceManager.GetString("Lync_UpdateLocationConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Personal note: {0}..
+        /// </summary>
+        internal static string Lync_UpdatePersonalNoteConfigString {
+            get {
+                return ResourceManager.GetString("Lync_UpdatePersonalNoteConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status: {0}..
+        /// </summary>
+        internal static string Lync_UpdateStatusConfigString {
+            get {
+                return ResourceManager.GetString("Lync_UpdateStatusConfigString", resourceCulture);
             }
         }
         
@@ -363,6 +471,15 @@ namespace OfficeModules.Resources {
         internal static string Word_ApplicationNotFound {
             get {
                 return ResourceManager.GetString("Word_ApplicationNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t activate the spell checking..
+        /// </summary>
+        internal static string Word_CantActivateSpellChecking {
+            get {
+                return ResourceManager.GetString("Word_CantActivateSpellChecking", resourceCulture);
             }
         }
         

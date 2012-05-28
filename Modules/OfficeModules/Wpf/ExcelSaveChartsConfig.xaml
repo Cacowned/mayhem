@@ -1,4 +1,4 @@
-﻿<src:WpfConfiguration x:Class="OfficeModules.Wpf.PowerPointSavePicturesConfig"
+﻿<src:WpfConfiguration x:Class="OfficeModules.Wpf.ExcelSaveChartsConfig"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"

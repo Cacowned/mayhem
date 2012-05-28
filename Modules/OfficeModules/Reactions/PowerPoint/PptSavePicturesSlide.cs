@@ -20,16 +20,10 @@ namespace OfficeModules.Reactions.PowerPoint
     [MayhemModule("PowerPoint: Save Pictures", "Saves the pictures from the current slide")]
     public class PptSavePicturesSlide : ReactionBase, IWpfConfigurable
     {
-        private OPowerPoint.Application app;
-
         [DataMember]
         private string fileName;
 
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            var pptSavePicturesConfig = configurationControl as PowerPointSavePicturesConfig;
-            fileName = pptSavePicturesConfig.Filename;
-        }
+        private OPowerPoint.Application app;
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -77,23 +71,23 @@ namespace OfficeModules.Reactions.PowerPoint
                     {
                         OPowerPoint.Slide slide = activePresentation.SlideShowWindow.View.Slide;
 
-                        //verify if slide is not null
                         if (slide == null)
                         {
                             ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_NoSlideSelected);
                         }
                         else
                         {
-
                             List<OPowerPoint.Shape> shapes = new List<OPowerPoint.Shape>();
+
                             foreach (OPowerPoint.Shape shape in slide.Shapes)
                             {
-                                //we save to all list all shapes that may contain imagies
+                                // We add to list all shapes that may contain imagies
                                 if (shape.HasTextFrame != Microsoft.Office.Core.MsoTriState.msoTrue)
                                     shapes.Add(shape);
                             }
 
-                            if (shapes.Count > 0) //exists images
+                            // We have images for saving
+                            if (shapes.Count > 0)
                             {
                                 Thread thread = new Thread(this.SavePicture);
                                 thread.SetApartmentState(ApartmentState.STA);
@@ -103,7 +97,6 @@ namespace OfficeModules.Reactions.PowerPoint
                             }
                         }
                     }
-
             }
             catch (Exception e)
             {
@@ -116,15 +109,14 @@ namespace OfficeModules.Reactions.PowerPoint
             }
         }
 
-        public void SavePicture(object p_shapes)
+        public void SavePicture(object pShapes)
         {
-            int count;
+            int count = 0;
             List<OPowerPoint.Shape> shapes;
-            count = 0;
 
             lock (this)
             {
-                shapes = p_shapes as List<OPowerPoint.Shape>;
+                shapes = pShapes as List<OPowerPoint.Shape>;
 
                 if (shapes == null)
                     return;
@@ -134,7 +126,9 @@ namespace OfficeModules.Reactions.PowerPoint
                     foreach (OPowerPoint.Shape shape in shapes)
                     {
                         shape.Copy();
+
                         bool containsImage = Clipboard.ContainsImage();
+
                         if (containsImage)
                         {
                             count++;
@@ -146,6 +140,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
                             encoder.Frames.Add(BitmapFrame.Create(image));
                             encoder.Save(stream);
+
                             stream.Close();
                         }
                     }
@@ -156,7 +151,6 @@ namespace OfficeModules.Reactions.PowerPoint
                     Logger.WriteLine(ex.Message);
                 }
             }
-
         }
 
         #region IWpfConfigurable Methods
@@ -164,6 +158,13 @@ namespace OfficeModules.Reactions.PowerPoint
         public WpfConfiguration ConfigurationControl
         {
             get { return new PowerPointSavePicturesConfig(fileName); }
+        }
+
+        public void OnSaved(WpfConfiguration configurationControl)
+        {
+            var pptSavePicturesConfig = configurationControl as PowerPointSavePicturesConfig;
+            
+            fileName = pptSavePicturesConfig.Filename;
         }
 
         #endregion

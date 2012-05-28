@@ -144,6 +144,24 @@
   <data name="General_FileNotFound" xml:space="preserve">
     <value>The file doesn't exist.</value>
   </data>
+  <data name="Lync_ApplicationNotFound" xml:space="preserve">
+    <value>Lync application not found.</value>
+  </data>
+  <data name="Lync_NotLoggedIn" xml:space="preserve">
+    <value>No user is currently logged in.</value>
+  </data>
+  <data name="Lync_NoUserId" xml:space="preserve">
+    <value>No contact with the selected user id exists in your groups.</value>
+  </data>
+  <data name="Lync_ReactionCouldntPerform" xml:space="preserve">
+    <value>The Lync reaction could not be performed.</value>
+  </data>
+  <data name="Lync_StatusChangedConfigString" xml:space="preserve">
+    <value>User Id: {0}, Status: {1}</value>
+  </data>
+  <data name="Lync_UpdatePersonalNoteConfigString" xml:space="preserve">
+    <value>Personal note: {0}.</value>
+  </data>
   <data name="Outlook_ApplicationNotFound" xml:space="preserve">
     <value>Outlook application not found.</value>
   </data>
@@ -219,6 +237,9 @@
   <data name="Word_ApplicationNotFound" xml:space="preserve">
     <value>Unable to find the opened Word application.</value>
   </data>
+  <data name="Word_CantActivateSpellChecking" xml:space="preserve">
+    <value>Can't activate the spell checking.</value>
+  </data>
   <data name="Word_CantSavePictures" xml:space="preserve">
     <value>The pictures from the current document could not be saved.</value>
   </data>
@@ -227,5 +248,23 @@
   </data>
   <data name="Word_NoPicturesInDocument" xml:space="preserve">
     <value>No pictures found in the current document.</value>
+  </data>
+  <data name="Lync_SelectUserConfigString" xml:space="preserve">
+    <value>User id: {0}.</value>
+  </data>
+  <data name="Lync_UpdateLocationConfigString" xml:space="preserve">
+    <value>Location: {0}.</value>
+  </data>
+  <data name="Lync_UpdateStatusConfigString" xml:space="preserve">
+    <value>Status: {0}.</value>
+  </data>
+  <data name="Excel_CantCheckCompatibility" xml:space="preserve">
+    <value>Unable to check compatibility.</value>
+  </data>
+  <data name="Lync_ComboBoxNoItems" xml:space="preserve">
+    <value>The combo box can't be empty.</value>
+  </data>
+  <data name="Lync_InvalidUserId" xml:space="preserve">
+    <value>The User Id is invalid.</value>
   </data>
 </root>
