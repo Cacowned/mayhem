@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using MayhemCore;
 using Microsoft.Office.Interop.PowerPoint;
 using OfficeModules.Resources;
@@ -33,9 +34,10 @@ namespace OfficeModules.Events
                     powerPoint = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");
                     powerPoint.WindowActivate += activePresentationChangedEvent;
                 }
-                catch
+                catch (Exception ex)
                 {
                     ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
+                    Logger.Write(ex);
                     e.Cancel = true;
                 }
             }

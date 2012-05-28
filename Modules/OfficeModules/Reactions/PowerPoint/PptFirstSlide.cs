@@ -37,17 +37,17 @@ namespace OfficeModules.Reactions.PowerPoint
                 {
                     if (windows > 1)
                     {
-                        // we've got more than one
+                        // We've got more than one
                         ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_MoreThanOneWindow);
                     }
 
                     app.SlideShowWindows[1].View.First();
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantChangeSlidesFirst);
-                Logger.Write(e);
+                Logger.Write(ex);
             }
             finally
             {

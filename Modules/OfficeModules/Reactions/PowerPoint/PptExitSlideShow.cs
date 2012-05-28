@@ -39,9 +39,9 @@ namespace OfficeModules.Reactions
                     {
                         // we've got more than one
                         ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_MoreThanOneWindow);
-                    }  
+                    }
 
-                   app.SlideShowWindows[1].View.Exit();
+                    app.SlideShowWindows[1].View.Exit();
                 }
             }
             catch (Exception ex)

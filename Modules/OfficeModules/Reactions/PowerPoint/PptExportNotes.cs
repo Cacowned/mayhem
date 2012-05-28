@@ -16,20 +16,14 @@ namespace OfficeModules.Reactions.PowerPoint
     [MayhemModule("PowerPoint: Export Notes", "Exports the notes from the active presentation")]
     public class PptExportNotes : ReactionBase, IWpfConfigurable
     {
-        private OPowerPoint.Application app;
-        private StreamWriter streamWriter = null;
-
         /// <summary>
         /// The path of the file were the notes would be saved
         /// </summary>
         [DataMember]
         private string fileName;
 
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            var pptExportConfig = configurationControl as PowerPointExportConfig;
-            fileName = pptExportConfig.Filename;
-        }
+        private OPowerPoint.Application app;
+        private StreamWriter streamWriter = null;
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -46,7 +40,7 @@ namespace OfficeModules.Reactions.PowerPoint
             {
                 try
                 {
-                    //if the file exists we try to open it
+                    // If the file exists we try to open it
                     FileStream stream = File.Open(fileName, FileMode.Create);
                     streamWriter = new StreamWriter(stream);
                 }
@@ -86,7 +80,7 @@ namespace OfficeModules.Reactions.PowerPoint
                 else
                     if (!activePresentation.HasNotesMaster)
                     {
-                        //the current presentation doesn't have notes
+                        // The current presentation doesn't have notes
                         ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_NoNotes);
                     }
                     else
@@ -95,7 +89,8 @@ namespace OfficeModules.Reactions.PowerPoint
                         {
                             if (slide.HasNotesPage == Microsoft.Office.Core.MsoTriState.msoTrue)
                             {
-                                if (slide.NotesPage.Shapes.Placeholders.Count >= 2) //if we have notes(the notes are kept on the position 2 in the placeholders collection) we save them in the selected file
+                                // If we have notes(the notes are kept on the position 2 in the placeholders collection) we save their text in the selected file
+                                if (slide.NotesPage.Shapes.Placeholders.Count >= 2)
                                 {
                                     streamWriter.WriteLine(slide.NotesPage.Shapes.Placeholders[2].TextFrame.TextRange.Text);
                                 }
@@ -123,10 +118,17 @@ namespace OfficeModules.Reactions.PowerPoint
             get { return new PowerPointExportConfig(fileName); }
         }
 
+        public void OnSaved(WpfConfiguration configurationControl)
+        {
+            var pptExportConfig = configurationControl as PowerPointExportConfig;
+
+            fileName = pptExportConfig.Filename;
+        }
+
         #endregion
 
         #region IConfigurable Members
-      
+
         public string GetConfigString()
         {
             return string.Format(CultureInfo.CurrentCulture, Strings.PowerPoint_ExportConfigString, Path.GetFileName(fileName));
