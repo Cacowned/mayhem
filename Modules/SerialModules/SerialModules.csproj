@@ -33,14 +33,17 @@
   <ItemGroup>
     <Reference Include="MayhemCore">
       <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MayhemWpf">
       <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="SerialManager">
       <HintPath>..\..\bin\SerialManager\SerialManager.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
