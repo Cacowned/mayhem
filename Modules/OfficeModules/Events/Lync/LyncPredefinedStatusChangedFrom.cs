@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Serialization;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using Microsoft.Lync.Model;
-using Microsoft.Lync.Model.Group;
 using OfficeModules.Resources;
 using OfficeModules.Wpf;
 
@@ -26,6 +24,7 @@ namespace OfficeModules.Events.Lync
         private string userId;
 
         private LyncClient lyncClient;
+        private Self self;
         private string currentStatus;
         private Contact selectedContact;
 
@@ -44,32 +43,30 @@ namespace OfficeModules.Events.Lync
             try
             {
                 lyncClient = LyncClient.GetClient();
-                Dictionary<String, ContactSubscription> contactSubscriptions = new Dictionary<String, ContactSubscription>();
-                bool found = false;
 
-                foreach (Group group in lyncClient.ContactManager.Groups)
+                self = lyncClient.Self;
+
+                if (self == null)
                 {
-                    foreach (Contact contact in group)
-                    {
-                        if (contact.Uri.Contains(userId))
-                        {
-                            selectedContact = contact;
-                            selectedContact.ContactInformationChanged += contactInformationChanged;
-                           
-                            currentStatus = selectedContact.GetContactInformation(ContactInformationType.Activity).ToString();
-                            
-                            found = true;
-
-                            break;
-                        }
-                    }
+                    ErrorLog.AddError(ErrorType.Failure, Strings.Lync_NotLoggedIn);
+                    return;
                 }
 
-                if (found == false)
+                try
+                {
+                    selectedContact = self.Contact.ContactManager.GetContactByUri(userId);
+                    selectedContact.ContactInformationChanged += contactInformationChanged;
+
+                    currentStatus = selectedContact.GetContactInformation(ContactInformationType.Activity).ToString();
+                }
+                catch (Exception ex)
                 {
                     ErrorLog.AddError(ErrorType.Failure, Strings.Lync_NoUserId);
+                    Logger.Write(ex);
                     e.Cancel = true;
-                }                
+
+                    return;
+                }
             }
             catch (Exception ex)
             {

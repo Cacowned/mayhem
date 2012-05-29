@@ -58,6 +58,8 @@ namespace OfficeModules.Wpf
                 StatusComboBox.SelectedIndex = 0;
             else
                 StatusComboBox.SelectedItem = Status;
+
+            CheckValidity();
         }
 
         public override void OnSave()

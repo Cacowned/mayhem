@@ -6,20 +6,21 @@ using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using Microsoft.Lync.Model;
+using Microsoft.Lync.Model.Extensibility;
 using OfficeModules.Resources;
 using OfficeModules.Wpf;
 
 namespace OfficeModules.Reactions.Lync
 {
     /// <summary>
-    /// This reaction updates the personal note of the current user
+    /// This reaction makes an audio call to a predefined user
     /// </summary>
     [DataContract]
-    [MayhemModule("Lync: Update Personal Note", "Updates the personal note of the current user")]
-    public class LyncUpdatePersonalNote : ReactionBase, IWpfConfigurable
+    [MayhemModule("Lync: Make Audio Call", "Makes an audio call to a predefined user")]
+    public class LyncMakeCall : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string personalNote;
+        private string userId;
 
         private LyncClient lyncClient = null;
         private Self self = null;
@@ -48,10 +49,24 @@ namespace OfficeModules.Reactions.Lync
                     return;
                 }
 
-                var contactInformation = new List<KeyValuePair<PublishableContactInformationType, object>>();
-                contactInformation.Add(new KeyValuePair<PublishableContactInformationType, object>(PublishableContactInformationType.PersonalNote, personalNote));
+                try
+                {
+                    Contact contact = self.Contact.ContactManager.GetContactByUri(userId);
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.Lync_NoUserId);
+                    Logger.Write(ex);
+                    return;
+                }
 
-                self.BeginPublishContactInformation(contactInformation, result => self.EndPublishContactInformation(result), "Publishing Personal Note");
+                Automation automation = LyncClient.GetAutomation();
+
+                var participants = new List<string>();
+
+                participants.Add(userId);
+
+                automation.BeginStartConversation(AutomationModalities.Audio, participants, null, null, automation);
             }
             catch (Exception ex)
             {
@@ -68,14 +83,14 @@ namespace OfficeModules.Reactions.Lync
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new LyncUpdatePersonalNoteConfig(personalNote); }
+            get { return new LyncSelectUserConfig(userId); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            LyncUpdatePersonalNoteConfig config = configurationControl as LyncUpdatePersonalNoteConfig;
+            LyncSelectUserConfig config = configurationControl as LyncSelectUserConfig;
 
-            personalNote = config.PersonalNote;
+            userId = config.UserId;
         }
 
         #endregion
@@ -84,7 +99,7 @@ namespace OfficeModules.Reactions.Lync
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.Lync_UpdatePersonalNoteConfigString, personalNote);
+            return string.Format(CultureInfo.CurrentCulture, Strings.Lync_SelectUserConfigString, userId);
         }
 
         #endregion

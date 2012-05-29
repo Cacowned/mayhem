@@ -1,10 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
+using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
-    public partial class LyncSelectUserConfig : WpfConfiguration
+    public partial class LyncSendMessageConfig : WpfConfiguration
     {
         public string UserId
         {
@@ -12,14 +13,21 @@ namespace OfficeModules.Wpf
             private set;
         }
 
-        public override string Title
+        public string Message
         {
-            get { return "Select User"; }
+            get;
+            private set;
         }
 
-        public LyncSelectUserConfig(string userId)
+        public override string Title
+        {
+            get { return "Send message"; }
+        }
+
+        public LyncSendMessageConfig(string userId, string message)
         {
             UserId = userId;
+            Message = message;
 
             InitializeComponent();
         }
@@ -27,6 +35,7 @@ namespace OfficeModules.Wpf
         public override void OnLoad()
         {
             UserIdBox.Text = UserId;
+            MessageTextBox.Text = Message;
 
             CheckValidity();
         }
@@ -34,11 +43,25 @@ namespace OfficeModules.Wpf
         public override void OnSave()
         {
             UserId = UserIdBox.Text;
+            Message = MessageTextBox.Text;
         }
 
         private void CheckValidity()
         {
             CanSave = UserIdBox.Text.Trim().Length > 0;
+
+            if (!CanSave)
+            {
+                textInvalid.Text = Strings.Lync_InvalidUserId;
+            }
+            else
+            {
+                CanSave = MessageTextBox.Text.Trim().Length > 0;
+                if (!CanSave)
+                {
+                    textInvalid.Text = Strings.Lync_MessageInvalid;
+                }
+            }
 
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
@@ -46,6 +69,11 @@ namespace OfficeModules.Wpf
         private void UserIdBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
-        }        
+        }
+
+        private void MessageTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckValidity();
+        }
     }
 }

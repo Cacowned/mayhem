@@ -6,20 +6,24 @@ using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using Microsoft.Lync.Model;
+using Microsoft.Lync.Model.Extensibility;
 using OfficeModules.Resources;
 using OfficeModules.Wpf;
 
 namespace OfficeModules.Reactions.Lync
 {
     /// <summary>
-    /// This reaction updates the personal note of the current user
+    /// This reaction sends a message to a predefined user
     /// </summary>
     [DataContract]
-    [MayhemModule("Lync: Update Personal Note", "Updates the personal note of the current user")]
-    public class LyncUpdatePersonalNote : ReactionBase, IWpfConfigurable
+    [MayhemModule("Lync: Send Instant Message", "Send an instant message to a predefined user")]
+    public class LyncSendMessage : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string personalNote;
+        private string message;
+
+        [DataMember]
+        private string userId;
 
         private LyncClient lyncClient = null;
         private Self self = null;
@@ -29,6 +33,7 @@ namespace OfficeModules.Reactions.Lync
             try
             {
                 lyncClient = LyncClient.GetClient();
+
             }
             catch (Exception ex)
             {
@@ -48,10 +53,27 @@ namespace OfficeModules.Reactions.Lync
                     return;
                 }
 
-                var contactInformation = new List<KeyValuePair<PublishableContactInformationType, object>>();
-                contactInformation.Add(new KeyValuePair<PublishableContactInformationType, object>(PublishableContactInformationType.PersonalNote, personalNote));
+                try
+                {
+                    Contact contact = self.Contact.ContactManager.GetContactByUri(userId);
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.Lync_NoUserId);
+                    Logger.Write(ex);
+                    return;
+                }
 
-                self.BeginPublishContactInformation(contactInformation, result => self.EndPublishContactInformation(result), "Publishing Personal Note");
+                Automation automation = LyncClient.GetAutomation();
+
+                var participants = new List<string>();
+                var contextData = new Dictionary<AutomationModalitySettings, object>();
+
+                participants.Add(userId);
+                contextData.Add(AutomationModalitySettings.FirstInstantMessage, message);
+                contextData.Add(AutomationModalitySettings.SendFirstInstantMessageImmediately, true);
+
+                automation.BeginStartConversation(AutomationModalities.InstantMessage, participants, contextData, null, automation);
             }
             catch (Exception ex)
             {
@@ -68,14 +90,15 @@ namespace OfficeModules.Reactions.Lync
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new LyncUpdatePersonalNoteConfig(personalNote); }
+            get { return new LyncSendMessageConfig(userId, message); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            LyncUpdatePersonalNoteConfig config = configurationControl as LyncUpdatePersonalNoteConfig;
+            LyncSendMessageConfig config = configurationControl as LyncSendMessageConfig;
 
-            personalNote = config.PersonalNote;
+            userId = config.UserId;
+            message = config.Message;
         }
 
         #endregion
@@ -84,7 +107,7 @@ namespace OfficeModules.Reactions.Lync
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.Lync_UpdatePersonalNoteConfigString, personalNote);
+            return string.Format(CultureInfo.CurrentCulture, Strings.Lync_SendMessageConfigString, userId, message);
         }
 
         #endregion

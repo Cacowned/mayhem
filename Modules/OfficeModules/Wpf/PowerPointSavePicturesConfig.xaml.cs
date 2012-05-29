@@ -9,7 +9,7 @@ namespace OfficeModules.Wpf
 {
     public partial class PowerPointSavePicturesConfig : WpfConfiguration
     {
-        public string Filename
+        public string FileName
         {
             get;
             private set;
@@ -24,19 +24,19 @@ namespace OfficeModules.Wpf
         {
             InitializeComponent();
 
-            Filename = filename;
+            FileName = filename;
         }
 
         public override void OnLoad()
         {
-            LocationBox.Text = Filename;
+            LocationBox.Text = FileName;
 
             CheckValidity();
         }
 
         public override void OnSave()
         {
-            Filename = LocationBox.Text;
+            FileName = LocationBox.Text;
         }
 
         private void CheckValidity()
