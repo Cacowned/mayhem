@@ -1,14 +1,14 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using CoreAudioApi;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.Runtime.InteropServices;
 
-namespace SystemModules
+namespace SystemModules.Reactions
 {
 	[DataContract]
-	[MayhemModule("Set Volume", "Sets the master volume level")]
+	[MayhemModule("Volume: Set", "Sets the master volume level")]
 	public class SetVolume : ReactionBase, IWpfConfigurable
 	{
 		[DataMember]
@@ -40,13 +40,13 @@ namespace SystemModules
 		{
 			get
 			{
-				return new SetVolumeConfig(level);
+				return new Wpf.SetVolumeConfig(level);
 			}
 		}
 
 		public void OnSaved(WpfConfiguration configurationControl)
 		{
-			var config = (SetVolumeConfig)configurationControl;
+			var config = (Wpf.SetVolumeConfig)configurationControl;
 			this.level = config.Level;
 		}
 

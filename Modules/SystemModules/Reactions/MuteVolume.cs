@@ -3,11 +3,10 @@ using System.Runtime.Serialization;
 using CoreAudioApi;
 using MayhemCore;
 
-namespace SystemModules
+namespace SystemModules.Reactions
 {
-	[DataContract]
-	[MayhemModule("Increase Volume", "Increases the master volume level")]
-	public class IncreaseVolume : ReactionBase
+	[MayhemModule("Volume: Mute", "Mutes / Unmutes the default audio device")]
+	public class MuteVolume : ReactionBase
 	{
 		public override void Perform()
 		{
@@ -24,7 +23,7 @@ namespace SystemModules
 				return;
 			}
 
-			device.AudioEndpointVolume.VolumeStepUp();
+			device.AudioEndpointVolume.Mute = !device.AudioEndpointVolume.Mute;
 		}
 	}
 }
