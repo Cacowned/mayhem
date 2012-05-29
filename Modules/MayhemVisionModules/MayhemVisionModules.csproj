@@ -33,9 +33,11 @@
   <ItemGroup>
     <Reference Include="MayhemCore">
       <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MayhemWpf">
       <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -94,6 +96,7 @@
     <ProjectReference Include="..\MayhemWebCamWrapper\MayhemWebCamWrapper.csproj">
       <Project>{D52362F0-D67B-4FC2-925D-DCF2B7384565}</Project>
       <Name>MayhemWebCamWrapper</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
