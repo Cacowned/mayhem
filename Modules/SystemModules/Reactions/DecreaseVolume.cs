@@ -1,12 +1,10 @@
 ﻿using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using CoreAudioApi;
 using MayhemCore;
 
-namespace SystemModules
+namespace SystemModules.Reactions
 {
-	[DataContract]
-	[MayhemModule("Decrease Volume", "Increases the master volume level")]
+	[MayhemModule("Volume: Decrease", "Decreases the master volume level")]
 	public class DecreaseVolume : ReactionBase
 	{
 		public override void Perform()
