@@ -26,14 +26,14 @@ namespace OfficeModules.Events.Lync
             try
             {
                 lyncClient = LyncClient.GetClient();
-                Dictionary<String,ContactSubscription> contactSubscriptions = new Dictionary<String,ContactSubscription>();
+                Dictionary<String, ContactSubscription> contactSubscriptions = new Dictionary<String, ContactSubscription>();
 
-                foreach(Group group in lyncClient.ContactManager.Groups)
+                foreach (Group group in lyncClient.ContactManager.Groups)
                 {
-                    foreach(Contact contact in group)
+                    foreach (Contact contact in group)
                     {
                         contact.ContactInformationChanged += contactInformationChanged;
-                    }                   
+                    }
                 }
             }
             catch (Exception ex)
@@ -67,7 +67,7 @@ namespace OfficeModules.Events.Lync
             if (e.ChangedContactInformation.Contains(ContactInformationType.Activity))
             {
                 Trigger();
-            }        
+            }
         }
     }
 }

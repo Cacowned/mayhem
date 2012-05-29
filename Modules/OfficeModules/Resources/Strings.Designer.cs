@@ -178,6 +178,15 @@ namespace OfficeModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The message is invalid..
+        /// </summary>
+        internal static string Lync_MessageInvalid {
+            get {
+                return ResourceManager.GetString("Lync_MessageInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No user is currently logged in..
         /// </summary>
         internal static string Lync_NotLoggedIn {
@@ -210,6 +219,24 @@ namespace OfficeModules.Resources {
         internal static string Lync_SelectUserConfigString {
             get {
                 return ResourceManager.GetString("Lync_SelectUserConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User id: {0}, Path: {1}..
+        /// </summary>
+        internal static string Lync_SendFileConfigString {
+            get {
+                return ResourceManager.GetString("Lync_SendFileConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User id: {0}, Message: {1}..
+        /// </summary>
+        internal static string Lync_SendMessageConfigString {
+            get {
+                return ResourceManager.GetString("Lync_SendMessageConfigString", resourceCulture);
             }
         }
         

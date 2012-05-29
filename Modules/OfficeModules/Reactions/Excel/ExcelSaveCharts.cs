@@ -81,7 +81,7 @@ namespace OfficeModules.Reactions.Excel
         {
             var excelSaveChartsConfig = configurationControl as ExcelSaveChartsConfig;
         
-            fileName = excelSaveChartsConfig.Filename;
+            fileName = excelSaveChartsConfig.FileName;
         }
 
         #endregion

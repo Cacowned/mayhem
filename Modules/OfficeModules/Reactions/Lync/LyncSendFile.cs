@@ -6,20 +6,24 @@ using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using Microsoft.Lync.Model;
+using Microsoft.Lync.Model.Extensibility;
 using OfficeModules.Resources;
 using OfficeModules.Wpf;
 
 namespace OfficeModules.Reactions.Lync
 {
     /// <summary>
-    /// This reaction updates the personal note of the current user
+    /// This reaction sends the selected file to a predefined user
     /// </summary>
     [DataContract]
-    [MayhemModule("Lync: Update Personal Note", "Updates the personal note of the current user")]
-    public class LyncUpdatePersonalNote : ReactionBase, IWpfConfigurable
+    [MayhemModule("Lync: Send File", "Sends a file to a predefined user")]
+    public class LyncSendFile : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string personalNote;
+        private string userId;
+
+        [DataMember]
+        private string fileName;
 
         private LyncClient lyncClient = null;
         private Self self = null;
@@ -48,10 +52,28 @@ namespace OfficeModules.Reactions.Lync
                     return;
                 }
 
-                var contactInformation = new List<KeyValuePair<PublishableContactInformationType, object>>();
-                contactInformation.Add(new KeyValuePair<PublishableContactInformationType, object>(PublishableContactInformationType.PersonalNote, personalNote));
+                try
+                {
+                    Contact contact = self.Contact.ContactManager.GetContactByUri(userId);
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.Lync_NoUserId);
+                    Logger.Write(ex);
+                    return;
+                }
 
-                self.BeginPublishContactInformation(contactInformation, result => self.EndPublishContactInformation(result), "Publishing Personal Note");
+                Automation automation = LyncClient.GetAutomation();
+
+                var participants = new List<string>();
+                var contextData = new Dictionary<AutomationModalitySettings, object>();
+
+                contextData.Add(AutomationModalitySettings.FilePathToTransfer, fileName);
+                contextData.Add(AutomationModalitySettings.FileIsShared, true);
+
+                participants.Add(userId);
+
+                automation.BeginStartConversation(AutomationModalities.FileTransfer, participants, contextData, null, automation);
             }
             catch (Exception ex)
             {
@@ -68,14 +90,15 @@ namespace OfficeModules.Reactions.Lync
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new LyncUpdatePersonalNoteConfig(personalNote); }
+            get { return new LyncSendFileConfig(userId, fileName); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            LyncUpdatePersonalNoteConfig config = configurationControl as LyncUpdatePersonalNoteConfig;
+            LyncSendFileConfig config = configurationControl as LyncSendFileConfig;
 
-            personalNote = config.PersonalNote;
+            userId = config.UserId;
+            fileName = config.FileName;
         }
 
         #endregion
@@ -84,7 +107,7 @@ namespace OfficeModules.Reactions.Lync
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.Lync_UpdatePersonalNoteConfigString, personalNote);
+            return string.Format(CultureInfo.CurrentCulture, Strings.Lync_SendFileConfigString, userId, fileName);
         }
 
         #endregion
