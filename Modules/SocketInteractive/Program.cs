@@ -4,35 +4,28 @@ using System.IO.Pipes;
 using System.Security.Principal;
 using System.Text;
 
-namespace SocketApp
+namespace SocketInteractive
 {
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			if (args.Length != 1)
-			{
-				Console.WriteLine("Interactive Mode!");
-				Console.WriteLine("Type a phrase and hit enter to send. Type 'quit' to close.");
+			Console.WriteLine("Interactive Mode!");
+			Console.WriteLine("Type a phrase and hit enter to send. Type 'quit' to close.");
 
-				string message = "";
-				while (true)
+			string message = "";
+			while (true)
+			{
+				message = Console.ReadLine();
+
+				if (message == "quit")
 				{
-					message = Console.ReadLine();
-
-					if (message == "quit")
-					{
-						break;
-					}
-					else
-					{
-						Write(message);
-					}
+					break;
 				}
-			}
-			else
-			{
-				Write(args[0]);
+				else
+				{
+					Write(message);
+				}
 			}
 		}
 
