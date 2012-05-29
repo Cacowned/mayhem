@@ -9,7 +9,7 @@ namespace OfficeModules.Wpf
 {
     public partial class ExcelSaveChartsConfig : WpfConfiguration
     {
-        public string Filename
+        public string FileName
         {
             get;
             private set;
@@ -23,19 +23,19 @@ namespace OfficeModules.Wpf
         public ExcelSaveChartsConfig(string filename)
         {
             InitializeComponent();
-            Filename = filename;
+            FileName = filename;
         }
 
         public override void OnLoad()
         {
-            LocationBox.Text = Filename;
+            LocationBox.Text = FileName;
 
             CheckValidity();
         }
 
         public override void OnSave()
         {
-            Filename = LocationBox.Text;
+            FileName = LocationBox.Text;
         }
 
         private void CheckValidity()

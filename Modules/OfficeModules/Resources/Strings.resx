@@ -267,4 +267,13 @@
   <data name="Lync_InvalidUserId" xml:space="preserve">
     <value>The User Id is invalid.</value>
   </data>
+  <data name="Lync_MessageInvalid" xml:space="preserve">
+    <value>The message is invalid.</value>
+  </data>
+  <data name="Lync_SendFileConfigString" xml:space="preserve">
+    <value>User id: {0}, Path: {1}.</value>
+  </data>
+  <data name="Lync_SendMessageConfigString" xml:space="preserve">
+    <value>User id: {0}, Message: {1}.</value>
+  </data>
 </root>

@@ -5,10 +5,8 @@ using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using Microsoft.Lync.Model;
-using Microsoft.Lync.Model.Group;
 using OfficeModules.Resources;
 using OfficeModules.Wpf;
-
 
 namespace OfficeModules.Events.Lync
 {
@@ -23,6 +21,7 @@ namespace OfficeModules.Events.Lync
         private string userId;
 
         private LyncClient lyncClient;
+        private Self self;
         private string currentPersonalNote;
         private Contact selectedContact;
 
@@ -38,35 +37,32 @@ namespace OfficeModules.Events.Lync
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            bool found = false;
-
             try
             {
                 lyncClient = LyncClient.GetClient();
 
-                foreach (Group group in lyncClient.ContactManager.Groups)
+                self = lyncClient.Self;
+
+                if (self == null)
                 {
-                    foreach (Contact contact in group)
-                    {
-                        // If the selected User Id is found  we set the event and get the current personal note
-                        if (contact.Uri.Contains(userId))
-                        {                           
-                            selectedContact = contact;
-                            selectedContact.ContactInformationChanged += contactInformationChanged;
-
-                            currentPersonalNote = selectedContact.GetContactInformation(ContactInformationType.PersonalNote).ToString();
-                            found = true;
-
-                            break;
-                        }
-                    }
+                    ErrorLog.AddError(ErrorType.Failure, Strings.Lync_NotLoggedIn);
+                    return;
                 }
 
-                // If the User Id is not found we need to disable the event
-                if (found == false)
+                try
+                {
+                    selectedContact = self.Contact.ContactManager.GetContactByUri(userId);
+                    selectedContact.ContactInformationChanged += contactInformationChanged;
+
+                    currentPersonalNote = selectedContact.GetContactInformation(ContactInformationType.PersonalNote).ToString();
+                }
+                catch (Exception ex)
                 {
                     ErrorLog.AddError(ErrorType.Failure, Strings.Lync_NoUserId);
+                    Logger.Write(ex);
                     e.Cancel = true;
+
+                    return;
                 }
             }
             catch (Exception ex)

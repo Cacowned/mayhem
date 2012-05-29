@@ -7,7 +7,7 @@ using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
-    public partial class WordSavePicturesConfig : WpfConfiguration
+    public partial class LyncSendFileConfig : WpfConfiguration
     {
         public string FileName
         {
@@ -15,21 +15,29 @@ namespace OfficeModules.Wpf
             private set;
         }
 
-        public override string Title
+        public string UserId
         {
-            get { return "Save Pictures"; }
+            get;
+            private set;
         }
 
-        public WordSavePicturesConfig(string filename)
+        public override string Title
+        {
+            get { return "Send File"; }
+        }
+
+        public LyncSendFileConfig(string userId, string filename)
         {
             InitializeComponent();
 
+            UserId = userId;
             FileName = filename;
         }
 
         public override void OnLoad()
         {
             LocationBox.Text = FileName;
+            UserIdBox.Text = UserId;
 
             CheckValidity();
         }
@@ -37,6 +45,7 @@ namespace OfficeModules.Wpf
         public override void OnSave()
         {
             FileName = LocationBox.Text;
+            UserId = UserIdBox.Text;
         }
 
         private void CheckValidity()
@@ -51,27 +60,41 @@ namespace OfficeModules.Wpf
                 CanSave = false;
             }
             else
-                if (!Directory.Exists(text))
+                if (!File.Exists(text))
                 {
-                    // The directory doesn't exists
-                    textInvalid.Text = Strings.General_DirectoryNotFound;
+                    // The file doesn't exists
+                    textInvalid.Text = Strings.General_FileNotFound;
                     CanSave = false;
                 }
+                else
+                    if (UserIdBox.Text.Trim().Length == 0)
+                    {
+                        textInvalid.Text = Strings.Lync_InvalidUserId;
+                        CanSave = false;
+                    }
 
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        private void Browse_Folder_Click(object sender, RoutedEventArgs e)
+        private void BrowseFile_Click(object sender, RoutedEventArgs e)
         {
-            var dlgFolder = new FolderBrowserDialog();
+            var dlg = new OpenFileDialog();
 
-            if (dlgFolder.ShowDialog().Equals(DialogResult.OK))
+            dlg.FileName = FileName;
+
+            if (dlg.ShowDialog().Equals(DialogResult.OK))
             {
-                LocationBox.Text = dlgFolder.SelectedPath;
+                FileName = dlg.FileName;
+                LocationBox.Text = FileName;
             }
         }
 
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckValidity();
+        }
+
+        private void UserIdBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
         }

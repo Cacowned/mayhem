@@ -160,7 +160,7 @@ namespace OfficeModules.Reactions.Word
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var wordSavePicturesConfig = configurationControl as WordSavePicturesConfig;
-            fileName = wordSavePicturesConfig.Filename;
+            fileName = wordSavePicturesConfig.FileName;
         }
 
         #endregion

@@ -32,13 +32,17 @@ namespace OfficeModules.Reactions.Lync
             try
             {
                 lyncClient = LyncClient.GetClient();
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.Lync_ApplicationNotFound);
+                Logger.Write(ex);
 
-                if (lyncClient == null)
-                {
-                    ErrorLog.AddError(ErrorType.Failure, Strings.Lync_ApplicationNotFound);
-                    return;
-                }
+                return;
+            }
 
+            try
+            {
                 self = lyncClient.Self;
 
                 if (self == null)
