@@ -38,17 +38,24 @@ namespace SocketApp
 
 		private static void Write(string message)
 		{
-			NamedPipeClientStream pipeClient =
-				new NamedPipeClientStream(".", "mayhemSocketPipeName",
-					PipeDirection.InOut, PipeOptions.None,
-					TokenImpersonationLevel.Impersonation);
+			try
+			{
+				NamedPipeClientStream pipeClient =
+					new NamedPipeClientStream(".", "mayhemSocketPipeName",
+						PipeDirection.InOut, PipeOptions.None,
+						TokenImpersonationLevel.Impersonation);
 
-			pipeClient.Connect();
-			StreamString ss = new StreamString(pipeClient);
+				pipeClient.Connect(200);
+				StreamString ss = new StreamString(pipeClient);
 
-			ss.WriteString(message);
+				ss.WriteString(message);
 
-			pipeClient.Close();
+				pipeClient.Close();
+			}
+			catch (Exception)
+			{
+				Console.WriteLine("ERROR: Mayhem with Socket Event is not running.");
+			}
 		}
 
 		// Defines the data protocol for reading and writing strings on our stream
