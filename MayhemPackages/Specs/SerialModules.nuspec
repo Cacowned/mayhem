@@ -1,0 +1,36 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>SerialModules</id>
+    <version>1.0.0</version>
+    <authors>Eli White</authors>
+    <owners>The Outercurve Foundation</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Serial ports or emulated serial ports (typically, connected via USB) are used to communicate with many different types of devices. Examples include laboratory test equipment, machine tools, Arduino boards, external displays, etc.
+
+To use a serial port, you must specify the port, baud rate, parity, number of data bits and number of stop bits. While the port and baud rate will vary, most devices use no parity, 8 data bits and 1 stop bit.
+
+Event
+
+Serial Listen
+
+Triggers when the specified sequence of characters is received.
+
+
+
+Reaction
+
+Serial Write
+
+Sends the specified sequence of characters.
+</description>
+<summary>These modules interact with devices using serial communication.</summary>
+    <copyright>Copyright © Outercurve 2012</copyright>
+    <tags>Serial COM Device</tags>
+    <dependencies>
+	<dependency id="MayhemCore" version="1.0.0" />
+      	<dependency id="MayhemWpf" version="1.0.0" />
+      	<dependency id="SerialManager" version="1.0.0" />
+    </dependencies>
+  </metadata>
+</package>
