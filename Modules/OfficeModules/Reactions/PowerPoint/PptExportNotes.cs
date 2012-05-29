@@ -122,7 +122,7 @@ namespace OfficeModules.Reactions.PowerPoint
         {
             var pptExportConfig = configurationControl as PowerPointExportConfig;
 
-            fileName = pptExportConfig.Filename;
+            fileName = pptExportConfig.FileName;
         }
 
         #endregion

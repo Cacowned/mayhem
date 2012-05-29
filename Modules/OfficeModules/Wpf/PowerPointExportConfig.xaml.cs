@@ -11,7 +11,7 @@ namespace OfficeModules.Wpf
 {
     public partial class PowerPointExportConfig : WpfConfiguration
     {
-        public string Filename
+        public string FileName
         {
             get;
             private set;
@@ -26,18 +26,18 @@ namespace OfficeModules.Wpf
         {
             InitializeComponent();
 
-            Filename = filename;
+            FileName = filename;
         }
 
         public override void OnLoad()
         {
-            LocationBox.Text = Filename;
+            LocationBox.Text = FileName;
             CheckValidity();
         }
 
         public override void OnSave()
         {
-            Filename = LocationBox.Text;
+            FileName = LocationBox.Text;
         }
 
         private void CheckValidity()
@@ -73,13 +73,13 @@ namespace OfficeModules.Wpf
         {
             var dlg = new OpenFileDialog();
 
-            dlg.FileName = Filename;
+            dlg.FileName = FileName;
             dlg.DefaultExt = ".txt";
 
             if (dlg.ShowDialog().Equals(DialogResult.OK))
             {
-                Filename = dlg.FileName;
-                LocationBox.Text = Filename;
+                FileName = dlg.FileName;
+                LocationBox.Text = FileName;
             }
         }
 

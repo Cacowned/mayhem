@@ -164,7 +164,7 @@ namespace OfficeModules.Reactions.PowerPoint
         {
             var pptSavePicturesConfig = configurationControl as PowerPointSavePicturesConfig;
             
-            fileName = pptSavePicturesConfig.Filename;
+            fileName = pptSavePicturesConfig.FileName;
         }
 
         #endregion
