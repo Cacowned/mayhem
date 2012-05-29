@@ -13,6 +13,7 @@ namespace SystemModules.Reactions
     {
         [DataMember]
         private bool forceShutDown;
+
         public override void Perform()
         {
             if (forceShutDown)
@@ -24,10 +25,12 @@ namespace SystemModules.Reactions
                 Process.Start("shutdown", "/s /t 0");
             }
         }
+
         public WpfConfiguration ConfigurationControl
         {
             get { return new ShutDownWarning(forceShutDown); }
         }
+
         public string GetConfigString()
         {
             if (forceShutDown)
@@ -35,6 +38,7 @@ namespace SystemModules.Reactions
             else
                 return "Safe Shutdown";
         }
+
         public void OnSaved(WpfConfiguration configurationControl)
         {
              forceShutDown = ((ShutDownWarning)configurationControl).ForceShutDown;
