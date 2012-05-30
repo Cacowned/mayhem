@@ -19,7 +19,7 @@ namespace MayhemVisionModules.Wpf
             this.TopMost = true;
             this.ShowInTaskbar = false;
             this.StartPosition = FormStartPosition.CenterScreen;
-
+            this.Size = new Size(640, 480);
         }
 
         public void ShowPopup(int millisecondTimeout, string filename)
@@ -27,7 +27,6 @@ namespace MayhemVisionModules.Wpf
             if (filename != null)
             {
                 this.BackgroundImage = Image.FromFile(filename);
-                this.Size = this.BackgroundImage.Size;
                 this.Show();
                 Thread.Sleep(millisecondTimeout);
                 this.Close();
