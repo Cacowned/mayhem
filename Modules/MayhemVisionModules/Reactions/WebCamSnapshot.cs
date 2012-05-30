@@ -310,22 +310,35 @@ namespace MayhemVisionModules.Reactions
             if (selectedCameraIndex != -1 && selectedCameraConnected)
             {
                 Bitmap image = webcambuffer.GetLastBufferedItem();
-                if (image != null)
+                try
                 {
-                    string savedPath = SaveImage(image);
-                    //save image
-                    if (playShutterSound)
+                    if (image != null)
                     {
-                        SoundPlayer shutterSound = new SoundPlayer(Properties.Resources.shutterSound);
-                        shutterSound.Play();
-                    }
+                        string savedPath = SaveImage(ref image);
+                        //save image
+                        if (playShutterSound)
+                        {
+                            SoundPlayer shutterSound = new SoundPlayer(Properties.Resources.shutterSound);
+                            shutterSound.Play();
+                        }
 
-                    if (showPreview)
-                    {
-                        ImagePopup popup = new ImagePopup();
-                        popup.ShowPopup(1000, savedPath);
-                        popup = null;
+                        if (showPreview)
+                        {
+                            ImagePopup popup = new ImagePopup();
+                            popup.ShowPopup(1000, savedPath);
+                            popup = null;
+                        }
+
                     }
+                }
+                catch
+                {
+                    Logger.WriteLine("Exception while saving picture");
+                    ErrorLog.AddError(ErrorType.Failure, "Could not save picture");
+                }
+                finally
+                {
+                    image.Dispose();
                 }
             }
             else
@@ -336,7 +349,7 @@ namespace MayhemVisionModules.Reactions
             }
         }
 
-        public string SaveImage(Bitmap image)
+        public string SaveImage(ref Bitmap image)
         {
             Logger.WriteLine("SaveImage");
             DateTime now = DateTime.Now;
@@ -358,11 +371,6 @@ namespace MayhemVisionModules.Reactions
             {
                 Logger.WriteLine("Exception while saving picture");
                 ErrorLog.AddError(ErrorType.Failure, "Could not save a picture to: " + path);
-            }
-            finally
-            {
-                // VERY important! 
-                image.Dispose();
             }
             return path; 
         }
