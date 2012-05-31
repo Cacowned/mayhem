@@ -4,51 +4,51 @@ using System.IO.Pipes;
 using System.Security.Principal;
 using System.Text;
 
-namespace SocketApp
+namespace SocketInteractive
 {
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			if (args.Length != 1)
-			{
-				Console.WriteLine("Interactive Mode!");
-				Console.WriteLine("Type a phrase and hit enter to send. Type 'quit' to close.");
+			Console.WriteLine("Interactive Mode!");
+			Console.WriteLine("Type a phrase and hit enter to send. Type 'quit' to close.");
 
-				string message = "";
-				while (true)
+			string message = "";
+			while (true)
+			{
+				message = Console.ReadLine();
+
+				if (message == "quit")
 				{
-					message = Console.ReadLine();
-
-					if (message == "quit")
-					{
-						break;
-					}
-					else
-					{
-						Write(message);
-					}
+					break;
 				}
-			}
-			else
-			{
-				Write(args[0]);
+				else
+				{
+					Write(message);
+				}
 			}
 		}
 
 		private static void Write(string message)
 		{
-			NamedPipeClientStream pipeClient =
-				new NamedPipeClientStream(".", "mayhemSocketPipeName",
-					PipeDirection.InOut, PipeOptions.None,
-					TokenImpersonationLevel.Impersonation);
+			try
+			{
+				NamedPipeClientStream pipeClient =
+					new NamedPipeClientStream(".", "mayhemSocketPipeName",
+						PipeDirection.InOut, PipeOptions.None,
+						TokenImpersonationLevel.Impersonation);
 
-			pipeClient.Connect();
-			StreamString ss = new StreamString(pipeClient);
+				pipeClient.Connect(200);
+				StreamString ss = new StreamString(pipeClient);
 
-			ss.WriteString(message);
+				ss.WriteString(message);
 
-			pipeClient.Close();
+				pipeClient.Close();
+			}
+			catch (Exception)
+			{
+				Console.WriteLine("ERROR: Mayhem with Socket Event is not running.");
+			}
 		}
 
 		// Defines the data protocol for reading and writing strings on our stream

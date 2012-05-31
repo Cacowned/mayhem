@@ -48,7 +48,7 @@ namespace MayhemVisionModules.Components
         {
             if (Image != null)
                 Image.Dispose();
-            GC.SuppressFinalize(this);
+            //GC.SuppressFinalize(this);
         }
 
         public object Clone()

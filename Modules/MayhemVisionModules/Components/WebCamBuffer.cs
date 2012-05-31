@@ -61,58 +61,36 @@ namespace MayhemVisionModules.Components
             loopBuffer = new Queue<BitmapTimeStamp>();
         }
 
-        public void SaveImage(Bitmap image, string savePath)
-        {
-            DateTime now = DateTime.Now;
-            try
-            {
-
-                image.Save(savePath, ImageFormat.Jpeg);
-            }
-            catch (ArgumentException ex)
-            {
-                //MessageBox.Show(ex.ToString());
-            }
-            finally
-            {
-                // VERY important! 
-                image.Dispose();
-            }
-
-        }
-
-
-
         public override void UpdateFrame(object sender, EventArgs e)
         {
-            WebCam camera = sender as WebCam;
-            DateTime now = DateTime.Now;
-            TimeSpan lastUpdate = now - loopBufferLastUpdate;
-            if (lastUpdate.TotalMilliseconds >= LoopBufferUpdateMs)
+            try
             {
-                loopBufferLastUpdate = DateTime.Now;
-                if (loopBuffer.Count < loopBufferMaxLength)
+                WebCam camera = sender as WebCam;
+                DateTime now = DateTime.Now;
+                TimeSpan lastUpdate = now - loopBufferLastUpdate;
+                if (lastUpdate.TotalMilliseconds >= LoopBufferUpdateMs)
                 {
-                    //Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
-                   // {
-                        if (ImagerWidth != default(double) && ImagerHeight != default(double))
+                    loopBufferLastUpdate = DateTime.Now;
+                    if (loopBuffer.Count < loopBufferMaxLength)
+                    {
+                        if (ImagerWidth != default(double) && ImagerHeight != default(double) && camera.ImageBuffer != null)
                         {
                             loopBuffer.Enqueue(new BitmapTimeStamp(ImageAsBitmap(camera.ImageBuffer)));
                         }
-                   // }, null);
-                }
-                else
-                {
-                    BitmapTimeStamp destroyMe = loopBuffer.Dequeue();
-                    destroyMe.Dispose();
-                    //Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
-                    //{
-                        if (ImagerWidth != default(double) && ImagerHeight != default(double))
+                    }
+                    else
+                    {
+                        BitmapTimeStamp destroyMe = loopBuffer.Dequeue();
+                        destroyMe.Dispose();
+                        if (ImagerWidth != default(double) && ImagerHeight != default(double) && camera.ImageBuffer != null)
                         {
                             loopBuffer.Enqueue(new BitmapTimeStamp(ImageAsBitmap(camera.ImageBuffer)));
                         }
-                    //}, null);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
             }
         }
 
