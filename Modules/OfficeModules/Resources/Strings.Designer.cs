@@ -502,6 +502,24 @@ namespace OfficeModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t activate the compatibility check..
+        /// </summary>
+        internal static string Word_CantActivateCompatibilityCheck {
+            get {
+                return ResourceManager.GetString("Word_CantActivateCompatibilityCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t activate the inspector..
+        /// </summary>
+        internal static string Word_CantActivateInspector {
+            get {
+                return ResourceManager.GetString("Word_CantActivateInspector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t activate the spell checking..
         /// </summary>
         internal static string Word_CantActivateSpellChecking {

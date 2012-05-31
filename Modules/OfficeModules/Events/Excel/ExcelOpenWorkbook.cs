@@ -6,7 +6,7 @@ using OExcel = Microsoft.Office.Interop.Excel;
 
 namespace OfficeModules.Events.Excel
 {
-    [MayhemModule("Excel: Open Workbook", "Triggers when an workbook is opened")]
+    [MayhemModule("Excel: Open Workbook", "Triggers when a workbook is opened")]
     public class ExcelOpenWorkbook : EventBase
     {
         OExcel.Application excel;

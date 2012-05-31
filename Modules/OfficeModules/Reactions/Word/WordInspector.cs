@@ -6,7 +6,7 @@ using OWord = Microsoft.Office.Interop.Word;
 
 namespace OfficeModules.Reactions.Word
 {
-    [MayhemModule("Word: Check Compatibility", "Activates the compatibility checking for a document")]
+    [MayhemModule("Word: Activate Inspector", "Activates the inspector feature for a document")]
     public class WordInspector : ReactionBase
     {
         private OWord.Application app;
@@ -49,7 +49,7 @@ namespace OfficeModules.Reactions.Word
             }
             catch (Exception ex)
             {
-                ErrorLog.AddError(ErrorType.Failure, Strings.Word_CantActivateSpellChecking);
+                ErrorLog.AddError(ErrorType.Failure, Strings.Word_CantActivateInspector);
                 Logger.Write(ex);
             }
         }
