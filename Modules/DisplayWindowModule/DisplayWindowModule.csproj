@@ -34,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MayhemCore">
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+    </Reference>
+    <Reference Include="MayhemWpf">
+      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
@@ -81,18 +87,6 @@
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MayhemCore\MayhemCore.csproj">
-      <Project>{F2267792-04A9-4FAF-ABBC-4ADFD68881F4}</Project>
-      <Name>MayhemCore</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MayhemWpf\MayhemWpf.csproj">
-      <Project>{EDE63213-1EC8-4CDF-A782-AA20C73D26F8}</Project>
-      <Name>MayhemWpf</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

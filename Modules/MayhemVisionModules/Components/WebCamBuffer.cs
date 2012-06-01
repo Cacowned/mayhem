@@ -104,12 +104,19 @@ namespace MayhemVisionModules.Components
 
         public System.Drawing.Bitmap GetLastBufferedItem()
         {
-            int tailIdx = loopBuffer.Count - 1;
-            if (tailIdx > 0 && tailIdx < loopBuffer.Count)
+            try
             {
-                return loopBuffer.ElementAt(tailIdx).Image;
+                int tailIdx = loopBuffer.Count - 1;
+                if (tailIdx > 0 && tailIdx < loopBuffer.Count)
+                {
+                    return loopBuffer.ElementAt(tailIdx).Image;
+                }
+                return null;
             }
-            return null;
+            catch
+            {
+                return null;
+            }
         }
 
         public System.Drawing.Bitmap GetBufferItemAtIndex(int index)
