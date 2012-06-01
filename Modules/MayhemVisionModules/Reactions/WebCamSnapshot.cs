@@ -24,7 +24,7 @@ using System.IO;
 namespace MayhemVisionModules.Reactions
 {
     [DataContract]
-    [MayhemModule("Webcam Snapshot", "Save a snapshot from a webcam")] 
+    [MayhemModule("Webcam Snapshot", "Saves a snapshot from a webcam")] 
     public class WebCamSnapshot : ReactionBase, IWpfConfigurable
     {
         [DataMember]
@@ -59,6 +59,7 @@ namespace MayhemVisionModules.Reactions
 
         private WebCamBuffer webcambuffer; //this registers to obtain images from the configured webcam
 
+        private bool isPerforming = false;
         private bool callbacksRegistered = false;
 
         ~WebCamSnapshot()
@@ -307,8 +308,19 @@ namespace MayhemVisionModules.Reactions
 
         public override void Perform()
         {
-            if (selectedCameraIndex != -1 && selectedCameraConnected)
+            if (isPerforming)
             {
+                ErrorLog.AddError(ErrorType.Failure, "Waiting for last snapshot to save");
+                return;
+            }
+            if (!selectedCameraConnected)
+            {
+                ErrorLog.AddError(ErrorType.Failure, "Waiting for webcam to become available");
+                return;
+            }
+            if (selectedCameraIndex != -1 && selectedCameraConnected && webcambuffer != null)
+            {
+                isPerforming = true;
                 Bitmap image = webcambuffer.GetLastBufferedItem();
                 try
                 {
@@ -338,8 +350,11 @@ namespace MayhemVisionModules.Reactions
                 }
                 finally
                 {
-                    image.Dispose();
+                    if (image != null)
+                        image.Dispose();
+                    image = null;
                 }
+                isPerforming = false;
             }
             else
             {
