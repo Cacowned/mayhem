@@ -56,16 +56,16 @@ namespace MayhemVisionModules.Events
         private float timeThreshold;
 
         [DataMember]
-        private int roiX;
+        private double roiX;
 
         [DataMember]
-        private int roiY;
+        private double roiY;
 
         [DataMember]
-        private int roiWidth;
+        private double roiWidth;
 
         [DataMember]
-        private int roiHeight;
+        private double roiHeight;
 
         [DataMember]
         private int camerafocus;
@@ -202,8 +202,8 @@ namespace MayhemVisionModules.Events
             timeThreshold = 1;
             roiX = 0;
             roiY = 0;
-            roiWidth = 640;
-            roiHeight = 480;
+            roiWidth = 1;
+            roiHeight = 1;
             camerafocus = 0;
             camerazoom = 1;
         }

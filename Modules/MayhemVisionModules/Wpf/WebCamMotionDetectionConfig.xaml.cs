@@ -35,7 +35,7 @@ namespace MayhemVisionModules.Wpf
             camera_selector.InitSelector();
         }
 
-        public WebCamMotionDetectionConfig(int cameraFocus, int cameraZoom, float percentageThresh, float timeThresh, int differenceThresh, int roix, int roiy, int roiwidth, int roiheight)
+        public WebCamMotionDetectionConfig(int cameraFocus, int cameraZoom, float percentageThresh, float timeThresh, int differenceThresh, double roix, double roiy, double roiwidth, double roiheight)
         {
             InitializeComponent();
 
@@ -141,7 +141,7 @@ namespace MayhemVisionModules.Wpf
         public int SelectedCameraIndex;
         public string SelectedCameraName;
         public string SelectedCameraPath;
-        public int RoiX, RoiY, RoiWidth, RoiHeight;
+        public double RoiX, RoiY, RoiWidth, RoiHeight;
         public float PercentageThresh, TimeThresh;
         public int DiffThresh;
         public int CameraFocus, CameraZoom;
