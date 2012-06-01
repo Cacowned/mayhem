@@ -24,7 +24,7 @@ namespace MayhemWebCamWrapper
     {
         
         //constructors...
-        public WebCam(int captureWidth=640, int captureHeight=480)
+        public WebCam(int captureWidth=320, int captureHeight=240)
         {
             Subscribers = new List<ImageListenerBase>();
             _index = -1;
@@ -42,8 +42,8 @@ namespace MayhemWebCamWrapper
             _path = path;
             _index = index;
             _isavailable = isavailable;
-            _width = 640;
-            _height = 480;
+            _width = 320;
+            _height = 240;
         }
 
         
@@ -55,8 +55,8 @@ namespace MayhemWebCamWrapper
                 Stop();
                 if (_height == default(int) || _width == default(int))
                 {
-                    _height = 480;
-                    _width = 640;
+                    _height = 240;
+                    _width = 320;
                 }
 
                 if (worker == null)

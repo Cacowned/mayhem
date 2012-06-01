@@ -27,7 +27,7 @@ namespace MayhemVisionModules.Components
         public float TimeSensitivity; //how quickly should the motion detector adapt to time? (larger value means it takes longer to forget the past)
         public double RoiX, RoiY, RoiWidth, RoiHeight; //the region of interest over which processing will occur
         public int SelectedCameraIndex;
-        private byte[] motionBuffer = new byte[(int)(640 * 480 * 3)];
+        private byte[] motionBuffer = null;
         private bool showBackground = true;
         private IntPtr pMotionDetector = ComputerVisionImports.CreateMotionDetector();
    
@@ -37,8 +37,8 @@ namespace MayhemVisionModules.Components
         {
             RoiX = 0;
             RoiY = 0;
-            RoiWidth = 640;
-            RoiHeight = 480;
+            RoiWidth = 1;
+            RoiHeight = 1;
             SelectedCameraIndex = -1;
             MotionAreaPercentageSensitivity = 5;
             MotionDiffSensitivity = 30;
@@ -85,6 +85,10 @@ namespace MayhemVisionModules.Components
             {
                 try
                 {
+                    if (motionBuffer == null)
+                    {
+                        motionBuffer = new byte[(int)(Convert.ToInt32(ImagerWidth) * Convert.ToInt32(ImagerHeight) * 3)];
+                    }
                     int scaledRoiX = Math.Max(Math.Min(Convert.ToInt32(ImagerWidth*RoiX),Convert.ToInt32(ImagerWidth)),0) ;
                     int scaledRoiY = Math.Max(Math.Min(Convert.ToInt32(ImagerHeight*RoiY), Convert.ToInt32(ImagerHeight)), 0);
                     int scaledRoiWidth = Math.Max(Math.Min(Convert.ToInt32(ImagerWidth*RoiWidth), Convert.ToInt32(ImagerWidth)), 0);
