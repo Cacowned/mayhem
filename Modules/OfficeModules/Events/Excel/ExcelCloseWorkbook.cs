@@ -6,7 +6,7 @@ using OExcel = Microsoft.Office.Interop.Excel;
 
 namespace OfficeModules.Events.Excel
 {
-    [MayhemModule("Excel: Close Workbook", "Triggers when an workbook is closed")]
+    [MayhemModule("Excel: Close Workbook", "Triggers when a workbook is closed")]
     public class ExcelCloseWorkbook : EventBase
     {
         OExcel.Application excel;

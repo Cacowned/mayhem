@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
+using System.IO;
+using System;
 
 namespace SocketModules.Wpf
 {
@@ -46,6 +48,23 @@ namespace SocketModules.Wpf
 			CheckValidity();
 
 			textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+
+			updateCommand();
+		}
+
+		private void updateCommand()
+		{
+			string directory = Directory.GetCurrentDirectory();
+			string filename = "SocketExecutable.exe";
+			string commandText = string.Format("{0}\\{1} \"{2}\"", directory, filename, PhraseTextBox.Text);
+			
+			command.Text = commandText;
+			command.PageRight();
+		}
+
+		private void Copy_Click(object sender, RoutedEventArgs e)
+		{
+			Clipboard.SetText(command.Text);
 		}
 	}
 }

@@ -49,7 +49,7 @@ namespace OfficeModules.Reactions.Word
             }
             catch (Exception ex)
             {
-                ErrorLog.AddError(ErrorType.Failure, Strings.Word_CantActivateSpellChecking);
+                ErrorLog.AddError(ErrorType.Failure, Strings.Word_CantActivateCompatibilityCheck);
                 Logger.Write(ex);
             }
         }

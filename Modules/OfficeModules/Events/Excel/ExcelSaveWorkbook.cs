@@ -6,7 +6,7 @@ using OExcel = Microsoft.Office.Interop.Excel;
 
 namespace OfficeModules.Events.Excel
 {
-    [MayhemModule("Excel: Save Workbook", "Triggers when an workbook is saved")]
+    [MayhemModule("Excel: Save Workbook", "Triggers when a workbook is saved")]
     public class ExcelSaveWorkbook : EventBase
     {
         OExcel.Application excel;

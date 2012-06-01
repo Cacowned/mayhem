@@ -276,4 +276,10 @@
   <data name="Lync_SendMessageConfigString" xml:space="preserve">
     <value>User id: {0}, Message: {1}.</value>
   </data>
+  <data name="Word_CantActivateCompatibilityCheck" xml:space="preserve">
+    <value>Can't activate the compatibility check.</value>
+  </data>
+  <data name="Word_CantActivateInspector" xml:space="preserve">
+    <value>Can't activate the inspector.</value>
+  </data>
 </root>

@@ -6,6 +6,9 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Security.Policy;
 using System.Threading;
+using System.Windows;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
 
 namespace MayhemVisionModules.Wpf
 {
@@ -15,23 +18,54 @@ namespace MayhemVisionModules.Wpf
     {
         public ImagePopup()
         {
+            
             this.FormBorderStyle = FormBorderStyle.None;
-            this.TopMost = true;
             this.ShowInTaskbar = false;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new Size(640, 480);
+            this.Size = new System.Drawing.Size(640, 480);
         }
 
         public void ShowPopup(int millisecondTimeout, string filename)
         {
             if (filename != null)
             {
+                //IntPtr windowHandle = new WindowInteropHelper(System.Windows.Application.Current.MainWindow).Handle;
+                //NativeWindow parent = NativeWindow.FromHandle(windowHandle);
+
                 this.BackgroundImage = Image.FromFile(filename);
+                IntPtr wHnd = FindWindow("Mayhem", null);
+                NativeWindow parent = NativeWindow.FromHandle(wHnd);
+                SetParent(this.Handle, wHnd);
+                this.TopMost = true;
                 this.Show();
                 Thread.Sleep(millisecondTimeout);
                 this.Close();
             }
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // ImagePopup
+            // 
+            this.ClientSize = new System.Drawing.Size(640, 480);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "ImagePopup";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.TopMost = true;
+            this.ResumeLayout(false);
+
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr FindWindow(string ClassName, string WindowText);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
         /*public void ShowPopup(int millisecondTimeout, Bitmap bmp)
         {
