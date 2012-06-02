@@ -57,14 +57,14 @@ namespace MayhemVisionModules.Reactions
         [DataMember]
         private bool selectedCameraConnected;
 
-        private WebCamBuffer webcambuffer; //this registers to obtain images from the configured webcam
+        private WebCamBuffer webcambuffer=null; //this registers to obtain images from the configured webcam
 
         private bool isPerforming = false;
         private bool callbacksRegistered = false;
 
         ~WebCamSnapshot()
         {
-            if (selectedCameraIndex != -1 && selectedCameraConnected)
+            if (selectedCameraIndex != -1 && selectedCameraConnected && webcambuffer != null)
                 webcambuffer.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
             WebcamManager.ReleaseInactiveCameras();
             if (callbacksRegistered)
@@ -134,6 +134,7 @@ namespace MayhemVisionModules.Reactions
                 for (int i = 0; i < webcambuffer.SubscribedImagers.Count; i++)
                     webcambuffer.UnregisterForImages(webcambuffer.SubscribedImagers[i]);
                 webcambuffer.ClearBuffer();
+                webcambuffer = null;
             }
         }
 
@@ -194,8 +195,6 @@ namespace MayhemVisionModules.Reactions
         {
             Thread thread = new Thread(() =>
             {
-                if (webcambuffer != null)
-                    ReleasePreviousBuffers();
                 try
                 {
                     ReleasePreviousBuffers();
@@ -366,6 +365,7 @@ namespace MayhemVisionModules.Reactions
 
         public string SaveImage(ref Bitmap image)
         {
+            Bitmap tempImage = image;
             Logger.WriteLine("SaveImage");
             DateTime now = DateTime.Now;
             string filename = fileNamePrefix + "_" +
@@ -379,7 +379,7 @@ namespace MayhemVisionModules.Reactions
             Logger.WriteLine("saving file to " + path);
             try
             {
-                image.Save(path, ImageFormat.Jpeg);
+                tempImage.Save(path, ImageFormat.Jpeg);
                 ErrorLog.AddError(ErrorType.Message, "Picture saved to: " + path);
             }
             catch
@@ -387,6 +387,8 @@ namespace MayhemVisionModules.Reactions
                 Logger.WriteLine("Exception while saving picture");
                 ErrorLog.AddError(ErrorType.Failure, "Could not save a picture to: " + path);
             }
+            tempImage.Dispose();
+            tempImage = null;
             return path; 
         }
 
@@ -394,9 +396,6 @@ namespace MayhemVisionModules.Reactions
         {
             get
             {
-                if (webcambuffer != null)
-                    ReleasePreviousBuffers();
-                WebcamManager.ReleaseInactiveCameras();
                 WebcamSnapshotConfig config = new WebcamSnapshotConfig(folderLocation, fileNamePrefix,showPreview, playShutterSound);
                 return config;
             }

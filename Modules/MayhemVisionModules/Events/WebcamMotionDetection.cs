@@ -152,11 +152,13 @@ namespace MayhemVisionModules.Events
 
         protected void ReleasePreviousDetectors()
         {
+            
             if (motionDetector != null && selectedCameraIndex != -1)
             {
                 for (int i = 0; i < motionDetector.SubscribedImagers.Count; i++)
                     motionDetector.UnregisterForImages(motionDetector.SubscribedImagers[i]);
                 motionDetector.Clear();
+                motionDetector = null;
             }
         }
 
@@ -244,6 +246,7 @@ namespace MayhemVisionModules.Events
                     motionDetector.MotionDetected -= WebCamMotionDetected;
                     motionDetector.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
                     ReleasePreviousDetectors();
+                    
                     WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS);
                     WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM);
                     WebcamManager.ReleaseInactiveCameras();
@@ -262,14 +265,14 @@ namespace MayhemVisionModules.Events
         {
             Thread thread = new Thread(() =>
             {
-                if (motionDetector != null)
-                    ReleasePreviousDetectors();
                 try
                 {
                     ReleasePreviousDetectors();
                     WebcamManager.SetPropertyValueManual(cameraindex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS, camerafocus);
                     WebcamManager.SetPropertyValueManual(cameraindex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM, camerazoom);
+                    
                     motionDetector = new WebCamMotionDetector();
+                    //motionDetector.ToggleVisualization();
                     motionDetector.RegisterForImages(WebcamManager.GetCamera(cameraindex));
                     motionDetector.SelectedCameraIndex = cameraindex;
                     motionDetector.MotionAreaPercentageSensitivity = percentageSensitivity;
@@ -301,16 +304,16 @@ namespace MayhemVisionModules.Events
             {
                 if (WebcamManager.IsServiceRestartRequired())
                     WebcamManager.RestartService();
-                if (!callbacksRegistered)
-                {
-                    WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
-                    WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
-                    callbacksRegistered = true;
-                }
-                //look for the selected camera
                 selectedCameraIndex = LookforSelectedCamera(true);
+                
                 if (selectedCameraIndex != -1 && selectedCameraConnected)
                 {
+                    if (!callbacksRegistered)
+                    {
+                        WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
+                        WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
+                        callbacksRegistered = true;
+                    }
                     InitializeMotionDetection(selectedCameraIndex);
                 }
             }
@@ -363,9 +366,6 @@ namespace MayhemVisionModules.Events
         {
             get
             {
-                if (motionDetector!= null)
-                    ReleasePreviousDetectors();
-                WebcamManager.ReleaseInactiveCameras();
                 WebCamMotionDetectionConfig config = new WebCamMotionDetectionConfig(camerafocus, camerazoom, percentageSensitivity, timeThreshold, differenceThreshold, roiX, roiY, roiWidth, roiHeight);
                 return config;
             }
