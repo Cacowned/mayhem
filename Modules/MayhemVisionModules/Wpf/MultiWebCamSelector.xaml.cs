@@ -114,8 +114,8 @@ namespace MayhemVisionModules.Wpf
             InitializeComponent();
             Dispatcher.ShutdownStarted += OnExit;
 
-            captureWidth = 320;  //the size of the capture...
-            captureHeight = 240;
+            captureWidth = 640;  //the size of the capture...
+            captureHeight = 480;
             previewWidth = 80; //the size of the preview windows
             previewHeight = 60;
             mainViewWidth = 320;
@@ -127,8 +127,8 @@ namespace MayhemVisionModules.Wpf
         {
             DataContext = this;
            
-            captureWidth = 320;  //the size of the capture...
-            captureHeight = 240;
+            captureWidth = 640;  //the size of the capture...
+            captureHeight = 480;
             previewWidth = 80; //the size of the preview windows
             previewHeight = 60;
             mainViewWidth = 320;

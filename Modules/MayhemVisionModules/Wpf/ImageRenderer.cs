@@ -76,7 +76,7 @@ namespace MayhemVisionModules.Wpf
         void populateBitMap(byte[] data, int len)
         {
 
-            if (ImagerWidth != default(int) && ImagerHeight != default(int))
+            if (ImagerWidth != default(int) && ImagerHeight != default(int) && data.Length == len && map != null)
             {
                 Marshal.Copy(data, 0, map, len);
             }

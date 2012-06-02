@@ -333,10 +333,10 @@ namespace MayhemVisionModules.Wpf
         public void SetROI(double roix, double roiy, double roiwidth, double roiheight)
         {
 
-            ROI.Width = 0.5 * (roiwidth) - 0.5;
-            ROI.Height = 0.5 * (roiheight) - 0.5;
-            Canvas.SetLeft(ROI, 0.5*(roix)-0.5);
-            Canvas.SetTop(ROI, 0.5 * (roiy) - 0.5);
+            ROI.Width = Math.Max(Math.Min(320*roiwidth, 320),0);
+            ROI.Height = Math.Max(Math.Min(240 * roiheight, 240), 0);
+            Canvas.SetLeft(ROI, Math.Max(Math.Min(320*roix, 320),0));
+            Canvas.SetTop(ROI, Math.Max(Math.Min(240 * roiy, 240), 0));
             RoiX = Image_Viewer.RoiX = roix;
             RoiY = Image_Viewer.RoiY = roiy;
             RoiWidth = Image_Viewer.RoiWidth = roiwidth;
