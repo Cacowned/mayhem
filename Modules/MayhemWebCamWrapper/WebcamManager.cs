@@ -36,6 +36,7 @@ namespace MayhemWebCamWrapper
 
         public WebCamHardwareScannerForm()
         {
+
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.ShowIcon = false;
@@ -48,12 +49,16 @@ namespace MayhemWebCamWrapper
         private void Load_Form(object sender, EventArgs e)
         {
             InitializeComponent();
+          
+
         }
 
         private void Form_Activated(object sender, EventArgs e)
         {
             this.Visible = false;
             this.SendToBack();
+           
+            
             int pWnd = FindWindow("Progman", null);
             int tWnd = this.Handle.ToInt32();
             SetParent(tWnd, pWnd);
@@ -89,9 +94,6 @@ namespace MayhemWebCamWrapper
 
         [DllImport("user32.dll")]
         static extern int SetParent(int hWndChild, int hWndNewParent);
-
-     
-
     }
 
     /// <summary>
@@ -105,8 +107,12 @@ namespace MayhemWebCamWrapper
             WebCamHardwareScannerForm frm = new WebCamHardwareScannerForm();
             Guid webcamGUID = new Guid("6994ad05-93ef-11d0-a3cc-00a0c9223196");
             notifier = new USBNotifier(frm, webcamGUID);
+
+            
             frm.Show();
         }
+
+        
 
         public void RegisterWebcamArrivalEvent(USBEventHandler onArrival)
         {

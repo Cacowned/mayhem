@@ -236,10 +236,10 @@ namespace MayhemVisionModules.Events
  
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+        //[MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            //if (!e.IsConfiguring)
+            if (!e.IsConfiguring)
             {
                 if (motionDetector != null && selectedCameraIndex != -1)
                 {
@@ -263,16 +263,16 @@ namespace MayhemVisionModules.Events
 
         void InitializeMotionDetection(int cameraindex)
         {
+            ReleasePreviousDetectors();
             Thread thread = new Thread(() =>
             {
                 try
                 {
-                    ReleasePreviousDetectors();
                     WebcamManager.SetPropertyValueManual(cameraindex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS, camerafocus);
                     WebcamManager.SetPropertyValueManual(cameraindex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM, camerazoom);
                     
                     motionDetector = new WebCamMotionDetector();
-                    //motionDetector.ToggleVisualization();
+                    motionDetector.ToggleVisualization();
                     motionDetector.RegisterForImages(WebcamManager.GetCamera(cameraindex));
                     motionDetector.SelectedCameraIndex = cameraindex;
                     motionDetector.MotionAreaPercentageSensitivity = percentageSensitivity;
@@ -289,18 +289,17 @@ namespace MayhemVisionModules.Events
                     MessageBox.Show(err.ToString());
                 }
 
-                Thread.Sleep(30);
-                WebcamManager.ReleaseInactiveCameras();
+                //WebcamManager.ReleaseInactiveCameras();
            
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+        //[MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnEnabling(EnablingEventArgs e)
         {
-          //  if (!e.WasConfiguring)
+            if (!e.WasConfiguring)
             {
                 if (WebcamManager.IsServiceRestartRequired())
                     WebcamManager.RestartService();
@@ -345,7 +344,6 @@ namespace MayhemVisionModules.Events
             if (motionDetector != null && selectedCameraIndex != -1)
             {
                 motionDetector.MotionDetected -= WebCamMotionDetected;
-                motionDetector.UnregisterForImages(WebcamManager.GetCamera(selectedCameraIndex));
                 ReleasePreviousDetectors();
                 WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS);
                 WebcamManager.SetPropertyValueAuto(selectedCameraIndex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM);

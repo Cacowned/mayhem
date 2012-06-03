@@ -133,6 +133,7 @@ namespace MayhemVisionModules.Reactions
             {
                 for (int i = 0; i < webcambuffer.SubscribedImagers.Count; i++)
                     webcambuffer.UnregisterForImages(webcambuffer.SubscribedImagers[i]);
+                Thread.Sleep(30);
                 webcambuffer.ClearBuffer();
                 webcambuffer = null;
             }
@@ -205,8 +206,6 @@ namespace MayhemVisionModules.Reactions
                 {
                     MessageBox.Show(err.ToString());
                 }
-                Thread.Sleep(30);
-                WebcamManager.ReleaseInactiveCameras();
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
@@ -232,10 +231,10 @@ namespace MayhemVisionModules.Reactions
            
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+        //[MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            //if (!e.IsConfiguring)
+            if (!e.IsConfiguring)
             {
                 if (webcambuffer != null && selectedCameraIndex != -1)
                 {
@@ -253,10 +252,10 @@ namespace MayhemVisionModules.Reactions
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+        //[MethodImpl(MethodImplOptions.Synchronized)]
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            //if (!e.WasConfiguring)
+            if (!e.WasConfiguring)
             {
                 if (WebcamManager.IsServiceRestartRequired())
                     WebcamManager.RestartService();
