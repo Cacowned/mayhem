@@ -30,7 +30,7 @@ namespace MayhemVisionModules.Components
         private byte[] motionBuffer = null;
         private bool showBackground = true;
         private IntPtr pMotionDetector = IntPtr.Zero;
-   
+
 
 
         public WebCamMotionDetector()
@@ -87,7 +87,7 @@ namespace MayhemVisionModules.Components
             if (camera.ImageBuffer == null)
                 return;
 
-           
+
             if (ImagerWidth != default(double) && ImagerHeight != default(double) && SelectedCameraIndex > -1 && SelectedCameraIndex < WebcamManager.NumberConnectedCameras())
             {
                 try
@@ -96,31 +96,33 @@ namespace MayhemVisionModules.Components
                     {
                         pMotionDetector = ComputerVisionImports.CreateMotionDetector();
                     }
-                    if (motionBuffer == null || motionBuffer.Length != camera.ImageBuffer.Length )
+                    if (motionBuffer == null || motionBuffer.Length != camera.ImageBuffer.Length)
                     {
                         motionBuffer = new byte[(int)(camera.ImageBuffer.Length)];
                     }
-                    int scaledRoiX = Math.Max(Math.Min(Convert.ToInt32(ImagerWidth*RoiX),Convert.ToInt32(ImagerWidth)),0) ;
-                    int scaledRoiY = Math.Max(Math.Min(Convert.ToInt32(ImagerHeight*RoiY), Convert.ToInt32(ImagerHeight)), 0);
-                    int scaledRoiWidth = Math.Max(Math.Min(Convert.ToInt32(ImagerWidth*RoiWidth), Convert.ToInt32(ImagerWidth)), 0);
-                    int scaledRoiHeight = Math.Max(Math.Min(Convert.ToInt32(ImagerWidth*RoiHeight), Convert.ToInt32(ImagerHeight)), 0);
-                    ComputerVisionImports.UpdateBackground(pMotionDetector, camera.ImageBuffer, showBackground ? motionBuffer : null, Convert.ToInt32(ImagerWidth), Convert.ToInt32(ImagerHeight), MotionAreaPercentageSensitivity, MotionDiffSensitivity, TimeSensitivity, scaledRoiX, scaledRoiY, scaledRoiWidth, scaledRoiHeight);
-                  
-                    if (ComputerVisionImports.IsMotionDetected(pMotionDetector))
-                        OnMotionDetected(EventArgs.Empty); // trigger event
-
-                    if (showBackground)
+                    int scaledRoiX = Math.Max(Math.Min(Convert.ToInt32(ImagerWidth * RoiX), Convert.ToInt32(ImagerWidth)), 0);
+                    int scaledRoiY = Math.Max(Math.Min(Convert.ToInt32(ImagerHeight * RoiY), Convert.ToInt32(ImagerHeight)), 0);
+                    int scaledRoiWidth = Math.Max(Math.Min(Convert.ToInt32(ImagerWidth * RoiWidth), Convert.ToInt32(ImagerWidth)), 0);
+                    int scaledRoiHeight = Math.Max(Math.Min(Convert.ToInt32(ImagerWidth * RoiHeight), Convert.ToInt32(ImagerHeight)), 0);
+                    if (pMotionDetector != IntPtr.Zero)
                     {
-                        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
+                        ComputerVisionImports.UpdateBackground(pMotionDetector, camera.ImageBuffer, motionBuffer, Convert.ToInt32(ImagerWidth), Convert.ToInt32(ImagerHeight), MotionAreaPercentageSensitivity, MotionDiffSensitivity, TimeSensitivity, scaledRoiX, scaledRoiY, scaledRoiWidth, scaledRoiHeight);
+
+                        if (ComputerVisionImports.IsMotionDetected(pMotionDetector))
+                            OnMotionDetected(EventArgs.Empty); // trigger event
+
+                        if (showBackground)
                         {
-                            populateBitMap(motionBuffer, (int)(ImagerWidth * ImagerHeight * 3));
-                            BitmapSource.Invalidate();
-                        }, null);
+                            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
+                            {
+                                populateBitMap(motionBuffer, (int)(ImagerWidth * ImagerHeight * 3));
+                                BitmapSource.Invalidate();
+                                GC.Collect(); //this is due to a bug in InteropBitmap which causes memory leaks for 24 bit bitmaps... MS: FIX IT!
+                            }, null);
+                        }
                     }
-                    GC.Collect(); //this is due to a bug in InteropBitmap which causes memory leaks for 24 bit bitmaps... MS: FIX IT!
-                    
                 }
-                catch (Exception ex)
+                catch
                 {
                     //System.Windows.Forms.MessageBox.Show(ex.ToString());
                 }
@@ -163,7 +165,7 @@ namespace MayhemVisionModules.Components
             RegisterForImages(c);
         }
 
- 
+
         public void RemoveImageSource(ImagerBase c)
         {
             UnregisterForImages(c);
