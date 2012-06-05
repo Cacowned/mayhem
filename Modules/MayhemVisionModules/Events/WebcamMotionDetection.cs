@@ -263,11 +263,12 @@ namespace MayhemVisionModules.Events
 
         void InitializeMotionDetection(int cameraindex)
         {
-            ReleasePreviousDetectors();
+            
             Thread thread = new Thread(() =>
             {
                 try
                 {
+                    ReleasePreviousDetectors();
                     WebcamManager.SetPropertyValueManual(cameraindex, WebcamManager.CAMERA_PROPERTY.CAMERA_FOCUS, camerafocus);
                     WebcamManager.SetPropertyValueManual(cameraindex, WebcamManager.CAMERA_PROPERTY.CAMERA_ZOOM, camerazoom);
                     
@@ -288,8 +289,6 @@ namespace MayhemVisionModules.Events
                 {
                     MessageBox.Show(err.ToString());
                 }
-
-                //WebcamManager.ReleaseInactiveCameras();
            
             });
             thread.SetApartmentState(ApartmentState.STA);
@@ -322,6 +321,7 @@ namespace MayhemVisionModules.Events
         public void OnSaved(WpfConfiguration configurationControl)
         {
             WebCamMotionDetectionConfig config = configurationControl as WebCamMotionDetectionConfig;
+            config.Cleanup();
             captureWidth = 640;
             captureHeight = 480;
             selectedCameraPath = config.SelectedCameraPath;
@@ -336,6 +336,21 @@ namespace MayhemVisionModules.Events
             roiHeight = config.RoiHeight;
             camerafocus = config.CameraFocus;
             camerazoom = config.CameraZoom;
+
+            if (WebcamManager.IsServiceRestartRequired())
+                WebcamManager.RestartService();
+            selectedCameraIndex = LookforSelectedCamera(true);
+
+            if (selectedCameraIndex != -1 && selectedCameraConnected)
+            {
+                if (!callbacksRegistered)
+                {
+                    WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
+                    WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
+                    callbacksRegistered = true;
+                }
+                InitializeMotionDetection(selectedCameraIndex);
+            }
 
         }
 
@@ -365,6 +380,7 @@ namespace MayhemVisionModules.Events
             get
             {
                 WebCamMotionDetectionConfig config = new WebCamMotionDetectionConfig(camerafocus, camerazoom, percentageSensitivity, timeThreshold, differenceThreshold, roiX, roiY, roiWidth, roiHeight);
+                config.Cleanup();
                 return config;
             }
         }
