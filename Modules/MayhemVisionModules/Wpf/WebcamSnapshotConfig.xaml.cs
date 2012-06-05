@@ -176,6 +176,11 @@ namespace MayhemVisionModules.Wpf
 
         public override void OnClosing()
         {
+            //camera_selector.Cleanup();
+        }
+
+        public void Cleanup()
+        {
             camera_selector.Cleanup();
         }
 

@@ -82,6 +82,12 @@ namespace MayhemVisionModules.Wpf
             camera_selector.Cleanup();
         }
 
+        public void Cleanup()
+        {
+            camera_roi_selector.CleanUp();
+            camera_selector.Cleanup();
+        }
+
         public override void OnLoad()
         {
             camera_roi_selector.SetSliderValues(CameraFocus, CameraZoom, PercentageThresh, TimeThresh, DiffThresh); 

@@ -194,12 +194,15 @@ namespace MayhemVisionModules.Reactions
 
         void InitializeSnapshot(int cameraindex)
         {
+           
+            
             Thread thread = new Thread(() =>
             {
                 try
                 {
                     ReleasePreviousBuffers();
-                    webcambuffer = new WebCamBuffer();
+                    if (webcambuffer == null)
+                        webcambuffer = new WebCamBuffer();
                     webcambuffer.RegisterForImages(WebcamManager.GetCamera(cameraindex));
                 }
                 catch (Exception err)
@@ -277,6 +280,7 @@ namespace MayhemVisionModules.Reactions
         public void OnSaved(WpfConfiguration configurationControl)
         {
             WebcamSnapshotConfig config = configurationControl as WebcamSnapshotConfig;
+             config.Cleanup();
             folderLocation = config.SaveLocation;
             fileNamePrefix = config.FilenamePrefix;
             captureWidth = 640;
@@ -285,6 +289,20 @@ namespace MayhemVisionModules.Reactions
             selectedCameraName = config.SelectedCameraName;
             showPreview = config.ShowPreview;
             playShutterSound = config.PlayShutterSound;
+            if (WebcamManager.IsServiceRestartRequired())
+                WebcamManager.RestartService();
+            //look for the selected camera
+            selectedCameraIndex = LookforSelectedCamera(true);
+            if (selectedCameraIndex != -1 && selectedCameraConnected)
+            {
+                if (!callbacksRegistered)
+                {
+                    WebcamManager.RegisterWebcamConnectionEvent(OnCameraConnected);
+                    WebcamManager.RegisterWebcamRemovalEvent(OnCameraDisconnected);
+                    callbacksRegistered = true;
+                }
+                InitializeSnapshot(selectedCameraIndex);
+            }
         }
 
         protected override void OnDeleted()
@@ -357,7 +375,6 @@ namespace MayhemVisionModules.Reactions
             else
             {
                 ReleasePreviousBuffers();
-                WebcamManager.ReleaseInactiveCameras();
                 ErrorLog.AddError(ErrorType.Failure, "Webcam snapshot is disabled because selected camera was not found");
             }
         }
@@ -396,6 +413,7 @@ namespace MayhemVisionModules.Reactions
             get
             {
                 WebcamSnapshotConfig config = new WebcamSnapshotConfig(folderLocation, fileNamePrefix,showPreview, playShutterSound);
+                config.Cleanup();
                 return config;
             }
         }
