@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using MayhemWpf.UserControls;
 using System.IO;
 using System;
+using System.Threading;
 
 namespace SocketModules.Wpf
 {
@@ -64,7 +65,19 @@ namespace SocketModules.Wpf
 
 		private void Copy_Click(object sender, RoutedEventArgs e)
 		{
-			Clipboard.SetText(command.Text);
+            // TODO: What a super super terrible fix
+            // SetText can throw an exception, this stupid thing found on
+            // http://stackoverflow.com/questions/68666/clipbrd-e-cant-open-error-when-setting-the-clipboard-from-net
+            for (int i = 0; i < 10; i++)
+            {
+                try
+                {
+                    Clipboard.SetText(command.Text);
+                    return;
+                }
+                catch { }
+                Thread.Sleep(10);
+            }  
 		}
 	}
 }

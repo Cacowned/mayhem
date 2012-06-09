@@ -7,7 +7,7 @@ using SocketModules.Wpf;
 namespace SocketModules.Events
 {
 	[DataContract]
-	[MayhemModule("Socket Event", "Trigger this event using the SocketEvent executable")]
+	[MayhemModule("MayhemEvent.exe", "Trigger this event using the MayhemEvent.exe executable")]
 	public class SocketEvent : EventBase, IWpfConfigurable
 	{
 		[DataMember]
