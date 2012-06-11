@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace SocketModules.LowLevel
+namespace MayhemEventExeModule.LowLevel
 {
 	// Defines the data protocol for reading and writing strings on our stream
 	public class StreamString

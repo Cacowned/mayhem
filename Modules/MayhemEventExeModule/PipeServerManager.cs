@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MayhemCore;
 
-namespace SocketModules
+namespace MayhemEventExeModule
 {
 	public static class PipeServerManager
 	{

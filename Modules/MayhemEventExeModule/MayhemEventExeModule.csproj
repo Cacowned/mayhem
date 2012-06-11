@@ -8,8 +8,8 @@
     <ProjectGuid>{64F6EA27-BAD6-4BF5-A0E8-B86827313D01}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SocketModules</RootNamespace>
-    <AssemblyName>SocketModules</AssemblyName>
+    <RootNamespace>MayhemEventExeModule</RootNamespace>
+    <AssemblyName>MayhemEventExeModule</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\SocketModules\</OutputPath>
+    <OutputPath>..\..\bin\MayhemEventModule\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -61,12 +61,12 @@
     <Compile Include="Events\SocketEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PipeServer.cs" />
-    <Compile Include="Wpf\SocketEventConfig.xaml.cs">
-      <DependentUpon>SocketEventConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\MayhemEventConfig.xaml.cs">
+      <DependentUpon>MayhemEventConfig.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Wpf\SocketEventConfig.xaml">
+    <Page Include="Wpf\MayhemEventConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

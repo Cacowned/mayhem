@@ -3,8 +3,9 @@ using System.IO;
 using System.IO.Pipes;
 using System.Security.Principal;
 using System.Text;
+using System.Diagnostics;
 
-namespace SocketExecutable
+namespace MayhemEventExecutable
 {
 	static class Program
 	{
@@ -28,6 +29,11 @@ namespace SocketExecutable
 					// showing any window anyways, so it doesn't really matter.
 				}
 			}
+            else if (args.Length == 1)
+            {
+                // No arguments sent, start interactive mode
+                Process.Start("MayhemEventInteractive.exe");
+            }
 
 
 

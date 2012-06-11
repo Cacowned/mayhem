@@ -4,13 +4,15 @@ using System.IO.Pipes;
 using System.Security.Principal;
 using System.Text;
 
-namespace SocketInteractive
+namespace MayhemEventInteractive
 {
 	class Program
 	{
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Interactive Mode!");
+
+            // Change to ESC key
 			Console.WriteLine("Type a phrase and hit enter to send. Type 'quit' to close.");
 
 			string message = "";
