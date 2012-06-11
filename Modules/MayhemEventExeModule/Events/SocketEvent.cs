@@ -2,13 +2,13 @@
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using SocketModules.Wpf;
+using MayhemEventExeModule.Wpf;
 
-namespace SocketModules.Events
+namespace MayhemEventExeModule.Events
 {
 	[DataContract]
 	[MayhemModule("MayhemEvent.exe", "Trigger this event using the MayhemEvent.exe executable")]
-	public class SocketEvent : EventBase, IWpfConfigurable
+	public class MayhemEvent : EventBase, IWpfConfigurable
 	{
 		[DataMember]
 		private string phrase;
@@ -32,13 +32,13 @@ namespace SocketModules.Events
 		{
 			get
 			{
-				return new SocketEventConfig(phrase);
+				return new MayhemEventConfig(phrase);
 			}
 		}
 
 		public void OnSaved(WpfConfiguration configurationControl)
 		{
-			var config = configurationControl as SocketEventConfig;
+			var config = configurationControl as MayhemEventConfig;
 			phrase = config.Phrase;
 		}
 

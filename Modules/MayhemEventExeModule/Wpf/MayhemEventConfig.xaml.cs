@@ -5,9 +5,9 @@ using System.IO;
 using System;
 using System.Threading;
 
-namespace SocketModules.Wpf
+namespace MayhemEventExeModule.Wpf
 {
-	public partial class SocketEventConfig : WpfConfiguration
+	public partial class MayhemEventConfig : WpfConfiguration
 	{
 		public string Phrase
 		{
@@ -15,7 +15,7 @@ namespace SocketModules.Wpf
 			private set;
 		}
 
-		public SocketEventConfig(string phrase)
+		public MayhemEventConfig(string phrase)
 		{
 			Phrase = phrase;
 			InitializeComponent();
@@ -25,7 +25,7 @@ namespace SocketModules.Wpf
 		{
 			get
 			{
-				return "Socket Event";
+				return "MayhemEvent.exe";
 			}
 		}
 
@@ -56,7 +56,7 @@ namespace SocketModules.Wpf
 		private void updateCommand()
 		{
 			string directory = Directory.GetCurrentDirectory();
-			string filename = "SocketExecutable.exe";
+			string filename = "MayhemEvent.exe";
 			string commandText = string.Format("{0}\\{1} \"{2}\"", directory, filename, PhraseTextBox.Text);
 			
 			command.Text = commandText;

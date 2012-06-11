@@ -2,9 +2,9 @@
 using System.IO.Pipes;
 using System.Threading;
 using MayhemCore;
-using SocketModules.LowLevel;
+using MayhemEventExeModule.LowLevel;
 
-namespace SocketModules
+namespace MayhemEventExeModule
 {
 	public class PipeServer
 	{
