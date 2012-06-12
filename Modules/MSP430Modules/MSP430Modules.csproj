@@ -8,8 +8,8 @@
     <ProjectGuid>{B94FDED3-00F2-43F0-9298-111273721BA4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ArduinoModules</RootNamespace>
-    <AssemblyName>ArduinoModules</AssemblyName>
+    <RootNamespace>MSP430Modules</RootNamespace>
+    <AssemblyName>MSP430Modules</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\ArduinoModules\</OutputPath>
+    <OutputPath>..\..\bin\MSP430Modules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -62,21 +62,45 @@
   <ItemGroup>
     <Compile Include="Events\DigitalInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Wpf\ArduinoDigitalInputConfig.xaml.cs">
-      <DependentUpon>ArduinoDigitalInputConfig.xaml</DependentUpon>
+    <Compile Include="Reactions\DigitalOutput.cs" />
+    <Compile Include="Wpf\MSP430DigitalInputConfig.xaml.cs">
+      <DependentUpon>MSP430DigitalInputConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\MSP430DigitalOutputConfig.xaml.cs">
+      <DependentUpon>MSP430DigitalOutputConfig.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Wpf\ArduinoDigitalInputConfig.xaml">
+    <Page Include="Wpf\MSP430DigitalInputConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Wpf\MSP430DigitalOutputConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Readme.txt" />
+    <Content Include="Flasher\HIL.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flasher\MayhemMSP430Module.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flasher\MSP430.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flasher\MSP430Flasher.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Reactions\" />
+    <None Include="Flasher\FlashMSP430.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
