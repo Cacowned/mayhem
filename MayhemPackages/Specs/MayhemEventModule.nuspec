@@ -6,9 +6,24 @@
     <authors>Eli White</authors>
     <owners>The Outercurve Foundation</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Trigger an event by using an executable and command line parameters.</description>
+    <description>
+The MayhemCommand.exe Event triggers when the MayhemCommand application is run with the specified argument. This allows any application that can run a command line to trigger a Mayhem Event.
+
+Event
+
+MayhemCommand.exe
+
+The MayhemCommand.exe Event triggers when the MayhemCommand application is run with the specified argument. To simplify calling the MayhemCommand application, the proper command line is automatically generated with the appropriate argument. This can be copied to the clipboard and pasted where appropriate.
+
+A common use for MayhemCommand.exe is to allow objects in a PowerPoint presentation to trigger Mayhem Events. In PowerPoint, select the Object and hit Insert->Action. Select Run, and paste the command into the field. You can then click on the Object during a Slide Show to trigger the corresponding Mayhem Event.
+
+Note: If the MayhemCommand application is called without an argument, it will automatically go into interactive mode. Commands can then be entered in real time. This is often useful during testing.
+</description>
+<summary>
+The MayhemCommand.exe Event triggers when the MayhemCommand application is run with the specified argument.
+</summary>
     <copyright>Copyright © Outercurve 2012</copyright>
-    <tags>Socket</tags>
+    <tags>Socket Powerpoint</tags>
     <dependencies>
 	<dependency id="MayhemCore" version="1.0.0" />
       	<dependency id="MayhemWpf" version="1.0.0" />
