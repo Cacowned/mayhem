@@ -114,8 +114,8 @@ namespace MayhemVisionModules.Wpf
             InitializeComponent();
             Dispatcher.ShutdownStarted += OnExit;
 
-            captureWidth = 320;  //the size of the capture...
-            captureHeight = 240;
+            captureWidth = 640;  //the size of the capture...
+            captureHeight = 480;
             previewWidth = 80; //the size of the preview windows
             previewHeight = 60;
             mainViewWidth = 320;
@@ -127,8 +127,8 @@ namespace MayhemVisionModules.Wpf
         {
             DataContext = this;
            
-            captureWidth = 320;  //the size of the capture...
-            captureHeight = 240;
+            captureWidth = 640;  //the size of the capture...
+            captureHeight = 480;
             previewWidth = 80; //the size of the preview windows
             previewHeight = 60;
             mainViewWidth = 320;
@@ -171,6 +171,19 @@ namespace MayhemVisionModules.Wpf
             
         }
 
+        private void ShowNoCamerasFoundPanel()
+        {
+            //CameraReadiness = false;
+            ImageViewer viewer = new ImageViewer();
+            viewer.ViewerWidth = previewWidth;
+            viewer.ViewerHeight = previewHeight;
+            cameraPreviews.Clear();
+            cameraPreviews.Add(viewer);
+            cameraPreviews[0].ImageSource.Source = loadBitmap(Properties.Resources.CamBusyIcon);
+            viewer.TopTitle = "No webcams connected";
+            viewer.BottomTitle = "Please connect a USB webcam";
+        }
+
         private void ShowWaitingPanel()
         {
             CameraReadiness = false;
@@ -204,6 +217,11 @@ namespace MayhemVisionModules.Wpf
 
             cameraPreviews.Clear(); //remove previous viewers
             //populate the camera list and find the one that is available and set it as current selection...
+            if (numberConnectedCameras == 0)
+            {
+                ShowNoCamerasFoundPanel();
+                return;
+            }
             for (int i = 0; i < numberConnectedCameras; i++)
             {
                 //if (WebcamManager.StartCamera(i, captureWidth, captureHeight))

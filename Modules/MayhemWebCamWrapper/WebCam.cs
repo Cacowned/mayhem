@@ -171,7 +171,13 @@ namespace MayhemWebCamWrapper
         {
             if (OnImageUpdated != null)
             {
-               OnImageUpdated(this, new EventArgs());
+                try
+                {
+                    OnImageUpdated(this, new EventArgs());
+                }
+                catch
+                {
+                }
             }
         }
 
