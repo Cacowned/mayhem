@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C8DD1394-62FC-402F-BF2A-8E4EA412DB4C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ConnectivityModule</RootNamespace>
+    <AssemblyName>ConnectivityModule</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\ConnectivityModules\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Brecham.Obex">
+      <HintPath>Libs\Brecham.Obex.dll</HintPath>
+    </Reference>
+    <Reference Include="InTheHand.Net.Personal, Version=2.2.0.0, Culture=neutral, PublicKeyToken=ea38caa273134499, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\InTheHand.Net.Personal.dll</HintPath>
+    </Reference>
+    <Reference Include="ManagedWifi">
+      <HintPath>Libs\ManagedWifi.dll</HintPath>
+    </Reference>
+    <Reference Include="MayhemCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MayhemWpf, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TransportConnection, Version=1.7.1012.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\TransportConnection.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events\BTDeviceBecomesVisible.cs" />
+    <Compile Include="Events\BTDeviceNoLongerVisible.cs" />
+    <Compile Include="Events\BTPredefinedDeviceBecomesVisible.cs" />
+    <Compile Include="Events\BTPredefinedDeviceNoLongerVisible.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reactions\BTPairWithDeviceName.cs" />
+    <Compile Include="Reactions\BTPairWithDeviceAddress.cs" />
+    <Compile Include="Reactions\BTSendFileAddress.cs" />
+    <Compile Include="Reactions\BTSendFileName.cs" />
+    <Compile Include="Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\PairWithDeviceByAddressConfig.xaml.cs">
+      <DependentUpon>PairWithDeviceByAddressConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\PairWithDeviceByNameConfig.xaml.cs">
+      <DependentUpon>PairWithDeviceByNameConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\SendFileToDeviceByAddressConfig.xaml.cs">
+      <DependentUpon>SendFileToDeviceByAddressConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\DeviceNameConfig.xaml.cs">
+      <DependentUpon>DeviceNameConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\SendFileToDeviceByNameConfig.xaml.cs">
+      <DependentUpon>SendFileToDeviceByNameConfig.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Wpf\PairWithDeviceByAddressConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\PairWithDeviceByNameConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\SendFileToDeviceByAddressConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\DeviceNameConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\SendFileToDeviceByNameConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
