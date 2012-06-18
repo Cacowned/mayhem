@@ -1,0 +1,27 @@
+﻿<src:WpfConfiguration x:Class="FacebookModules.Wpf.WallPostConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             Width="240">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="160"></ColumnDefinition>
+            <ColumnDefinition Width="80"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <WebBrowser Name="webBrowser" Grid.Row="0" Grid.ColumnSpan="3" Visibility="Collapsed" Navigated="webBrowser_Navigated" />
+  
+        <TextBlock Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontWeight="Bold">Logged In As</TextBlock>
+        <TextBlock Name="User_Info" Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center"></TextBlock>
+
+        <Image Name="Profile" Source="http://profile.ak.fbcdn.net/hprofile-ak-snc4/50502_102849331815_4985514_n.jpg" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2"></Image>
+        
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+    </Grid>
+</src:WpfConfiguration>

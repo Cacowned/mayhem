@@ -1,0 +1,22 @@
+﻿<src:WpfConfiguration x:Class="OfficeModules.Wpf.LyncUpdatePersonalNoteConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             Width="350">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="250" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Personal Note:</TextBlock>
+        <TextBox Name="PersonalNoteBox" Grid.Column="1" Grid.Row="0" TextChanged="PersonalNoteBox_TextChanged"></TextBox>
+
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1">The personal note is invalid.</TextBlock>
+    </Grid>
+</src:WpfConfiguration>
+
