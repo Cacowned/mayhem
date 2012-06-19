@@ -340,11 +340,29 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t disconnect from the selected network..
+        /// </summary>
+        internal static string WiFi_CantDisconnectFromNetwork {
+            get {
+                return ResourceManager.GetString("WiFi_CantDisconnectFromNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t get the available networks..
         /// </summary>
         internal static string WiFi_CantGetNetworks {
             get {
                 return ResourceManager.GetString("WiFi_CantGetNetworks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disconnected from the {0} network..
+        /// </summary>
+        internal static string WiFi_DisconnectedFromNetwork {
+            get {
+                return ResourceManager.GetString("WiFi_DisconnectedFromNetwork", resourceCulture);
             }
         }
         
@@ -367,7 +385,7 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The network is already not visible..
+        ///   Looks up a localized string similar to The network {0} is already not visible..
         /// </summary>
         internal static string WiFi_NetworkNotVisible {
             get {
@@ -376,11 +394,20 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The network is already visible..
+        ///   Looks up a localized string similar to The network {0} is already visible..
         /// </summary>
         internal static string WiFi_NetworkVisible {
             get {
                 return ResourceManager.GetString("WiFi_NetworkVisible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The computer is not connected to the {0} network..
+        /// </summary>
+        internal static string WiFi_NoNetworkConnected {
+            get {
+                return ResourceManager.GetString("WiFi_NoNetworkConnected", resourceCulture);
             }
         }
         
@@ -408,6 +435,15 @@ namespace ConnectivityModule {
         internal static string WiFi_Seconds_Invalid {
             get {
                 return ResourceManager.GetString("WiFi_Seconds_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A connection to the {0} network was successfully established..
+        /// </summary>
+        internal static string WiFi_SuccessConnectedNetwork {
+            get {
+                return ResourceManager.GetString("WiFi_SuccessConnectedNetwork", resourceCulture);
             }
         }
     }
