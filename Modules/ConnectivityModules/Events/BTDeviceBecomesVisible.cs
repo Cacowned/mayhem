@@ -96,7 +96,6 @@ namespace ConnectivityModule.Events
                             Trigger();
                         }
 
-
                         auxDevices.Clear();
                         // We make a search to see if the device is no longer visible, if so, we need to remove it from the list
                         foreach (BluetoothDeviceInfo device in devices)
