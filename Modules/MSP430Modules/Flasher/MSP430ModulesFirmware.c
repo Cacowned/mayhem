@@ -262,15 +262,13 @@ __interrupt void USCIAB0RX_ISR()
 {
 	unsigned char rxBuffer;
 
+	// Check the interrupt flag
 	if(IFG2 & UCA0RXIFG)
 	{
-	    rxBuffer = UCA0RXBUF;                  // Store RX'ed UART data
+		// Store the receive UART data
+	    rxBuffer = UCA0RXBUF;
 	}
 
-	if (rxBuffer == 0x76)
-	{
-		Transmit(0x79);
-	}
-
+	// Set the digital outputs based on UART data
 	setDigitalOutputs(rxBuffer);
 }
