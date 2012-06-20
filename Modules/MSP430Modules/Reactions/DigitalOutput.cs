@@ -1,11 +1,9 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Runtime.Serialization;
-using System.Text;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using MSP430Modules;
 using MSP430Modules.Wpf;
 using SerialManager;
 
@@ -15,6 +13,7 @@ namespace MSP430Modules.Reactions
     [MayhemModule("MSP430: Digital Output", "Triggers a digital output")]
     public class DigitalOutput : ReactionBase, IWpfConfigurable
     {
+        [DataMember]
         private SerialPortManager manager;
 
         [DataMember]
@@ -22,23 +21,23 @@ namespace MSP430Modules.Reactions
 
         [DataMember]
         private int index;
-        
+
         [DataMember]
         private string port;
-        
+
         [DataMember]
         private DigitalOutputType outputType;
 
         [DataMember]
-        private string phrase;        
+        private string phrase;
 
         protected override void OnLoadDefaults()
         {
-            index = 0;            
+            index = 0;
             outputType = DigitalOutputType.Toggle;
             port = "COM1";
             this.phrase = string.Empty;
-            this.settings = new SerialSettings(9600, Parity.Even, StopBits.One, 8);          
+            this.settings = new SerialSettings(9600, Parity.Even, StopBits.One, 8);
         }
 
         public WpfConfiguration ConfigurationControl
@@ -50,7 +49,7 @@ namespace MSP430Modules.Reactions
         {
             var config = ConfigurationControl as MSP430DigitalOutputConfig;
 
-            index = config.Index;                       
+            index = config.Index;
             outputType = config.OutputType;
             port = config.Port;
         }
@@ -59,19 +58,19 @@ namespace MSP430Modules.Reactions
         {
             //GetConfigString appears below the event/reaction in the Mayhem UI
 
-            //Action to take
+            // Action to be displayed in the configuration string
             string action = string.Empty;
             switch (outputType)
             {
                 case DigitalOutputType.Toggle: action = "Toggle";
                     break;
-                case DigitalOutputType.On: action = "Turn On";
+                case DigitalOutputType.High: action = "Turn High";
                     break;
-                case DigitalOutputType.Off: action = "Turn Off";
+                case DigitalOutputType.Low: action = "Turn Low";
                     break;
             }
 
-            //Index to show in the string (ie. P1.0, P1.4, etc.)
+            // Index to show in the string (ie. P1.0, P1.4, etc.)
             string indexName = string.Empty;
             switch (index)
             {
@@ -88,19 +87,12 @@ namespace MSP430Modules.Reactions
                 case 5: indexName = "P2.0";
                     break;
             }
-            
-            // Return string
-            return action + " " + indexName + " on " + port;
 
-            //switch (port)
-            //{
-            //    case "COM1": type = "first com port";
-            //        break;
-            //    case "COM2": type = "first com port";
-            //        break;
-            //    case "COM3": type = "first com port";
-            //        break;
-            //}
+            // COM Port
+            // 'port' contains the COM port to display
+
+            // Return the configuration string
+            return action + " " + indexName + " on " + port;
         }
 
         protected override void OnAfterLoad()
@@ -139,48 +131,46 @@ namespace MSP430Modules.Reactions
 
         public override void Perform()
         {
+            // Send toggle trigger to firmware
             if (outputType.Equals(DigitalOutputType.Toggle))
             {
-                if (index.Equals(0)) { byte[] sendByte = { 0x00 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(1)) { byte[] sendByte = { 0x01 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(2)) { byte[] sendByte = { 0x02 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(3)) { byte[] sendByte = { 0x03 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(4)) { byte[] sendByte = { 0x04 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(5)) { byte[] sendByte = { 0x05 }; this.manager.Write(this.port, sendByte, 1); }
+                if (index.Equals(0)) { byte[] sendByte = { 0x00 }; this.manager.Write(this.port, sendByte, 1); }    // P1.0
+                if (index.Equals(1)) { byte[] sendByte = { 0x01 }; this.manager.Write(this.port, sendByte, 1); }    // P1.4
+                if (index.Equals(2)) { byte[] sendByte = { 0x02 }; this.manager.Write(this.port, sendByte, 1); }    // P1.5
+                if (index.Equals(3)) { byte[] sendByte = { 0x03 }; this.manager.Write(this.port, sendByte, 1); }    // P1.6
+                if (index.Equals(4)) { byte[] sendByte = { 0x04 }; this.manager.Write(this.port, sendByte, 1); }    // P1.7
+                if (index.Equals(5)) { byte[] sendByte = { 0x05 }; this.manager.Write(this.port, sendByte, 1); }    // P2.0
             }
 
-            if (outputType.Equals(DigitalOutputType.On))
+            // Send turn high trigger to firmware
+            if (outputType.Equals(DigitalOutputType.High))
             {
-                if (index.Equals(0)) { byte[] sendByte = { 0x10 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(1)) { byte[] sendByte = { 0x11 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(2)) { byte[] sendByte = { 0x12 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(3)) { byte[] sendByte = { 0x13 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(4)) { byte[] sendByte = { 0x14 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(5)) { byte[] sendByte = { 0x15 }; this.manager.Write(this.port, sendByte, 1); }
+                if (index.Equals(0)) { byte[] sendByte = { 0x10 }; this.manager.Write(this.port, sendByte, 1); }    // P1.0
+                if (index.Equals(1)) { byte[] sendByte = { 0x11 }; this.manager.Write(this.port, sendByte, 1); }    // P1.4
+                if (index.Equals(2)) { byte[] sendByte = { 0x12 }; this.manager.Write(this.port, sendByte, 1); }    // P1.5
+                if (index.Equals(3)) { byte[] sendByte = { 0x13 }; this.manager.Write(this.port, sendByte, 1); }    // P1.6
+                if (index.Equals(4)) { byte[] sendByte = { 0x14 }; this.manager.Write(this.port, sendByte, 1); }    // P1.7
+                if (index.Equals(5)) { byte[] sendByte = { 0x15 }; this.manager.Write(this.port, sendByte, 1); }    // P2.0
             }
 
-            if (outputType.Equals(DigitalOutputType.Off))
+            // Send turn low trigger to firmware
+            if (outputType.Equals(DigitalOutputType.Low))
             {
-                if (index.Equals(0)) { byte[] sendByte = { 0x20 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(1)) { byte[] sendByte = { 0x21 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(2)) { byte[] sendByte = { 0x22 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(3)) { byte[] sendByte = { 0x23 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(4)) { byte[] sendByte = { 0x24 }; this.manager.Write(this.port, sendByte, 1); }
-                if (index.Equals(5)) { byte[] sendByte = { 0x25 }; this.manager.Write(this.port, sendByte, 1); }
+                if (index.Equals(0)) { byte[] sendByte = { 0x20 }; this.manager.Write(this.port, sendByte, 1); }    // P1.0
+                if (index.Equals(1)) { byte[] sendByte = { 0x21 }; this.manager.Write(this.port, sendByte, 1); }    // P1.4
+                if (index.Equals(2)) { byte[] sendByte = { 0x22 }; this.manager.Write(this.port, sendByte, 1); }    // P1.5
+                if (index.Equals(3)) { byte[] sendByte = { 0x23 }; this.manager.Write(this.port, sendByte, 1); }    // P1.6
+                if (index.Equals(4)) { byte[] sendByte = { 0x24 }; this.manager.Write(this.port, sendByte, 1); }    // P1.7
+                if (index.Equals(5)) { byte[] sendByte = { 0x25 }; this.manager.Write(this.port, sendByte, 1); }    // P2.0
             }
-
-            //else
-            //{
-            //    ErrorLog.AddError(ErrorType.Failure, "MSP430 module is not attached");
-            //}
         }
     }
 
     // What action we should take on the digital output
     public enum DigitalOutputType
     {
-        Toggle, 
-        On,
-        Off
+        Toggle,
+        High,
+        Low
     }
 }
