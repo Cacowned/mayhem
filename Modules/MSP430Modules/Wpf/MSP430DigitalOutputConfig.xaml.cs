@@ -5,6 +5,7 @@ using MSP430Modules.Reactions;
 using System.Diagnostics;
 using System.Reflection;
 using System.Management;
+using MayhemCore;
 
 namespace MSP430Modules.Wpf
 {
@@ -16,21 +17,22 @@ namespace MSP430Modules.Wpf
         public DigitalOutputType OutputType { get; set; }
         public int Index { get; set; }
         public string Port { get; set; }
-        public string[] Ports { get; set; }
+        public string PortName { get; set; }         
 
-        public MSP430DigitalOutputConfig(int index, DigitalOutputType outputType, string port)
+        public MSP430DigitalOutputConfig(int index, DigitalOutputType outputType, string port, string portName)
         {
             OutputType = outputType;
             Index = index;
             Port = port;
+            PortName = portName;
 
-            CanSave = true;
+            CanSave = true;                        
             InitializeComponent();
-        }
+        }       
 
         public override void OnLoad()
-        {
-            PopulateOutputs();
+        {            
+            PopulateOutputs();           
 
             // Output:
             // Load the default output pin
@@ -49,16 +51,31 @@ namespace MSP430Modules.Wpf
             }
 
             // COM Port:
-            // Load the COM port that contains the term "MSP430"            
-            foreach (object port in PortBox.Items)
+            // Load the COM port containing "MSP430" on first load
+            if (Port == null)
             {
-                if (port.ToString().Contains("MSP430"))
+                foreach (object port in PortBox.Items)
                 {
-                    PortBox.SelectedItem = port;
-                    string[] words = port.ToString().Split('-');
-                    Port = words[0].Trim();
+                    if (port.ToString().Contains("MSP430"))
+                    {
+                        PortName = port.ToString();
+                        PortBox.SelectedItem = PortName;
+                    }
                 }
             }
+            
+            // Load the saved COM port on consecutive loads
+            else
+            {
+                foreach (object port in PortBox.Items)
+                {
+                    if (port.ToString().Contains(Port))
+                    {
+                        PortName = port.ToString();
+                        PortBox.SelectedItem = PortName;
+                    }
+                }
+            }            
         }
 
         private void PopulateOutputs()
@@ -87,7 +104,7 @@ namespace MSP430Modules.Wpf
                 {
                     foreach (ManagementObject obj in searcher.Get())
                     {
-                        PortBox.Items.Add(obj["DeviceID"] + " - " + obj["Description"]);
+                        PortBox.Items.Add(obj["DeviceID"] + " - " + obj["Description"]);                      
                     }
                 }
 
@@ -114,10 +131,7 @@ namespace MSP430Modules.Wpf
         {
             // Select the item for the COM Port selected
             ComboBox box = sender as ComboBox;
-
-            // Split the COM Port description and extract the "COM#" 
-            string[] words = box.SelectedItem.ToString().Split('-');
-            Port = words[0].Trim();
+            PortName = box.SelectedItem.ToString();            
         }
 
         public override void OnSave()
@@ -141,8 +155,9 @@ namespace MSP430Modules.Wpf
 
             // COM Port:
             // Split the COM Port description and save the "COM#" 
-            string[] words = PortBox.SelectedItem.ToString().Split('-');
-            Port = words[0].Trim();
+            PortName = PortBox.SelectedItem.ToString();
+            string[] words = PortName.Split('-');
+            Port = words[0].Trim();           
         }
 
         public override string Title

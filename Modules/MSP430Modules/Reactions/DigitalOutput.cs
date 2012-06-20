@@ -26,6 +26,9 @@ namespace MSP430Modules.Reactions
         private string port;
 
         [DataMember]
+        private string portName;
+
+        [DataMember]
         private DigitalOutputType outputType;
 
         [DataMember]
@@ -34,15 +37,15 @@ namespace MSP430Modules.Reactions
         protected override void OnLoadDefaults()
         {
             index = 0;
-            outputType = DigitalOutputType.Toggle;
-            port = "COM1";
+            outputType = DigitalOutputType.Toggle;            
+            portName = "";
             this.phrase = string.Empty;
             this.settings = new SerialSettings(9600, Parity.Even, StopBits.One, 8);
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new MSP430DigitalOutputConfig(index, outputType, port); }
+            get { return new MSP430DigitalOutputConfig(index, outputType, port, portName); }
         }
 
         public void OnSaved(WpfConfiguration ConfigurationControl)
@@ -52,6 +55,7 @@ namespace MSP430Modules.Reactions
             index = config.Index;
             outputType = config.OutputType;
             port = config.Port;
+            portName = config.PortName;
         }
 
         public string GetConfigString()
