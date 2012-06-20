@@ -4,6 +4,7 @@ using MayhemWpf.UserControls;
 using System.IO;
 using System;
 using System.Threading;
+using System.Reflection;
 
 namespace MayhemEventExeModule.Wpf
 {
@@ -55,7 +56,10 @@ namespace MayhemEventExeModule.Wpf
 
 		private void updateCommand()
 		{
-			string directory = Directory.GetCurrentDirectory();
+			Assembly execAssembly = Assembly.GetExecutingAssembly();
+			string loc = execAssembly.Location;
+			string directory = Path.GetDirectoryName(loc);
+
 			string filename = "MayhemEvent.exe";
 			string commandText = string.Format("{0}\\{1} \"{2}\"", directory, filename, PhraseTextBox.Text);
 			
