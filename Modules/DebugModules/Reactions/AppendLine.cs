@@ -44,6 +44,12 @@ namespace DebugModules.Reactions
             filePath = config.File;
         }
 
+        protected override void OnAfterLoad()
+        {
+            filePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem") + @"\AppendLog.txt";
+            StreamWriter timeLogWriter = new StreamWriter(filePath);
+        }
+
         public string GetConfigString()
         {
             return "\"" + lineToAdd + "\" to File: " + Path.GetFileName(filePath);
