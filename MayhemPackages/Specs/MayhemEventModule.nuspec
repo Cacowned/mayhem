@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>SocketModules</id>
+    <id>MayhemEventModule</id>
     <version>1.0.0</version>
     <authors>Eli White</authors>
     <owners>The Outercurve Foundation</owners>
@@ -23,7 +23,7 @@ Note: If the MayhemCommand application is called without an argument, it will au
 The MayhemCommand.exe Event triggers when the MayhemCommand application is run with the specified argument.
 </summary>
     <copyright>Copyright © Outercurve 2012</copyright>
-    <tags>Socket Powerpoint</tags>
+    <tags>Socket Powerpoint Command Line</tags>
     <dependencies>
 	<dependency id="MayhemCore" version="1.0.0" />
       	<dependency id="MayhemWpf" version="1.0.0" />
