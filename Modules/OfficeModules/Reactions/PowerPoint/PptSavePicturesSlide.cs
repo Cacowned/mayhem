@@ -24,6 +24,7 @@ namespace OfficeModules.Reactions.PowerPoint
         private string fileName;
 
         private OPowerPoint.Application app;
+        private string presentationName;
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -70,6 +71,14 @@ namespace OfficeModules.Reactions.PowerPoint
                     else
                     {
                         OPowerPoint.Slide slide = activePresentation.SlideShowWindow.View.Slide;
+
+                        presentationName = activePresentation.Name;
+
+                        if (presentationName.Contains(".pptx"))
+                            presentationName = presentationName.Remove(presentationName.LastIndexOf(".pptx"));
+
+                        if (presentationName.Contains(".ppt"))
+                            presentationName = presentationName.Remove(presentationName.LastIndexOf(".ppt"));
 
                         if (slide == null)
                         {
@@ -135,7 +144,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
                             BitmapSource image = Clipboard.GetImage();
 
-                            FileStream stream = new FileStream(fileName + "\\pic" + count + ".jpg", FileMode.Create);
+                            FileStream stream = new FileStream(fileName + "\\" + presentationName + "_pic" + count + ".jpg", FileMode.Create);
                             JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 
                             encoder.Frames.Add(BitmapFrame.Create(image));
@@ -163,7 +172,7 @@ namespace OfficeModules.Reactions.PowerPoint
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var pptSavePicturesConfig = configurationControl as PowerPointSavePicturesConfig;
-            
+
             fileName = pptSavePicturesConfig.FileName;
         }
 

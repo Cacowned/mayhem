@@ -446,5 +446,14 @@ namespace ConnectivityModule {
                 return ResourceManager.GetString("WiFi_SuccessConnectedNetwork", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Wi-Fi capability is not enabled..
+        /// </summary>
+        internal static string WiFi_WiFiNotAvailable {
+            get {
+                return ResourceManager.GetString("WiFi_WiFiNotAvailable", resourceCulture);
+            }
+        }
     }
 }
