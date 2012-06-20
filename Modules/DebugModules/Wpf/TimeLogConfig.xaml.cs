@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MayhemWpf.UserControls;
 using Microsoft.Win32;
 
@@ -25,18 +14,18 @@ namespace DebugModules.Wpf
         {
             get;
             private set;
-        }        
+        }
         
         public TimeLogConfig(string file)
         {
             this.File = file;            
             InitializeComponent();
         }
-
+                
         public override void OnLoad()
-        {            
+        {
             FileBox.Text = this.File;
-        }
+        }        
 
         public override void OnSave()
         {
@@ -65,7 +54,7 @@ namespace DebugModules.Wpf
         // Browse for file
         private void Browse_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new OpenFileDialog();
+            var dlg = new OpenFileDialog();            
             dlg.Filter = "txt files (*.txt)|*.txt|log files (*.log)|*.log";
             dlg.FileName = File;
             dlg.DefaultExt = ".txt";

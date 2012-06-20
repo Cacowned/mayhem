@@ -12,11 +12,11 @@ using MayhemWpf.UserControls;
 namespace DebugModules.Reactions
 {
     [DataContract]
-    [MayhemModule("Time Log", "Appends an event time log to a .txt file")]
+    [MayhemModule("Time Log", "Logs the event time to a .txt file")]
     public class TimeLog : ReactionBase, IWpfConfigurable
     {
         [DataMember]
-        private string filePath;
+        private string filePath;        
 
         public override void Perform()
         {
@@ -35,7 +35,7 @@ namespace DebugModules.Reactions
         }
 
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
-        {
+        {   
             get { return new TimeLogConfig(filePath); }
         }
 
@@ -45,9 +45,15 @@ namespace DebugModules.Reactions
             filePath = config.File;
         }
 
+        protected override void OnAfterLoad()
+        {            
+            filePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem") + @"\TimeLog.txt";            
+            StreamWriter timeLogWriter = new StreamWriter(filePath);                        
+        }
+
         public string GetConfigString()
         {
-            return "Event trigger time to file: " + Path.GetFileName(filePath);
+            return "Logs the event time to: " + Path.GetFileName(filePath);
         }
     }
 }
