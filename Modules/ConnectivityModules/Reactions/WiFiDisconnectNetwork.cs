@@ -24,8 +24,19 @@ namespace ConnectivityModule.Reactions
 
         public override void Perform()
         {
-            client = new WlanClient();
             bool found = false;
+
+            try
+            {
+                client = new WlanClient();
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.WiFi_WiFiNotAvailable);
+                Logger.Write(ex);
+
+                return;
+            }
 
             try
             {

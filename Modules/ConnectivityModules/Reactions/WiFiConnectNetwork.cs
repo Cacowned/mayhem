@@ -24,8 +24,18 @@ namespace ConnectivityModule.Reactions
 
         public override void Perform()
         {
-            client = new WlanClient();
-            
+            try
+            {
+                client = new WlanClient();
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.WiFi_WiFiNotAvailable);
+                Logger.Write(ex);
+
+                return;
+            }
+
             try
             {
                 foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
@@ -53,7 +63,7 @@ namespace ConnectivityModule.Reactions
                             string command = "netsh wlan connect name=\"" + networkName + "\"";
 
                             ProcessStartInfo processInfo = new ProcessStartInfo("cmd.exe", "/C " + command);
-                          
+
                             processInfo.WindowStyle = ProcessWindowStyle.Hidden;
                             Process.Start(processInfo);
 
@@ -82,7 +92,7 @@ namespace ConnectivityModule.Reactions
                                 ErrorLog.AddError(ErrorType.Failure, Strings.WiFi_CantConnectToNetwork);
                             else
                                 ErrorLog.AddError(ErrorType.Message, string.Format(Strings.WiFi_SuccessConnectedNetwork, networkName));
-                            
+
                             return;
                         }
                     }

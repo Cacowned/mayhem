@@ -246,4 +246,7 @@
   <data name="WiFi_SuccessConnectedNetwork" xml:space="preserve">
     <value>A connection to the {0} network was successfully established.</value>
   </data>
+  <data name="WiFi_WiFiNotAvailable" xml:space="preserve">
+    <value>The Wi-Fi capability is not enabled.</value>
+  </data>
 </root>

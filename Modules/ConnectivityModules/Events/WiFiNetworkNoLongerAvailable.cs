@@ -38,7 +38,19 @@ namespace ConnectivityModule.Events
             try
             {
                 client = new WlanClient();
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.WiFi_WiFiNotAvailable);
+                Logger.Write(ex);
 
+                e.Cancel = true;
+
+                return;
+            }
+
+            try
+            {
                 foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
                 {
                     foreach (Wlan.WlanAvailableNetwork network in wlanIface.GetAvailableNetworkList(0))

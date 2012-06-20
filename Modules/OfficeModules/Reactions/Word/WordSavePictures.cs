@@ -24,6 +24,7 @@ namespace OfficeModules.Reactions.Word
         private string fileName;
 
         private OWord.Application app;
+        private string documentName;
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -65,6 +66,14 @@ namespace OfficeModules.Reactions.Word
                 else
                 {
                     List<OWord.InlineShape> inlineShapes = new List<OWord.InlineShape>();
+
+                    documentName = activeDocument.Name;
+
+                    if (documentName.Contains(".docx"))
+                        documentName = documentName.Remove(documentName.LastIndexOf(".docx"));
+
+                    if (documentName.Contains(".doc"))
+                        documentName = documentName.Remove(documentName.LastIndexOf(".doc"));
 
                     foreach (OWord.InlineShape inlineShape in activeDocument.InlineShapes)
                     {
@@ -126,13 +135,14 @@ namespace OfficeModules.Reactions.Word
                         app.Selection.CopyAsPicture();
 
                         bool containsImage = Clipboard.ContainsImage();
+
                         if (containsImage)
                         {
                             count++;
 
                             BitmapSource image = Clipboard.GetImage();
 
-                            streamWriter = new FileStream(fileName + "\\pic" + count + ".jpg", FileMode.Create);
+                            streamWriter = new FileStream(fileName + "\\" + documentName + "_pic" + count + ".jpg", FileMode.Create);
                             JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 
                             encoder.Frames.Add(BitmapFrame.Create(image));

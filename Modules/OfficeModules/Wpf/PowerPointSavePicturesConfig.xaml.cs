@@ -43,6 +43,8 @@ namespace OfficeModules.Wpf
         {
             string text = LocationBox.Text;
 
+            CanSave = true;
+
             if (text.Length == 0)
             {
                 textInvalid.Text = Strings.General_FileLocationInvalid;
