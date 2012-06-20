@@ -47,9 +47,11 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="SerialManager">
       <HintPath>..\..\bin\SerialManager\SerialManager.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -84,7 +86,7 @@
     <Content Include="Flasher\HIL.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Flasher\MayhemMSP430Module.txt">
+    <Content Include="Flasher\Log\Log.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Flasher\MSP430.dll">
@@ -93,14 +95,17 @@
     <Content Include="Flasher\MSP430Flasher.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Readme.txt">
+    <Content Include="Flasher\MSP430ModulesFirmware.c">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flasher\MSP430ModulesFirmware.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Flasher\FlashMSP430.bat">
+    <Content Include="Flasher\FlashMSP430.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
