@@ -28,6 +28,6 @@
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">COM Port:</TextBlock>
         <ComboBox Name="PortBox" Grid.Column="1" Grid.Row="2" SelectionChanged="PortBox_SelectionChanged" />
 
-        <Button Style="{StaticResource ConfigLabel}" Margin="10,15,10,15" Width="350" Height="35" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="3" Click="FlashButton_Click">Click to flash your MSP430 device with Mayhem firmware.</Button>
+        <Button Style="{StaticResource ConfigLabel}" Margin="10,15,10,15" Width="350" Height="35" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="3" Click="FlashButton_Click">Click to flash your MSP430 device with Mayhem firmware</Button>
     </Grid>
 </src:WpfConfiguration>
