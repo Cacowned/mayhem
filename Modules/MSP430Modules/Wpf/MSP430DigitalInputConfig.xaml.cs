@@ -16,13 +16,14 @@ namespace MSP430Modules.Wpf
         public DigitalInputType InputType { get; set; }
         public int Index {  get; set; }
         public string Port { get; set; }
-        public string[] Ports { get; set; }
+        public string PortName { get; set; }
 
-        public MSP430DigitalInputConfig(int index, DigitalInputType inputType, string port)
+        public MSP430DigitalInputConfig(int index, DigitalInputType inputType, string port, string portName)
         {
             InputType = inputType;
             Index = index;
             Port = port;
+            PortName = portName;
 
             CanSave = true;
             InitializeComponent();
@@ -49,16 +50,31 @@ namespace MSP430Modules.Wpf
             }
 
             // COM Port:
-            // Load the COM port that contains the term "MSP430"            
-            foreach (object port in PortBox.Items)
+            // Load the COM port containing "MSP430" on first load
+            if (Port == null)
             {
-                if (port.ToString().Contains("MSP430"))
+                foreach (object port in PortBox.Items)
                 {
-                    PortBox.SelectedItem = port;
-                    string[] words = port.ToString().Split('-');
-                    Port = words[0].Trim();
+                    if (port.ToString().Contains("MSP430"))
+                    {
+                        PortName = port.ToString();
+                        PortBox.SelectedItem = PortName;
+                    }
                 }
             }
+
+            // Load the saved COM port on consecutive loads
+            else
+            {
+                foreach (object port in PortBox.Items)
+                {
+                    if (port.ToString().Contains(Port))
+                    {
+                        PortName = port.ToString();
+                        PortBox.SelectedItem = PortName;
+                    }
+                }
+            }  
         }
 
         public void PopulateOutputs()
@@ -114,10 +130,7 @@ namespace MSP430Modules.Wpf
         {
             // Select the item for the COM Port selected
             ComboBox box = sender as ComboBox;
-
-            // Split the COM Port description and extract the "COM#" 
-            string[] words = box.SelectedItem.ToString().Split('-');
-            Port = words[0].Trim();
+            PortName = box.SelectedItem.ToString();            
         }
 
         public override void OnSave()
@@ -141,8 +154,9 @@ namespace MSP430Modules.Wpf
 
             // COM Port:
             // Split the COM Port description and save the "COM#" 
-            string[] words = PortBox.SelectedItem.ToString().Split('-');
-            Port = words[0].Trim();
+            PortName = PortBox.SelectedItem.ToString();
+            string[] words = PortName.Split('-');
+            Port = words[0].Trim();           
         }
 
         public override string Title

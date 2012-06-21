@@ -47,9 +47,11 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="SerialManager">
       <HintPath>..\..\bin\SerialManager\SerialManager.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -62,8 +64,12 @@
   <ItemGroup>
     <Compile Include="Events\DigitalInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reactions\DigitalOutput.cs" />
     <Compile Include="Wpf\ArduinoDigitalInputConfig.xaml.cs">
       <DependentUpon>ArduinoDigitalInputConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\ArduinoDigitalOutputConfig.xaml.cs">
+      <DependentUpon>ArduinoDigitalOutputConfig.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -71,12 +77,32 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Wpf\ArduinoDigitalOutputConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Readme.txt" />
+    <Content Include="Flasher\ArduinoFlasher.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flasher\ArduinoModulesFirmware.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Reactions\" />
+    <Content Include="Flasher\ArduinoModulesFirmware.hex">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flasher\ArduinoModulesFirmware.ino">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flasher\avrdude.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Flasher\FlashArduino.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

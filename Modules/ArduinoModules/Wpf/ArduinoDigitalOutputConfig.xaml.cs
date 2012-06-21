@@ -1,38 +1,37 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using MayhemWpf.UserControls;
-using MSP430Modules.Reactions;
-using System.Diagnostics;
-using System.Reflection;
+﻿using System.Diagnostics;
 using System.Management;
-using MayhemCore;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
+using ArduinoModules.Reactions;
+using MayhemWpf.UserControls;
 
-namespace MSP430Modules.Wpf
+namespace ArduinoModules.Wpf
 {
     /// <summary>
-    /// Interaction logic for MSP430DigitalOutputConfig.xaml
+    /// Interaction logic for ArduinoDigitalOutputConfig.xaml
     /// </summary>
-    public partial class MSP430DigitalOutputConfig : WpfConfiguration
+    public partial class ArduinoDigitalOutputConfig : WpfConfiguration
     {
         public DigitalOutputType OutputType { get; set; }
         public int Index { get; set; }
         public string Port { get; set; }
-        public string PortName { get; set; }         
+        public string PortName { get; set; }
 
-        public MSP430DigitalOutputConfig(int index, DigitalOutputType outputType, string port, string portName)
+        public ArduinoDigitalOutputConfig(int index, DigitalOutputType outputType, string port, string portName)
         {
             OutputType = outputType;
             Index = index;
             Port = port;
             PortName = portName;
 
-            CanSave = true;                        
+            CanSave = true;
             InitializeComponent();
-        }       
+        }
 
         public override void OnLoad()
-        {            
-            PopulateOutputs();           
+        {
+            PopulateOutputs();
 
             // Output:
             // Load the default output pin
@@ -51,19 +50,19 @@ namespace MSP430Modules.Wpf
             }
 
             // COM Port:
-            // Load the COM port containing "MSP430" on first load
+            // Load the COM port that contains the term "Arduino"            
             if (Port == null)
             {
                 foreach (object port in PortBox.Items)
                 {
-                    if (port.ToString().Contains("MSP430"))
+                    if (port.ToString().Contains("Arduino"))
                     {
                         PortName = port.ToString();
                         PortBox.SelectedItem = PortName;
                     }
                 }
             }
-            
+
             // Load the saved COM port on consecutive loads
             else
             {
@@ -75,19 +74,19 @@ namespace MSP430Modules.Wpf
                         PortBox.SelectedItem = PortName;
                     }
                 }
-            }            
+            }  
         }
 
         private void PopulateOutputs()
         {
             // Input:
-            // Add digital output pins as specified in MSP430 firmware
-            OutputBox.Items.Add("P1.0");        // LED1
-            OutputBox.Items.Add("P1.4");
-            OutputBox.Items.Add("P1.5");
-            OutputBox.Items.Add("P1.6");        // LED2
-            OutputBox.Items.Add("P1.7");
-            OutputBox.Items.Add("P2.0");
+            // Add digital output pins as specified in Arduino firmware
+            OutputBox.Items.Add("Pin8");      
+            OutputBox.Items.Add("Pin9");
+            OutputBox.Items.Add("Pin10");
+            OutputBox.Items.Add("Pin11");        
+            OutputBox.Items.Add("Pin12");
+            OutputBox.Items.Add("Pin13");
 
             // Trigger Type:
             // The available actions are added in the .xaml file
@@ -104,7 +103,7 @@ namespace MSP430Modules.Wpf
                 {
                     foreach (ManagementObject obj in searcher.Get())
                     {
-                        PortBox.Items.Add(obj["DeviceID"] + " - " + obj["Description"]);                      
+                        PortBox.Items.Add(obj["DeviceID"] + " - " + obj["Description"]);
                     }
                 }
 
@@ -131,7 +130,9 @@ namespace MSP430Modules.Wpf
         {
             // Select the item for the COM Port selected
             ComboBox box = sender as ComboBox;
-            PortName = box.SelectedItem.ToString();            
+            PortName = box.SelectedItem.ToString();
+            string[] words = PortName.Split('-');
+            Port = words[0].Trim();            
         }
 
         public override void OnSave()
@@ -157,14 +158,14 @@ namespace MSP430Modules.Wpf
             // Split the COM Port description and save the "COM#" 
             PortName = PortBox.SelectedItem.ToString();
             string[] words = PortName.Split('-');
-            Port = words[0].Trim();           
+            Port = words[0].Trim();             
         }
 
         public override string Title
         {
             get
             {
-                return "MSP430: Digital Output";
+                return "Arduino: Digital Output";
             }
         }
 
@@ -172,8 +173,8 @@ namespace MSP430Modules.Wpf
         {
             Assembly execAssembly = Assembly.GetExecutingAssembly();
             string loc = execAssembly.Location;
-            string directory = System.IO.Path.GetDirectoryName(loc);            
-            Process.Start(@directory + "/Flasher/FlashMSP430.bat");
+            string directory = System.IO.Path.GetDirectoryName(loc);                        
+            Process.Start(@directory + "/Flasher/FlashArduino.bat", Port);
         }
     }
 }
