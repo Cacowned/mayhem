@@ -2,11 +2,10 @@
 using System.IO.Ports;
 using System.Runtime.Serialization;
 using System.Text;
+using ArduinoModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using ArduinoModules;
-using ArduinoModules.Wpf;
 using SerialManager;
 
 namespace ArduinoModules.Events
@@ -15,6 +14,7 @@ namespace ArduinoModules.Events
     [MayhemModule("Arduino: Digital Input", "Listens to a digital input")]
     public class DigitalInput : EventBase, IWpfConfigurable
     {
+        [DataMember]
         private SerialPortManager manager;
 
         [DataMember]
@@ -27,6 +27,9 @@ namespace ArduinoModules.Events
         private string port;
 
         [DataMember]
+        private string portName;
+
+        [DataMember]
         private DigitalInputType inputType;
         
         [DataMember]
@@ -36,14 +39,14 @@ namespace ArduinoModules.Events
         {
             index = 0;
             inputType = DigitalInputType.Toggle;
-            port = "COM1";
+            portName = "";
             this.phrase = string.Empty;
-            this.settings = new SerialSettings(9600, Parity.Even, StopBits.One, 8);                     
+            this.settings = new SerialSettings(9600, Parity.Even, StopBits.One, 8);
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new ArduinoDigitalInputConfig(index, inputType, port); }
+            get { return new ArduinoDigitalInputConfig(index, inputType, port, portName); }
         }
 
         public void OnSaved(WpfConfiguration ConfigurationControl)
@@ -53,54 +56,48 @@ namespace ArduinoModules.Events
             index = config.Index;
             inputType = config.InputType;
             port = config.Port;
+            portName = config.PortName;
         }
 
         public string GetConfigString()
         {
             //GetConfigString appears below the event/reaction in the Mayhem UI
 
-            //Action to take
+            // Action to be displayed in the configuration string
             string action = string.Empty;
             switch (inputType)
             {
                 case DigitalInputType.Toggle: action = "Toggles";
                     break;
-                case DigitalInputType.On: action = "Turns On";
+                case DigitalInputType.High: action = "Turns High";
                     break;
-                case DigitalInputType.Off: action = "Turns Off";
+                case DigitalInputType.Low: action = "Turns Low";
                     break;
             }
 
-            //Index to show in the string (ie. P1.3, P2.1, etc.)
+            // Index to show in the string (ie. pin3, pin4, etc.)
             string indexName = string.Empty;
             switch (index)
             {
-                case 0: indexName = "P1.3";
+                case 0: indexName = "Pin2";
                     break;
-                case 1: indexName = "P2.1";
+                case 1: indexName = "Pin3";
                     break;
-                case 2: indexName = "P2.2";
+                case 2: indexName = "Pin4";
                     break;
-                case 3: indexName = "P2.3";
+                case 3: indexName = "Pin5";
                     break;
-                case 4: indexName = "P2.4";
+                case 4: indexName = "Pin6";
                     break;
-                case 5: indexName = "P2.5";
+                case 5: indexName = "Pin7";
                     break;
             }
 
-            // Return string
-            return indexName + " " + action + " on " + port;
+            // COM Port
+            // 'port' contains the COM port to display
 
-            //switch (port)
-            //{
-            //    case "COM1": type = "first com port";
-            //        break;
-            //    case "COM2": type = "first com port";
-            //        break;
-            //    case "COM3": type = "first com port";
-            //        break;
-            //}
+            // Return the configuration string
+            return indexName + " " + action + " on " + port;
         }
 
         protected override void OnAfterLoad()
@@ -139,59 +136,48 @@ namespace ArduinoModules.Events
 
         private void ReceivedData(byte[] bytes, int numBytes)
         {
-           
+            // Get bytes received from the serial port
+            string byteReceived = Encoding.UTF8.GetString(bytes);
 
-             
-                string str = Encoding.UTF8.GetString(bytes);
+            // Check toggle conditions from firmware
+            if (inputType.Equals(DigitalInputType.Toggle))
+            {
+                if (index.Equals(0) && (byteReceived.Equals("P") || byteReceived.Equals("`"))) Trigger(); //0x50 OR 0x60
+                if (index.Equals(1) && (byteReceived.Equals("Q") || byteReceived.Equals("a"))) Trigger(); //0x51 OR 0x61
+                if (index.Equals(2) && (byteReceived.Equals("R") || byteReceived.Equals("b"))) Trigger(); //0x52 OR 0x62
+                if (index.Equals(3) && (byteReceived.Equals("S") || byteReceived.Equals("c"))) Trigger(); //0x53 OR 0x63
+                if (index.Equals(4) && (byteReceived.Equals("T") || byteReceived.Equals("d"))) Trigger(); //0x54 OR 0x64
+                if (index.Equals(5) && (byteReceived.Equals("U") || byteReceived.Equals("e"))) Trigger(); //0x55 OR 0x65                
+            }
 
-                if (str == "1")
-                {
-                    Trigger();
-                }
-           
-            
-            
-            
-            
-            
-            
+            // Check turns high conditions from firmware
+            if (inputType.Equals(DigitalInputType.High))
+            {
+                if (index.Equals(0) && byteReceived.Equals("P")) Trigger(); //0x50
+                if (index.Equals(1) && byteReceived.Equals("Q")) Trigger(); //0x51
+                if (index.Equals(2) && byteReceived.Equals("R")) Trigger(); //0x52
+                if (index.Equals(3) && byteReceived.Equals("S")) Trigger(); //0x53
+                if (index.Equals(4) && byteReceived.Equals("T")) Trigger(); //0x54
+                if (index.Equals(5) && byteReceived.Equals("U")) Trigger(); //0x55            
+            }
 
-            //if (inputType.Equals(DigitalInputType.Toggle))
-            //{
-            //    if (index.Equals(0) && byteReceived.Equals("@")) Trigger(); //0x40
-            //    if (index.Equals(1) && byteReceived.Equals("A")) Trigger(); //0x41
-            //    if (index.Equals(2) && byteReceived.Equals("B")) Trigger(); //0x42
-            //    if (index.Equals(3) && byteReceived.Equals("C")) Trigger(); //0x43
-            //    if (index.Equals(4) && byteReceived.Equals("D")) Trigger(); //0x44
-            //    if (index.Equals(5) && byteReceived.Equals("E")) Trigger(); //0x45
-            //}
-
-            //if (inputType.Equals(DigitalInputType.On))
-            //{
-            //    if (index.Equals(0) && byteReceived.Equals("P")) Trigger(); //0x50
-            //    if (index.Equals(1) && byteReceived.Equals("Q")) Trigger(); //0x51
-            //    if (index.Equals(2) && byteReceived.Equals("R")) Trigger(); //0x52
-            //    if (index.Equals(3) && byteReceived.Equals("S")) Trigger(); //0x53
-            //    if (index.Equals(4) && byteReceived.Equals("T")) Trigger(); //0x54
-            //    if (index.Equals(5) && byteReceived.Equals("U")) Trigger(); //0x55            
-            //}
-
-            //if (inputType.Equals(DigitalInputType.Off))
-            //{
-            //    if (index.Equals(0) && byteReceived.Equals("`")) Trigger(); //0x60
-            //    if (index.Equals(1) && byteReceived.Equals("a")) Trigger(); //0x61
-            //    if (index.Equals(2) && byteReceived.Equals("b")) Trigger(); //0x62
-            //    if (index.Equals(3) && byteReceived.Equals("c")) Trigger(); //0x63
-            //    if (index.Equals(4) && byteReceived.Equals("d")) Trigger(); //0x64
-            //    if (index.Equals(5) && byteReceived.Equals("e")) Trigger(); //0x65
-            //}
+            // Check turns low conditions from firmware
+            if (inputType.Equals(DigitalInputType.Low))
+            {
+                if (index.Equals(0) && byteReceived.Equals("`")) Trigger(); //0x60
+                if (index.Equals(1) && byteReceived.Equals("a")) Trigger(); //0x61
+                if (index.Equals(2) && byteReceived.Equals("b")) Trigger(); //0x62
+                if (index.Equals(3) && byteReceived.Equals("c")) Trigger(); //0x63
+                if (index.Equals(4) && byteReceived.Equals("d")) Trigger(); //0x64
+                if (index.Equals(5) && byteReceived.Equals("e")) Trigger(); //0x65
+            }
         }
     }
 
     public enum DigitalInputType
     {
         Toggle, 
-        On,
-        Off
+        High,
+        Low
     }
 }
