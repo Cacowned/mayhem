@@ -3,24 +3,24 @@ using System.Management;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using ArduinoModules.Events;
+using ArduinoModules.Reactions;
 using MayhemWpf.UserControls;
 
 namespace ArduinoModules.Wpf
 {
     /// <summary>
-    /// Interaction logic for ArduinoDigitalInputConfig.xaml
+    /// Interaction logic for ArduinoDigitalOutputConfig.xaml
     /// </summary>
-    public partial class ArduinoDigitalInputConfig : WpfConfiguration
+    public partial class ArduinoDigitalOutputConfig : WpfConfiguration
     {
-        public DigitalInputType InputType { get; set; }
+        public DigitalOutputType OutputType { get; set; }
         public int Index { get; set; }
         public string Port { get; set; }
         public string PortName { get; set; }
 
-        public ArduinoDigitalInputConfig(int index, DigitalInputType inputType, string port, string portName)
+        public ArduinoDigitalOutputConfig(int index, DigitalOutputType outputType, string port, string portName)
         {
-            InputType = inputType;
+            OutputType = outputType;
             Index = index;
             Port = port;
             PortName = portName;
@@ -33,24 +33,24 @@ namespace ArduinoModules.Wpf
         {
             PopulateOutputs();
 
-            // Input:
-            // Load the default input pin
-            InputBox.SelectedIndex = Index;
+            // Output:
+            // Load the default output pin
+            OutputBox.SelectedIndex = Index;
 
             // Trigger Type:
             // Load the default action
-            switch (InputType)
+            switch (OutputType)
             {
-                case DigitalInputType.Toggle: ControlBox.SelectedIndex = 0;
+                case DigitalOutputType.Toggle: ControlBox.SelectedIndex = 0;
                     break;
-                case DigitalInputType.High: ControlBox.SelectedIndex = 1;
+                case DigitalOutputType.High: ControlBox.SelectedIndex = 1;
                     break;
-                case DigitalInputType.Low: ControlBox.SelectedIndex = 2;
+                case DigitalOutputType.Low: ControlBox.SelectedIndex = 2;
                     break;
             }
 
             // COM Port:
-            // Load the COM port containing "MSP430" on first load
+            // Load the COM port that contains the term "Arduino"            
             if (Port == null)
             {
                 foreach (object port in PortBox.Items)
@@ -77,16 +77,16 @@ namespace ArduinoModules.Wpf
             }  
         }
 
-        public void PopulateOutputs()
+        private void PopulateOutputs()
         {
             // Input:
-            // Add digital input pins as specified in Arduino firmware
-            InputBox.Items.Add("Pin2");
-            InputBox.Items.Add("Pin3");
-            InputBox.Items.Add("Pin4");
-            InputBox.Items.Add("Pin5");
-            InputBox.Items.Add("Pin6");
-            InputBox.Items.Add("Pin7");
+            // Add digital output pins as specified in Arduino firmware
+            OutputBox.Items.Add("Pin8");      
+            OutputBox.Items.Add("Pin9");
+            OutputBox.Items.Add("Pin10");
+            OutputBox.Items.Add("Pin11");        
+            OutputBox.Items.Add("Pin12");
+            OutputBox.Items.Add("Pin13");
 
             // Trigger Type:
             // The available actions are added in the .xaml file
@@ -119,9 +119,9 @@ namespace ArduinoModules.Wpf
             }
         }
 
-        private void InputBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OutputBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Select the index of the input pin selected
+            // Select the index of the output pin selected
             ComboBox box = sender as ComboBox;
             Index = box.SelectedIndex;
         }
@@ -137,20 +137,20 @@ namespace ArduinoModules.Wpf
 
         public override void OnSave()
         {
-            // Input:
-            // Save the selected input pin
-            Index = InputBox.SelectedIndex;
+            // Output:
+            // Save the selected output pin
+            Index = OutputBox.SelectedIndex;
 
             // Trigger Type:
             // Save the selected action
-            ComboBoxItem inputBox = ControlBox.SelectedItem as ComboBoxItem;
-            switch (inputBox.Content.ToString())
+            ComboBoxItem outputBox = ControlBox.SelectedItem as ComboBoxItem;
+            switch (outputBox.Content.ToString())
             {
-                case "Toggles": InputType = DigitalInputType.Toggle;
+                case "Toggle": OutputType = DigitalOutputType.Toggle;
                     break;
-                case "Turns High": InputType = DigitalInputType.High;
+                case "Turn High": OutputType = DigitalOutputType.High;
                     break;
-                case "Turns Low": InputType = DigitalInputType.Low;
+                case "Turn Low": OutputType = DigitalOutputType.Low;
                     break;
             }
 
@@ -158,14 +158,14 @@ namespace ArduinoModules.Wpf
             // Split the COM Port description and save the "COM#" 
             PortName = PortBox.SelectedItem.ToString();
             string[] words = PortName.Split('-');
-            Port = words[0].Trim();           
+            Port = words[0].Trim();             
         }
 
         public override string Title
         {
             get
             {
-                return "Arduino: Digital Input";
+                return "Arduino: Digital Output";
             }
         }
 
@@ -173,7 +173,7 @@ namespace ArduinoModules.Wpf
         {
             Assembly execAssembly = Assembly.GetExecutingAssembly();
             string loc = execAssembly.Location;
-            string directory = System.IO.Path.GetDirectoryName(loc);
+            string directory = System.IO.Path.GetDirectoryName(loc);                        
             Process.Start(@directory + "/Flasher/FlashArduino.bat", Port);
         }
     }
