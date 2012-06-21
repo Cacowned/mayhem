@@ -172,7 +172,7 @@ namespace MSP430Modules.Wpf
         {
             Assembly execAssembly = Assembly.GetExecutingAssembly();
             string loc = execAssembly.Location;
-            string directory = System.IO.Path.GetDirectoryName(loc);
+            string directory = System.IO.Path.GetDirectoryName(loc);            
             Process.Start(@directory + "/Flasher/FlashMSP430.bat");
         }
     }
