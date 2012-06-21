@@ -1,0 +1,23 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>MSP430Modules</id>
+    <version>1.0.0</version>
+    <authors>Gabriel Reyes</authors>
+    <owners>Outercurve</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance> 
+    <description>Allows you to connect your Texas Instruments MSP430 Launchpad (tested with MSP430G2553) with Mayhem for DigitalInput and DigitalOutput connections. Before using this module, you will need to first attach the MSP430 Launchpad to your computer and install the device drivers. Refer to the device wiki at http://processors.wiki.ti.com/index.php/MSP430_LaunchPad_(MSP-EXP430G2) if you have trouble installing the drivers.
+
+Once your device is installed, you can download the Mayhem MSP430Modules package to your computer. After MSP430Modules is installed in Mayhem, you should select the correct COM Port and flash the device with custom firmware provided within Mayhem. NOTE: you will only have to perform this task once before you can use your MSP430 with Mayhem.
+
+Enjoy the MSP430Modules!</description>
+    <summary>Allows you to connect the MSP430 Launchpad (tested with MSP430G2553) to Mayhem for DigitalInput and DigitalOutput connections.</summary>
+    <copyright>Copyright © Outercurve 2012</copyright>
+    <tags>MSP430, Microcontroller, Texas Instruments, TI, Launchpad, Digital, Input, Output</tags>
+    <dependencies>
+      <dependency id="MayhemCore" version="1.0" />
+      <dependency id="MayhemWpf" version="1.0" />
+      <dependency id="SerialManager" version="1.0" />
+    </dependencies>
+  </metadata>
+</package>
