@@ -1,16 +1,16 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Runtime.Serialization;
+using ArduinoModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using MSP430Modules.Wpf;
 using SerialManager;
 
-namespace MSP430Modules.Reactions
+namespace ArduinoModules.Reactions
 {
     [DataContract]
-    [MayhemModule("MSP430: Digital Output", "Triggers a digital output")]
+    [MayhemModule("Arduino: Digital Output", "Triggers a digital output")]
     public class DigitalOutput : ReactionBase, IWpfConfigurable
     {
         [DataMember]
@@ -45,12 +45,12 @@ namespace MSP430Modules.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new MSP430DigitalOutputConfig(index, outputType, port, portName); }
+            get { return new ArduinoDigitalOutputConfig(index, outputType, port, portName); }
         }
 
         public void OnSaved(WpfConfiguration ConfigurationControl)
         {
-            var config = ConfigurationControl as MSP430DigitalOutputConfig;
+            var config = ConfigurationControl as ArduinoDigitalOutputConfig;
 
             index = config.Index;
             outputType = config.OutputType;
@@ -74,21 +74,21 @@ namespace MSP430Modules.Reactions
                     break;
             }
 
-            // Index to show in the string (ie. P1.0, P1.4, etc.)
+            // Index to show in the string (ie. pin8, pin9, etc.)
             string indexName = string.Empty;
             switch (index)
             {
-                case 0: indexName = "P1.0";
+                case 0: indexName = "Pin8";
                     break;
-                case 1: indexName = "P1.4";
+                case 1: indexName = "Pin9";
                     break;
-                case 2: indexName = "P1.5";
+                case 2: indexName = "Pin10";
                     break;
-                case 3: indexName = "P1.6";
+                case 3: indexName = "Pin11";
                     break;
-                case 4: indexName = "P1.7";
+                case 4: indexName = "Pin12";
                     break;
-                case 5: indexName = "P2.0";
+                case 5: indexName = "Pin13";
                     break;
             }
 
@@ -138,34 +138,34 @@ namespace MSP430Modules.Reactions
             // Send toggle trigger to firmware
             if (outputType.Equals(DigitalOutputType.Toggle))
             {
-                if (index.Equals(0)) { byte[] sendByte = { 0x00 }; this.manager.Write(this.port, sendByte, 1); }    // P1.0
-                if (index.Equals(1)) { byte[] sendByte = { 0x01 }; this.manager.Write(this.port, sendByte, 1); }    // P1.4
-                if (index.Equals(2)) { byte[] sendByte = { 0x02 }; this.manager.Write(this.port, sendByte, 1); }    // P1.5
-                if (index.Equals(3)) { byte[] sendByte = { 0x03 }; this.manager.Write(this.port, sendByte, 1); }    // P1.6
-                if (index.Equals(4)) { byte[] sendByte = { 0x04 }; this.manager.Write(this.port, sendByte, 1); }    // P1.7
-                if (index.Equals(5)) { byte[] sendByte = { 0x05 }; this.manager.Write(this.port, sendByte, 1); }    // P2.0
+                if (index.Equals(0)) { byte[] sendByte = { 0x00 }; this.manager.Write(this.port, sendByte, 1); }    // pin8
+                if (index.Equals(1)) { byte[] sendByte = { 0x01 }; this.manager.Write(this.port, sendByte, 1); }    // pin9
+                if (index.Equals(2)) { byte[] sendByte = { 0x02 }; this.manager.Write(this.port, sendByte, 1); }    // pin10
+                if (index.Equals(3)) { byte[] sendByte = { 0x03 }; this.manager.Write(this.port, sendByte, 1); }    // pin11
+                if (index.Equals(4)) { byte[] sendByte = { 0x04 }; this.manager.Write(this.port, sendByte, 1); }    // pin12
+                if (index.Equals(5)) { byte[] sendByte = { 0x05 }; this.manager.Write(this.port, sendByte, 1); }    // pin13
             }
 
             // Send turn high trigger to firmware
             if (outputType.Equals(DigitalOutputType.High))
             {
-                if (index.Equals(0)) { byte[] sendByte = { 0x10 }; this.manager.Write(this.port, sendByte, 1); }    // P1.0
-                if (index.Equals(1)) { byte[] sendByte = { 0x11 }; this.manager.Write(this.port, sendByte, 1); }    // P1.4
-                if (index.Equals(2)) { byte[] sendByte = { 0x12 }; this.manager.Write(this.port, sendByte, 1); }    // P1.5
-                if (index.Equals(3)) { byte[] sendByte = { 0x13 }; this.manager.Write(this.port, sendByte, 1); }    // P1.6
-                if (index.Equals(4)) { byte[] sendByte = { 0x14 }; this.manager.Write(this.port, sendByte, 1); }    // P1.7
-                if (index.Equals(5)) { byte[] sendByte = { 0x15 }; this.manager.Write(this.port, sendByte, 1); }    // P2.0
+                if (index.Equals(0)) { byte[] sendByte = { 0x10 }; this.manager.Write(this.port, sendByte, 1); }    // pin8
+                if (index.Equals(1)) { byte[] sendByte = { 0x11 }; this.manager.Write(this.port, sendByte, 1); }    // pin9
+                if (index.Equals(2)) { byte[] sendByte = { 0x12 }; this.manager.Write(this.port, sendByte, 1); }    // pin10
+                if (index.Equals(3)) { byte[] sendByte = { 0x13 }; this.manager.Write(this.port, sendByte, 1); }    // pin11
+                if (index.Equals(4)) { byte[] sendByte = { 0x14 }; this.manager.Write(this.port, sendByte, 1); }    // pin12
+                if (index.Equals(5)) { byte[] sendByte = { 0x15 }; this.manager.Write(this.port, sendByte, 1); }    // pin13
             }
 
             // Send turn low trigger to firmware
             if (outputType.Equals(DigitalOutputType.Low))
             {
-                if (index.Equals(0)) { byte[] sendByte = { 0x20 }; this.manager.Write(this.port, sendByte, 1); }    // P1.0
-                if (index.Equals(1)) { byte[] sendByte = { 0x21 }; this.manager.Write(this.port, sendByte, 1); }    // P1.4
-                if (index.Equals(2)) { byte[] sendByte = { 0x22 }; this.manager.Write(this.port, sendByte, 1); }    // P1.5
-                if (index.Equals(3)) { byte[] sendByte = { 0x23 }; this.manager.Write(this.port, sendByte, 1); }    // P1.6
-                if (index.Equals(4)) { byte[] sendByte = { 0x24 }; this.manager.Write(this.port, sendByte, 1); }    // P1.7
-                if (index.Equals(5)) { byte[] sendByte = { 0x25 }; this.manager.Write(this.port, sendByte, 1); }    // P2.0
+                if (index.Equals(0)) { byte[] sendByte = { 0x20 }; this.manager.Write(this.port, sendByte, 1); }    // pin8
+                if (index.Equals(1)) { byte[] sendByte = { 0x21 }; this.manager.Write(this.port, sendByte, 1); }    // pin9
+                if (index.Equals(2)) { byte[] sendByte = { 0x22 }; this.manager.Write(this.port, sendByte, 1); }    // pin10
+                if (index.Equals(3)) { byte[] sendByte = { 0x23 }; this.manager.Write(this.port, sendByte, 1); }    // pin11
+                if (index.Equals(4)) { byte[] sendByte = { 0x24 }; this.manager.Write(this.port, sendByte, 1); }    // pin12
+                if (index.Equals(5)) { byte[] sendByte = { 0x25 }; this.manager.Write(this.port, sendByte, 1); }    // pin13
             }
         }
     }

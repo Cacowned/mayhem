@@ -27,6 +27,9 @@ namespace MSP430Modules.Events
         private string port;
 
         [DataMember]
+        private string portName;
+
+        [DataMember]
         private DigitalInputType inputType;
 
         [DataMember]
@@ -36,14 +39,14 @@ namespace MSP430Modules.Events
         {
             index = 0;
             inputType = DigitalInputType.Toggle;
-            port = "COM1";
+            portName = "";
             this.phrase = string.Empty;
             this.settings = new SerialSettings(9600, Parity.Even, StopBits.One, 8);
         }
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new MSP430DigitalInputConfig(index, inputType, port); }
+            get { return new MSP430DigitalInputConfig(index, inputType, port, portName); }
         }
 
         public void OnSaved(WpfConfiguration ConfigurationControl)
@@ -53,6 +56,7 @@ namespace MSP430Modules.Events
             index = config.Index;
             inputType = config.InputType;
             port = config.Port;
+            portName = config.PortName;
         }
 
         public string GetConfigString()

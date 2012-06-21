@@ -9,25 +9,26 @@
             <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition />            
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>        
+        </Grid.RowDefinitions>
 
-        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Output:</TextBlock>
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Input:</TextBlock>
         <ComboBox Name="InputBox" Grid.Column="1" Grid.Row="0" SelectionChanged="InputBox_SelectionChanged" />
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Trigger Type:</TextBlock>
         <ComboBox Name="ControlBox" Grid.Column="1" Grid.Row="1">
             <ComboBoxItem>Toggles</ComboBoxItem>
-            <ComboBoxItem>Turns On</ComboBoxItem>
-            <ComboBoxItem>Turns Off</ComboBoxItem>
+            <ComboBoxItem>Turns High</ComboBoxItem>
+            <ComboBoxItem>Turns Low</ComboBoxItem>
         </ComboBox>
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">COM Port:</TextBlock>
         <ComboBox Name="PortBox" Grid.Column="1" Grid.Row="2" SelectionChanged="PortBox_SelectionChanged" />
-
-        <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" Style="{StaticResource ConfigErrorMessage}" Name="ArduinoAttached" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Visibility="Hidden">Plug in an Arduino interface kit.</TextBlock>
+        
+        <Button Style="{StaticResource ConfigLabel}" Margin="10,15,10,15" Width="350" Height="35" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="4" Click="FlashButton_Click">Click to flash your Arduino device with Mayhem firmware</Button>
     </Grid>
+
 </src:WpfConfiguration>

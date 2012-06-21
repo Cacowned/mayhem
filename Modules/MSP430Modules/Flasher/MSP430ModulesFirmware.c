@@ -13,6 +13,10 @@
  * DISCLAIMER: Release for demonstration and education purposes only. You are fully
  * responsible for modifying and using this software.
  *
+ * Copyright (c) 2012, The Outercurve Foundation
+ * For more details on the license:
+ * http://www.outercurve.org/
+ *
  * Version 1.0.0
  */
 
