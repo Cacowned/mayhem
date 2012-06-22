@@ -1,0 +1,33 @@
+﻿<src:WpfConfiguration x:Class="MSP430Modules.Wpf.MSP430DigitalOutputConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+             Width="400">       
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="300" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Trigger Type:</TextBlock>
+        <ComboBox Name="ControlBox" Grid.Column="1" Grid.Row="0">
+            <ComboBoxItem>Toggle</ComboBoxItem>
+            <ComboBoxItem>Turn High</ComboBoxItem>
+            <ComboBoxItem>Turn Low</ComboBoxItem>
+        </ComboBox>
+
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Output:</TextBlock>
+        <ComboBox Name="OutputBox" Grid.Column="1" Grid.Row="1" SelectionChanged="OutputBox_SelectionChanged" />
+
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">COM Port:</TextBlock>
+        <ComboBox Name="PortBox" Grid.Column="1" Grid.Row="2" SelectionChanged="PortBox_SelectionChanged" />
+
+        <Button Style="{StaticResource ConfigLabel}" Margin="10,15,10,15" Width="350" Height="35" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="3" Click="FlashButton_Click">Click to flash your MSP430 device with Mayhem firmware</Button>
+    </Grid>
+</src:WpfConfiguration>
