@@ -282,4 +282,7 @@
   <data name="Word_CantActivateInspector" xml:space="preserve">
     <value>Can't activate the inspector.</value>
   </data>
+  <data name="CantCloseFileStream" xml:space="preserve">
+    <value>Can't close the open file.</value>
+  </data>
 </root>

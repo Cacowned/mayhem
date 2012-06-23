@@ -153,8 +153,11 @@
   <data name="BT_ErrorMonitoringBluetooth" xml:space="preserve">
     <value>Error at monitoring the bluetooth activity.</value>
   </data>
-  <data name="BT_ErrorWrongPin" xml:space="preserve">
-    <value>A connection could not be establish. The acces Pin may be incorrect.</value>
+  <data name="BT_MonitorBecomesVisible" xml:space="preserve">
+    <value>Becomes visible.</value>
+  </data>
+  <data name="BT_MonitorNoLongerVisible" xml:space="preserve">
+    <value>No longer visible.</value>
   </data>
   <data name="BT_NoBluetooth" xml:space="preserve">
     <value>No Bluetooth found.</value>
@@ -177,14 +180,26 @@
   <data name="DeviceAddress_ConfigString" xml:space="preserve">
     <value>Device's address: {0}.</value>
   </data>
+  <data name="DeviceNameBecomes_Title" xml:space="preserve">
+    <value>Monitor device becomes visible</value>
+  </data>
   <data name="DeviceNameConnect_Title" xml:space="preserve">
     <value>Connect to device</value>
   </data>
   <data name="DeviceName_ConfigString" xml:space="preserve">
-    <value>Device's name: {0}.</value>
+    <value>Device's name: {0}. Monitor: {1}.</value>
   </data>
   <data name="DeviceName_Title" xml:space="preserve">
     <value>Monitor device</value>
+  </data>
+  <data name="DevicePairAddress_ConfigString" xml:space="preserve">
+    <value>Device's address: {0}. Pin {1}.</value>
+  </data>
+  <data name="DevicePairName_ConfigString" xml:space="preserve">
+    <value>Device's name: {0}. Pin {1}.</value>
+  </data>
+  <data name="General_BluetoothTimerInterval" xml:space="preserve">
+    <value>500</value>
   </data>
   <data name="General_FileLocationInvalid" xml:space="preserve">
     <value>File location is invalid.</value>
@@ -207,6 +222,9 @@
   <data name="SendFileToDevice_Title" xml:space="preserve">
     <value>Send file to device</value>
   </data>
+  <data name="Succes" xml:space="preserve">
+    <value>Succes</value>
+  </data>
   <data name="WiFi_CantConnectToNetwork" xml:space="preserve">
     <value>Can't connect to the selected network.</value>
   </data>
@@ -219,6 +237,12 @@
   <data name="WiFi_DisconnectedFromNetwork" xml:space="preserve">
     <value>Disconnected from the {0} network.</value>
   </data>
+  <data name="WiFi_NetworkAlreadyNotVisible" xml:space="preserve">
+    <value>The network {0} is already not visible.</value>
+  </data>
+  <data name="WiFi_NetworkAlreadyVisible" xml:space="preserve">
+    <value>The network {0} is already visible.</value>
+  </data>
   <data name="WiFi_NetworkName_NoCharacter" xml:space="preserve">
     <value>The name of the network must contain at least one character.</value>
   </data>
@@ -226,10 +250,7 @@
     <value>The name of the network must be 100 characters long or smaller.</value>
   </data>
   <data name="WiFi_NetworkNotVisible" xml:space="preserve">
-    <value>The network {0} is already not visible.</value>
-  </data>
-  <data name="WiFi_NetworkVisible" xml:space="preserve">
-    <value>The network {0} is already visible.</value>
+    <value>The network {0} is not visible.</value>
   </data>
   <data name="WiFi_NoNetworkConnected" xml:space="preserve">
     <value>The computer is not connected to the {0} network.</value>

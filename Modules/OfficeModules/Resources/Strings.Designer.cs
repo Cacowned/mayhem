@@ -61,6 +61,15 @@ namespace OfficeModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t close the open file..
+        /// </summary>
+        internal static string CantCloseFileStream {
+            get {
+                return ResourceManager.GetString("CantCloseFileStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Excel application not found..
         /// </summary>
         internal static string Excel_ApplicationNotFound {
