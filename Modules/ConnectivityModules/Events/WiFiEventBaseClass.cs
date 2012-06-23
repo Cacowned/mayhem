@@ -25,7 +25,6 @@ namespace ConnectivityModule.Events
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-
             if (!InitializeTimerCreateClient())
             {
                 e.Cancel = true;
@@ -44,8 +43,6 @@ namespace ConnectivityModule.Events
                             isAvailable = true;
                             wasAvailable = true;
 
-                            // If the network is already visible we should inform the user
-                            ErrorLog.AddError(ErrorType.Message, string.Format(Strings.WiFi_NetworkAlreadyVisible, networkName));
                             break;
                         }
                     }
@@ -136,8 +133,8 @@ namespace ConnectivityModule.Events
 
                 if (!found && isAvailable)
                 {
-                    wasAvailable = false;
-                    isAvailable = true;
+                    wasAvailable = true;
+                    isAvailable = false;
                 }
 
                 return true;

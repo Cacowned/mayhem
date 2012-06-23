@@ -222,8 +222,8 @@
   <data name="SendFileToDevice_Title" xml:space="preserve">
     <value>Send file to device</value>
   </data>
-  <data name="Succes" xml:space="preserve">
-    <value>Succes</value>
+  <data name="Success" xml:space="preserve">
+    <value>Success</value>
   </data>
   <data name="WiFi_CantConnectToNetwork" xml:space="preserve">
     <value>Can't connect to the selected network.</value>
