@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Runtime.Serialization;
 using ConnectivityModule.Wpf;
 using InTheHand.Net;
-using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
@@ -14,39 +13,32 @@ namespace ConnectivityModule.Reactions
 {
     [DataContract]
     [MayhemModule("Bluetooth: Pair With Device By Address", "Pair with a specific device identified by its address")]
-    public class BTPairWithDeviceAddress : ReactionBase, IWpfConfigurable
+    public class BTPairWithDeviceAddress : BTPairBaseClass, IWpfConfigurable
     {
         [DataMember]
-        private string deviceAddressString;
-
-        [DataMember]
-        private string accessPin;
+        protected string deviceAddressString;
 
         public override void Perform()
         {
             try
             {
-                BluetoothDeviceInfo device = new BluetoothDeviceInfo(BluetoothAddress.Parse(deviceAddressString));
+                device = new BluetoothDeviceInfo(BluetoothAddress.Parse(deviceAddressString));
 
                 // Adding a warning message if the device is not in range
                 if (device == null)
                 {
-                    ErrorLog.AddError(ErrorType.Warning, string.Format(CultureInfo.CurrentCulture, Strings.BT_DeviceAddressNotFound, deviceAddressString));
+                    ErrorLog.AddError(ErrorType.Failure, string.Format(CultureInfo.CurrentCulture, Strings.BT_DeviceAddressNotFound, deviceAddressString));
                     return;
                 }
 
-                BluetoothAddress deviceAddress = device.DeviceAddress;
-
-                BluetoothSecurity.RemoveDevice(deviceAddress);
-
-                if (!BluetoothSecurity.PairRequest(deviceAddress, accessPin))
-                    ErrorLog.AddError(ErrorType.Failure, Strings.BT_ErrorWrongPin);
-                else
-                    ErrorLog.AddError(ErrorType.Message, String.Format(Strings.BT_SuccessfulPairAddress, deviceAddress));
+                if (MakePairRequest())
+                {
+                    ErrorLog.AddError(ErrorType.Message, String.Format(Strings.BT_SuccessfulPairAddress, deviceAddressString));
+                }
             }
             catch (SocketException ex)
             {
-                ErrorLog.AddError(ErrorType.Failure, Strings.BT_ErrorWrongPin);
+                ErrorLog.AddError(ErrorType.Failure, Strings.BT_CantConnectToDevice);
                 Logger.Write(ex);
             }
             catch (Exception ex)
@@ -80,7 +72,7 @@ namespace ConnectivityModule.Reactions
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.DeviceAddress_ConfigString, deviceAddressString);
+            return string.Format(CultureInfo.CurrentCulture, Strings.DeviceAddress_ConfigString, deviceAddressString, accessPin);
         }
 
         #endregion

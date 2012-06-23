@@ -3,8 +3,6 @@ using System.Globalization;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
 using ConnectivityModule.Wpf;
-using InTheHand.Net;
-using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
@@ -14,13 +12,10 @@ namespace ConnectivityModule.Reactions
 {
     [DataContract]
     [MayhemModule("Bluetooth: Pair With Device By Name", "Pair with a specific device identified by its name")]
-    public class BTPairWithDeviceName : ReactionBase, IWpfConfigurable
+    public class BTPairWithDeviceName : BTPairBaseClass, IWpfConfigurable
     {
         [DataMember]
         private string deviceName;
-
-        [DataMember]
-        private string accessPin;
 
         private BluetoothClient bluetoothClient;
 
@@ -28,7 +23,7 @@ namespace ConnectivityModule.Reactions
         {
             try
             {
-                BluetoothDeviceInfo device = null;
+                device = null;
 
                 bluetoothClient = new BluetoothClient();
 
@@ -50,18 +45,14 @@ namespace ConnectivityModule.Reactions
                     return;
                 }
 
-                BluetoothAddress deviceAddress = device.DeviceAddress;
-
-                BluetoothSecurity.RemoveDevice(deviceAddress);
-
-                if (!BluetoothSecurity.PairRequest(deviceAddress, accessPin))
-                    ErrorLog.AddError(ErrorType.Failure, Strings.BT_ErrorWrongPin);
-                else
-                    ErrorLog.AddError(ErrorType.Message, String.Format(Strings.BT_SuccessfulPairAddress, deviceName));
+                if (MakePairRequest())
+                {
+                    ErrorLog.AddError(ErrorType.Message, string.Format(CultureInfo.CurrentCulture, Strings.BT_SuccessfulPair, deviceName));
+                }
             }
             catch (SocketException ex)
             {
-                ErrorLog.AddError(ErrorType.Failure, Strings.BT_ErrorWrongPin);
+                ErrorLog.AddError(ErrorType.Failure, Strings.BT_CantConnectToDevice);
                 Logger.Write(ex);
             }
             catch (Exception ex)
@@ -95,7 +86,7 @@ namespace ConnectivityModule.Reactions
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.DeviceName_ConfigString, deviceName);
+            return string.Format(CultureInfo.CurrentCulture, Strings.DevicePairName_ConfigString, deviceName, accessPin);
         }
 
         #endregion

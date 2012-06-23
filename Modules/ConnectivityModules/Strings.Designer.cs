@@ -169,11 +169,20 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A connection could not be establish. The acces Pin may be incorrect..
+        ///   Looks up a localized string similar to Becomes visible..
         /// </summary>
-        internal static string BT_ErrorWrongPin {
+        internal static string BT_MonitorBecomesVisible {
             get {
-                return ResourceManager.GetString("BT_ErrorWrongPin", resourceCulture);
+                return ResourceManager.GetString("BT_MonitorBecomesVisible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No longer visible..
+        /// </summary>
+        internal static string BT_MonitorNoLongerVisible {
+            get {
+                return ResourceManager.GetString("BT_MonitorNoLongerVisible", resourceCulture);
             }
         }
         
@@ -241,7 +250,7 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Device&apos;s name: {0}..
+        ///   Looks up a localized string similar to Device&apos;s name: {0}. Monitor: {1}..
         /// </summary>
         internal static string DeviceName_ConfigString {
             get {
@@ -259,11 +268,47 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Monitor device becomes visible.
+        /// </summary>
+        internal static string DeviceNameBecomes_Title {
+            get {
+                return ResourceManager.GetString("DeviceNameBecomes_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect to device.
         /// </summary>
         internal static string DeviceNameConnect_Title {
             get {
                 return ResourceManager.GetString("DeviceNameConnect_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device&apos;s address: {0}. Pin {1}..
+        /// </summary>
+        internal static string DevicePairAddress_ConfigString {
+            get {
+                return ResourceManager.GetString("DevicePairAddress_ConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device&apos;s name: {0}. Pin {1}..
+        /// </summary>
+        internal static string DevicePairName_ConfigString {
+            get {
+                return ResourceManager.GetString("DevicePairName_ConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 500.
+        /// </summary>
+        internal static string General_BluetoothTimerInterval {
+            get {
+                return ResourceManager.GetString("General_BluetoothTimerInterval", resourceCulture);
             }
         }
         
@@ -331,6 +376,15 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Succes.
+        /// </summary>
+        internal static string Succes {
+            get {
+                return ResourceManager.GetString("Succes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t connect to the selected network..
         /// </summary>
         internal static string WiFi_CantConnectToNetwork {
@@ -367,6 +421,24 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The network {0} is already not visible..
+        /// </summary>
+        internal static string WiFi_NetworkAlreadyNotVisible {
+            get {
+                return ResourceManager.GetString("WiFi_NetworkAlreadyNotVisible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The network {0} is already visible..
+        /// </summary>
+        internal static string WiFi_NetworkAlreadyVisible {
+            get {
+                return ResourceManager.GetString("WiFi_NetworkAlreadyVisible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The name of the network must contain at least one character..
         /// </summary>
         internal static string WiFi_NetworkName_NoCharacter {
@@ -385,20 +457,11 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The network {0} is already not visible..
+        ///   Looks up a localized string similar to The network {0} is not visible..
         /// </summary>
         internal static string WiFi_NetworkNotVisible {
             get {
                 return ResourceManager.GetString("WiFi_NetworkNotVisible", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The network {0} is already visible..
-        /// </summary>
-        internal static string WiFi_NetworkVisible {
-            get {
-                return ResourceManager.GetString("WiFi_NetworkVisible", resourceCulture);
             }
         }
         

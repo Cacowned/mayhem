@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading;
@@ -118,46 +119,58 @@ namespace OfficeModules.Reactions.PowerPoint
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SavePicture(object pShapes)
         {
             int count = 0;
             List<OPowerPoint.Shape> shapes;
 
-            lock (this)
-            {
-                shapes = pShapes as List<OPowerPoint.Shape>;
+            shapes = pShapes as List<OPowerPoint.Shape>;
 
-                if (shapes == null)
-                    return;
+            if (shapes == null)
+                return;
+
+            FileStream stream = null;
+
+            try
+            {
+                foreach (OPowerPoint.Shape shape in shapes)
+                {
+                    shape.Copy();
+
+                    bool containsImage = Clipboard.ContainsImage();
+
+                    if (containsImage)
+                    {
+                        count++;
+
+                        BitmapSource image = Clipboard.GetImage();
+
+                        stream = new FileStream(fileName + "\\" + presentationName + "_pic" + count + ".jpg", FileMode.Create);
+
+                        JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+
+                        encoder.Frames.Add(BitmapFrame.Create(image));
+                        encoder.Save(stream);
+
+                        stream.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantSavePictures);
+                Logger.WriteLine(ex.Message);
 
                 try
                 {
-                    foreach (OPowerPoint.Shape shape in shapes)
-                    {
-                        shape.Copy();
-
-                        bool containsImage = Clipboard.ContainsImage();
-
-                        if (containsImage)
-                        {
-                            count++;
-
-                            BitmapSource image = Clipboard.GetImage();
-
-                            FileStream stream = new FileStream(fileName + "\\" + presentationName + "_pic" + count + ".jpg", FileMode.Create);
-                            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-
-                            encoder.Frames.Add(BitmapFrame.Create(image));
-                            encoder.Save(stream);
-
-                            stream.Close();
-                        }
-                    }
+                    if (stream != null)
+                        stream.Close();
                 }
-                catch (Exception ex)
+                catch (IOException e)
                 {
-                    ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantSavePictures);
-                    Logger.WriteLine(ex.Message);
+                    ErrorLog.AddError(ErrorType.Failure, Strings.CantCloseFileStream);
+                    Logger.WriteLine(e);
                 }
             }
         }

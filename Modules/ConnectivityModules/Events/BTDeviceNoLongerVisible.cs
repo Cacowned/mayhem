@@ -1,116 +1,55 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Timers;
-using InTheHand.Net.Sockets;
 using MayhemCore;
 
 namespace ConnectivityModule.Events
 {
+    /// <summary>
+    /// A class that detects when a bluetooth device is no longer visible.
+    /// </summary>
     [MayhemModule("Bluetooth: Device No Longer Visible", "Triggers when a device is no longer visible")]
-    public class BTDeviceNoLongerVisible : EventBase
+    public class BTDeviceNoLongerVisible : BTDeviceBaseClass
     {
-        private BluetoothClient bluetoothClient;
-        private Timer timer;
-
-        private List<BluetoothDeviceInfo> devices;
-        private List<BluetoothDeviceInfo> auxDevices;
-        private List<BluetoothDeviceInfo> newDevices;
-
-        protected override void OnEnabling(EnablingEventArgs e)
+        /// <summary>
+        /// This method is called when the timer.Elapsed event is raised and checks if a bluetooth device is no longer visible from the last check.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        protected override void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            devices = null;
-            auxDevices = null;
-            newDevices = null;
-
-            timer = new System.Timers.Timer();
-            timer.Interval = 100;
-            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+            // Stopping the timer so this event will not be triggered again until the method exits.
+            timer.Stop();
 
             try
             {
-                bluetoothClient = new BluetoothClient();
-                auxDevices = new List<BluetoothDeviceInfo>();
+                // Calling this method will return a list of the currently visible devices.
+                // Note that this method takes up to 10 seconds to complete, in order to have accurate results.
+                newDevices = bluetoothClient.DiscoverDevices(10, false, false, false, true).ToList();
 
-                timer.Start();
+                if (devices == null)
+                {
+                    // If it's the first time this event is triggered we get the list of the bluetooth devices and we set the timer.
+                    MakeFirstListOfDevices();
+                }
+                else
+                {
+                    FindNewDevices();
+
+                    if (RemoveNoLongerVisibleDevices())
+                    {
+                        Trigger();
+                    }
+                }
             }
             catch (Exception ex)
             {
-                ErrorLog.AddError(ErrorType.Failure, Strings.BT_NoBluetooth);
+                ErrorLog.AddError(ErrorType.Failure, Strings.BT_ErrorMonitoringBluetooth);
                 Logger.Write(ex);
-                e.Cancel = true;
-            }
-        }
-
-        protected override void OnDisabled(DisabledEventArgs e)
-        {
-            if (timer != null)
-            {
-                timer.Stop();
-                timer.Dispose();
             }
 
-            if (devices != null)
-            {
-                devices.Clear();
-                devices = null;
-            }
-
-            if (auxDevices != null)
-            {
-                auxDevices.Clear();
-                auxDevices = null;
-            }
-        }
-
-        private void timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            lock (this)
-            {
-                timer.Stop();
-
-                try
-                {
-                    newDevices = bluetoothClient.DiscoverDevices(10, false, false, false, true).ToList();
-
-                    if (devices == null)
-                    {
-                        devices = new List<BluetoothDeviceInfo>();
-                        devices.AddRange(newDevices);
-                        timer.Interval = int.Parse(Strings.General_TimerInterval);
-                    }
-                    else
-                    {
-                        auxDevices.Clear();
-
-                        foreach (BluetoothDeviceInfo device in newDevices)
-                            if (!devices.Contains(device))
-                                auxDevices.Add(device);
-
-                        foreach (BluetoothDeviceInfo device in auxDevices)
-                            devices.Add(device);
-
-                        auxDevices.Clear();
-
-                        foreach (BluetoothDeviceInfo device in devices)
-                            if (!newDevices.Contains(device))
-                                auxDevices.Add(device);
-
-                        foreach (BluetoothDeviceInfo device in auxDevices)
-                        {
-                            devices.Remove(device);
-                            Trigger();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ErrorLog.AddError(ErrorType.Failure, Strings.BT_ErrorMonitoringBluetooth);
-                    Logger.Write(ex);
-                }
-
-                timer.Start();
-            }
+            // Starting the timer.
+            timer.Start();
         }
     }
 }

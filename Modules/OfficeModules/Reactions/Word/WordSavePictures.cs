@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading;
@@ -108,54 +109,63 @@ namespace OfficeModules.Reactions.Word
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SavePictures(object p_inlineShapes)
         {
             int count;
             List<OWord.InlineShape> inlineShapes;
 
-            lock (this)
+            count = 0;
+            inlineShapes = p_inlineShapes as List<OWord.InlineShape>;
+
+            if (inlineShapes == null)
+                return;
+
+            FileStream streamWriter = null;
+
+            try
             {
-                count = 0;
-                inlineShapes = p_inlineShapes as List<OWord.InlineShape>;
+                foreach (OWord.InlineShape inlineShape in inlineShapes)
+                {
+                    inlineShape.Select();
 
-                if (inlineShapes == null)
-                    return;
+                    if (app == null)
+                        return;
 
-                FileStream streamWriter = null;
+                    app.Selection.CopyAsPicture();
+
+                    bool containsImage = Clipboard.ContainsImage();
+
+                    if (containsImage)
+                    {
+                        count++;
+
+                        BitmapSource image = Clipboard.GetImage();
+
+                        streamWriter = new FileStream(fileName + "\\" + documentName + "_pic" + count + ".jpg", FileMode.Create);
+                        JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+
+                        encoder.Frames.Add(BitmapFrame.Create(image));
+                        encoder.Save(streamWriter);
+
+                        streamWriter.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.Word_CantSavePictures);
+                Logger.WriteLine(ex);
 
                 try
                 {
-                    foreach (OWord.InlineShape inlineShape in inlineShapes)
-                    {
-                        inlineShape.Select();
-
-                        if (app == null)
-                            return;
-
-                        app.Selection.CopyAsPicture();
-
-                        bool containsImage = Clipboard.ContainsImage();
-
-                        if (containsImage)
-                        {
-                            count++;
-
-                            BitmapSource image = Clipboard.GetImage();
-
-                            streamWriter = new FileStream(fileName + "\\" + documentName + "_pic" + count + ".jpg", FileMode.Create);
-                            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-
-                            encoder.Frames.Add(BitmapFrame.Create(image));
-                            encoder.Save(streamWriter);
-
-                            streamWriter.Close();
-                        }
-                    }
+                    if (streamWriter != null)
+                        streamWriter.Close();
                 }
-                catch (Exception ex)
+                catch (IOException e)
                 {
-                    ErrorLog.AddError(ErrorType.Failure, Strings.Word_CantSavePictures);
-                    Logger.WriteLine(ex);
+                    ErrorLog.AddError(ErrorType.Failure, Strings.CantCloseFileStream);
+                    Logger.WriteLine(e);
                 }
             }
         }

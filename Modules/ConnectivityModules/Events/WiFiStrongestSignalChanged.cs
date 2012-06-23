@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Timers;
 using MayhemCore;
 using NativeWifi;
@@ -10,33 +9,18 @@ namespace ConnectivityModule.Events
 {
     [DataContract]
     [MayhemModule("Wi-Fi: Strongest Signal Changed", "The network with the strongest signal has changed")]
-    public class WiFiStrongestSignalChanged : EventBase
+    public class WiFiStrongestSignalChanged : WiFiEventBaseClass
     {
-        private WlanClient client;
         private Wlan.WlanAvailableNetwork strongestNetwork;
         private Wlan.WlanAvailableNetwork newerStrongestNetwork;
-        private Timer timer;
 
         private uint signalQualityStrongestNetwork;
         private uint newMaximumQualityValue;
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            timer = new Timer();
-            timer.Interval = int.Parse(Strings.General_TimerInterval);
-            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-
-            signalQualityStrongestNetwork = 0;
-
-            try
+            if (!InitializeTimerCreateClient())
             {
-                client = new WlanClient();
-            }
-            catch (Exception ex)
-            {
-                ErrorLog.AddError(ErrorType.Failure, Strings.WiFi_WiFiNotAvailable);
-                Logger.Write(ex);
-
                 e.Cancel = true;
 
                 return;
@@ -74,22 +58,7 @@ namespace ConnectivityModule.Events
             }
         }
 
-        protected override void OnDisabled(DisabledEventArgs e)
-        {
-            if (timer != null)
-            {
-                timer.Stop();
-                timer.Elapsed -= timer_Elapsed;
-                timer.Dispose();
-            }
-        }
-
-        private string GetStringForSSID(Wlan.Dot11Ssid ssid)
-        {
-            return Encoding.ASCII.GetString(ssid.SSID, 0, (int)ssid.SSIDLength);
-        }
-
-        private void timer_Elapsed(object sender, ElapsedEventArgs e)
+        protected override void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             try
             {

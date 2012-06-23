@@ -36,6 +36,8 @@ namespace OfficeModules.Reactions.PowerPoint
 
         public override void Perform()
         {
+            streamWriter = null;
+
             if (File.Exists(fileName))
             {
                 try
@@ -65,6 +67,17 @@ namespace OfficeModules.Reactions.PowerPoint
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
                 Logger.WriteLine(ex);
+
+                try
+                {
+                    if (streamWriter != null)
+                        streamWriter.Close();
+                }
+                catch (IOException e)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.CantCloseFileStream);
+                    Logger.WriteLine(e);
+                }
 
                 return;
             }
@@ -104,6 +117,17 @@ namespace OfficeModules.Reactions.PowerPoint
             {
                 ErrorLog.AddError(ErrorType.Warning, Strings.PowerPoint_CantExportNotes);
                 Logger.Write(ex);
+
+                try
+                {
+                    if (streamWriter != null)
+                        streamWriter.Close();
+                }
+                catch (IOException e)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.CantCloseFileStream);
+                    Logger.WriteLine(e);
+                }
             }
             finally
             {

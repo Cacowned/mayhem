@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using Brecham.Obex;
 using ConnectivityModule.Wpf;
-using InTheHand.Net;
-using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Sockets;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
@@ -14,26 +11,16 @@ namespace ConnectivityModule.Reactions
 {
     [DataContract]
     [MayhemModule("Bluetooth: Send File By Name", "Sends a file to a specific device identified by its name")]
-    public class BTSendFileName : ReactionBase, IWpfConfigurable
+    public class BTSendFileName : BTSendFileBaseClass, IWpfConfigurable
     {
         [DataMember]
         private string deviceName;
 
-        [DataMember]
-        private string filePath;
-
-        [DataMember]
-        private string accessPin;        
-
-        private BluetoothClient bluetoothClient;
-
         public override void Perform()
         {
-            ObexClientSession session = null;
-
             try
             {
-                BluetoothDeviceInfo device = null;
+                device = null;
 
                 bluetoothClient = new BluetoothClient();
 
@@ -51,49 +38,24 @@ namespace ConnectivityModule.Reactions
                 // Adding a warning message if the device is not in range
                 if (device == null)
                 {
-                    ErrorLog.AddError(ErrorType.Warning, string.Format(CultureInfo.CurrentCulture, Strings.BT_DeviceNotFound, deviceName));
+                    ErrorLog.AddError(ErrorType.Failure, string.Format(CultureInfo.CurrentCulture, Strings.BT_DeviceNotFound, deviceName));
                     return;
                 }
 
-                BluetoothAddress deviceAddress = device.DeviceAddress;
+                if (!MakePairRequest())
+                {
+                    // If we could not pair we can't send the file
+                    return;
+                }
 
-                BluetoothSecurity.PairRequest(deviceAddress, accessPin);
-
-                BluetoothEndPoint remoteEndPoint = new BluetoothEndPoint(device.DeviceAddress, BluetoothService.ObexObjectPush);
-
-                bluetoothClient.Connect(remoteEndPoint);
-
-                session = new ObexClientSession(bluetoothClient.GetStream(), UInt16.MaxValue);
-                session.Connect();
-
-                session.PutFile(filePath);
-
-                session.Disconnect();
-                session.Dispose();
-
-                bluetoothClient.Dispose();
-            }
-            catch (ObexResponseException ex)
-            {
-                ErrorLog.AddError(ErrorType.Warning, Strings.BT_ConnectionRefused);
-                Logger.Write(ex);
-
-                if (bluetoothClient != null)
-                    bluetoothClient.Dispose();
+                SendFileMethod();
             }
             catch (Exception ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.BT_CantConnectToDevice);
                 Logger.Write(ex);
 
-                if (session != null)
-                {
-                    session.Disconnect();
-                    session.Dispose();
-                }
-
-                if (bluetoothClient != null)
-                    bluetoothClient.Dispose();
+                Dispose();
             }
         }
 
@@ -122,7 +84,7 @@ namespace ConnectivityModule.Reactions
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.DeviceName_ConfigString, deviceName);
+            return string.Format(CultureInfo.CurrentCulture, Strings.DevicePairName_ConfigString, deviceName, accessPin);
         }
 
         #endregion
