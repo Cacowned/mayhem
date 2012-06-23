@@ -376,11 +376,11 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Succes.
+        ///   Looks up a localized string similar to Success.
         /// </summary>
-        internal static string Succes {
+        internal static string Success {
             get {
-                return ResourceManager.GetString("Succes", resourceCulture);
+                return ResourceManager.GetString("Success", resourceCulture);
             }
         }
         

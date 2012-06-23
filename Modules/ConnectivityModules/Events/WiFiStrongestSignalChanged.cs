@@ -19,6 +19,9 @@ namespace ConnectivityModule.Events
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
+            // Setting the number of seconds
+            seconds = int.Parse(Strings.General_TimerInterval) / 1000;
+
             if (!InitializeTimerCreateClient())
             {
                 e.Cancel = true;
@@ -60,16 +63,20 @@ namespace ConnectivityModule.Events
 
         protected override void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            timer.Stop();
+
             try
             {
+                bool found = false;
                 foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
                 {
                     newMaximumQualityValue = 0;
 
                     foreach (Wlan.WlanAvailableNetwork network in wlanIface.GetAvailableNetworkList(0))
                     {
-                        if (GetStringForSSID(network.dot11Ssid).Equals(GetStringForSSID(strongestNetwork.dot11Ssid)) && network.wlanSignalQuality > signalQualityStrongestNetwork)
+                        if (GetStringForSSID(network.dot11Ssid).Equals(GetStringForSSID(strongestNetwork.dot11Ssid)))
                         {
+                            found = true;
                             // Update value
                             signalQualityStrongestNetwork = network.wlanSignalQuality;
                         }
@@ -81,6 +88,11 @@ namespace ConnectivityModule.Events
                                 newerStrongestNetwork = network;
                             }
                         }
+                    }
+
+                    if (found == false)
+                    {
+                        signalQualityStrongestNetwork = 0; // The network is no longer available
                     }
                 }
 
@@ -102,6 +114,8 @@ namespace ConnectivityModule.Events
                 ErrorLog.AddError(ErrorType.Failure, Strings.WiFi_CantGetNetworks);
                 Logger.Write(ex);
             }
+
+            timer.Start();
         }
     }
 }
