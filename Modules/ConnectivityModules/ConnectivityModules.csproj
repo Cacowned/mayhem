@@ -89,7 +89,7 @@
     <Compile Include="Reactions\BTSendFileName.cs" />
     <Compile Include="Reactions\WiFiConnectNetwork.cs" />
     <Compile Include="Reactions\WiFiDisconnectNetwork.cs" />
-    <Compile Include="Reactions\WiFiReactionBaseClasscs.cs" />
+    <Compile Include="Reactions\WiFiReactionBaseClass.cs" />
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
