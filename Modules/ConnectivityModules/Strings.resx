@@ -172,10 +172,10 @@
     <value>The time interval must be greater than 5 seconds.</value>
   </data>
   <data name="BT_SuccessfulPair" xml:space="preserve">
-    <value>The device with the name {0} was succesful paired with the computer.</value>
+    <value>The device with the name {0} was successful paired with the computer.</value>
   </data>
   <data name="BT_SuccessfulPairAddress" xml:space="preserve">
-    <value>The device with the address {0} was succesful paired with the computer.</value>
+    <value>The device with the address {0} was successful paired with the computer.</value>
   </data>
   <data name="DeviceAddress_ConfigString" xml:space="preserve">
     <value>Device's address: {0}.</value>

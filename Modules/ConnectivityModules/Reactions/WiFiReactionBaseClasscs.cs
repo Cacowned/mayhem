@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -13,24 +12,38 @@ using NativeWifi;
 
 namespace ConnectivityModule.Reactions
 {
+    /// <summary>
+    /// An abstract base class that contains common code for the reactions that connect or disconnect to/from a network.
+    /// </summary>
     [DataContract]
     public abstract class WiFiReactionBaseClass : ReactionBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The name of the network.
+        /// </summary>
         [DataMember]
         protected string networkName;
 
         protected WlanClient client;
 
+        /// <summary>
+        /// This method will initialize the objects of this class.
+        /// </summary>
         protected override void OnAfterLoad()
         {
             client = null;
         }
 
+        /// <summary>
+        /// This method will connect or disconnect to/from a network executing the command received as a parameter.
+        /// </summary>
+        /// <param name="command">The command to be executed</param>
+        /// <returns>Returns true if the connectivity mode was changed successfully, false otherwise</returns>
         protected bool ChangeConnectivityMode(string command)
         {
             try
             {
-                if(client == null)
+                if (client == null)
                     client = new WlanClient();
             }
             catch (Exception ex)
@@ -69,36 +82,45 @@ namespace ConnectivityModule.Reactions
                         processInfo.WindowStyle = ProcessWindowStyle.Hidden;
                         Process.Start(processInfo);
 
-                        Thread.Sleep(2000); // We wait for the connect/disconnect command to finish
+                        Thread.Sleep(2000); // We wait for the connect/disconnect command to finish.
 
                         return true;
                     }
                 }
             }
 
-            // If the desired network wasn't found we assume is not in reach
+            // If the desired network wasn't found we assume is not in reach.
             ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.WiFi_NetworkNotVisible, networkName));
 
             return false;
         }
 
+        /// <summary>
+        /// Transforms the ssid of a network into a string representing it's name.
+        /// </summary>
+        /// <param name="ssid">The ssid of the network</param>
+        /// <returns>The name of the network</returns>
         private string GetStringForSSID(Wlan.Dot11Ssid ssid)
         {
             return Encoding.ASCII.GetString(ssid.SSID, 0, (int)ssid.SSIDLength);
         }
 
+        /// <summary>
+        /// This method will be implemented by the classes that inherit this class and will be called when the event associated with the reaction is triggered.
+        /// It contains the functionality of this reaction.
+        /// </summary>
         public abstract override void Perform();
 
         #region IWpfConfigurable Methods
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new MonitorNetworkConfig(networkName); }
+            get { return new ConnectNetworkConfig(networkName); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = configurationControl as MonitorNetworkConfig;
+            var config = configurationControl as ConnectNetworkConfig;
 
             if (config == null)
                 return;

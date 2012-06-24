@@ -8,12 +8,21 @@ using NativeWifi;
 
 namespace ConnectivityModule.Events
 {
+    /// <summary>
+    /// An abstract base class that contains common code for the events that monitor the activity of a network.
+    /// </summary>
     [DataContract]
     public abstract class WiFiEventBaseClass : EventBase
     {
+        /// <summary>
+        /// The name of the network.
+        /// </summary>
         [DataMember]
         protected string networkName;
 
+        /// <summary>
+        /// The number of seconds to wait between checks.
+        /// </summary>
         [DataMember]
         protected int seconds;
 
@@ -23,6 +32,10 @@ namespace ConnectivityModule.Events
         protected bool isAvailable;
         protected bool wasAvailable;
 
+        /// <summary>
+        /// This method is initializing the needed objects and starts the timer.
+        /// It also gets the initial state of the monitored network.
+        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             if (!InitializeTimerCreateClient())
@@ -66,6 +79,9 @@ namespace ConnectivityModule.Events
             }
         }
 
+        /// <summary>
+        /// This method is releasing the used objects when the event is disabled.
+        /// </summary>
         protected override void OnDisabled(DisabledEventArgs e)
         {
             if (timer != null)
@@ -76,11 +92,20 @@ namespace ConnectivityModule.Events
             }
         }
 
+        /// <summary>
+        /// Transforms the ssid of a network into a string representing it's name.
+        /// </summary>
+        /// <param name="ssid">The ssid of the network</param>
+        /// <returns>The name of the network</returns>
         protected string GetStringForSSID(Wlan.Dot11Ssid ssid)
         {
             return Encoding.ASCII.GetString(ssid.SSID, 0, (int)ssid.SSIDLength);
         }
 
+        /// <summary>
+        /// This method initializes the needed objects and if the WiFi capability is not available displays an error message.
+        /// </summary>
+        /// <returns>Returns true if the initialization finished successfully.</returns>
         protected bool InitializeTimerCreateClient()
         {
             timer = new Timer();
@@ -105,6 +130,10 @@ namespace ConnectivityModule.Events
             }
         }
 
+        /// <summary>
+        /// This method checks if the monitored network is available.
+        /// </summary>
+        /// <returns>Returns true if the check finished successfully, false otherwise</returns>
         protected bool VerifyNetworkAvailability()
         {
             bool found;
@@ -118,7 +147,8 @@ namespace ConnectivityModule.Events
                     {
                         if (GetStringForSSID(network.dot11Ssid).Equals(networkName))
                         {
-                            found = true; // The Network we search for is in the list of the available networks
+                            // The Network we search for is in the list of the available networks.
+                            found = true;
 
                             if (!isAvailable)
                             {
@@ -155,6 +185,9 @@ namespace ConnectivityModule.Events
             }
         }
 
+        /// <summary>
+        /// This method will be implemented by the classes that inherit this class and will be called when the timer.Elapsed event will be raised.
+        /// </summary>
         protected abstract void timer_Elapsed(object sender, ElapsedEventArgs e);
     }
 }

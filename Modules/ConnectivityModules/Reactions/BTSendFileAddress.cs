@@ -10,13 +10,22 @@ using MayhemWpf.UserControls;
 
 namespace ConnectivityModule.Reactions
 {
+    /// <summary>
+    /// A class that send a file to a bluetooth device identified by it's address.
+    /// </summary>
     [DataContract]
     [MayhemModule("Bluetooth: Send File By Address", "Sends a file to a specific device identified by its address")]
     public class BTSendFileAddress : BTSendFileBaseClass, IWpfConfigurable
     {
+        /// <summary>
+        /// The address of the device represented as a string.
+        /// </summary>
         [DataMember]
         private string deviceAddressString;
 
+        /// <summary>
+        /// This method will try to send a file to a bluetooth device indentified by it's address.
+        /// </summary>
         public override void Perform()
         {
             try
@@ -27,7 +36,7 @@ namespace ConnectivityModule.Reactions
 
                 device = new BluetoothDeviceInfo(BluetoothAddress.Parse(deviceAddressString));
 
-                // Adding a warning message if the device is not in range
+                // Adding a warning message if the device is not in range.
                 if (device == null)
                 {
                     ErrorLog.AddError(ErrorType.Failure, string.Format(CultureInfo.CurrentCulture, Strings.BT_DeviceAddressNotFound, deviceAddressString));
@@ -36,7 +45,7 @@ namespace ConnectivityModule.Reactions
 
                 if (!MakePairRequest())
                 {
-                    // If we could not pair we can't send the file
+                    // If we couldn't pair we can't send the file.
                     return;
                 }
 

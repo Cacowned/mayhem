@@ -7,6 +7,9 @@ using NativeWifi;
 
 namespace ConnectivityModule.Events
 {
+    /// <summary>
+    /// A class that detects when the network with the strongest signal changed.
+    /// </summary>
     [DataContract]
     [MayhemModule("Wi-Fi: Strongest Signal Changed", "The network with the strongest signal has changed")]
     public class WiFiStrongestSignalChanged : WiFiEventBaseClass
@@ -17,6 +20,10 @@ namespace ConnectivityModule.Events
         private uint signalQualityStrongestNetwork;
         private uint newMaximumQualityValue;
 
+        /// <summary>
+        /// This method is initializing the needed objects and starts the timer.
+        /// It also gets the network with the strongest signal.
+        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             // Setting the number of seconds
@@ -61,6 +68,9 @@ namespace ConnectivityModule.Events
             }
         }
 
+        /// <summary>
+        /// This method is called when the timer.Elapsed event is raised and checks if the network with the strongest signal has changed since the last check.
+        /// </summary>
         protected override void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             timer.Stop();

@@ -21,7 +21,7 @@ namespace ConnectivityModule.Events
         }
 
         /// <summary>
-        /// This method is called when the timer.Elapsed event is raised and checks if the predefined bluetooth device became visible from the last check.
+        /// This method is called when the timer.Elapsed event is raised and checks if the predefined bluetooth device has become visible since the last check.
         /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void timer_Elapsed(object sender, ElapsedEventArgs e)

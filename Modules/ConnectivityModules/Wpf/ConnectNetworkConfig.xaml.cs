@@ -1,28 +1,18 @@
-﻿using System.Globalization;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
 
 namespace ConnectivityModule.Wpf
 {
     /// <summary>
-    /// User Control for setting the name of a network.
+    /// User Control for setting the name of the network we want to connect to, or disconnect from.
     /// </summary>
-    public partial class NetworkNameConfig : WpfConfiguration
+    public partial class ConnectNetworkConfig : WpfConfiguration
     {
         /// <summary>
         /// The name of the network.
         /// </summary>
         public string NetworkName
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// The wait time between checks.
-        /// </summary>
-        public int Seconds
         {
             get;
             private set;
@@ -37,13 +27,12 @@ namespace ConnectivityModule.Wpf
         }
 
         /// <summary>
-        /// The constructor of the NetworkNameConfig class.
+        /// The constructor of the ConnectNetworkConfig class.
         /// </summary>
         /// <param name="networkName">The name of the network</param>
-        public NetworkNameConfig(string networkName, int seconds)
+        public ConnectNetworkConfig(string networkName)
         {
             NetworkName = networkName;
-            Seconds = seconds;
 
             InitializeComponent();
         }
@@ -57,28 +46,7 @@ namespace ConnectivityModule.Wpf
 
             NetworkNameBox.Text = NetworkName;
 
-            // The minimum time span must be 1.
-            if (Seconds == 0)
-                Seconds = 1;
-
-            SecondsBox.Text = Seconds.ToString(CultureInfo.InvariantCulture);
-
-            // We need to check if the network name and the number of seconds are setted correctly.
-            string errorString = CheckValidityNetworkName();
-
-            if (!errorString.Equals(string.Empty))
-            {
-                textInvalid.Text = errorString;
-                textInvalid.Visibility = Visibility.Visible;
-                return;
-            }
-
-            errorString = CheckValiditySeconds();
-
-            if (!errorString.Equals(string.Empty))
-                textInvalid.Text = errorString;
-
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            DisplayErrorMessage(CheckValidityNetworkName());
         }
 
         /// <summary>
@@ -87,7 +55,6 @@ namespace ConnectivityModule.Wpf
         public override void OnSave()
         {
             NetworkName = NetworkNameBox.Text;
-            Seconds = int.Parse(SecondsBox.Text);
         }
 
         /// <summary>
@@ -111,41 +78,11 @@ namespace ConnectivityModule.Wpf
         }
 
         /// <summary>
-        /// This method will check if the number of seconds is setted correctly.
-        /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
-        private string CheckValiditySeconds()
-        {
-            int seconds;
-            string errorString = string.Empty;
-
-            bool badsec = !(int.TryParse(SecondsBox.Text, out seconds) && (seconds >= 0 && seconds < 60));
-
-            if (badsec)
-                errorString = Strings.WiFi_Seconds_Invalid;
-            else
-                if (seconds == 0)
-                    errorString = Strings.WiFi_Seconds_GreaterThanZero;
-
-            CanSave = !badsec && seconds != 0;
-
-            return errorString;
-        }
-
-        /// <summary>
         /// This method will be called when the text from the NetworkNameBox changes.
         /// </summary>
         private void NetworkNameBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             DisplayErrorMessage(CheckValidityNetworkName());
-        }
-
-        /// <summary>
-        /// This method will be called when the text from the DeviceNameBox changes.
-        /// </summary>
-        private void SecondsBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            DisplayErrorMessage(CheckValiditySeconds());
         }
 
         /// <summary>

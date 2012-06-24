@@ -95,9 +95,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\MonitorNetworkConfig.xaml.cs">
+    <Compile Include="Wpf\ConnectNetworkConfig.xaml.cs">
       <SubType>Code</SubType>
-      <DependentUpon>MonitorNetworkConfig.xaml</DependentUpon>
+      <DependentUpon>ConnectNetworkConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\NetworkNameConfig.xaml.cs">
       <DependentUpon>NetworkNameConfig.xaml</DependentUpon>
@@ -126,7 +126,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Wpf\MonitorNetworkConfig.xaml">
+    <Page Include="Wpf\ConnectNetworkConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -13,7 +13,7 @@ namespace ConnectivityModule.Events
     public class BTDeviceNoLongerVisible : BTDeviceBaseClass
     {
         /// <summary>
-        /// This method is called when the timer.Elapsed event is raised and checks if a bluetooth device is no longer visible from the last check.
+        /// This method is called when the timer.Elapsed event is raised and checks if a bluetooth device is no longer visible since the last check.
         /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void timer_Elapsed(object sender, ElapsedEventArgs e)

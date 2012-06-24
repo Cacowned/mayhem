@@ -8,7 +8,7 @@ using MayhemCore;
 namespace ConnectivityModule.Events
 {
     /// <summary>
-    /// An abstract base class used for detecting when a bluetooth devices becomes or is no longer visible.
+    /// An abstract base class used for detecting when a bluetooth device has become or is no longer visible.
     /// </summary>
     public abstract class BTDeviceBaseClass : EventBase
     {
@@ -86,7 +86,7 @@ namespace ConnectivityModule.Events
         }
 
         /// <summary>
-        /// This method is searching the newDevices list and finds the devices that became available from the last check. The found devices are added to the main list.
+        /// This method is searching the newDevices list and finds the devices that has become available since the last check. The found devices are added to the main list.
         /// </summary>
         /// <returns>Returns true if a new device is found, false otherwise</returns>
         protected bool FindNewDevices()
@@ -114,7 +114,7 @@ namespace ConnectivityModule.Events
         }
 
         /// <summary>
-        /// This method is searching the newDevices list and finds the devices that are no longer available from the last check. The found devices are removed from the main list.
+        /// This method is searching the newDevices list and finds the devices that are no longer available since the last check. The found devices are removed from the main list.
         /// </summary>
         /// <returns>Returns true if a device is removed, false otherwise</returns>
         protected bool RemoveNoLongerVisibleDevices()
