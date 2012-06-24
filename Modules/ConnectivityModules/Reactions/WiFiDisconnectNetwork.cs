@@ -6,10 +6,17 @@ using System;
 
 namespace ConnectivityModule.Reactions
 {
+    /// <summary>
+    /// A class that disconnects from a predefined network.
+    /// </summary>
     [DataContract]
     [MayhemModule("WiFi: Disconnect From Network", "Disconnects from a specific network")]
     public class WiFiDisconnectNetwork : WiFiReactionBaseClass
     {
+        /// <summary>
+        /// A method that verifies if the computer is connected to the predefined network.
+        /// </summary>
+        /// <returns>Returns true if it's connected, false otherwise</returns>
         protected bool VerifyConnectionState()
         {
             try
@@ -41,6 +48,9 @@ namespace ConnectivityModule.Reactions
             return false;
         }
 
+        /// <summary>
+        /// This method will try to disconnect from the predefined network.
+        /// </summary>
         public override void Perform()
         {
             string command = "netsh wlan disconnect";

@@ -10,15 +10,24 @@ using MayhemWpf.UserControls;
 
 namespace ConnectivityModule.Reactions
 {
+    /// <summary>
+    /// A class that pairs the computer with a bluetooth device identified by it's name.
+    /// </summary>
     [DataContract]
     [MayhemModule("Bluetooth: Pair With Device By Name", "Pair with a specific device identified by its name")]
     public class BTPairWithDeviceName : BTPairBaseClass, IWpfConfigurable
     {
+        /// <summary>
+        /// The name of the device.
+        /// </summary>
         [DataMember]
         private string deviceName;
 
         private BluetoothClient bluetoothClient;
 
+        /// <summary>
+        /// This method will try to pair the computer with the bluetooth device indentified by it's name.
+        /// </summary>
         public override void Perform()
         {
             try
@@ -38,7 +47,7 @@ namespace ConnectivityModule.Reactions
                     }
                 }
 
-                // Adding a warning message if the device is not in range
+                // Adding a warning message if the device is not in range.
                 if (device == null)
                 {
                     ErrorLog.AddError(ErrorType.Failure, string.Format(CultureInfo.CurrentCulture, Strings.BT_DeviceNotFound, deviceName));

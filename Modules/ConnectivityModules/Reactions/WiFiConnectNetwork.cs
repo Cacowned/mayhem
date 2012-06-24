@@ -6,10 +6,16 @@ using System;
 
 namespace ConnectivityModule.Reactions
 {
+    /// <summary>
+    /// A class that connects to a predefined network.
+    /// </summary>
     [DataContract]
     [MayhemModule("WiFi: Connect To Network", "Connects to a specific network")]
     public class WiFiConnectNetwork : WiFiReactionBaseClass
     {
+        /// <summary>
+        /// This method will try to connect to the predefined network.
+        /// </summary>
         public override void Perform()
         {
             string command = "netsh wlan connect name=\"" + networkName + "\"";

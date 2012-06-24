@@ -223,7 +223,7 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The device with the name {0} was succesful paired with the computer..
+        ///   Looks up a localized string similar to The device with the name {0} was successful paired with the computer..
         /// </summary>
         internal static string BT_SuccessfulPair {
             get {
@@ -232,7 +232,7 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The device with the address {0} was succesful paired with the computer..
+        ///   Looks up a localized string similar to The device with the address {0} was successful paired with the computer..
         /// </summary>
         internal static string BT_SuccessfulPairAddress {
             get {
