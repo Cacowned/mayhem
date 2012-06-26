@@ -72,9 +72,12 @@
     <Compile Include="Components\ComputerVisionImports.cs" />
     <Compile Include="Components\IBufferingImager.cs" />
     <Compile Include="Components\WebCamBuffer.cs" />
+    <Compile Include="Components\WebCamFaceDetector.cs" />
     <Compile Include="Components\WebCamMotionDetector.cs" />
     <Compile Include="Components\WebCamPersonDetector.cs" />
+    <Compile Include="Events\WebcamFaceDetection.cs" />
     <Compile Include="Events\WebcamMotionDetection.cs" />
+    <Compile Include="Events\WebcamPersonDetection.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -92,8 +95,14 @@
       <DependentUpon>MultiWebCamSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\ImageRenderer.cs" />
+    <Compile Include="Wpf\WebCamFaceDetection.xaml.cs">
+      <DependentUpon>WebCamFaceDetection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\WebCamMotionDetectionConfig.xaml.cs">
       <DependentUpon>WebCamMotionDetectionConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WebCamPersonDetectionConfig.xaml.cs">
+      <DependentUpon>WebCamPersonDetectionConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\WebCamROISelector.xaml.cs">
       <DependentUpon>WebCamROISelector.xaml</DependentUpon>
@@ -118,7 +127,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Wpf\WebCamFaceDetection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Wpf\WebCamMotionDetectionConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\WebCamPersonDetectionConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,6 +166,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="cvextern_gpu.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="haarcascade_frontalface_alt2.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="npp32_42_9.dll">
