@@ -73,6 +73,7 @@
     <Compile Include="Components\IBufferingImager.cs" />
     <Compile Include="Components\WebCamBuffer.cs" />
     <Compile Include="Components\WebCamMotionDetector.cs" />
+    <Compile Include="Components\WebCamPersonDetector.cs" />
     <Compile Include="Events\WebcamMotionDetection.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
