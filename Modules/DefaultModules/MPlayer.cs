@@ -8,22 +8,16 @@ namespace DefaultModules
 {
 	internal class MPlayer
 	{
-		private readonly Thread runThread;
-
 		private MediaPlayer mediaPlayer;
 
 		private Uri fileToPlay;
 
 		private bool isPlaying;
-
+        
 		public MPlayer()
 		{
-			mediaPlayer = new MediaPlayer();
 			fileToPlay = null;
 			isPlaying = false;
-
-			runThread = new Thread(StartPlaying);
-			runThread.IsBackground = true;
 		}
 
 		private void MediaFailed(object sender, ExceptionEventArgs e)
@@ -34,12 +28,17 @@ namespace DefaultModules
 		public void PlayFile(string filePath)
 		{
 			fileToPlay = new Uri(filePath, UriKind.Absolute);
-			if (!isPlaying)
-			{
-				isPlaying = true;
-				runThread.Start();
-			}
-		}
+
+            // If called while playing, it will ignore until media ends
+            if (!isPlaying)
+			{         
+                
+                isPlaying = true;                
+                Thread newThread = new Thread(StartPlaying);
+                newThread.IsBackground = true;
+                newThread.Start();
+            }   
+        }		
 
 		private void StartPlaying()
 		{
@@ -59,12 +58,12 @@ namespace DefaultModules
 			(
 				new Action(() => mediaPlayer.Stop()),
 				DispatcherPriority.Send
-			);
+			);            
 		}
 
 		private void MediaOpened(object sender, EventArgs e)
 		{
-			Logger.WriteLine("Media opened");
+			Logger.WriteLine("Media Opened");
 		}
 
 		private void MediaEnded(object sender, EventArgs e)
