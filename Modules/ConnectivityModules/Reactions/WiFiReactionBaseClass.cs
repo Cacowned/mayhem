@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Threading;
 using ConnectivityModule.Wpf;
 using MayhemCore;
@@ -57,10 +58,30 @@ namespace ConnectivityModule.Reactions
             {
                 Wlan.WlanAvailableNetwork[] networks = wlanIface.GetAvailableNetworkList(0);
                 foreach (Wlan.WlanAvailableNetwork network in networks)
-                {                    
-                    if (network.profileName.Equals(networkName))
+                {
+                    if (network.profileName.Equals(networkName) || (network.profileName.Equals("") && networkName.Equals(GetStringForSSID(network.dot11Ssid))))
                     {
-                        string profileXml = string.Format("<?xml version=\"1.0\"?><WLANProfile xmlns=\"http://www.microsoft.com/networking/WLAN/profile/v1\"><name>{0}</name><SSIDConfig><SSID><name>{0}</name></SSID><nonBroadcast>false</nonBroadcast></SSIDConfig><connectionType>ESS</connectionType><connectionMode>manual</connectionMode><MSM><security><authEncryption><authentication>open</authentication><encryption>none</encryption><useOneX>false</useOneX></authEncryption></security></MSM></WLANProfile>", networkName);
+                        string profileXml = string.Format(@"<?xml version=""1.0""?>
+<WLANProfile xmlns=""http://www.microsoft.com/networking/WLAN/profile/v1"">
+    <name>{0}</name>
+    <SSIDConfig>
+        <SSID>
+            <name>{0}</name>
+        </SSID>
+            <nonBroadcast>false</nonBroadcast>
+     </SSIDConfig>
+     <connectionType>ESS</connectionType>
+     <connectionMode>manual</connectionMode>
+    <MSM>
+        <security>
+            <authEncryption>
+                <authentication>open</authentication>
+                <encryption>none</encryption>
+                <useOneX>false</useOneX>
+            </authEncryption>
+        </security>
+    </MSM>
+</WLANProfile>", networkName);
 
                         bool found = false;
                         foreach (Wlan.WlanProfileInfo profileInfo in wlanIface.GetProfiles())
@@ -95,6 +116,16 @@ namespace ConnectivityModule.Reactions
         }
 
         /// <summary>
+        /// Transforms the ssid of a network into a string representing it's name.
+        /// </summary>
+        /// <param name="ssid">The ssid of the network</param>
+        /// <returns>The name of the network</returns>
+        protected string GetStringForSSID(Wlan.Dot11Ssid ssid)
+        {
+            return Encoding.ASCII.GetString(ssid.SSID, 0, (int)ssid.SSIDLength);
+        }
+
+        /// <summary>
         /// This method will be implemented by the classes that inherit this class and will be called when the event associated with the reaction is triggered.
         /// It contains the functionality of this reaction.
         /// </summary>
@@ -112,7 +143,9 @@ namespace ConnectivityModule.Reactions
             var config = configurationControl as ConnectNetworkConfig;
 
             if (config == null)
+            {
                 return;
+            }
 
             networkName = config.NetworkName;
         }
