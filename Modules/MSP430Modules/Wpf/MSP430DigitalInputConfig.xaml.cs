@@ -5,6 +5,7 @@ using MSP430Modules.Events;
 using System.Reflection;
 using System.Diagnostics;
 using System.Management;
+using System.IO;
 
 namespace MSP430Modules.Wpf
 {
@@ -171,8 +172,10 @@ namespace MSP430Modules.Wpf
         {
             Assembly execAssembly = Assembly.GetExecutingAssembly();
             string loc = execAssembly.Location;
-            string directory = System.IO.Path.GetDirectoryName(loc);
-            Process.Start(@directory + "/Flasher/FlashMSP430.bat");
+            string directory = Path.GetDirectoryName(loc);
+            string flasher = @"Flasher\FlashMSP430.bat";
+            string flashBatch = Path.Combine(directory, flasher);
+            Process.Start(flashBatch);
         }
     }
 }
