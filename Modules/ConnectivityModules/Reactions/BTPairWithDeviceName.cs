@@ -83,7 +83,9 @@ namespace ConnectivityModule.Reactions
             var config = configurationControl as PairWithDeviceByNameConfig;
 
             if (config == null)
+            {
                 return;
+            }
 
             deviceName = config.DeviceName;
             accessPin = config.Pin;

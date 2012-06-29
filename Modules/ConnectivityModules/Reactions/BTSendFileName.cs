@@ -80,7 +80,9 @@ namespace ConnectivityModule.Reactions
             var config = configurationControl as SendFileToDeviceByNameConfig;
 
             if (config == null)
+            {
                 return;
+            }
 
             deviceName = config.DeviceName;
             filePath = config.FilePath;

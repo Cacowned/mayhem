@@ -79,7 +79,9 @@ namespace ConnectivityModule.Wpf
             errorString = CheckValidityDeviceAddress();
 
             if (errorString.Equals(string.Empty))
+            {
                 errorString = CheckValidityPin();
+            }
 
             if (!errorString.Equals(string.Empty))
             {
@@ -100,10 +102,16 @@ namespace ConnectivityModule.Wpf
             string errorString = string.Empty;
 
             if (textLength < 12)
+            {
                 errorString = Strings.BT_DeviceAddress_TooShort;
+            }
             else
+            {
                 if (textLength > 17)
+                {
                     errorString = Strings.BT_DeviceAddress_TooLong;
+                }
+            }
 
             CanSave = textLength >= 12 && textLength <= 17;
 
@@ -120,7 +128,9 @@ namespace ConnectivityModule.Wpf
             string errorString = string.Empty;
 
             if (textLength > 10)
+            {
                 errorString = Strings.BT_Pin_TooLong;
+            }
 
             // It is ok if the pin is not setted.
             CanSave = textLength == 0 || textLength <= 10;
@@ -142,7 +152,9 @@ namespace ConnectivityModule.Wpf
                 textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
             }
             else
+            {
                 CheckValidity(); // In the case that this is correct we need to verify the rest of the fields.
+            }
         }
 
         /// <summary>
@@ -159,7 +171,9 @@ namespace ConnectivityModule.Wpf
                 textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
             }
             else
+            {
                 CheckValidity();
+            }
         }
     }
 }

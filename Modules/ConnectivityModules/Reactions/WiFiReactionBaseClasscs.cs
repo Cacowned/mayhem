@@ -61,7 +61,7 @@ namespace ConnectivityModule.Reactions
                 {
                     if (GetStringForSSID(network.dot11Ssid).Equals(networkName))
                     {
-                        string profileXml = string.Format("<?xml version=\"1.0\"?><WLANProfile xmlns=\"http://www.microsoft.com/networking/WLAN/profile/v1\"><name>{0}</name><SSIDConfig><SSID><name>{0}</name></SSID><nonBroadcast>false</nonBroadcast></SSIDConfig><connectionType>ESS</connectionType><connectionMode>manual</connectionMode><MSM><security><authEncryption><authentication>open</authentication><encryption>none</encryption><useOneX>false</useOneX></authEncryption></security></MSM></WLANProfile>", networkName);
+                        string profileXml = string.Format("<?xml version=\"1.0\"?>\n<WLANProfile xmlns=\"http://www.microsoft.com/networking/WLAN/profile/v1\"><name>{0}</name><SSIDConfig><SSID><name>{0}</name></SSID><nonBroadcast>false</nonBroadcast></SSIDConfig><connectionType>ESS</connectionType><connectionMode>manual</connectionMode><MSM><security><authEncryption><authentication>open</authentication><encryption>none</encryption><useOneX>false</useOneX></authEncryption></security></MSM></WLANProfile>", networkName);
 
                         bool found = false;
                         foreach (Wlan.WlanProfileInfo profileInfo in wlanIface.GetProfiles())
@@ -75,7 +75,9 @@ namespace ConnectivityModule.Reactions
                         }
 
                         if (!found)
+                        {
                             wlanIface.SetProfile(Wlan.WlanProfileFlags.AllUser, profileXml, true);
+                        }
 
                         ProcessStartInfo processInfo = new ProcessStartInfo("cmd.exe", "/C " + command);
 
@@ -123,7 +125,9 @@ namespace ConnectivityModule.Reactions
             var config = configurationControl as ConnectNetworkConfig;
 
             if (config == null)
+            {
                 return;
+            }
 
             networkName = config.NetworkName;
         }

@@ -60,7 +60,9 @@ namespace ConnectivityModule.Wpf
 
             // The minimum timespan must be 5.
             if (Seconds < 5)
+            {
                 Seconds = 5;
+            }
 
             SecondsBox.Text = Seconds.ToString(CultureInfo.InvariantCulture);
 
@@ -96,10 +98,16 @@ namespace ConnectivityModule.Wpf
             string errorString = string.Empty;
 
             if (textLength == 0)
+            {
                 errorString = Strings.BT_DeviceName_NoCharacter;
+            }
             else
+            {
                 if (textLength > 100)
+                {
                     errorString = Strings.BT_DeviceName_TooLong;
+                }
+            }
 
             CanSave = textLength > 0 && (textLength <= 100);
 
@@ -118,13 +126,23 @@ namespace ConnectivityModule.Wpf
             bool badsec = !(int.TryParse(SecondsBox.Text, out seconds) && (seconds >= 5 && seconds < 60));
 
             if (badsec)
+            {
                 if (seconds < 5)
+                {
                     errorString = Strings.BT_SecondsMoreThan5;
+                }
                 else
+                {
                     if (seconds == 0)
+                    {
                         errorString = Strings.WiFi_Seconds_GreaterThanZero;
+                    }
                     else
+                    {
                         errorString = Strings.WiFi_Seconds_Invalid;
+                    }
+                }
+            }
 
             CanSave = !badsec && seconds != 0;
 
@@ -155,7 +173,9 @@ namespace ConnectivityModule.Wpf
         {
             // In the case that we have an error message we display it.
             if (!errorString.Equals(string.Empty))
+            {
                 textInvalid.Text = errorString;
+            }
 
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
