@@ -1,0 +1,23 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>ArduinoModules</id>
+    <version>1.0.0</version>
+    <authors>Gabriel Reyes</authors>
+    <owners>Outercurve</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance> 
+    <description>Allows you to connect your Arduino Board (tested with Arduino Uno) with Mayhem for DigitalInput and DigitalOutput connections. Before using this module, you will need to first attach the Arduino to your computer and install the device drivers. You can download the Arduino USB drivers from http://arduino.cc/en/Main/Software under "Windows".
+
+Once your device is installed, you can download the Mayhem ArduinoModules package to your computer. After ArduinoModules is installed in Mayhem, you should select the correct COM Port and flash the device with custom firmware provided within Mayhem. NOTE: you will only have to perform this task once before you can use your Arduino with Mayhem.
+
+Enjoy the ArduinoModules!</description>
+    <summary>Allows you to connect the Arduino Board (tested with Arduino Uno) to Mayhem for DigitalInput and DigitalOutput connections.</summary>
+    <copyright>Copyright © Outercurve 2012</copyright>
+    <tags>Arduino, Microcontroller, Atmel, Atmega, Digital, Input, Output</tags>
+    <dependencies>
+      <dependency id="MayhemCore" version="1.0" />
+      <dependency id="MayhemWpf" version="1.0" />
+      <dependency id="SerialManager" version="1.0" />
+    </dependencies>
+  </metadata>
+</package>
