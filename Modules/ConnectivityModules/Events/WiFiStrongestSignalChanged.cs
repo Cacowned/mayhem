@@ -87,7 +87,7 @@ namespace ConnectivityModule.Events
                         if (GetStringForSSID(network.dot11Ssid).Equals(GetStringForSSID(strongestNetwork.dot11Ssid)))
                         {
                             found = true;
-                            // Update value
+                            // Update value.
                             signalQualityStrongestNetwork = network.wlanSignalQuality;
                         }
                         else
@@ -102,7 +102,7 @@ namespace ConnectivityModule.Events
 
                     if (found == false)
                     {
-                        signalQualityStrongestNetwork = 0; // The network is no longer available
+                        signalQualityStrongestNetwork = 0; // The network is no longer available.
                     }
                 }
 
