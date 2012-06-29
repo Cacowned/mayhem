@@ -21,8 +21,8 @@
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Trigger Type:</TextBlock>
         <ComboBox Name="ControlBox" Grid.Column="1" Grid.Row="1">
             <ComboBoxItem>Toggles</ComboBoxItem>
-            <ComboBoxItem>Turns High</ComboBoxItem>
-            <ComboBoxItem>Turns Low</ComboBoxItem>
+            <ComboBoxItem>Turns High / Switch Opens</ComboBoxItem>
+            <ComboBoxItem>Turns Low / Switch Closes</ComboBoxItem>
         </ComboBox>
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">COM Port:</TextBlock>
