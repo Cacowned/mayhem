@@ -51,7 +51,7 @@ namespace ConnectivityModule.Events
                 {
                     foreach (Wlan.WlanAvailableNetwork network in wlanIface.GetAvailableNetworkList(0))
                     {
-                        if (GetStringForSSID(network.dot11Ssid).Equals(networkName))
+                        if (network.profileName.Equals(networkName))
                         {
                             isAvailable = true;
                             wasAvailable = true;
@@ -145,7 +145,7 @@ namespace ConnectivityModule.Events
                 {
                     foreach (Wlan.WlanAvailableNetwork network in wlanIface.GetAvailableNetworkList(0))
                     {
-                        if (GetStringForSSID(network.dot11Ssid).Equals(networkName))
+                        if (network.profileName.Equals(networkName))
                         {
                             // The Network we search for is in the list of the available networks.
                             found = true;
