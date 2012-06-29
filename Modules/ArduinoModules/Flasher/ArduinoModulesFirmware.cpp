@@ -67,12 +67,12 @@ void setup()
   // Analog Pins are currently unused
   
   // Define input pins
-  pinMode(pin2, INPUT);
-  pinMode(pin3, INPUT);
-  pinMode(pin4, INPUT);
-  pinMode(pin5, INPUT);  
-  pinMode(pin6, INPUT);  
-  pinMode(pin7, INPUT);  
+  pinMode(pin2, INPUT_PULLUP);
+  pinMode(pin3, INPUT_PULLUP);
+  pinMode(pin4, INPUT_PULLUP);
+  pinMode(pin5, INPUT_PULLUP);  
+  pinMode(pin6, INPUT_PULLUP);  
+  pinMode(pin7, INPUT_PULLUP);  
 
   // Define output pins
   pinMode(pin8, OUTPUT);  

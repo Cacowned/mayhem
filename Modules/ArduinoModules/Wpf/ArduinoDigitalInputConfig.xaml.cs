@@ -149,9 +149,9 @@ namespace ArduinoModules.Wpf
             {
                 case "Toggles": InputType = DigitalInputType.Toggle;
                     break;
-                case "Turns High": InputType = DigitalInputType.High;
+                case "Turns High / Switch Opens": InputType = DigitalInputType.High;
                     break;
-                case "Turns Low": InputType = DigitalInputType.Low;
+                case "Turns Low / Switch Closes": InputType = DigitalInputType.Low;
                     break;
             }
 
