@@ -177,12 +177,14 @@ namespace ConnectivityModule.Events
             var config = configurationControl as DeviceNameConfig;
 
             if (config == null)
+            {
                 return;
+            }
 
             deviceName = config.DeviceName;
             seconds = config.Seconds - 5; // We wait at least 5 seconds for the DiscoverDevices() method so we deduct that time from the total wait time.
 
-            if (seconds == 0)
+            if (seconds <= 0)
             {
                 seconds = 1; // We need to wait at least 1 second.
             }

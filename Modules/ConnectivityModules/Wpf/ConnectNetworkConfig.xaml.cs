@@ -67,10 +67,16 @@ namespace ConnectivityModule.Wpf
             string errorString = string.Empty;
 
             if (textLength == 0)
+            {
                 errorString = Strings.WiFi_NetworkName_NoCharacter;
+            }
             else
+            {
                 if (textLength > 100)
+                {
                     errorString = Strings.WiFi_NetworkName_TooLong;
+                }
+            }
 
             CanSave = textLength > 0 && (textLength <= 100);
 
@@ -93,7 +99,9 @@ namespace ConnectivityModule.Wpf
         {
             // In the case that we have an error message we display it.
             if (!errorString.Equals(string.Empty))
+            {
                 textInvalid.Text = errorString;
+            }
 
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }

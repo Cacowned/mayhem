@@ -44,7 +44,9 @@ namespace ConnectivityModule.Events
             var config = configurationControl as NetworkNameConfig;
 
             if (config == null)
+            {
                 return;
+            }
 
             networkName = config.NetworkName;
             seconds = config.Seconds;

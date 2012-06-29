@@ -1,8 +1,8 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.Serialization;
 using MayhemCore;
 using NativeWifi;
-using System.ComponentModel;
-using System;
 
 namespace ConnectivityModule.Reactions
 {
@@ -37,7 +37,9 @@ namespace ConnectivityModule.Reactions
                         Wlan.WlanConnectionAttributes connAtributes = wlanInterface.CurrentConnection;
 
                         if (connAtributes.profileName.Equals(networkName) && connAtributes.isState == Wlan.WlanInterfaceState.Connected)
+                        {
                             found = true;
+                        }
                     }
                     catch (Win32Exception ex)
                     {

@@ -72,7 +72,9 @@ namespace ConnectivityModule.Reactions
             var config = configurationControl as SendFileToDeviceByAddressConfig;
 
             if (config == null)
+            {
                 return;
+            }
 
             deviceAddressString = config.DeviceAddress;
             filePath = config.FilePath;

@@ -52,7 +52,9 @@ namespace ConnectivityModule.Reactions
                 Logger.Write(ex);
 
                 if (bluetoothClient != null)
+                {
                     bluetoothClient.Dispose();
+                }
             }
         }
 
@@ -68,7 +70,9 @@ namespace ConnectivityModule.Reactions
             }
 
             if (bluetoothClient != null)
+            {
                 bluetoothClient.Dispose();
+            }
         }
 
         /// <summary>
