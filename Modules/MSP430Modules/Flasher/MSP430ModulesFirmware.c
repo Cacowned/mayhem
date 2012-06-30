@@ -177,11 +177,11 @@ void configPins(void)
 	P2DIR |= BIT0;
 	P2DIR &= ~(BIT1+BIT2+BIT3+BIT4+BIT5);
 
-	// Enable internal resistor for inputs and set to pull-down
+	// Enable internal resistor for inputs and set to pull-up
 	P1REN |= BIT3;
-	P1OUT &= ~BIT3;
+	P1OUT |= BIT3;
 	P2REN |= BIT1+BIT2+BIT3+BIT4+BIT5;
-	P2OUT &= ~(BIT1+BIT2+BIT3+BIT4+BIT5);
+	P2OUT |= BIT1+BIT2+BIT3+BIT4+BIT5;
 }
 
 // Configuration for the UART
