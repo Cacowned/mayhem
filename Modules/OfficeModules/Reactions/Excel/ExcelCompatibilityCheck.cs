@@ -10,6 +10,7 @@ namespace OfficeModules.Reactions.Excel
     public class ExcelCompatibilityCheck : ReactionBase
     {
         OExcel.Application app;
+
         public override void Perform()
         {
             try

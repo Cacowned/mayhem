@@ -16,10 +16,11 @@ namespace OfficeModules.Reactions.Excel
     [MayhemModule("Excel: Save charts", "Saves the charts from the current workbook")]
     public class ExcelSaveCharts : ReactionBase, IWpfConfigurable
     {
-        OExcel.Application app;
-
         [DataMember]
         private string fileName;
+
+        private OExcel.Application app;
+        private string workbookName;
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -55,10 +56,19 @@ namespace OfficeModules.Reactions.Excel
                 else
                 {
                     int count = 1;
+
+                    workbookName = workbook.Name;
+
+                    if (workbookName.Contains(".xlsx"))
+                        workbookName = workbookName.Remove(workbookName.LastIndexOf(".xlsx"));
+
+                    if (workbookName.Contains(".xls"))
+                        workbookName = workbookName.Remove(workbookName.LastIndexOf(".xls"));
+
                     foreach (OExcel.Worksheet sheet in workbook.Sheets)
                         foreach (OExcel.ChartObject obj in sheet.ChartObjects(Type.Missing))
                         {
-                            obj.Chart.Export(fileName + "\\chart" + count + ".jpg");
+                            obj.Chart.Export(fileName + "\\" + workbookName + "_chart" + count + ".jpg");
                             count++;
                         }
                 }
@@ -80,7 +90,7 @@ namespace OfficeModules.Reactions.Excel
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var excelSaveChartsConfig = configurationControl as ExcelSaveChartsConfig;
-        
+
             fileName = excelSaveChartsConfig.FileName;
         }
 

@@ -38,6 +38,8 @@ namespace OfficeModules.Reactions.PowerPoint
         {
             if (File.Exists(fileName))
             {
+                streamWriter = null;
+
                 try
                 {
                     FileStream stream = File.Open(fileName, FileMode.Create);
@@ -65,6 +67,17 @@ namespace OfficeModules.Reactions.PowerPoint
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
                 Logger.Write(ex);
+
+                try
+                {
+                    if (streamWriter != null)
+                        streamWriter.Close();
+                }
+                catch (IOException e)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.CantCloseFileStream);
+                    Logger.WriteLine(e);
+                }
 
                 return;
             }
@@ -96,6 +109,17 @@ namespace OfficeModules.Reactions.PowerPoint
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantExportText);
                 Logger.Write(ex);
+
+                try
+                {
+                    if (streamWriter != null)
+                        streamWriter.Close();
+                }
+                catch (IOException e)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.CantCloseFileStream);
+                    Logger.WriteLine(e);
+                }
             }
             finally
             {

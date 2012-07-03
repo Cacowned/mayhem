@@ -10,6 +10,8 @@
 
 Once your device is installed, you can download the Mayhem MSP430Modules package to your computer. After MSP430Modules is installed in Mayhem, you should select the correct COM Port and flash the device with custom firmware provided within Mayhem. NOTE: you will only have to perform this task once before you can use your MSP430 with Mayhem.
 
+NOTE: For digital input, if you plan to use a switch it should be connected between the desired pin and ground. The MSP430 has the internal pull up resistors enabled in our firmware.
+
 Enjoy the MSP430Modules!</description>
     <summary>Allows you to connect the MSP430 Launchpad (tested with MSP430G2553) to Mayhem for DigitalInput and DigitalOutput connections.</summary>
     <copyright>Copyright © Outercurve 2012</copyright>
