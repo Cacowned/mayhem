@@ -53,7 +53,10 @@ namespace MayhemVisionModules.Components
             {
                 cvOutImage.Draw(pedestrain, new Bgr(System.Drawing.Color.Red), 5);
             }
-            return false;
+            if (rects.Length > 0)
+                return true;
+            else
+                return false;
         }
 
         private Image<Bgr, Byte> cvInImage = null;

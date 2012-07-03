@@ -57,7 +57,7 @@ namespace MayhemVisionModules.Components
             {
                 cvOutImage.Draw(face.rect, new Bgr(System.Drawing.Color.Red), 5);
             }
-            if (faces.Length > 1)
+            if (faces.Length > 0)
                 return true;
             else
                 return false;
