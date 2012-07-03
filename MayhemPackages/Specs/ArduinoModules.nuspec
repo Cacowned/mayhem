@@ -10,6 +10,8 @@
 
 Once your device is installed, you can download the Mayhem ArduinoModules package to your computer. After ArduinoModules is installed in Mayhem, you should select the correct COM Port and flash the device with custom firmware provided within Mayhem. NOTE: you will only have to perform this task once before you can use your Arduino with Mayhem.
 
+NOTE: For digital input, if you plan to use a switch it should be connected between the desired pin and ground. The Arduino has the internal pull up resistors enabled in our firmware.
+
 Enjoy the ArduinoModules!</description>
     <summary>Allows you to connect the Arduino Board (tested with Arduino Uno) to Mayhem for DigitalInput and DigitalOutput connections.</summary>
     <copyright>Copyright © Outercurve 2012</copyright>

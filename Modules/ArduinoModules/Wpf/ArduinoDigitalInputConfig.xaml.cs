@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ArduinoModules.Events;
 using MayhemWpf.UserControls;
+using System.IO;
 
 namespace ArduinoModules.Wpf
 {
@@ -148,9 +149,9 @@ namespace ArduinoModules.Wpf
             {
                 case "Toggles": InputType = DigitalInputType.Toggle;
                     break;
-                case "Turns High": InputType = DigitalInputType.High;
+                case "Turns High / Switch Opens": InputType = DigitalInputType.High;
                     break;
-                case "Turns Low": InputType = DigitalInputType.Low;
+                case "Turns Low / Switch Closes": InputType = DigitalInputType.Low;
                     break;
             }
 
@@ -173,8 +174,10 @@ namespace ArduinoModules.Wpf
         {
             Assembly execAssembly = Assembly.GetExecutingAssembly();
             string loc = execAssembly.Location;
-            string directory = System.IO.Path.GetDirectoryName(loc);
-            Process.Start(@directory + "/Flasher/FlashArduino.bat", Port);
+            string directory = Path.GetDirectoryName(loc);
+            string flasher = @"Flasher\FlashArduino.bat";
+            string flashBatch = Path.Combine(directory, flasher);
+            Process.Start(flashBatch, Port);
         }
     }
 }

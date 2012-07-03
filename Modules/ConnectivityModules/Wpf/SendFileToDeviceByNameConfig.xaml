@@ -1,0 +1,32 @@
+﻿<src:WpfConfiguration x:Class="ConnectivityModule.Wpf.SendFileToDeviceByNameConfig"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
+                      Width="500" >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="100" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Grid.Row="0" Grid.ColumnSpan="3">Please enter the name of the device you want to send the file to.</TextBlock>
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Device name:</TextBlock>
+        <TextBox Name="DeviceNameBox" TextChanged="DeviceNameBox_TextChanged" Grid.Column="1" Grid.Row="1"/>
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">File path:</TextBlock>
+        <TextBox Name="FilePathBox" TextChanged="FilePathBox_TextChanged" Grid.Column="1" Grid.Row="2"/>
+        <Button Height="25" Click="Browse_File_Click" Grid.Column="2" Grid.Row="2">Browse file</Button>
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="3">Set Pin:</TextBlock>
+        <TextBox Name="PinBox" TextChanged="PinBox_TextChanged" Grid.Column="1" Grid.Row="3"/>
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2">The name of the device is invalid</TextBlock>
+
+    </Grid>
+</src:WpfConfiguration>
+
