@@ -13,7 +13,7 @@ using OExcel = Microsoft.Office.Interop.Excel;
 namespace OfficeModules.Reactions.Excel
 {
     [DataContract]
-    [MayhemModule("Excel: Save charts", "Saves the charts from the current workbook")]
+    [MayhemModule("Excel: Save Charts", "Saves the charts from the current workbook")]
     public class ExcelSaveCharts : ReactionBase, IWpfConfigurable
     {
         [DataMember]
