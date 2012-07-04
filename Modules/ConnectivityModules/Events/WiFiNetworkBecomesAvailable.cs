@@ -36,12 +36,12 @@ namespace ConnectivityModule.Events
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new NetworkNameConfig(networkName, seconds); }
+            get { return new NetworkBecomesAvailableConfig(networkName, seconds); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = configurationControl as NetworkNameConfig;
+            var config = configurationControl as NetworkBecomesAvailableConfig;
 
             if (config == null)
             {

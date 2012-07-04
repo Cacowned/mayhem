@@ -26,7 +26,6 @@
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="3">Set Pin:</TextBlock>
         <TextBox Name="PinBox" TextChanged="PinBox_TextChanged" Grid.Column="1" Grid.Row="3"/>
         <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2">The name of the device is invalid</TextBlock>
-
     </Grid>
 </src:WpfConfiguration>
 

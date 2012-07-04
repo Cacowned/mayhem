@@ -99,8 +99,14 @@
       <SubType>Code</SubType>
       <DependentUpon>ConnectNetworkConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\NetworkNameConfig.xaml.cs">
-      <DependentUpon>NetworkNameConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\DisconnectNetworkConfig.xaml.cs">
+      <DependentUpon>DisconnectNetworkConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\NetworkBecomesAvailableConfig.xaml.cs">
+      <DependentUpon>NetworkBecomesAvailableConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\NetworkNoLongerAvailableConfig.xaml.cs">
+      <DependentUpon>NetworkNoLongerAvailableConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\PairWithDeviceByAddressConfig.xaml.cs">
       <DependentUpon>PairWithDeviceByAddressConfig.xaml</DependentUpon>
@@ -108,11 +114,14 @@
     <Compile Include="Wpf\PairWithDeviceByNameConfig.xaml.cs">
       <DependentUpon>PairWithDeviceByNameConfig.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\PredefinedDeviceNoLongerVisibleConfig.xaml.cs">
+      <DependentUpon>PredefinedDeviceNoLongerVisibleConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\SendFileToDeviceByAddressConfig.xaml.cs">
       <DependentUpon>SendFileToDeviceByAddressConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\DeviceNameConfig.xaml.cs">
-      <DependentUpon>DeviceNameConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\PredefinedDeviceBecomesVisibleConfig.xaml.cs">
+      <DependentUpon>PredefinedDeviceBecomesVisibleConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\SendFileToDeviceByNameConfig.xaml.cs">
       <DependentUpon>SendFileToDeviceByNameConfig.xaml</DependentUpon>
@@ -130,9 +139,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wpf\NetworkNameConfig.xaml">
+    <Page Include="Wpf\DisconnectNetworkConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\NetworkBecomesAvailableConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\NetworkNoLongerAvailableConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\PairWithDeviceByAddressConfig.xaml">
       <SubType>Designer</SubType>
@@ -142,11 +159,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Wpf\PredefinedDeviceNoLongerVisibleConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wpf\SendFileToDeviceByAddressConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\DeviceNameConfig.xaml">
+    <Page Include="Wpf\PredefinedDeviceBecomesVisibleConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

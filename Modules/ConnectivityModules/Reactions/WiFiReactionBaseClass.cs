@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
-using ConnectivityModule.Wpf;
 using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using MayhemWpf.UserControls;
 using NativeWifi;
 
 namespace ConnectivityModule.Reactions
@@ -16,7 +12,7 @@ namespace ConnectivityModule.Reactions
     /// An abstract base class that contains common code for the reactions that connect or disconnect to/from a network.
     /// </summary>
     [DataContract]
-    public abstract class WiFiReactionBaseClass : ReactionBase, IWpfConfigurable
+    public abstract class WiFiReactionBaseClass : ReactionBase
     {
         /// <summary>
         /// The name of the network.
@@ -130,35 +126,5 @@ namespace ConnectivityModule.Reactions
         /// It contains the functionality of this reaction.
         /// </summary>
         public abstract override void Perform();
-
-        #region IWpfConfigurable Methods
-
-        public WpfConfiguration ConfigurationControl
-        {
-            get { return new ConnectNetworkConfig(networkName); }
-        }
-
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            var config = configurationControl as ConnectNetworkConfig;
-
-            if (config == null)
-            {
-                return;
-            }
-
-            networkName = config.NetworkName;
-        }
-
-        #endregion
-
-        #region IWpfConfigurable Members
-
-        public string GetConfigString()
-        {
-            return string.Format(CultureInfo.CurrentCulture, Strings.NetworkName_ConfigString, networkName);
-        }
-
-        #endregion
     }
 }

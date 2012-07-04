@@ -81,7 +81,7 @@ namespace ConnectivityModule.Events
         {
             devices = new List<BluetoothDeviceInfo>();
             devices.AddRange(newDevices);
-            
+
             timer.Interval = int.Parse(Strings.General_BluetoothTimerInterval);
         }
 

@@ -2,19 +2,18 @@
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf"
-                      Width="460" >
+                      Width="500" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="60" />
+            <ColumnDefinition Width="100" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
-
         </Grid.RowDefinitions>
 
         <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Grid.Row="0" Grid.ColumnSpan="3">Please enter the name of the device you want to pair with.</TextBlock>
@@ -23,7 +22,6 @@
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">Set Pin:</TextBlock>
         <TextBox Name="PinBox" TextChanged="PinBox_TextChanged" Grid.Column="1" Grid.Row="2"/>
         <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2">The name of the device is invalid</TextBlock>
-
     </Grid>
 </src:WpfConfiguration>
 

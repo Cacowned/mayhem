@@ -8,7 +8,7 @@ namespace ConnectivityModule.Wpf
     /// <summary>
     /// User Control for setting the name of a network.
     /// </summary>
-    public partial class NetworkNameConfig : WpfConfiguration
+    public partial class NetworkBecomesAvailableConfig : WpfConfiguration
     {
         /// <summary>
         /// The name of the network.
@@ -33,14 +33,14 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         public override string Title
         {
-            get { return Strings.NetworkName_Title; }
+            get { return Strings.NetworkBecomesAvailable_Title; }
         }
 
         /// <summary>
         /// The constructor of the NetworkNameConfig class.
         /// </summary>
         /// <param name="networkName">The name of the network</param>
-        public NetworkNameConfig(string networkName, int seconds)
+        public NetworkBecomesAvailableConfig(string networkName, int seconds)
         {
             NetworkName = networkName;
             Seconds = seconds;

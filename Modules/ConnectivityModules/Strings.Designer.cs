@@ -241,6 +241,15 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wi-Fi: Connect To Network.
+        /// </summary>
+        internal static string ConnectNetwork_Title {
+            get {
+                return ResourceManager.GetString("ConnectNetwork_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Device&apos;s address: {0}..
         /// </summary>
         internal static string DeviceAddress_ConfigString {
@@ -304,6 +313,15 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wi-Fi: Disconnect From Network.
+        /// </summary>
+        internal static string DisconnectNetwork_Title {
+            get {
+                return ResourceManager.GetString("DisconnectNetwork_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 500.
         /// </summary>
         internal static string General_BluetoothTimerInterval {
@@ -340,6 +358,15 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wi-Fi: Network Becomes Available.
+        /// </summary>
+        internal static string NetworkBecomesAvailable_Title {
+            get {
+                return ResourceManager.GetString("NetworkBecomesAvailable_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Network&apos;s name: {0}..
         /// </summary>
         internal static string NetworkName_ConfigString {
@@ -349,29 +376,65 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Monitor network.
+        ///   Looks up a localized string similar to Wi-Fi: Network No Longer Available.
         /// </summary>
-        internal static string NetworkName_Title {
+        internal static string NetworkNoLongerAvailable_Title {
             get {
-                return ResourceManager.GetString("NetworkName_Title", resourceCulture);
+                return ResourceManager.GetString("NetworkNoLongerAvailable_Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pair with device.
+        ///   Looks up a localized string similar to Bluetooth: Pair With Device By Address.
         /// </summary>
-        internal static string PairWithDevice_Title {
+        internal static string PairWithDeviceByAddress_Title {
             get {
-                return ResourceManager.GetString("PairWithDevice_Title", resourceCulture);
+                return ResourceManager.GetString("PairWithDeviceByAddress_Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send file to device.
+        ///   Looks up a localized string similar to Bluetooth: Pair With Device By Name.
         /// </summary>
-        internal static string SendFileToDevice_Title {
+        internal static string PairWithDeviceByName_Title {
             get {
-                return ResourceManager.GetString("SendFileToDevice_Title", resourceCulture);
+                return ResourceManager.GetString("PairWithDeviceByName_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bluetooth: Predefined Device Becomes Visible.
+        /// </summary>
+        internal static string PredefinedDeviceBecomesVisible_Title {
+            get {
+                return ResourceManager.GetString("PredefinedDeviceBecomesVisible_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bluetooth: Predefined Device No Longer Visible.
+        /// </summary>
+        internal static string PredefinedDeviceNoLongerVisible_Title {
+            get {
+                return ResourceManager.GetString("PredefinedDeviceNoLongerVisible_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bluetooth: Send File By Address.
+        /// </summary>
+        internal static string SendFileToDeviceByAddress_Title {
+            get {
+                return ResourceManager.GetString("SendFileToDeviceByAddress_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bluetooth: Send File By Name.
+        /// </summary>
+        internal static string SendFileToDeviceByName_Title {
+            get {
+                return ResourceManager.GetString("SendFileToDeviceByName_Title", resourceCulture);
             }
         }
         
