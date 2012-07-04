@@ -4,10 +4,7 @@ using MayhemWpf.UserControls;
 
 namespace ConnectivityModule.Wpf
 {
-    /// <summary>
-    /// User Control for setting the name of the network we want to connect to, or disconnect from.
-    /// </summary>
-    public partial class ConnectNetworkConfig : WpfConfiguration
+    public partial class DisconnectNetworkConfig : WpfConfiguration
     {
         /// <summary>
         /// The name of the network.
@@ -23,14 +20,14 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         public override string Title
         {
-            get { return Strings.ConnectNetwork_Title; }
+            get { return Strings.DisconnectNetwork_Title; }
         }
 
         /// <summary>
         /// The constructor of the ConnectNetworkConfig class.
         /// </summary>
         /// <param name="networkName">The name of the network</param>
-        public ConnectNetworkConfig(string networkName)
+        public DisconnectNetworkConfig(string networkName)
         {
             NetworkName = networkName;
 

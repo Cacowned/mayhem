@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Timers;
-using ConnectivityModule.Wpf;
 using InTheHand.Net;
 using InTheHand.Net.Sockets;
 using MayhemCore;
-using MayhemWpf.ModuleTypes;
-using MayhemWpf.UserControls;
 
 namespace ConnectivityModule.Events
 {
@@ -18,7 +14,7 @@ namespace ConnectivityModule.Events
     /// An abstract base class used for detecting when a predefined bluetooth devices becomes or is no longer visible.
     /// </summary>
     [DataContract]
-    public abstract class BTPredefinedDeviceBaseClass : EventBase, IWpfConfigurable
+    public abstract class BTPredefinedDeviceBaseClass : EventBase
     {
         /// <summary>
         /// The name of the device that is monitored.
@@ -164,41 +160,5 @@ namespace ConnectivityModule.Events
         /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected abstract void timer_Elapsed(object sender, ElapsedEventArgs e);
-
-        #region IWpfConfigurable Methods
-
-        public WpfConfiguration ConfigurationControl
-        {
-            get { return new DeviceNameConfig(deviceName, seconds); }
-        }
-
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            var config = configurationControl as DeviceNameConfig;
-
-            if (config == null)
-            {
-                return;
-            }
-
-            deviceName = config.DeviceName;
-            seconds = config.Seconds - 5; // We wait at least 5 seconds for the DiscoverDevices() method so we deduct that time from the total wait time.
-
-            if (seconds <= 0)
-            {
-                seconds = 1; // We need to wait at least 1 second.
-            }
-        }
-
-        #endregion
-
-        #region IConfigurable Members
-
-        public string GetConfigString()
-        {
-            return string.Format(CultureInfo.CurrentCulture, Strings.DeviceName_ConfigString, deviceName, monitorType);
-        }
-
-        #endregion
     }
 }

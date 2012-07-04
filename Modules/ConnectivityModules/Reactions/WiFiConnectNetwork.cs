@@ -1,7 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.Serialization;
+using ConnectivityModule.Wpf;
 using MayhemCore;
+using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
 using NativeWifi;
 
 namespace ConnectivityModule.Reactions
@@ -10,8 +14,8 @@ namespace ConnectivityModule.Reactions
     /// A class that connects to a predefined network.
     /// </summary>
     [DataContract]
-    [MayhemModule("WiFi: Connect To Network", "Connects to a specific network")]
-    public class WiFiConnectNetwork : WiFiReactionBaseClass
+    [MayhemModule("Wi-Fi: Connect To Network", "Connects to a specific network")]
+    public class WiFiConnectNetwork : WiFiReactionBaseClass, IWpfConfigurable
     {
         /// <summary>
         /// This method will try to connect to the predefined network.
@@ -65,5 +69,35 @@ namespace ConnectivityModule.Reactions
                 Logger.Write(ex);
             }
         }
+
+        #region IWpfConfigurable Methods
+
+        public WpfConfiguration ConfigurationControl
+        {
+            get { return new ConnectNetworkConfig(networkName); }
+        }
+
+        public void OnSaved(WpfConfiguration configurationControl)
+        {
+            var config = configurationControl as ConnectNetworkConfig;
+
+            if (config == null)
+            {
+                return;
+            }
+
+            networkName = config.NetworkName;
+        }
+
+        #endregion
+
+        #region IWpfConfigurable Members
+
+        public string GetConfigString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, Strings.NetworkName_ConfigString, networkName);
+        }
+
+        #endregion
     }
 }

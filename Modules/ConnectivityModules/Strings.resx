@@ -177,6 +177,9 @@
   <data name="BT_SuccessfulPairAddress" xml:space="preserve">
     <value>The device with the address {0} was successful paired with the computer.</value>
   </data>
+  <data name="ConnectNetwork_Title" xml:space="preserve">
+    <value>Wi-Fi: Connect To Network</value>
+  </data>
   <data name="DeviceAddress_ConfigString" xml:space="preserve">
     <value>Device's address: {0}.</value>
   </data>
@@ -198,6 +201,9 @@
   <data name="DevicePairName_ConfigString" xml:space="preserve">
     <value>Device's name: {0}. Pin {1}.</value>
   </data>
+  <data name="DisconnectNetwork_Title" xml:space="preserve">
+    <value>Wi-Fi: Disconnect From Network</value>
+  </data>
   <data name="General_BluetoothTimerInterval" xml:space="preserve">
     <value>500</value>
   </data>
@@ -210,17 +216,32 @@
   <data name="General_TimerInterval" xml:space="preserve">
     <value>5000</value>
   </data>
+  <data name="NetworkBecomesAvailable_Title" xml:space="preserve">
+    <value>Wi-Fi: Network Becomes Available</value>
+  </data>
   <data name="NetworkName_ConfigString" xml:space="preserve">
     <value>Network's name: {0}.</value>
   </data>
-  <data name="NetworkName_Title" xml:space="preserve">
-    <value>Monitor network</value>
+  <data name="NetworkNoLongerAvailable_Title" xml:space="preserve">
+    <value>Wi-Fi: Network No Longer Available</value>
   </data>
-  <data name="PairWithDevice_Title" xml:space="preserve">
-    <value>Pair with device</value>
+  <data name="PairWithDeviceByAddress_Title" xml:space="preserve">
+    <value>Bluetooth: Pair With Device By Address</value>
   </data>
-  <data name="SendFileToDevice_Title" xml:space="preserve">
-    <value>Send file to device</value>
+  <data name="PairWithDeviceByName_Title" xml:space="preserve">
+    <value>Bluetooth: Pair With Device By Name</value>
+  </data>
+  <data name="PredefinedDeviceBecomesVisible_Title" xml:space="preserve">
+    <value>Bluetooth: Predefined Device Becomes Visible</value>
+  </data>
+  <data name="PredefinedDeviceNoLongerVisible_Title" xml:space="preserve">
+    <value>Bluetooth: Predefined Device No Longer Visible</value>
+  </data>
+  <data name="SendFileToDeviceByAddress_Title" xml:space="preserve">
+    <value>Bluetooth: Send File By Address</value>
+  </data>
+  <data name="SendFileToDeviceByName_Title" xml:space="preserve">
+    <value>Bluetooth: Send File By Name</value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>Success</value>

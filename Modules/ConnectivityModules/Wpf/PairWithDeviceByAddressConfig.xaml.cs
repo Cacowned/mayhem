@@ -32,7 +32,7 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         public override string Title
         {
-            get { return Strings.PairWithDevice_Title; }
+            get { return Strings.PairWithDeviceByAddress_Title; }
         }
 
         /// <summary>
@@ -127,13 +127,17 @@ namespace ConnectivityModule.Wpf
             int textLength = PinBox.Text.Length;
             string errorString = string.Empty;
 
-            if (textLength > 10)
+            if (textLength == 0)
             {
-                errorString = Strings.BT_Pin_TooLong;
+                errorString = Strings.BT_Pin_NoCharacter;
             }
+            else
+                if (textLength > 10)
+                {
+                    errorString = Strings.BT_Pin_TooLong;
+                }
 
-            // It is ok if the pin is not setted.
-            CanSave = textLength == 0 || textLength <= 10;
+            CanSave = textLength != 0 && textLength <= 10;
 
             return errorString;
         }

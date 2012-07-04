@@ -8,7 +8,7 @@ namespace ConnectivityModule.Wpf
     /// <summary>
     /// User Control for setting the name of a bluetooth device.
     /// </summary>
-    public partial class DeviceNameConfig : WpfConfiguration
+    public partial class PredefinedDeviceNoLongerVisibleConfig : WpfConfiguration
     {
         /// <summary>
         /// The name of the device.
@@ -33,7 +33,7 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         public override string Title
         {
-            get { return Strings.DeviceName_Title; }
+            get { return Strings.PredefinedDeviceNoLongerVisible_Title; }
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         /// <param name="deviceName">The name of the bluetooth device</param>
         /// <param name="seconds">The wait time between checks</param>
-        public DeviceNameConfig(string deviceName, int seconds)
+        public PredefinedDeviceNoLongerVisibleConfig(string deviceName, int seconds)
         {
             DeviceName = deviceName;
             Seconds = seconds;
