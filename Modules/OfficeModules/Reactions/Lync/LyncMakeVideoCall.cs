@@ -13,18 +13,24 @@ using OfficeModules.Wpf;
 namespace OfficeModules.Reactions.Lync
 {
     /// <summary>
-    /// This reaction makes a video call to a predefined user
+    /// A reaction that makes a video call to a predefined user.
     /// </summary>
     [DataContract]
     [MayhemModule("Lync: Make Video Call", "Makes a video call to a predefined user")]
     public class LyncMakeVideoCall : ReactionBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The User ID of the predefined contact.
+        /// </summary>
         [DataMember]
         private string userId;
 
         private LyncClient lyncClient = null;
         private Self self = null;
 
+        /// <summary>
+        /// This method will get the instance of the Lync Client application and will make a video call to the predefined userId.
+        /// </summary>
         public override void Perform()
         {
             try
@@ -82,7 +88,7 @@ namespace OfficeModules.Reactions.Lync
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new LyncSelectUserConfig(userId); }
+            get { return new LyncSelectUserConfig(userId, Strings.LyncMakeVideoCall_Title); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)

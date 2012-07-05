@@ -13,21 +13,30 @@ using OfficeModules.Wpf;
 namespace OfficeModules.Reactions.Lync
 {
     /// <summary>
-    /// This reaction sends the selected file to a predefined user
+    /// A reaction that sends the selected file to a predefined user
     /// </summary>
     [DataContract]
     [MayhemModule("Lync: Send File", "Sends a file to a predefined user")]
     public class LyncSendFile : ReactionBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The User ID of the predefined contact.
+        /// </summary>
         [DataMember]
         private string userId;
 
+        /// <summary>
+        /// The path of the file that will be sent.
+        /// </summary>
         [DataMember]
         private string fileName;
 
         private LyncClient lyncClient = null;
         private Self self = null;
 
+        /// <summary>
+        /// This method will get the instance of the Lync Client application and will send the selected file to the predefined user.
+        /// </summary>
         public override void Perform()
         {
             try

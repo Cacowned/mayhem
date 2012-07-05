@@ -12,6 +12,9 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions.PowerPoint
 {
+    /// <summary>
+    /// A reaction that will export the text of the active presentation.
+    /// </summary>
     [DataContract]
     [MayhemModule("PowerPoint: Export Text", "Exports the text of the slides from the active presentation")]
     public class PptExportText : ReactionBase, IWpfConfigurable
@@ -25,6 +28,9 @@ namespace OfficeModules.Reactions.PowerPoint
         private OPowerPoint.Application app;
         private StreamWriter streamWriter = null;
 
+        /// <summary>
+        /// This method checks if the selected file exists.
+        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             if (!File.Exists(fileName))
@@ -34,6 +40,9 @@ namespace OfficeModules.Reactions.PowerPoint
             }
         }
 
+        /// <summary>
+        /// This method will get the instance of the PowerPoint application and will export the text of the active presentation to the selected file.
+        /// </summary>
         public override void Perform()
         {
             if (File.Exists(fileName))
@@ -131,7 +140,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new PowerPointExportConfig(fileName); }
+            get { return new PowerPointExportConfig(fileName,Strings.PptExportText_Title); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)

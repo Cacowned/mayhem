@@ -8,19 +8,27 @@ using OfficeModules.Resources;
 namespace OfficeModules.Events.Lync
 {
     /// <summary>
-    /// This event is triggered when the status of any contact changes
+    /// An event that will be triggered when the status of any contact changes.
     /// </summary>
-    [MayhemModule("Lync: Status changed", "Triggers when the status of a contact changes")]
+    [MayhemModule("Lync: Status Changed", "Triggers when the status of a contact changes")]
     public class LyncStatusChanged : EventBase
     {
         private LyncClient lyncClient;
         private EventHandler<ContactInformationChangedEventArgs> contactInformationChanged;
 
+        /// <summary>
+        /// This method is called after the event is loaded.
+        /// </summary>
         protected override void OnAfterLoad()
         {
+            lyncClient = null;
+
             contactInformationChanged = Contact_ContactInformationChanged;
         }
 
+        /// <summary>
+        /// This method gets the Lync Client instance and is subscribing to the ContactInformationChangedEvent.
+        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             try
@@ -44,6 +52,9 @@ namespace OfficeModules.Events.Lync
             }
         }
 
+        /// <summary>
+        /// This method is unsubscribing from the ContactInformationChangedEvent.
+        /// </summary>
         protected override void OnDisabled(DisabledEventArgs e)
         {
             if (lyncClient != null)
@@ -60,6 +71,9 @@ namespace OfficeModules.Events.Lync
             }
         }
 
+        /// <summary>
+        /// This method is called when the ContactInformationChangedEvent is triggered, and if the type of the event is ContactInformationType.Activity will trigger this event.
+        /// </summary>
         private void Contact_ContactInformationChanged(object sender, ContactInformationChangedEventArgs e)
         {
             var contact = sender as Contact;

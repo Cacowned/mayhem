@@ -6,11 +6,17 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions
 {
+    /// <summary>
+    /// A reaction that will navigate to the previous slide of the active slideshow.
+    /// </summary>
     [MayhemModule("PowerPoint: Previous Slide", "Navigates to the previous slide")]
     public class PptPrevSlide : ReactionBase
     {
         private OPowerPoint.Application app;
 
+        /// <summary>
+        /// This method will get the instance of the PowerPoint application and will navigate to the previous slide of the active slideshow.
+        /// </summary>
         public override void Perform()
         {
             try
@@ -37,7 +43,7 @@ namespace OfficeModules.Reactions
                 {
                     if (windows > 1)
                     {
-                        // we've got more than one
+                        // We've got more than one
                         ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_MoreThanOneWindow);
                     }
 

@@ -7,25 +7,42 @@ using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// User Control for setting the location where the charts of the active workbook will be saved.
+    /// </summary>
     public partial class ExcelSaveChartsConfig : WpfConfiguration
     {
+        /// <summary>
+        /// The path of the folder where the charts will be saved.
+        /// </summary>
         public string FileName
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// The title of the user control.
+        /// </summary>
         public override string Title
         {
-            get { return "Save charts"; }
+            get { return "Excel: Save Charts"; }
         }
 
+        /// <summary>
+        /// The constructor of the ExcelSaveChartsConfig class.
+        /// </summary>
+        /// <param name="filename">The path of the folder where the charts will be saved.</param>
         public ExcelSaveChartsConfig(string filename)
         {
-            InitializeComponent();
             FileName = filename;
+
+            InitializeComponent();            
         }
 
+        /// <summary>
+        /// This method will be called when the user control will start loading.
+        /// </summary>
         public override void OnLoad()
         {
             LocationBox.Text = FileName;
@@ -33,11 +50,17 @@ namespace OfficeModules.Wpf
             CheckValidity();
         }
 
+        /// <summary>
+        /// This method will be called when the user clicks the save button.
+        /// </summary>
         public override void OnSave()
         {
             FileName = LocationBox.Text;
         }
 
+        /// <summary>
+        /// This method will check the validity of the information provided by the user.
+        /// </summary>
         private void CheckValidity()
         {
             string text = LocationBox.Text;
@@ -62,6 +85,9 @@ namespace OfficeModules.Wpf
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
+        /// <summary>
+        /// This method will let the user select the location where the charts will be saved.
+        /// </summary>
         private void Browse_Folder_Click(object sender, RoutedEventArgs e)
         {
             var dlgFolder = new FolderBrowserDialog();
@@ -72,6 +98,9 @@ namespace OfficeModules.Wpf
             }
         }
 
+        /// <summary>
+        /// This method will be called when the text from the LocationBox changes.
+        /// </summary>
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();

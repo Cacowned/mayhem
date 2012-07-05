@@ -12,21 +12,30 @@ using OfficeModules.Wpf;
 namespace OfficeModules.Reactions.Lync
 {
     /// <summary>
-    /// This reaction updates the status of the current user
+    /// A reaction that updates the status of the current user.
     /// </summary>
     [DataContract]
     [MayhemModule("Lync: Update Status", "Updates the status of the current user")]
     public class LyncUpdateStatus : ReactionBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The id of the new status.
+        /// </summary>
         [DataMember]
         private int statusId;
 
+        /// <summary>
+        /// The text of the new status.
+        /// </summary>
         [DataMember]
         private string statusText;
 
         private LyncClient lyncClient = null;
         private Self self = null;
 
+        /// <summary>
+        /// This method will get the instance of the Lync Client application and will update the status of the current user.
+        /// </summary>
         public override void Perform()
         {
             try

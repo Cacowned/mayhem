@@ -11,15 +11,21 @@ using OfficeModules.Wpf;
 namespace OfficeModules.Events.Lync
 {
     /// <summary>
-    /// This event is triggered when the status of a predefined contact changes from the one that is setted by the user to any other
+    /// An event that will be triggered when the status of a predefined contact changes from the one that is setted by the user to any other.
     /// </summary>
     [DataContract]
     [MayhemModule("Lync: Status Changed From", "Triggers when the status of a predefined contact changes from the predefined status")]
     public class LyncPredefinedStatusChangedFrom : EventBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The status that is monitored.
+        /// </summary>
         [DataMember]
         private string status;
 
+        /// <summary>
+        /// The User ID of the predefined contact.
+        /// </summary>
         [DataMember]
         private string userId;
 
@@ -30,6 +36,9 @@ namespace OfficeModules.Events.Lync
 
         private EventHandler<ContactInformationChangedEventArgs> contactInformationChanged;
 
+        /// <summary>
+        /// This method is called after the event is loaded.
+        /// </summary>
         protected override void OnAfterLoad()
         {
             lyncClient = null;
@@ -38,6 +47,9 @@ namespace OfficeModules.Events.Lync
             contactInformationChanged = Contact_ContactInformationChanged;
         }
 
+        /// <summary>
+        /// This method gets the Lync Client instance and is subscribing to the ContactInformationChangedEvent.
+        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             try
@@ -76,6 +88,9 @@ namespace OfficeModules.Events.Lync
             }
         }
 
+        /// <summary>
+        /// This method is unsubscribing from the ContactInformationChangedEvent.
+        /// </summary>
         protected override void OnDisabled(DisabledEventArgs e)
         {
             lyncClient = null;
@@ -87,6 +102,9 @@ namespace OfficeModules.Events.Lync
             }
         }
 
+        /// <summary>
+        /// This method is called when the ContactInformationChangedEvent is triggered, and if the type of the event is ContactInformationType.Activity and the previous status equals the status that is monitored will trigger this event.
+        /// </summary>
         private void Contact_ContactInformationChanged(object sender, ContactInformationChangedEventArgs e)
         {
             var contact = sender as Contact;
@@ -97,7 +115,6 @@ namespace OfficeModules.Events.Lync
 
                 if ((status.ToLower().Equals("any") || currentStatus.ToLower().Equals(status.ToLower())) && !contactStatus.ToLower().Equals(status.ToLower()))
                 {
-                    Logger.WriteLine(contactStatus);
                     Trigger();
                 }
 
@@ -109,7 +126,7 @@ namespace OfficeModules.Events.Lync
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new LyncStatusChangedConfig(userId, status); }
+            get { return new LyncStatusChangedConfig(userId, status, Strings.LyncPredefinedStatusChangedFrom_Title); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)

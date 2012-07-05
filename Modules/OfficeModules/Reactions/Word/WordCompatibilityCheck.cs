@@ -6,11 +6,17 @@ using OWord = Microsoft.Office.Interop.Word;
 
 namespace OfficeModules.Reactions.Word
 {
+    /// <summary>
+    /// A reaction that will activate the compatibility checking for the active document.
+    /// </summary>
     [MayhemModule("Word: Check Compatibility", "Activates the compatibility checking for a document")]
     public class WordCompatibilityCheck : ReactionBase
     {
         private OWord.Application app;
 
+        /// <summary>
+        /// This method will get the instance of the Word application and will activate the compatibility checking for the active document.
+        /// </summary>
         public override void Perform()
         {
             try

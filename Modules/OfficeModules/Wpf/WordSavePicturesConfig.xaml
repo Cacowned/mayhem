@@ -18,6 +18,5 @@
         <TextBox Name="LocationBox" TextChanged="LocationBox_TextChanged" Grid.Column="1" Grid.Row="0" />
         <Button Height="25" Click="Browse_Folder_Click" Grid.Column="2" Grid.Row="0">Browse folder</Button>
         <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="1">File location is invalid</TextBlock>
-
     </Grid>
 </src:WpfConfiguration>

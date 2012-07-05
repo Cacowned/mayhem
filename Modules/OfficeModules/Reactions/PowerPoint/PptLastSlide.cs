@@ -6,11 +6,17 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions
 {
+    /// <summary>
+    /// A reaction that will navigate to the last slide of the active slideshow.
+    /// </summary>
     [MayhemModule("PowerPoint: Last Slide", "Navigates to the last slide")]
     public class PptLastSlide : ReactionBase
     {
         private OPowerPoint.Application app;
 
+        /// <summary>
+        /// This method will get the instance of the PowerPoint application and will navigate to the last slide of the active slideshow.
+        /// </summary>
         public override void Perform()
         {
             try
