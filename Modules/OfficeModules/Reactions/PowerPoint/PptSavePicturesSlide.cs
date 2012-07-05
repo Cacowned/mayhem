@@ -17,16 +17,25 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions.PowerPoint
 {
+    /// <summary>
+    /// A reaction that will save the pictures from the current slide of the active slideshow.
+    /// </summary>
     [DataContract]
     [MayhemModule("PowerPoint: Save Pictures", "Saves the pictures from the current slide")]
     public class PptSavePicturesSlide : ReactionBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The path of the folder where the pictures will be saved.
+        /// </summary>
         [DataMember]
         private string fileName;
 
         private OPowerPoint.Application app;
         private string presentationName;
 
+        /// <summary>
+        /// This method will check if the folder exists.
+        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             if (!Directory.Exists(fileName))
@@ -36,6 +45,9 @@ namespace OfficeModules.Reactions.PowerPoint
             }
         }
 
+        /// <summary>
+        /// This method will get the instance of the PowerPoint application and save the pictures from the current slide of the active slideshow.
+        /// </summary>
         public override void Perform()
         {
             if (!Directory.Exists(fileName))
@@ -119,6 +131,10 @@ namespace OfficeModules.Reactions.PowerPoint
             }
         }
 
+        /// <summary>
+        /// This method will save the pictures received as a parameter to the predefined path.
+        /// </summary>
+        /// <param name="pShapes">A list of pictures that need to be saved</param>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void SavePicture(object pShapes)
         {

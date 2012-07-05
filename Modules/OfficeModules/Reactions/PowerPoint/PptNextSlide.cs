@@ -6,11 +6,17 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions
 {
+    /// <summary>
+    /// A reaction that will navigate to the next slide of the active slideshow.
+    /// </summary>
     [MayhemModule("PowerPoint: Next Slide", "Navigates to the next slide")]
     public class PptNextSlide : ReactionBase
     {
         private OPowerPoint.Application app;
 
+        /// <summary>
+        /// This method will get the instance of the PowerPoint application and will navigate to the next slide of the active slideshow.
+        /// </summary>
         public override void Perform()
         {
             try

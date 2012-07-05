@@ -157,9 +157,6 @@
     <Compile Include="Wpf\LyncStatusChangedConfig.xaml.cs">
       <DependentUpon>LyncStatusChangedConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\LyncUpdateLocationConfig.xaml.cs">
-      <DependentUpon>LyncUpdateLocationConfig.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Wpf\LyncUpdateStatusConfig.xaml.cs">
       <DependentUpon>LyncUpdateStatusConfig.xaml</DependentUpon>
     </Compile>
@@ -220,10 +217,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wpf\LyncStatusChangedConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wpf\LyncUpdateLocationConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

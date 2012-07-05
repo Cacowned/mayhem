@@ -6,11 +6,17 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions
 {
+    /// <summary>
+    /// A reaction that will close the active PowerPoint presentation.
+    /// </summary>
     [MayhemModule("PowerPoint: Close Presentation", "Closes the active presentation")]
     public class PptClosePresentation : ReactionBase
     {
         private OPowerPoint.Application app;
 
+        /// <summary>
+        /// This method will get the instance of the PowerPoint application and will close the active presentation.
+        /// </summary>
         public override void Perform()
         {
             try

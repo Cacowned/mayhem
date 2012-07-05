@@ -12,16 +12,25 @@ using OExcel = Microsoft.Office.Interop.Excel;
 
 namespace OfficeModules.Reactions.Excel
 {
+    /// <summary>
+    /// A reaction that will save the charts from the current workbook.
+    /// </summary>
     [DataContract]
     [MayhemModule("Excel: Save Charts", "Saves the charts from the current workbook")]
     public class ExcelSaveCharts : ReactionBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The path of the folder where the charts will be saved.
+        /// </summary>
         [DataMember]
         private string fileName;
 
         private OExcel.Application app;
         private string workbookName;
 
+        /// <summary>
+        /// This method will check if the predefined folder exists.
+        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             if (!Directory.Exists(fileName))
@@ -31,6 +40,8 @@ namespace OfficeModules.Reactions.Excel
             }
         }
 
+        /// <summary>
+        /// This method will get the instance of the Excel Application and save the charts from the active workbook.
         public override void Perform()
         {
             try

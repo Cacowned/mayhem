@@ -6,11 +6,17 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions
 {
+    /// <summary>
+    /// A reaction that will open the slideshow window for the active presentation
+    /// </summary>
     [MayhemModule("PowerPoint: View Slideshow", "Opens the slideshow window for the active presentation")]
     public class PptViewSlideShow : ReactionBase
     {
         private OPowerPoint.Application app;
 
+        /// <summary>
+        /// This method will get the instance of the PowerPoint application and will open the slideshow window for the active presentation.
+        /// </summary>
         public override void Perform()
         {
             try

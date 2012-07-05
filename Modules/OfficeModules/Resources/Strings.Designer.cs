@@ -286,6 +286,60 @@ namespace OfficeModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lync: Location Changed.
+        /// </summary>
+        internal static string LyncLocationChanged_Title {
+            get {
+                return ResourceManager.GetString("LyncLocationChanged_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lync: Make Audio Call.
+        /// </summary>
+        internal static string LyncMakeCall_Title {
+            get {
+                return ResourceManager.GetString("LyncMakeCall_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lync: Make Video Call.
+        /// </summary>
+        internal static string LyncMakeVideoCall_Title {
+            get {
+                return ResourceManager.GetString("LyncMakeVideoCall_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lync: Personal Note Changed.
+        /// </summary>
+        internal static string LyncPersonalNoteChanged_Title {
+            get {
+                return ResourceManager.GetString("LyncPersonalNoteChanged_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lync: Status Changed From.
+        /// </summary>
+        internal static string LyncPredefinedStatusChangedFrom_Title {
+            get {
+                return ResourceManager.GetString("LyncPredefinedStatusChangedFrom_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lync: Status Changed To.
+        /// </summary>
+        internal static string LyncPredefinedStatusChangedTo_Title {
+            get {
+                return ResourceManager.GetString("LyncPredefinedStatusChangedTo_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Outlook application not found..
         /// </summary>
         internal static string Outlook_ApplicationNotFound {
@@ -498,6 +552,24 @@ namespace OfficeModules.Resources {
         internal static string PowerPoint_NoWindowCantChange {
             get {
                 return ResourceManager.GetString("PowerPoint_NoWindowCantChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint: Export Notes.
+        /// </summary>
+        internal static string PptExportNotes_Title {
+            get {
+                return ResourceManager.GetString("PptExportNotes_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint: Export Text.
+        /// </summary>
+        internal static string PptExportText_Title {
+            get {
+                return ResourceManager.GetString("PptExportText_Title", resourceCulture);
             }
         }
         

@@ -7,7 +7,7 @@ using OfficeModules.Resources;
 namespace OfficeModules.Events.Lync
 {
     /// <summary>
-    /// This event is triggered when a call is received
+    /// An event that will be triggered when a call is received.
     /// </summary>
     [MayhemModule("Lync: Call Received", "Triggers when a call is received")]
     public class LyncCallReceived : EventBase
@@ -17,6 +17,9 @@ namespace OfficeModules.Events.Lync
 
         private EventHandler<ConversationManagerEventArgs> conversationAdded;
 
+        /// <summary>
+        /// This method is called after the event is loaded.
+        /// </summary>
         protected override void OnAfterLoad()
         {
             lyncClient = null;
@@ -25,6 +28,9 @@ namespace OfficeModules.Events.Lync
             conversationAdded = Conversations_ConversationAdded;
         }
 
+        /// <summary>
+        /// This method gets the Lync Client instance and is subscribing to the ConversationManagerEvent.
+        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             try
@@ -42,6 +48,9 @@ namespace OfficeModules.Events.Lync
             }
         }
 
+        /// <summary>
+        /// This method is unsubscribing from the ConversationManagerEvent.
+        /// </summary>
         protected override void OnDisabled(DisabledEventArgs e)
         {
             if (conversationManager != null)
@@ -56,6 +65,9 @@ namespace OfficeModules.Events.Lync
             }
         }
 
+        /// <summary>
+        /// This method is called when the ConversationManagerEvent is triggered, and if the type of the event is ModalityTypes.AudioVideo will trigger this event.
+        /// </summary>
         void Conversations_ConversationAdded(object sender, ConversationManagerEventArgs e)
         {
             if (e.Conversation.Modalities[ModalityTypes.AudioVideo].State == ModalityState.Notified)
