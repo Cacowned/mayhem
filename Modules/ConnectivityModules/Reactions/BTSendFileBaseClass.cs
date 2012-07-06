@@ -46,6 +46,11 @@ namespace ConnectivityModule.Reactions
 
                 bluetoothClient.Dispose();
             }
+            catch (PlatformNotSupportedException ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.BT_NoBluetooth);
+                Logger.Write(ex);
+            }
             catch (ObexResponseException ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.BT_ConnectionRefused);

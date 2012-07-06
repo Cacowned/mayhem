@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Timers;
 using ConnectivityModule.Wpf;
 using MayhemCore;
@@ -34,35 +33,9 @@ namespace ConnectivityModule.Events
             timer.Start();
         }
 
-        #region IWpfConfigurable Methods
-
         public WpfConfiguration ConfigurationControl
         {
-            get { return new NetworkNoLongerAvailableConfig(networkName, seconds); }
+            get { return new NetworkAvailableConfig(networkName, seconds, Strings.NetworkNoLongerAvailable_Title); }
         }
-
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            var config = configurationControl as NetworkNoLongerAvailableConfig;
-
-            if (config == null)
-            {
-                return;
-            }
-
-            networkName = config.NetworkName;
-            seconds = config.Seconds;
-        }
-
-        #endregion
-
-        #region IConfigurable Members
-
-        public string GetConfigString()
-        {
-            return string.Format(CultureInfo.CurrentCulture, Strings.NetworkName_ConfigString, networkName);
-        }
-
-        #endregion
     }
 }

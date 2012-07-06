@@ -1,40 +1,34 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using MayhemWpf.UserControls;
 
 namespace ConnectivityModule.Wpf
 {
     /// <summary>
     /// User Control for setting the name of the network we want to connect to, or disconnect from.
     /// </summary>
-    public partial class ConnectNetworkConfig : WpfConfiguration
+    public partial class NetworkConfig : WiFiBaseConfig
     {
-        /// <summary>
-        /// The name of the network.
-        /// </summary>
-        public string NetworkName
-        {
-            get;
-            private set;
-        }
-
         /// <summary>
         /// The title of the user control.
         /// </summary>
         public override string Title
         {
-            get { return Strings.ConnectNetwork_Title; }
+            get { return configTitle; }
         }
+
+        private string configTitle;
 
         /// <summary>
         /// The constructor of the ConnectNetworkConfig class.
         /// </summary>
         /// <param name="networkName">The name of the network</param>
-        public ConnectNetworkConfig(string networkName)
+        public NetworkConfig(string networkName, string title, string informationText)
         {
-            NetworkName = networkName;
-
             InitializeComponent();
+
+            NetworkName = networkName;
+            configTitle = title;
+            InformationText.Text = informationText;
         }
 
         /// <summary>
@@ -46,7 +40,7 @@ namespace ConnectivityModule.Wpf
 
             NetworkNameBox.Text = NetworkName;
 
-            DisplayErrorMessage(CheckValidityNetworkName());
+            DisplayErrorMessage(CheckValidityNetworkName(NetworkNameBox.Text));
         }
 
         /// <summary>
@@ -58,37 +52,11 @@ namespace ConnectivityModule.Wpf
         }
 
         /// <summary>
-        /// This method will check if the name of the network is valid.
-        /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
-        private string CheckValidityNetworkName()
-        {
-            int textLength = NetworkNameBox.Text.Length;
-            string errorString = string.Empty;
-
-            if (textLength == 0)
-            {
-                errorString = Strings.WiFi_NetworkName_NoCharacter;
-            }
-            else
-            {
-                if (textLength > 100)
-                {
-                    errorString = Strings.WiFi_NetworkName_TooLong;
-                }
-            }
-
-            CanSave = textLength > 0 && (textLength <= 100);
-
-            return errorString;
-        }
-
-        /// <summary>
         /// This method will be called when the text from the NetworkNameBox changes.
         /// </summary>
         private void NetworkNameBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DisplayErrorMessage(CheckValidityNetworkName());
+            DisplayErrorMessage(CheckValidityNetworkName(NetworkNameBox.Text));
         }
 
         /// <summary>

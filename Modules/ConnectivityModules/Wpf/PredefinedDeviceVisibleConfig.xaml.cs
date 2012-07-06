@@ -1,24 +1,14 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using MayhemWpf.UserControls;
 
 namespace ConnectivityModule.Wpf
 {
     /// <summary>
     /// User Control for setting the name of a bluetooth device.
     /// </summary>
-    public partial class PredefinedDeviceNoLongerVisibleConfig : WpfConfiguration
+    public partial class PredefinedDeviceVisibleConfig : BTBaseConfig
     {
-        /// <summary>
-        /// The name of the device.
-        /// </summary>
-        public string DeviceName
-        {
-            get;
-            private set;
-        }
-
         /// <summary>
         /// The wait time between checks.
         /// </summary>
@@ -33,20 +23,28 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         public override string Title
         {
-            get { return Strings.PredefinedDeviceNoLongerVisible_Title; }
+            get { return configTitle; }
         }
+
+        private string configTitle;
 
         /// <summary>
         /// The constructor the of DeviceNameConfig class.
         /// </summary>
         /// <param name="deviceName">The name of the bluetooth device</param>
-        /// <param name="seconds">The wait time between checks</param>
-        public PredefinedDeviceNoLongerVisibleConfig(string deviceName, int seconds)
+        /// <param name="seconds">The wait time between checks</param
+        /// <param name="title">The title of the config window</param>
+        /// <param name="deviceType">The type of the connection mode to the device</param>
+        /// <param name="informationText">The information that will be displayed in the config window</param>>
+        public PredefinedDeviceVisibleConfig(string deviceName, int seconds, string title, string deviceType, string informationText)
         {
+            InitializeComponent();
+
             DeviceName = deviceName;
             Seconds = seconds;
-
-            InitializeComponent();
+            configTitle = title;
+            DeviceType.Text = deviceType;
+            InformationText.Text = informationText;
         }
 
         /// <summary>
@@ -54,9 +52,7 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         public override void OnLoad()
         {
-            CanSave = true;
-
-            DeviceNameBox.Text = DeviceName;
+            DeviceBox.Text = DeviceName;
 
             // The minimum timespan must be 5.
             if (Seconds < 5)
@@ -66,17 +62,7 @@ namespace ConnectivityModule.Wpf
 
             SecondsBox.Text = Seconds.ToString(CultureInfo.InvariantCulture);
 
-            // We need to check if the device name and the number of seconds are setted correctly.
-            string errorString = CheckValidityDeviceName();
-
-            if (!errorString.Equals(string.Empty))
-            {
-                textInvalid.Text = errorString;
-                textInvalid.Visibility = Visibility.Visible;
-                return;
-            }
-
-            DisplayErrorMessage(CheckValiditySeconds());
+            CheckValidity();
         }
 
         /// <summary>
@@ -84,34 +70,26 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         public override void OnSave()
         {
-            DeviceName = DeviceNameBox.Text;
+            DeviceName = DeviceBox.Text;
             Seconds = int.Parse(SecondsBox.Text);
         }
 
         /// <summary>
-        /// This method will check if the name of the device is valid.
+        /// This method will check if all the information from the user control are setted correctly.
         /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
-        private string CheckValidityDeviceName()
+        private void CheckValidity()
         {
-            int textLength = DeviceNameBox.Text.Length;
+            // We need to check if the network name and the number of seconds are setted correctly.
             string errorString = string.Empty;
 
-            if (textLength == 0)
+            errorString = CheckValidityDeviceName(DeviceBox.Text);
+
+            if (errorString.Equals(string.Empty))
             {
-                errorString = Strings.BT_DeviceName_NoCharacter;
-            }
-            else
-            {
-                if (textLength > 100)
-                {
-                    errorString = Strings.BT_DeviceName_TooLong;
-                }
+                errorString = CheckValiditySeconds();
             }
 
-            CanSave = textLength > 0 && (textLength <= 100);
-
-            return errorString;
+            DisplayErrorMessage(errorString);
         }
 
         /// <summary>
@@ -152,9 +130,9 @@ namespace ConnectivityModule.Wpf
         /// <summary>
         /// This method will be called when the text from the DeviceNameBox changes.
         /// </summary>
-        private void DeviceNameBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void DeviceBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DisplayErrorMessage(CheckValidityDeviceName());
+            CheckValidity();
         }
 
         /// <summary>
@@ -162,7 +140,7 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         private void SecondsBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            DisplayErrorMessage(CheckValiditySeconds());
+            CheckValidity();
         }
 
         /// <summary>

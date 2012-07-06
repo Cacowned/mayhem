@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Runtime.Serialization;
 using ConnectivityModule.Wpf;
 using MayhemCore;
@@ -70,34 +69,9 @@ namespace ConnectivityModule.Reactions
             }
         }
 
-        #region IWpfConfigurable Methods
-
         public WpfConfiguration ConfigurationControl
         {
-            get { return new ConnectNetworkConfig(networkName); }
+            get { return new NetworkConfig(networkName, Strings.ConnectNetwork_Title, Strings.WiFi_InformationTextConnectNetwork); }
         }
-
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            var config = configurationControl as ConnectNetworkConfig;
-
-            if (config == null)
-            {
-                return;
-            }
-
-            networkName = config.NetworkName;
-        }
-
-        #endregion
-
-        #region IWpfConfigurable Members
-
-        public string GetConfigString()
-        {
-            return string.Format(CultureInfo.CurrentCulture, Strings.NetworkName_ConfigString, networkName);
-        }
-
-        #endregion
     }
 }
