@@ -1,35 +1,34 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
-using MayhemWpf.UserControls;
 
 namespace ConnectivityModule.Wpf
 {
-    public partial class DisconnectNetworkConfig : WpfConfiguration
+    /// <summary>
+    /// User Control for setting the name of a network.
+    /// </summary>
+    public partial class NetworkAvailableConfig : WiFiAvailableConfig
     {
-        /// <summary>
-        /// The name of the network.
-        /// </summary>
-        public string NetworkName
-        {
-            get;
-            private set;
-        }
-
         /// <summary>
         /// The title of the user control.
         /// </summary>
         public override string Title
         {
-            get { return Strings.DisconnectNetwork_Title; }
+            get { return configTitle; }
         }
 
+        private string configTitle;
+
         /// <summary>
-        /// The constructor of the ConnectNetworkConfig class.
+        /// The constructor of the NetworkNameConfig class.
         /// </summary>
         /// <param name="networkName">The name of the network</param>
-        public DisconnectNetworkConfig(string networkName)
+        /// <param name="title">The title of the config window</param>
+        public NetworkAvailableConfig(string networkName, int seconds, string title)
         {
             NetworkName = networkName;
+            Seconds = seconds;
+            configTitle = title;
 
             InitializeComponent();
         }
@@ -43,7 +42,15 @@ namespace ConnectivityModule.Wpf
 
             NetworkNameBox.Text = NetworkName;
 
-            DisplayErrorMessage(CheckValidityNetworkName());
+            // The minimum time span must be 1.
+            if (Seconds == 0)
+            {
+                Seconds = 1;
+            }
+
+            SecondsBox.Text = Seconds.ToString(CultureInfo.InvariantCulture);
+
+            CheckValidity();
         }
 
         /// <summary>
@@ -52,32 +59,23 @@ namespace ConnectivityModule.Wpf
         public override void OnSave()
         {
             NetworkName = NetworkNameBox.Text;
+            Seconds = int.Parse(SecondsBox.Text);
         }
 
         /// <summary>
-        /// This method will check if the name of the network is valid.
+        /// This method will check if all the information from the user control are setted correctly.
         /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
-        private string CheckValidityNetworkName()
+        private void CheckValidity()
         {
-            int textLength = NetworkNameBox.Text.Length;
-            string errorString = string.Empty;
+            // We need to check if the network name and the number of seconds are setted correctly.
+            string errorString = CheckValidityNetworkName(NetworkNameBox.Text);
 
-            if (textLength == 0)
+            if (errorString.Equals(string.Empty))
             {
-                errorString = Strings.WiFi_NetworkName_NoCharacter;
-            }
-            else
-            {
-                if (textLength > 100)
-                {
-                    errorString = Strings.WiFi_NetworkName_TooLong;
-                }
+                errorString = CheckValiditySeconds(SecondsBox.Text);
             }
 
-            CanSave = textLength > 0 && (textLength <= 100);
-
-            return errorString;
+            DisplayErrorMessage(errorString);
         }
 
         /// <summary>
@@ -85,7 +83,15 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         private void NetworkNameBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DisplayErrorMessage(CheckValidityNetworkName());
+            CheckValidity();
+        }
+
+        /// <summary>
+        /// This method will be called when the text from the DeviceNameBox changes.
+        /// </summary>
+        private void SecondsBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckValidity();
         }
 
         /// <summary>

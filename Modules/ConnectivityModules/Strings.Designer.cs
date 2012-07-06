@@ -151,6 +151,24 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Device address:.
+        /// </summary>
+        internal static string BT_DeviceTypeTextAddress {
+            get {
+                return ResourceManager.GetString("BT_DeviceTypeTextAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device name:.
+        /// </summary>
+        internal static string BT_DeviceTypeTextName {
+            get {
+                return ResourceManager.GetString("BT_DeviceTypeTextName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The device is already visible..
         /// </summary>
         internal static string BT_DeviceVisible {
@@ -165,6 +183,51 @@ namespace ConnectivityModule {
         internal static string BT_ErrorMonitoringBluetooth {
             get {
                 return ResourceManager.GetString("BT_ErrorMonitoringBluetooth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the address of the device you want to pair with..
+        /// </summary>
+        internal static string BT_InformationTextPairAddress {
+            get {
+                return ResourceManager.GetString("BT_InformationTextPairAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the name of the device you want to pair with..
+        /// </summary>
+        internal static string BT_InformationTextPairName {
+            get {
+                return ResourceManager.GetString("BT_InformationTextPairName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the name of the device you want to monitor..
+        /// </summary>
+        internal static string BT_InformationTextPredefinedDeviceVisible {
+            get {
+                return ResourceManager.GetString("BT_InformationTextPredefinedDeviceVisible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the address of the device you want to send the file to..
+        /// </summary>
+        internal static string BT_InformationTextSendFileAddress {
+            get {
+                return ResourceManager.GetString("BT_InformationTextSendFileAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the name of the device you want to send the file to..
+        /// </summary>
+        internal static string BT_InformationTextSendFileName {
+            get {
+                return ResourceManager.GetString("BT_InformationTextSendFileName", resourceCulture);
             }
         }
         
@@ -214,7 +277,7 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The time interval must be greater than 5 seconds..
+        ///   Looks up a localized string similar to The time interval must be greater or equal to 5 seconds..
         /// </summary>
         internal static string BT_SecondsMoreThan5 {
             get {
@@ -259,7 +322,7 @@ namespace ConnectivityModule {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Device&apos;s name: {0}. Monitor: {1}..
+        ///   Looks up a localized string similar to Device&apos;s name: {0}..
         /// </summary>
         internal static string DeviceName_ConfigString {
             get {
@@ -291,6 +354,15 @@ namespace ConnectivityModule {
         internal static string DeviceNameConnect_Title {
             get {
                 return ResourceManager.GetString("DeviceNameConnect_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device&apos;s name: {0}. Seconds {1}..
+        /// </summary>
+        internal static string DeviceNameSeconds_ConfigString {
+            get {
+                return ResourceManager.GetString("DeviceNameSeconds_ConfigString", resourceCulture);
             }
         }
         
@@ -480,6 +552,24 @@ namespace ConnectivityModule {
         internal static string WiFi_DisconnectedFromNetwork {
             get {
                 return ResourceManager.GetString("WiFi_DisconnectedFromNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the name of the network you want to connect to..
+        /// </summary>
+        internal static string WiFi_InformationTextConnectNetwork {
+            get {
+                return ResourceManager.GetString("WiFi_InformationTextConnectNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the name of the network you want to disconnect from..
+        /// </summary>
+        internal static string WiFi_InformationTextDisconnectNetwork {
+            get {
+                return ResourceManager.GetString("WiFi_InformationTextDisconnectNetwork", resourceCulture);
             }
         }
         

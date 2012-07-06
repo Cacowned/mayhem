@@ -59,6 +59,11 @@ namespace ConnectivityModule.Reactions
                     ErrorLog.AddError(ErrorType.Message, string.Format(CultureInfo.CurrentCulture, Strings.BT_SuccessfulPair, deviceName));
                 }
             }
+            catch (PlatformNotSupportedException ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.BT_NoBluetooth);
+                Logger.Write(ex);
+            }
             catch (SocketException ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.BT_CantConnectToDevice);
@@ -75,12 +80,12 @@ namespace ConnectivityModule.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new PairWithDeviceByNameConfig(deviceName, accessPin); }
+            get { return new PairWithDeviceConfig(deviceName, accessPin, Strings.PairWithDeviceByName_Title, Strings.BT_DeviceTypeTextName, Strings.BT_InformationTextPairName); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = configurationControl as PairWithDeviceByNameConfig;
+            var config = configurationControl as PairWithDeviceConfig;
 
             if (config == null)
             {

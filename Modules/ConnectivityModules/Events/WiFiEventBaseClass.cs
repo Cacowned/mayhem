@@ -1,9 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Timers;
+using ConnectivityModule.Wpf;
 using MayhemCore;
+using MayhemWpf.UserControls;
 using NativeWifi;
 
 namespace ConnectivityModule.Events
@@ -189,5 +192,31 @@ namespace ConnectivityModule.Events
         /// This method will be implemented by the classes that inherit this class and will be called when the timer.Elapsed event will be raised.
         /// </summary>
         protected abstract void timer_Elapsed(object sender, ElapsedEventArgs e);
+
+        #region IWpfConfigurable Methods
+
+        public void OnSaved(WpfConfiguration configurationControl)
+        {
+            var config = configurationControl as NetworkAvailableConfig;
+
+            if (config == null)
+            {
+                return;
+            }
+
+            networkName = config.NetworkName;
+            seconds = config.Seconds;
+        }
+
+        #endregion
+
+        #region IConfigurable Members
+
+        public string GetConfigString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, Strings.NetworkName_ConfigString, networkName);
+        }
+
+        #endregion
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using MayhemWpf.UserControls;
 using Microsoft.Win32;
 
 namespace ConnectivityModule.Wpf
@@ -9,17 +8,8 @@ namespace ConnectivityModule.Wpf
     /// <summary>
     /// User Control for setting the address, file path and pin of the bluetooth device we want to send the file to.
     /// </summary>
-    public partial class SendFileToDeviceByAddressConfig : WpfConfiguration
+    public partial class SendFileToDeviceConfig : BTPairConfig
     {
-        /// <summary>
-        /// The address of the device.
-        /// </summary>
-        public string DeviceAddress
-        {
-            get;
-            private set;
-        }
-
         /// <summary>
         /// The path of the file.
         /// </summary>
@@ -30,35 +20,33 @@ namespace ConnectivityModule.Wpf
         }
 
         /// <summary>
-        /// The pin used for pairing with the device.
-        /// </summary>
-        public string Pin
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// The title of the user control.
         /// </summary>
         public override string Title
         {
-            get { return Strings.SendFileToDeviceByAddress_Title; }
+            get { return configTitle; }
         }
 
+        private string configTitle;
         /// <summary>
         /// The constructor the of SendFileToDeviceByAddressConfig class.
         /// </summary>
         /// <param name="deviceAddress">The address of the bluetooth device</param>
         /// <param name="filePath">The path of the file</param>
         /// <param name="pin">The pin used for pairing with the device</param>
-        public SendFileToDeviceByAddressConfig(string deviceAddress, string filePath, string pin)
+        /// <param name="title">The title of the config window</param>
+        /// <param name="deviceType">The type of the connection mode to the device</param>
+        /// <param name="informationText">The information text that will be displayed in the config window</param>
+        public SendFileToDeviceConfig(string deviceAddress, string filePath, string pin, string title, string deviceType, string informationText)
         {
+            InitializeComponent();
+
             DeviceAddress = deviceAddress;
             FilePath = filePath;
             Pin = pin;
-
-            InitializeComponent();
+            configTitle = title;
+            DeviceType.Text = deviceType;
+            InformationText.Text = informationText;
         }
 
         /// <summary>
@@ -66,7 +54,15 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         public override void OnLoad()
         {
-            DeviceAddressBox.Text = DeviceAddress;
+            if (configTitle.Equals(Strings.SendFileToDeviceByAddress_Title))
+            {
+                DeviceBox.Text = DeviceAddress;
+            }
+            else
+                if (configTitle.Equals(Strings.SendFileToDeviceByName_Title))
+                {
+                    DeviceBox.Text = DeviceName;
+                }
             FilePathBox.Text = FilePath;
             PinBox.Text = Pin;
 
@@ -78,7 +74,16 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         public override void OnSave()
         {
-            DeviceAddress = DeviceAddressBox.Text;
+            if (configTitle.Equals(Strings.SendFileToDeviceByAddress_Title))
+            {
+                DeviceAddress = DeviceBox.Text;
+            }
+            else
+                if (configTitle.Equals(Strings.SendFileToDeviceByName_Title))
+                {
+                    DeviceName = DeviceBox.Text;
+                }
+
             FilePath = FilePathBox.Text;
             Pin = PinBox.Text;
         }
@@ -91,74 +96,27 @@ namespace ConnectivityModule.Wpf
             string errorString = string.Empty;
             CanSave = true;
 
-            errorString = CheckValidityDeviceAddress();
+            if (configTitle.Equals(Strings.SendFileToDeviceByAddress_Title))
+            {
+                errorString = CheckValidityDeviceAddress(DeviceBox.Text);
+            }
+            else
+                if (configTitle.Equals(Strings.SendFileToDeviceByName_Title))
+                {
+                    errorString = CheckValidityDeviceName(DeviceBox.Text);
+                }
 
             if (errorString.Equals(string.Empty))
             {
                 errorString = CheckValidityFilePath();
-                if (errorString.Equals(string.Empty))
-                {
-                    errorString = CheckValidityPin();
-                }
             }
 
-            if (!errorString.Equals(string.Empty))
+            if (errorString.Equals(string.Empty))
             {
-                textInvalid.Text = errorString;
-                CanSave = false;
+                errorString = CheckValidityPin(PinBox.Text);
             }
 
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        /// <summary>
-        /// This method will check if the address of the device is valid.
-        /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
-        private string CheckValidityDeviceAddress()
-        {
-            int textLength = DeviceAddressBox.Text.Length;
-            string errorString = string.Empty;
-
-            if (textLength < 12)
-            {
-                errorString = Strings.BT_DeviceAddress_TooShort;
-            }
-            else
-            {
-                if (textLength > 17)
-                {
-                    errorString = Strings.BT_DeviceAddress_TooLong;
-                }
-            }
-
-            CanSave = textLength >= 12 && textLength <= 17;
-
-            return errorString;
-        }
-
-        /// <summary>
-        /// This method will check if the pin is valid.
-        /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
-        private string CheckValidityPin()
-        {
-            int textLength = PinBox.Text.Length;
-            string errorString = string.Empty;
-
-            if (textLength == 0)
-            {
-                errorString = Strings.BT_Pin_NoCharacter;
-            }
-            else
-                if (textLength > 10)
-                {
-                    errorString = Strings.BT_Pin_TooLong;
-                }
-
-            CanSave = textLength != 0 && textLength <= 10;
-
-            return errorString;
+            DisplayErrorMessage(errorString);
         }
 
         /// <summary>
@@ -198,18 +156,7 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         private void DeviceAddressBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string errorString = CheckValidityDeviceAddress();
-
-            // In the case that we have an error message we display it.
-            if (!errorString.Equals(string.Empty))
-            {
-                textInvalid.Text = errorString;
-                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-            }
-            else
-            {
-                CheckValidity(); // In the case that this is correct we need to verify the rest of the fields.
-            }
+            CheckValidity();
         }
 
         /// <summary>
@@ -217,18 +164,7 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         private void PinBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string errorString = CheckValidityPin();
-
-            // In the case that we have an error message we display it.
-            if (!errorString.Equals(string.Empty))
-            {
-                textInvalid.Text = errorString;
-                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-            }
-            else
-            {
-                CheckValidity();
-            }
+            CheckValidity();
         }
 
         /// <summary>
@@ -236,18 +172,7 @@ namespace ConnectivityModule.Wpf
         /// </summary>
         private void FilePathBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string errorString = CheckValidityFilePath();
-
-            // In the case that we have an error message we display it.
-            if (!errorString.Equals(string.Empty))
-            {
-                textInvalid.Text = errorString;
-                textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-            }
-            else
-            {
-                CheckValidity();
-            }
+            CheckValidity();
         }
 
         /// <summary>
@@ -264,6 +189,21 @@ namespace ConnectivityModule.Wpf
                 FilePath = dlg.FileName;
                 FilePathBox.Text = FilePath;
             }
+        }
+
+        /// <summary>
+        /// Displays the error message received as parameter.
+        /// </summary>
+        /// <param name="errorMessage">The text of the error message</param>
+        private void DisplayErrorMessage(string errorString)
+        {
+            // In the case that we have an error message we display it.
+            if (!errorString.Equals(string.Empty))
+            {
+                textInvalid.Text = errorString;
+            }
+
+            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

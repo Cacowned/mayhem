@@ -51,6 +51,11 @@ namespace ConnectivityModule.Reactions
 
                 SendFileMethod();
             }
+            catch (PlatformNotSupportedException ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.BT_NoBluetooth);
+                Logger.Write(ex);
+            }
             catch (Exception ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.BT_CantConnectToDevice);
@@ -64,12 +69,12 @@ namespace ConnectivityModule.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new SendFileToDeviceByAddressConfig(deviceAddressString, filePath, accessPin); }
+            get { return new SendFileToDeviceConfig(deviceAddressString, filePath, accessPin, Strings.SendFileToDeviceByAddress_Title, Strings.BT_DeviceTypeTextAddress, Strings.BT_InformationTextSendFileAddress); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = configurationControl as SendFileToDeviceByAddressConfig;
+            var config = configurationControl as SendFileToDeviceConfig;
 
             if (config == null)
             {

@@ -77,6 +77,7 @@ namespace ConnectivityModule.Events
         /// This method is setting the list of visible devices for the first time.
         /// The normal interval for the timer is set.
         /// </summary>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected void MakeFirstListOfDevices()
         {
             devices = new List<BluetoothDeviceInfo>();
@@ -89,6 +90,7 @@ namespace ConnectivityModule.Events
         /// This method is searching the newDevices list and finds the devices that has become available since the last check. The found devices are added to the main list.
         /// </summary>
         /// <returns>Returns true if a new device is found, false otherwise</returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected bool FindNewDevices()
         {
             bool found = false;
@@ -117,6 +119,7 @@ namespace ConnectivityModule.Events
         /// This method is searching the newDevices list and finds the devices that are no longer available since the last check. The found devices are removed from the main list.
         /// </summary>
         /// <returns>Returns true if a device is removed, false otherwise</returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected bool RemoveNoLongerVisibleDevices()
         {
             bool removed = false;

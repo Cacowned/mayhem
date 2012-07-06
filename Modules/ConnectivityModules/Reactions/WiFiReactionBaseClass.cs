@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
+using ConnectivityModule.Wpf;
 using MayhemCore;
+using MayhemWpf.UserControls;
 using NativeWifi;
 
 namespace ConnectivityModule.Reactions
@@ -126,5 +129,30 @@ namespace ConnectivityModule.Reactions
         /// It contains the functionality of this reaction.
         /// </summary>
         public abstract override void Perform();
+
+        #region IWpfConfigurable Methods
+
+        public void OnSaved(WpfConfiguration configurationControl)
+        {
+            var config = configurationControl as NetworkConfig;
+
+            if (config == null)
+            {
+                return;
+            }
+
+            networkName = config.NetworkName;
+        }
+
+        #endregion
+
+        #region IWpfConfigurable Members
+
+        public string GetConfigString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, Strings.NetworkName_ConfigString, networkName);
+        }
+
+        #endregion
     }
 }

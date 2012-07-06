@@ -95,37 +95,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\ConnectNetworkConfig.xaml.cs">
+    <Compile Include="Wpf\BTBaseConfig.cs" />
+    <Compile Include="Wpf\BTPairConfig.cs" />
+    <Compile Include="Wpf\NetworkConfig.xaml.cs">
       <SubType>Code</SubType>
-      <DependentUpon>ConnectNetworkConfig.xaml</DependentUpon>
+      <DependentUpon>NetworkConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\DisconnectNetworkConfig.xaml.cs">
-      <DependentUpon>DisconnectNetworkConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\NetworkAvailableConfig.xaml.cs">
+      <DependentUpon>NetworkAvailableConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\NetworkBecomesAvailableConfig.xaml.cs">
-      <DependentUpon>NetworkBecomesAvailableConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\PairWithDeviceConfig.xaml.cs">
+      <DependentUpon>PairWithDeviceConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\NetworkNoLongerAvailableConfig.xaml.cs">
-      <DependentUpon>NetworkNoLongerAvailableConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\SendFileToDeviceConfig.xaml.cs">
+      <DependentUpon>SendFileToDeviceConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\PairWithDeviceByAddressConfig.xaml.cs">
-      <DependentUpon>PairWithDeviceByAddressConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\PredefinedDeviceVisibleConfig.xaml.cs">
+      <DependentUpon>PredefinedDeviceVisibleConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\PairWithDeviceByNameConfig.xaml.cs">
-      <DependentUpon>PairWithDeviceByNameConfig.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wpf\PredefinedDeviceNoLongerVisibleConfig.xaml.cs">
-      <DependentUpon>PredefinedDeviceNoLongerVisibleConfig.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wpf\SendFileToDeviceByAddressConfig.xaml.cs">
-      <DependentUpon>SendFileToDeviceByAddressConfig.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wpf\PredefinedDeviceBecomesVisibleConfig.xaml.cs">
-      <DependentUpon>PredefinedDeviceBecomesVisibleConfig.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wpf\SendFileToDeviceByNameConfig.xaml.cs">
-      <DependentUpon>SendFileToDeviceByNameConfig.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Wpf\WiFiAvailableConfig.cs" />
+    <Compile Include="Wpf\WiFiBaseConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Strings.resx">
@@ -135,43 +124,23 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Wpf\ConnectNetworkConfig.xaml">
+    <Page Include="Wpf\NetworkConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wpf\DisconnectNetworkConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wpf\NetworkBecomesAvailableConfig.xaml">
+    <Page Include="Wpf\NetworkAvailableConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wpf\NetworkNoLongerAvailableConfig.xaml">
+    <Page Include="Wpf\PairWithDeviceConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\PairWithDeviceByAddressConfig.xaml">
+    <Page Include="Wpf\SendFileToDeviceConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Wpf\PairWithDeviceByNameConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wpf\PredefinedDeviceNoLongerVisibleConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wpf\SendFileToDeviceByAddressConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wpf\PredefinedDeviceBecomesVisibleConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Wpf\SendFileToDeviceByNameConfig.xaml">
+    <Page Include="Wpf\PredefinedDeviceVisibleConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
