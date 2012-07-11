@@ -63,7 +63,16 @@ namespace OfficeModules.Events.Lync
                     selectedContact = self.Contact.ContactManager.GetContactByUri(userId);
                     selectedContact.ContactInformationChanged += contactInformationChanged;
 
-                    currentPersonalNote = selectedContact.GetContactInformation(ContactInformationType.PersonalNote).ToString();
+                    object personalNoteObject = selectedContact.GetContactInformation(ContactInformationType.PersonalNote);
+
+                    if(personalNoteObject == null)
+                    {
+                        currentPersonalNote = "";
+                    }
+                    else
+                    {
+                        currentPersonalNote = personalNoteObject.ToString();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -102,7 +111,17 @@ namespace OfficeModules.Events.Lync
         private void Contact_ContactInformationChanged(object sender, ContactInformationChangedEventArgs e)
         {
             var contact = sender as Contact;
-            string selectedPersonalNote = contact.GetContactInformation(ContactInformationType.PersonalNote).ToString();
+            string selectedPersonalNote;
+            object personalNoteObject = contact.GetContactInformation(ContactInformationType.PersonalNote);
+
+            if (personalNoteObject == null)
+            {
+                selectedPersonalNote = "";
+            }
+            else
+            {
+                selectedPersonalNote = personalNoteObject.ToString();
+            }
 
             // If the location changed event is triggered and the new personal note is different from the previous one, we trigger the event
             if (e.ChangedContactInformation.Contains(ContactInformationType.PersonalNote) && !currentPersonalNote.ToString().ToLower().Equals(selectedPersonalNote.ToLower()))
