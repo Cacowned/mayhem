@@ -1,4 +1,5 @@
 ﻿using MayhemWpf.UserControls;
+using SystemModules.Resources;
 
 namespace SystemModules.Wpf
 {
@@ -12,21 +13,25 @@ namespace SystemModules.Wpf
             get;
             private set;
         }
+
         public ShutDownWarning(bool forceShutDown = false)
         {
             InitializeComponent();
             CanSave = true;
             this.ForceShutDown = forceShutDown;
         }
+
         public override string Title
         {
             get{return ("Warning");}
         }
+
         public override void OnLoad()
         {
-            WarningBox.Text = SystemModules.Resources.Strings.Shutdown_ForceWarning;
+            WarningBox.Text = Strings.Shutdown_ForceWarning;
             EnableForceCheckBox.IsChecked = ForceShutDown;
         }
+
         public override void OnSave()
         {
             this.ForceShutDown = (bool)EnableForceCheckBox.IsChecked;
