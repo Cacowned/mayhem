@@ -9,7 +9,7 @@ namespace OfficeModules.Events.Lync
     /// <summary>
     /// An event that will be triggered when a call is received.
     /// </summary>
-    [MayhemModule("Lync: Call Received", "Triggers when a call is received")]
+    [MayhemModule("Lync: Call Received", "Triggers when a call is received only if the IM window of the caller is not opened")]
     public class LyncCallReceived : EventBase
     {
         private LyncClient lyncClient;
