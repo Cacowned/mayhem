@@ -61,11 +61,110 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AIzaSyBED0KUmlEcX8qEmv7AYZtUsd6A0fNRpds.
+        ///   Looks up a localized string similar to The name of the location must contain at least one character..
+        /// </summary>
+        internal static string GoogleMaps_Location_NoCharacter {
+            get {
+                return ResourceManager.GetString("GoogleMaps_Location_NoCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the location is too long..
+        /// </summary>
+        internal static string GoogleMaps_Location_TooLong {
+            get {
+                return ResourceManager.GetString("GoogleMaps_Location_TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google Maps: Search Location.
+        /// </summary>
+        internal static string GoogleMapsSearchLocation_Title {
+            get {
+                return ResourceManager.GetString("GoogleMapsSearchLocation_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AIzaSyDJ_Z6r99nc8n4WyXqSqiR4-WNyNcfJnvY.
         /// </summary>
         internal static string GooglePlus_ApiKey {
             get {
                 return ResourceManager.GetString("GooglePlus_ApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authentification failed.
+        /// </summary>
+        internal static string GooglePlus_AuthentificationFailed {
+            get {
+                return ResourceManager.GetString("GooglePlus_AuthentificationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The blog entry could not be added to Google+ History.
+        /// </summary>
+        internal static string GooglePlus_BlogEntryCouldntBeAdded {
+            get {
+                return ResourceManager.GetString("GooglePlus_BlogEntryCouldntBeAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The blog entry was succesful added.
+        /// </summary>
+        internal static string GooglePlus_BlogEntrySuccesfulAdded {
+            get {
+                return ResourceManager.GetString("GooglePlus_BlogEntrySuccesfulAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 901856013311.apps.googleusercontent.com.
+        /// </summary>
+        internal static string GooglePlus_ClientID {
+            get {
+                return ResourceManager.GetString("GooglePlus_ClientID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ikaqc_qw35lKLJE-oA7mIY_X.
+        /// </summary>
+        internal static string GooglePlus_ClientSecret {
+            get {
+                return ResourceManager.GetString("GooglePlus_ClientSecret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the Url of the blog entry you want to add to Google+ History..
+        /// </summary>
+        internal static string GooglePlus_DetailsPostBlogEntry {
+            get {
+                return ResourceManager.GetString("GooglePlus_DetailsPostBlogEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the Url of the photo you want to add to Google+ History..
+        /// </summary>
+        internal static string GooglePlus_DetailsPostPhoto {
+            get {
+                return ResourceManager.GetString("GooglePlus_DetailsPostPhoto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the Url of the video you want to add to Google+ History..
+        /// </summary>
+        internal static string GooglePlus_DetailsPostVideo {
+            get {
+                return ResourceManager.GetString("GooglePlus_DetailsPostVideo", resourceCulture);
             }
         }
         
@@ -84,6 +183,60 @@ namespace GoogleModules.Resources {
         internal static string GooglePlus_ErrorMonitoringNewComment {
             get {
                 return ResourceManager.GetString("GooglePlus_ErrorMonitoringNewComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The event could not be enabled..
+        /// </summary>
+        internal static string GooglePlus_EventCouldntBeEnabled {
+            get {
+                return ResourceManager.GetString("GooglePlus_EventCouldntBeEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The text of the moment must contain at least one character..
+        /// </summary>
+        internal static string GooglePlus_MomentText_NoCharacter {
+            get {
+                return ResourceManager.GetString("GooglePlus_MomentText_NoCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The text of the moment is too long..
+        /// </summary>
+        internal static string GooglePlus_MomentText_TooLong {
+            get {
+                return ResourceManager.GetString("GooglePlus_MomentText_TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blog Entry Url:.
+        /// </summary>
+        internal static string GooglePlus_PostBlogEntryUrlText {
+            get {
+                return ResourceManager.GetString("GooglePlus_PostBlogEntryUrlText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Photo Url:.
+        /// </summary>
+        internal static string GooglePlus_PostPhotoUrlText {
+            get {
+                return ResourceManager.GetString("GooglePlus_PostPhotoUrlText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video Url:.
+        /// </summary>
+        internal static string GooglePlus_PostVideoUrlText {
+            get {
+                return ResourceManager.GetString("GooglePlus_PostVideoUrlText", resourceCulture);
             }
         }
         
@@ -115,11 +268,29 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The video could not be added to Google+ History.
+        /// </summary>
+        internal static string GooglePlus_VideoCouldntBeAdded {
+            get {
+                return ResourceManager.GetString("GooglePlus_VideoCouldntBeAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The video was succesful added.
+        /// </summary>
+        internal static string GooglePlus_VideoSuccesfulAdded {
+            get {
+                return ResourceManager.GetString("GooglePlus_VideoSuccesfulAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Google+: New Activity.
         /// </summary>
-        internal static string GooglePlusNewActivityTitle {
+        internal static string GooglePlusNewActivity_Title {
             get {
-                return ResourceManager.GetString("GooglePlusNewActivityTitle", resourceCulture);
+                return ResourceManager.GetString("GooglePlusNewActivity_Title", resourceCulture);
             }
         }
         
@@ -129,6 +300,51 @@ namespace GoogleModules.Resources {
         internal static string GooglePlusNewCommentTitle {
             get {
                 return ResourceManager.GetString("GooglePlusNewCommentTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google+: Post Blog Entry.
+        /// </summary>
+        internal static string GooglePlusPostBlogEntry_Title {
+            get {
+                return ResourceManager.GetString("GooglePlusPostBlogEntry_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google+: Post Photo.
+        /// </summary>
+        internal static string GooglePlusPostPhoto_Title {
+            get {
+                return ResourceManager.GetString("GooglePlusPostPhoto_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google+: Post Video.
+        /// </summary>
+        internal static string GooglePlusPostVideo_Title {
+            get {
+                return ResourceManager.GetString("GooglePlusPostVideo_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location: {0}. Map type: {1}..
+        /// </summary>
+        internal static string LocationMapType_ConfigString {
+            get {
+                return ResourceManager.GetString("LocationMapType_ConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moment Url: {0}..
+        /// </summary>
+        internal static string MomentUrl_ConfigString {
+            get {
+                return ResourceManager.GetString("MomentUrl_ConfigString", resourceCulture);
             }
         }
         
