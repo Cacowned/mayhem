@@ -54,12 +54,12 @@ namespace PreGsocTest1
         }
         protected override void OnAfterLoad()
         {
-            TickTimer = new ScheduleTimer();
-            TickTimer.Elapsed += new ScheduledEventHandler(AlarmHit);   
+              
         }
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            TickTimer.ClearJobs();
+            TickTimer = new ScheduleTimer();
+            TickTimer.Elapsed += new ScheduledEventHandler(AlarmHit); 
             if (recurDaily)
             {
                 //TickTimer.AddEvent(new Schedule.ScheduledTime("Daily", "7:07  AM"));
