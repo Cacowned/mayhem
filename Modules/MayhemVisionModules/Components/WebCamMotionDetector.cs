@@ -15,11 +15,124 @@ using System.ComponentModel;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Windows.Threading;
+using Emgu.CV;
+using Emgu.Util;
+using Emgu.CV.Structure;
 using MayhemWebCamWrapper;
+using System.Diagnostics;
 
 namespace MayhemVisionModules.Components
 {
     //performs motion detection... also stores motion detection template
+    public class MotionDetection
+    {
+        public bool UpdateBackground(byte[] inImage, byte[] outImage, int width, int height, float detectorPercentage, float detectorDifference, float detectorTime, int roix, int roiy, int roiWidth, int roiHeight)
+        {
+            if (!initialized)
+            {
+                initTime = DateTime.Now;
+            
+                if (inputImage == null)
+                {
+                    inputImage = new Image<Bgr, Byte>(width, height);
+                }
+
+                if (segMask == null)
+                {
+                    segMask = new Image<Gray, Single>(width, height);
+                }
+
+                if (mhi == null || mhi.Width != width || mhi.Height != height)
+                {
+                    if (buff == null)
+                    {
+                        buff = new Image<Gray, Byte>[ringBufferSize];
+                        for (int i = 0; i < ringBufferSize; i++)
+                        {
+                            buff[i] = new Image<Gray, Byte>(width, height);
+                            buff[i].SetValue(0);
+                        }
+                    }
+
+                    mhi = null;
+                    mask = null;
+                    mhi = new Image<Gray, Single>(width, height);
+                    mhi.SetValue(0.0);
+                    mask = new Image<Gray, Byte>(width, height);
+                }
+
+                initialized = true;
+            }
+            
+            lastTime = DateTime.Now;
+            TimeSpan t = lastTime.Subtract(initTime);
+            double timestamp = t.TotalSeconds; 
+            inputImage.Bytes = inImage;
+            buff[last] = inputImage.Convert<Gray, Byte>();
+            idx2 = (last + 1) % ringBufferSize;
+            last = idx2;
+            Image<Gray, Byte> silh = buff[idx2];
+            Emgu.CV.CvInvoke.cvAbsDiff(buff[idx1].Ptr, buff[idx2].Ptr, silh.Ptr);
+            Emgu.CV.CvInvoke.cvThreshold(silh.Ptr, silh.Ptr, detectorDifference, 1, Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
+            Emgu.CV.CvInvoke.cvUpdateMotionHistory(silh.Ptr, mhi.Ptr, timestamp, detectorTime);
+            double scale = 255.0 / detectorTime;
+            Emgu.CV.CvInvoke.cvCvtScale(mhi.Ptr, mask.Ptr, scale, (detectorTime - timestamp) * scale);
+            
+            Rectangle motionRectangle = new Rectangle(roix, roiy, roiWidth, roiHeight);
+            Emgu.CV.CvInvoke.cvSetImageROI(silh.Ptr, motionRectangle);
+            double numMotionPixels = (double)Emgu.CV.CvInvoke.cvNorm(silh.Ptr, IntPtr.Zero, Emgu.CV.CvEnum.NORM_TYPE.CV_L1, IntPtr.Zero);
+            double motionPercentage = 100.0*numMotionPixels / (motionRectangle.Width * motionRectangle.Height);
+
+            //output
+            Emgu.CV.CvInvoke.cvZero(origOutImage.Ptr);
+            Emgu.CV.CvInvoke.cvMerge(IntPtr.Zero, IntPtr.Zero, mask.Ptr, IntPtr.Zero, origOutImage.Ptr);
+
+            if (resizedOutImage == null)
+            {
+                resizedOutImage = new Image<Bgr, Byte>(width, height);
+            }
+            resizedOutImage = origOutImage.Resize(width, height, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            if (motionPercentage > detectorPercentage && numWarmUpFrames > 30)
+            {
+                int centerLocationX = motionRectangle.X + motionRectangle.Width / 2;
+                int centerLocationY = motionRectangle.Y + motionRectangle.Height / 2;
+                int radius = (int)Math.Round(0.25*Math.Sqrt(motionRectangle.Width * motionRectangle.Width + motionRectangle.Height * motionRectangle.Height));
+                System.Drawing.Point pt = new System.Drawing.Point(centerLocationX, centerLocationY);
+                MCvScalar scalar = new MCvScalar(255,255,255);
+                Emgu.CV.CvInvoke.cvCircle(resizedOutImage.Ptr, pt, radius, scalar, 2, Emgu.CV.CvEnum.LINE_TYPE.CV_AA, 0);
+                isMotionDetected = true;
+                numWarmUpFrames = 0;
+            }
+            ++numWarmUpFrames;
+            Emgu.CV.CvInvoke.cvResetImageROI(silh);
+            return true;
+        }
+
+        public bool IsMotionDetected()
+        {
+            bool ret = isMotionDetected;
+            isMotionDetected = false;
+            return ret;
+        }
+
+        int last = 0;
+        int i, idx1 = 0, idx2;
+        const int ringBufferSize = 4;
+        DateTime initTime;
+        DateTime lastTime;
+        Image<Gray, Single> mhi = null;
+        Image<Gray, Single> segMask = null;
+        Image<Gray, Byte> mask = null;
+        Image<Gray, Byte>[] buff;
+        Image<Bgr, Byte> inputImage = null;
+        Image<Bgr, Byte> origOutImage = new Image<Bgr, Byte>(640, 480);
+        public Image<Bgr, Byte> resizedOutImage = null;
+        bool initialized = false;
+        int numWarmUpFrames = 0;
+        bool isMotionDetected = false;
+    }
+
+
     public class WebCamMotionDetector : ImageListener
     {
         public float MotionAreaPercentageSensitivity; //what percentage of pixel motion over the area is considered for a trigger? (between 0 and 100)
@@ -29,8 +142,7 @@ namespace MayhemVisionModules.Components
         public int SelectedCameraIndex;
         private byte[] motionBuffer = null;
         private bool showBackground = true;
-        private IntPtr pMotionDetector = IntPtr.Zero;
-
+        MotionDetection Detector = new MotionDetection();
 
 
         public WebCamMotionDetector()
@@ -52,18 +164,6 @@ namespace MayhemVisionModules.Components
 
         public void Clear()
         {
-            try
-            {
-                if (pMotionDetector != IntPtr.Zero)
-                {
-                    ComputerVisionImports.DisposeMotionDetector(pMotionDetector);
-                }
-                pMotionDetector = IntPtr.Zero;
-            }
-            catch (Exception ex)
-            {
-                //System.Windows.Forms.MessageBox.Show(ex.ToString());
-            }
         }
 
         public void ToggleVisualization()
@@ -92,10 +192,6 @@ namespace MayhemVisionModules.Components
             {
                 try
                 {
-                    if (pMotionDetector == IntPtr.Zero || pMotionDetector == null)
-                    {
-                        pMotionDetector = ComputerVisionImports.CreateMotionDetector();
-                    }
                     if (motionBuffer == null || motionBuffer.Length != camera.ImageBuffer.Length)
                     {
                         motionBuffer = new byte[(int)(camera.ImageBuffer.Length)];
@@ -104,27 +200,25 @@ namespace MayhemVisionModules.Components
                     int scaledRoiY = Math.Max(Math.Min(Convert.ToInt32(ImagerHeight * RoiY), Convert.ToInt32(ImagerHeight)), 0);
                     int scaledRoiWidth = Math.Max(Math.Min(Convert.ToInt32(ImagerWidth * RoiWidth), Convert.ToInt32(ImagerWidth)), 0);
                     int scaledRoiHeight = Math.Max(Math.Min(Convert.ToInt32(ImagerWidth * RoiHeight), Convert.ToInt32(ImagerHeight)), 0);
-                    if (pMotionDetector != IntPtr.Zero)
+                    if (Detector.UpdateBackground(camera.ImageBuffer, motionBuffer, Convert.ToInt32(ImagerWidth), Convert.ToInt32(ImagerHeight), MotionAreaPercentageSensitivity, MotionDiffSensitivity, TimeSensitivity, scaledRoiX, scaledRoiY, scaledRoiWidth, scaledRoiHeight))
                     {
-                        ComputerVisionImports.UpdateBackground(pMotionDetector, camera.ImageBuffer, motionBuffer, Convert.ToInt32(ImagerWidth), Convert.ToInt32(ImagerHeight), MotionAreaPercentageSensitivity, MotionDiffSensitivity, TimeSensitivity, scaledRoiX, scaledRoiY, scaledRoiWidth, scaledRoiHeight);
-
-                        if (ComputerVisionImports.IsMotionDetected(pMotionDetector))
+                        if (Detector.IsMotionDetected())
                             OnMotionDetected(EventArgs.Empty); // trigger event
 
                         if (showBackground)
                         {
                             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, (SendOrPostCallback)delegate
                             {
-                                populateBitMap(motionBuffer, (int)(ImagerWidth * ImagerHeight * 3));
+                                populateBitMap(Detector.resizedOutImage.Bytes, (int)(ImagerWidth * ImagerHeight * 3));
                                 BitmapSource.Invalidate();
                                 GC.Collect(); //this is due to a bug in InteropBitmap which causes memory leaks for 24 bit bitmaps... MS: FIX IT!
                             }, null);
                         }
                     }
                 }
-                catch
+                catch (Emgu.CV.Util.CvException ex)
                 {
-                    //System.Windows.Forms.MessageBox.Show(ex.ToString());
+                    System.Windows.Forms.MessageBox.Show(ex.ErrorMessage);
                 }
             }
         }
