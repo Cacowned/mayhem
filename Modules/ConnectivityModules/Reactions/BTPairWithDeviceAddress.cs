@@ -18,9 +18,6 @@ namespace ConnectivityModule.Reactions
     [MayhemModule("Bluetooth: Pair With Device By Address", "Pair with a specific device identified by its address")]
     public class BTPairWithDeviceAddress : BTPairBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// The address of the device represented as a string.
-        /// </summary>
         [DataMember]
         protected string deviceAddressString;
 

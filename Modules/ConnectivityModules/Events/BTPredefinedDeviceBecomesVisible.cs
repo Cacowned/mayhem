@@ -15,13 +15,9 @@ namespace ConnectivityModule.Events
     [MayhemModule("Bluetooth: Predefined Device Becomes Visible", "Triggers when the selected device becomes visible")]
     public class BTPredefinedDeviceBecomesVisible : BTPredefinedDeviceBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// This method is called when the timer.Elapsed event is raised and checks if the predefined bluetooth device has become visible since the last check.
-        /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // Stopping the timer so this event will not be triggered again until the method exits.
             timer.Stop();
 
             // The event will be triggered if the VerifyDeviceVisibility method completed successfully and the bluetooth device wasn't visible and now is.
@@ -32,7 +28,6 @@ namespace ConnectivityModule.Events
                 wasVisible = true;
             }
 
-            // Starting the timer.
             timer.Start();
         }
 

@@ -16,10 +16,6 @@ namespace ConnectivityModule.Reactions
     [MayhemModule("Wi-Fi: Disconnect From Network", "Disconnects from a specific network")]
     public class WiFiDisconnectNetwork : WiFiReactionBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// A method that verifies if the computer is connected to the predefined network.
-        /// </summary>
-        /// <returns>Returns true if it's connected, false otherwise</returns>
         protected bool VerifyConnectionState()
         {
             try

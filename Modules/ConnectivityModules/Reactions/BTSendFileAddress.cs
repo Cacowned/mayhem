@@ -17,9 +17,6 @@ namespace ConnectivityModule.Reactions
     [MayhemModule("Bluetooth: Send File By Address", "Sends a file to a specific device identified by its address")]
     public class BTSendFileAddress : BTSendFileBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// The address of the device represented as a string.
-        /// </summary>
         [DataMember]
         private string deviceAddressString;
 

@@ -12,13 +12,9 @@ namespace ConnectivityModule.Events
     [MayhemModule("Bluetooth: Device No Longer Visible", "Triggers when a device is no longer visible")]
     public class BTDeviceNoLongerVisible : BTDeviceBaseClass
     {
-        /// <summary>
-        /// This method is called when the timer.Elapsed event is raised and checks if a bluetooth device is no longer visible since the last check.
-        /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected override void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // Stopping the timer so this event will not be triggered again until the method exits.
             timer.Stop();
 
             try
@@ -38,6 +34,7 @@ namespace ConnectivityModule.Events
 
                     if (RemoveNoLongerVisibleDevices())
                     {
+                        // If a device is no longer visible we trigger this event.
                         Trigger();
                     }
                 }
@@ -48,7 +45,6 @@ namespace ConnectivityModule.Events
                 Logger.Write(ex);
             }
 
-            // Starting the timer.
             timer.Start();
         }
     }

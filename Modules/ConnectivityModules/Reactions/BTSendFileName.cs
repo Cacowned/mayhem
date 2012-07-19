@@ -16,9 +16,6 @@ namespace ConnectivityModule.Reactions
     [MayhemModule("Bluetooth: Send File By Name", "Sends a file to a specific device identified by its name")]
     public class BTSendFileName : BTSendFileBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// The name of the device.
-        /// </summary>
         [DataMember]
         private string deviceName;
 

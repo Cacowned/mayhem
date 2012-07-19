@@ -15,7 +15,7 @@ namespace OfficeModules.Reactions.Excel
         OExcel.Application app;
 
         /// <summary>
-        /// This method will get the instance of the Excel Application and will set the CheckCompatibility property to true.
+        /// If an instance of the Excel application exits this method will set it's CheckCompatibility property to true.
         /// </summary>
         public override void Perform()
         {

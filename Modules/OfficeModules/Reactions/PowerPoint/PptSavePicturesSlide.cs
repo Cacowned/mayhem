@@ -33,9 +33,6 @@ namespace OfficeModules.Reactions.PowerPoint
         private OPowerPoint.Application app;
         private string presentationName;
 
-        /// <summary>
-        /// This method will check if the folder exists.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             if (!Directory.Exists(fileName))
@@ -46,7 +43,7 @@ namespace OfficeModules.Reactions.PowerPoint
         }
 
         /// <summary>
-        /// This method will get the instance of the PowerPoint application and save the pictures from the current slide of the active slideshow.
+        /// If an instance of the PowerPoint application exits this method will save the pictures from the current slide of the active slideshow.
         /// </summary>
         public override void Perform()
         {
@@ -131,10 +128,6 @@ namespace OfficeModules.Reactions.PowerPoint
             }
         }
 
-        /// <summary>
-        /// This method will save the pictures received as a parameter to the predefined path.
-        /// </summary>
-        /// <param name="pShapes">A list of pictures that need to be saved</param>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void SavePicture(object pShapes)
         {

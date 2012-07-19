@@ -19,10 +19,6 @@ namespace ConnectivityModule.Events
         protected List<BluetoothDeviceInfo> newDevices;
         protected List<BluetoothDeviceInfo> auxDevices;
 
-        /// <summary>
-        /// This method is initializing the needed objects and starts the timer.
-        /// If the bluetooth capability is not available for this computer the event will not be enabled and an error message will be shown.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             devices = null;
@@ -42,6 +38,7 @@ namespace ConnectivityModule.Events
             }
             catch (Exception ex)
             {
+                // If the bluetooth capability is not available for this computer the event will not be enabled and an error message will be shown.
                 ErrorLog.AddError(ErrorType.Failure, Strings.BT_NoBluetooth);
                 Logger.Write(ex);
 
@@ -49,9 +46,6 @@ namespace ConnectivityModule.Events
             }
         }
 
-        /// <summary>
-        /// This method is releasing the used objects when the event is disabled.
-        /// </summary>
         protected override void OnDisabled(DisabledEventArgs e)
         {
             if (timer != null)
@@ -73,10 +67,6 @@ namespace ConnectivityModule.Events
             }
         }
 
-        /// <summary>
-        /// This method is setting the list of visible devices for the first time.
-        /// The normal interval for the timer is set.
-        /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected void MakeFirstListOfDevices()
         {
@@ -86,10 +76,6 @@ namespace ConnectivityModule.Events
             timer.Interval = int.Parse(Strings.General_BluetoothTimerInterval);
         }
 
-        /// <summary>
-        /// This method is searching the newDevices list and finds the devices that has become available since the last check. The found devices are added to the main list.
-        /// </summary>
-        /// <returns>Returns true if a new device is found, false otherwise</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected bool FindNewDevices()
         {
@@ -115,10 +101,6 @@ namespace ConnectivityModule.Events
             return found;
         }
 
-        /// <summary>
-        /// This method is searching the newDevices list and finds the devices that are no longer available since the last check. The found devices are removed from the main list.
-        /// </summary>
-        /// <returns>Returns true if a device is removed, false otherwise</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected bool RemoveNoLongerVisibleDevices()
         {
@@ -144,9 +126,6 @@ namespace ConnectivityModule.Events
             return removed;
         }
 
-        /// <summary>
-        /// This method will be implemented by the classes that inherit this class and will be called when the timer.Elapsed event will be raised.
-        /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected abstract void timer_Elapsed(object sender, ElapsedEventArgs e);
     }

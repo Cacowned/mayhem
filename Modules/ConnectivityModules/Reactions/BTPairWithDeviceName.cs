@@ -17,9 +17,6 @@ namespace ConnectivityModule.Reactions
     [MayhemModule("Bluetooth: Pair With Device By Name", "Pair with a specific device identified by its name")]
     public class BTPairWithDeviceName : BTPairBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// The name of the device.
-        /// </summary>
         [DataMember]
         private string deviceName;
 
