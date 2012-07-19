@@ -20,7 +20,7 @@ namespace OfficeModules.Reactions.PowerPoint
     public class PptExportNotes : ReactionBase, IWpfConfigurable
     {
         /// <summary>
-        /// The path of the file were the notes would be saved.
+        /// The path of the file were the notes will be saved.
         /// </summary>
         [DataMember]
         private string fileName;
@@ -28,9 +28,6 @@ namespace OfficeModules.Reactions.PowerPoint
         private OPowerPoint.Application app;
         private StreamWriter streamWriter = null;
 
-        /// <summary>
-        /// This method checks if the selected file exists.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             if (!File.Exists(fileName))
@@ -41,7 +38,7 @@ namespace OfficeModules.Reactions.PowerPoint
         }
 
         /// <summary>
-        /// This method will get the instance of the PowerPoint application and will export the notes of the active presentation to the selected file.
+        /// If an instance of the PowerPoint application exits this method will export the notes of the active presentation to the selected file.
         /// </summary>
         public override void Perform()
         {

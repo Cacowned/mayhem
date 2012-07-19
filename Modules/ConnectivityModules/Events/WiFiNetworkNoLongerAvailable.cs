@@ -14,9 +14,6 @@ namespace ConnectivityModule.Events
     [MayhemModule("Wi-Fi: Network No Longer Available", "The selected network is no longer available")]
     public class WiFiNetworkNoLongerAvailable : WiFiEventBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// This method is called when the timer.Elapsed event is raised and checks if the monitored network is no longer available.
-        /// </summary>
         protected override void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             timer.Stop();

@@ -17,27 +17,16 @@ namespace ConnectivityModule.Reactions
     [DataContract]
     public abstract class WiFiReactionBaseClass : ReactionBase
     {
-        /// <summary>
-        /// The name of the network.
-        /// </summary>
         [DataMember]
         protected string networkName;
 
         protected WlanClient client;
 
-        /// <summary>
-        /// This method will initialize the objects of this class.
-        /// </summary>
         protected override void OnAfterLoad()
         {
             client = null;
         }
 
-        /// <summary>
-        /// This method will connect or disconnect to/from a network executing the command received as a parameter.
-        /// </summary>
-        /// <param name="command">The command to be executed</param>
-        /// <returns>Returns true if the connectivity mode was changed successfully, false otherwise</returns>
         protected bool ChangeConnectivityMode(string command)
         {
             try
@@ -114,20 +103,11 @@ namespace ConnectivityModule.Reactions
             return false;
         }
 
-        /// <summary>
-        /// Transforms the ssid of a network into a string representing it's name.
-        /// </summary>
-        /// <param name="ssid">The ssid of the network</param>
-        /// <returns>The name of the network</returns>
         protected string GetStringForSSID(Wlan.Dot11Ssid ssid)
         {
             return Encoding.ASCII.GetString(ssid.SSID, 0, (int)ssid.SSIDLength);
         }
 
-        /// <summary>
-        /// This method will be implemented by the classes that inherit this class and will be called when the event associated with the reaction is triggered.
-        /// It contains the functionality of this reaction.
-        /// </summary>
         public abstract override void Perform();
 
         #region IWpfConfigurable Methods

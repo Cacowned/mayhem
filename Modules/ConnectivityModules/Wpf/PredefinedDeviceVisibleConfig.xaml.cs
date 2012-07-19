@@ -18,9 +18,6 @@ namespace ConnectivityModule.Wpf
             private set;
         }
 
-        /// <summary>
-        /// The title of the user control.
-        /// </summary>
         public override string Title
         {
             get { return configTitle; }
@@ -28,14 +25,6 @@ namespace ConnectivityModule.Wpf
 
         private string configTitle;
 
-        /// <summary>
-        /// The constructor the of DeviceNameConfig class.
-        /// </summary>
-        /// <param name="deviceName">The name of the bluetooth device</param>
-        /// <param name="seconds">The wait time between checks</param
-        /// <param name="title">The title of the config window</param>
-        /// <param name="deviceType">The type of the connection mode to the device</param>
-        /// <param name="informationText">The information that will be displayed in the config window</param>>
         public PredefinedDeviceVisibleConfig(string deviceName, int seconds, string title, string deviceType, string informationText)
         {
             InitializeComponent();
@@ -47,9 +36,6 @@ namespace ConnectivityModule.Wpf
             InformationText.Text = informationText;
         }
 
-        /// <summary>
-        /// This method will be called when the user control will start loading.
-        /// </summary>
         public override void OnLoad()
         {
             DeviceBox.Text = DeviceName;
@@ -65,18 +51,12 @@ namespace ConnectivityModule.Wpf
             CheckValidity();
         }
 
-        /// <summary>
-        /// This method will be called when the used clicks the save button.
-        /// </summary>
         public override void OnSave()
         {
             DeviceName = DeviceBox.Text;
             Seconds = int.Parse(SecondsBox.Text);
         }
 
-        /// <summary>
-        /// This method will check if all the information from the user control are setted correctly.
-        /// </summary>
         private void CheckValidity()
         {
             // We need to check if the network name and the number of seconds are setted correctly.
@@ -92,10 +72,6 @@ namespace ConnectivityModule.Wpf
             DisplayErrorMessage(errorString);
         }
 
-        /// <summary>
-        /// This method will check if the number of seconds is setted correctly.
-        /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
         private string CheckValiditySeconds()
         {
             int seconds;
@@ -127,29 +103,18 @@ namespace ConnectivityModule.Wpf
             return errorString;
         }
 
-        /// <summary>
-        /// This method will be called when the text from the DeviceNameBox changes.
-        /// </summary>
         private void DeviceBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
         }
 
-        /// <summary>
-        /// This method will be called when the text from the DeviceNameBox changes.
-        /// </summary>
         private void SecondsBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             CheckValidity();
         }
 
-        /// <summary>
-        /// Displays the error message received as parameter.
-        /// </summary>
-        /// <param name="errorMessage">The text of the error message</param>
         private void DisplayErrorMessage(string errorString)
         {
-            // In the case that we have an error message we display it.
             if (!errorString.Equals(string.Empty))
             {
                 textInvalid.Text = errorString;

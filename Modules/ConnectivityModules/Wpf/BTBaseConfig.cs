@@ -4,28 +4,18 @@ namespace ConnectivityModule.Wpf
 {
     public class BTBaseConfig : WpfConfiguration
     {
-        /// <summary>
-        /// The name of the device
-        /// </summary>
         public string DeviceName
         {
             get;
             protected set;
         }
 
-        /// <summary>
-        /// The address of the device.
-        /// </summary>
         public string DeviceAddress
         {
             get;
             protected set;
         }
 
-        /// <summary>
-        /// This method will check if the name of the device is valid.
-        /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
         protected string CheckValidityDeviceName(string name)
         {
             int textLength = name.Length;
@@ -48,10 +38,6 @@ namespace ConnectivityModule.Wpf
             return errorString;
         }
 
-        /// <summary>
-        /// This method will check if the address of the device is valid.
-        /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
         protected string CheckValidityDeviceAddress(string deviceAddress)
         {
             int textLength = deviceAddress.Length;

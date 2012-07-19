@@ -18,7 +18,7 @@ namespace OfficeModules.Events.Lync
     public class LyncPersonalNoteChanged : EventBase, IWpfConfigurable
     {
         /// <summary>
-        /// The User ID of the predefined contact.
+        /// The User ID of the predefined contact that will be monitored.
         /// </summary>
         [DataMember]
         private string userId;
@@ -30,9 +30,6 @@ namespace OfficeModules.Events.Lync
 
         private EventHandler<ContactInformationChangedEventArgs> contactInformationChanged;
 
-        /// <summary>
-        /// This method is called after the event is loaded.
-        /// </summary>
         protected override void OnAfterLoad()
         {
             lyncClient = null;
@@ -41,9 +38,6 @@ namespace OfficeModules.Events.Lync
             contactInformationChanged = Contact_ContactInformationChanged;
         }
 
-        /// <summary>
-        /// This method gets the Lync Client instance and is subscribing to the ContactInformationChangedEvent.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             try
@@ -91,9 +85,6 @@ namespace OfficeModules.Events.Lync
             }
         }
 
-        /// <summary>
-        /// This method is unsubscribing from the ContactInformationChangedEvent.
-        /// </summary>
         protected override void OnDisabled(DisabledEventArgs e)
         {
             lyncClient = null;
@@ -106,7 +97,7 @@ namespace OfficeModules.Events.Lync
         }
 
         /// <summary>
-        /// This method is called when the ContactInformationChangedEvent is triggered, and if the type of the event is ContactInformationType.PersonalNote will trigger this event.
+        /// This method is called when the ContactInformationChangedEvent is triggered, and will trigger this event if the personal note of the monitored user changes.
         /// </summary>
         private void Contact_ContactInformationChanged(object sender, ContactInformationChangedEventArgs e)
         {
@@ -123,7 +114,7 @@ namespace OfficeModules.Events.Lync
                 selectedPersonalNote = personalNoteObject.ToString();
             }
 
-            // If the location changed event is triggered and the new personal note is different from the previous one, we trigger the event
+            // If the new personal note is different from the previous one, we trigger the event.
             if (e.ChangedContactInformation.Contains(ContactInformationType.PersonalNote) && !currentPersonalNote.ToString().ToLower().Equals(selectedPersonalNote.ToLower()))
             {
                 Trigger();

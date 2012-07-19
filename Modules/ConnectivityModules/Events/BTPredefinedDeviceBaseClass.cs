@@ -19,9 +19,6 @@ namespace ConnectivityModule.Events
     [DataContract]
     public abstract class BTPredefinedDeviceBaseClass : EventBase
     {
-        /// <summary>
-        /// The name of the device that is monitored.
-        /// </summary>
         [DataMember]
         protected string deviceName;
 
@@ -41,14 +38,10 @@ namespace ConnectivityModule.Events
         protected bool wasVisible;
         protected bool isFirstRun;
 
-        /// <summary>
-        /// This method is initializing the needed objects and starts the timer.
-        /// If the bluetooth capability is not available for this computer the event will not be enabled and an error message will be shown.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             timer = new Timer();
-            timer.Interval = 100; // Setting the timer to 0.1 seconds so that it will get the initial list right away
+            timer.Interval = 100; // Setting the timer to 0.1 seconds so that it will get the initial list right away.
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
 
             isVisible = false;
@@ -72,9 +65,6 @@ namespace ConnectivityModule.Events
             }
         }
 
-        /// <summary>
-        /// This method is releasing the used objects when the event is disabled.
-        /// </summary>
         protected override void OnDisabled(DisabledEventArgs e)
         {
             if (timer != null)
@@ -90,10 +80,6 @@ namespace ConnectivityModule.Events
             }
         }
 
-        /// <summary>
-        /// This method checks about changes in a device's visibility and it's updating the isVisible and wasVisible fields when changes occur.
-        /// </summary>
-        /// <returns>Returns true if the operations of this method completed successfully, false otherwise </returns>
         protected bool VerifyDeviceVisibility()
         {
             if (isFirstRun)
@@ -153,9 +139,6 @@ namespace ConnectivityModule.Events
             }
         }
 
-        /// <summary>
-        /// This method will be implemented by the classes that inherit this class and will be called when the timer.Elapsed event will be raised.
-        /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
         protected abstract void timer_Elapsed(object sender, ElapsedEventArgs e);
 

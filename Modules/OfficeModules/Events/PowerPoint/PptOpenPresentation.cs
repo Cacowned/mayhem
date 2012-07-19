@@ -15,29 +15,18 @@ namespace OfficeModules.Events
         OPowerPoint.Application powerPoint;
         OPowerPoint.EApplication_AfterPresentationOpenEventHandler openPresentationEvent;
 
-        /// <summary>
-        /// This method is called after the event is loaded.
-        /// </summary>
         protected override void OnAfterLoad()
         {
-            // Create the event handler delegate to attach
             openPresentationEvent = PresentationOpened;
         }
 
-        /// <summary>
-        /// This method is called when the EApplication_AfterPresentationOpenEventHandler is triggered and will trigger this event.
-        /// </summary>
         private void PresentationOpened(OPowerPoint.Presentation pres)
         {
             Trigger();
         }
 
-        /// <summary>
-        /// This method gets the PowerPoint instance and is subscribing to the EApplication_AfterPresentationOpenEventHandler.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            // When enabled, try and get the PowerPoint instance
             try
             {
                 powerPoint = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");

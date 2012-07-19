@@ -14,13 +14,11 @@ namespace ConnectivityModule.Events
     [MayhemModule("Wi-Fi: Network Becomes Available", "The selected network becomes available")]
     public class WiFiNetworkBecomesAvailable : WiFiEventBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// This method is called when the timer.Elapsed event is raised and checks if the monitored network has become available since the last check.
-        /// </summary>
         protected override void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             timer.Stop();
 
+            //  Checking if the monitored network has become available since the last check.
             if (VerifyNetworkAvailability() && !wasAvailable && isAvailable)
             {
                 Trigger();

@@ -11,10 +11,6 @@
             protected set;
         }
 
-        /// <summary>
-        /// This method will check if the number of seconds is setted correctly.
-        /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
         protected string CheckValiditySeconds(string secondsText)
         {
             int seconds;

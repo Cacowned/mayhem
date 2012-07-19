@@ -28,9 +28,6 @@ namespace OfficeModules.Reactions.Excel
         private OExcel.Application app;
         private string workbookName;
 
-        /// <summary>
-        /// This method will check if the predefined folder exists.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             if (!Directory.Exists(fileName))
@@ -41,7 +38,8 @@ namespace OfficeModules.Reactions.Excel
         }
 
         /// <summary>
-        /// This method will get the instance of the Excel Application and save the charts from the active workbook.
+        /// If an instance of the Excel application exits this method will save the charts from the active workbook.
+        /// </summary>
         public override void Perform()
         {
             try

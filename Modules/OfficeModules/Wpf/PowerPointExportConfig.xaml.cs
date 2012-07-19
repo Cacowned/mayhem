@@ -23,9 +23,6 @@ namespace OfficeModules.Wpf
             private set;
         }
 
-        /// <summary>
-        /// The title of the user control.
-        /// </summary>
         public override string Title
         {
             get { return configTitle; }
@@ -33,11 +30,6 @@ namespace OfficeModules.Wpf
 
         private string configTitle;
 
-        /// <summary>
-        /// The constructor of the PowerPointExportConfig class.
-        /// </summary>
-        /// <param name="filename">The location of the file where the information will be saved.</param>
-        /// <param name="title">The title of the config window</param>
         public PowerPointExportConfig(string filename, string title)
         {
             InitializeComponent();
@@ -46,26 +38,17 @@ namespace OfficeModules.Wpf
             configTitle = title;
         }
 
-        /// <summary>
-        /// This method will be called when the user control will start loading.
-        /// </summary>
         public override void OnLoad()
         {
             LocationBox.Text = FileName;
             CheckValidity();
         }
 
-        /// <summary>
-        /// This method will be called when the user clicks the save button.
-        /// </summary>
         public override void OnSave()
         {
             FileName = LocationBox.Text;
         }
 
-        /// <summary>
-        /// This method will check the validity of the information provided by the user.
-        /// </summary>
         private void CheckValidity()
         {
             string text = LocationBox.Text;
@@ -95,9 +78,6 @@ namespace OfficeModules.Wpf
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        /// <summary>
-        /// This method will let the user select the file where the information will be saved
-        /// </summary>
         private void Browse_File_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new OpenFileDialog();
@@ -112,9 +92,6 @@ namespace OfficeModules.Wpf
             }
         }
 
-        /// <summary>
-        /// This method will let the user select the location where the information will be saved.
-        /// </summary>
         private void Browse_Folder_Click(object sender, RoutedEventArgs e)
         {
             var dlgFolder = new FolderBrowserDialog();
@@ -125,9 +102,6 @@ namespace OfficeModules.Wpf
             }
         }
 
-        /// <summary>
-        /// This method will create a new file.
-        /// </summary>
         private void Create_File_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -145,9 +119,6 @@ namespace OfficeModules.Wpf
             }
         }
 
-        /// <summary>
-        /// This method will be called when the text from the  LocationBox changes.
-        /// </summary>
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
