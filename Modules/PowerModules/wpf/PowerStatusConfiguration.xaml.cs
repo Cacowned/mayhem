@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using MayhemWpf.UserControls;
-using System.Windows.Forms;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Forms;
+using MayhemWpf.UserControls;
 
 namespace PreGsocTest1
 {
@@ -24,7 +13,7 @@ namespace PreGsocTest1
         public PowerStatusChoice ChosenStatus { get; private set; }
         public float Percentage { get; private set; }
         public BatteryChargeStatus ChosenBCS { get; private set; }
-        public int RemainingTime { get; private set; } //seconds
+        public int RemainingTime { get; private set; } //minutes
         public PowerStatusConfiguration(PowerStatusChoice chosenstatus, float percentage, BatteryChargeStatus chosenBCS, int remainingTime)
         {
             ChosenStatus = chosenstatus;

@@ -4,12 +4,13 @@ using System.Windows.Forms;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
+using System.IO;
 
 namespace PreGsocTest1
 {
     [DataContract]
-    [MayhemModule("1Power: Power Status", "This event triggers when a particular laptop power status is reached.")]
-    public class PowerStatus1 : EventBase, IWpfConfigurable
+    [MayhemModule("2Power: Power Status", "This event triggers when a particular laptop power status is reached.")]
+    public class PowerStatus2 : EventBase, IWpfConfigurable
     {
         [DataMember]
         private PowerStatusChoice chosenStatus;
@@ -18,7 +19,7 @@ namespace PreGsocTest1
         [DataMember]
         private BatteryChargeStatus chosenBCS;
         [DataMember]
-        private int remainingTime;
+        private int remainingTime; //minutes
         private Timer pollingTimer;
         private int pollingTimerInterval; //milliseconds
         private bool raiseEvent;
@@ -34,6 +35,7 @@ namespace PreGsocTest1
             chosenBCS = config.ChosenBCS;
             percentage = config.Percentage;
             remainingTime = config.RemainingTime;
+            MessageBox.Show(chosenStatus.ToString() + " " + chosenBCS.ToString() + " " + percentage.ToString() + " " + remainingTime.ToString());
         }
         #endregion
         public string GetConfigString()
@@ -52,16 +54,59 @@ namespace PreGsocTest1
         {
             chosenStatus = PowerStatusChoice.PowerState;
             chosenBCS = BatteryChargeStatus.Charging;
-            remainingTime = 30;
+            remainingTime = 30*60;
             percentage = 30;
         }
         protected override void OnAfterLoad()
         {
+            TestAndSetRaiseEvent();
             pollingTimerInterval = 2000; //2 seconds
             pollingTimer = new Timer();
             pollingTimer.Enabled = true;
             pollingTimer.Interval = pollingTimerInterval;
             pollingTimer.Tick += new EventHandler(ConditionCheck);
+        }
+
+        private void TestAndSetRaiseEvent()
+        {
+            raiseEvent = false;
+            switch (chosenStatus)
+            {
+                case PowerStatusChoice.PowerState:
+                    switch (chosenBCS)
+                    {
+                        case BatteryChargeStatus.Charging:
+                        case BatteryChargeStatus.Critical:
+                            if ((chosenBCS & SystemInformation.PowerStatus.BatteryChargeStatus) != chosenBCS)
+                            {
+                                raiseEvent = true;
+                            }
+                            break;
+                        case BatteryChargeStatus.Low: 
+                            if ((BatteryChargeStatus.High & SystemInformation.PowerStatus.BatteryChargeStatus) != BatteryChargeStatus.High)
+                            {
+                                raiseEvent = true;
+                            }
+                            break;
+                    }
+                    break;
+                case PowerStatusChoice.Percentage:
+                    if (BatteryPercentageRemaining() > percentage)
+                        raiseEvent = true;
+                    break;
+                case PowerStatusChoice.RemainingTime:
+                    if (BatteryMinutesRemaining() > remainingTime)
+                        raiseEvent = true;
+                    break;
+            }
+        }
+        protected int BatteryMinutesRemaining()
+        {
+            return SystemInformation.PowerStatus.BatteryLifeRemaining / 60;
+        }
+        protected int BatteryPercentageRemaining()
+        {
+            return (int)(SystemInformation.PowerStatus.BatteryLifePercent*100);
         }
         protected override void OnDisabled(DisabledEventArgs e)
         {
@@ -72,7 +117,7 @@ namespace PreGsocTest1
         protected override void OnEnabling(EnablingEventArgs e)
         {
             pollingTimer.Start();
-            raiseEvent = true;
+            TestAndSetRaiseEvent();
         }
         private void callTrigger()
         {
@@ -81,6 +126,7 @@ namespace PreGsocTest1
         }
         private void ConditionCheck(Object sender, EventArgs e)
         {
+            //MessageBox.Show("in cond check");
             if (raiseEvent)
             {
                 switch (chosenStatus)
@@ -88,73 +134,24 @@ namespace PreGsocTest1
                     case PowerStatusChoice.PowerState:
                         if ((chosenBCS & SystemInformation.PowerStatus.BatteryChargeStatus) == chosenBCS)
                         {
-                            //MessageBox.Show(SystemInformation.PowerStatus.BatteryChargeStatus.ToString());
+                            MessageBox.Show(SystemInformation.PowerStatus.BatteryChargeStatus.ToString());
                             callTrigger();
                         }
                         break;
                     case PowerStatusChoice.Percentage:
-                        //MessageBox.Show("in the right place");
-                        float diff = Math.Abs(percentage - (SystemInformation.PowerStatus.BatteryLifePercent * 100));
-                        if (diff < 1)
-                        {
-                            //MessageBox.Show(diff.ToString());
+                        //MessageBox.Show("in the right place "+percentage.ToString()+" "+BatteryPercentageRemaining());
+                        if(percentage <= BatteryPercentageRemaining())
                             callTrigger();
-                        }
                         break;
                     case PowerStatusChoice.RemainingTime:
-                        if (remainingTime <= SystemInformation.PowerStatus.BatteryLifeRemaining)
+                        if (remainingTime <= BatteryMinutesRemaining())
                             callTrigger();
                         break;
                 }
             }
             else
             {
-            }
-        }
-        private void ConditionCheck1(Object sender, EventArgs e)
-        {
-            if (!raiseEvent)
-            {
-                if (chosenStatus == PowerStatusChoice.PowerState && ((chosenBCS & BatteryChargeStatus.Charging)==chosenBCS))
-                {
-                    if ((SystemInformation.PowerStatus.BatteryChargeStatus & BatteryChargeStatus.Charging)!=BatteryChargeStatus.Charging)
-                        raiseEvent = true;
-                }
-                else
-                {
-                    if ((SystemInformation.PowerStatus.BatteryChargeStatus & BatteryChargeStatus.Charging)==BatteryChargeStatus.Charging)
-                        raiseEvent = true;
-                }
-                return;
-            }
-            else
-            {
-                //MessageBox.Show(SystemInformation.PowerStatus.BatteryChargeStatus.ToString());
-                //MessageBox.Show(chosenBCS.ToString());
-                //MessageBox.Show(chosenStatus.ToString());
-                if (!(chosenStatus == PowerStatusChoice.PowerState && ((chosenBCS & BatteryChargeStatus.Charging)==chosenBCS))) //ensures one trigger everytime plug is disconnected. we dont want evetns while charging.
-                {
-                    if ((SystemInformation.PowerStatus.BatteryChargeStatus & BatteryChargeStatus.Charging)==BatteryChargeStatus.Charging)
-                        return;
-                }
-                switch (chosenStatus)
-                {
-                    case PowerStatusChoice.PowerState:
-                        if ((chosenBCS & SystemInformation.PowerStatus.BatteryChargeStatus) == chosenBCS)
-                        {
-                            //MessageBox.Show(SystemInformation.PowerStatus.BatteryChargeStatus.ToString());
-                            callTrigger();
-                        }
-                        break;
-                    case PowerStatusChoice.Percentage:
-                        if (percentage <= (SystemInformation.PowerStatus.BatteryLifePercent * 100))
-                            callTrigger();
-                        break;
-                    case PowerStatusChoice.RemainingTime:
-                        if (remainingTime <= SystemInformation.PowerStatus.BatteryLifeRemaining)
-                            callTrigger();
-                        break;
-                }
+                TestAndSetRaiseEvent();
             }
         }
     }
