@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DebugModules">
+      <HintPath>..\packages\DebugModules.1.0.2\lib\net40\DebugModules.dll</HintPath>
+    </Reference>
     <Reference Include="Emgu.CV">
       <HintPath>.\Emgu.CV.dll</HintPath>
     </Reference>
@@ -41,12 +44,10 @@
       <HintPath>.\Emgu.Util.dll</HintPath>
     </Reference>
     <Reference Include="MayhemCore">
-      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\MayhemCore.1.0.0\lib\net40\MayhemCore.dll</HintPath>
     </Reference>
     <Reference Include="MayhemWpf">
-      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\MayhemWpf.1.0.0\lib\net40\MayhemWpf.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
