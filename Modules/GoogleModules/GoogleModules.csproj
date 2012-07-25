@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\GoogleModules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -42,9 +42,6 @@
     </Reference>
     <Reference Include="Google.Apis.Authentication.OAuth2">
       <HintPath>Libs\Google.Apis.Authentication.OAuth2.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Plus.v1">
-      <HintPath>Libs\Google.Apis.Plus.v1.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis.Plus.v1moments">
       <HintPath>Libs\Google.Apis.Plus.v1moments.dll</HintPath>
@@ -77,7 +74,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\GooglePlusReceiveComment.cs" />
     <Compile Include="InsertKeyWindow.cs">
       <SubType>Form</SubType>
     </Compile>

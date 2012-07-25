@@ -8,6 +8,9 @@ using MayhemWpf.UserControls;
 
 namespace GoogleModules.Reactions
 {
+    /// <summary>
+    /// A class used for posting the selected video to the user's Google+ History page.
+    /// </summary>
     [DataContract]
     [MayhemModule("Google+: Post Video", "Posts the selected video to Google+ History")]
     public class GooglePlusPostVideo : GooglePlusBaseReaction, IWpfConfigurable

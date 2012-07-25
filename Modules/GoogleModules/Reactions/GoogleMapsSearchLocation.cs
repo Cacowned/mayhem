@@ -9,6 +9,9 @@ using MayhemWpf.UserControls;
 
 namespace GoogleModules.Reactions
 {
+    /// <summary>
+    /// A class that will open a webpage containing the search result on Google Maps for the selected location.
+    /// </summary>
     [DataContract]
     [MayhemModule("Google Maps: Search Location", "Searches the selected location")]
     public class GoogleMapsSearchLocation : ReactionBase, IWpfConfigurable
@@ -17,12 +20,12 @@ namespace GoogleModules.Reactions
         private string location;
 
         [DataMember]
-        private string type;
+        private string mapType;
 
         public override void Perform()
         {
             string shortType = "h";
-            switch (type)
+            switch (mapType)
             {
                 case "Map":
                     shortType = "m";
@@ -45,7 +48,7 @@ namespace GoogleModules.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new GoogleMapsSearchLocationConfig(location, type, Strings.GoogleMapsSearchLocation_Title); }
+            get { return new GoogleMapsSearchLocationConfig(location, mapType, Strings.GoogleMapsSearchLocation_Title); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
@@ -58,7 +61,7 @@ namespace GoogleModules.Reactions
             }
 
             location = config.Location;
-            type = config.MapType;
+            mapType = config.MapType;
         }
 
         #endregion
@@ -67,7 +70,7 @@ namespace GoogleModules.Reactions
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.LocationMapType_ConfigString, location, type);
+            return string.Format(CultureInfo.CurrentCulture, Strings.LocationMapType_ConfigString, location, mapType);
         }
 
         #endregion

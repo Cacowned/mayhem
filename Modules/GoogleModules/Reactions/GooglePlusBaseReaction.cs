@@ -14,9 +14,15 @@ using MayhemWpf.UserControls;
 
 namespace GoogleModules.Reactions
 {
+    /// <summary>
+    /// An abstract base class used for posting information to the Google+ History page.
+    /// </summary>
     [DataContract]
     public abstract class GooglePlusBaseReaction : ReactionBase
     {
+        /// <summary>
+        /// An Url that describes the type of the moment the user will add to the Google+ History page.
+        /// </summary>
         [DataMember]
         protected string MomentUrl;
 
@@ -47,6 +53,7 @@ namespace GoogleModules.Reactions
             moment.Type = activityType;           
             moment.Target = itemScope;
 
+            // Preparing the request.
             MomentsResource.InsertRequest insReq = service.Moments.Insert(moment, "me", MomentsResource.Collection.Vault);
 
             Moment mom = insReq.Fetch();
@@ -56,12 +63,12 @@ namespace GoogleModules.Reactions
         {
             try
             {
-                // Get the auth URL:
+                // Get the auth URL.
                 IAuthorizationState state = new AuthorizationState(new[] { Scope });
                 state.Callback = new Uri(NativeApplicationClient.OutOfBandCallbackUrl);
                 Uri authUri = arg.RequestUserAuthorization(state);
 
-                // Request authorization from the user (by opening a browser window):
+                // Request authorization from the user (by opening a browser window).
                 Process.Start(authUri.ToString());
 
                 InsertKeyWindow keyWindow = new InsertKeyWindow();
@@ -69,7 +76,7 @@ namespace GoogleModules.Reactions
 
                 string authCode = keyWindow.AuthorizationCode;
 
-                // Retrieve the access token by using the authorization code:*/
+                // Retrieve the access token by using the authorization code.
                 return arg.ProcessUserAuthorization(authCode, state);
             }
             catch (Exception ex)

@@ -11,27 +11,18 @@ namespace GoogleModules.Wpf
     /// </summary>
     public partial class GoogleMapsSearchLocationConfig : WpfConfiguration
     {
-        /// <summary>
-        /// The location that will be searched
-        /// </summary>
         public string Location
         {
             get;
             private set;
         }
 
-        /// <summary>
-        /// The type of the map that will be displayed
-        /// </summary>
         public string MapType
         {
             get;
             private set;
         }
 
-        /// <summary>
-        /// The title of the user control.
-        /// </summary>
         public override string Title
         {
             get { return configTitle; }
@@ -39,13 +30,7 @@ namespace GoogleModules.Wpf
         
         private string configTitle;
         private ObservableCollection<string> mapTypes = null;
-
-        /// <summary>
-        /// The constructor of the GoogleMapsSearchLocationConfig class.
-        /// </summary>
-        /// <param name="locationText">The location that will be searched</param>
-        /// <param name="mapType">The type of the map</param>
-        /// <param name="title">The title of the user control</param>        
+    
         public GoogleMapsSearchLocationConfig(string locationText, string mapType, string title)
         {
             InitializeComponent();
@@ -55,9 +40,6 @@ namespace GoogleModules.Wpf
             configTitle = title;
         }
 
-        /// <summary>
-        /// This method will be called when the user control will start loading.
-        /// </summary>
         public override void OnLoad()
         {
             CanSave = true;
@@ -83,19 +65,12 @@ namespace GoogleModules.Wpf
             DisplayErrorMessage(CheckLocationText());
         }
 
-        /// <summary>
-        /// This method will be called when the used clicks the save button.
-        /// </summary>
         public override void OnSave()
         {
             Location = LocationBox.Text;
             MapType = MapTypesComboBox.SelectedItem as string;
         }
 
-        /// <summary>
-        /// This method will check if the location is valid.
-        /// </summary>
-        /// <returns>An error string that will be displayed in the user control</returns>
         private string CheckLocationText()
         {
             int textLength = LocationBox.Text.Length;
@@ -118,18 +93,11 @@ namespace GoogleModules.Wpf
             return errorString;
         }
 
-        /// <summary>
-        /// This method will be called when the text from the LocationBox changes.
-        /// </summary>
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             DisplayErrorMessage(CheckLocationText());
         }
 
-        /// <summary>
-        /// Displays the error message received as parameter.
-        /// </summary>
-        /// <param name="errorMessage">The text of the error message</param>
         private void DisplayErrorMessage(string errorString)
         {
             // In the case that we have an error message we display it.
