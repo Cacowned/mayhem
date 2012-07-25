@@ -7,6 +7,9 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Events
 {
+    /// <summary>
+    /// An event that will be triggered when the active presentation changes.
+    /// </summary>
     public class PptActivePresentationChanged : EventBase
     {
         [MayhemModule("PowerPoint: Active Presentation Changed", "Triggers when the active presentation has changed")]
@@ -17,7 +20,6 @@ namespace OfficeModules.Events
 
             protected override void OnAfterLoad()
             {
-                // Create the event handler delegate to attach
                 activePresentationChangedEvent = ActivePresentationChanged;
             }
 
@@ -28,7 +30,6 @@ namespace OfficeModules.Events
 
             protected override void OnEnabling(EnablingEventArgs e)
             {
-                // When enabled, try and get the PowerPoint instance
                 try
                 {
                     powerPoint = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");

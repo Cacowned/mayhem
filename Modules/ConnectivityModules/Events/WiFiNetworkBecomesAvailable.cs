@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Timers;
 using ConnectivityModule.Wpf;
 using MayhemCore;
@@ -15,13 +14,11 @@ namespace ConnectivityModule.Events
     [MayhemModule("Wi-Fi: Network Becomes Available", "The selected network becomes available")]
     public class WiFiNetworkBecomesAvailable : WiFiEventBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// This method is called when the timer.Elapsed event is raised and checks if the monitored network has become available since the last check.
-        /// </summary>
         protected override void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             timer.Stop();
 
+            //  Checking if the monitored network has become available since the last check.
             if (VerifyNetworkAvailability() && !wasAvailable && isAvailable)
             {
                 Trigger();
@@ -32,35 +29,9 @@ namespace ConnectivityModule.Events
             timer.Start();
         }
 
-        #region IWpfConfigurable Methods
-
         public WpfConfiguration ConfigurationControl
         {
-            get { return new NetworkBecomesAvailableConfig(networkName, seconds); }
+            get { return new NetworkAvailableConfig(networkName, seconds, Strings.NetworkBecomesAvailable_Title); }
         }
-
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            var config = configurationControl as NetworkBecomesAvailableConfig;
-
-            if (config == null)
-            {
-                return;
-            }
-
-            networkName = config.NetworkName;
-            seconds = config.Seconds;
-        }
-
-        #endregion
-
-        #region IConfigurable Members
-
-        public string GetConfigString()
-        {
-            return string.Format(CultureInfo.CurrentCulture, Strings.NetworkName_ConfigString, networkName);
-        }
-
-        #endregion
     }
 }

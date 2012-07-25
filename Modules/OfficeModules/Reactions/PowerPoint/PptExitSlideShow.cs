@@ -6,11 +6,17 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions
 {
+    /// <summary>
+    /// A reaction that will close the active slide show.
+    /// </summary>
     [MayhemModule("PowerPoint: Exit Slideshow", "Exits the current slide show")]
     public class PptExitSlideShow : ReactionBase
     {
         private OPowerPoint.Application app;
 
+        /// <summary>
+        /// If an instance of the PowerPoint application exits this method will close the active slideshow.
+        /// </summary>
         public override void Perform()
         {
             try
@@ -37,7 +43,7 @@ namespace OfficeModules.Reactions
                 {
                     if (windows > 1)
                     {
-                        // we've got more than one
+                        // We've got more than one slideshow open.
                         ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_MoreThanOneWindow);
                     }
 

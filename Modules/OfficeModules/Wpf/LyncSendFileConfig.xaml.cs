@@ -7,15 +7,21 @@ using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// User Control for sending a file to a predefined user.
+    /// </summary>
     public partial class LyncSendFileConfig : WpfConfiguration
     {
-        public string FileName
+        public string UserId
         {
             get;
             private set;
         }
 
-        public string UserId
+        /// <summary>
+        /// The path of the file to be sent to the user.
+        /// </summary>
+        public string FileName
         {
             get;
             private set;
@@ -23,7 +29,7 @@ namespace OfficeModules.Wpf
 
         public override string Title
         {
-            get { return "Send File"; }
+            get { return "Lync: Send File"; }
         }
 
         public LyncSendFileConfig(string userId, string filename)

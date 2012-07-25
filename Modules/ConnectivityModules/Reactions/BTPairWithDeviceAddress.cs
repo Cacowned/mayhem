@@ -18,9 +18,6 @@ namespace ConnectivityModule.Reactions
     [MayhemModule("Bluetooth: Pair With Device By Address", "Pair with a specific device identified by its address")]
     public class BTPairWithDeviceAddress : BTPairBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// The address of the device represented as a string
-        /// </summary>
         [DataMember]
         protected string deviceAddressString;
 
@@ -45,6 +42,11 @@ namespace ConnectivityModule.Reactions
                     ErrorLog.AddError(ErrorType.Message, String.Format(Strings.BT_SuccessfulPairAddress, deviceAddressString));
                 }
             }
+            catch (PlatformNotSupportedException ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.BT_NoBluetooth);
+                Logger.Write(ex);
+            }
             catch (SocketException ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.BT_CantConnectToDevice);
@@ -61,12 +63,12 @@ namespace ConnectivityModule.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new PairWithDeviceByAddressConfig(deviceAddressString, accessPin); }
+            get { return new PairWithDeviceConfig(deviceAddressString, accessPin, Strings.PairWithDeviceByAddress_Title, Strings.BT_DeviceTypeTextAddress, Strings.BT_InformationTextPairAddress); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = configurationControl as PairWithDeviceByAddressConfig;
+            var config = configurationControl as PairWithDeviceConfig;
 
             if (config == null)
             {

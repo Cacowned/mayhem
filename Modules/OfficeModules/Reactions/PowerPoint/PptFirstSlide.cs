@@ -6,11 +6,17 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions.PowerPoint
 {
+    /// <summary>
+    /// A reaction that will navigate to the first slide of the active slideshow.
+    /// </summary>
     [MayhemModule("PowerPoint: First Slide", "Navigates to the first slide")]
     public class PptFirstSlide : ReactionBase
     {
         private OPowerPoint.Application app;
 
+        /// <summary>
+        /// If an instance of the PowerPoint application exits this method will navigate to the first slide of the active slideshow.
+        /// </summary>
         public override void Perform()
         {
             try

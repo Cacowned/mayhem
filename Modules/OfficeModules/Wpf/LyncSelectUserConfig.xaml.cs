@@ -4,6 +4,9 @@ using MayhemWpf.UserControls;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// User Control for selecting the user that will be monitored.
+    /// </summary>
     public partial class LyncSelectUserConfig : WpfConfiguration
     {
         public string UserId
@@ -14,14 +17,17 @@ namespace OfficeModules.Wpf
 
         public override string Title
         {
-            get { return "Select User"; }
+            get { return configTitle; }
         }
 
-        public LyncSelectUserConfig(string userId)
+        private string configTitle;
+
+        public LyncSelectUserConfig(string userId, string title)
         {
             UserId = userId;
 
             InitializeComponent();
+            configTitle = title;
         }
 
         public override void OnLoad()

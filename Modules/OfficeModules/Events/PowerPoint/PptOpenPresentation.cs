@@ -6,6 +6,9 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Events
 {
+    /// <summary>
+    /// An event that will be triggered when a presentation is opened.
+    /// </summary>
     [MayhemModule("PowerPoint: Open Presentation", "Triggers when a presentation is opened")]
     public class PptOpenPresentation : EventBase
     {
@@ -14,7 +17,6 @@ namespace OfficeModules.Events
 
         protected override void OnAfterLoad()
         {
-            // Create the event handler delegate to attach
             openPresentationEvent = PresentationOpened;
         }
 
@@ -25,7 +27,6 @@ namespace OfficeModules.Events
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            // When enabled, try and get the PowerPoint instance
             try
             {
                 powerPoint = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");
@@ -39,6 +40,9 @@ namespace OfficeModules.Events
             }
         }
 
+        /// <summary>
+        /// This method is unsubscribing from the EApplication_AfterPresentationOpenEventHandler.
+        /// </summary>
         protected override void OnDisabled(DisabledEventArgs e)
         {
             if (powerPoint != null)

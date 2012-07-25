@@ -6,6 +6,9 @@ using OWord = Microsoft.Office.Interop.Word;
 
 namespace OfficeModules.Events.Word
 {
+    /// <summary>
+    /// An event that will be triggered when a document is printed.
+    /// </summary>
     [MayhemModule("Word: Print Document", "Triggers when a document is printed")]
     public class WordPrintDocument : EventBase
     {
@@ -14,7 +17,6 @@ namespace OfficeModules.Events.Word
 
         protected override void OnAfterLoad()
         {
-            // Create the event handler delegate to attach
             printDocumentEvent = DocumentPrinted;
         }
 
@@ -25,7 +27,6 @@ namespace OfficeModules.Events.Word
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            // When enabled, try and get the Word instance
             try
             {
                 word = (OWord.Application)Marshal.GetActiveObject("Word.Application");

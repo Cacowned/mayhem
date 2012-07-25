@@ -6,6 +6,9 @@ using OExcel = Microsoft.Office.Interop.Excel;
 
 namespace OfficeModules.Events.Excel
 {
+    /// <summary>
+    /// An event that will be triggered when a workbook is saved.
+    /// </summary>
     [MayhemModule("Excel: Save Workbook", "Triggers when a workbook is saved")]
     public class ExcelSaveWorkbook : EventBase
     {
@@ -14,19 +17,17 @@ namespace OfficeModules.Events.Excel
 
         protected override void OnAfterLoad()
         {
-            // Create the event handler delegate to attach
             saveWorkbookEvent = WorkbookSaved;
         }
 
-        private void WorkbookSaved(OExcel.Workbook workbook, bool succes)
+        private void WorkbookSaved(OExcel.Workbook workbook, bool success)
         {
-            if (succes) // Only if the save action was succesful the event will be triggered
+            if (success) // Only if the save action was succesful the event will be triggered
                 Trigger();
         }
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            // When enabled, try and get the PowerPoint instance
             try
             {
                 excel = (OExcel.Application)Marshal.GetActiveObject("Excel.Application");

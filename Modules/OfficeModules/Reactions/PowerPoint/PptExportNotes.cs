@@ -12,12 +12,15 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions.PowerPoint
 {
+    /// <summary>
+    /// A reaction that will export the notes of the active presentation.
+    /// </summary>
     [DataContract]
     [MayhemModule("PowerPoint: Export Notes", "Exports the notes from the active presentation")]
     public class PptExportNotes : ReactionBase, IWpfConfigurable
     {
         /// <summary>
-        /// The path of the file were the notes would be saved
+        /// The path of the file were the notes will be saved.
         /// </summary>
         [DataMember]
         private string fileName;
@@ -34,6 +37,9 @@ namespace OfficeModules.Reactions.PowerPoint
             }
         }
 
+        /// <summary>
+        /// If an instance of the PowerPoint application exits this method will export the notes of the active presentation to the selected file.
+        /// </summary>
         public override void Perform()
         {
             streamWriter = null;
@@ -139,7 +145,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new PowerPointExportConfig(fileName); }
+            get { return new PowerPointExportConfig(fileName, Strings.PptExportNotes_Title); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)

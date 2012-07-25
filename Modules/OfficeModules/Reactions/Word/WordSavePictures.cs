@@ -17,10 +17,16 @@ using OWord = Microsoft.Office.Interop.Word;
 
 namespace OfficeModules.Reactions.Word
 {
+    /// <summary>
+    /// A reaction that will save the pictures from the current document.
+    /// </summary>
     [DataContract]
     [MayhemModule("Word: Save Pictures", "Saves the pictures from the current document")]
     public class WordSavePictures : ReactionBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The path of the folder where the pictures will be saved.
+        /// </summary>
         [DataMember]
         private string fileName;
 
@@ -36,6 +42,9 @@ namespace OfficeModules.Reactions.Word
             }
         }
 
+        /// <summary>
+        /// If an instance of the Word application exits this method will save the pictures from the current document.
+        /// </summary>
         public override void Perform()
         {
             if (!Directory.Exists(fileName))

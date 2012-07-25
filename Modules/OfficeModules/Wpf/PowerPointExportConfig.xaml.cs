@@ -9,8 +9,14 @@ using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// The User Control used for setting the file for the exported information.
+    /// </summary>
     public partial class PowerPointExportConfig : WpfConfiguration
     {
+        /// <summary>
+        /// The location of the file where the information will be saved.
+        /// </summary>
         public string FileName
         {
             get;
@@ -19,14 +25,17 @@ namespace OfficeModules.Wpf
 
         public override string Title
         {
-            get { return "Export"; }
+            get { return configTitle; }
         }
 
-        public PowerPointExportConfig(string filename)
+        private string configTitle;
+
+        public PowerPointExportConfig(string filename, string title)
         {
             InitializeComponent();
 
             FileName = filename;
+            configTitle = title;
         }
 
         public override void OnLoad()

@@ -16,9 +16,6 @@ namespace ConnectivityModule.Reactions
     [MayhemModule("Bluetooth: Send File By Name", "Sends a file to a specific device identified by its name")]
     public class BTSendFileName : BTSendFileBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// The name of the device.
-        /// </summary>
         [DataMember]
         private string deviceName;
 
@@ -59,6 +56,11 @@ namespace ConnectivityModule.Reactions
 
                 SendFileMethod();
             }
+            catch (PlatformNotSupportedException ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.BT_NoBluetooth);
+                Logger.Write(ex);
+            }
             catch (Exception ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.BT_CantConnectToDevice);
@@ -72,12 +74,12 @@ namespace ConnectivityModule.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new SendFileToDeviceByNameConfig(deviceName, filePath, accessPin); }
+            get { return new SendFileToDeviceConfig(deviceName, filePath, accessPin, Strings.SendFileToDeviceByName_Title, Strings.BT_DeviceTypeTextName, Strings.BT_InformationTextSendFileName); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = configurationControl as SendFileToDeviceByNameConfig;
+            var config = configurationControl as SendFileToDeviceConfig;
 
             if (config == null)
             {

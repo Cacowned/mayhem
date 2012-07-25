@@ -20,13 +20,8 @@ namespace ConnectivityModule.Events
         private uint signalQualityStrongestNetwork;
         private uint newMaximumQualityValue;
 
-        /// <summary>
-        /// This method is initializing the needed objects and starts the timer.
-        /// It also gets the network with the strongest signal.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            // Setting the number of seconds
             seconds = int.Parse(Strings.General_TimerInterval) / 1000;
 
             if (!InitializeTimerCreateClient())
@@ -38,6 +33,7 @@ namespace ConnectivityModule.Events
 
             try
             {
+                // Getting the network with the strongest signal.
                 foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
                 {
                     foreach (Wlan.WlanAvailableNetwork network in wlanIface.GetAvailableNetworkList(0))
@@ -87,7 +83,7 @@ namespace ConnectivityModule.Events
                         if (GetStringForSSID(network.dot11Ssid).Equals(GetStringForSSID(strongestNetwork.dot11Ssid)))
                         {
                             found = true;
-                            // Update value.
+
                             signalQualityStrongestNetwork = network.wlanSignalQuality;
                         }
                         else
