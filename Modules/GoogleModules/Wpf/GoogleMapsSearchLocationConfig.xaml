@@ -16,7 +16,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Grid.Row="0" Grid.ColumnSpan="3">Please enter the location you want to search.</TextBlock>
+        <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Grid.Row="0" Grid.ColumnSpan="3">Please enter the location you want to search and select the type of the map.</TextBlock>
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Location:</TextBlock>
         <TextBox Name="LocationBox" TextChanged="LocationBox_TextChanged" Grid.Column="1" Grid.Row="1"/>
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">Map type:</TextBlock>

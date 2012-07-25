@@ -8,6 +8,9 @@ using MayhemWpf.UserControls;
 
 namespace GoogleModules.Reactions
 {
+    /// <summary>
+    /// A class used for posting the selected blog entry to the user's Google+ History page.
+    /// </summary>
     [DataContract]
     [MayhemModule("Google+: Post Blog Entry", "Posts the selected blog entry to Google+ History")]
     public class GooglePlusPostBlogEntry : GooglePlusBaseReaction, IWpfConfigurable
