@@ -4,9 +4,9 @@ using System.Windows.Controls;
 namespace GoogleModules.Wpf
 {
     /// <summary>
-    /// This is the configuration file for setting the Profile ID of the user you want to monitor.
+    /// This is the configuration file for setting the username for the feed we want to monitor.
     /// </summary>
-    public partial class GooglePlusProfileIDConfig : GooglePlusBaseConfig
+    public partial class YoutubeUsernameConfig : YoutubeBaseConfig
     {
         public override string Title
         {
@@ -15,9 +15,9 @@ namespace GoogleModules.Wpf
 
         private string configTitle;
 
-        public GooglePlusProfileIDConfig(string profileID, string title)
+        public YoutubeUsernameConfig(string username, string title)
         {
-            ProfileID = profileID;
+            Username = username;
             configTitle = title;
 
             InitializeComponent();
@@ -26,19 +26,20 @@ namespace GoogleModules.Wpf
         public override void OnLoad()
         {
             CanSave = true;
-            ProfileIDBox.Text = ProfileID;
 
-            DisplayErrorMessage(CheckValidityProfileID(ProfileID));
+            UsernameBox.Text = Username;
+
+            DisplayErrorMessage(CheckValidityUsername(Username));
         }
 
         public override void OnSave()
         {
-            ProfileID = ProfileIDBox.Text;
+            Username = UsernameBox.Text;
         }
 
-        private void ProfileIDBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void UsernameBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DisplayErrorMessage(CheckValidityProfileID(ProfileIDBox.Text));
+            DisplayErrorMessage(CheckValidityUsername(UsernameBox.Text));
         }
 
         protected void DisplayErrorMessage(string errorString)

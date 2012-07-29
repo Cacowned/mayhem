@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.Timers;
 using GoogleModules.Resources;
@@ -15,14 +16,24 @@ namespace GoogleModules.Events
     /// </summary>
     [DataContract]
     [MayhemModule("Google+: New Activity", "Triggers when a predefined user posts in the Public Feed an activity")]
-    public class GooglePlusNewActivity : GooglePlusBaseClass, IWpfConfigurable
+    public class GooglePlusNewActivity : GooglePlusEventBaseClass, IWpfConfigurable
     {
+        protected override void OnEnabling(EnablingEventArgs e)
+        {
+            base.OnEnabling(e);
+
+            if (!e.Cancel)
+            {
+                StartTimer(100);
+            }
+        }
+
         protected override void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             timer.Stop();
 
             try
-            {                
+            {
                 DateTime newLastActivityTime = new DateTime();
 
                 GPlusActivities activities = apiHelper.ListActivities();
@@ -41,7 +52,7 @@ namespace GoogleModules.Events
                     }
 
                     isFirstTime = false;
-                    timer.Interval = 60000;
+                    timer.Interval = int.Parse(Strings.General_TimeInterval);
 
                     timer.Start();
 
@@ -68,16 +79,18 @@ namespace GoogleModules.Events
                         }
                         else
                         {
-                            // We don't have any new event
+                            // We don't have any new event.
                             finish = true;
                             break;
                         }
                     }
 
                     if (finish)
+                    {
                         break;
+                    }
 
-                    activities = apiHelper.ListActivities(saveTokenActivity);                        
+                    activities = apiHelper.ListActivities(saveTokenActivity);
                 } while (!string.IsNullOrEmpty(saveTokenActivity));
 
                 if (lastAddedItemTimestamp.CompareTo(newLastActivityTime) < 0)
@@ -89,14 +102,41 @@ namespace GoogleModules.Events
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.GooglePlus_ErrorMonitoringNewActivity);
                 Logger.Write(ex);
+
+                return;
             }
 
             timer.Start();
-        }        
+        }
+
+        #region IWpfConfigurable Methods
 
         public WpfConfiguration ConfigurationControl
         {
             get { return new GooglePlusProfileIDConfig(profileId, Strings.GooglePlusNewActivity_Title); }
         }
+
+        public void OnSaved(WpfConfiguration configurationControl)
+        {
+            var config = configurationControl as GooglePlusProfileIDConfig;
+
+            if (config == null)
+            {
+                return;
+            }
+
+            profileId = config.ProfileID;
+        }
+
+        #endregion
+
+        #region IConfigurable Members
+
+        public string GetConfigString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, Strings.ProfileID_ConfigString, profileId);
+        }
+
+        #endregion
     }
 }

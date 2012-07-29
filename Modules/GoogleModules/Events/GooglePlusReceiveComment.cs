@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Runtime.Serialization;
 using System.Timers;
 using GoogleModules.Resources;
 using GoogleModules.Wpf;
@@ -9,45 +11,96 @@ using MayhemWpf.UserControls;
 
 namespace GoogleModules.Events
 {
-    [MayhemModule("Google+: Receive Comment", "Triggers when a predefined user receives a comment")]
-    public class GooglePlusReceiveComment : GooglePlusBaseClass, IWpfConfigurable
+    /// <summary>
+    /// This class represents an event that will be triggered when a predefined user receives a comment on the selected activity.
+    /// </summary>
+    [DataContract]
+    [MayhemModule("Google+: Receive Comment", "Triggers when a predefined user receives a comment on the selected activity")]
+    public class GooglePlusReceiveComment : GooglePlusEventBaseClass, IWpfConfigurable
     {
-        private DateTime GetTimestampMostRecentComment()
+        [DataMember]
+        private string activityLink;
+
+        private string activityId;
+
+        protected override void OnEnabling(EnablingEventArgs e)
         {
-            GPlusActivities activities = apiHelper.ListActivities();
+            base.OnEnabling(e);
 
-            DateTime newLastCommentTime = new DateTime();
-
-            string saveTokenActivity = string.Empty;
-
-            do
+            if (!e.Cancel)
             {
-                saveTokenActivity = activities.nextPageToken;
-
-                foreach (GPlusActivity activity in activities.items)
+                try
                 {
-                    GPlusComments comments = apiHelper.ListComments(activity.id);
-
-                    string saveTokenComment = string.Empty;
+                    bool found = false;
+                    string saveTokenActivities = string.Empty;
+                    GPlusActivities activities = apiHelper.ListActivities();
 
                     do
                     {
-                        saveTokenComment = comments.nextPageToken;
+                        saveTokenActivities = activities.nextPageToken;
 
-                        foreach (GPlusComment comment in comments.items)
+                        foreach (GPlusActivity activity in activities.items)
                         {
-                            if (comment.published.CompareTo(newLastCommentTime) > 0)
+                            if (activity.url.Equals(activityLink))
                             {
-                                newLastCommentTime = comment.published;
+                                activityId = activity.id;
+
+                                found = true;
+                                break;
                             }
                         }
 
-                        comments = apiHelper.ListComments(activity.id, comments.nextPageToken);
-                    } while (!string.IsNullOrEmpty(saveTokenComment));
+                        if (found)
+                        {
+                            break;
+                        }
+
+                        activities = apiHelper.ListActivities(activities.nextPageToken);
+                    } while (!string.IsNullOrEmpty(saveTokenActivities));
+
+                    if (found)
+                    {
+                        StartTimer(100);
+                    }
+                    else
+                    {
+                        ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.General_Incorrect, Strings.General_ActivityID));
+
+                        e.Cancel = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.GooglePlus_EventCouldntBeEnabled);
+                    Logger.Write(ex);
+
+                    e.Cancel = true;
+                    return;
+                }
+            }
+        }
+
+        private DateTime GetTimestampMostRecentComment()
+        {
+            DateTime newLastCommentTime = DateTime.MinValue;
+            string saveTokenComment = string.Empty;
+
+            GPlusComments comments = apiHelper.ListComments(activityId);
+
+            do
+            {
+                saveTokenComment = comments.nextPageToken;
+
+                foreach (GPlusComment comment in comments.items)
+                {
+                    if (comment.published.CompareTo(newLastCommentTime) > 0)
+                    {
+                        newLastCommentTime = comment.published;
+                    }
                 }
 
-                activities = apiHelper.ListActivities(activities.nextPageToken);
-            } while (!string.IsNullOrEmpty(activities.nextPageToken));
+                comments = apiHelper.ListComments(activityId, comments.nextPageToken);
+            } while (!string.IsNullOrEmpty(saveTokenComment));
 
             return newLastCommentTime;
         }
@@ -58,41 +111,67 @@ namespace GoogleModules.Events
 
             try
             {
-                GPlusActivities activities = apiHelper.ListActivities();
-
                 if (isFirstTime)
                 {
                     lastAddedItemTimestamp = GetTimestampMostRecentComment();
 
                     isFirstTime = false;
-                    timer.Interval = 5000;
+                    timer.Interval = int.Parse(Strings.General_TimeInterval);
 
                     timer.Start();
-
-                    return;
                 }
-
-                DateTime newLastCommentTime = GetTimestampMostRecentComment();
-
-                if (lastAddedItemTimestamp.CompareTo(newLastCommentTime) < 0)
+                else
                 {
-                    lastAddedItemTimestamp = newLastCommentTime;
+                    DateTime newLastCommentTime = GetTimestampMostRecentComment();
 
-                    Trigger();
+                    if (lastAddedItemTimestamp.CompareTo(newLastCommentTime) < 0)
+                    {
+                        lastAddedItemTimestamp = newLastCommentTime;
+
+                        Trigger();
+                    }
                 }
             }
             catch (Exception ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.GooglePlus_ErrorMonitoringNewComment);
                 Logger.Write(ex);
+
+                return;
             }
 
             timer.Start();
         }
 
+        #region IWpfConfigurable Methods
+
         public WpfConfiguration ConfigurationControl
         {
-            get { return new GooglePlusProfileIDConfig(profileId, Strings.GooglePlusNewCommentTitle); }
+            get { return new GooglePlusActivityLinkConfig(activityLink, Strings.GooglePlusReceiveComment_Title); }
         }
+
+        public void OnSaved(WpfConfiguration configurationControl)
+        {
+            var config = configurationControl as GooglePlusActivityLinkConfig;
+
+            if (config == null)
+            {
+                return;
+            }
+
+            profileId = config.ProfileID;
+            activityLink = config.ActivityLink;
+        }
+
+        #endregion
+
+        #region IConfigurable Members
+
+        public string GetConfigString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, Strings.ActivityLink_ConfigString, activityLink);
+        }
+
+        #endregion
     }
 }
