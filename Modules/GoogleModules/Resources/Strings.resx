@@ -117,14 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActivityLink_ConfigString" xml:space="preserve">
+    <value>Activity's link: {0}.</value>
+  </data>
+  <data name="General_ActivityID" xml:space="preserve">
+    <value>Activity ID</value>
+  </data>
+  <data name="General_Incorrect" xml:space="preserve">
+    <value>The {0} is incorrect.</value>
+  </data>
+  <data name="General_NoCharacter" xml:space="preserve">
+    <value>The {0} must contain at least one character.</value>
+  </data>
+  <data name="General_ProfileID" xml:space="preserve">
+    <value>Profile ID</value>
+  </data>
+  <data name="General_TimeInterval" xml:space="preserve">
+    <value>60000</value>
+  </data>
+  <data name="General_TooLong" xml:space="preserve">
+    <value>The {0} is too long.</value>
+  </data>
   <data name="GoogleMapsSearchLocation_Title" xml:space="preserve">
     <value>Google Maps: Search Location</value>
   </data>
-  <data name="GoogleMaps_Location_NoCharacter" xml:space="preserve">
-    <value>The name of the location must contain at least one character.</value>
-  </data>
-  <data name="GoogleMaps_Location_TooLong" xml:space="preserve">
-    <value>The name of the location is too long.</value>
+  <data name="GoogleMaps_Location" xml:space="preserve">
+    <value>name of the location</value>
   </data>
   <data name="GooglePlusNewActivity_Title" xml:space="preserve">
     <value>Google+: New Activity</value>
@@ -141,8 +159,14 @@
   <data name="GooglePlusPostVideo_Title" xml:space="preserve">
     <value>Google+: Post Video</value>
   </data>
+  <data name="GooglePlusReceiveComment_Title" xml:space="preserve">
+    <value>Google+: Receive Comment</value>
+  </data>
+  <data name="GooglePlus_ActivityID" xml:space="preserve">
+    <value>Activity ID</value>
+  </data>
   <data name="GooglePlus_ApiKey" xml:space="preserve">
-    <value>AIzaSyDJ_Z6r99nc8n4WyXqSqiR4-WNyNcfJnvY</value>
+    <value>AIzaSyDC9EuY_1hg4V-CjUzuSRWO9K9bpJE5bic</value>
   </data>
   <data name="GooglePlus_AuthentificationFailed" xml:space="preserve">
     <value>Authentification failed</value>
@@ -154,10 +178,10 @@
     <value>The blog entry was succesful added</value>
   </data>
   <data name="GooglePlus_ClientID" xml:space="preserve">
-    <value>901856013311.apps.googleusercontent.com</value>
+    <value>41016818966.apps.googleusercontent.com</value>
   </data>
   <data name="GooglePlus_ClientSecret" xml:space="preserve">
-    <value>ikaqc_qw35lKLJE-oA7mIY_X</value>
+    <value>uWqNYTTFmHPj2rd_3VYNctT6</value>
   </data>
   <data name="GooglePlus_DetailsPostBlogEntry" xml:space="preserve">
     <value>Please enter the Url of the blog entry you want to add to Google+ History.</value>
@@ -174,14 +198,14 @@
   <data name="GooglePlus_ErrorMonitoringNewComment" xml:space="preserve">
     <value>Error at monitoring the Google+ comments.</value>
   </data>
+  <data name="GooglePlus_ErrorMonitoringYoutubeUploadedVideos" xml:space="preserve">
+    <value>Error at monitoring the Youtube uploads video feed for {0}.</value>
+  </data>
   <data name="GooglePlus_EventCouldntBeEnabled" xml:space="preserve">
     <value>The event could not be enabled.</value>
   </data>
-  <data name="GooglePlus_MomentText_NoCharacter" xml:space="preserve">
-    <value>The text of the moment must contain at least one character.</value>
-  </data>
-  <data name="GooglePlus_MomentText_TooLong" xml:space="preserve">
-    <value>The text of the moment is too long.</value>
+  <data name="GooglePlus_MomentText" xml:space="preserve">
+    <value>text of the moment</value>
   </data>
   <data name="GooglePlus_PostBlogEntryUrlText" xml:space="preserve">
     <value>Blog Entry Url:</value>
@@ -191,15 +215,6 @@
   </data>
   <data name="GooglePlus_PostVideoUrlText" xml:space="preserve">
     <value>Video Url:</value>
-  </data>
-  <data name="GooglePlus_ProfileIDIncorrect" xml:space="preserve">
-    <value>The Profile ID is incorrect.</value>
-  </data>
-  <data name="GooglePlus_ProfileID_NoCharacter" xml:space="preserve">
-    <value>The Profile ID must contain at least one character.</value>
-  </data>
-  <data name="GooglePlus_ProfileID_TooLong" xml:space="preserve">
-    <value>The Profile ID is too long.</value>
   </data>
   <data name="GooglePlus_VideoCouldntBeAdded" xml:space="preserve">
     <value>The video could not be added to Google+ History</value>
@@ -215,5 +230,41 @@
   </data>
   <data name="ProfileID_ConfigString" xml:space="preserve">
     <value>Profile ID: {0}.</value>
+  </data>
+  <data name="Username_ConfigString" xml:space="preserve">
+    <value>Username: {0}.</value>
+  </data>
+  <data name="YoutubeCommentAdded_ConfigString" xml:space="preserve">
+    <value>Video ID: {0}.</value>
+  </data>
+  <data name="YoutubeCommentAdded_Title" xml:space="preserve">
+    <value>Youtube: Video Comment</value>
+  </data>
+  <data name="YoutubeVideoDeleted_Title" xml:space="preserve">
+    <value>Youtube: Video Deleted</value>
+  </data>
+  <data name="YoutubeVideoDoesntExists" xml:space="preserve">
+    <value>An Youtube Video identified by the provided ID doesn't exists.</value>
+  </data>
+  <data name="YoutubeVideoUploaded_Title" xml:space="preserve">
+    <value>Youtube: Video Uploaded</value>
+  </data>
+  <data name="Youtube_DeveloperKey" xml:space="preserve">
+    <value>AI39si4VuUApLd4VGVwxWEwKMwbNs1dhSeVEc1LGavmXEwnP1QsUq9FHL81tTdDq4_bQRf0SSP6VvvVovht6Xioy3l-9v2awOw</value>
+  </data>
+  <data name="Youtube_ErrorMonitoringComment" xml:space="preserve">
+    <value>Error at monitoring the Youtube comments.</value>
+  </data>
+  <data name="Youtube_ProductName" xml:space="preserve">
+    <value>Mayhem</value>
+  </data>
+  <data name="Youtube_Username" xml:space="preserve">
+    <value>username</value>
+  </data>
+  <data name="Youtube_VideoCommentCouldntEnable" xml:space="preserve">
+    <value>The event 'Youtube: Video Comment' couldn't be enabled.</value>
+  </data>
+  <data name="Youtube_VideoID" xml:space="preserve">
+    <value>Video ID</value>
   </data>
 </root>

@@ -61,20 +61,74 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the location must contain at least one character..
+        ///   Looks up a localized string similar to Activity&apos;s link: {0}..
         /// </summary>
-        internal static string GoogleMaps_Location_NoCharacter {
+        internal static string ActivityLink_ConfigString {
             get {
-                return ResourceManager.GetString("GoogleMaps_Location_NoCharacter", resourceCulture);
+                return ResourceManager.GetString("ActivityLink_ConfigString", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the location is too long..
+        ///   Looks up a localized string similar to Activity ID.
         /// </summary>
-        internal static string GoogleMaps_Location_TooLong {
+        internal static string General_ActivityID {
             get {
-                return ResourceManager.GetString("GoogleMaps_Location_TooLong", resourceCulture);
+                return ResourceManager.GetString("General_ActivityID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} is incorrect..
+        /// </summary>
+        internal static string General_Incorrect {
+            get {
+                return ResourceManager.GetString("General_Incorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} must contain at least one character..
+        /// </summary>
+        internal static string General_NoCharacter {
+            get {
+                return ResourceManager.GetString("General_NoCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profile ID.
+        /// </summary>
+        internal static string General_ProfileID {
+            get {
+                return ResourceManager.GetString("General_ProfileID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 60000.
+        /// </summary>
+        internal static string General_TimeInterval {
+            get {
+                return ResourceManager.GetString("General_TimeInterval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} is too long..
+        /// </summary>
+        internal static string General_TooLong {
+            get {
+                return ResourceManager.GetString("General_TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to name of the location.
+        /// </summary>
+        internal static string GoogleMaps_Location {
+            get {
+                return ResourceManager.GetString("GoogleMaps_Location", resourceCulture);
             }
         }
         
@@ -88,7 +142,16 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AIzaSyDJ_Z6r99nc8n4WyXqSqiR4-WNyNcfJnvY.
+        ///   Looks up a localized string similar to Activity ID.
+        /// </summary>
+        internal static string GooglePlus_ActivityID {
+            get {
+                return ResourceManager.GetString("GooglePlus_ActivityID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AIzaSyDC9EuY_1hg4V-CjUzuSRWO9K9bpJE5bic.
         /// </summary>
         internal static string GooglePlus_ApiKey {
             get {
@@ -124,7 +187,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 901856013311.apps.googleusercontent.com.
+        ///   Looks up a localized string similar to 41016818966.apps.googleusercontent.com.
         /// </summary>
         internal static string GooglePlus_ClientID {
             get {
@@ -133,7 +196,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ikaqc_qw35lKLJE-oA7mIY_X.
+        ///   Looks up a localized string similar to uWqNYTTFmHPj2rd_3VYNctT6.
         /// </summary>
         internal static string GooglePlus_ClientSecret {
             get {
@@ -187,6 +250,15 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error at monitoring the Youtube uploads video feed for {0}..
+        /// </summary>
+        internal static string GooglePlus_ErrorMonitoringYoutubeUploadedVideos {
+            get {
+                return ResourceManager.GetString("GooglePlus_ErrorMonitoringYoutubeUploadedVideos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The event could not be enabled..
         /// </summary>
         internal static string GooglePlus_EventCouldntBeEnabled {
@@ -196,20 +268,11 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The text of the moment must contain at least one character..
+        ///   Looks up a localized string similar to text of the moment.
         /// </summary>
-        internal static string GooglePlus_MomentText_NoCharacter {
+        internal static string GooglePlus_MomentText {
             get {
-                return ResourceManager.GetString("GooglePlus_MomentText_NoCharacter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The text of the moment is too long..
-        /// </summary>
-        internal static string GooglePlus_MomentText_TooLong {
-            get {
-                return ResourceManager.GetString("GooglePlus_MomentText_TooLong", resourceCulture);
+                return ResourceManager.GetString("GooglePlus_MomentText", resourceCulture);
             }
         }
         
@@ -237,33 +300,6 @@ namespace GoogleModules.Resources {
         internal static string GooglePlus_PostVideoUrlText {
             get {
                 return ResourceManager.GetString("GooglePlus_PostVideoUrlText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Profile ID must contain at least one character..
-        /// </summary>
-        internal static string GooglePlus_ProfileID_NoCharacter {
-            get {
-                return ResourceManager.GetString("GooglePlus_ProfileID_NoCharacter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Profile ID is too long..
-        /// </summary>
-        internal static string GooglePlus_ProfileID_TooLong {
-            get {
-                return ResourceManager.GetString("GooglePlus_ProfileID_TooLong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Profile ID is incorrect..
-        /// </summary>
-        internal static string GooglePlus_ProfileIDIncorrect {
-            get {
-                return ResourceManager.GetString("GooglePlus_ProfileIDIncorrect", resourceCulture);
             }
         }
         
@@ -331,6 +367,15 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Google+: Receive Comment.
+        /// </summary>
+        internal static string GooglePlusReceiveComment_Title {
+            get {
+                return ResourceManager.GetString("GooglePlusReceiveComment_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location: {0}. Map type: {1}..
         /// </summary>
         internal static string LocationMapType_ConfigString {
@@ -354,6 +399,114 @@ namespace GoogleModules.Resources {
         internal static string ProfileID_ConfigString {
             get {
                 return ResourceManager.GetString("ProfileID_ConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username: {0}..
+        /// </summary>
+        internal static string Username_ConfigString {
+            get {
+                return ResourceManager.GetString("Username_ConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AI39si4VuUApLd4VGVwxWEwKMwbNs1dhSeVEc1LGavmXEwnP1QsUq9FHL81tTdDq4_bQRf0SSP6VvvVovht6Xioy3l-9v2awOw.
+        /// </summary>
+        internal static string Youtube_DeveloperKey {
+            get {
+                return ResourceManager.GetString("Youtube_DeveloperKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error at monitoring the Youtube comments..
+        /// </summary>
+        internal static string Youtube_ErrorMonitoringComment {
+            get {
+                return ResourceManager.GetString("Youtube_ErrorMonitoringComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mayhem.
+        /// </summary>
+        internal static string Youtube_ProductName {
+            get {
+                return ResourceManager.GetString("Youtube_ProductName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to username.
+        /// </summary>
+        internal static string Youtube_Username {
+            get {
+                return ResourceManager.GetString("Youtube_Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The event &apos;Youtube: Video Comment&apos; couldn&apos;t be enabled..
+        /// </summary>
+        internal static string Youtube_VideoCommentCouldntEnable {
+            get {
+                return ResourceManager.GetString("Youtube_VideoCommentCouldntEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video ID.
+        /// </summary>
+        internal static string Youtube_VideoID {
+            get {
+                return ResourceManager.GetString("Youtube_VideoID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video ID: {0}..
+        /// </summary>
+        internal static string YoutubeCommentAdded_ConfigString {
+            get {
+                return ResourceManager.GetString("YoutubeCommentAdded_ConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Youtube: Video Comment.
+        /// </summary>
+        internal static string YoutubeCommentAdded_Title {
+            get {
+                return ResourceManager.GetString("YoutubeCommentAdded_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Youtube: Video Deleted.
+        /// </summary>
+        internal static string YoutubeVideoDeleted_Title {
+            get {
+                return ResourceManager.GetString("YoutubeVideoDeleted_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An Youtube Video identified by the provided ID doesn&apos;t exists..
+        /// </summary>
+        internal static string YoutubeVideoDoesntExists {
+            get {
+                return ResourceManager.GetString("YoutubeVideoDoesntExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Youtube: Video Uploaded.
+        /// </summary>
+        internal static string YoutubeVideoUploaded_Title {
+            get {
+                return ResourceManager.GetString("YoutubeVideoUploaded_Title", resourceCulture);
             }
         }
     }
