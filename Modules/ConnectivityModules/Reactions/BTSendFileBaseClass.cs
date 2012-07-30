@@ -23,9 +23,6 @@ namespace ConnectivityModule.Reactions
         protected BluetoothClient bluetoothClient;
         protected ObexClientSession session;
 
-        /// <summary>
-        /// This method will try to send a file to a bluetooth device
-        /// </summary>
         protected void SendFileMethod()
         {
             try
@@ -46,6 +43,11 @@ namespace ConnectivityModule.Reactions
 
                 bluetoothClient.Dispose();
             }
+            catch (PlatformNotSupportedException ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.BT_NoBluetooth);
+                Logger.Write(ex);
+            }
             catch (ObexResponseException ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.BT_ConnectionRefused);
@@ -58,9 +60,6 @@ namespace ConnectivityModule.Reactions
             }
         }
 
-        /// <summary>
-        /// This method will dispose the objects session and bluetoothClient used by this class.
-        /// </summary>
         protected void Dispose()
         {
             if (session != null)
@@ -75,10 +74,6 @@ namespace ConnectivityModule.Reactions
             }
         }
 
-        /// <summary>
-        /// This method will be implemented by the classes that inherit this class and will be called when the event associated with the reaction is triggered.
-        /// It contains the functionality of this reaction.
-        /// </summary>
         public abstract override void Perform();
     }
 }

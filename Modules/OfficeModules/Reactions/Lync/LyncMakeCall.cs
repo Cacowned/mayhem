@@ -20,7 +20,7 @@ namespace OfficeModules.Reactions.Lync
     public class LyncMakeCall : ReactionBase, IWpfConfigurable
     {
         /// <summary>
-        /// The User ID of the predefined contact.
+        /// The User ID of the predefined contact which the audio call will be made to.
         /// </summary>
         [DataMember]
         private string userId;
@@ -29,7 +29,7 @@ namespace OfficeModules.Reactions.Lync
         private Self self = null;
 
         /// <summary>
-        /// This method will get the instance of the Lync Client application and will make an audio call to the predefined userId.
+        /// If an instance of the Lync application exits this method will make an audio call to the predefined User Id.
         /// </summary>
         public override void Perform()
         {

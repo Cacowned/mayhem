@@ -15,7 +15,7 @@ namespace OfficeModules.Reactions
         private OPowerPoint.Application app;
 
         /// <summary>
-        /// This method will get the instance of the PowerPoint application and will close the active slideshow.
+        /// If an instance of the PowerPoint application exits this method will close the active slideshow.
         /// </summary>
         public override void Perform()
         {
@@ -43,7 +43,7 @@ namespace OfficeModules.Reactions
                 {
                     if (windows > 1)
                     {
-                        // we've got more than one
+                        // We've got more than one slideshow open.
                         ErrorLog.AddError(ErrorType.Message, Strings.PowerPoint_MoreThanOneWindow);
                     }
 

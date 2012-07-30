@@ -9,7 +9,7 @@ namespace OfficeModules.Events.Lync
     /// <summary>
     /// An event that will be triggered when an instant message is received.
     /// </summary>
-    [MayhemModule("Lync: Instant Message Received", "Triggers when an instant message is received")]
+    [MayhemModule("Lync: Instant Message Received", "Triggers when an instant message is received only if the IM window of the sender is not already opened")]
     public class LyncInstantMessageReceived : EventBase
     {
         private LyncClient lyncClient;
@@ -17,9 +17,6 @@ namespace OfficeModules.Events.Lync
 
         private EventHandler<ConversationManagerEventArgs> conversationAdded;
 
-        /// <summary>
-        /// This method is called after the event is loaded.
-        /// </summary>
         protected override void OnAfterLoad()
         {
             lyncClient = null;
@@ -28,9 +25,6 @@ namespace OfficeModules.Events.Lync
             conversationAdded = Conversations_ConversationAdded;
         }
 
-        /// <summary>
-        /// This method gets the Lync Client instance and is subscribing to the ConversationManagerEvent.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             try
@@ -48,9 +42,6 @@ namespace OfficeModules.Events.Lync
             }
         }
 
-        /// <summary>
-        /// This method is unsubscribing from the ConversationManagerEvent.
-        /// </summary>
         protected override void OnDisabled(DisabledEventArgs e)
         {
             if (conversationManager != null)
@@ -66,7 +57,7 @@ namespace OfficeModules.Events.Lync
         }
 
         /// <summary>
-        /// This method is called when the ConversationManagerEvent is triggered, and if the type of the event is ModalityTypes.InstantMessage will trigger this event.
+        /// This method is called when the ConversationManagerEvent is triggered, and will trigger this event if an instant message is received.
         /// </summary>
         void Conversations_ConversationAdded(object sender, ConversationManagerEventArgs e)
         {

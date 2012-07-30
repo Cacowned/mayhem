@@ -15,7 +15,7 @@ namespace OfficeModules.Reactions
         private OPowerPoint.Application app;
 
         /// <summary>
-        /// This method will get the instance of the PowerPoint application and will navigate to the last slide of the active slideshow.
+        /// If an instance of the PowerPoint application exits this method will navigate to the last slide of the active slideshow.
         /// </summary>
         public override void Perform()
         {

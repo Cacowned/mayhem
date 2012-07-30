@@ -1,12 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
-using MayhemCore;
-using NativeWifi;
-using MayhemWpf.UserControls;
 using ConnectivityModule.Wpf;
-using System.Globalization;
+using MayhemCore;
 using MayhemWpf.ModuleTypes;
+using MayhemWpf.UserControls;
+using NativeWifi;
 
 namespace ConnectivityModule.Reactions
 {
@@ -17,10 +16,6 @@ namespace ConnectivityModule.Reactions
     [MayhemModule("Wi-Fi: Disconnect From Network", "Disconnects from a specific network")]
     public class WiFiDisconnectNetwork : WiFiReactionBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// A method that verifies if the computer is connected to the predefined network.
-        /// </summary>
-        /// <returns>Returns true if it's connected, false otherwise</returns>
         protected bool VerifyConnectionState()
         {
             try
@@ -106,34 +101,9 @@ namespace ConnectivityModule.Reactions
             }
         }
 
-        #region IWpfConfigurable Methods
-
         public WpfConfiguration ConfigurationControl
         {
-            get { return new DisconnectNetworkConfig(networkName); }
+            get { return new NetworkConfig(networkName, Strings.DisconnectNetwork_Title, Strings.WiFi_InformationTextDisconnectNetwork); }
         }
-
-        public void OnSaved(WpfConfiguration configurationControl)
-        {
-            var config = configurationControl as DisconnectNetworkConfig;
-
-            if (config == null)
-            {
-                return;
-            }
-
-            networkName = config.NetworkName;
-        }
-
-        #endregion
-
-        #region IWpfConfigurable Members
-
-        public string GetConfigString()
-        {
-            return string.Format(CultureInfo.CurrentCulture, Strings.NetworkName_ConfigString, networkName);
-        }
-
-        #endregion
     }
 }

@@ -15,7 +15,7 @@ namespace OfficeModules.Reactions
         private OPowerPoint.Application app;
 
         /// <summary>
-        /// This method will get the instance of the PowerPoint application and will close the active presentation.
+        /// If an instance of the PowerPoint application exits this method will close the active presentation.
         /// </summary>
         public override void Perform()
         {
