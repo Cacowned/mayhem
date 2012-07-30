@@ -17,9 +17,6 @@ namespace ConnectivityModule.Reactions
     [MayhemModule("Bluetooth: Send File By Address", "Sends a file to a specific device identified by its address")]
     public class BTSendFileAddress : BTSendFileBaseClass, IWpfConfigurable
     {
-        /// <summary>
-        /// The address of the device represented as a string.
-        /// </summary>
         [DataMember]
         private string deviceAddressString;
 
@@ -51,6 +48,11 @@ namespace ConnectivityModule.Reactions
 
                 SendFileMethod();
             }
+            catch (PlatformNotSupportedException ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.BT_NoBluetooth);
+                Logger.Write(ex);
+            }
             catch (Exception ex)
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.BT_CantConnectToDevice);
@@ -64,12 +66,12 @@ namespace ConnectivityModule.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new SendFileToDeviceByAddressConfig(deviceAddressString, filePath, accessPin); }
+            get { return new SendFileToDeviceConfig(deviceAddressString, filePath, accessPin, Strings.SendFileToDeviceByAddress_Title, Strings.BT_DeviceTypeTextAddress, Strings.BT_InformationTextSendFileAddress); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = configurationControl as SendFileToDeviceByAddressConfig;
+            var config = configurationControl as SendFileToDeviceConfig;
 
             if (config == null)
             {

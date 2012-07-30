@@ -18,9 +18,6 @@ namespace OfficeModules.Reactions.Lync
     [MayhemModule("Lync: Update Personal Note", "Updates the personal note of the current user")]
     public class LyncUpdatePersonalNote : ReactionBase, IWpfConfigurable
     {
-        /// <summary>
-        /// The new personal note.
-        /// </summary>
         [DataMember]
         private string personalNote;
 
@@ -28,7 +25,7 @@ namespace OfficeModules.Reactions.Lync
         private Self self = null;
 
         /// <summary>
-        /// This method will get the instance of the Lync Client application and will update the personal note of the current user.
+        /// If an instance of the Lync application exits this method will update the personal note of the current user.
         /// </summary>
         public override void Perform()
         {

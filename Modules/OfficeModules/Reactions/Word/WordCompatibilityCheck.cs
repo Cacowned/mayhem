@@ -15,7 +15,7 @@ namespace OfficeModules.Reactions.Word
         private OWord.Application app;
 
         /// <summary>
-        /// This method will get the instance of the Word application and will activate the compatibility checking for the active document.
+        /// If an instance of the Word application exits this method will activate the compatibility checking for the active document.
         /// </summary>
         public override void Perform()
         {
