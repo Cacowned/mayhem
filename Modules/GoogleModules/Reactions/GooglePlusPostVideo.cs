@@ -19,8 +19,6 @@ namespace GoogleModules.Reactions
         {
             try
             {
-                Authentificate();
-
                 AddActivity("http://schemas.google.com/ListenActivity");
 
                 ErrorLog.AddError(ErrorType.Message, Strings.GooglePlus_VideoSuccesfulAdded);
@@ -28,13 +26,13 @@ namespace GoogleModules.Reactions
             catch (Exception ex)
             {
                 Logger.Write(ex);
-                ErrorLog.AddError(ErrorType.Failure,  Strings.GooglePlus_VideoCouldntBeAdded);
+                ErrorLog.AddError(ErrorType.Failure, Strings.GooglePlus_VideoCouldntBeAdded);
             }
         }
-        
+
         public WpfConfiguration ConfigurationControl
         {
-            get { return new GooglePlusAddMomentConfig(MomentUrl, Strings.GooglePlusPostVideo_Title, Strings.GooglePlus_DetailsPostVideo, Strings.GooglePlus_PostVideoUrlText); }
+            get { return new GooglePlusAddMomentConfig(momentUrl, Strings.GooglePlusPostVideo_Title, Strings.GooglePlus_DetailsPostVideo, Strings.GooglePlus_PostVideoUrlText); }
         }
     }
 }

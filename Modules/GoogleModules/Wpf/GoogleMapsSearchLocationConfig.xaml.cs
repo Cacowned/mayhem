@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using GoogleModules.Resources;
 using MayhemWpf.UserControls;
@@ -27,10 +26,9 @@ namespace GoogleModules.Wpf
         {
             get { return configTitle; }
         }
-        
+
         private string configTitle;
-        private ObservableCollection<string> mapTypes = null;
-    
+
         public GoogleMapsSearchLocationConfig(string locationText, string mapType, string title)
         {
             InitializeComponent();
@@ -45,22 +43,21 @@ namespace GoogleModules.Wpf
             CanSave = true;
 
             LocationBox.Text = Location;
-            
-            if (mapTypes == null)
-                mapTypes = new ObservableCollection<string>();
-            else
-                mapTypes.Clear();
 
-            mapTypes.Add("Map");
-            mapTypes.Add("Satellite");
-            mapTypes.Add("Terrain");
+            MapTypesComboBox.Items.Clear();
 
-            MapTypesComboBox.ItemsSource = mapTypes;
+            MapTypesComboBox.Items.Add("Map");
+            MapTypesComboBox.Items.Add("Satellite");
+            MapTypesComboBox.Items.Add("Terrain");
 
             if (string.IsNullOrEmpty(MapType))
+            {
                 MapTypesComboBox.SelectedIndex = 0;
+            }
             else
+            {
                 MapTypesComboBox.SelectedItem = MapType;
+            }
 
             DisplayErrorMessage(CheckLocationText());
         }
@@ -80,12 +77,9 @@ namespace GoogleModules.Wpf
             {
                 errorString = Strings.GoogleMaps_Location_NoCharacter;
             }
-            else
+            else if (textLength > 200)
             {
-                if (textLength > 200)
-                {
-                    errorString = Strings.GoogleMaps_Location_TooLong;
-                }
+                errorString = Strings.GoogleMaps_Location_TooLong;
             }
 
             CanSave = textLength > 0 && (textLength <= 200);

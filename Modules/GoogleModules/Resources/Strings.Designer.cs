@@ -88,7 +88,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AIzaSyDJ_Z6r99nc8n4WyXqSqiR4-WNyNcfJnvY.
+        ///   Looks up a localized string similar to AIzaSyDC9EuY_1hg4V-CjUzuSRWO9K9bpJE5bic.
         /// </summary>
         internal static string GooglePlus_ApiKey {
             get {
@@ -97,11 +97,29 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authentification failed.
+        ///   Looks up a localized string similar to Authentication failed..
         /// </summary>
-        internal static string GooglePlus_AuthentificationFailed {
+        internal static string GooglePlus_AuthenticationFailed {
             get {
-                return ResourceManager.GetString("GooglePlus_AuthentificationFailed", resourceCulture);
+                return ResourceManager.GetString("GooglePlus_AuthenticationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The authorization code must contain at least one character..
+        /// </summary>
+        internal static string GooglePlus_AuthorizationCode_NoCharacter {
+            get {
+                return ResourceManager.GetString("GooglePlus_AuthorizationCode_NoCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The authorization code  is too long..
+        /// </summary>
+        internal static string GooglePlus_AuthorizationCode_TooLong {
+            get {
+                return ResourceManager.GetString("GooglePlus_AuthorizationCode_TooLong", resourceCulture);
             }
         }
         
@@ -124,7 +142,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 901856013311.apps.googleusercontent.com.
+        ///   Looks up a localized string similar to 41016818966.apps.googleusercontent.com.
         /// </summary>
         internal static string GooglePlus_ClientID {
             get {
@@ -133,7 +151,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ikaqc_qw35lKLJE-oA7mIY_X.
+        ///   Looks up a localized string similar to uWqNYTTFmHPj2rd_3VYNctT6.
         /// </summary>
         internal static string GooglePlus_ClientSecret {
             get {
@@ -210,6 +228,15 @@ namespace GoogleModules.Resources {
         internal static string GooglePlus_MomentText_TooLong {
             get {
                 return ResourceManager.GetString("GooglePlus_MomentText_TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Authenticated..
+        /// </summary>
+        internal static string GooglePlus_NotAuthenticated {
+            get {
+                return ResourceManager.GetString("GooglePlus_NotAuthenticated", resourceCulture);
             }
         }
         

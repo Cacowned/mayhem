@@ -144,8 +144,14 @@
   <data name="GooglePlus_ApiKey" xml:space="preserve">
     <value>AIzaSyDC9EuY_1hg4V-CjUzuSRWO9K9bpJE5bic</value>
   </data>
-  <data name="GooglePlus_AuthentificationFailed" xml:space="preserve">
-    <value>Authentification failed</value>
+  <data name="GooglePlus_AuthenticationFailed" xml:space="preserve">
+    <value>Authentication failed.</value>
+  </data>
+  <data name="GooglePlus_AuthorizationCode_NoCharacter" xml:space="preserve">
+    <value>The authorization code must contain at least one character.</value>
+  </data>
+  <data name="GooglePlus_AuthorizationCode_TooLong" xml:space="preserve">
+    <value>The authorization code  is too long.</value>
   </data>
   <data name="GooglePlus_BlogEntryCouldntBeAdded" xml:space="preserve">
     <value>The blog entry could not be added to Google+ History</value>
@@ -182,6 +188,9 @@
   </data>
   <data name="GooglePlus_MomentText_TooLong" xml:space="preserve">
     <value>The text of the moment is too long.</value>
+  </data>
+  <data name="GooglePlus_NotAuthenticated" xml:space="preserve">
+    <value>Not Authenticated.</value>
   </data>
   <data name="GooglePlus_PostBlogEntryUrlText" xml:space="preserve">
     <value>Blog Entry Url:</value>
