@@ -19,8 +19,6 @@ namespace GoogleModules.Reactions
         {
             try
             {
-                Authentificate();
-
                 AddActivity("http://schemas.google.com/CreateActivity");
 
                 ErrorLog.AddError(ErrorType.Message, Strings.GooglePlus_BlogEntrySuccesfulAdded);
@@ -34,7 +32,7 @@ namespace GoogleModules.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new GooglePlusAddMomentConfig(MomentUrl, Strings.GooglePlusPostBlogEntry_Title, Strings.GooglePlus_DetailsPostBlogEntry, Strings.GooglePlus_PostBlogEntryUrlText); }
+            get { return new GooglePlusAddMomentConfig(momentUrl, Strings.GooglePlusPostBlogEntry_Title, Strings.GooglePlus_DetailsPostBlogEntry, Strings.GooglePlus_PostBlogEntryUrlText); }
         }
     }
 }

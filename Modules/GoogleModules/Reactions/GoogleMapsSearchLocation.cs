@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Serialization;
 using GoogleModules.Resources;
@@ -22,24 +23,22 @@ namespace GoogleModules.Reactions
         [DataMember]
         private string mapType;
 
+        private Dictionary<string, string> mapTypesDictionary;
+
+        protected override void OnAfterLoad()
+        {
+            mapTypesDictionary = new Dictionary<string, string>()
+	        {
+	            {"Map", "m"},
+	            {"Satellite", "h"},
+	            {"Terrain", "p"},
+	        };
+        }
+
         public override void Perform()
         {
-            string shortType = "h";
-            switch (mapType)
-            {
-                case "Map":
-                    shortType = "m";
-                    break;
-                case "Satellite":
-                    shortType = "h";
-                    break;
-                case "Terrain":
-                    shortType = "p";
-                    break;
-            }
-
             string url_base = "http://maps.google.com/maps?f=q&hl=en&geocode=&time=&date=&ttype=&q={0}&ie=UTF8&t={1}";
-            string requestString = string.Format(url_base, location, shortType);
+            string requestString = string.Format(url_base, location, mapTypesDictionary[mapType]);
 
             Process.Start(requestString);
         }
