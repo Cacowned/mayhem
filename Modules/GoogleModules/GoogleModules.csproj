@@ -88,12 +88,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\GooglePlusEventBaseClass.cs" />
+    <Compile Include="Events\GoogleModulesEventBase.cs" />
+    <Compile Include="Events\GooglePlusEventBase.cs" />
     <Compile Include="Events\GooglePlusNewActivity.cs" />
     <Compile Include="Events\GooglePlusReceiveComment.cs" />
-    <Compile Include="Events\YoutubeEventBaseClass.cs" />
+    <Compile Include="Events\YoutubeEventBase.cs" />
     <Compile Include="Events\YoutubeCommentAdded.cs" />
-    <Compile Include="Events\YoutubeVideoEventBaseClass.cs" />
+    <Compile Include="Events\YoutubeVideoEventBase.cs" />
     <Compile Include="Events\YoutubeVideoDeleted.cs" />
     <Compile Include="Events\YoutubeVideoUploaded.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
