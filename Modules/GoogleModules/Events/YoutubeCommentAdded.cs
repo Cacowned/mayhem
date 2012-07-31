@@ -17,7 +17,7 @@ namespace GoogleModules.Events
     /// </summary>
     [DataContract]
     [MayhemModule("Youtube: Video Comment", "Triggers when a comment is received for a predefined video")]
-    public class YoutubeCommentAdded : YoutubeEventBaseClass, IWpfConfigurable
+    public class YoutubeCommentAdded : YoutubeEventBase, IWpfConfigurable
     {
         [DataMember]
         private string videoID;
@@ -140,10 +140,6 @@ namespace GoogleModules.Events
         {
             var config = configurationControl as YoutubeCommentAddedConfig;
 
-            if (config == null)
-            {
-                return;
-            }
             videoID = config.VideoID;
         }
 

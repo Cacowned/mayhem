@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Runtime.Serialization;
-using System.Timers;
 using GoogleModules.Resources;
 using GooglePlusLib.NET;
 using MayhemCore;
@@ -12,14 +11,13 @@ namespace GoogleModules.Events
     /// This is the base class for the Google+ Events.
     /// </summary>
     [DataContract]
-    public abstract class GooglePlusEventBaseClass : EventBase
+    public abstract class GooglePlusEventBase : GoogleModulesEventBase
     {
         [DataMember]
         protected string profileId;
 
         protected DateTime lastAddedItemTimestamp;
 
-        protected Timer timer;
         protected bool isFirstTime;
 
         protected GooglePlusAPIHelper apiHelper;
@@ -52,26 +50,5 @@ namespace GoogleModules.Events
                 return;
             }
         }
-
-        protected override void OnDisabled(DisabledEventArgs e)
-        {
-            if (timer != null)
-            {
-                timer.Stop();
-                timer.Elapsed -= timer_Elapsed;
-                timer.Dispose();
-            }
-        }
-
-        protected void StartTimer(int interval)
-        {
-            timer = new Timer();
-            timer.Interval = interval;
-            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-
-            timer.Start();
-        }
-
-        protected abstract void timer_Elapsed(object sender, ElapsedEventArgs e);
     }
 }

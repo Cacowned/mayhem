@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Timers;
 using GoogleModules.Resources;
 using GoogleModules.Wpf;
@@ -16,7 +17,7 @@ namespace GoogleModules.Events
     /// </summary>
     [DataContract]
     [MayhemModule("Google+: Receive Comment", "Triggers when a predefined user receives a comment on the selected activity")]
-    public class GooglePlusReceiveComment : GooglePlusEventBaseClass, IWpfConfigurable
+    public class GooglePlusReceiveComment : GooglePlusEventBase, IWpfConfigurable
     {
         [DataMember]
         private string activityLink;
@@ -29,54 +30,57 @@ namespace GoogleModules.Events
 
             if (!e.Cancel)
             {
-                try
+                ThreadPool.QueueUserWorkItem(o =>
                 {
-                    bool found = false;
-                    string saveTokenActivities = string.Empty;
-                    GPlusActivities activities = apiHelper.ListActivities();
-
-                    do
+                    try
                     {
-                        saveTokenActivities = activities.nextPageToken;
+                        bool found = false;
+                        string saveTokenActivities = string.Empty;
 
-                        foreach (GPlusActivity activity in activities.items)
+                        GPlusActivities activities = apiHelper.ListActivities();
+
+                        do
                         {
-                            if (activity.url.Equals(activityLink))
+                            saveTokenActivities = activities.nextPageToken;
+                            foreach (GPlusActivity activity in activities.items)
                             {
-                                activityId = activity.id;
+                                if (activity.url.Equals(activityLink))
+                                {
+                                    activityId = activity.id;
 
-                                found = true;
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (found)
+                            {
                                 break;
                             }
-                        }
+
+                            activities = apiHelper.ListActivities(activities.nextPageToken);
+                        } while (!string.IsNullOrEmpty(saveTokenActivities));
 
                         if (found)
                         {
-                            break;
+                            StartTimer(100);
                         }
+                        else
+                        {
+                            ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.General_Incorrect, Strings.General_ActivityID));
 
-                        activities = apiHelper.ListActivities(activities.nextPageToken);
-                    } while (!string.IsNullOrEmpty(saveTokenActivities));
-
-                    if (found)
-                    {
-                        StartTimer(100);
+                            e.Cancel = true;
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.General_Incorrect, Strings.General_ActivityID));
+                        ErrorLog.AddError(ErrorType.Failure, Strings.GooglePlus_EventCouldntBeEnabled);
+                        Logger.Write(ex);
 
                         e.Cancel = true;
+                        return;
                     }
-                }
-                catch (Exception ex)
-                {
-                    ErrorLog.AddError(ErrorType.Failure, Strings.GooglePlus_EventCouldntBeEnabled);
-                    Logger.Write(ex);
-
-                    e.Cancel = true;
-                    return;
-                }
+                });
             }
         }
 
@@ -153,11 +157,6 @@ namespace GoogleModules.Events
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var config = configurationControl as GooglePlusActivityLinkConfig;
-
-            if (config == null)
-            {
-                return;
-            }
 
             profileId = config.ProfileID;
             activityLink = config.ActivityLink;

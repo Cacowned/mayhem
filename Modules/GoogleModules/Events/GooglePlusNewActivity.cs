@@ -16,7 +16,7 @@ namespace GoogleModules.Events
     /// </summary>
     [DataContract]
     [MayhemModule("Google+: New Activity", "Triggers when a predefined user posts in the Public Feed an activity")]
-    public class GooglePlusNewActivity : GooglePlusEventBaseClass, IWpfConfigurable
+    public class GooglePlusNewActivity : GooglePlusEventBase, IWpfConfigurable
     {
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -119,11 +119,6 @@ namespace GoogleModules.Events
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var config = configurationControl as GooglePlusProfileIDConfig;
-
-            if (config == null)
-            {
-                return;
-            }
 
             profileId = config.ProfileID;
         }

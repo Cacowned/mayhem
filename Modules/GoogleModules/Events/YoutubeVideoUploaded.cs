@@ -15,7 +15,7 @@ namespace GoogleModules.Events
     /// </summary>
     [DataContract]
     [MayhemModule("Youtube: Video Uploaded", "Triggers when a predefined user uploads a video")]
-    public class YoutubeVideoUploaded : YoutubeVideoEventBaseClass, IWpfConfigurable
+    public class YoutubeVideoUploaded : YoutubeVideoEventBase, IWpfConfigurable
     {
         protected override void OnEnabling(EnablingEventArgs e)
         {

@@ -16,7 +16,7 @@ namespace GoogleModules.Events
     /// </summary>
     [DataContract]
     [MayhemModule("Youtube: Video Deleted", "Triggers when a predefined user deletes a video")]
-    public class YoutubeVideoDeleted : YoutubeVideoEventBaseClass, IWpfConfigurable
+    public class YoutubeVideoDeleted : YoutubeVideoEventBase, IWpfConfigurable
     {
         protected override void OnEnabling(EnablingEventArgs e)
         {

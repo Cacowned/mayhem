@@ -46,9 +46,12 @@ namespace GoogleModules.Wpf
 
         public override void OnSave()
         {
-            ActivityLink = ActivityLinkBox.Text;
+            ActivityLink = ActivityLinkBox.Text.Replace("u/0/", "");
         }
 
+        /// <summary>
+        /// This method obtains the profile ID by parsing the link of the activity the user chooses to monitor. The profile ID is the 4th element if we split the activity link by the '/' character.
+        /// </summary>
         public void FindProfileID(string activityLink)
         {
             if (string.IsNullOrEmpty(activityLink))
@@ -57,11 +60,9 @@ namespace GoogleModules.Wpf
             }
 
             // These characters are not found in the url path so we need to remove them from the link provided by the user.
-            activityLink = activityLink.Replace("u/0/", "");
+            ActivityLink = activityLink.Replace("u/0/", "");
 
-            ActivityLink = activityLink;
-
-            string[] chunks = activityLink.Split(new char[] { '/' });
+            string[] chunks = ActivityLink.Split(new char[] { '/' });
 
             if (chunks.Length < 4)
             {
