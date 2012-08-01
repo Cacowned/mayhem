@@ -53,8 +53,8 @@ namespace GoogleModules.Reactions
         public void UseSavedAuthorization()
         {
             var provider = new NativeApplicationClient(GoogleAuthenticationServer.Description);
-            provider.ClientIdentifier = Strings.GooglePlus_ClientID;
-            provider.ClientSecret = Strings.GooglePlus_ClientSecret;
+            provider.ClientIdentifier = Strings.Google_ClientID;
+            provider.ClientSecret = Strings.Google_ClientSecret;
 
             OAuth2Authenticator<NativeApplicationClient> auth = new OAuth2Authenticator<NativeApplicationClient>(provider, getState);
 
@@ -81,11 +81,6 @@ namespace GoogleModules.Reactions
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var config = configurationControl as GooglePlusAddMomentConfig;
-
-            if (config == null)
-            {
-                return;
-            }
 
             momentUrl = config.MomentText;
             refreshToken = config.RefreshToken;
