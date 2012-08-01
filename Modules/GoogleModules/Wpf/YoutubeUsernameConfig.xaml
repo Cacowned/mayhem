@@ -1,4 +1,4 @@
-﻿<local:YoutubeBaseConfig x:Class="GoogleModules.Wpf.YoutubeUsernameConfig"
+﻿<local:YouTubeBaseConfig x:Class="GoogleModules.Wpf.YouTubeUsernameConfig"
                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                          xmlns:local="clr-namespace:GoogleModules.Wpf"
@@ -20,4 +20,4 @@
         <TextBox Name="UsernameBox" TextChanged="UsernameBox_TextChanged" Grid.Column="1" Grid.Row="1"/>
         <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">The Username is invalid.</TextBlock>
     </Grid>
-</local:YoutubeBaseConfig>
+</local:YouTubeBaseConfig>

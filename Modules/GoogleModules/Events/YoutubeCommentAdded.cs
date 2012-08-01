@@ -16,8 +16,8 @@ namespace GoogleModules.Events
     /// This class represents an event that will be triggered when a comment is received for a predefined video.
     /// </summary>
     [DataContract]
-    [MayhemModule("Youtube: Video Comment", "Triggers when a comment is received for a predefined video")]
-    public class YoutubeCommentAdded : YoutubeEventBase, IWpfConfigurable
+    [MayhemModule("YouTube: Video Comment", "Triggers when a comment is received for a predefined video")]
+    public class YouTubeCommentAdded : YouTubeEventBase, IWpfConfigurable
     {
         [DataMember]
         private string videoID;
@@ -43,7 +43,7 @@ namespace GoogleModules.Events
             }
             catch (GDataRequestException ex)
             {
-                ErrorLog.AddError(ErrorType.Failure, Strings.YoutubeVideoDoesntExists);
+                ErrorLog.AddError(ErrorType.Failure, Strings.YouTubeVideoDoesntExists);
                 Logger.Write(ex);
 
                 e.Cancel = true;
@@ -51,7 +51,7 @@ namespace GoogleModules.Events
             }
             catch (Exception ex)
             {
-                ErrorLog.AddError(ErrorType.Failure, Strings.Youtube_ErrorMonitoringComment);
+                ErrorLog.AddError(ErrorType.Failure, Strings.YouTube_ErrorMonitoringComment);
                 Logger.Write(ex);
 
                 e.Cancel = true;
@@ -85,7 +85,7 @@ namespace GoogleModules.Events
                 }
                 catch (Exception ex)
                 {
-                    ErrorLog.AddError(ErrorType.Failure, Strings.Youtube_VideoCommentCouldntEnable);
+                    ErrorLog.AddError(ErrorType.Failure, Strings.YouTube_VideoCommentCouldntEnable);
                     Logger.Write(ex);
 
                     return;
@@ -120,7 +120,7 @@ namespace GoogleModules.Events
                 catch (Exception ex)
                 {
                     Logger.Write(ex);
-                    ErrorLog.AddError(ErrorType.Failure, Strings.Youtube_ErrorMonitoringComment);
+                    ErrorLog.AddError(ErrorType.Failure, Strings.YouTube_ErrorMonitoringComment);
 
                     return;
                 }
@@ -133,12 +133,12 @@ namespace GoogleModules.Events
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new YoutubeCommentAddedConfig(videoID, Strings.YoutubeCommentAdded_Title); }
+            get { return new YouTubeCommentAddedConfig(videoID, Strings.YouTubeCommentAdded_Title); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = configurationControl as YoutubeCommentAddedConfig;
+            var config = configurationControl as YouTubeCommentAddedConfig;
 
             videoID = config.VideoID;
         }
@@ -149,7 +149,7 @@ namespace GoogleModules.Events
 
         public string GetConfigString()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.YoutubeCommentAdded_ConfigString, videoID);
+            return string.Format(CultureInfo.CurrentCulture, Strings.YouTubeCommentAdded_ConfigString, videoID);
         }
 
         #endregion

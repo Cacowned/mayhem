@@ -414,99 +414,99 @@ namespace GoogleModules.Resources {
         /// <summary>
         ///   Looks up a localized string similar to AI39si4VuUApLd4VGVwxWEwKMwbNs1dhSeVEc1LGavmXEwnP1QsUq9FHL81tTdDq4_bQRf0SSP6VvvVovht6Xioy3l-9v2awOw.
         /// </summary>
-        internal static string Youtube_DeveloperKey {
+        internal static string YouTube_DeveloperKey {
             get {
-                return ResourceManager.GetString("Youtube_DeveloperKey", resourceCulture);
+                return ResourceManager.GetString("YouTube_DeveloperKey", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error at monitoring the Youtube comments..
+        ///   Looks up a localized string similar to Error at monitoring the YouTube comments..
         /// </summary>
-        internal static string Youtube_ErrorMonitoringComment {
+        internal static string YouTube_ErrorMonitoringComment {
             get {
-                return ResourceManager.GetString("Youtube_ErrorMonitoringComment", resourceCulture);
+                return ResourceManager.GetString("YouTube_ErrorMonitoringComment", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Mayhem.
         /// </summary>
-        internal static string Youtube_ProductName {
+        internal static string YouTube_ProductName {
             get {
-                return ResourceManager.GetString("Youtube_ProductName", resourceCulture);
+                return ResourceManager.GetString("YouTube_ProductName", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to username.
         /// </summary>
-        internal static string Youtube_Username {
+        internal static string YouTube_Username {
             get {
-                return ResourceManager.GetString("Youtube_Username", resourceCulture);
+                return ResourceManager.GetString("YouTube_Username", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The event &apos;Youtube: Video Comment&apos; couldn&apos;t be enabled..
+        ///   Looks up a localized string similar to The event &apos;YouTube: Video Comment&apos; couldn&apos;t be enabled..
         /// </summary>
-        internal static string Youtube_VideoCommentCouldntEnable {
+        internal static string YouTube_VideoCommentCouldntEnable {
             get {
-                return ResourceManager.GetString("Youtube_VideoCommentCouldntEnable", resourceCulture);
+                return ResourceManager.GetString("YouTube_VideoCommentCouldntEnable", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Video ID.
         /// </summary>
-        internal static string Youtube_VideoID {
+        internal static string YouTube_VideoID {
             get {
-                return ResourceManager.GetString("Youtube_VideoID", resourceCulture);
+                return ResourceManager.GetString("YouTube_VideoID", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Video ID: {0}..
         /// </summary>
-        internal static string YoutubeCommentAdded_ConfigString {
+        internal static string YouTubeCommentAdded_ConfigString {
             get {
-                return ResourceManager.GetString("YoutubeCommentAdded_ConfigString", resourceCulture);
+                return ResourceManager.GetString("YouTubeCommentAdded_ConfigString", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Youtube: Video Comment.
+        ///   Looks up a localized string similar to YouTube: Video Comment.
         /// </summary>
-        internal static string YoutubeCommentAdded_Title {
+        internal static string YouTubeCommentAdded_Title {
             get {
-                return ResourceManager.GetString("YoutubeCommentAdded_Title", resourceCulture);
+                return ResourceManager.GetString("YouTubeCommentAdded_Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Youtube: Video Deleted.
+        ///   Looks up a localized string similar to YouTube: Video Deleted.
         /// </summary>
-        internal static string YoutubeVideoDeleted_Title {
+        internal static string YouTubeVideoDeleted_Title {
             get {
-                return ResourceManager.GetString("YoutubeVideoDeleted_Title", resourceCulture);
+                return ResourceManager.GetString("YouTubeVideoDeleted_Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An Youtube Video identified by the provided ID doesn&apos;t exists..
+        ///   Looks up a localized string similar to An YouTube Video identified by the provided ID doesn&apos;t exists..
         /// </summary>
-        internal static string YoutubeVideoDoesntExists {
+        internal static string YouTubeVideoDoesntExists {
             get {
-                return ResourceManager.GetString("YoutubeVideoDoesntExists", resourceCulture);
+                return ResourceManager.GetString("YouTubeVideoDoesntExists", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Youtube: Video Uploaded.
+        ///   Looks up a localized string similar to YouTube: Video Uploaded.
         /// </summary>
-        internal static string YoutubeVideoUploaded_Title {
+        internal static string YouTubeVideoUploaded_Title {
             get {
-                return ResourceManager.GetString("YoutubeVideoUploaded_Title", resourceCulture);
+                return ResourceManager.GetString("YouTubeVideoUploaded_Title", resourceCulture);
             }
         }
     }

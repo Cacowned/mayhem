@@ -8,14 +8,14 @@ namespace GoogleModules.Events
     /// This is the base class for the Youtube Events.
     /// </summary>
     [DataContractAttribute]
-    public abstract class YoutubeEventBase : GoogleModulesEventBase
+    public abstract class YouTubeEventBase : GoogleModulesEventBase
     {
         protected YouTubeRequestSettings settings;
         protected YouTubeRequest request;
 
         protected virtual void InitializeYoutubeConnection()
         {
-            settings = new YouTubeRequestSettings(Strings.Youtube_ProductName, Strings.Youtube_DeveloperKey);
+            settings = new YouTubeRequestSettings(Strings.YouTube_ProductName, Strings.YouTube_DeveloperKey);
             request = new YouTubeRequest(settings);
         }
     }
