@@ -61,6 +61,69 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication failed..
+        /// </summary>
+        internal static string General_AuthenticationFailed {
+            get {
+                return ResourceManager.GetString("General_AuthenticationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file doesn&apos;t exist..
+        /// </summary>
+        internal static string General_FileNotFound {
+            get {
+                return ResourceManager.GetString("General_FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} must contain at least one character..
+        /// </summary>
+        internal static string General_NoCharacter {
+            get {
+                return ResourceManager.GetString("General_NoCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Authenticated..
+        /// </summary>
+        internal static string General_NotAuthenticated {
+            get {
+                return ResourceManager.GetString("General_NotAuthenticated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} is too long..
+        /// </summary>
+        internal static string General_TooLong {
+            get {
+                return ResourceManager.GetString("General_TooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 41016818966.apps.googleusercontent.com.
+        /// </summary>
+        internal static string Google_ClientID {
+            get {
+                return ResourceManager.GetString("Google_ClientID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to uWqNYTTFmHPj2rd_3VYNctT6.
+        /// </summary>
+        internal static string Google_ClientSecret {
+            get {
+                return ResourceManager.GetString("Google_ClientSecret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The name of the location must contain at least one character..
         /// </summary>
         internal static string GoogleMaps_Location_NoCharacter {
@@ -97,15 +160,6 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authentication failed..
-        /// </summary>
-        internal static string GooglePlus_AuthenticationFailed {
-            get {
-                return ResourceManager.GetString("GooglePlus_AuthenticationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The authorization code must contain at least one character..
         /// </summary>
         internal static string GooglePlus_AuthorizationCode_NoCharacter {
@@ -138,24 +192,6 @@ namespace GoogleModules.Resources {
         internal static string GooglePlus_BlogEntrySuccesfulAdded {
             get {
                 return ResourceManager.GetString("GooglePlus_BlogEntrySuccesfulAdded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 41016818966.apps.googleusercontent.com.
-        /// </summary>
-        internal static string GooglePlus_ClientID {
-            get {
-                return ResourceManager.GetString("GooglePlus_ClientID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to uWqNYTTFmHPj2rd_3VYNctT6.
-        /// </summary>
-        internal static string GooglePlus_ClientSecret {
-            get {
-                return ResourceManager.GetString("GooglePlus_ClientSecret", resourceCulture);
             }
         }
         
@@ -228,15 +264,6 @@ namespace GoogleModules.Resources {
         internal static string GooglePlus_MomentText_TooLong {
             get {
                 return ResourceManager.GetString("GooglePlus_MomentText_TooLong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Not Authenticated..
-        /// </summary>
-        internal static string GooglePlus_NotAuthenticated {
-            get {
-                return ResourceManager.GetString("GooglePlus_NotAuthenticated", resourceCulture);
             }
         }
         
@@ -381,6 +408,123 @@ namespace GoogleModules.Resources {
         internal static string ProfileID_ConfigString {
             get {
                 return ResourceManager.GetString("ProfileID_ConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video title: {0}..
+        /// </summary>
+        internal static string UploadVideo_ConfigString {
+            get {
+                return ResourceManager.GetString("UploadVideo_ConfigString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Category.
+        /// </summary>
+        internal static string YouTube_Category {
+            get {
+                return ResourceManager.GetString("YouTube_Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string YouTube_Description {
+            get {
+                return ResourceManager.GetString("YouTube_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AI39si4VuUApLd4VGVwxWEwKMwbNs1dhSeVEc1LGavmXEwnP1QsUq9FHL81tTdDq4_bQRf0SSP6VvvVovht6Xioy3l-9v2awOw.
+        /// </summary>
+        internal static string YouTube_DeveloperKey {
+            get {
+                return ResourceManager.GetString("YouTube_DeveloperKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keywords.
+        /// </summary>
+        internal static string YouTube_Keywords {
+            get {
+                return ResourceManager.GetString("YouTube_Keywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        internal static string YouTube_Password {
+            get {
+                return ResourceManager.GetString("YouTube_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mayhem.
+        /// </summary>
+        internal static string YouTube_ProductName {
+            get {
+                return ResourceManager.GetString("YouTube_ProductName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The video &apos;{0}&apos; could not be uploaded..
+        /// </summary>
+        internal static string YouTube_UploadFailed {
+            get {
+                return ResourceManager.GetString("YouTube_UploadFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The video &apos;{0}&apos; was successfully uploaded..
+        /// </summary>
+        internal static string YouTube_UploadSuccesful {
+            get {
+                return ResourceManager.GetString("YouTube_UploadSuccesful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        internal static string YouTube_Username {
+            get {
+                return ResourceManager.GetString("YouTube_Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to path of the video.
+        /// </summary>
+        internal static string YouTube_VideoPath {
+            get {
+                return ResourceManager.GetString("YouTube_VideoPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video Title.
+        /// </summary>
+        internal static string YouTube_VideoTitle {
+            get {
+                return ResourceManager.GetString("YouTube_VideoTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to YouTube: Upload Video.
+        /// </summary>
+        internal static string YouTubeUploadVideo_Title {
+            get {
+                return ResourceManager.GetString("YouTubeUploadVideo_Title", resourceCulture);
             }
         }
     }

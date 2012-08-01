@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
 using DotNetOpenAuth.OAuth2;
 using Google.Apis.Authentication.OAuth2;
 using Google.Apis.Authentication.OAuth2.DotNetOpenAuth;
@@ -102,12 +101,12 @@ namespace GoogleModules.Wpf
 
             if (errorString.Equals(string.Empty) && authenticationFailed)
             {
-                errorString = Strings.GooglePlus_AuthenticationFailed;
+                errorString = Strings.General_AuthenticationFailed;
             }
 
             if (errorString.Equals(string.Empty) && !isAuthenticated)
             {
-                errorString = Strings.GooglePlus_NotAuthenticated;
+                errorString = Strings.General_NotAuthenticated;
             }
 
             if (!errorString.Equals(string.Empty))
@@ -180,8 +179,8 @@ namespace GoogleModules.Wpf
         protected void Authenticate()
         {
             NativeApplicationClient provider = new NativeApplicationClient(GoogleAuthenticationServer.Description);
-            provider.ClientIdentifier = Strings.GooglePlus_ClientID;
-            provider.ClientSecret = Strings.GooglePlus_ClientSecret;
+            provider.ClientIdentifier = Strings.Google_ClientID;
+            provider.ClientSecret = Strings.Google_ClientSecret;
 
             auth = new OAuth2Authenticator<NativeApplicationClient>(provider, GetAuthorization);
 
