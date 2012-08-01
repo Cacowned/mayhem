@@ -6,9 +6,9 @@ using MayhemWpf.UserControls;
 namespace GoogleModules.Wpf
 {
     /// <summary>
-    /// This is the configuration file for setting the ID of the Youtube video we want to monitor.
+    /// This is the configuration file for setting the ID of the YouTube video we want to monitor.
     /// </summary>
-    public partial class YoutubeCommentAddedConfig : WpfConfiguration
+    public partial class YouTubeCommentAddedConfig : WpfConfiguration
     {
         public string VideoID
         {
@@ -23,7 +23,7 @@ namespace GoogleModules.Wpf
 
         private string configTitle;
 
-        public YoutubeCommentAddedConfig(string videoID, string title)
+        public YouTubeCommentAddedConfig(string videoID, string title)
         {
             VideoID = videoID;
             configTitle = title;
@@ -58,14 +58,14 @@ namespace GoogleModules.Wpf
             {
                 CanSave = false;
 
-                return string.Format(Strings.General_NoCharacter, Strings.Youtube_VideoID);
+                return string.Format(Strings.General_NoCharacter, Strings.YouTube_VideoID);
             }
 
             int textLength = value.Length;
 
             if (textLength > 100)
             {
-                errorString = string.Format(Strings.General_TooLong, Strings.Youtube_VideoID);
+                errorString = string.Format(Strings.General_TooLong, Strings.YouTube_VideoID);
             }
 
             CanSave = textLength > 0 && (textLength <= 100);

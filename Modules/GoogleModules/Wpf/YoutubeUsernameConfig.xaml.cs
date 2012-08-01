@@ -6,7 +6,7 @@ namespace GoogleModules.Wpf
     /// <summary>
     /// This is the configuration file for setting the username for the feed we want to monitor.
     /// </summary>
-    public partial class YoutubeUsernameConfig : YoutubeBaseConfig
+    public partial class YouTubeUsernameConfig : YouTubeBaseConfig
     {
         public override string Title
         {
@@ -15,7 +15,7 @@ namespace GoogleModules.Wpf
 
         private string configTitle;
 
-        public YoutubeUsernameConfig(string username, string title)
+        public YouTubeUsernameConfig(string username, string title)
         {
             Username = username;
             configTitle = title;

@@ -14,8 +14,8 @@ namespace GoogleModules.Events
     /// This class represents an event that will be triggered when a new video is uploaded by a predefined user.
     /// </summary>
     [DataContract]
-    [MayhemModule("Youtube: Video Uploaded", "Triggers when a predefined user uploads a video")]
-    public class YoutubeVideoUploaded : YoutubeVideoEventBase, IWpfConfigurable
+    [MayhemModule("YouTube: Video Uploaded", "Triggers when a predefined user uploads a video")]
+    public class YouTubeVideoUploaded : YouTubeVideoEventBase, IWpfConfigurable
     {
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -88,7 +88,7 @@ namespace GoogleModules.Events
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new YoutubeUsernameConfig(username, Strings.YoutubeVideoUploaded_Title); }
+            get { return new YouTubeUsernameConfig(username, Strings.YouTubeVideoUploaded_Title); }
         }
     }
 }

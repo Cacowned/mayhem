@@ -16,7 +16,7 @@ namespace GoogleModules.Events
     /// This is the base class for the Youtube Video Events.
     /// </summary>
     [DataContract]
-    public abstract class YoutubeVideoEventBase : YoutubeEventBase
+    public abstract class YouTubeVideoEventBase : YouTubeEventBase
     {
         [DataMember]
         protected string username;
@@ -62,7 +62,7 @@ namespace GoogleModules.Events
 
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = configurationControl as YoutubeUsernameConfig;
+            var config = configurationControl as YouTubeUsernameConfig;
 
             username = config.Username;
         }

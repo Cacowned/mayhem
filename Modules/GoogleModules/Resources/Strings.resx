@@ -234,37 +234,37 @@
   <data name="Username_ConfigString" xml:space="preserve">
     <value>Username: {0}.</value>
   </data>
-  <data name="YoutubeCommentAdded_ConfigString" xml:space="preserve">
+  <data name="YouTubeCommentAdded_ConfigString" xml:space="preserve">
     <value>Video ID: {0}.</value>
   </data>
-  <data name="YoutubeCommentAdded_Title" xml:space="preserve">
-    <value>Youtube: Video Comment</value>
+  <data name="YouTubeCommentAdded_Title" xml:space="preserve">
+    <value>YouTube: Video Comment</value>
   </data>
-  <data name="YoutubeVideoDeleted_Title" xml:space="preserve">
-    <value>Youtube: Video Deleted</value>
+  <data name="YouTubeVideoDeleted_Title" xml:space="preserve">
+    <value>YouTube: Video Deleted</value>
   </data>
-  <data name="YoutubeVideoDoesntExists" xml:space="preserve">
-    <value>An Youtube Video identified by the provided ID doesn't exists.</value>
+  <data name="YouTubeVideoDoesntExists" xml:space="preserve">
+    <value>An YouTube Video identified by the provided ID doesn't exists.</value>
   </data>
-  <data name="YoutubeVideoUploaded_Title" xml:space="preserve">
-    <value>Youtube: Video Uploaded</value>
+  <data name="YouTubeVideoUploaded_Title" xml:space="preserve">
+    <value>YouTube: Video Uploaded</value>
   </data>
-  <data name="Youtube_DeveloperKey" xml:space="preserve">
+  <data name="YouTube_DeveloperKey" xml:space="preserve">
     <value>AI39si4VuUApLd4VGVwxWEwKMwbNs1dhSeVEc1LGavmXEwnP1QsUq9FHL81tTdDq4_bQRf0SSP6VvvVovht6Xioy3l-9v2awOw</value>
   </data>
-  <data name="Youtube_ErrorMonitoringComment" xml:space="preserve">
-    <value>Error at monitoring the Youtube comments.</value>
+  <data name="YouTube_ErrorMonitoringComment" xml:space="preserve">
+    <value>Error at monitoring the YouTube comments.</value>
   </data>
-  <data name="Youtube_ProductName" xml:space="preserve">
+  <data name="YouTube_ProductName" xml:space="preserve">
     <value>Mayhem</value>
   </data>
-  <data name="Youtube_Username" xml:space="preserve">
+  <data name="YouTube_Username" xml:space="preserve">
     <value>username</value>
   </data>
-  <data name="Youtube_VideoCommentCouldntEnable" xml:space="preserve">
-    <value>The event 'Youtube: Video Comment' couldn't be enabled.</value>
+  <data name="YouTube_VideoCommentCouldntEnable" xml:space="preserve">
+    <value>The event 'YouTube: Video Comment' couldn't be enabled.</value>
   </data>
-  <data name="Youtube_VideoID" xml:space="preserve">
+  <data name="YouTube_VideoID" xml:space="preserve">
     <value>Video ID</value>
   </data>
 </root>

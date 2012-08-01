@@ -6,7 +6,7 @@ namespace GoogleModules.Wpf
     /// <summary>
     /// This is the base configuration file for the Youtube configuration files.
     /// </summary>
-    public class YoutubeBaseConfig : WpfConfiguration
+    public class YouTubeBaseConfig : WpfConfiguration
     {
         public string Username
         {
@@ -22,14 +22,14 @@ namespace GoogleModules.Wpf
             {
                 CanSave = false;
 
-                return string.Format(Strings.General_NoCharacter, Strings.Youtube_Username);
+                return string.Format(Strings.General_NoCharacter, Strings.YouTube_Username);
             }
 
             int textLength = value.Length;
 
             if (textLength > 100)
             {
-                errorString = string.Format(Strings.General_TooLong, Strings.Youtube_Username);
+                errorString = string.Format(Strings.General_TooLong, Strings.YouTube_Username);
             }
 
             CanSave = textLength > 0 && (textLength <= 100);
