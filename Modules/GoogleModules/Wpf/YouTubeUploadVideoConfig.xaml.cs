@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -72,27 +73,22 @@ namespace GoogleModules.Wpf
         {
             InitializeComponent();
 
+            List<string> categories = new List<string>()
+            {
+                "Autos & Vehicles", "Comedy", "Education", "Entertainment", "Film & Animation", "Gaming", "Howto & Style", "Music", "News & Politics", 
+                "Nonprofits & Activism", "People & Blogs", "Pets & Animals", "Science & Technology", "Sports", "Travel & Events"
+            };
+
+            CategoryComboBox.Items.Clear();
+            foreach (string cat in categories)
+            {
+                CategoryComboBox.Items.Add(cat);
+            }
+
             VideoTitle = videoTitle;
             Description = description;
             Category = category;
             VideoPath = videoPath;
-
-            CategoryComboBox.Items.Add("Autos & Vehicles");
-            CategoryComboBox.Items.Add("Comedy");
-            CategoryComboBox.Items.Add("Education");
-            CategoryComboBox.Items.Add("Entertainment");
-            CategoryComboBox.Items.Add("Film & Animation");
-            CategoryComboBox.Items.Add("Gaming");
-            CategoryComboBox.Items.Add("Howto & Style");
-            CategoryComboBox.Items.Add("Music");
-            CategoryComboBox.Items.Add("News & Politics");
-            CategoryComboBox.Items.Add("Nonprofits & Activism");
-            CategoryComboBox.Items.Add("People & Blogs");
-            CategoryComboBox.Items.Add("Pets & Animals");
-            CategoryComboBox.Items.Add("Science & Technology");
-            CategoryComboBox.Items.Add("Sports");
-            CategoryComboBox.Items.Add("Travel & Events");
-
             configTitle = title;
         }
 
@@ -167,7 +163,6 @@ namespace GoogleModules.Wpf
                 authenticationFailed = true;
 
                 Logger.Write(ex);
-
                 return null;
             }
             finally
@@ -198,13 +193,11 @@ namespace GoogleModules.Wpf
 
             eventAuthorizationCodeEnter.Set();
 
+            // We need to wait for the authentication to take place. If in 15 seconds the authentication doesn't take place we stop it. 
             Thread.Sleep(500);
-
-            // We need to wait for the authentication to take place. If in 15 seconds the authentication doesn't take place we stop it.           
             eventWaitAuthorization.WaitOne(20000);
 
             CheckValidity();
-
             buttonCheckCode.IsEnabled = false;
         }
 
@@ -219,22 +212,7 @@ namespace GoogleModules.Wpf
             }
         }
 
-        private void AuthorizationCode_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            CheckValidity();
-        }
-
-        private void VideoTitleBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            CheckValidity();
-        }
-
-        private void DescriptionBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            CheckValidity();
-        }
-
-        private void VideoPathBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void Box_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
         }
@@ -253,17 +231,10 @@ namespace GoogleModules.Wpf
                 errorString = Strings.GooglePlus_AuthorizationCode_TooLong;
             }
 
-            CanSave = textLength > 0 && (textLength <= 200);
+            CanSave = textLength > 0 && (textLength <= 300);
 
             // If an Authorization Code is setted and the Authentication process is started we can click the CheckCode button.
-            if (CanSave && canEnableCheckCode)
-            {
-                buttonCheckCode.IsEnabled = true;
-            }
-            else
-            {
-                buttonCheckCode.IsEnabled = false;
-            }
+            buttonCheckCode.IsEnabled = (CanSave && canEnableCheckCode);
 
             return errorString;
         }
