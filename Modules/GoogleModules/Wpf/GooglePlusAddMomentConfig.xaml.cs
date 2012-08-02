@@ -151,27 +151,15 @@ namespace GoogleModules.Wpf
                 errorString = Strings.GooglePlus_AuthorizationCode_TooLong;
             }
 
-            CanSave = textLength > 0 && (textLength <= 200);
+            CanSave = textLength > 0 && (textLength <= 300);
 
             // If an Authorization Code is setted and the Authentication process is started we can click the CheckCode button.
-            if (CanSave && canEnableCheckCode)
-            {
-                buttonCheckCode.IsEnabled = true;
-            }
-            else
-            {
-                buttonCheckCode.IsEnabled = false;
-            }
+            buttonCheckCode.IsEnabled = (CanSave && canEnableCheckCode);
 
             return errorString;
         }
 
-        private void AuthorizationCodeBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            CheckValidity();
-        }
-
-        private void ActivityTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void Box_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckValidity();
         }
@@ -192,10 +180,9 @@ namespace GoogleModules.Wpf
         {
             authenticationFailed = false;
             isAuthenticated = false;
+            canEnableCheckCode = true;
 
             IAuthorizationState state = null;
-
-            canEnableCheckCode = true;
 
             try
             {
@@ -217,7 +204,6 @@ namespace GoogleModules.Wpf
                 authenticationFailed = true;
 
                 Logger.Write(ex);
-
                 return null;
             }
             finally
@@ -250,14 +236,12 @@ namespace GoogleModules.Wpf
         private void buttonCheckCode_Click(object sender, RoutedEventArgs e)
         {
             authorizationCode = AuthorizationCodeBox.Text;
-
             eventAuthorizationCodeEnter.Set();
 
             // We need to wait for the authentication to take place. If in 15 seconds the authentication doesn't take place we stop it.           
             eventWaitAuthorization.WaitOne(15000);
 
             CheckValidity();
-
             buttonCheckCode.IsEnabled = false;
         }
     }
