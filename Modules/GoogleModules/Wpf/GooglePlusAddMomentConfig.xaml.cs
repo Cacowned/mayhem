@@ -92,22 +92,25 @@ namespace GoogleModules.Wpf
             string errorString = string.Empty;
             CanSave = true;
 
-            errorString = CheckValidityMomentText();
-
-            if (errorString.Equals(string.Empty))
+            if (!(errorString = CheckValidityMomentText()).Equals(string.Empty))
             {
-                errorString = CheckValidityAuthorizationCode();
+                ;
             }
-
-            if (errorString.Equals(string.Empty) && authenticationFailed)
-            {
-                errorString = Strings.General_AuthenticationFailed;
-            }
-
-            if (errorString.Equals(string.Empty) && !isAuthenticated)
-            {
-                errorString = Strings.General_NotAuthenticated;
-            }
+            else
+                if (!(errorString = CheckValidityAuthorizationCode()).Equals(string.Empty))
+                {
+                    ;
+                }
+                else
+                    if (authenticationFailed)
+                    {
+                        errorString = Strings.General_AuthenticationFailed;
+                    }
+                    else
+                        if (!isAuthenticated)
+                        {
+                            errorString = Strings.General_NotAuthenticated;
+                        }
 
             if (!errorString.Equals(string.Empty))
             {
@@ -127,10 +130,11 @@ namespace GoogleModules.Wpf
             {
                 errorString = Strings.GooglePlus_MomentText_NoCharacter;
             }
-            else if (textLength > 300)
-            {
-                errorString = Strings.GooglePlus_MomentText_TooLong;
-            }
+            else
+                if (textLength > 300)
+                {
+                    errorString = Strings.GooglePlus_MomentText_TooLong;
+                }
 
             CanSave = textLength > 0 && (textLength <= 300);
 
@@ -146,10 +150,11 @@ namespace GoogleModules.Wpf
             {
                 errorString = Strings.GooglePlus_AuthorizationCode_NoCharacter;
             }
-            else if (textLength > 300)
-            {
-                errorString = Strings.GooglePlus_AuthorizationCode_TooLong;
-            }
+            else
+                if (textLength > 300)
+                {
+                    errorString = Strings.GooglePlus_AuthorizationCode_TooLong;
+                }
 
             CanSave = textLength > 0 && (textLength <= 300);
 

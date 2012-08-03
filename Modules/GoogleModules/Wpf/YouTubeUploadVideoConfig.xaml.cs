@@ -226,10 +226,11 @@ namespace GoogleModules.Wpf
             {
                 errorString = Strings.GooglePlus_AuthorizationCode_NoCharacter;
             }
-            else if (textLength > 300)
-            {
-                errorString = Strings.GooglePlus_AuthorizationCode_TooLong;
-            }
+            else
+                if (textLength > 300)
+                {
+                    errorString = Strings.GooglePlus_AuthorizationCode_TooLong;
+                }
 
             CanSave = textLength > 0 && (textLength <= 300);
 
@@ -248,10 +249,11 @@ namespace GoogleModules.Wpf
             {
                 errorString = string.Format(Strings.General_NoCharacter, type);
             }
-            else if (textLength > maxLength)
-            {
-                errorString = string.Format(Strings.General_TooLong, type);
-            }
+            else
+                if (textLength > maxLength)
+                {
+                    errorString = string.Format(Strings.General_TooLong, type);
+                }
 
             CanSave = textLength > 0 && (textLength <= maxLength);
 
@@ -268,16 +270,18 @@ namespace GoogleModules.Wpf
             {
                 errorString = string.Format(Strings.General_NoCharacter, Strings.YouTube_VideoPath);
             }
-            else if (textLength > 300)
-            {
-                errorString = string.Format(Strings.General_TooLong, Strings.YouTube_VideoPath);
-            }
-            else if (!File.Exists(VideoPathBox.Text))
-            {
-                // The file doesn't exists
-                errorString = Strings.General_FileNotFound;
-                fileExits = false;
-            }
+            else
+                if (textLength > 300)
+                {
+                    errorString = string.Format(Strings.General_TooLong, Strings.YouTube_VideoPath);
+                }
+                else
+                    if (!File.Exists(VideoPathBox.Text))
+                    {
+                        // The file doesn't exists
+                        errorString = Strings.General_FileNotFound;
+                        fileExits = false;
+                    }
 
             CanSave = textLength > 0 && (textLength <= 300) && fileExits;
 
@@ -289,32 +293,35 @@ namespace GoogleModules.Wpf
             string errorString = string.Empty;
             CanSave = true;
 
-            errorString = CheckValidityField(VideoTitleBox.Text, 200, Strings.YouTube_VideoTitle);
-
-            if (errorString.Equals(string.Empty))
+            if (!(errorString = CheckValidityField(VideoTitleBox.Text, 200, Strings.YouTube_VideoTitle)).Equals(string.Empty))
             {
-                errorString = CheckValidityField(DescriptionBox.Text, 500, Strings.YouTube_Description);
+                ;
             }
-
-            if (errorString.Equals(string.Empty))
-            {
-                errorString = CheckValidityVideoPath();
-            }
-
-            if (errorString.Equals(string.Empty))
-            {
-                errorString = CheckValidityAuthorizationCode();
-            }
-
-            if (errorString.Equals(string.Empty) && authenticationFailed)
-            {
-                errorString = Strings.General_AuthenticationFailed;
-            }
-
-            if (errorString.Equals(string.Empty) && !isAuthenticated)
-            {
-                errorString = Strings.General_NotAuthenticated;
-            }
+            else
+                if (!(errorString = CheckValidityField(DescriptionBox.Text, 500, Strings.YouTube_Description)).Equals(string.Empty))
+                {
+                    ;
+                }
+                else
+                    if (!(errorString = CheckValidityVideoPath()).Equals(string.Empty))
+                    {
+                        ;
+                    }
+                    else
+                        if (!(errorString = CheckValidityAuthorizationCode()).Equals(string.Empty))
+                        {
+                            ;
+                        }
+                        else
+                            if (authenticationFailed)
+                            {
+                                errorString = Strings.General_AuthenticationFailed;
+                            }
+                            else
+                                if (!isAuthenticated)
+                                {
+                                    errorString = Strings.General_NotAuthenticated;
+                                }
 
             if (!errorString.Equals(string.Empty))
             {
