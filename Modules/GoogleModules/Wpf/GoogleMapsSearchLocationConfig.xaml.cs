@@ -77,10 +77,11 @@ namespace GoogleModules.Wpf
             {
                 errorString = Strings.GoogleMaps_Location_NoCharacter;
             }
-            else if (textLength > 200)
-            {
-                errorString = Strings.GoogleMaps_Location_TooLong;
-            }
+            else
+                if (textLength > 200)
+                {
+                    errorString = Strings.GoogleMaps_Location_TooLong;
+                }
 
             CanSave = textLength > 0 && (textLength <= 200);
 
