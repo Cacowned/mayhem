@@ -5,7 +5,7 @@ using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 
-namespace PreGsocTest1
+namespace PowerModules
 {
     public enum PowerStatusChoice
     {

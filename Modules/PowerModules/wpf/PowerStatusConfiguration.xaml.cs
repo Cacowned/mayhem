@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Forms;
 using MayhemWpf.UserControls;
 
-namespace PreGsocTest1
+namespace PowerModules
 {
     /// <summary>
     /// Interaction logic for PowerStatusConfiguration.xaml
