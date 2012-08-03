@@ -5,7 +5,7 @@ using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 
-namespace PreGsocTest1
+namespace PowerModules
 {
     [DataContract]
     [MayhemModule("1Power: Power Status", "This event triggers when a particular laptop power status is reached.")]

@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using MayhemCore;
 
-namespace PreGsocTest1
+namespace PowerModules
 {
     [MayhemModule("Power: Cable Unplugged", "This event triggers when the power cable is unplugged.")]
     public class PowerUnplugged : EventBase

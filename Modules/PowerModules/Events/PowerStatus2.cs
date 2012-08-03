@@ -6,7 +6,7 @@ using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using System.IO;
 
-namespace PreGsocTest1
+namespace PowerModules
 {
     [DataContract]
     [MayhemModule("2Power: Power Status", "This event triggers when a particular laptop power status is reached.")]
@@ -60,7 +60,7 @@ namespace PreGsocTest1
         protected override void OnAfterLoad()
         {
             TestAndSetRaiseEvent();
-            pollingTimerInterval = 2000; //2 seconds
+            pollingTimerInterval = 3000; //3 seconds
             pollingTimer = new Timer();
             pollingTimer.Enabled = true;
             pollingTimer.Interval = pollingTimerInterval;
@@ -92,17 +92,23 @@ namespace PreGsocTest1
                     break;
                 case PowerStatusChoice.Percentage:
                     if (BatteryPercentageRemaining() > percentage)
+                    {
+                        MessageBox.Show("raiseevent true " + percentage.ToString() + " < " + BatteryPercentageRemaining());
                         raiseEvent = true;
+                    }
                     break;
                 case PowerStatusChoice.RemainingTime:
                     if (BatteryMinutesRemaining() > remainingTime)
                         raiseEvent = true;
                     break;
+                default:
+                    MessageBox.Show("cond check fail");
+                    break;
             }
         }
         protected int BatteryMinutesRemaining()
         {
-            return SystemInformation.PowerStatus.BatteryLifeRemaining / 60;
+            return (int)(SystemInformation.PowerStatus.BatteryLifeRemaining / 60);
         }
         protected int BatteryPercentageRemaining()
         {
@@ -110,23 +116,30 @@ namespace PreGsocTest1
         }
         protected override void OnDisabled(DisabledEventArgs e)
         {
+            MessageBox.Show("disabled rasie event false");
             raiseEvent = false;
             pollingTimer.Stop();
-            pollingTimer.Dispose();
+            //pollingTimer.Dispose();
         }
         protected override void OnEnabling(EnablingEventArgs e)
         {
+            /*pollingTimer = new Timer();
+            pollingTimer.Enabled = true;
+            pollingTimer.Interval = pollingTimerInterval;
+            pollingTimer.Tick += new EventHandler(ConditionCheck);
+             */
             pollingTimer.Start();
             TestAndSetRaiseEvent();
         }
         private void callTrigger()
         {
+            MessageBox.Show("call trigger raise event false");
             raiseEvent = false;
             Trigger();
         }
         private void ConditionCheck(Object sender, EventArgs e)
         {
-            //MessageBox.Show("in cond check");
+            MessageBox.Show("in cond check");
             if (raiseEvent)
             {
                 switch (chosenStatus)
@@ -139,9 +152,12 @@ namespace PreGsocTest1
                         }
                         break;
                     case PowerStatusChoice.Percentage:
-                        //MessageBox.Show("in the right place "+percentage.ToString()+" "+BatteryPercentageRemaining());
-                        if(percentage <= BatteryPercentageRemaining())
+                        MessageBox.Show("in the right place "+percentage.ToString()+" "+BatteryPercentageRemaining());
+                        if (percentage <= BatteryPercentageRemaining())
+                        {
+                            //MessageBox.Show(percentage.ToString() + " " + BatteryPercentageRemaining().ToString());
                             callTrigger();
+                        }
                         break;
                     case PowerStatusChoice.RemainingTime:
                         if (remainingTime <= BatteryMinutesRemaining())
