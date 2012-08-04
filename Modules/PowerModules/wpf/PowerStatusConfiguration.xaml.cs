@@ -11,15 +11,13 @@ namespace PowerModules
     public partial class PowerStatusConfiguration : WpfConfiguration
     {
         public PowerStatusChoice ChosenStatus { get; private set; }
-        public float Percentage { get; private set; }
+        public int Percentage { get; private set; }
         public BatteryChargeStatus ChosenBCS { get; private set; }
-        public int RemainingTime { get; private set; } //minutes
-        public PowerStatusConfiguration(PowerStatusChoice chosenstatus, float percentage, BatteryChargeStatus chosenBCS, int remainingTime)
+        public PowerStatusConfiguration(PowerStatusChoice chosenstatus, BatteryChargeStatus chosenBCS, int percentage)
         {
             ChosenStatus = chosenstatus;
             Percentage = percentage;
             ChosenBCS = chosenBCS;
-            RemainingTime = remainingTime;
             InitializeComponent();
         }
         public override string Title
@@ -29,14 +27,10 @@ namespace PowerModules
         public override void OnLoad()
         {
             CanSave = true;
-            //shouldCheckVailidity = true;
             switch (ChosenStatus)
             {
                 case PowerStatusChoice.Percentage:
                     RadioPercent.IsChecked = true;
-                    break;
-                case PowerStatusChoice.RemainingTime:
-                    RadioLifeTime.IsChecked = true;
                     break;
                 default:
                     RadioBCS.IsChecked = true;
@@ -54,15 +48,12 @@ namespace PowerModules
                     BatteryChargeSelectionList.SelectedIndex = 2;
                     break;
             }
-            BatteryTimeRemainingBox.Text = RemainingTime.ToString();
             BatteryPercentageBox.Text = Percentage.ToString();
         }
         public override void OnSave()
         {
             if (RadioBCS.IsChecked == true)
                 ChosenStatus = PowerStatusChoice.PowerState;
-            else if (RadioLifeTime.IsChecked == true)
-                ChosenStatus = PowerStatusChoice.RemainingTime;
             else
                 ChosenStatus = PowerStatusChoice.Percentage;
             switch (BatteryChargeSelectionList.SelectedIndex)
@@ -77,8 +68,7 @@ namespace PowerModules
                     ChosenBCS = BatteryChargeStatus.Critical;
                     break;
             }
-            Percentage = float.Parse(BatteryPercentageBox.Text);
-            RemainingTime = Int32.Parse(BatteryTimeRemainingBox.Text);
+            Percentage = Int32.Parse(BatteryPercentageBox.Text);
         }
         private void TextChanged(object sender, RoutedEventArgs e)
         {
@@ -86,19 +76,11 @@ namespace PowerModules
             {
                 BatteryChargeSelectionList.IsEnabled = true;
                 BatteryPercentageBox.IsEnabled = false;
-                BatteryTimeRemainingBox.IsEnabled = false;
-            }
-            else if (RadioLifeTime.IsChecked == true)
-            {
-                BatteryChargeSelectionList.IsEnabled = false;
-                BatteryPercentageBox.IsEnabled = false;
-                BatteryTimeRemainingBox.IsEnabled = true;
             }
             else
             {
                 BatteryChargeSelectionList.IsEnabled = false;
                 BatteryPercentageBox.IsEnabled = true;
-                BatteryTimeRemainingBox.IsEnabled = false;
             }
             textInvalid.Text = CheckValidity();
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
@@ -107,15 +89,8 @@ namespace PowerModules
         private string CheckValidity()
         {
             string s = "Invalid";
-            float percent;
-            int minutes;
-            bool badtime = !(Int32.TryParse(BatteryTimeRemainingBox.Text, out minutes) && (minutes >= 2 && minutes <= 600));
-            bool badpercent = !(float.TryParse(BatteryPercentageBox.Text, out percent) && (percent >= 3.0 && percent <= 98.0));
-            if (badtime && RadioLifeTime.IsChecked != true)
-            {
-                BatteryTimeRemainingBox.Text = "30";
-                badtime = false;
-            }
+            int percent;
+            bool badpercent = !(Int32.TryParse(BatteryPercentageBox.Text, out percent) && (percent >= 3 && percent <= 98));
             if (badpercent && RadioPercent.IsChecked != true)
             {
                 BatteryPercentageBox.Text = "30";
@@ -123,9 +98,7 @@ namespace PowerModules
             }
             if (badpercent)
                 s += " percentage";
-            if (badtime)
-                s += " time";
-            CanSave = !(badpercent || badtime);
+            CanSave = !badpercent;
             return CanSave ? string.Empty : s;
         }
     }

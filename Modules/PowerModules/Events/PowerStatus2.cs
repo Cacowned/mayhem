@@ -1,32 +1,33 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
-using System.IO;
 
 namespace PowerModules
 {
+    public enum PowerStatusChoice
+    {
+        Percentage, PowerState
+    }
     [DataContract]
-    [MayhemModule("2Power: Power Status", "This event triggers when a particular laptop power status is reached.")]
-    public class PowerStatus2 : EventBase, IWpfConfigurable
+    [MayhemModule("Power: Power Status", "This event triggers when a particular laptop power status is reached.")]
+    public class PowerStatus : EventBase, IWpfConfigurable
     {
         [DataMember]
         private PowerStatusChoice chosenStatus;
         [DataMember]
-        private float percentage;
+        private int percentage;
         [DataMember]
         private BatteryChargeStatus chosenBCS;
-        [DataMember]
-        private int remainingTime; //minutes
-        private Timer pollingTimer;
-        private int pollingTimerInterval; //milliseconds
+        private DispatcherTimer pollingTimer;
         private bool raiseEvent;
         #region config view
         public WpfConfiguration ConfigurationControl
         {
-            get { return new PowerStatusConfiguration(chosenStatus, percentage, chosenBCS, remainingTime); }
+            get { return new PowerStatusConfiguration(chosenStatus, chosenBCS, percentage); }
         }
         public void OnSaved(WpfConfiguration configurationControl)
         {
@@ -34,8 +35,7 @@ namespace PowerModules
             chosenStatus = config.ChosenStatus;
             chosenBCS = config.ChosenBCS;
             percentage = config.Percentage;
-            remainingTime = config.RemainingTime;
-            MessageBox.Show(chosenStatus.ToString() + " " + chosenBCS.ToString() + " " + percentage.ToString() + " " + remainingTime.ToString());
+            //MessageBox.Show(chosenStatus.ToString() + " " + chosenBCS.ToString() + " " + percentage.ToString() + " " + remainingTime.ToString());
         }
         #endregion
         public string GetConfigString()
@@ -44,8 +44,6 @@ namespace PowerModules
             {
                 case PowerStatusChoice.Percentage:
                     return string.Format("Battery falls to {0}%", percentage);
-                case PowerStatusChoice.RemainingTime:
-                    return string.Format("{0} minutes battery time remaining", remainingTime.ToString());
                 default:
                     return "Battery hits " + chosenBCS.ToString() + " status";
             }
@@ -54,17 +52,11 @@ namespace PowerModules
         {
             chosenStatus = PowerStatusChoice.PowerState;
             chosenBCS = BatteryChargeStatus.Charging;
-            remainingTime = 30*60;
             percentage = 30;
         }
         protected override void OnAfterLoad()
         {
-            TestAndSetRaiseEvent();
-            pollingTimerInterval = 3000; //3 seconds
-            pollingTimer = new Timer();
-            pollingTimer.Enabled = true;
-            pollingTimer.Interval = pollingTimerInterval;
-            pollingTimer.Tick += new EventHandler(ConditionCheck);
+            pollingTimer = new DispatcherTimer();
         }
 
         private void TestAndSetRaiseEvent()
@@ -91,24 +83,16 @@ namespace PowerModules
                     }
                     break;
                 case PowerStatusChoice.Percentage:
-                    if (BatteryPercentageRemaining() > percentage)
+                    if (BatteryPercentageRemaining() > (int)percentage)
                     {
-                        MessageBox.Show("raiseevent true " + percentage.ToString() + " < " + BatteryPercentageRemaining());
+                        //MessageBox.Show("raiseevent true " + percentage.ToString() + " < " + BatteryPercentageRemaining());
                         raiseEvent = true;
                     }
                     break;
-                case PowerStatusChoice.RemainingTime:
-                    if (BatteryMinutesRemaining() > remainingTime)
-                        raiseEvent = true;
-                    break;
                 default:
-                    MessageBox.Show("cond check fail");
+                    //MessageBox.Show("cond check fail");
                     break;
             }
-        }
-        protected int BatteryMinutesRemaining()
-        {
-            return (int)(SystemInformation.PowerStatus.BatteryLifeRemaining / 60);
         }
         protected int BatteryPercentageRemaining()
         {
@@ -116,30 +100,26 @@ namespace PowerModules
         }
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            MessageBox.Show("disabled rasie event false");
+            //MessageBox.Show("disabled rasie event false");
             raiseEvent = false;
             pollingTimer.Stop();
-            //pollingTimer.Dispose();
         }
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            /*pollingTimer = new Timer();
-            pollingTimer.Enabled = true;
-            pollingTimer.Interval = pollingTimerInterval;
-            pollingTimer.Tick += new EventHandler(ConditionCheck);
-             */
-            pollingTimer.Start();
             TestAndSetRaiseEvent();
+            pollingTimer.Interval = TimeSpan.FromSeconds(3);
+            pollingTimer.Tick += new EventHandler(ConditionCheck);
+            pollingTimer.Start();
         }
         private void callTrigger()
         {
-            MessageBox.Show("call trigger raise event false");
+            //MessageBox.Show("call trigger raise event false");
             raiseEvent = false;
             Trigger();
         }
         private void ConditionCheck(Object sender, EventArgs e)
         {
-            MessageBox.Show("in cond check");
+            //MessageBox.Show("in cond check");
             if (raiseEvent)
             {
                 switch (chosenStatus)
@@ -147,21 +127,17 @@ namespace PowerModules
                     case PowerStatusChoice.PowerState:
                         if ((chosenBCS & SystemInformation.PowerStatus.BatteryChargeStatus) == chosenBCS)
                         {
-                            MessageBox.Show(SystemInformation.PowerStatus.BatteryChargeStatus.ToString());
+                            //MessageBox.Show(SystemInformation.PowerStatus.BatteryChargeStatus.ToString());
                             callTrigger();
                         }
                         break;
                     case PowerStatusChoice.Percentage:
-                        MessageBox.Show("in the right place "+percentage.ToString()+" "+BatteryPercentageRemaining());
-                        if (percentage <= BatteryPercentageRemaining())
+                        //MessageBox.Show("in the right place "+percentage.ToString()+" "+BatteryPercentageRemaining());
+                        if ((int)percentage >= BatteryPercentageRemaining())
                         {
                             //MessageBox.Show(percentage.ToString() + " " + BatteryPercentageRemaining().ToString());
                             callTrigger();
                         }
-                        break;
-                    case PowerStatusChoice.RemainingTime:
-                        if (remainingTime <= BatteryMinutesRemaining())
-                            callTrigger();
                         break;
                 }
             }
