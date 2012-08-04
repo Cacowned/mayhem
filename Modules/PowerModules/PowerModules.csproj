@@ -52,8 +52,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\PowerStatus.cs" />
-    <Compile Include="Events\PowerStatus1.cs" />
     <Compile Include="Events\PowerStatus2.cs" />
     <Compile Include="Events\PowerUnplugged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
