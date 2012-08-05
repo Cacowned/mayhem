@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using DotNetOpenAuth.OAuth2;
-using Google.Apis.Authentication.OAuth2;
-using Google.Apis.Authentication.OAuth2.DotNetOpenAuth;
 using GoogleModules.Resources;
-using MayhemCore;
 
 namespace GoogleModules.Wpf
 {
     /// <summary>
     /// User Control for setting the information about the video an user wants to upload.
     /// </summary>
-    public partial class YouTubeUploadVideoConfig : GoogleBaseConfig
+    public partial class YouTubeUploadVideoConfig : GoogleAuthenticationBaseConfig
     {
         public string VideoTitle
         {
@@ -43,24 +37,7 @@ namespace GoogleModules.Wpf
             private set;
         }
 
-        public string RefreshToken
-        {
-            get;
-            private set;
-        }
-
         private const string Scope = "https://gdata.youtube.com";
-        private string authorizationCode;
-        private OAuth2Authenticator<NativeApplicationClient> auth;
-
-        private static AutoResetEvent eventAuthorizationCodeEnter = new AutoResetEvent(false);
-        private static AutoResetEvent eventWaitAuthorization = new AutoResetEvent(false);
-
-        private Thread loadTokenThread;
-
-        private bool authenticationFailed;
-        private bool isAuthenticated;
-        private bool canEnableCheckCode;
 
         public YouTubeUploadVideoConfig(string videoTitle, string description, string category, string videoPath, string title)
         {
@@ -117,67 +94,7 @@ namespace GoogleModules.Wpf
 
         private void buttonAuthenticate_Click(object sender, RoutedEventArgs e)
         {
-            NativeApplicationClient provider = new NativeApplicationClient(GoogleAuthenticationServer.Description);
-            provider.ClientIdentifier = Strings.Google_ClientID;
-            provider.ClientSecret = Strings.Google_ClientSecret;
-
-            auth = new OAuth2Authenticator<NativeApplicationClient>(provider, GetAuthorization);
-
-            loadTokenThread = new Thread(new ThreadStart(auth.LoadAccessToken));
-            loadTokenThread.Start();
-        }
-
-        protected IAuthorizationState GetAuthorization(NativeApplicationClient arg)
-        {
-            authenticationFailed = false;
-            isAuthenticated = false;
-
-            IAuthorizationState state = null;
-
-            canEnableCheckCode = true;
-
-            try
-            {
-                // Get the auth URL.
-                state = new AuthorizationState(new[] { Scope });
-                state.Callback = new Uri(NativeApplicationClient.OutOfBandCallbackUrl);
-                Uri authUri = arg.RequestUserAuthorization(state);
-
-                // Request authorization from the user (by opening a browser window).
-                Process.Start(authUri.ToString());
-
-                eventAuthorizationCodeEnter.WaitOne();
-
-                // Retrieve the access token by using the authorization code.
-                return arg.ProcessUserAuthorization(authorizationCode, state);
-            }
-            catch (Exception ex)
-            {
-                authenticationFailed = true;
-
-                Logger.Write(ex);
-                return null;
-            }
-            finally
-            {
-                if (authenticationFailed)
-                {
-                    isAuthenticated = false;
-                }
-                else
-                {
-                    isAuthenticated = true;
-
-                    if (state != null)
-                    {
-                        RefreshToken = state.RefreshToken;
-                    }
-                }
-
-                // The user needs to authenticate again in order to get another code.
-                canEnableCheckCode = false;
-                eventWaitAuthorization.Set();
-            }
+            Authenticate(Scope);
         }
 
         private void buttonCheckCode_Click(object sender, RoutedEventArgs e)
@@ -232,53 +149,15 @@ namespace GoogleModules.Wpf
         private void CheckValidity()
         {
             errorString = string.Empty;
-            CanSave = true;
 
-            if (!CheckValidityField(VideoTitleBox.Text, 200, Strings.YouTube_VideoTitle))
-            {
-                DisplayErrorMessage(textInvalid);
-                return;
-            }
+            // The text fields of the configuration window are checked in order and if an error is found the evaluation of this expresion will stop and the error will be displayed.
+            // The evaluation variable is not used but it won't compile if I don't store the result.
+            bool evaluation = CheckValidityField(VideoTitleBox.Text, 200, Strings.YouTube_VideoTitle) &&
+                              CheckValidityField(DescriptionBox.Text, 500, Strings.YouTube_Description) &&
+                              CheckValidityVideoPath(VideoPathBox.Text) &&
+                              CheckValidityAuthorizationCode(AuthorizationCodeBox.Text, buttonCheckCode) &&
+                              CheckAuthentication();
 
-            if (!CheckValidityField(DescriptionBox.Text, 500, Strings.YouTube_Description))
-            {
-                DisplayErrorMessage(textInvalid);
-                return;
-            }
-
-            if (!CheckValidityVideoPath(VideoPathBox.Text))
-            {
-                DisplayErrorMessage(textInvalid);
-                return;
-            }
-
-            if (!CheckValidityField(AuthorizationCodeBox.Text, 200, Strings.General_AuthorizationCode))
-            {
-                DisplayErrorMessage(textInvalid);
-                buttonCheckCode.IsEnabled = false;
-                return;
-            }
-            else
-            {
-                // If the authorization code is valid and the other conditions are satisfied we can enable the CheckCode button
-                buttonCheckCode.IsEnabled = canEnableCheckCode;
-            }
-
-            if (authenticationFailed)
-            {
-                errorString = Strings.General_AuthenticationFailed;
-                DisplayErrorMessage(textInvalid);
-                return;
-            }
-
-            if (!isAuthenticated)
-            {
-                errorString = Strings.General_NotAuthenticated;
-                DisplayErrorMessage(textInvalid);
-                return;
-            }
-
-            // If no error was found we call this method to enable the Save button and hide the error text block.
             DisplayErrorMessage(textInvalid);
         }
     }

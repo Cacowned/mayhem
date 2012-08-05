@@ -97,6 +97,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\GoogleAuthenticationBaseConfig.cs" />
     <Compile Include="Wpf\GoogleBaseConfig.cs" />
     <Compile Include="Wpf\GoogleMapsSearchLocationConfig.xaml.cs">
       <DependentUpon>GoogleMapsSearchLocationConfig.xaml</DependentUpon>
