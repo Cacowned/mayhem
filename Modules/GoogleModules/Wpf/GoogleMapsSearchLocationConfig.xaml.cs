@@ -1,14 +1,12 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using GoogleModules.Resources;
-using MayhemWpf.UserControls;
 
 namespace GoogleModules.Wpf
 {
     /// <summary>
     /// User Control for setting the location a user wants to search.
     /// </summary>
-    public partial class GoogleMapsSearchLocationConfig : WpfConfiguration
+    public partial class GoogleMapsSearchLocationConfig : GoogleBaseConfig
     {
         public string Location
         {
@@ -21,13 +19,6 @@ namespace GoogleModules.Wpf
             get;
             private set;
         }
-
-        public override string Title
-        {
-            get { return configTitle; }
-        }
-
-        private string configTitle;
 
         public GoogleMapsSearchLocationConfig(string locationText, string mapType, string title)
         {
@@ -59,7 +50,7 @@ namespace GoogleModules.Wpf
                 MapTypesComboBox.SelectedItem = MapType;
             }
 
-            DisplayErrorMessage(CheckLocationText());
+            CheckValidity();
         }
 
         public override void OnSave()
@@ -68,39 +59,15 @@ namespace GoogleModules.Wpf
             MapType = MapTypesComboBox.SelectedItem as string;
         }
 
-        private string CheckLocationText()
+        protected void CheckValidity()
         {
-            int textLength = LocationBox.Text.Length;
-            string errorString = string.Empty;
-
-            if (textLength == 0)
-            {
-                errorString = Strings.GoogleMaps_Location_NoCharacter;
-            }
-            else if (textLength > 200)
-            {
-                errorString = Strings.GoogleMaps_Location_TooLong;
-            }
-
-            CanSave = textLength > 0 && (textLength <= 200);
-
-            return errorString;
+            CheckValidityField(LocationBox.Text, 200, Strings.GoogleMaps);
+            DisplayErrorMessage(textInvalid);
         }
 
         private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DisplayErrorMessage(CheckLocationText());
-        }
-
-        private void DisplayErrorMessage(string errorString)
-        {
-            // In the case that we have an error message we display it.
-            if (!errorString.Equals(string.Empty))
-            {
-                textInvalid.Text = errorString;
-            }
-
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            CheckValidity();
         }
     }
 }
