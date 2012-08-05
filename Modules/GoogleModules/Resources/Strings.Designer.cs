@@ -70,11 +70,29 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authorization Code.
+        /// </summary>
+        internal static string General_AuthorizationCode {
+            get {
+                return ResourceManager.GetString("General_AuthorizationCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file doesn&apos;t exist..
         /// </summary>
         internal static string General_FileNotFound {
             get {
                 return ResourceManager.GetString("General_FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to text of the moment.
+        /// </summary>
+        internal static string General_MomentText {
+            get {
+                return ResourceManager.GetString("General_MomentText", resourceCulture);
             }
         }
         
@@ -124,20 +142,11 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the location must contain at least one character..
+        ///   Looks up a localized string similar to Google Maps.
         /// </summary>
-        internal static string GoogleMaps_Location_NoCharacter {
+        internal static string GoogleMaps {
             get {
-                return ResourceManager.GetString("GoogleMaps_Location_NoCharacter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The name of the location is too long..
-        /// </summary>
-        internal static string GoogleMaps_Location_TooLong {
-            get {
-                return ResourceManager.GetString("GoogleMaps_Location_TooLong", resourceCulture);
+                return ResourceManager.GetString("GoogleMaps", resourceCulture);
             }
         }
         
@@ -156,24 +165,6 @@ namespace GoogleModules.Resources {
         internal static string GooglePlus_ApiKey {
             get {
                 return ResourceManager.GetString("GooglePlus_ApiKey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The authorization code must contain at least one character..
-        /// </summary>
-        internal static string GooglePlus_AuthorizationCode_NoCharacter {
-            get {
-                return ResourceManager.GetString("GooglePlus_AuthorizationCode_NoCharacter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The authorization code  is too long..
-        /// </summary>
-        internal static string GooglePlus_AuthorizationCode_TooLong {
-            get {
-                return ResourceManager.GetString("GooglePlus_AuthorizationCode_TooLong", resourceCulture);
             }
         }
         
@@ -250,24 +241,6 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The text of the moment must contain at least one character..
-        /// </summary>
-        internal static string GooglePlus_MomentText_NoCharacter {
-            get {
-                return ResourceManager.GetString("GooglePlus_MomentText_NoCharacter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The text of the moment is too long..
-        /// </summary>
-        internal static string GooglePlus_MomentText_TooLong {
-            get {
-                return ResourceManager.GetString("GooglePlus_MomentText_TooLong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Blog Entry Url:.
         /// </summary>
         internal static string GooglePlus_PostBlogEntryUrlText {
@@ -291,24 +264,6 @@ namespace GoogleModules.Resources {
         internal static string GooglePlus_PostVideoUrlText {
             get {
                 return ResourceManager.GetString("GooglePlus_PostVideoUrlText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Profile ID must contain at least one character..
-        /// </summary>
-        internal static string GooglePlus_ProfileID_NoCharacter {
-            get {
-                return ResourceManager.GetString("GooglePlus_ProfileID_NoCharacter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Profile ID is too long..
-        /// </summary>
-        internal static string GooglePlus_ProfileID_TooLong {
-            get {
-                return ResourceManager.GetString("GooglePlus_ProfileID_TooLong", resourceCulture);
             }
         }
         

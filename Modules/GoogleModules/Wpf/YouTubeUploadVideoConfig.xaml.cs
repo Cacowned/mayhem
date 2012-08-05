@@ -11,14 +11,13 @@ using Google.Apis.Authentication.OAuth2;
 using Google.Apis.Authentication.OAuth2.DotNetOpenAuth;
 using GoogleModules.Resources;
 using MayhemCore;
-using MayhemWpf.UserControls;
 
 namespace GoogleModules.Wpf
 {
     /// <summary>
     /// User Control for setting the information about the video an user wants to upload.
     /// </summary>
-    public partial class YouTubeUploadVideoConfig : WpfConfiguration
+    public partial class YouTubeUploadVideoConfig : GoogleBaseConfig
     {
         public string VideoTitle
         {
@@ -50,12 +49,6 @@ namespace GoogleModules.Wpf
             private set;
         }
 
-        public override string Title
-        {
-            get { return configTitle; }
-        }
-
-        private string configTitle;
         private const string Scope = "https://gdata.youtube.com";
         private string authorizationCode;
         private OAuth2Authenticator<NativeApplicationClient> auth;
@@ -217,112 +210,76 @@ namespace GoogleModules.Wpf
             CheckValidity();
         }
 
-        private string CheckValidityAuthorizationCode()
+        private bool CheckValidityVideoPath(string videoPath)
         {
-            int textLength = AuthorizationCodeBox.Text.Length;
-            string errorString = string.Empty;
+            errorString = string.Empty;
 
-            if (textLength == 0)
+            if (!CheckValidityField(videoPath, 300, Strings.YouTube_VideoPath))
             {
-                errorString = Strings.GooglePlus_AuthorizationCode_NoCharacter;
-            }
-            else if (textLength > 300)
-            {
-                errorString = Strings.GooglePlus_AuthorizationCode_TooLong;
+                return false;
             }
 
-            CanSave = textLength > 0 && (textLength <= 300);
-
-            // If an Authorization Code is setted and the Authentication process is started we can click the CheckCode button.
-            buttonCheckCode.IsEnabled = (CanSave && canEnableCheckCode);
-
-            return errorString;
-        }
-
-        private string CheckValidityField(string text, int maxLength, string type)
-        {
-            int textLength = text.Length;
-            string errorString = string.Empty;
-
-            if (textLength == 0)
-            {
-                errorString = string.Format(Strings.General_NoCharacter, type);
-            }
-            else if (textLength > maxLength)
-            {
-                errorString = string.Format(Strings.General_TooLong, type);
-            }
-
-            CanSave = textLength > 0 && (textLength <= maxLength);
-
-            return errorString;
-        }
-
-        private string CheckValidityVideoPath()
-        {
-            int textLength = VideoPathBox.Text.Length;
-            string errorString = string.Empty;
-            bool fileExits = true;
-
-            if (textLength == 0)
-            {
-                errorString = string.Format(Strings.General_NoCharacter, Strings.YouTube_VideoPath);
-            }
-            else if (textLength > 300)
-            {
-                errorString = string.Format(Strings.General_TooLong, Strings.YouTube_VideoPath);
-            }
-            else if (!File.Exists(VideoPathBox.Text))
+            if (!File.Exists(VideoPathBox.Text))
             {
                 // The file doesn't exists
                 errorString = Strings.General_FileNotFound;
-                fileExits = false;
+                return false;
             }
 
-            CanSave = textLength > 0 && (textLength <= 300) && fileExits;
-
-            return errorString;
+            return true;
         }
 
         private void CheckValidity()
         {
-            string errorString = string.Empty;
+            errorString = string.Empty;
             CanSave = true;
 
-            errorString = CheckValidityField(VideoTitleBox.Text, 200, Strings.YouTube_VideoTitle);
-
-            if (errorString.Equals(string.Empty))
+            if (!CheckValidityField(VideoTitleBox.Text, 200, Strings.YouTube_VideoTitle))
             {
-                errorString = CheckValidityField(DescriptionBox.Text, 500, Strings.YouTube_Description);
+                DisplayErrorMessage(textInvalid);
+                return;
             }
 
-            if (errorString.Equals(string.Empty))
+            if (!CheckValidityField(DescriptionBox.Text, 500, Strings.YouTube_Description))
             {
-                errorString = CheckValidityVideoPath();
+                DisplayErrorMessage(textInvalid);
+                return;
             }
 
-            if (errorString.Equals(string.Empty))
+            if (!CheckValidityVideoPath(VideoPathBox.Text))
             {
-                errorString = CheckValidityAuthorizationCode();
+                DisplayErrorMessage(textInvalid);
+                return;
             }
 
-            if (errorString.Equals(string.Empty) && authenticationFailed)
+            if (!CheckValidityField(AuthorizationCodeBox.Text, 200, Strings.General_AuthorizationCode))
+            {
+                DisplayErrorMessage(textInvalid);
+                buttonCheckCode.IsEnabled = false;
+                return;
+            }
+            else
+            {
+                // If the authorization code is valid and the other conditions are satisfied we can enable the CheckCode button
+                buttonCheckCode.IsEnabled = canEnableCheckCode;
+            }
+
+            if (authenticationFailed)
             {
                 errorString = Strings.General_AuthenticationFailed;
+                DisplayErrorMessage(textInvalid);
+                return;
             }
 
-            if (errorString.Equals(string.Empty) && !isAuthenticated)
+            if (!isAuthenticated)
             {
                 errorString = Strings.General_NotAuthenticated;
+                DisplayErrorMessage(textInvalid);
+                return;
             }
 
-            if (!errorString.Equals(string.Empty))
-            {
-                textInvalid.Text = errorString;
-                CanSave = false;
-            }
-
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            // If no error was found we call this method to enable the Save button and hide the error text block.
+            DisplayErrorMessage(textInvalid);
         }
     }
 }

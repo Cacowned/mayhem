@@ -120,8 +120,14 @@
   <data name="General_AuthenticationFailed" xml:space="preserve">
     <value>Authentication failed.</value>
   </data>
+  <data name="General_AuthorizationCode" xml:space="preserve">
+    <value>Authorization Code</value>
+  </data>
   <data name="General_FileNotFound" xml:space="preserve">
     <value>The file doesn't exist.</value>
+  </data>
+  <data name="General_MomentText" xml:space="preserve">
+    <value>text of the moment</value>
   </data>
   <data name="General_NoCharacter" xml:space="preserve">
     <value>The {0} must contain at least one character.</value>
@@ -132,14 +138,11 @@
   <data name="General_TooLong" xml:space="preserve">
     <value>The {0} is too long.</value>
   </data>
+  <data name="GoogleMaps" xml:space="preserve">
+    <value>Google Maps</value>
+  </data>
   <data name="GoogleMapsSearchLocation_Title" xml:space="preserve">
     <value>Google Maps: Search Location</value>
-  </data>
-  <data name="GoogleMaps_Location_NoCharacter" xml:space="preserve">
-    <value>The name of the location must contain at least one character.</value>
-  </data>
-  <data name="GoogleMaps_Location_TooLong" xml:space="preserve">
-    <value>The name of the location is too long.</value>
   </data>
   <data name="GooglePlusNewActivity_Title" xml:space="preserve">
     <value>Google+: New Activity</value>
@@ -158,12 +161,6 @@
   </data>
   <data name="GooglePlus_ApiKey" xml:space="preserve">
     <value>AIzaSyDC9EuY_1hg4V-CjUzuSRWO9K9bpJE5bic</value>
-  </data>
-  <data name="GooglePlus_AuthorizationCode_NoCharacter" xml:space="preserve">
-    <value>The authorization code must contain at least one character.</value>
-  </data>
-  <data name="GooglePlus_AuthorizationCode_TooLong" xml:space="preserve">
-    <value>The authorization code  is too long.</value>
   </data>
   <data name="GooglePlus_BlogEntryCouldntBeAdded" xml:space="preserve">
     <value>The blog entry could not be added to Google+ History</value>
@@ -189,12 +186,6 @@
   <data name="GooglePlus_EventCouldntBeEnabled" xml:space="preserve">
     <value>The event could not be enabled.</value>
   </data>
-  <data name="GooglePlus_MomentText_NoCharacter" xml:space="preserve">
-    <value>The text of the moment must contain at least one character.</value>
-  </data>
-  <data name="GooglePlus_MomentText_TooLong" xml:space="preserve">
-    <value>The text of the moment is too long.</value>
-  </data>
   <data name="GooglePlus_PostBlogEntryUrlText" xml:space="preserve">
     <value>Blog Entry Url:</value>
   </data>
@@ -206,12 +197,6 @@
   </data>
   <data name="GooglePlus_ProfileIDIncorrect" xml:space="preserve">
     <value>The Profile ID is incorrect.</value>
-  </data>
-  <data name="GooglePlus_ProfileID_NoCharacter" xml:space="preserve">
-    <value>The Profile ID must contain at least one character.</value>
-  </data>
-  <data name="GooglePlus_ProfileID_TooLong" xml:space="preserve">
-    <value>The Profile ID is too long.</value>
   </data>
   <data name="GooglePlus_VideoCouldntBeAdded" xml:space="preserve">
     <value>The video could not be added to Google+ History</value>

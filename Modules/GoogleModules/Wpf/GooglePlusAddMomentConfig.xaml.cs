@@ -8,14 +8,13 @@ using Google.Apis.Authentication.OAuth2;
 using Google.Apis.Authentication.OAuth2.DotNetOpenAuth;
 using GoogleModules.Resources;
 using MayhemCore;
-using MayhemWpf.UserControls;
 
 namespace GoogleModules.Wpf
 {
     /// <summary>
     /// User Control for setting the information about the moment that needs to be added.
     /// </summary>
-    public partial class GooglePlusAddMomentConfig : WpfConfiguration
+    public partial class GooglePlusAddMomentConfig : GoogleBaseConfig
     {
         public string MomentText
         {
@@ -28,13 +27,6 @@ namespace GoogleModules.Wpf
             get;
             private set;
         }
-
-        public override string Title
-        {
-            get { return configTitle; }
-        }
-
-        private string configTitle;
 
         private static AutoResetEvent eventAuthorizationCodeEnter = new AutoResetEvent(false);
         private static AutoResetEvent eventWaitAuthorization = new AutoResetEvent(false);
@@ -58,8 +50,6 @@ namespace GoogleModules.Wpf
             configTitle = title;
             DetailsText.Text = momentDetailsText;
             TypeText.Text = momentTypeText;
-
-            CheckValidity();
         }
 
         public override void OnLoad()
@@ -89,74 +79,43 @@ namespace GoogleModules.Wpf
 
         private void CheckValidity()
         {
-            string errorString = string.Empty;
+            errorString = string.Empty;
             CanSave = true;
 
-            errorString = CheckValidityMomentText();
-
-            if (errorString.Equals(string.Empty))
+            if (!CheckValidityField(ActivityTextBox.Text, 300, Strings.General_MomentText))
             {
-                errorString = CheckValidityAuthorizationCode();
+                DisplayErrorMessage(textInvalid);
+                return;
             }
 
-            if (errorString.Equals(string.Empty) && authenticationFailed)
+            if (!CheckValidityField(AuthorizationCodeBox.Text, 300, Strings.General_AuthorizationCode))
+            {
+                DisplayErrorMessage(textInvalid);
+                buttonCheckCode.IsEnabled = false;
+                return;
+            }
+            else
+            {
+                // If the authorization code is valid and the other conditions are satisfied we can enable the Check Code button.
+                buttonCheckCode.IsEnabled = canEnableCheckCode;
+            }
+
+            if (authenticationFailed)
             {
                 errorString = Strings.General_AuthenticationFailed;
+                DisplayErrorMessage(textInvalid);
+                return;
             }
 
-            if (errorString.Equals(string.Empty) && !isAuthenticated)
+            if (!isAuthenticated)
             {
                 errorString = Strings.General_NotAuthenticated;
+                DisplayErrorMessage(textInvalid);
+                return;
             }
 
-            if (!errorString.Equals(string.Empty))
-            {
-                textInvalid.Text = errorString;
-                CanSave = false;
-            }
-
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        private string CheckValidityMomentText()
-        {
-            int textLength = ActivityTextBox.Text.Length;
-            string errorString = string.Empty;
-
-            if (textLength == 0)
-            {
-                errorString = Strings.GooglePlus_MomentText_NoCharacter;
-            }
-            else if (textLength > 300)
-            {
-                errorString = Strings.GooglePlus_MomentText_TooLong;
-            }
-
-            CanSave = textLength > 0 && (textLength <= 300);
-
-            return errorString;
-        }
-
-        private string CheckValidityAuthorizationCode()
-        {
-            int textLength = AuthorizationCodeBox.Text.Length;
-            string errorString = string.Empty;
-
-            if (textLength == 0)
-            {
-                errorString = Strings.GooglePlus_AuthorizationCode_NoCharacter;
-            }
-            else if (textLength > 300)
-            {
-                errorString = Strings.GooglePlus_AuthorizationCode_TooLong;
-            }
-
-            CanSave = textLength > 0 && (textLength <= 300);
-
-            // If an Authorization Code is setted and the Authentication process is started we can click the CheckCode button.
-            buttonCheckCode.IsEnabled = (CanSave && canEnableCheckCode);
-
-            return errorString;
+            // If no error was found we call this method to enable the Save button and hide the error text block.
+            DisplayErrorMessage(textInvalid);
         }
 
         private void Box_TextChanged(object sender, TextChangedEventArgs e)
