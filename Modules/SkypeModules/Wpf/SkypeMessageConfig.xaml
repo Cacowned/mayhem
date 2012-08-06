@@ -1,0 +1,26 @@
+﻿<local:SkypeBaseConfig x:Class="SkypeModules.Wpf.SkypeMessageConfig"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:local="clr-namespace:SkypeModules.Wpf"
+                       Width="420" >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="60" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Grid.Row="0" Grid.ColumnSpan="3">Please enter the desired Skype ID and the message to be sent.</TextBlock>
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Skype ID:</TextBlock>
+        <TextBox Name="SkypeIDBox" TextChanged="Box_TextChanged" Grid.Column="1" Grid.Row="1"/>
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">Message:</TextBlock>
+        <TextBox Name="MessageBox" TextChanged="Box_TextChanged" Grid.Column="1" Grid.Row="2"/>
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2">The Skype ID is invalid</TextBlock>
+    </Grid>
+</local:SkypeBaseConfig>

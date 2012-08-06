@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CallContact_Title" xml:space="preserve">
+    <value>Skype: Call Contact</value>
+  </data>
+  <data name="Error_CallCantPutOnHold" xml:space="preserve">
+    <value>The call to the '{0}' contact can't be put on hold.</value>
+  </data>
+  <data name="Error_CallCantResume" xml:space="preserve">
+    <value>The call to the '{0}' contact can't be resumed.</value>
+  </data>
+  <data name="Error_CallingContact" xml:space="preserve">
+    <value>A call to the '{0}' contact couldn't be established.</value>
+  </data>
+  <data name="Error_CallNotActive" xml:space="preserve">
+    <value>No active call exists between you and '{0}'.</value>
+  </data>
+  <data name="Error_CallNotInProgress" xml:space="preserve">
+    <value>No call in progress exists between you and '{0}'.</value>
+  </data>
+  <data name="Error_CallNotOnHold" xml:space="preserve">
+    <value>No call on hold exists between you and '{0}'.</value>
+  </data>
+  <data name="Error_CantMuteUnmute" xml:space="preserve">
+    <value>Can't mute/unmute the microphone.</value>
+  </data>
+  <data name="Error_ConnectingSkype" xml:space="preserve">
+    <value>Error at connecting with Skype.</value>
+  </data>
+  <data name="Error_ContactNotFound" xml:space="preserve">
+    <value>The contact '{0}' was not found in your contact list.</value>
+  </data>
+  <data name="Error_SendingChatMessage" xml:space="preserve">
+    <value>The selected message can't be sent to '{0}'.</value>
+  </data>
+  <data name="General_NoCharacter" xml:space="preserve">
+    <value>The {0} must contain at least one character.</value>
+  </data>
+  <data name="General_TooLong" xml:space="preserve">
+    <value>The {0} is too long.</value>
+  </data>
+  <data name="HoldCall_Title" xml:space="preserve">
+    <value>Skype: Hold Call</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>message</value>
+  </data>
+  <data name="SendMessage_Title" xml:space="preserve">
+    <value>Skype: Send Chat Message</value>
+  </data>
+  <data name="SkypeID" xml:space="preserve">
+    <value>Skype ID</value>
+  </data>
+  <data name="SkypeID_ConfigString" xml:space="preserve">
+    <value>Skype ID: {0}.</value>
+  </data>
+  <data name="SkypeMessage_ConfigString" xml:space="preserve">
+    <value>Skype ID: {0}. Message: {1}.</value>
+  </data>
+  <data name="UnholdCall_Title" xml:space="preserve">
+    <value>Skype: Unhold Call</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>file path</value>
+  </data>
+  <data name="Error_SendingAudioMessage" xml:space="preserve">
+    <value>The selected audio message can't be sent to '{0}'.</value>
+  </data>
+  <data name="General_FileFormatNotValid" xml:space="preserve">
+    <value>The file must have the .wav extension.</value>
+  </data>
+  <data name="General_FileNotFound" xml:space="preserve">
+    <value>The file doesn't exist.</value>
+  </data>
+  <data name="SendAudioMessage_Title" xml:space="preserve">
+    <value>Skype: Play Audio Message</value>
+  </data>
+  <data name="SkypeAudioMessage_ConfigString" xml:space="preserve">
+    <value>Skype ID: {0}. File path: {1}.</value>
+  </data>
+  <data name="ChangeStatus_Title" xml:space="preserve">
+    <value>Skype: Change Status</value>
+  </data>
+  <data name="Error_CantChangeStatus" xml:space="preserve">
+    <value>The current status can't be changed.</value>
+  </data>
+  <data name="Status_ConfigString" xml:space="preserve">
+    <value>Status: {0}.</value>
+  </data>
+  <data name="CallEnded_Title" xml:space="preserve">
+    <value>Skype: Call Ended</value>
+  </data>
+  <data name="Error_EventCantBeTriggered" xml:space="preserve">
+    <value>The event '{0}' couldn't be triggered.</value>
+  </data>
+  <data name="ReceiveCall_Title" xml:space="preserve">
+    <value>Skype: Receive Call</value>
+  </data>
+  <data name="Successful_AudioMessage" xml:space="preserve">
+    <value>The audio message was succesful sent.</value>
+  </data>
+  <data name="Successful_ChatMessage" xml:space="preserve">
+    <value>The chat message was succesful sent.</value>
+  </data>
+  <data name="OnHoldCall_Title" xml:space="preserve">
+    <value>Skype: Call Holded</value>
+  </data>
+  <data name="ReceiveChatMessage_Title" xml:space="preserve">
+    <value>Skype: Chat Message Received</value>
+  </data>
+  <data name="ReceiveSms_Title" xml:space="preserve">
+    <value>Skype: Receive Sms</value>
+  </data>
+  <data name="Error_CantMuteUnmuteNoCall" xml:space="preserve">
+    <value>Can't mute/unmute the microphone because an active call doesn't exist.</value>
+  </data>
+</root>
