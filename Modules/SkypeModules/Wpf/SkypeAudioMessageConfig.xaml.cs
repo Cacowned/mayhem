@@ -43,7 +43,7 @@ namespace SkypeModules.Wpf
         {
             errorString = string.Empty;
 
-            if (!CheckValidityField(LocationBox.Text, 100, Strings.FilePath))
+            if (!CheckValidityField(LocationBox.Text, Strings.FilePath, maxLength: 100))
             {
                 return false;
             }
@@ -68,7 +68,7 @@ namespace SkypeModules.Wpf
             errorString = string.Empty;
 
             // The evaluation variable is not used but it won't compile if I don't store the result.
-            bool evaluation = CheckValidityField(SkypeIDBox.Text, 100, Strings.SkypeID) &&
+            bool evaluation = CheckValidityField(SkypeIDBox.Text, Strings.SkypeID, maxLength: 100) &&
                               CheckValidityLocation();
 
             DisplayErrorMessage(textInvalid);

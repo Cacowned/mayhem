@@ -42,8 +42,8 @@ namespace SkypeModules.Wpf
             errorString = string.Empty;
 
             // The evaluation variable is not used but it won't compile if I don't store the result.
-            bool evaluation = CheckValidityField(SkypeIDBox.Text, 100, Strings.SkypeID) &&
-                              CheckValidityField(MessageBox.Text, 100, Strings.Message);
+            bool evaluation = CheckValidityField(SkypeIDBox.Text, Strings.SkypeID, maxLength: 100) &&
+                              CheckValidityField(MessageBox.Text, Strings.Message, maxLength: 100);
 
             DisplayErrorMessage(textInvalid);
         }

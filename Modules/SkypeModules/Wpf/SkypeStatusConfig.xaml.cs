@@ -26,8 +26,10 @@ namespace SkypeModules.Wpf
 
         public SkypeStatusConfig(TUserStatus status)
         {
-            Status = status;
+            // The value of CanSave can be setted to true because no check is needed since this window contains only a combo box 
+            // which is setted automatically on the first element if other values are not selected.
             CanSave = true;
+            Status = status;
 
             InitializeComponent();
 
