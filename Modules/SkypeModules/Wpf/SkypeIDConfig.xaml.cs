@@ -30,7 +30,7 @@ namespace SkypeModules.Wpf
 
         protected override void CheckValidity()
         {
-            CheckValidityField(SkypeIDBox.Text, 100, Strings.SkypeID);
+            CheckValidityField(SkypeIDBox.Text, Strings.SkypeID, maxLength: 100);
             DisplayErrorMessage(textInvalid);
         }
 

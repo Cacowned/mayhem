@@ -24,7 +24,7 @@ namespace SkypeModules.Wpf
         protected string configTitle;
         protected string errorString;
 
-        protected bool CheckValidityField(string text, int maxLength, string type)
+        protected bool CheckValidityField(string text, string type, int maxLength)
         {
             errorString = string.Empty;
             int textLength = text.Length;
@@ -39,7 +39,7 @@ namespace SkypeModules.Wpf
                     errorString = string.Format(Strings.General_TooLong, type);
                 }
 
-            return textLength > 0 && (textLength <= maxLength);
+            return errorString == string.Empty;
         }
 
         protected void DisplayErrorMessage(TextBlock textInvalid)
@@ -63,7 +63,8 @@ namespace SkypeModules.Wpf
 
         protected virtual void CheckValidity()
         {
-            // This method will be overriden in the classes that need to check the validity of it's fields.
+            // This method will be overriden in the classes that need to check the validity of it's fields. 
+            // It is needed to be declared here so I can call it in the Box_TextChanged method.
         }
     }
 }
