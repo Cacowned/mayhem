@@ -2,13 +2,14 @@
 using System.Globalization;
 using System.Windows;
 using MayhemWpf.UserControls;
+using System.Windows.Controls;
 
 namespace PreGsocTest1
 {
     /// <summary>
     /// Interaction logic for AlarmConfiguration.xaml
     /// </summary>
-    public partial class AlarmConfiguration : WpfConfiguration
+    public partial class DPAlarmConfig : WpfConfiguration
     {
         public bool RecurDaily { get; private set; }
         public int Day { get; private set; }
@@ -18,10 +19,10 @@ namespace PreGsocTest1
         public int Minute { get; private set; }
         public int Second { get; private set; }
         private bool shouldCheckValidity;
-        public AlarmConfiguration(bool recurs, int day, int month, int year, int hour, int minute, int second)
+        public DPAlarmConfig(bool recurs, int day, int month, int year, int hour, int minute, int second)
         {
             RecurDaily = recurs;
-            Day = (day == 0) ? DateTime.Now.Day:day;
+            Day = (day == 0) ? DateTime.Now.Day : day;
             Month = (month == 0) ? DateTime.Now.Month : month;
             Year = (year == 0) ? DateTime.Now.Year : year;
             Hour = hour;
@@ -39,9 +40,20 @@ namespace PreGsocTest1
             HourBox.Text = Hour.ToString();
             MinuteBox.Text = Minute.ToString();
             SecondBox.Text = Second.ToString();
-            DayBox.Text = Day.ToString();
-            MonthBox.Text = Month.ToString();
-            YearBox.Text = Year.ToString();
+            DateTime dtToSelect = new DateTime(Year, Month, Day);
+            AlarmDatePick.SelectedDate = dtToSelect;
+            if (dtToSelect.CompareTo(DateTime.Now) > 0)
+            {
+                AlarmDatePick.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0))));
+            }
+            else
+            {
+                AlarmDatePick.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, dtToSelect.Subtract(new TimeSpan(1, 0, 0, 0))));
+            }
+            
+            //DayBox.Text = Day.ToString();
+            //MonthBox.Text = Month.ToString();
+            //YearBox.Text = Year.ToString();
             shouldCheckValidity = true;
         }
         public override void OnSave()
@@ -49,10 +61,14 @@ namespace PreGsocTest1
             Second = int.Parse(SecondBox.Text);
             Minute = int.Parse(MinuteBox.Text);
             Hour = int.Parse(HourBox.Text);
-            Day = int.Parse(DayBox.Text);
+            Day = AlarmDatePick.SelectedDate.GetValueOrDefault().Day;
+            Month = AlarmDatePick.SelectedDate.GetValueOrDefault().Month;
+            Year = AlarmDatePick.SelectedDate.GetValueOrDefault().Year;
+            /*Day = int.Parse(DayBox.Text);
             Month = int.Parse(MonthBox.Text);
             Year = int.Parse(YearBox.Text);
-            RecurDaily = (RecurringDailyCheckBox.IsChecked==true)?true:false;
+             */
+            RecurDaily = (RecurringDailyCheckBox.IsChecked == true) ? true : false;
         }
         private string CheckValidity()
         {
@@ -67,19 +83,23 @@ namespace PreGsocTest1
             bool badmonth = false;
             bool badyear = false;
             bool badtotal = false;
+            day = AlarmDatePick.SelectedDate.GetValueOrDefault().Day;
+            month = AlarmDatePick.SelectedDate.GetValueOrDefault().Month;
+            year = AlarmDatePick.SelectedDate.GetValueOrDefault().Year;
             if (RecurringDailyCheckBox.IsChecked == false)
             {
-                badday = !(int.TryParse(DayBox.Text, out day) && (day >= 1 && day < 32));
-                badmonth = !(int.TryParse(MonthBox.Text, out month) && (month >= 1 && month < 13));
-                badyear = !(int.TryParse(YearBox.Text, out year) && (year >= 2012 && year < 10000));
+                //badday = !(int.TryParse(DayBox.Text, out day) && (day >= 1 && day < 32));
+                //badmonth = !(int.TryParse(MonthBox.Text, out month) && (month >= 1 && month < 13));
+                //badyear = !(int.TryParse(YearBox.Text, out year) && (year >= 2012 && year < 10000));
                 if (!(badsec || badmin || badhour || badday || badmonth || badyear))
                 {
                     string time = string.Format("{0}/{1}/{2} {3}:{4}:{5}", month, day, year, hours, minutes, seconds);
                     //MessageBox.Show(time +" " +DateTime.TryParseExact(time, "M/dd/yyyy h:m:s", CultureInfo.InvariantCulture, DateTimeStyles.None, out alarmTime).ToString());
-                    badtotal = !(DateTime.TryParseExact(time, "M/dd/yyyy H:m:s", CultureInfo.InvariantCulture, DateTimeStyles.None, out alarmTime) && (alarmTime.CompareTo(DateTime.Now)) > 0);
+                    badtotal = !(DateTime.TryParseExact(time, "M/d/yyyy H:m:s", CultureInfo.InvariantCulture, DateTimeStyles.None, out alarmTime) && (alarmTime.CompareTo(DateTime.Now)) > 0);
+                    //MessageBox.Show(alarmTime.ToString());
                 }
             }
-            
+
 
             if (badsec)
             {
@@ -112,23 +132,18 @@ namespace PreGsocTest1
             if (badtotal && !(badsec || badmin || badhour || badday || badmonth || badyear))
                 s = "Must be a valid Date and Time in the Future";
 
-            CanSave = !(badsec || badmin || badhour || badday || badmonth || badyear || badtotal );
+            CanSave = !(badsec || badmin || badhour || badday || badmonth || badyear || badtotal);
             return CanSave ? string.Empty : s;
         }
-        //private void TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         private void TextChanged(object sender, EventArgs e)
         {
             if (RecurringDailyCheckBox.IsChecked == true)
             {
-                DayBox.IsEnabled = false;
-                MonthBox.IsEnabled = false;
-                YearBox.IsEnabled = false;
+                AlarmDatePick.IsEnabled = false;
             }
             else
             {
-                DayBox.IsEnabled = true;
-                MonthBox.IsEnabled = true;
-                YearBox.IsEnabled = true;
+                AlarmDatePick.IsEnabled = true;
             }
             textInvalid.Text = CheckValidity();
             if (shouldCheckValidity)
