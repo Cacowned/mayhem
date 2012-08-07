@@ -30,7 +30,6 @@ namespace GoogleModules.Wpf
 
         public override void OnLoad()
         {
-            CanSave = true;
             buttonCheckCode.IsEnabled = false;
             canEnableCheckCode = false;
 
@@ -59,8 +58,8 @@ namespace GoogleModules.Wpf
 
             // The text fields of the configuration window are checked in order and if an error is found the evaluation of this expresion will stop and the error will be displayed.
             // The evaluation variable is not used but it won't compile if I don't store the result.
-            bool evaluation = CheckValidityField(ActivityTextBox.Text, 300, Strings.General_MomentText) &&
-                              CheckValidityField(AuthorizationCodeBox.Text, 300, Strings.General_AuthorizationCode) &&
+            bool evaluation = CheckValidityField(ActivityTextBox.Text, Strings.General_MomentText, maxLength: 300) &&
+                              CheckValidityField(AuthorizationCodeBox.Text, Strings.General_AuthorizationCode, maxLength: 300) &&
                               CheckValidityAuthorizationCode(AuthorizationCodeBox.Text, buttonCheckCode) &&
                               CheckAuthentication();
 
