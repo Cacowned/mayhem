@@ -31,8 +31,6 @@ namespace GoogleModules.Wpf
 
         public override void OnLoad()
         {
-            CanSave = true;
-
             LocationBox.Text = Location;
 
             MapTypesComboBox.Items.Clear();
@@ -61,7 +59,7 @@ namespace GoogleModules.Wpf
 
         protected void CheckValidity()
         {
-            CheckValidityField(LocationBox.Text, 200, Strings.GoogleMaps);
+            CheckValidityField(LocationBox.Text, Strings.GoogleMaps, maxLength: 200);
             DisplayErrorMessage(textInvalid);
         }
 

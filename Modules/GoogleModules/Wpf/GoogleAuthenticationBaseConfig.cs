@@ -39,7 +39,7 @@ namespace GoogleModules.Wpf
         {
             errorString = string.Empty;
 
-            if (!CheckValidityField(authorizationCode, 200, Strings.General_AuthorizationCode))
+            if (!CheckValidityField(authorizationCode, Strings.General_AuthorizationCode, maxLength: 200))
             {
                 buttonCheckCode.IsEnabled = false;
                 return false;

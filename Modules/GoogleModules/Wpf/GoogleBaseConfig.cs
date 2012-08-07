@@ -18,7 +18,7 @@ namespace GoogleModules.Wpf
         protected string configTitle;
         protected string errorString;
 
-        protected bool CheckValidityField(string text, int maxLength, string type)
+        protected bool CheckValidityField(string text, string type, int maxLength)
         {
             int textLength = text.Length;
             errorString = string.Empty;
@@ -32,7 +32,7 @@ namespace GoogleModules.Wpf
                 errorString = string.Format(Strings.General_TooLong, type);
             }
 
-            return textLength > 0 && (textLength <= maxLength);
+            return errorString == string.Empty;
         }
 
         protected void DisplayErrorMessage(TextBlock textInvalid)

@@ -64,7 +64,6 @@ namespace GoogleModules.Wpf
 
         public override void OnLoad()
         {
-            CanSave = true;
             buttonCheckCode.IsEnabled = false;
             canEnableCheckCode = false;
 
@@ -103,7 +102,7 @@ namespace GoogleModules.Wpf
 
             eventAuthorizationCodeEnter.Set();
 
-            // We need to wait for the authentication to take place. If in 15 seconds the authentication doesn't take place we stop it. 
+            // We need to wait for the authentication to take place. If in 20 seconds the authentication doesn't take place we stop it. 
             Thread.Sleep(500);
             eventWaitAuthorization.WaitOne(20000);
 
@@ -131,7 +130,7 @@ namespace GoogleModules.Wpf
         {
             errorString = string.Empty;
 
-            if (!CheckValidityField(videoPath, 300, Strings.YouTube_VideoPath))
+            if (!CheckValidityField(videoPath, Strings.YouTube_VideoPath, maxLength: 300))
             {
                 return false;
             }
@@ -152,8 +151,8 @@ namespace GoogleModules.Wpf
 
             // The text fields of the configuration window are checked in order and if an error is found the evaluation of this expresion will stop and the error will be displayed.
             // The evaluation variable is not used but it won't compile if I don't store the result.
-            bool evaluation = CheckValidityField(VideoTitleBox.Text, 200, Strings.YouTube_VideoTitle) &&
-                              CheckValidityField(DescriptionBox.Text, 500, Strings.YouTube_Description) &&
+            bool evaluation = CheckValidityField(VideoTitleBox.Text, Strings.YouTube_VideoTitle, maxLength: 200) &&
+                              CheckValidityField(DescriptionBox.Text, Strings.YouTube_Description, maxLength: 500) &&
                               CheckValidityVideoPath(VideoPathBox.Text) &&
                               CheckValidityAuthorizationCode(AuthorizationCodeBox.Text, buttonCheckCode) &&
                               CheckAuthentication();
