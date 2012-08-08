@@ -33,7 +33,7 @@ namespace GoogleModules.Wpf
         protected static AutoResetEvent eventAuthorizationCodeEnter = new AutoResetEvent(false);
         protected static AutoResetEvent eventWaitAuthorization = new AutoResetEvent(false);
 
-        private string ReactionScope;
+        private string reactionScope;
 
         protected bool CheckValidityAuthorizationCode(string authorizationCode, Button buttonCheckCode)
         {
@@ -72,7 +72,7 @@ namespace GoogleModules.Wpf
 
         protected void Authenticate(string scope)
         {
-            ReactionScope = scope;
+            reactionScope = scope;
 
             NativeApplicationClient provider = new NativeApplicationClient(GoogleAuthenticationServer.Description);
             provider.ClientIdentifier = Strings.Google_ClientID;
@@ -95,7 +95,7 @@ namespace GoogleModules.Wpf
             try
             {
                 // Get the auth URL.
-                state = new AuthorizationState(new[] { ReactionScope });
+                state = new AuthorizationState(new[] { reactionScope });
                 state.Callback = new Uri(NativeApplicationClient.OutOfBandCallbackUrl);
                 Uri authUri = arg.RequestUserAuthorization(state);
 
