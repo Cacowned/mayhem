@@ -45,12 +45,11 @@ namespace SkypeModules.Reactions
                     {
                         ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.Error_CallNotActive, skypeID));
                     }
-                    else
-                        if (!inProgress)
-                        {
-                            // A call is initializated between the user and the selected Skype ID but the call is not in progress.
-                            ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.Error_CallNotInProgress, skypeID));
-                        }
+                    else if (!inProgress)
+                    {
+                        // A call is initializated between the user and the selected Skype ID but the call is not in progress.
+                        ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.Error_CallNotInProgress, skypeID));
+                    }
                 }
             }
             catch (Exception ex)

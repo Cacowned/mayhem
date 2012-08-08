@@ -6,9 +6,9 @@ using SkypeModules.Resources;
 namespace SkypeModules.Events
 {
     /// <summary>
-    /// An event that will be triggered when a Skype call is put on hold.
+    /// An event that will be triggered when an SMS is received.
     /// </summary>
-    [MayhemModule("Skype: Receive Sms", "An sms is received")]
+    [MayhemModule("Skype: Receive SMS", "An SMS is received")]
     public class SmsReceived : SkypeEventBase
     {
         private _ISkypeEvents_SmsMessageStatusChangedEventHandler smsMessageStatusChangedEventHandler;

@@ -43,12 +43,11 @@ namespace SkypeModules.Reactions
                 {
                     ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.Error_CallNotActive, skypeID));
                 }
-                else
-                    if (!isOnHold)
-                    {
-                        // A call is initializated between the user and the selected skype ID but the call is not on hold.
-                        ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.Error_CallNotOnHold, skypeID));
-                    }
+                else if (!isOnHold)
+                {
+                    // A call is initializated between the user and the selected skype ID but the call is not on hold.
+                    ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.Error_CallNotOnHold, skypeID));
+                }
             }
             catch (Exception ex)
             {

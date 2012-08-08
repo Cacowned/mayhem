@@ -304,7 +304,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skype: Receive Sms.
+        ///   Looks up a localized string similar to Skype: Receive SMS.
         /// </summary>
         internal static string ReceiveSms_Title {
             get {
