@@ -1,0 +1,58 @@
+﻿<src:WpfConfiguration x:Class="MayhemVisionModules.Wpf.WebCamPersonDetectionConfig"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
+                      xmlns:src="clr-namespace:MayhemWpf.UserControls;assembly=MayhemWpf" 
+                      xmlns:visionmods="clr-namespace:MayhemVisionModules.Wpf"
+                      xmlns:computervision="clr-namespace:MayhemVisionModules.Components"
+                      DataContext="{Binding RelativeSource={RelativeSource Self}}"
+                      Name="root"
+                      Width="500" Height="Auto">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"></ColumnDefinition>
+            <ColumnDefinition Width="250"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel x:Name="ROIPanel" Grid.ColumnSpan="2" Visibility="Hidden">
+            <Label Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.RowSpan="2" Margin="0,8,0,0"  FontWeight="Bold">Click (left mouse button) and drag towards bottom right to select a smaller region</Label>
+            <Canvas Width="320" Height="240" VerticalAlignment="Center" Grid.ColumnSpan="2" MouseMove="ROI_MouseMove"  MouseDown="ROI_MouseDown" MouseUp="ROI_MouseUp">
+                <computervision:WebCamPersonDetector x:Name="Image_Viewer" VerticalAlignment="Center" Width="320" Height="240" Visibility="Visible"></computervision:WebCamPersonDetector>
+                <visionmods:ImageRenderer x:Name="Image_Viewer_Orig" VerticalAlignment="Center" Width="320" Height="240" Visibility="Collapsed">
+                </visionmods:ImageRenderer>
+                <Rectangle x:Name="ROI" Stroke="Green" StrokeThickness="5"  Width="320" Height="240" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="0" Canvas.Top="0" Canvas.Right="320" Canvas.Bottom="240"/>
+            </Canvas>
+            <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-10,0,0">
+                <RadioButton Grid.Row="2" Grid.Column="0" Width="150" Checked="Original_Checked">Source image</RadioButton>
+                <RadioButton Grid.Row="2" Grid.Column="1" Width="150" IsChecked="True" Checked="Motion_HistoryChecked" >Motion history</RadioButton>
+            </StackPanel>
+
+            <StackPanel HorizontalAlignment="Center" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center"  Orientation="Vertical">
+                    <Label FontWeight="Bold">Configure Camera Settings</Label>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center">Set Focus:</TextBlock>
+                        <Slider x:Name="Focus_Slider" Width="110" Margin="10,0,0,0" Minimum="{Binding FocusMinimum}" Maximum="{Binding FocusMaximum}" TickFrequency="{Binding FocusStep}"  IsSnapToTickEnabled="True" ValueChanged="Focus_ValueChanged"></Slider>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center">Set Zoom:</TextBlock>
+                        <Slider x:Name="Zoom_Slider" Width="110" Margin="10,5,0,0" Minimum="{Binding ZoomMinimum}" Maximum="{Binding ZoomMaximum}" TickFrequency="{Binding ZoomStep}" IsSnapToTickEnabled="True" ValueChanged="Zoom_ValueChanged"></Slider>
+                    </StackPanel>
+                </StackPanel>
+
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel x:Name="SelectorPanel" Grid.ColumnSpan="2" Orientation="Vertical" VerticalAlignment="Center" Visibility="Visible">
+            <Label FontWeight="Bold" HorizontalAlignment="Center">Select a webcam</Label>
+            <visionmods:MultiWebCamSelector x:Name="camera_selector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="200"></visionmods:MultiWebCamSelector>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="ButtonState" Click="Button_Clicked" Width="200" Margin="0,5,0,0">Configure person detector >></Button>
+        </StackPanel>
+    </Grid>
+</src:WpfConfiguration>

@@ -147,11 +147,32 @@
   <data name="BT_DeviceNotVisible" xml:space="preserve">
     <value>The device is already not visible.</value>
   </data>
+  <data name="BT_DeviceTypeTextAddress" xml:space="preserve">
+    <value>Device address:</value>
+  </data>
+  <data name="BT_DeviceTypeTextName" xml:space="preserve">
+    <value>Device name:</value>
+  </data>
   <data name="BT_DeviceVisible" xml:space="preserve">
     <value>The device is already visible.</value>
   </data>
   <data name="BT_ErrorMonitoringBluetooth" xml:space="preserve">
     <value>Error at monitoring the bluetooth activity.</value>
+  </data>
+  <data name="BT_InformationTextPairAddress" xml:space="preserve">
+    <value>Please enter the address of the device you want to pair with.</value>
+  </data>
+  <data name="BT_InformationTextPairName" xml:space="preserve">
+    <value>Please enter the name of the device you want to pair with.</value>
+  </data>
+  <data name="BT_InformationTextPredefinedDeviceVisible" xml:space="preserve">
+    <value>Please enter the name of the device you want to monitor.</value>
+  </data>
+  <data name="BT_InformationTextSendFileAddress" xml:space="preserve">
+    <value>Please enter the address of the device you want to send the file to.</value>
+  </data>
+  <data name="BT_InformationTextSendFileName" xml:space="preserve">
+    <value>Please enter the name of the device you want to send the file to.</value>
   </data>
   <data name="BT_MonitorBecomesVisible" xml:space="preserve">
     <value>Becomes visible.</value>
@@ -169,7 +190,7 @@
     <value>The Pin is too long.</value>
   </data>
   <data name="BT_SecondsMoreThan5" xml:space="preserve">
-    <value>The time interval must be greater than 5 seconds.</value>
+    <value>The time interval must be greater or equal to 5 seconds.</value>
   </data>
   <data name="BT_SuccessfulPair" xml:space="preserve">
     <value>The device with the name {0} was successful paired with the computer.</value>
@@ -189,8 +210,11 @@
   <data name="DeviceNameConnect_Title" xml:space="preserve">
     <value>Connect to device</value>
   </data>
+  <data name="DeviceNameSeconds_ConfigString" xml:space="preserve">
+    <value>Device's name: {0}. Seconds {1}.</value>
+  </data>
   <data name="DeviceName_ConfigString" xml:space="preserve">
-    <value>Device's name: {0}. Monitor: {1}.</value>
+    <value>Device's name: {0}.</value>
   </data>
   <data name="DeviceName_Title" xml:space="preserve">
     <value>Monitor device</value>
@@ -257,6 +281,12 @@
   </data>
   <data name="WiFi_DisconnectedFromNetwork" xml:space="preserve">
     <value>Disconnected from the {0} network.</value>
+  </data>
+  <data name="WiFi_InformationTextConnectNetwork" xml:space="preserve">
+    <value>Please enter the name of the network you want to connect to.</value>
+  </data>
+  <data name="WiFi_InformationTextDisconnectNetwork" xml:space="preserve">
+    <value>Please enter the name of the network you want to disconnect from.</value>
   </data>
   <data name="WiFi_NetworkAlreadyNotVisible" xml:space="preserve">
     <value>The network {0} is already not visible.</value>

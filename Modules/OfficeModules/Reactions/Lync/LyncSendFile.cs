@@ -20,7 +20,7 @@ namespace OfficeModules.Reactions.Lync
     public class LyncSendFile : ReactionBase, IWpfConfigurable
     {
         /// <summary>
-        /// The User ID of the predefined contact.
+        /// The User ID of the predefined contact which the selected file will be sent to.
         /// </summary>
         [DataMember]
         private string userId;
@@ -35,7 +35,7 @@ namespace OfficeModules.Reactions.Lync
         private Self self = null;
 
         /// <summary>
-        /// This method will get the instance of the Lync Client application and will send the selected file to the predefined user.
+        /// If an instance of the Lync application exits this method will send the selected file to the predefined User Id.
         /// </summary>
         public override void Perform()
         {
