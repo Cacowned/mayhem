@@ -16,9 +16,6 @@ namespace OfficeModules.Events.Lync
         private LyncClient lyncClient;
         private EventHandler<ContactInformationChangedEventArgs> contactInformationChanged;
 
-        /// <summary>
-        /// This method is called after the event is loaded.
-        /// </summary>
         protected override void OnAfterLoad()
         {
             lyncClient = null;
@@ -26,9 +23,6 @@ namespace OfficeModules.Events.Lync
             contactInformationChanged = Contact_ContactInformationChanged;
         }
 
-        /// <summary>
-        /// This method gets the Lync Client instance and is subscribing to the ContactInformationChangedEvent.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             try
@@ -52,9 +46,6 @@ namespace OfficeModules.Events.Lync
             }
         }
 
-        /// <summary>
-        /// This method is unsubscribing from the ContactInformationChangedEvent.
-        /// </summary>
         protected override void OnDisabled(DisabledEventArgs e)
         {
             if (lyncClient != null)
@@ -72,7 +63,7 @@ namespace OfficeModules.Events.Lync
         }
 
         /// <summary>
-        /// This method is called when the ContactInformationChangedEvent is triggered, and if the type of the event is ContactInformationType.Activity will trigger this event.
+        /// This method is called when the ContactInformationChangedEvent is triggered, and will trigger this event if the status has changed.
         /// </summary>
         private void Contact_ContactInformationChanged(object sender, ContactInformationChangedEventArgs e)
         {

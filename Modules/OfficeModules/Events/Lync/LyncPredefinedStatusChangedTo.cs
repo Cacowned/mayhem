@@ -18,14 +18,11 @@ namespace OfficeModules.Events.Lync
     [MayhemModule("Lync: Status Changed To", "Triggers when the status of a predefined contact changes to the predefined status")]
     public class LyncPredefinedStatusChangedTo : EventBase, IWpfConfigurable
     {
-        /// <summary>
-        /// The status that is monitored.
-        /// </summary>
         [DataMember]
         private string status;
 
         /// <summary>
-        /// The User ID of the predefined contact.
+        /// The User ID of the predefined contact that will be monitored.
         /// </summary>
         [DataMember]
         private string userId;

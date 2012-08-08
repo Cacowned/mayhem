@@ -33,9 +33,6 @@ namespace OfficeModules.Reactions.Word
         private OWord.Application app;
         private string documentName;
 
-        /// <summary>
-        /// This method will check if the folder exists.
-        /// </summary>
         protected override void OnEnabling(EnablingEventArgs e)
         {
             if (!Directory.Exists(fileName))
@@ -46,7 +43,7 @@ namespace OfficeModules.Reactions.Word
         }
 
         /// <summary>
-        /// This method will get the instance of the Word application and save the pictures from the current document.
+        /// If an instance of the Word application exits this method will save the pictures from the current document.
         /// </summary>
         public override void Perform()
         {
@@ -121,10 +118,6 @@ namespace OfficeModules.Reactions.Word
             }
         }
 
-        /// <summary>
-        /// This method will save the pictures received as a parameter to the predefined path.
-        /// </summary>
-        /// <param name="p_inlineShapes">A list of pictures that need to be saved</param>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void SavePictures(object p_inlineShapes)
         {
