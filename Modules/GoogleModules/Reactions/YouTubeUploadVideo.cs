@@ -66,7 +66,7 @@ namespace GoogleModules.Reactions
             }
         }
 
-        public void UseSavedAuthorization()
+        private void UseSavedAuthorization()
         {
             var provider = new NativeApplicationClient(GoogleAuthenticationServer.Description);
             provider.ClientIdentifier = Strings.Google_ClientID;
@@ -77,7 +77,7 @@ namespace GoogleModules.Reactions
             auth.LoadAccessToken();
         }
 
-        public IAuthorizationState getState(NativeApplicationClient arg)
+        private IAuthorizationState getState(NativeApplicationClient arg)
         {
             IAuthorizationState state = new AuthorizationState(new[] { Scope });
             state.Callback = new Uri(NativeApplicationClient.OutOfBandCallbackUrl);
