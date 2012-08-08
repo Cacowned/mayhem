@@ -226,7 +226,7 @@
     <value>Skype: Chat Message Received</value>
   </data>
   <data name="ReceiveSms_Title" xml:space="preserve">
-    <value>Skype: Receive Sms</value>
+    <value>Skype: Receive SMS</value>
   </data>
   <data name="Error_CantMuteUnmuteNoCall" xml:space="preserve">
     <value>Can't mute/unmute the microphone because an active call doesn't exist.</value>

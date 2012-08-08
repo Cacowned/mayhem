@@ -33,11 +33,10 @@ namespace SkypeModules.Wpf
             {
                 errorString = string.Format(Strings.General_NoCharacter, type);
             }
-            else
-                if (textLength > maxLength)
-                {
-                    errorString = string.Format(Strings.General_TooLong, type);
-                }
+            else if (textLength > maxLength)
+            {
+                errorString = string.Format(Strings.General_TooLong, type);
+            }
 
             return errorString == string.Empty;
         }

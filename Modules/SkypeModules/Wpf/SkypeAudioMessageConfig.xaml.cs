@@ -47,18 +47,16 @@ namespace SkypeModules.Wpf
             {
                 return false;
             }
-            else
-                if (!LocationBox.Text.EndsWith(".wav"))
-                {
-                    errorString = Strings.General_FileFormatNotValid;
-                    return false;
-                }
-                else
-                    if (!File.Exists(LocationBox.Text))
-                    {
-                        errorString = Strings.General_FileNotFound;
-                        return false;
-                    }
+            else if (!LocationBox.Text.EndsWith(".wav"))
+            {
+                errorString = Strings.General_FileFormatNotValid;
+                return false;
+            }
+            else if (!File.Exists(LocationBox.Text))
+            {
+                errorString = Strings.General_FileNotFound;
+                return false;
+            }
 
             return true;
         }
