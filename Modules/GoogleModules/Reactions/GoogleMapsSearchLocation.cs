@@ -54,11 +54,6 @@ namespace GoogleModules.Reactions
         {
             var config = configurationControl as GoogleMapsSearchLocationConfig;
 
-            if (config == null)
-            {
-                return;
-            }
-
             location = config.Location;
             mapType = config.MapType;
         }
