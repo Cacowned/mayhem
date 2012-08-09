@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActivityLink_ConfigString" xml:space="preserve">
+    <value>Activity's link: {0}.</value>
+  </data>
+  <data name="General_ActivityID" xml:space="preserve">
+    <value>Activity ID</value>
+  </data>
+  <data name="General_ActivityLink" xml:space="preserve">
+    <value>link of the activity</value>
+  </data>
   <data name="General_AuthenticationFailed" xml:space="preserve">
     <value>Authentication failed.</value>
   </data>
@@ -126,6 +135,9 @@
   <data name="General_FileNotFound" xml:space="preserve">
     <value>The file doesn't exist.</value>
   </data>
+  <data name="General_Incorrect" xml:space="preserve">
+    <value>The {0} is incorrect.</value>
+  </data>
   <data name="General_MomentText" xml:space="preserve">
     <value>text of the moment</value>
   </data>
@@ -134,6 +146,12 @@
   </data>
   <data name="General_NotAuthenticated" xml:space="preserve">
     <value>Not Authenticated.</value>
+  </data>
+  <data name="General_ProfileID" xml:space="preserve">
+    <value>Profile ID</value>
+  </data>
+  <data name="General_TimeInterval" xml:space="preserve">
+    <value>60000</value>
   </data>
   <data name="General_TooLong" xml:space="preserve">
     <value>The {0} is too long.</value>
@@ -159,6 +177,9 @@
   <data name="GooglePlusPostVideo_Title" xml:space="preserve">
     <value>Google+: Post Video</value>
   </data>
+  <data name="GooglePlusReceiveComment_Title" xml:space="preserve">
+    <value>Google+: Receive Comment</value>
+  </data>
   <data name="GooglePlus_ApiKey" xml:space="preserve">
     <value>AIzaSyDC9EuY_1hg4V-CjUzuSRWO9K9bpJE5bic</value>
   </data>
@@ -180,8 +201,17 @@
   <data name="GooglePlus_ErrorMonitoringNewActivity" xml:space="preserve">
     <value>Error at monitoring the Google+ feed activity.</value>
   </data>
+  <data name="GooglePlus_ErrorMonitoringNewActivity1" xml:space="preserve">
+    <value>Error at monitoring the Google+ feed activity.</value>
+  </data>
   <data name="GooglePlus_ErrorMonitoringNewComment" xml:space="preserve">
     <value>Error at monitoring the Google+ comments.</value>
+  </data>
+  <data name="GooglePlus_ErrorMonitoringNewComment1" xml:space="preserve">
+    <value>Error at monitoring the Google+ comments.</value>
+  </data>
+  <data name="GooglePlus_ErrorMonitoringYoutubeUploadedVideos" xml:space="preserve">
+    <value>Error at monitoring the Youtube uploads video feed for {0}.</value>
   </data>
   <data name="GooglePlus_EventCouldntBeEnabled" xml:space="preserve">
     <value>The event could not be enabled.</value>
@@ -222,8 +252,32 @@
   <data name="UploadVideo_ConfigString" xml:space="preserve">
     <value>Video title: {0}.</value>
   </data>
+  <data name="Username_ConfigString" xml:space="preserve">
+    <value>Username: {0}.</value>
+  </data>
+  <data name="YouTubeCommentAdded_ConfigString" xml:space="preserve">
+    <value>Video ID: {0}.</value>
+  </data>
+  <data name="YouTubeCommentAdded_ConfigString1" xml:space="preserve">
+    <value>Video ID: {0}.</value>
+  </data>
+  <data name="YouTubeCommentAdded_Title" xml:space="preserve">
+    <value>YouTube: Video Comment</value>
+  </data>
+  <data name="YouTubeCommentAdded_Title1" xml:space="preserve">
+    <value>YouTube: Video Comment</value>
+  </data>
   <data name="YouTubeUploadVideo_Title" xml:space="preserve">
     <value>YouTube: Upload Video</value>
+  </data>
+  <data name="YouTubeVideoDeleted_Title" xml:space="preserve">
+    <value>YouTube: Video Deleted</value>
+  </data>
+  <data name="YouTubeVideoDoesntExists" xml:space="preserve">
+    <value>An YouTube Video identified by the provided ID doesn't exists.</value>
+  </data>
+  <data name="YouTubeVideoUploaded_Title" xml:space="preserve">
+    <value>YouTube: Video Uploaded</value>
   </data>
   <data name="YouTube_Category" xml:space="preserve">
     <value>Category</value>
@@ -233,6 +287,9 @@
   </data>
   <data name="YouTube_DeveloperKey" xml:space="preserve">
     <value>AI39si4VuUApLd4VGVwxWEwKMwbNs1dhSeVEc1LGavmXEwnP1QsUq9FHL81tTdDq4_bQRf0SSP6VvvVovht6Xioy3l-9v2awOw</value>
+  </data>
+  <data name="YouTube_ErrorMonitoringComment" xml:space="preserve">
+    <value>Error at monitoring the YouTube comments.</value>
   </data>
   <data name="YouTube_Keywords" xml:space="preserve">
     <value>Keywords</value>
@@ -251,6 +308,12 @@
   </data>
   <data name="YouTube_Username" xml:space="preserve">
     <value>Username</value>
+  </data>
+  <data name="YouTube_VideoCommentCouldntEnable" xml:space="preserve">
+    <value>The event 'YouTube: Video Comment' couldn't be enabled.</value>
+  </data>
+  <data name="YouTube_VideoID" xml:space="preserve">
+    <value>Video ID</value>
   </data>
   <data name="YouTube_VideoPath" xml:space="preserve">
     <value>path of the video</value>

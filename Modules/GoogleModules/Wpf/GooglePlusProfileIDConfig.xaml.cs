@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using GoogleModules.Resources;
 
 namespace GoogleModules.Wpf
 {
@@ -8,13 +7,6 @@ namespace GoogleModules.Wpf
     /// </summary>
     public partial class GooglePlusProfileIDConfig : GooglePlusBaseConfig
     {
-        public override string Title
-        {
-            get { return configTitle; }
-        }
-
-        private string configTitle;
-
         public GooglePlusProfileIDConfig(string profileID, string title)
         {
             ProfileID = profileID;
@@ -25,10 +17,9 @@ namespace GoogleModules.Wpf
 
         public override void OnLoad()
         {
-            CanSave = true;
             ProfileIDBox.Text = ProfileID;
 
-            DisplayErrorMessage(CheckValidityProfileID(ProfileID));
+            CheckValidity();
         }
 
         public override void OnSave()
@@ -36,20 +27,12 @@ namespace GoogleModules.Wpf
             ProfileID = ProfileIDBox.Text;
         }
 
-        private void ProfileIDBox_TextChanged(object sender, TextChangedEventArgs e)
+        protected override void CheckValidity()
         {
-            DisplayErrorMessage(CheckValidityProfileID(ProfileIDBox.Text));
-        }
+            errorString = string.Empty;
 
-        protected void DisplayErrorMessage(string errorString)
-        {
-            // In the case that we have an error message we display it.
-            if (!errorString.Equals(string.Empty))
-            {
-                textInvalid.Text = errorString;
-            }
-
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            CheckValidityField(ProfileIDBox.Text, Strings.General_ProfileID, maxLength: 100);
+            DisplayErrorMessage(textInvalid);
         }
     }
 }

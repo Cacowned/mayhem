@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using GoogleModules.Resources;
 
 namespace GoogleModules.Wpf
@@ -52,7 +51,7 @@ namespace GoogleModules.Wpf
             }
         }
 
-        private void CheckValidity()
+        protected override void CheckValidity()
         {
             errorString = string.Empty;
 
@@ -64,11 +63,6 @@ namespace GoogleModules.Wpf
                               CheckAuthentication();
 
             DisplayErrorMessage(textInvalid);
-        }
-
-        private void Box_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            CheckValidity();
         }
 
         private void buttonAuthenticate_Click(object sender, RoutedEventArgs e)

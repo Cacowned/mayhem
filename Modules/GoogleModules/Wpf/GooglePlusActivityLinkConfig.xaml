@@ -17,7 +17,7 @@
 
         <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Grid.Row="0" Grid.ColumnSpan="3">Please enter the link of the activity you want to monitor.</TextBlock>
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Activity's link:</TextBlock>
-        <TextBox Name="ActivityLinkBox" TextChanged="ActivityLinkBox_TextChanged" Grid.Column="1" Grid.Row="1"/>
+        <TextBox Name="ActivityLinkBox" TextChanged="Box_TextChanged" Grid.Column="1" Grid.Row="1"/>
         <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">The link of the activity is invalid.</TextBlock>
     </Grid>
 </local:GooglePlusBaseConfig>

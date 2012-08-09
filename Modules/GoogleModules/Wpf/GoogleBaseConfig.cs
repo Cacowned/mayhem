@@ -48,5 +48,15 @@ namespace GoogleModules.Wpf
 
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
+
+        protected void Box_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckValidity();
+        }
+
+        protected virtual void CheckValidity()
+        {
+            // This will be overriden in the classes that inherit this class.
+        }
     }
 }

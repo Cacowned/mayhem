@@ -38,7 +38,7 @@ namespace GoogleModules.Reactions
         [DataMember]
         private string refreshToken;
 
-        private const string Scope = "https://gdata.youtube.com";
+        private const string scope = "https://gdata.youtube.com";
 
         private YouTubeRequest request;
 
@@ -79,7 +79,7 @@ namespace GoogleModules.Reactions
 
         private IAuthorizationState getState(NativeApplicationClient arg)
         {
-            IAuthorizationState state = new AuthorizationState(new[] { Scope });
+            IAuthorizationState state = new AuthorizationState(new[] { scope });
             state.Callback = new Uri(NativeApplicationClient.OutOfBandCallbackUrl);
             state.RefreshToken = refreshToken;
 
