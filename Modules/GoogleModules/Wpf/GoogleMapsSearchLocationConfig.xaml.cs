@@ -1,5 +1,4 @@
-﻿using System.Windows.Controls;
-using GoogleModules.Resources;
+﻿using GoogleModules.Resources;
 
 namespace GoogleModules.Wpf
 {
@@ -57,15 +56,12 @@ namespace GoogleModules.Wpf
             MapType = MapTypesComboBox.SelectedItem as string;
         }
 
-        protected void CheckValidity()
+        protected override void CheckValidity()
         {
+            errorString = string.Empty;
+
             CheckValidityField(LocationBox.Text, Strings.GoogleMaps, maxLength: 200);
             DisplayErrorMessage(textInvalid);
-        }
-
-        private void LocationBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            CheckValidity();
         }
     }
 }

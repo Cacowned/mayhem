@@ -32,7 +32,7 @@ namespace GoogleModules.Reactions
 
         protected PlusService service;
         protected OAuth2Authenticator<NativeApplicationClient> auth;
-        protected const string Scope = "https://www.googleapis.com/auth/plus.moments.write";
+        protected const string scope = "https://www.googleapis.com/auth/plus.moments.write";
 
         protected void AddActivity(string activityType)
         {
@@ -50,7 +50,7 @@ namespace GoogleModules.Reactions
             service.Moments.Insert(moment, "me", MomentsResource.Collection.Vault).Fetch();
         }
 
-        public void UseSavedAuthorization()
+        private void UseSavedAuthorization()
         {
             var provider = new NativeApplicationClient(GoogleAuthenticationServer.Description);
             provider.ClientIdentifier = Strings.Google_ClientID;
@@ -63,9 +63,9 @@ namespace GoogleModules.Reactions
             auth.LoadAccessToken();
         }
 
-        public IAuthorizationState getState(NativeApplicationClient arg)
+        private IAuthorizationState getState(NativeApplicationClient arg)
         {
-            IAuthorizationState state = new AuthorizationState(new[] { Scope });
+            IAuthorizationState state = new AuthorizationState(new[] { scope });
             state.Callback = new Uri(NativeApplicationClient.OutOfBandCallbackUrl);
             state.RefreshToken = refreshToken;
 

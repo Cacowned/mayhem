@@ -1,19 +1,17 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using GoogleModules.Resources;
 
 namespace GoogleModules.Wpf
 {
     /// <summary>
     /// This is the configuration file for setting the username for the feed we want to monitor.
     /// </summary>
-    public partial class YouTubeUsernameConfig : YouTubeBaseConfig
+    public partial class YouTubeUsernameConfig : GoogleBaseConfig
     {
-        public override string Title
+        public string Username
         {
-            get { return configTitle; }
+            get;
+            protected set;
         }
-
-        private string configTitle;
 
         public YouTubeUsernameConfig(string username, string title)
         {
@@ -25,11 +23,9 @@ namespace GoogleModules.Wpf
 
         public override void OnLoad()
         {
-            CanSave = true;
-
             UsernameBox.Text = Username;
 
-            DisplayErrorMessage(CheckValidityUsername(Username));
+            CheckValidity();
         }
 
         public override void OnSave()
@@ -37,20 +33,12 @@ namespace GoogleModules.Wpf
             Username = UsernameBox.Text;
         }
 
-        private void UsernameBox_TextChanged(object sender, TextChangedEventArgs e)
+        protected override void CheckValidity()
         {
-            DisplayErrorMessage(CheckValidityUsername(UsernameBox.Text));
-        }
+            errorString = string.Empty;
 
-        protected void DisplayErrorMessage(string errorString)
-        {
-            // In the case that we have an error message we display it.
-            if (!errorString.Equals(string.Empty))
-            {
-                textInvalid.Text = errorString;
-            }
-
-            textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
+            CheckValidityField(UsernameBox.Text, Strings.YouTube_Username, maxLength: 100);
+            DisplayErrorMessage(textInvalid);
         }
     }
 }

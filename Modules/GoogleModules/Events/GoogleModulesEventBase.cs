@@ -4,6 +4,9 @@ using MayhemCore;
 
 namespace GoogleModules.Events
 {
+    /// <summary>
+    /// Base class for all the GoogleModules Events.
+    /// </summary>
     [DataContractAttribute]
     public abstract class GoogleModulesEventBase : EventBase
     {

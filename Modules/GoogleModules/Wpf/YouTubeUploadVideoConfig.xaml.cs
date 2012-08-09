@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using GoogleModules.Resources;
 
@@ -121,11 +120,6 @@ namespace GoogleModules.Wpf
             }
         }
 
-        private void Box_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            CheckValidity();
-        }
-
         private bool CheckValidityVideoPath(string videoPath)
         {
             errorString = string.Empty;
@@ -145,7 +139,7 @@ namespace GoogleModules.Wpf
             return true;
         }
 
-        private void CheckValidity()
+        protected override void CheckValidity()
         {
             errorString = string.Empty;
 
