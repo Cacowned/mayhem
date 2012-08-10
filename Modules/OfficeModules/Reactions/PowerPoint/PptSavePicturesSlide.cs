@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading;
@@ -16,14 +17,21 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions.PowerPoint
 {
+    /// <summary>
+    /// A reaction that will save the pictures from the current slide of the active slideshow.
+    /// </summary>
     [DataContract]
     [MayhemModule("PowerPoint: Save Pictures", "Saves the pictures from the current slide")]
     public class PptSavePicturesSlide : ReactionBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The path of the folder where the pictures will be saved.
+        /// </summary>
         [DataMember]
         private string fileName;
 
         private OPowerPoint.Application app;
+        private string presentationName;
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -34,6 +42,9 @@ namespace OfficeModules.Reactions.PowerPoint
             }
         }
 
+        /// <summary>
+        /// If an instance of the PowerPoint application exits this method will save the pictures from the current slide of the active slideshow.
+        /// </summary>
         public override void Perform()
         {
             if (!Directory.Exists(fileName))
@@ -70,6 +81,14 @@ namespace OfficeModules.Reactions.PowerPoint
                     else
                     {
                         OPowerPoint.Slide slide = activePresentation.SlideShowWindow.View.Slide;
+
+                        presentationName = activePresentation.Name;
+
+                        if (presentationName.Contains(".pptx"))
+                            presentationName = presentationName.Remove(presentationName.LastIndexOf(".pptx"));
+
+                        if (presentationName.Contains(".ppt"))
+                            presentationName = presentationName.Remove(presentationName.LastIndexOf(".ppt"));
 
                         if (slide == null)
                         {
@@ -109,46 +128,58 @@ namespace OfficeModules.Reactions.PowerPoint
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SavePicture(object pShapes)
         {
             int count = 0;
             List<OPowerPoint.Shape> shapes;
 
-            lock (this)
-            {
-                shapes = pShapes as List<OPowerPoint.Shape>;
+            shapes = pShapes as List<OPowerPoint.Shape>;
 
-                if (shapes == null)
-                    return;
+            if (shapes == null)
+                return;
+
+            FileStream stream = null;
+
+            try
+            {
+                foreach (OPowerPoint.Shape shape in shapes)
+                {
+                    shape.Copy();
+
+                    bool containsImage = Clipboard.ContainsImage();
+
+                    if (containsImage)
+                    {
+                        count++;
+
+                        BitmapSource image = Clipboard.GetImage();
+
+                        stream = new FileStream(fileName + "\\" + presentationName + "_pic" + count + ".jpg", FileMode.Create);
+
+                        JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+
+                        encoder.Frames.Add(BitmapFrame.Create(image));
+                        encoder.Save(stream);
+
+                        stream.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantSavePictures);
+                Logger.WriteLine(ex.Message);
 
                 try
                 {
-                    foreach (OPowerPoint.Shape shape in shapes)
-                    {
-                        shape.Copy();
-
-                        bool containsImage = Clipboard.ContainsImage();
-
-                        if (containsImage)
-                        {
-                            count++;
-
-                            BitmapSource image = Clipboard.GetImage();
-
-                            FileStream stream = new FileStream(fileName + "\\pic" + count + ".jpg", FileMode.Create);
-                            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-
-                            encoder.Frames.Add(BitmapFrame.Create(image));
-                            encoder.Save(stream);
-
-                            stream.Close();
-                        }
-                    }
+                    if (stream != null)
+                        stream.Close();
                 }
-                catch (Exception ex)
+                catch (IOException e)
                 {
-                    ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantSavePictures);
-                    Logger.WriteLine(ex.Message);
+                    ErrorLog.AddError(ErrorType.Failure, Strings.CantCloseFileStream);
+                    Logger.WriteLine(e);
                 }
             }
         }
@@ -163,7 +194,7 @@ namespace OfficeModules.Reactions.PowerPoint
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var pptSavePicturesConfig = configurationControl as PowerPointSavePicturesConfig;
-            
+
             fileName = pptSavePicturesConfig.FileName;
         }
 

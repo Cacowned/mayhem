@@ -6,6 +6,9 @@ using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// User Control for monitoring the status of a predefined user.
+    /// </summary>
     public partial class LyncStatusChangedConfig : WpfConfiguration
     {
         public string UserId
@@ -20,19 +23,21 @@ namespace OfficeModules.Wpf
             private set;
         }
 
+        public override string Title
+        {
+            get { return configTitle; }
+        }
+
+        private string configTitle;
         private ObservableCollection<string> statuses = null;
 
-        public LyncStatusChangedConfig(string userId, string status)
+        public LyncStatusChangedConfig(string userId, string status, string title)
         {
             UserId = userId;
             Status = status;
+            configTitle = title;
 
             InitializeComponent();
-        }
-
-        public override string Title
-        {
-            get { return "Monitor Status"; }
         }
 
         public override void OnLoad()

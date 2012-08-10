@@ -16,7 +16,6 @@
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">User Id:</TextBlock>
         <TextBox Name="UserIdBox" Grid.Column="1" Grid.Row="0" TextChanged="UserIdBox_TextChanged"></TextBox>
-
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Status:</TextBlock>
         <ComboBox Name ="StatusComboBox" Grid.Column="1" Grid.Row="1"/>
         <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="2">User Id is invalid</TextBlock>

@@ -11,7 +11,7 @@ using OfficeModules.Wpf;
 namespace OfficeModules.Events.Lync
 {
     /// <summary>
-    /// This event is triggered when the status of a predefined contact changes from the one that is setted by the user to any other
+    /// An event that will be triggered when the status of a predefined contact changes from the one that is setted by the user to any other.
     /// </summary>
     [DataContract]
     [MayhemModule("Lync: Status Changed From", "Triggers when the status of a predefined contact changes from the predefined status")]
@@ -20,6 +20,9 @@ namespace OfficeModules.Events.Lync
         [DataMember]
         private string status;
 
+        /// <summary>
+        /// The User ID of the predefined contact that will be monitored.
+        /// </summary>
         [DataMember]
         private string userId;
 
@@ -87,6 +90,9 @@ namespace OfficeModules.Events.Lync
             }
         }
 
+        /// <summary>
+        /// This method is called when the ContactInformationChangedEvent is triggered, and will trigger this event if the previous status equals the status that is monitored.
+        /// </summary>
         private void Contact_ContactInformationChanged(object sender, ContactInformationChangedEventArgs e)
         {
             var contact = sender as Contact;
@@ -97,7 +103,6 @@ namespace OfficeModules.Events.Lync
 
                 if ((status.ToLower().Equals("any") || currentStatus.ToLower().Equals(status.ToLower())) && !contactStatus.ToLower().Equals(status.ToLower()))
                 {
-                    Logger.WriteLine(contactStatus);
                     Trigger();
                 }
 
@@ -109,7 +114,7 @@ namespace OfficeModules.Events.Lync
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new LyncStatusChangedConfig(userId, status); }
+            get { return new LyncStatusChangedConfig(userId, status, Strings.LyncPredefinedStatusChangedFrom_Title); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)

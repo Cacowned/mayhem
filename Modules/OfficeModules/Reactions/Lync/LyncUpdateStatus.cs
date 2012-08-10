@@ -12,7 +12,7 @@ using OfficeModules.Wpf;
 namespace OfficeModules.Reactions.Lync
 {
     /// <summary>
-    /// This reaction updates the status of the current user
+    /// A reaction that updates the status of the current user.
     /// </summary>
     [DataContract]
     [MayhemModule("Lync: Update Status", "Updates the status of the current user")]
@@ -27,6 +27,9 @@ namespace OfficeModules.Reactions.Lync
         private LyncClient lyncClient = null;
         private Self self = null;
 
+        /// <summary>
+        /// If an instance of the Lync application exits this method will update the status of the current user.
+        /// </summary>
         public override void Perform()
         {
             try

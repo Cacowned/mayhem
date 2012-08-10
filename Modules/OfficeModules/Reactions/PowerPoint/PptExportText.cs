@@ -12,12 +12,15 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Reactions.PowerPoint
 {
+    /// <summary>
+    /// A reaction that will export the text of the active presentation.
+    /// </summary>
     [DataContract]
     [MayhemModule("PowerPoint: Export Text", "Exports the text of the slides from the active presentation")]
     public class PptExportText : ReactionBase, IWpfConfigurable
     {
         /// <summary>
-        /// The path of the file were the notes would be saved
+        /// The path of the file were the notes will be saved.
         /// </summary>
         [DataMember]
         private string fileName;
@@ -34,10 +37,15 @@ namespace OfficeModules.Reactions.PowerPoint
             }
         }
 
+        /// <summary>
+        /// If an instance of the PowerPoint application exits this method will export the text of the active presentation to the selected file.
+        /// </summary>
         public override void Perform()
         {
             if (File.Exists(fileName))
             {
+                streamWriter = null;
+
                 try
                 {
                     FileStream stream = File.Open(fileName, FileMode.Create);
@@ -65,6 +73,17 @@ namespace OfficeModules.Reactions.PowerPoint
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_ApplicationNotFound);
                 Logger.Write(ex);
+
+                try
+                {
+                    if (streamWriter != null)
+                        streamWriter.Close();
+                }
+                catch (IOException e)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.CantCloseFileStream);
+                    Logger.WriteLine(e);
+                }
 
                 return;
             }
@@ -96,6 +115,17 @@ namespace OfficeModules.Reactions.PowerPoint
             {
                 ErrorLog.AddError(ErrorType.Failure, Strings.PowerPoint_CantExportText);
                 Logger.Write(ex);
+
+                try
+                {
+                    if (streamWriter != null)
+                        streamWriter.Close();
+                }
+                catch (IOException e)
+                {
+                    ErrorLog.AddError(ErrorType.Failure, Strings.CantCloseFileStream);
+                    Logger.WriteLine(e);
+                }
             }
             finally
             {
@@ -107,7 +137,7 @@ namespace OfficeModules.Reactions.PowerPoint
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new PowerPointExportConfig(fileName); }
+            get { return new PowerPointExportConfig(fileName, Strings.PptExportText_Title); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)

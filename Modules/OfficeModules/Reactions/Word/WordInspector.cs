@@ -6,11 +6,17 @@ using OWord = Microsoft.Office.Interop.Word;
 
 namespace OfficeModules.Reactions.Word
 {
+    /// <summary>
+    /// A reaction that will activate the inspector feature for the active document.
+    /// </summary>
     [MayhemModule("Word: Activate Inspector", "Activates the inspector feature for a document")]
     public class WordInspector : ReactionBase
     {
         private OWord.Application app;
 
+        /// <summary>
+        /// If an instance of the Word application exits this method will activate the inspector feature for the active document.
+        /// </summary>
         public override void Perform()
         {
             try

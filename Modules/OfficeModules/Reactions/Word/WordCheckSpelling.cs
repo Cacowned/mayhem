@@ -6,11 +6,17 @@ using OWord = Microsoft.Office.Interop.Word;
 
 namespace OfficeModules.Reactions.Word
 {
+    /// <summary>
+    /// A reaction that will activate the spell checking for the active document.
+    /// </summary>
     [MayhemModule("Word: Check Spelling", "Activates the spell checking for a document")]
     public class WordCheckSpelling : ReactionBase
     {
         private OWord.Application app;
 
+        /// <summary>
+        /// If an instance of the Word application exits this method will activate the spell checking for the active document.
+        /// </summary>
         public override void Perform()
         {
             try

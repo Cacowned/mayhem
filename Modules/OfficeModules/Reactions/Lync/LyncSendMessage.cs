@@ -13,21 +13,30 @@ using OfficeModules.Wpf;
 namespace OfficeModules.Reactions.Lync
 {
     /// <summary>
-    /// This reaction sends a message to a predefined user
+    /// A reaction that sends a message to a predefined user.
     /// </summary>
     [DataContract]
     [MayhemModule("Lync: Send Instant Message", "Send an instant message to a predefined user")]
     public class LyncSendMessage : ReactionBase, IWpfConfigurable
     {
-        [DataMember]
-        private string message;
-
+        /// <summary>
+        /// The User ID of the predefined contact which the instant message will be sent to.
+        /// </summary>
         [DataMember]
         private string userId;
+
+        /// <summary>
+        /// The message that will be sent.
+        /// </summary>
+        [DataMember]
+        private string message;
 
         private LyncClient lyncClient = null;
         private Self self = null;
 
+        /// <summary>
+        /// If an instance of the Lync application exits this method will send the setted message to the predefined user.
+        /// </summary>
         public override void Perform()
         {
             try

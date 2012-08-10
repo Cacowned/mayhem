@@ -11,12 +11,15 @@ using OfficeModules.Wpf;
 namespace OfficeModules.Events.Lync
 {
     /// <summary>
-    /// This event is triggered when the location of a predefined contact changes
+    /// An event that will be triggered when the location of a predefined contact changes.
     /// </summary>
     [DataContract]
     [MayhemModule("Lync: Location Changed", "Triggers when the location changes")]
     public class LyncLocationChanged : EventBase, IWpfConfigurable
     {
+        /// <summary>
+        /// The User ID of the predefined contact that will be monitored.
+        /// </summary>
         [DataMember]
         private string userId;
 
@@ -84,12 +87,15 @@ namespace OfficeModules.Events.Lync
             }
         }
 
+        /// <summary>
+        /// This method is called when the ContactInformationChangedEvent is triggered, and will trigger this event if the location of the monitored user has changed.
+        /// </summary>
         private void Contact_ContactInformationChanged(object sender, ContactInformationChangedEventArgs e)
         {
             var contact = sender as Contact;
             string selectedLocation = contact.GetContactInformation(ContactInformationType.LocationName).ToString();
 
-            // If the location changed event is triggered and the new location name is different from the previous one, we trigger the event
+            // If the new location name is different from the previous one, we trigger the event.
             if (e.ChangedContactInformation.Contains(ContactInformationType.LocationName) && !currentLocation.ToLower().Equals(selectedLocation.ToLower()))
             {
                 Trigger();
@@ -102,7 +108,7 @@ namespace OfficeModules.Events.Lync
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new LyncSelectUserConfig(userId); }
+            get { return new LyncSelectUserConfig(userId, Strings.LyncLocationChanged_Title); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)

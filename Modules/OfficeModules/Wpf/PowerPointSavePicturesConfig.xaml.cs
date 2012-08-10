@@ -7,8 +7,14 @@ using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// User Control for setting the location where the pictures of the current slide will be saved.
+    /// </summary>
     public partial class PowerPointSavePicturesConfig : WpfConfiguration
     {
+        /// <summary>
+        /// The path of the folder where the pictures will be saved.
+        /// </summary>
         public string FileName
         {
             get;
@@ -17,7 +23,7 @@ namespace OfficeModules.Wpf
 
         public override string Title
         {
-            get { return "Save Pictures"; }
+            get { return "PowerPoint: Save Pictures"; }
         }
 
         public PowerPointSavePicturesConfig(string filename)
@@ -42,6 +48,8 @@ namespace OfficeModules.Wpf
         private void CheckValidity()
         {
             string text = LocationBox.Text;
+
+            CanSave = true;
 
             if (text.Length == 0)
             {

@@ -6,6 +6,9 @@ using OWord = Microsoft.Office.Interop.Word;
 
 namespace OfficeModules.Events
 {
+    /// <summary>
+    /// An event that will be triggered when a document is closed.
+    /// </summary>
     [MayhemModule("Word: Close Document", "Triggers when a document is closed")]
     public class WordCloseDocument : EventBase
     {
@@ -14,7 +17,6 @@ namespace OfficeModules.Events
 
         protected override void OnAfterLoad()
         {
-            // Create the event handler delegate to attach
             closeDocumentEvent = DocumentClosed;
         }
 
@@ -25,7 +27,6 @@ namespace OfficeModules.Events
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            // When enabled, try and get the Word instance
             try
             {
                 word = (OWord.Application)Marshal.GetActiveObject("Word.Application");

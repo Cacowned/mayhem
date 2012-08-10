@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A0074A9E-D97F-40B8-9F91-4BA2330A81BC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GoogleModules</RootNamespace>
+    <AssemblyName>GoogleModules</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\GoogleModules\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetOpenAuth">
+      <HintPath>Libs\DotNetOpenAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Api.Maps.Service">
+      <HintPath>Libs\Google.Api.Maps.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis">
+      <HintPath>Libs\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Authentication.OAuth2">
+      <HintPath>Libs\Google.Apis.Authentication.OAuth2.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Plus.v1moments">
+      <HintPath>Libs\Google.Apis.Plus.v1moments.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Client, Version=2.1.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Google.GData.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.YouTube, Version=2.1.0.0, Culture=neutral, PublicKeyToken=af04a32718ae8833, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Google.GData.YouTube.dll</HintPath>
+    </Reference>
+    <Reference Include="GooglePlusLib.NET">
+      <HintPath>Libs\GooglePlusLib.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="MayhemCore">
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+    </Reference>
+    <Reference Include="MayhemWpf">
+      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Net35">
+      <HintPath>Libs\Newtonsoft.Json.Net35.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events\GoogleModulesEventBase.cs" />
+    <Compile Include="Events\GooglePlusEventBase.cs" />
+    <Compile Include="Events\GooglePlusNewActivity.cs" />
+    <Compile Include="Events\GooglePlusReceiveComment.cs" />
+    <Compile Include="Events\YouTubeCommentAdded.cs" />
+    <Compile Include="Events\YouTubeEventBase.cs" />
+    <Compile Include="Events\YouTubeVideoDeleted.cs" />
+    <Compile Include="Events\YouTubeVideoEventBase.cs" />
+    <Compile Include="Events\YouTubeVideoUploaded.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reactions\GoogleMapsSearchLocation.cs" />
+    <Compile Include="Reactions\GooglePlusBaseReaction.cs" />
+    <Compile Include="Reactions\GooglePlusPostBlogEntry.cs" />
+    <Compile Include="Reactions\GooglePlusPostVideo.cs" />
+    <Compile Include="Reactions\YouTubeUploadVideo.cs" />
+    <Compile Include="Resources\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\GoogleAuthenticationBaseConfig.cs" />
+    <Compile Include="Wpf\GoogleBaseConfig.cs" />
+    <Compile Include="Wpf\GoogleMapsSearchLocationConfig.xaml.cs">
+      <DependentUpon>GoogleMapsSearchLocationConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\GooglePlusActivityLinkConfig.xaml.cs">
+      <DependentUpon>GooglePlusActivityLinkConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\GooglePlusAddMomentConfig.xaml.cs">
+      <DependentUpon>GooglePlusAddMomentConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\GooglePlusBaseConfig.cs" />
+    <Compile Include="Wpf\GooglePlusProfileIDConfig.xaml.cs">
+      <DependentUpon>GooglePlusProfileIDConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\YouTubeCommentAddedConfig.xaml.cs">
+      <DependentUpon>YouTubeCommentAddedConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\YouTubeUploadVideoConfig.xaml.cs">
+      <DependentUpon>YouTubeUploadVideoConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\YouTubeUsernameConfig.xaml.cs">
+      <DependentUpon>YouTubeUsernameConfig.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Wpf\GoogleMapsSearchLocationConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\GooglePlusActivityLinkConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\GooglePlusAddMomentConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\GooglePlusProfileIDConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\YouTubeCommentAddedConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\YouTubeUploadVideoConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\YouTubeUsernameConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

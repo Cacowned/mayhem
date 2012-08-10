@@ -12,7 +12,7 @@ using OfficeModules.Wpf;
 namespace OfficeModules.Reactions.Lync
 {
     /// <summary>
-    /// This reaction updates the personal note of the current user
+    /// A reaction that updates the personal note of the current user.
     /// </summary>
     [DataContract]
     [MayhemModule("Lync: Update Personal Note", "Updates the personal note of the current user")]
@@ -24,6 +24,9 @@ namespace OfficeModules.Reactions.Lync
         private LyncClient lyncClient = null;
         private Self self = null;
 
+        /// <summary>
+        /// If an instance of the Lync application exits this method will update the personal note of the current user.
+        /// </summary>
         public override void Perform()
         {
             try

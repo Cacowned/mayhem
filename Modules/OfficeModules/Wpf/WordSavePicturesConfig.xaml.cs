@@ -7,8 +7,14 @@ using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// User Control for setting the location where the pictures of the active document will be saved.
+    /// </summary>
     public partial class WordSavePicturesConfig : WpfConfiguration
     {
+        /// <summary>
+        /// The path of the folder where the pictures will be saved.
+        /// </summary>
         public string FileName
         {
             get;
@@ -17,7 +23,7 @@ namespace OfficeModules.Wpf
 
         public override string Title
         {
-            get { return "Save Pictures"; }
+            get { return "Word: Save Pictures"; }
         }
 
         public WordSavePicturesConfig(string filename)
