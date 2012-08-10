@@ -214,10 +214,10 @@
     <value>Skype: Receive Call</value>
   </data>
   <data name="Successful_AudioMessage" xml:space="preserve">
-    <value>The audio message was succesful sent.</value>
+    <value>The audio message was sent successfully.</value>
   </data>
   <data name="Successful_ChatMessage" xml:space="preserve">
-    <value>The chat message was succesful sent.</value>
+    <value>The chat message was sent successfully.</value>
   </data>
   <data name="OnHoldCall_Title" xml:space="preserve">
     <value>Skype: Call Holded</value>

@@ -376,7 +376,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The audio message was succesful sent..
+        ///   Looks up a localized string similar to The audio message was sent successfully..
         /// </summary>
         internal static string Successful_AudioMessage {
             get {
@@ -385,7 +385,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The chat message was succesful sent..
+        ///   Looks up a localized string similar to The chat message was sent successfully..
         /// </summary>
         internal static string Successful_ChatMessage {
             get {
