@@ -1,0 +1,25 @@
+﻿<local:GooglePlusBaseConfig x:Class="GoogleModules.Wpf.GooglePlusActivityLinkConfig"
+                            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                            xmlns:local="clr-namespace:GoogleModules.Wpf"
+                            Width="460">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="80" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Grid.Row="0" Grid.ColumnSpan="3">Please enter the link of the activity you want to monitor.</TextBlock>
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Activity's link:</TextBlock>
+        <TextBox Name="ActivityLinkBox" TextChanged="Box_TextChanged" Grid.Column="1" Grid.Row="1"/>
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">The link of the activity is invalid.</TextBlock>
+    </Grid>
+</local:GooglePlusBaseConfig>
+
+

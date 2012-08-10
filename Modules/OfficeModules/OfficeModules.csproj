@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{760C6B5A-5259-453B-BFF4-1AC6F8C8193C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OfficeModules</RootNamespace>
+    <AssemblyName>OfficeModules</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\OfficeModules\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>..\..\MayhemRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\Packages\OfficeModules\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MayhemCore">
+      <HintPath>..\..\bin\MayhemCore\MayhemCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MayhemWpf, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\MayhemWpf\MayhemWpf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Build.Conversion.v4.0" />
+    <Reference Include="Microsoft.Lync.Controls">
+      <HintPath>Libs\Microsoft.Lync.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Lync.Controls.Framework">
+      <HintPath>Libs\Microsoft.Lync.Controls.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Lync.Model">
+      <HintPath>Libs\Microsoft.Lync.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Lync.Utilities">
+      <HintPath>Libs\Microsoft.Lync.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Outlook, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Uc, Version=4.0.7577.5, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>Libs\Microsoft.Office.Uc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Vbe.Interop.Forms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events\Excel\ExcelCloseWorkbook.cs" />
+    <Compile Include="Events\Excel\ExcelOpenWorkbook.cs" />
+    <Compile Include="Events\Excel\ExcelPrintWorkbook.cs" />
+    <Compile Include="Events\Excel\ExcelSaveWorkbook.cs" />
+    <Compile Include="Events\Lync\LyncInstantMessageReceived.cs" />
+    <Compile Include="Events\Lync\LyncLocationChanged.cs" />
+    <Compile Include="Events\Lync\LyncPersonalNoteChanged.cs" />
+    <Compile Include="Events\Lync\LyncPredefinedStatusChangedFrom.cs" />
+    <Compile Include="Events\Lync\LyncPredefinedStatusChangedTo.cs" />
+    <Compile Include="Events\Lync\LyncCallReceived.cs" />
+    <Compile Include="Events\Lync\LyncStatusChanged.cs" />
+    <Compile Include="Events\Outlook\OutlookMail.cs" />
+    <Compile Include="Events\Outlook\OutlookReminder.cs" />
+    <Compile Include="Events\PowerPoint\PptActivePresentationChanged.cs" />
+    <Compile Include="Events\PowerPoint\PptClosePresentation.cs" />
+    <Compile Include="Events\PowerPoint\PptOpenPresentation.cs" />
+    <Compile Include="Events\PowerPoint\PptPrintPresentation.cs" />
+    <Compile Include="Events\PowerPoint\PptSavePresentation.cs" />
+    <Compile Include="Events\Word\WordCloseDocument.cs" />
+    <Compile Include="Events\Word\WordOpenDocument.cs" />
+    <Compile Include="Events\Word\WordPrintDocument.cs" />
+    <Compile Include="Events\Word\WordSaveDocument.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reactions\Excel\ExcelCompatibilityCheck.cs" />
+    <Compile Include="Reactions\Excel\ExcelSaveCharts.cs" />
+    <Compile Include="Reactions\Lync\LyncMakeCall.cs" />
+    <Compile Include="Reactions\Lync\LyncMakeVideoCall.cs" />
+    <Compile Include="Reactions\Lync\LyncSendFile.cs" />
+    <Compile Include="Reactions\Lync\LyncSendMessage.cs" />
+    <Compile Include="Reactions\Lync\LyncUpdatePersonalNote.cs" />
+    <Compile Include="Reactions\Lync\LyncUpdateStatus.cs" />
+    <Compile Include="Reactions\PowerPoint\PptClosePresentation.cs" />
+    <Compile Include="Reactions\PowerPoint\PptExitSlideShow.cs" />
+    <Compile Include="Reactions\PowerPoint\PptExportNotes.cs" />
+    <Compile Include="Reactions\PowerPoint\PptExportText.cs" />
+    <Compile Include="Reactions\PowerPoint\PptFirstSlide.cs" />
+    <Compile Include="Reactions\PowerPoint\PptLastSlide.cs" />
+    <Compile Include="Reactions\PowerPoint\PptNextSlide.cs" />
+    <Compile Include="Reactions\PowerPoint\PptPrevSlide.cs" />
+    <Compile Include="Reactions\PowerPoint\PptSavePicturesSlide.cs" />
+    <Compile Include="Reactions\PowerPoint\PptViewSlideShow.cs" />
+    <Compile Include="Reactions\Word\WordCheckSpelling.cs" />
+    <Compile Include="Reactions\Word\WordCompatibilityCheck.cs" />
+    <Compile Include="Reactions\Word\WordInspector.cs" />
+    <Compile Include="Reactions\Word\WordSavePictures.cs" />
+    <Compile Include="Resources\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\ExcelSaveChartsConfig.xaml.cs">
+      <DependentUpon>ExcelSaveChartsConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\LyncSelectUserConfig.xaml.cs">
+      <DependentUpon>LyncSelectUserConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\LyncSendFileConfig.xaml.cs">
+      <DependentUpon>LyncSendFileConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\LyncSendMessageConfig.xaml.cs">
+      <DependentUpon>LyncSendMessageConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\LyncStatusChangedConfig.xaml.cs">
+      <DependentUpon>LyncStatusChangedConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\LyncUpdateStatusConfig.xaml.cs">
+      <DependentUpon>LyncUpdateStatusConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\PowerPointExportConfig.xaml.cs">
+      <DependentUpon>PowerPointExportConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\PowerPointSavePicturesConfig.xaml.cs">
+      <DependentUpon>PowerPointSavePicturesConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\LyncUpdatePersonalNoteConfig.xaml.cs">
+      <DependentUpon>LyncUpdatePersonalNoteConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\WordSavePicturesConfig.xaml.cs">
+      <DependentUpon>WordSavePicturesConfig.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Wpf\ExcelSaveChartsConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Wpf\LyncSelectUserConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\LyncSendFileConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\LyncSendMessageConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\LyncStatusChangedConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\LyncUpdateStatusConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\PowerPointExportConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\PowerPointSavePicturesConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\LyncUpdatePersonalNoteConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\WordSavePicturesConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

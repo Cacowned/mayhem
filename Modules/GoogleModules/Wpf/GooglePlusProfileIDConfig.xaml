@@ -1,0 +1,24 @@
+﻿<local:GooglePlusBaseConfig x:Class="GoogleModules.Wpf.GooglePlusProfileIDConfig"
+                            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                            xmlns:local="clr-namespace:GoogleModules.Wpf"
+                            Width="420">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="60" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Grid.Row="0" Grid.ColumnSpan="3">Please enter the ID of the profile you want to monitor.</TextBlock>
+        <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">Profile ID:</TextBlock>
+        <TextBox Name="ProfileIDBox" TextChanged="Box_TextChanged" Grid.Column="1" Grid.Row="1"/>
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="textInvalid" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">The Profile ID is invalid.</TextBlock>
+    </Grid>
+</local:GooglePlusBaseConfig>
+
