@@ -5,6 +5,9 @@ using OOutlook = Microsoft.Office.Interop.Outlook;
 
 namespace OfficeModules.Events
 {
+    /// <summary>
+    /// An event that will be triggered when a new email is received.
+    /// </summary>
     [MayhemModule("Outlook New Mail", "Triggers when a new email is received")]
     public class OutlookMail : EventBase
     {
@@ -13,7 +16,6 @@ namespace OfficeModules.Events
 
         protected override void OnAfterLoad()
         {
-            // Create the event handler delegate to attach
             mailEvent = GotMail;
         }
 
@@ -24,7 +26,6 @@ namespace OfficeModules.Events
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            // When enabled, try and get the outlook instance            
             try
             {
                 outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");

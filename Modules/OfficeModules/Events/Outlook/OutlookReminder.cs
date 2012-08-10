@@ -5,6 +5,9 @@ using OOutlook = Microsoft.Office.Interop.Outlook;
 
 namespace OfficeModules.Events
 {
+    /// <summary>
+    /// An event that will be triggered when a reminder goes off for an Outlook event.
+    /// </summary>
     [MayhemModule("Outlook Reminder", "Triggers when a reminder goes off for an Outlook event")]
     public class OutlookReminder : EventBase
     {
@@ -13,7 +16,6 @@ namespace OfficeModules.Events
 
         protected override void OnAfterLoad()
         {
-            // Create the event handler delegate to attach
             reminderEvent = GotReminder;
         }
 
@@ -24,7 +26,6 @@ namespace OfficeModules.Events
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            // When enabled, try and get the outlook instance
             try
             {
                 outlook = (OOutlook.Application)Marshal.GetActiveObject("Outlook.Application");

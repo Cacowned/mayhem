@@ -4,6 +4,9 @@ using MayhemWpf.UserControls;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// User Control for updating the personal note of the current user.
+    /// </summary>
     public partial class LyncUpdatePersonalNoteConfig : WpfConfiguration
     {
         public string PersonalNote
@@ -14,7 +17,7 @@ namespace OfficeModules.Wpf
 
         public override string Title
         {
-            get { return "Personal Note"; }
+            get { return "Lync: Update Personal Note"; }
         }
 
         public LyncUpdatePersonalNoteConfig(string personalNote)

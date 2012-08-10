@@ -5,6 +5,9 @@ using MayhemWpf.UserControls;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// User Control for updating the status of the current user.
+    /// </summary>
     public partial class LyncUpdateStatusConfig : WpfConfiguration
     {
         public int StatusId
@@ -21,7 +24,7 @@ namespace OfficeModules.Wpf
 
         public override string Title
         {
-            get { return "Status"; }
+            get { return "Lync: Update Status"; }
         }
 
         public LyncUpdateStatusConfig(int statusId, string statusText)
@@ -30,19 +33,19 @@ namespace OfficeModules.Wpf
             StatusText = statusText;
 
             InitializeComponent();
-        }  
+        }
 
         public override void OnLoad()
         {
             int index = -1;
-           
+
             foreach (ComboBoxItem item in StatusComboBox.Items)
             {
                 index++;
                 if (Int32.Parse(item.Tag.ToString()) == StatusId)
                 {
-                    break; 
-                }                
+                    break;
+                }
             }
 
             if (index >= 0 && index < StatusComboBox.Items.Count)
@@ -63,7 +66,7 @@ namespace OfficeModules.Wpf
         {
             CanSave = true;
 
-            if (StatusComboBox.Items.Count == 0 || StatusComboBox.SelectedIndex == - 1)
+            if (StatusComboBox.Items.Count == 0 || StatusComboBox.SelectedIndex == -1)
                 CanSave = false;
 
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;

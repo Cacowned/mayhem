@@ -6,10 +6,17 @@ using OExcel = Microsoft.Office.Interop.Excel;
 
 namespace OfficeModules.Reactions.Excel
 {
+    /// <summary>
+    /// A reaction that will check the compatibility of the current workbook.
+    /// </summary>
     [MayhemModule("Excel: Check Compatibility", "Checks the compatibility of the current workbook")]
     public class ExcelCompatibilityCheck : ReactionBase
     {
         OExcel.Application app;
+
+        /// <summary>
+        /// If an instance of the Excel application exits this method will set it's CheckCompatibility property to true.
+        /// </summary>
         public override void Perform()
         {
             try

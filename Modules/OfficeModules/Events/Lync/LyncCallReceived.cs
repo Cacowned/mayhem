@@ -7,9 +7,9 @@ using OfficeModules.Resources;
 namespace OfficeModules.Events.Lync
 {
     /// <summary>
-    /// This event is triggered when a call is received
+    /// An event that will be triggered when a call is received.
     /// </summary>
-    [MayhemModule("Lync: Call Received", "Triggers when a call is received")]
+    [MayhemModule("Lync: Call Received", "Triggers when a call is received only if the IM window of the caller is not opened")]
     public class LyncCallReceived : EventBase
     {
         private LyncClient lyncClient;
@@ -56,6 +56,9 @@ namespace OfficeModules.Events.Lync
             }
         }
 
+        /// <summary>
+        /// This method is called when the ConversationManagerEvent is triggered, and will trigger this event if an audio or video call is received.
+        /// </summary>
         void Conversations_ConversationAdded(object sender, ConversationManagerEventArgs e)
         {
             if (e.Conversation.Modalities[ModalityTypes.AudioVideo].State == ModalityState.Notified)

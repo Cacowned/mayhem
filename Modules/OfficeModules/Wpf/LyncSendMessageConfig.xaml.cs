@@ -5,6 +5,9 @@ using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// User Control for sending a message to a predefined user.
+    /// </summary>
     public partial class LyncSendMessageConfig : WpfConfiguration
     {
         public string UserId
@@ -21,7 +24,7 @@ namespace OfficeModules.Wpf
 
         public override string Title
         {
-            get { return "Send message"; }
+            get { return "Lync: Send Instant Message"; }
         }
 
         public LyncSendMessageConfig(string userId, string message)

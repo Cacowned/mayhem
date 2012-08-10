@@ -152,5 +152,6 @@ namespace MayhemVisionModules.Wpf
         public int DiffThresh;
         public int CameraFocus, CameraZoom;
         private bool _selectedState;
+
     }
 }

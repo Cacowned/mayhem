@@ -6,6 +6,9 @@ using OPowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace OfficeModules.Events.PowerPoint
 {
+    /// <summary>
+    /// An event that will be triggered when a presentation is printed.
+    /// </summary>
     [MayhemModule("PowerPoint: Print Presentation", "Triggers when a presentation is printed")]
     public class PptPrintPresentation : EventBase
     {
@@ -14,7 +17,6 @@ namespace OfficeModules.Events.PowerPoint
 
         protected override void OnAfterLoad()
         {
-            // Create the event handler delegate to attach
             printPresentationEvent = PresentationPrinted;
         }
 
@@ -25,7 +27,6 @@ namespace OfficeModules.Events.PowerPoint
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            // When enabled, try and get the PowerPoint instance
             try
             {
                 powerPoint = (OPowerPoint.Application)Marshal.GetActiveObject("PowerPoint.Application");

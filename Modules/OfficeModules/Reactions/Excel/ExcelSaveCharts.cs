@@ -12,14 +12,21 @@ using OExcel = Microsoft.Office.Interop.Excel;
 
 namespace OfficeModules.Reactions.Excel
 {
+    /// <summary>
+    /// A reaction that will save the charts from the current workbook.
+    /// </summary>
     [DataContract]
-    [MayhemModule("Excel: Save charts", "Saves the charts from the current workbook")]
+    [MayhemModule("Excel: Save Charts", "Saves the charts from the current workbook")]
     public class ExcelSaveCharts : ReactionBase, IWpfConfigurable
     {
-        OExcel.Application app;
-
+        /// <summary>
+        /// The path of the folder where the charts will be saved.
+        /// </summary>
         [DataMember]
         private string fileName;
+
+        private OExcel.Application app;
+        private string workbookName;
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
@@ -30,6 +37,9 @@ namespace OfficeModules.Reactions.Excel
             }
         }
 
+        /// <summary>
+        /// If an instance of the Excel application exits this method will save the charts from the active workbook.
+        /// </summary>
         public override void Perform()
         {
             try
@@ -55,10 +65,19 @@ namespace OfficeModules.Reactions.Excel
                 else
                 {
                     int count = 1;
+
+                    workbookName = workbook.Name;
+
+                    if (workbookName.Contains(".xlsx"))
+                        workbookName = workbookName.Remove(workbookName.LastIndexOf(".xlsx"));
+
+                    if (workbookName.Contains(".xls"))
+                        workbookName = workbookName.Remove(workbookName.LastIndexOf(".xls"));
+
                     foreach (OExcel.Worksheet sheet in workbook.Sheets)
                         foreach (OExcel.ChartObject obj in sheet.ChartObjects(Type.Missing))
                         {
-                            obj.Chart.Export(fileName + "\\chart" + count + ".jpg");
+                            obj.Chart.Export(fileName + "\\" + workbookName + "_chart" + count + ".jpg");
                             count++;
                         }
                 }
@@ -80,7 +99,7 @@ namespace OfficeModules.Reactions.Excel
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var excelSaveChartsConfig = configurationControl as ExcelSaveChartsConfig;
-        
+
             fileName = excelSaveChartsConfig.FileName;
         }
 

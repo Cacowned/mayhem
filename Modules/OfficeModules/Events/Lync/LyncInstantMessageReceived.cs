@@ -7,9 +7,9 @@ using OfficeModules.Resources;
 namespace OfficeModules.Events.Lync
 {
     /// <summary>
-    /// This event is triggered when an instant message is received
+    /// An event that will be triggered when an instant message is received.
     /// </summary>
-    [MayhemModule("Lync: Instant Message Received", "Triggers when an instant message is received")]
+    [MayhemModule("Lync: Instant Message Received", "Triggers when an instant message is received only if the IM window of the sender is not already opened")]
     public class LyncInstantMessageReceived : EventBase
     {
         private LyncClient lyncClient;
@@ -56,6 +56,9 @@ namespace OfficeModules.Events.Lync
             }
         }
 
+        /// <summary>
+        /// This method is called when the ConversationManagerEvent is triggered, and will trigger this event if an instant message is received.
+        /// </summary>
         void Conversations_ConversationAdded(object sender, ConversationManagerEventArgs e)
         {
             if (e.Conversation.Modalities[ModalityTypes.InstantMessage].State == ModalityState.Notified)

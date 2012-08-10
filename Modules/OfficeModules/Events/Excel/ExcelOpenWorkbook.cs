@@ -6,6 +6,9 @@ using OExcel = Microsoft.Office.Interop.Excel;
 
 namespace OfficeModules.Events.Excel
 {
+    /// <summary>
+    /// An event that will be triggered when a workbook is opened.
+    /// </summary>
     [MayhemModule("Excel: Open Workbook", "Triggers when a workbook is opened")]
     public class ExcelOpenWorkbook : EventBase
     {
@@ -14,7 +17,6 @@ namespace OfficeModules.Events.Excel
 
         protected override void OnAfterLoad()
         {
-            // Create the event handler delegate to attach
             openWorkbookEvent = WorkbookOpened;
         }
 
@@ -25,7 +27,6 @@ namespace OfficeModules.Events.Excel
 
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            // When enabled, try and get the PowerPoint instance
             try
             {
                 excel = (OExcel.Application)Marshal.GetActiveObject("Excel.Application");

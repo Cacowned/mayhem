@@ -7,8 +7,14 @@ using OfficeModules.Resources;
 
 namespace OfficeModules.Wpf
 {
+    /// <summary>
+    /// User Control for setting the location where the charts of the active workbook will be saved.
+    /// </summary>
     public partial class ExcelSaveChartsConfig : WpfConfiguration
     {
+        /// <summary>
+        /// The path of the folder where the charts will be saved.
+        /// </summary>
         public string FileName
         {
             get;
@@ -17,13 +23,14 @@ namespace OfficeModules.Wpf
 
         public override string Title
         {
-            get { return "Save charts"; }
+            get { return "Excel: Save Charts"; }
         }
 
         public ExcelSaveChartsConfig(string filename)
         {
-            InitializeComponent();
             FileName = filename;
+
+            InitializeComponent();
         }
 
         public override void OnLoad()
