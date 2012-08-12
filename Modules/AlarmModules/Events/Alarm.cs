@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using AlarmModules.Resources;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using Schedule;
 
-
-namespace PreGsocTest1
+namespace AlarmModules
 {
     [DataContract]
     [MayhemModule("Alarm","This event triggers at a particular time of the day.")]
@@ -14,29 +14,38 @@ namespace PreGsocTest1
     {
         [DataMember]
         private int hour;
+
         [DataMember]
         private int minute;
+
         [DataMember]
         private int second;
+
         [DataMember]
         private int day;
+
         [DataMember]
         private int month;
+
         [DataMember]
         private int year;
+
         [DataMember]
         private bool recurDaily;
-        private ScheduleTimer TickTimer;
+
+        private ScheduleTimer tickTimer;
+
         private DateTime alarmTime;
 
-        #region config view
+        #region Config View
         public WpfConfiguration ConfigurationControl
         {
-            get { return new DPAlarmConfig(recurDaily, day, month, year, hour, minute, second); }
+            get { return new AlarmConfig(recurDaily, day, month, year, hour, minute, second); }
         }
+
         public void OnSaved(WpfConfiguration configurationControl)
         {
-            var config = (DPAlarmConfig)configurationControl;
+            var config = (AlarmConfig)configurationControl;
             hour = config.Hour;
             minute = config.Minute;
             second = config.Second;
@@ -46,50 +55,43 @@ namespace PreGsocTest1
             recurDaily = config.RecurDaily;
         }
     #endregion
-        protected override void OnLoadDefaults()
-        {
-        }
-        protected override void OnLoadFromSaved()
-        {
-        }
-        protected override void OnAfterLoad()
-        {
-              
-        }
+        
         protected override void OnEnabling(EnablingEventArgs e)
         {
-            TickTimer = new ScheduleTimer();
-            TickTimer.Elapsed += new ScheduledEventHandler(AlarmHit); 
+            tickTimer = new ScheduleTimer();
+            tickTimer.Elapsed += AlarmHit;
             if (recurDaily)
             {
-                //TickTimer.AddEvent(new Schedule.ScheduledTime("Daily", "7:07  AM"));
-                TickTimer.AddEvent(new Schedule.ScheduledTime(EventTimeBase.Daily, new TimeSpan(0, hour, minute, second, 0)));
+                tickTimer.AddEvent(new Schedule.ScheduledTime(EventTimeBase.Daily, new TimeSpan(0, hour, minute, second, 0)));
             }
             else
             {
                 alarmTime = new DateTime(year, month, day, hour, minute, second);
                 SingleEvent se = new SingleEvent(alarmTime);
-                TickTimer.AddEvent(se);
+                tickTimer.AddEvent(se);
             }
-            TickTimer.Start(); 
+            tickTimer.Start(); 
         }
+        
         private void AlarmHit(object sender, EventArgs e)
         {
             Trigger();
         }
+
         protected override void OnDisabled(DisabledEventArgs e)
         {
-            TickTimer.Stop();
+            tickTimer.Stop();
+            tickTimer.Dispose();
         }
+
         public string GetConfigString()
         {
             string retString;
             if (recurDaily)
-                retString = "Daily, " + new DateTime(year,month,day,hour,minute,second).ToLongTimeString();
+                retString = string.Format(Strings.DailyAlarmConfig, hour,minute,second);
             else
             {
-                retString = string.Format("One Time, {0}/{1}/{2} ",month,day,year);
-                retString = "One Time, " + new DateTime(year, month, day, hour, minute, second).ToString();
+                retString = string.Format(Strings.OneTimeAlarmConfig, month, day, year, hour, minute, second);
             }
             return retString;
         }

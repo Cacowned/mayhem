@@ -56,6 +56,7 @@ namespace PowerModules
                 ChosenStatus = PowerStatusChoice.PowerState;
             else
                 ChosenStatus = PowerStatusChoice.Percentage;
+
             switch (BatteryChargeSelectionList.SelectedIndex)
             {
                 case 0:

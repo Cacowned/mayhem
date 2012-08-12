@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\AlarmModules\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -55,22 +55,26 @@
   <ItemGroup>
     <Compile Include="Events\Alarm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="wpf\AlarmConfiguration.xaml.cs">
-      <DependentUpon>AlarmConfiguration.xaml</DependentUpon>
+    <Compile Include="Resources\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="wpf\DPAlarmConfig.xaml.cs">
-      <DependentUpon>DPAlarmConfig.xaml</DependentUpon>
+    <Compile Include="Wpf\AlarmConfiguration.xaml.cs">
+      <DependentUpon>AlarmConfiguration.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="wpf\AlarmConfiguration.xaml">
+    <Page Include="Wpf\AlarmConfiguration.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="wpf\DPAlarmConfig.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
