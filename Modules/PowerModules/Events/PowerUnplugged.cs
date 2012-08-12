@@ -10,47 +10,46 @@ namespace PowerModules
         private bool _plugged;
         private bool raiseEvent; //makes sure to raise the event only once per unplug
         private Timer plugStateCheck;
+
         public bool Plugged
         {
             get { return _plugged; }
             set
             {
                 _plugged = value;
-                if (!_plugged)
+                if (!_plugged && raiseEvent)
                 {
-                    if (raiseEvent)
-                    {
                         raiseEvent = false;
                         Trigger();
                         plugStateCheck.Stop();
-                    }
-                }
-                else
+                }        
+                else if(_plugged && !raiseEvent)
                 {
-                    if (!raiseEvent)
-                    {
                         raiseEvent = true;
                         plugStateCheck.Start();
-                    }
                 }
             }
         }
+
         private void CableUnpluggedCheck(object sender, EventArgs e)
         {
             Plugged = (SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Online);
         }
+
         protected override void OnAfterLoad()
         {
             plugStateCheck = new Timer();
             plugStateCheck.Enabled = true;
             plugStateCheck.Interval = 2000; //2 seconds
-            plugStateCheck.Tick += new EventHandler(CableUnpluggedCheck);
+            plugStateCheck.Tick += CableUnpluggedCheck;
         }
+
         protected override void OnDisabled(DisabledEventArgs e)
         {
             raiseEvent = false;
             plugStateCheck.Stop();
         }
+
         protected override void OnEnabling(EnablingEventArgs e)
         {
             plugStateCheck.Start();
