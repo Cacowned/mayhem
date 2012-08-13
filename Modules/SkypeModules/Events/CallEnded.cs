@@ -8,7 +8,7 @@ namespace SkypeModules.Events
     /// <summary>
     /// An event that will be triggered when a Skype call is ended.
     /// </summary>
-    [MayhemModule("Skype: Call Ended", "A call is ended")]
+    [MayhemModule("Skype: Call Ended", "Triggers when a call is ended")]
     public class CallEnded : SkypeCallStatusBase
     {
         protected override void Skype_CallStatus(Call pCall, TCallStatus Status)

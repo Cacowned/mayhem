@@ -8,7 +8,7 @@ namespace SkypeModules.Events
     /// <summary>
     /// An event that will be triggered when a Skype chat messege is received.
     /// </summary>
-    [MayhemModule("Skype: Chat Message Received", "A chat message is received")]
+    [MayhemModule("Skype: Chat Message Received", "Triggers when a chat message is received")]
     public class ChatMessageReceived : SkypeEventBase
     {
         private _ISkypeEvents_MessageStatusEventHandler messageStatusEventHandler;

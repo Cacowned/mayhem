@@ -8,7 +8,7 @@ namespace SkypeModules.Events
     /// <summary>
     /// An event that will be triggered when a Skype call is received.
     /// </summary>
-    [MayhemModule("Skype: Receive Call", "A call is received")]
+    [MayhemModule("Skype: Receive Call", "Triggers when a call is received")]
     public class CallReceived : SkypeCallStatusBase
     {
         protected override void Skype_CallStatus(Call pCall, TCallStatus Status)
