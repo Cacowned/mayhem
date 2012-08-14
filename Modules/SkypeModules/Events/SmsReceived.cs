@@ -8,7 +8,7 @@ namespace SkypeModules.Events
     /// <summary>
     /// An event that will be triggered when an SMS is received.
     /// </summary>
-    [MayhemModule("Skype: Receive SMS", "Triggers when an SMS is received")]
+    [MayhemModule("Skype: SMS Received", "Triggers when an SMS is received")]
     public class SmsReceived : SkypeEventBase
     {
         private _ISkypeEvents_SmsMessageStatusChangedEventHandler smsMessageStatusChangedEventHandler;

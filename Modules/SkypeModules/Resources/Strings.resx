@@ -142,7 +142,7 @@
     <value>Can't mute/unmute the microphone.</value>
   </data>
   <data name="Error_ConnectingSkype" xml:space="preserve">
-    <value>Error at connecting with Skype.</value>
+    <value>Error connecting with Skype.</value>
   </data>
   <data name="Error_ContactNotFound" xml:space="preserve">
     <value>The contact '{0}' was not found in your contact list.</value>
@@ -211,7 +211,7 @@
     <value>The event '{0}' couldn't be triggered.</value>
   </data>
   <data name="ReceiveCall_Title" xml:space="preserve">
-    <value>Skype: Receive Call</value>
+    <value>Skype: Call Received</value>
   </data>
   <data name="Successful_AudioMessage" xml:space="preserve">
     <value>The audio message was sent successfully.</value>
@@ -220,13 +220,13 @@
     <value>The chat message was sent successfully.</value>
   </data>
   <data name="OnHoldCall_Title" xml:space="preserve">
-    <value>Skype: Call Holded</value>
+    <value>Skype: Call On Hold</value>
   </data>
   <data name="ReceiveChatMessage_Title" xml:space="preserve">
     <value>Skype: Chat Message Received</value>
   </data>
   <data name="ReceiveSms_Title" xml:space="preserve">
-    <value>Skype: Receive SMS</value>
+    <value>Skype: SMS Received</value>
   </data>
   <data name="Error_CantMuteUnmuteNoCall" xml:space="preserve">
     <value>Can't mute/unmute the microphone because an active call doesn't exist.</value>

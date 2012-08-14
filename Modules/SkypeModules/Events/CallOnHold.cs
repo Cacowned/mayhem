@@ -8,7 +8,7 @@ namespace SkypeModules.Events
     /// <summary>
     /// An event that will be triggered when a Skype call is put on hold.
     /// </summary>
-    [MayhemModule("Skype: Call Held", "Triggers when a call is put on hold")]
+    [MayhemModule("Skype: Call On Hold", "Triggers when a call is put on hold")]
     public class CallOnHold : SkypeCallStatusBase
     {
         protected override void Skype_CallStatus(Call pCall, TCallStatus Status)
