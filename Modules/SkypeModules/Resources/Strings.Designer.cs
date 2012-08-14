@@ -169,7 +169,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error at connecting with Skype..
+        ///   Looks up a localized string similar to Error connecting with Skype..
         /// </summary>
         internal static string Error_ConnectingSkype {
             get {
@@ -277,7 +277,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skype: Call Holded.
+        ///   Looks up a localized string similar to Skype: Call On Hold.
         /// </summary>
         internal static string OnHoldCall_Title {
             get {
@@ -286,7 +286,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skype: Receive Call.
+        ///   Looks up a localized string similar to Skype: Call Received.
         /// </summary>
         internal static string ReceiveCall_Title {
             get {
@@ -304,7 +304,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skype: Receive SMS.
+        ///   Looks up a localized string similar to Skype: SMS Received.
         /// </summary>
         internal static string ReceiveSms_Title {
             get {
