@@ -57,7 +57,9 @@ namespace GoogleModules.Wpf
 
             // The text fields of the configuration window are checked in order and if an error is found the evaluation of this expresion will stop and the error will be displayed.
             // The evaluation variable is not used but it won't compile if I don't store the result.
-            bool evaluation = CheckValidityField(ActivityTextBox.Text, Strings.General_MomentText, maxLength: 300) &&
+            // TypeText.Text.Substring(0, TypeText.Text.Length - 1) - removing the ':' character from the end of the description text. I use this config window for 2 different reactions
+            // and I have the same string resource for the text of the label containing the description of the field and the text I use in the error message.
+            bool evaluation = CheckValidityField(ActivityTextBox.Text, TypeText.Text.Substring(0, TypeText.Text.Length - 1), maxLength: 300) &&
                               CheckValidityField(AuthorizationCodeBox.Text, Strings.General_AuthorizationCode, maxLength: 300) &&
                               CheckValidityAuthorizationCode(AuthorizationCodeBox.Text, buttonCheckCode) &&
                               CheckAuthentication();

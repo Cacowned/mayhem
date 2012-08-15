@@ -15,7 +15,7 @@ namespace SkypeModules.Events
         {
             try
             {
-                if (Status.Equals(TCallStatus.clsOnHold) || Status.Equals(TCallStatus.clsLocalHold))
+                if (Status.Equals(TCallStatus.clsOnHold) || Status.Equals(TCallStatus.clsLocalHold) || Status.Equals(TCallStatus.clsRemoteHold))
                 {
                     Trigger();
                 }

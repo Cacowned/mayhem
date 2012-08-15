@@ -2,12 +2,12 @@
                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                             xmlns:local="clr-namespace:GoogleModules.Wpf"
-                            Width="460">
+                            Width="470">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="85" />
             <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="85" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />

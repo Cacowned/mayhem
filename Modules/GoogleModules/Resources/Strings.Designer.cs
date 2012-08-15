@@ -106,7 +106,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file doesn&apos;t exist..
+        ///   Looks up a localized string similar to The file does not exist..
         /// </summary>
         internal static string General_FileNotFound {
             get {
@@ -120,15 +120,6 @@ namespace GoogleModules.Resources {
         internal static string General_Incorrect {
             get {
                 return ResourceManager.GetString("General_Incorrect", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to text of the moment.
-        /// </summary>
-        internal static string General_MomentText {
-            get {
-                return ResourceManager.GetString("General_MomentText", resourceCulture);
             }
         }
         
@@ -223,7 +214,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The blog entry could not be added to Google+ History.
+        ///   Looks up a localized string similar to The blog entry could not be added to Google+ History..
         /// </summary>
         internal static string GooglePlus_BlogEntryCouldntBeAdded {
             get {
@@ -232,7 +223,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The blog entry was succesful added.
+        ///   Looks up a localized string similar to The blog entry was successfully added..
         /// </summary>
         internal static string GooglePlus_BlogEntrySuccesfulAdded {
             get {
@@ -268,7 +259,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error at monitoring the Google+ feed activity..
+        ///   Looks up a localized string similar to Error monitoring the Google+ feed activity..
         /// </summary>
         internal static string GooglePlus_ErrorMonitoringNewActivity {
             get {
@@ -277,16 +268,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error at monitoring the Google+ feed activity..
-        /// </summary>
-        internal static string GooglePlus_ErrorMonitoringNewActivity1 {
-            get {
-                return ResourceManager.GetString("GooglePlus_ErrorMonitoringNewActivity1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error at monitoring the Google+ comments..
+        ///   Looks up a localized string similar to Error monitoring the Google+ comments..
         /// </summary>
         internal static string GooglePlus_ErrorMonitoringNewComment {
             get {
@@ -295,20 +277,11 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error at monitoring the Google+ comments..
+        ///   Looks up a localized string similar to Error monitoring the YouTube video feed for {0}..
         /// </summary>
-        internal static string GooglePlus_ErrorMonitoringNewComment1 {
+        internal static string GooglePlus_ErrorMonitoringYouTubeUploadedVideos {
             get {
-                return ResourceManager.GetString("GooglePlus_ErrorMonitoringNewComment1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error at monitoring the Youtube uploads video feed for {0}..
-        /// </summary>
-        internal static string GooglePlus_ErrorMonitoringYoutubeUploadedVideos {
-            get {
-                return ResourceManager.GetString("GooglePlus_ErrorMonitoringYoutubeUploadedVideos", resourceCulture);
+                return ResourceManager.GetString("GooglePlus_ErrorMonitoringYouTubeUploadedVideos", resourceCulture);
             }
         }
         
@@ -358,7 +331,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The video could not be added to Google+ History.
+        ///   Looks up a localized string similar to The video could not be added to Google+ History..
         /// </summary>
         internal static string GooglePlus_VideoCouldntBeAdded {
             get {
@@ -367,7 +340,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The video was succesful added.
+        ///   Looks up a localized string similar to The video was successfully added to Google+ History..
         /// </summary>
         internal static string GooglePlus_VideoSuccesfulAdded {
             get {
@@ -381,15 +354,6 @@ namespace GoogleModules.Resources {
         internal static string GooglePlusNewActivity_Title {
             get {
                 return ResourceManager.GetString("GooglePlusNewActivity_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Google+: Receive Comment.
-        /// </summary>
-        internal static string GooglePlusNewCommentTitle {
-            get {
-                return ResourceManager.GetString("GooglePlusNewCommentTitle", resourceCulture);
             }
         }
         
@@ -502,7 +466,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error at monitoring the YouTube comments..
+        ///   Looks up a localized string similar to Error monitoring the YouTube comments..
         /// </summary>
         internal static string YouTube_ErrorMonitoringComment {
             get {
@@ -547,7 +511,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The video &apos;{0}&apos; was successfully uploaded..
+        ///   Looks up a localized string similar to The video &apos;{0}&apos; was uploaded successfully..
         /// </summary>
         internal static string YouTube_UploadSuccesful {
             get {
@@ -565,7 +529,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The event &apos;YouTube: Video Comment&apos; couldn&apos;t be enabled..
+        ///   Looks up a localized string similar to The event &apos;YouTube: Video Comment&apos; could not be enabled..
         /// </summary>
         internal static string YouTube_VideoCommentCouldntEnable {
             get {
@@ -583,7 +547,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to path of the video.
+        ///   Looks up a localized string similar to Path of the video.
         /// </summary>
         internal static string YouTube_VideoPath {
             get {
@@ -610,38 +574,11 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Video ID: {0}..
-        /// </summary>
-        internal static string YouTubeCommentAdded_ConfigString1 {
-            get {
-                return ResourceManager.GetString("YouTubeCommentAdded_ConfigString1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to YouTube: Video Comment.
         /// </summary>
         internal static string YouTubeCommentAdded_Title {
             get {
                 return ResourceManager.GetString("YouTubeCommentAdded_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to YouTube: Video Comment.
-        /// </summary>
-        internal static string YouTubeCommentAdded_Title1 {
-            get {
-                return ResourceManager.GetString("YouTubeCommentAdded_Title1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to YouTube: Upload Video.
-        /// </summary>
-        internal static string YouTubeUploadVideo_Title {
-            get {
-                return ResourceManager.GetString("YouTubeUploadVideo_Title", resourceCulture);
             }
         }
         
@@ -655,7 +592,7 @@ namespace GoogleModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An YouTube Video identified by the provided ID doesn&apos;t exists..
+        ///   Looks up a localized string similar to An YouTube Video identified by the provided ID does not exists..
         /// </summary>
         internal static string YouTubeVideoDoesntExists {
             get {

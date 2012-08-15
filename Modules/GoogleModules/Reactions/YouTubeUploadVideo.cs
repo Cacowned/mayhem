@@ -95,7 +95,7 @@ namespace GoogleModules.Reactions
 
         public WpfConfiguration ConfigurationControl
         {
-            get { return new YouTubeUploadVideoConfig(videoTitle, description, category, videoPath, Strings.YouTubeUploadVideo_Title); }
+            get { return new YouTubeUploadVideoConfig(videoTitle, description, category, videoPath, Strings.YouTubeVideoUploaded_Title); }
         }
 
         public void OnSaved(WpfConfiguration configurationControl)
