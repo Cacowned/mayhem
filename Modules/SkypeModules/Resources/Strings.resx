@@ -121,13 +121,13 @@
     <value>Skype: Call Contact</value>
   </data>
   <data name="Error_CallCantPutOnHold" xml:space="preserve">
-    <value>The call to the '{0}' contact can't be put on hold.</value>
+    <value>The call to the '{0}' contact cannot be put on hold.</value>
   </data>
   <data name="Error_CallCantResume" xml:space="preserve">
-    <value>The call to the '{0}' contact can't be resumed.</value>
+    <value>The call to the '{0}' contact cannot be resumed.</value>
   </data>
   <data name="Error_CallingContact" xml:space="preserve">
-    <value>A call to the '{0}' contact couldn't be established.</value>
+    <value>A call to the '{0}' contact could not be established.</value>
   </data>
   <data name="Error_CallNotActive" xml:space="preserve">
     <value>No active call exists between you and '{0}'.</value>
@@ -139,7 +139,7 @@
     <value>No call on hold exists between you and '{0}'.</value>
   </data>
   <data name="Error_CantMuteUnmute" xml:space="preserve">
-    <value>Can't mute/unmute the microphone.</value>
+    <value>Cannot mute/unmute the microphone.</value>
   </data>
   <data name="Error_ConnectingSkype" xml:space="preserve">
     <value>Error connecting with Skype.</value>
@@ -148,7 +148,7 @@
     <value>The contact '{0}' was not found in your contact list.</value>
   </data>
   <data name="Error_SendingChatMessage" xml:space="preserve">
-    <value>The selected message can't be sent to '{0}'.</value>
+    <value>The selected message cannot be sent to '{0}'.</value>
   </data>
   <data name="General_NoCharacter" xml:space="preserve">
     <value>The {0} must contain at least one character.</value>
@@ -181,13 +181,13 @@
     <value>file path</value>
   </data>
   <data name="Error_SendingAudioMessage" xml:space="preserve">
-    <value>The selected audio message can't be sent to '{0}'.</value>
+    <value>The selected audio message cannot be sent to '{0}'.</value>
   </data>
   <data name="General_FileFormatNotValid" xml:space="preserve">
     <value>The file must have the .wav extension.</value>
   </data>
   <data name="General_FileNotFound" xml:space="preserve">
-    <value>The file doesn't exist.</value>
+    <value>The file does not exist.</value>
   </data>
   <data name="SendAudioMessage_Title" xml:space="preserve">
     <value>Skype: Play Audio Message</value>
@@ -208,7 +208,7 @@
     <value>Skype: Call Ended</value>
   </data>
   <data name="Error_EventCantBeTriggered" xml:space="preserve">
-    <value>The event '{0}' couldn't be triggered.</value>
+    <value>The event '{0}' could not be triggered.</value>
   </data>
   <data name="ReceiveCall_Title" xml:space="preserve">
     <value>Skype: Call Received</value>
@@ -229,6 +229,6 @@
     <value>Skype: SMS Received</value>
   </data>
   <data name="Error_CantMuteUnmuteNoCall" xml:space="preserve">
-    <value>Can't mute/unmute the microphone because an active call doesn't exist.</value>
+    <value>Cannot mute/unmute the microphone because an active call does not exist.</value>
   </data>
 </root>

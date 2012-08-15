@@ -88,7 +88,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The call to the &apos;{0}&apos; contact can&apos;t be put on hold..
+        ///   Looks up a localized string similar to The call to the &apos;{0}&apos; contact cannot be put on hold..
         /// </summary>
         internal static string Error_CallCantPutOnHold {
             get {
@@ -97,7 +97,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The call to the &apos;{0}&apos; contact can&apos;t be resumed..
+        ///   Looks up a localized string similar to The call to the &apos;{0}&apos; contact cannot be resumed..
         /// </summary>
         internal static string Error_CallCantResume {
             get {
@@ -106,7 +106,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A call to the &apos;{0}&apos; contact couldn&apos;t be established..
+        ///   Looks up a localized string similar to A call to the &apos;{0}&apos; contact could not be established..
         /// </summary>
         internal static string Error_CallingContact {
             get {
@@ -151,7 +151,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t mute/unmute the microphone..
+        ///   Looks up a localized string similar to Cannot mute/unmute the microphone..
         /// </summary>
         internal static string Error_CantMuteUnmute {
             get {
@@ -160,7 +160,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t mute/unmute the microphone because an active call doesn&apos;t exist..
+        ///   Looks up a localized string similar to Cannot mute/unmute the microphone because an active call does not exist..
         /// </summary>
         internal static string Error_CantMuteUnmuteNoCall {
             get {
@@ -187,7 +187,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The event &apos;{0}&apos; couldn&apos;t be triggered..
+        ///   Looks up a localized string similar to The event &apos;{0}&apos; could not be triggered..
         /// </summary>
         internal static string Error_EventCantBeTriggered {
             get {
@@ -196,7 +196,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The selected audio message can&apos;t be sent to &apos;{0}&apos;..
+        ///   Looks up a localized string similar to The selected audio message cannot be sent to &apos;{0}&apos;..
         /// </summary>
         internal static string Error_SendingAudioMessage {
             get {
@@ -205,7 +205,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The selected message can&apos;t be sent to &apos;{0}&apos;..
+        ///   Looks up a localized string similar to The selected message cannot be sent to &apos;{0}&apos;..
         /// </summary>
         internal static string Error_SendingChatMessage {
             get {
@@ -232,7 +232,7 @@ namespace SkypeModules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file doesn&apos;t exist..
+        ///   Looks up a localized string similar to The file does not exist..
         /// </summary>
         internal static string General_FileNotFound {
             get {

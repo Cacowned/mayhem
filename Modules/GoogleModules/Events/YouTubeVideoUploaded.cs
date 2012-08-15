@@ -37,7 +37,7 @@ namespace GoogleModules.Events
                 }
                 catch (Exception ex)
                 {
-                    ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.GooglePlus_ErrorMonitoringYoutubeUploadedVideos, username));
+                    ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.GooglePlus_ErrorMonitoringYouTubeUploadedVideos, username));
                     Logger.Write(ex);
 
                     e.Cancel = true;
@@ -77,7 +77,7 @@ namespace GoogleModules.Events
             }
             catch (Exception ex)
             {
-                ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.GooglePlus_ErrorMonitoringYoutubeUploadedVideos, username));
+                ErrorLog.AddError(ErrorType.Failure, string.Format(Strings.GooglePlus_ErrorMonitoringYouTubeUploadedVideos, username));
                 Logger.Write(ex);
 
                 return;

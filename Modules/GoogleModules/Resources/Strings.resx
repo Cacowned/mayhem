@@ -133,13 +133,10 @@
     <value>Authorization Code</value>
   </data>
   <data name="General_FileNotFound" xml:space="preserve">
-    <value>The file doesn't exist.</value>
+    <value>The file does not exist.</value>
   </data>
   <data name="General_Incorrect" xml:space="preserve">
     <value>The {0} is incorrect.</value>
-  </data>
-  <data name="General_MomentText" xml:space="preserve">
-    <value>text of the moment</value>
   </data>
   <data name="General_NoCharacter" xml:space="preserve">
     <value>The {0} must contain at least one character.</value>
@@ -165,9 +162,6 @@
   <data name="GooglePlusNewActivity_Title" xml:space="preserve">
     <value>Google+: New Activity</value>
   </data>
-  <data name="GooglePlusNewCommentTitle" xml:space="preserve">
-    <value>Google+: Receive Comment</value>
-  </data>
   <data name="GooglePlusPostBlogEntry_Title" xml:space="preserve">
     <value>Google+: Post Blog Entry</value>
   </data>
@@ -184,10 +178,10 @@
     <value>AIzaSyDC9EuY_1hg4V-CjUzuSRWO9K9bpJE5bic</value>
   </data>
   <data name="GooglePlus_BlogEntryCouldntBeAdded" xml:space="preserve">
-    <value>The blog entry could not be added to Google+ History</value>
+    <value>The blog entry could not be added to Google+ History.</value>
   </data>
   <data name="GooglePlus_BlogEntrySuccesfulAdded" xml:space="preserve">
-    <value>The blog entry was succesful added</value>
+    <value>The blog entry was successfully added.</value>
   </data>
   <data name="GooglePlus_DetailsPostBlogEntry" xml:space="preserve">
     <value>Please enter the Url of the blog entry you want to add to Google+ History.</value>
@@ -199,19 +193,13 @@
     <value>Please enter the Url of the video you want to add to Google+ History.</value>
   </data>
   <data name="GooglePlus_ErrorMonitoringNewActivity" xml:space="preserve">
-    <value>Error at monitoring the Google+ feed activity.</value>
-  </data>
-  <data name="GooglePlus_ErrorMonitoringNewActivity1" xml:space="preserve">
-    <value>Error at monitoring the Google+ feed activity.</value>
+    <value>Error monitoring the Google+ feed activity.</value>
   </data>
   <data name="GooglePlus_ErrorMonitoringNewComment" xml:space="preserve">
-    <value>Error at monitoring the Google+ comments.</value>
+    <value>Error monitoring the Google+ comments.</value>
   </data>
-  <data name="GooglePlus_ErrorMonitoringNewComment1" xml:space="preserve">
-    <value>Error at monitoring the Google+ comments.</value>
-  </data>
-  <data name="GooglePlus_ErrorMonitoringYoutubeUploadedVideos" xml:space="preserve">
-    <value>Error at monitoring the Youtube uploads video feed for {0}.</value>
+  <data name="GooglePlus_ErrorMonitoringYouTubeUploadedVideos" xml:space="preserve">
+    <value>Error monitoring the YouTube video feed for {0}.</value>
   </data>
   <data name="GooglePlus_EventCouldntBeEnabled" xml:space="preserve">
     <value>The event could not be enabled.</value>
@@ -229,10 +217,10 @@
     <value>The Profile ID is incorrect.</value>
   </data>
   <data name="GooglePlus_VideoCouldntBeAdded" xml:space="preserve">
-    <value>The video could not be added to Google+ History</value>
+    <value>The video could not be added to Google+ History.</value>
   </data>
   <data name="GooglePlus_VideoSuccesfulAdded" xml:space="preserve">
-    <value>The video was succesful added</value>
+    <value>The video was successfully added to Google+ History.</value>
   </data>
   <data name="Google_ClientID" xml:space="preserve">
     <value>41016818966.apps.googleusercontent.com</value>
@@ -258,23 +246,14 @@
   <data name="YouTubeCommentAdded_ConfigString" xml:space="preserve">
     <value>Video ID: {0}.</value>
   </data>
-  <data name="YouTubeCommentAdded_ConfigString1" xml:space="preserve">
-    <value>Video ID: {0}.</value>
-  </data>
   <data name="YouTubeCommentAdded_Title" xml:space="preserve">
     <value>YouTube: Video Comment</value>
-  </data>
-  <data name="YouTubeCommentAdded_Title1" xml:space="preserve">
-    <value>YouTube: Video Comment</value>
-  </data>
-  <data name="YouTubeUploadVideo_Title" xml:space="preserve">
-    <value>YouTube: Upload Video</value>
   </data>
   <data name="YouTubeVideoDeleted_Title" xml:space="preserve">
     <value>YouTube: Video Deleted</value>
   </data>
   <data name="YouTubeVideoDoesntExists" xml:space="preserve">
-    <value>An YouTube Video identified by the provided ID doesn't exists.</value>
+    <value>An YouTube Video identified by the provided ID does not exists.</value>
   </data>
   <data name="YouTubeVideoUploaded_Title" xml:space="preserve">
     <value>YouTube: Video Uploaded</value>
@@ -289,7 +268,7 @@
     <value>AI39si4VuUApLd4VGVwxWEwKMwbNs1dhSeVEc1LGavmXEwnP1QsUq9FHL81tTdDq4_bQRf0SSP6VvvVovht6Xioy3l-9v2awOw</value>
   </data>
   <data name="YouTube_ErrorMonitoringComment" xml:space="preserve">
-    <value>Error at monitoring the YouTube comments.</value>
+    <value>Error monitoring the YouTube comments.</value>
   </data>
   <data name="YouTube_Keywords" xml:space="preserve">
     <value>Keywords</value>
@@ -304,19 +283,19 @@
     <value>The video '{0}' could not be uploaded.</value>
   </data>
   <data name="YouTube_UploadSuccesful" xml:space="preserve">
-    <value>The video '{0}' was successfully uploaded.</value>
+    <value>The video '{0}' was uploaded successfully.</value>
   </data>
   <data name="YouTube_Username" xml:space="preserve">
     <value>Username</value>
   </data>
   <data name="YouTube_VideoCommentCouldntEnable" xml:space="preserve">
-    <value>The event 'YouTube: Video Comment' couldn't be enabled.</value>
+    <value>The event 'YouTube: Video Comment' could not be enabled.</value>
   </data>
   <data name="YouTube_VideoID" xml:space="preserve">
     <value>Video ID</value>
   </data>
   <data name="YouTube_VideoPath" xml:space="preserve">
-    <value>path of the video</value>
+    <value>Path of the video</value>
   </data>
   <data name="YouTube_VideoTitle" xml:space="preserve">
     <value>Video Title</value>
