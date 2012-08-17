@@ -29,6 +29,7 @@ namespace PowerModules
         {
             get { return new PowerStatusConfiguration(chosenStatus, chosenBCS, percentage); }
         }
+
         public void OnSaved(WpfConfiguration configurationControl)
         {
             var config = (PowerStatusConfiguration)configurationControl;
@@ -36,7 +37,9 @@ namespace PowerModules
             chosenBCS = config.ChosenBCS;
             percentage = config.Percentage;
         }
+
         #endregion
+
         public string GetConfigString()
         {
             switch (chosenStatus)
@@ -47,16 +50,19 @@ namespace PowerModules
                     return "Battery hits " + chosenBCS.ToString() + " status";
             }
         }
+
         protected override void OnLoadDefaults()
         {
             chosenStatus = PowerStatusChoice.PowerState;
             chosenBCS = BatteryChargeStatus.Charging;
             percentage = 30;
         }
+
         protected override void OnAfterLoad()
         {
             pollingTimer = new DispatcherTimer();
         }
+
 
         private void TestAndSetRaiseEvent()
         {
@@ -72,32 +78,42 @@ namespace PowerModules
                             {
                                 raiseEvent = true;
                             }
+
                             break;
+
                         case BatteryChargeStatus.Low: 
                             if ((BatteryChargeStatus.High & SystemInformation.PowerStatus.BatteryChargeStatus) != BatteryChargeStatus.High)
                             {
                                 raiseEvent = true;
                             }
+
                             break;
                     }
+
                     break;
+
                 case PowerStatusChoice.Percentage:
                     if (BatteryPercentageRemaining() > (int)percentage)
                     {
                         raiseEvent = true;
                     }
+
                     break;
+
             }
         }
+
         protected int BatteryPercentageRemaining()
         {
             return (int)(SystemInformation.PowerStatus.BatteryLifePercent*100);
         }
+
         protected override void OnDisabled(DisabledEventArgs e)
         {
             raiseEvent = false;
             pollingTimer.Stop();
         }
+
         protected override void OnEnabling(EnablingEventArgs e)
         {
             TestAndSetRaiseEvent();
@@ -105,11 +121,13 @@ namespace PowerModules
             pollingTimer.Tick += new EventHandler(ConditionCheck);
             pollingTimer.Start();
         }
+
         private void callTrigger()
         {
             raiseEvent = false;
             Trigger();
         }
+
         private void ConditionCheck(Object sender, EventArgs e)
         {
             if (raiseEvent)
@@ -121,12 +139,15 @@ namespace PowerModules
                         {
                             callTrigger();
                         }
+
                         break;
+
                     case PowerStatusChoice.Percentage:
                         if ((int)percentage >= BatteryPercentageRemaining())
                         {
                             callTrigger();
                         }
+
                         break;
                 }
             }

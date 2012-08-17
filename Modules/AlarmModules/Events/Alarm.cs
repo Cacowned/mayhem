@@ -30,6 +30,28 @@ namespace AlarmModules
         [DataMember]
         private int year;
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         [DataMember]
         private bool recurDaily;
 
@@ -54,12 +76,14 @@ namespace AlarmModules
             year = config.Year;
             recurDaily = config.RecurDaily;
         }
+
     #endregion
         
         protected override void OnEnabling(EnablingEventArgs e)
         {
             tickTimer = new ScheduleTimer();
             tickTimer.Elapsed += AlarmHit;
+
             if (recurDaily)
             {
                 tickTimer.AddEvent(new Schedule.ScheduledTime(EventTimeBase.Daily, new TimeSpan(0, hour, minute, second, 0)));
@@ -70,6 +94,7 @@ namespace AlarmModules
                 SingleEvent se = new SingleEvent(alarmTime);
                 tickTimer.AddEvent(se);
             }
+
             tickTimer.Start(); 
         }
         
@@ -87,13 +112,18 @@ namespace AlarmModules
         public string GetConfigString()
         {
             string retString;
+
             if (recurDaily)
-                retString = string.Format(Strings.DailyAlarmConfig, hour,minute,second);
+            {
+                retString = string.Format(Strings.DailyAlarmConfig, hour, minute, second);
+            }
             else
             {
                 retString = string.Format(Strings.OneTimeAlarmConfig, month, day, year, hour, minute, second);
             }
+
             return retString;
         }
     }
 }
+

@@ -29,7 +29,7 @@ namespace SystemModules.Wpf
         public override void OnLoad()
         {
             WarningBox.Text = Strings.Shutdown_ForceWarning;
-            EnableForceCheckBox.IsChecked = ForceShutDown;
+            EnableForceCheckBox.IsChecked = this.ForceShutDown;
         }
 
         public override void OnSave()
