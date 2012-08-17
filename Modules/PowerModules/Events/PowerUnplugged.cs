@@ -17,6 +17,7 @@ namespace PowerModules
             set
             {
                 _plugged = value;
+
                 if (!_plugged && raiseEvent)
                 {
                         raiseEvent = false;

@@ -46,19 +46,16 @@ namespace AlarmModules
             SecondBox.Text = Second.ToString();
             DateTime dtToSelect = new DateTime(Year, Month, Day);
             AlarmDatePick.SelectedDate = dtToSelect;
-
+            DateTime subtractDate = dtToSelect;
+            
             if (dtToSelect.CompareTo(DateTime.Now) > 0)
             {
-                AlarmDatePick.BlackoutDates.Add(
-                    new CalendarDateRange(DateTime.MinValue, DateTime.Now.Subtract(
-                        new TimeSpan(1, 0, 0, 0))));
+                subtractDate = DateTime.Now;
             }
-            else
-            {
-                AlarmDatePick.BlackoutDates.Add(new CalendarDateRange(
-                    DateTime.MinValue, dtToSelect.Subtract(
+
+            AlarmDatePick.BlackoutDates.Add(
+                new CalendarDateRange(DateTime.MinValue, subtractDate.Subtract(
                         new TimeSpan(1, 0, 0, 0))));
-            }
            
             shouldCheckValidity = true;
         }
@@ -79,44 +76,52 @@ namespace AlarmModules
         {
             int seconds, minutes, hours, day, month, year;
             DateTime alarmTime;
-            string errorString = "Invalid";
-            bool badsec = !(int.TryParse(SecondBox.Text, out seconds) && (seconds >= 0 && seconds < 60));
-            bool badmin = !(int.TryParse(MinuteBox.Text, out minutes) && (minutes >= 0 && minutes < 60));
-            bool badhour = !(int.TryParse(HourBox.Text, out hours) && (hours >= 0 && hours < 24));
-            bool badday = false;
-            bool badmonth = false;
-            bool badyear = false;
-            bool badtotal = false;
+            string errorString = string.Empty;
+            bool badSec = !(int.TryParse(SecondBox.Text, out seconds) && (seconds >= 0 && seconds < 60));
+            bool badMin = !(int.TryParse(MinuteBox.Text, out minutes) && (minutes >= 0 && minutes < 60));
+            bool badHour = !(int.TryParse(HourBox.Text, out hours) && (hours >= 0 && hours < 24));
+            bool badDay = false;
+            bool badMonth = false;
+            bool badYear = false;
+            bool pastTime = false;
             DateTime finalDate = AlarmDatePick.SelectedDate.GetValueOrDefault();
             day = finalDate.Day;
             month = finalDate.Month;
             year = finalDate.Year;
-            bool badDateTime = !(badsec || badmin || badhour || badday || badmonth || badyear);
+            bool badDateTime = (badSec || badMin || badHour || badDay || badMonth || badYear);
 
             if (RecurringDailyCheckBox.IsChecked == false)
             {
-                if (badDateTime)
+                if (!badDateTime)
                 {
                     string time = string.Format("{0}/{1}/{2} {3}:{4}:{5}", month, day, year, hours, minutes, seconds);
-                    badtotal = !(DateTime.TryParseExact(time, "M/d/yyyy H:m:s", CultureInfo.InvariantCulture, DateTimeStyles.None, out alarmTime) && (alarmTime.CompareTo(DateTime.Now)) > 0);
+                    pastTime = !(DateTime.TryParseExact(time, "M/d/yyyy H:m:s", CultureInfo.InvariantCulture, DateTimeStyles.None, out alarmTime) && (alarmTime.CompareTo(DateTime.Now)) > 0);
                 }
             }
 
-            if (badsec)
-                errorString += " seconds";
-            if (badmin)
-                errorString += " minutes";
-            if (badhour)
-                errorString += " hours";
-            if (badday)
-                errorString += " days";
-            if (badmonth)
-                errorString += " month";
-            if (badyear)
-                errorString += " year";
-            if (badtotal && badDateTime)
+            if (pastTime)
+            {
                 errorString = "Must be a valid Date and Time in the Future";
-            CanSave = !(badsec || badmin || badhour || badday || badmonth || badyear || badtotal);
+            }
+            else
+            {
+                errorString = "Invalid";
+
+                if (badSec)
+                    errorString += " seconds";
+                if (badMin)
+                    errorString += " minutes";
+                if (badHour)
+                    errorString += " hours";
+                if (badDay)
+                    errorString += " days";
+                if (badMonth)
+                    errorString += " month";
+                if (badYear)
+                    errorString += " year";
+            }
+            
+            CanSave = !(badDateTime || pastTime);
             return CanSave ? string.Empty : errorString;
         }
 

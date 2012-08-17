@@ -13,6 +13,7 @@ namespace PowerModules
         public PowerStatusChoice ChosenStatus { get; private set; }
         public int Percentage { get; private set; }
         public BatteryChargeStatus ChosenBCS { get; private set; }
+
         public PowerStatusConfiguration(PowerStatusChoice chosenstatus, BatteryChargeStatus chosenBCS, int percentage)
         {
             ChosenStatus = chosenstatus;
@@ -20,13 +21,16 @@ namespace PowerModules
             ChosenBCS = chosenBCS;
             InitializeComponent();
         }
+
         public override string Title
         {
             get { return "Power Status"; }
         }
+
         public override void OnLoad()
         {
             CanSave = true;
+
             switch (ChosenStatus)
             {
                 case PowerStatusChoice.Percentage:
@@ -36,6 +40,7 @@ namespace PowerModules
                     RadioBCS.IsChecked = true;
                     break;
             }
+
             switch (ChosenBCS)
             {
                 case BatteryChargeStatus.Charging:
@@ -48,8 +53,10 @@ namespace PowerModules
                     BatteryChargeSelectionList.SelectedIndex = 2;
                     break;
             }
+
             BatteryPercentageBox.Text = Percentage.ToString();
         }
+
         public override void OnSave()
         {
             if (RadioBCS.IsChecked == true)
@@ -69,8 +76,10 @@ namespace PowerModules
                     ChosenBCS = BatteryChargeStatus.Critical;
                     break;
             }
+
             Percentage = Int32.Parse(BatteryPercentageBox.Text);
         }
+
         private void TextChanged(object sender, RoutedEventArgs e)
         {
             if (RadioBCS.IsChecked == true)
@@ -83,6 +92,7 @@ namespace PowerModules
                 BatteryChargeSelectionList.IsEnabled = false;
                 BatteryPercentageBox.IsEnabled = true;
             }
+
             textInvalid.Text = CheckValidity();
             textInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
         }
@@ -92,13 +102,16 @@ namespace PowerModules
             string s = "Invalid";
             int percent;
             bool badpercent = !(Int32.TryParse(BatteryPercentageBox.Text, out percent) && (percent >= 3 && percent <= 98));
+
             if (badpercent && RadioPercent.IsChecked != true)
             {
                 BatteryPercentageBox.Text = "30";
                 badpercent = false;
             }
+
             if (badpercent)
                 s += " percentage";
+
             CanSave = !badpercent;
             return CanSave ? string.Empty : s;
         }
