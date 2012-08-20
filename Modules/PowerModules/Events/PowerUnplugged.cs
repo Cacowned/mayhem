@@ -20,14 +20,14 @@ namespace PowerModules
 
                 if (!_plugged && raiseEvent)
                 {
-                        raiseEvent = false;
-                        Trigger();
-                        plugStateCheck.Stop();
+                    raiseEvent = false;
+                    Trigger();
+                    plugStateCheck.Stop();
                 }        
                 else if(_plugged && !raiseEvent)
                 {
-                        raiseEvent = true;
-                        plugStateCheck.Start();
+                    raiseEvent = true;
+                    plugStateCheck.Start();
                 }
             }
         }
