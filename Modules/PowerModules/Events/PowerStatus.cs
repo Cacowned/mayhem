@@ -12,19 +12,25 @@ namespace PowerModules
     {
         Percentage, PowerState
     }
+
     [DataContract]
     [MayhemModule("Power: Power Status", "This event triggers when a particular laptop power status is reached.")]
     public class PowerStatus : EventBase, IWpfConfigurable
     {
         [DataMember]
         private PowerStatusChoice chosenStatus;
+
         [DataMember]
         private int percentage;
+
         [DataMember]
         private BatteryChargeStatus chosenBCS;
+
         private DispatcherTimer pollingTimer;
+
         private bool raiseEvent;
-        #region config view
+
+        #region Config View
         public WpfConfiguration ConfigurationControl
         {
             get { return new PowerStatusConfiguration(chosenStatus, chosenBCS, percentage); }
@@ -74,6 +80,7 @@ namespace PowerModules
                     {
                         case BatteryChargeStatus.Charging:
                         case BatteryChargeStatus.Critical:
+
                             if ((chosenBCS & SystemInformation.PowerStatus.BatteryChargeStatus) != chosenBCS)
                             {
                                 raiseEvent = true;
@@ -82,6 +89,7 @@ namespace PowerModules
                             break;
 
                         case BatteryChargeStatus.Low: 
+
                             if ((BatteryChargeStatus.High & SystemInformation.PowerStatus.BatteryChargeStatus) != BatteryChargeStatus.High)
                             {
                                 raiseEvent = true;
