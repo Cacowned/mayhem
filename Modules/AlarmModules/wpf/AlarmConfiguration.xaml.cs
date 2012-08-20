@@ -90,13 +90,10 @@ namespace AlarmModules
             year = finalDate.Year;
             bool badDateTime = (badSec || badMin || badHour || badDay || badMonth || badYear);
 
-            if (RecurringDailyCheckBox.IsChecked == false)
+            if (RecurringDailyCheckBox.IsChecked == false && !badDateTime)
             {
-                if (!badDateTime)
-                {
-                    string time = string.Format("{0}/{1}/{2} {3}:{4}:{5}", month, day, year, hours, minutes, seconds);
-                    pastTime = !(DateTime.TryParseExact(time, "M/d/yyyy H:m:s", CultureInfo.InvariantCulture, DateTimeStyles.None, out alarmTime) && (alarmTime.CompareTo(DateTime.Now)) > 0);
-                }
+                string time = string.Format("{0}/{1}/{2} {3}:{4}:{5}", month, day, year, hours, minutes, seconds);
+                pastTime = !(DateTime.TryParseExact(time, "M/d/yyyy H:m:s", CultureInfo.InvariantCulture, DateTimeStyles.None, out alarmTime) && (alarmTime.CompareTo(DateTime.Now)) > 0);
             }
 
             if (pastTime)

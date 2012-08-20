@@ -27,7 +27,6 @@ namespace PowerModules
         private BatteryChargeStatus chosenBCS;
 
         private DispatcherTimer pollingTimer;
-
         private bool raiseEvent;
 
         #region Config View
@@ -138,30 +137,29 @@ namespace PowerModules
 
         private void ConditionCheck(Object sender, EventArgs e)
         {
-            if (raiseEvent)
-            {
-                switch (chosenStatus)
-                {
-                    case PowerStatusChoice.PowerState:
-                        if ((chosenBCS & SystemInformation.PowerStatus.BatteryChargeStatus) == chosenBCS)
-                        {
-                            callTrigger();
-                        }
-
-                        break;
-
-                    case PowerStatusChoice.Percentage:
-                        if ((int)percentage >= BatteryPercentageRemaining())
-                        {
-                            callTrigger();
-                        }
-
-                        break;
-                }
-            }
-            else
+            if (!raiseEvent)
             {
                 TestAndSetRaiseEvent();
+                return;
+            }
+
+            switch (chosenStatus)
+            {
+                case PowerStatusChoice.PowerState:
+                    if ((chosenBCS & SystemInformation.PowerStatus.BatteryChargeStatus) == chosenBCS)
+                    {
+                        callTrigger();
+                    }
+
+                    break;
+
+                case PowerStatusChoice.Percentage:
+                    if ((int)percentage >= BatteryPercentageRemaining())
+                    {
+                        callTrigger();
+                    }
+
+                    break;
             }
         }
     }
