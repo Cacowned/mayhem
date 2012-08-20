@@ -30,28 +30,6 @@ namespace AlarmModules
         [DataMember]
         private int year;
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         [DataMember]
         private bool recurDaily;
 
