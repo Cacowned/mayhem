@@ -8,7 +8,7 @@ using MayhemWpf.ModuleTypes;
 namespace DebugModules.Reactions
 {
     [DataContract]
-    [MayhemModule("Append Line", "Appends a line to a .txt file")]
+    [MayhemModule("Debug: Append Line", "Appends a line to a .txt file")]
     public class AppendLine : ReactionBase, IWpfConfigurable
     {
         [DataMember]
@@ -19,17 +19,18 @@ namespace DebugModules.Reactions
 
         public override void Perform()
         {
-            if (File.Exists(filePath))
+            StreamWriter stream;           
+            
+            try
             {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(filePath, true))
-                {
-                    file.WriteLine(lineToAdd);
-                }
+                stream = new StreamWriter(filePath, true);
+                stream.WriteLine(lineToAdd);
+                stream.Close();
             }
-            else
+            catch
             {
-                ErrorLog.AddError(ErrorType.Failure, "File does not exist");
-            }
+                ErrorLog.AddError(ErrorType.Failure, "File is open or being used by multiple reactions");
+            }            
         }
 
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
@@ -42,12 +43,14 @@ namespace DebugModules.Reactions
             var config = (AppendLineConfig)configurationControl;
             lineToAdd = config.Line;
             filePath = config.File;
+
+            StreamWriter timeLogWriter = new StreamWriter(filePath);
+            timeLogWriter.Close();
         }
 
         protected override void OnAfterLoad()
         {
-            filePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem") + @"\AppendLog.txt";
-            StreamWriter timeLogWriter = new StreamWriter(filePath);
+            filePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem") + @"\AppendLog.txt";            
         }
 
         public string GetConfigString()

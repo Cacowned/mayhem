@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using MayhemWpf.UserControls;
 using Microsoft.Win32;
+using System.IO;
 
 namespace DebugModules.Wpf
 {
@@ -43,7 +44,45 @@ namespace DebugModules.Wpf
 
         private void CheckFile(string file)
         {
-            CanSave = file.Length > 0 && System.IO.File.Exists(FileBox.Text.Trim());
+            FileInfo fileName = new FileInfo(FileBox.Text.Trim());
+            FileStream stream = null;
+
+            if (fileName.Exists)
+            {
+                try
+                {
+                    stream = fileName.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+                }
+                catch (IOException)
+                {
+                    fileInvalid.Visibility = false ? Visibility.Collapsed : Visibility.Visible;
+                    fileOverwrite.Visibility = true ? Visibility.Collapsed : Visibility.Visible;
+                    fileNew.Visibility = true ? Visibility.Collapsed : Visibility.Visible;
+                    CanSave = false;
+                    stream.Close();
+                }
+                finally
+                {
+                    if(stream != null)
+                    {
+                        fileInvalid.Visibility = true ? Visibility.Collapsed : Visibility.Visible;
+                        fileOverwrite.Visibility = false ? Visibility.Collapsed : Visibility.Visible;
+                        fileNew.Visibility = true ? Visibility.Collapsed : Visibility.Visible;
+                        CanSave = true;
+                        stream.Close();
+                    }
+                }
+            }
+
+            else
+            {
+                fileInvalid.Visibility = true ? Visibility.Collapsed : Visibility.Visible;
+                fileOverwrite.Visibility = true ? Visibility.Collapsed : Visibility.Visible;
+                fileNew.Visibility = false ? Visibility.Collapsed : Visibility.Visible;
+                CanSave = true;
+            }
+
+            //CanSave = file.Length > 0 && System.IO.File.Exists(FileBox.Text.Trim());
         }
 
         public override string Title

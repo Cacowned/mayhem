@@ -12,7 +12,7 @@ using MayhemWpf.UserControls;
 namespace DebugModules.Reactions
 {
     [DataContract]
-    [MayhemModule("Time Log", "Logs the event time to a .txt file")]
+    [MayhemModule("Debug: Time Log", "Logs the event time to a .txt file")]
     public class TimeLog : ReactionBase, IWpfConfigurable
     {
         [DataMember]
@@ -20,18 +20,18 @@ namespace DebugModules.Reactions
 
         public override void Perform()
         {
-            if (File.Exists(filePath))
-            {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(filePath, true))
-                {
-                    file.WriteLine(DateTime.Now.ToString(@"yyyy\/MM\/dd HH\:mm\:ss\.fff"));
-                }
-            }
+            StreamWriter stream;
 
-            else
+            try
             {
-                ErrorLog.AddError(ErrorType.Failure, "File does not exist");
+                stream = new StreamWriter(filePath, true);
+                stream.WriteLine(DateTime.Now.ToString(@"yyyy\/MM\/dd HH\:mm\:ss\.fff"));
+                stream.Close();
             }
+            catch
+            {
+                ErrorLog.AddError(ErrorType.Failure, "File is open or being used by multiple reactions");
+            }            
         }
 
         public MayhemWpf.UserControls.WpfConfiguration ConfigurationControl
@@ -43,12 +43,14 @@ namespace DebugModules.Reactions
         {
             var config = (TimeLogConfig)configurationControl;
             filePath = config.File;
+
+            StreamWriter timeLogWriter = new StreamWriter(filePath);
+            timeLogWriter.Close();
         }
 
         protected override void OnAfterLoad()
         {            
-            filePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem") + @"\TimeLog.txt";            
-            StreamWriter timeLogWriter = new StreamWriter(filePath);                        
+            filePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Mayhem") + @"\TimeLog.txt";                        
         }
 
         public string GetConfigString()

@@ -18,6 +18,8 @@
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="1">File:</TextBlock>
         <TextBox Name="FileBox" TextChanged="File_Changed" Grid.Column="1" Grid.Row="1" />
         <Button Height="25" Click="Browse_Click" Grid.Column="2" Grid.Row="1">Browse</Button>
-        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="fileInvalid" Grid.Column="1" Grid.Row="2">File Path Not Valid</TextBlock>
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="fileInvalid" Grid.Column="1" Grid.Row="2">File may be open or in use by another process.</TextBlock>
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="fileOverwrite" Grid.Column="1" Grid.Row="2">File already exists. Content will be overwritten.</TextBlock>
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="fileNew" Grid.Column="1" Grid.Row="2" Foreground="#FF1318CA">File will be created once you click save.</TextBlock>
     </Grid>
 </src:WpfConfiguration>
