@@ -111,9 +111,9 @@ namespace MSP430Modules.Events
             {
                 this.manager.ConnectPort(this.port, this.settings, this.ReceivedData);
             }
-            catch (Exception ex)
+            catch
             {
-                ErrorLog.AddError(ErrorType.Failure, ex.Message);
+                ErrorLog.AddError(ErrorType.Failure, "Unable to open COM port. Ensure port is available or device plugged in.");
                 e.Cancel = true;
                 return;
             }

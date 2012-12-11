@@ -75,17 +75,17 @@ namespace ArduinoModules.Wpf
                         PortBox.SelectedItem = PortName;
                     }
                 }
-            }  
+            }
         }
 
         private void PopulateOutputs()
         {
             // Input:
             // Add digital output pins as specified in Arduino firmware
-            OutputBox.Items.Add("Pin8");      
+            OutputBox.Items.Add("Pin8");
             OutputBox.Items.Add("Pin9");
             OutputBox.Items.Add("Pin10");
-            OutputBox.Items.Add("Pin11");        
+            OutputBox.Items.Add("Pin11");
             OutputBox.Items.Add("Pin12");
             OutputBox.Items.Add("Pin13");
 
@@ -106,11 +106,15 @@ namespace ArduinoModules.Wpf
                     {
                         PortBox.Items.Add(obj["DeviceID"] + " - " + obj["Description"]);
                     }
+
+                    CanSave = true;
                 }
 
-                else
+                if (PortBox.Items.Count == 0)
                 {
-                    PortBox.Items.Add("There are no available COM ports");
+                    PortBox.Items.Add("No COM ports available");
+                    CanSave = false;
+                    portInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
                 }
             }
 
@@ -131,9 +135,7 @@ namespace ArduinoModules.Wpf
         {
             // Select the item for the COM Port selected
             ComboBox box = sender as ComboBox;
-            PortName = box.SelectedItem.ToString();
-            string[] words = PortName.Split('-');
-            Port = words[0].Trim();            
+            PortName = box.SelectedItem.ToString();            
         }
 
         public override void OnSave()
@@ -159,7 +161,7 @@ namespace ArduinoModules.Wpf
             // Split the COM Port description and save the "COM#" 
             PortName = PortBox.SelectedItem.ToString();
             string[] words = PortName.Split('-');
-            Port = words[0].Trim();             
+            Port = words[0].Trim();
         }
 
         public override string Title

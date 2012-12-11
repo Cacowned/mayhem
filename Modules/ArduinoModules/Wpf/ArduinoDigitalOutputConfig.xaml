@@ -13,6 +13,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="0">Trigger Type:</TextBlock>
@@ -27,7 +28,9 @@
 
         <TextBlock Style="{StaticResource ConfigLabel}" Grid.Column="0" Grid.Row="2">COM Port:</TextBlock>
         <ComboBox Name="PortBox" Grid.Column="1" Grid.Row="2" SelectionChanged="PortBox_SelectionChanged" />
-        
+
+        <TextBlock Style="{StaticResource ConfigErrorMessage}" Name="portInvalid" Grid.Column="1" Grid.Row="3">No COM ports available</TextBlock>
+
         <Button Style="{StaticResource ConfigLabel}" Margin="10,15,10,15" Width="350" Height="35" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="4" Click="FlashButton_Click">Click to flash your Arduino device with Mayhem firmware</Button>
     </Grid>
 </src:WpfConfiguration>

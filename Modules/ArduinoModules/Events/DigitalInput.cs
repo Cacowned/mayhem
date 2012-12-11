@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Runtime.Serialization;
-using System.Text;
 using ArduinoModules.Wpf;
 using MayhemCore;
 using MayhemWpf.ModuleTypes;
 using MayhemWpf.UserControls;
 using SerialManager;
+using System.Text;
 
 namespace ArduinoModules.Events
 {
@@ -111,9 +111,9 @@ namespace ArduinoModules.Events
             {
                 this.manager.ConnectPort(this.port, this.settings, this.ReceivedData);
             }
-            catch (Exception ex)
+            catch
             {
-                ErrorLog.AddError(ErrorType.Failure, ex.Message);
+                ErrorLog.AddError(ErrorType.Failure, "Unable to open COM port. Ensure port is available or device plugged in.");
                 e.Cancel = true;
                 return;
             }

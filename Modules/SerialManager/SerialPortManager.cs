@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using MayhemCore;
 
 namespace SerialManager
 {
@@ -97,14 +98,16 @@ namespace SerialManager
 				// TODO: This just gets the data from the registry, so there could be
 				// bad data. A possible fix would be in the old code in MayhemSerial.UpdatePortList.
 				string[] ports = SerialPort.GetPortNames().Distinct().ToArray();
+                
 				Array.Sort(ports);
-				return ports;
+                Console.WriteLine(ports);
+                return ports;
 			}
 		}
 
 		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void ConnectPort(string portName, SerialSettings settings, Action<byte[], int> action = null)
-		{
+		{            
 			// Do some parameter checking
 			if (string.IsNullOrWhiteSpace(portName))
 			{
@@ -221,7 +224,15 @@ namespace SerialManager
 
 			if (port.IsOpen)
 			{
-				port.Close();
+                try
+                {
+                    port.Close();
+                }
+                catch
+                {
+                    Debug.WriteLine("Unable to close COM port: " + port.PortName);
+                    ErrorLog.AddError(ErrorType.Failure, "Unable to close COM port. Ensure port is available or device plugged in.");
+                }				
 			}
 
 			portHandlers.Remove(port);
@@ -250,6 +261,7 @@ namespace SerialManager
 					catch
 					{
 						Debug.WriteLine("Unable to open port: " + port.PortName);
+                        ErrorLog.AddError(ErrorType.Failure, "Unable to open COM port. Ensure port is available or device plugged in.");
 					}
 				}
 			}
@@ -261,7 +273,8 @@ namespace SerialManager
 			{
 				if (!ports.ContainsKey(portName))
 				{
-					throw new ArgumentException("The given port is not open", "portName");
+					//throw new ArgumentException("The given port is not open", "portName");
+                    ErrorLog.AddError(ErrorType.Failure, "Unable to open COM port. Ensure port is available or device plugged in.");
 				}
 
 				SerialPort port = ports[portName];
@@ -278,12 +291,20 @@ namespace SerialManager
 					catch
 					{
 						// This will throw if they unplug the cable, then try to trigger.
+                        ErrorLog.AddError(ErrorType.Failure, "Unable to open COM port. Ensure port is available or device plugged in.");
 					}
 				}
 
 				if (port.IsOpen)
 				{
-					port.Write(message);
+                    try
+                    {
+                        port.Write(message);
+                    }
+                    catch
+                    {
+                        ErrorLog.AddError(ErrorType.Failure, "Unable to write to COM port. Ensure port is available or device plugged in.");
+                    }
 				}
 				Thread.Sleep(110);
 			}
@@ -295,7 +316,8 @@ namespace SerialManager
 			{
 				if (!ports.ContainsKey(portName))
 				{
-					throw new ArgumentException("The given port is not open", "portName");
+					//throw new ArgumentException("The given port is not open", "portName");
+                    ErrorLog.AddError(ErrorType.Failure, "Unable to open COM port. Ensure port is available or device plugged in.");
 				}
 
 				SerialPort port = ports[portName];
@@ -312,12 +334,20 @@ namespace SerialManager
 					catch
 					{
 						// This will throw if they unplug the cable, then try to trigger.
+                        ErrorLog.AddError(ErrorType.Failure, "Unable to open COM port. Ensure port is available or device plugged in.");
 					}
 				}
 
 				if (port.IsOpen)
-				{
-					port.Write(buffer, 0, length);
+				{					
+                    try
+                    {
+                        port.Write(buffer, 0, length);
+                    }
+                    catch
+                    {
+                        ErrorLog.AddError(ErrorType.Failure, "Unable to write to COM port. Ensure port is available or device plugged in.");
+                    }
 				}
 				Thread.Sleep(110);
 			}

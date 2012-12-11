@@ -106,11 +106,15 @@ namespace MSP430Modules.Wpf
                     {
                         PortBox.Items.Add(obj["DeviceID"] + " - " + obj["Description"]);
                     }
+
+                    CanSave = true;
                 }
 
-                else
+                if (PortBox.Items.Count == 0)
                 {
-                    PortBox.Items.Add("There are no available COM ports");
+                    PortBox.Items.Add("No COM ports available");
+                    CanSave = false;
+                    portInvalid.Visibility = CanSave ? Visibility.Collapsed : Visibility.Visible;
                 }
             }
 
