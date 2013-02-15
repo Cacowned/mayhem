@@ -58,6 +58,7 @@
     <Compile Include="Events\SpeechRecognition.cs" />
     <Compile Include="Events\SystemTrayMenu.cs" />
     <Compile Include="Events\WeatherAlert.cs" />
+    <Compile Include="Reactions\HttpGet.cs" />
     <Compile Include="Reactions\LockWorkstation.cs" />
     <Compile Include="Reactions\OpenUrl.cs" />
     <Compile Include="Reactions\Screenshot.cs" />
@@ -81,6 +82,9 @@
     <Compile Include="Reactions\RunProgram.cs" />
     <Compile Include="Reactions\TextToSpeech.cs" />
     <Compile Include="SpeechRecognitionManager.cs" />
+    <Compile Include="Wpf\HttpGetConfig.xaml.cs">
+      <DependentUpon>HttpGetConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\StockAlertConfig.xaml.cs">
       <DependentUpon>StockAlertConfig.xaml</DependentUpon>
     </Compile>
@@ -133,6 +137,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Wpf\HttpGetConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Wpf\StockAlertConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
