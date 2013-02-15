@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>DefaultModules</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <authors>Eli White, Jay Meistrich, Will Beebe, Sven Kratz, Gabriel Reyes</authors>
     <owners>Outercurve</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,11 +18,11 @@
 			System Tray Menu - This allows a user to manually trigger an event from a Mayhem icon in the System Tray. Multiple System Tray Menu events can be running simultaneously, and the user can select among them from a list via the single Mayhem icon.
 			Weather Alert – Triggers when the specified temperature goes above or below the specified value in the location. Location can be specified by Zip Codes (for US cities), or by name.
 
-
 			Reactions
 			Lock Workstation – Puts the computer into the Windows lock state
 			Media controls – Sends the Media Next Item, Play/Pause or Previous Item command to all open Windows on your computer. This works with Windows Media Player, iTunes, VLC, or any other player which takes standard input.
 			Open Website – Opens your default browser to the specified URL.
+			Http Get Request - Launches an HTTP GET request to the specified URL.
 			Play Sound – Plays a sound file (wav, wma, and mp3 format are supported).
 			Run Program – Equivalent to the Run command. Can be used to launch files or programs.
 			Screenshot – Takes a picture of the entire desktop and saves it to the specified folder in jpg format. Pictures will be named with the time and date the picture was taken.
@@ -31,7 +31,7 @@
 		</description>
 		<summary>These are the default modules for Mayhem. These basic events and reactions work without additional hardware or software.</summary>
     <copyright>Copyright © Outercurve 2011</copyright>
-    <tags>Folder Change, Key Press, Timer, Lock Workstation, Next Item, Pause, Play, Last Item, Open Website, Play Sound, Run Program, Screenshot, Text to Speech</tags>
+    <tags>Folder Change, Key Press, Timer, Lock Workstation, Next Item, Pause, Play, Last Item, Open Website, Http Get, Play Sound, Run Program, Screenshot, Text to Speech</tags>
     <dependencies>
       <dependency id="MayhemCore" version="1.0.0" />
       <dependency id="MayhemWpf" version="1.0.0" />
